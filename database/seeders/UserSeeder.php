@@ -29,6 +29,13 @@ class UserSeeder extends Seeder
             "role"=>"vendor",
         ]);
 
-        User::factory(50)->create();
+        User::factory()->create([
+            "name"=>"User",
+            "email"=>"user@gmail.com",
+            "password"=>"Password!",
+            "role"=>"user",
+        ]);
+
+        // User::factory(50)->create();
     }
 }

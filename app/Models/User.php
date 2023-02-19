@@ -35,4 +35,13 @@ class User extends Authenticatable
             set: fn ($value) => bcrypt($value),
         );
     }
+
+    public function getRedirectRouteName()
+    {
+        return match ((string)$this->role) {
+            "admin"=>"admin.dashboard",
+            "vendor"=>"vendor.dashboard",
+            "user"=>"user.dashboard",
+        };
+    }
 }

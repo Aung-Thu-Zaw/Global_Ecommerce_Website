@@ -27,9 +27,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
+Route::get('/user/dashboard', function () {
     return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('user.dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -40,4 +40,12 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 
-Route::get("/admin/dashboard", [AdminDashboardController::class,"index"])->name("admin.dashboard");
+
+Route::middleware(["auth","user.role:admin"])->group(function () {
+    Route::get("/admin/dashboard", [AdminDashboardController::class,"index"])->name("admin.dashboard");
+});
+
+
+Route::middleware(["auth","user.role:vendor"])->group(function () {
+    Route::get("/vendor/dashboard", [VendorDashboardController::class,"index"])->name("vendor.dashboard");
+});
