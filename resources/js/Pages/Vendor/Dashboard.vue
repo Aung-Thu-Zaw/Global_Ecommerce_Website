@@ -1,13 +1,13 @@
 <template>
-  <h1>This is vendor dashboard</h1>
+  <VendorDashboardLayout> </VendorDashboardLayout>
 </template>
 
-<script>
-import DashboardLayout from "@/Layouts/DashboardLayout.vue";
+  <script>
+import VendorDashboardLayout from "@/Layouts/VendorDashboardLayout.vue";
 export default {
-  components: { DashboardLayout },
+  components: { VendorDashboardLayout },
 };
 </script>
 
-<style>
+  <style>
 </style>

@@ -27,8 +27,8 @@
         px-4
       "
     >
-      <!-- Brand -->
-      <a
+      <Link
+        :href="route('admin.dashboard')"
         class="
           text-white text-sm
           uppercase
@@ -36,10 +36,10 @@
           lg:inline-block
           font-semibold
         "
-        href="javascript:void(0)"
       >
-        Admin Dashboard
-      </a>
+        <slot name="dashboardName"></slot>
+      </Link>
+
       <!-- Form -->
       <form
         class="md:flex hidden flex-row flex-wrap items-center lg:ml-auto mr-3"
@@ -97,6 +97,7 @@
 </template>
 
 <script>
+import { Link } from "@inertiajs/vue3";
 import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
 
 export default {

@@ -1,9 +1,13 @@
 <template>
   <div class="font-roboto">
-    <Sidebar />
+    <AdminSidebar />
     <div class="relative md:ml-64 bg-blueGray-100">
-      <DashboardNavbar />
-      <Header />
+      <DashboardNavbar>
+        <template v-slot:dashboardName>
+          <span>Admin Dashboard</span>
+        </template>
+      </DashboardNavbar>
+      <AdminHeaderStats />
       <div class="px-4 md:px-10 mx-auto w-full -m-24">
         <slot />
         <Footer />
@@ -11,19 +15,18 @@
     </div>
   </div>
 </template>
-  <script>
+<script>
 import DashboardNavbar from "@/Components/Navbars/DashboardNavbar.vue";
-import Sidebar from "@/Components/Sidebar/Sidebar.vue";
-import Header from "@/Components/Headers/HeaderStats.vue";
+import AdminHeaderStats from "@/Components/Headers/AdminHeaderStats.vue";
+import AdminSidebar from "@/Components/Sidebar/AdminSidebar.vue";
 import Footer from "@/Components/Footers/DashboardFooter.vue";
 export default {
-  name: "admin-layout",
+  name: "vendor-layout",
   components: {
     DashboardNavbar,
-    Sidebar,
-    Header,
+    AdminSidebar,
     Footer,
+    AdminHeaderStats,
   },
 };
 </script>
-
