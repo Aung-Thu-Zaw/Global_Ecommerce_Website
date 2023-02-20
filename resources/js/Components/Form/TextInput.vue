@@ -2,7 +2,7 @@
 import InputContainer from "@/Components/Form/InputContainer.vue";
 import { onMounted, ref } from "vue";
 
-defineProps(["modelValue", "placeholder"]);
+defineProps(["modelValue", "placeholder", "type"]);
 
 defineEmits(["update:modelValue"]);
 
@@ -30,6 +30,7 @@ defineExpose({ focus: () => input.value.focus() });
         focus:border-transparent focus:ring-0
         placeholder:text-gray-400 placeholder:text-sm
       "
+      :type="type"
       :placeholder="placeholder"
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"

@@ -18,7 +18,6 @@
             v-model="form.name"
             required
             autofocus
-            autocomplete="name"
             placeholder="Enter Your Fullname"
           >
             <template v-slot:icon>
@@ -40,7 +39,6 @@
             class="mt-1 block w-full"
             v-model="form.email"
             required
-            autocomplete="username"
             placeholder="Enter Your Email Address"
           >
             <template v-slot:icon>
@@ -62,7 +60,6 @@
             class="mt-1 block w-full"
             v-model="form.password"
             required
-            autocomplete="new-password"
             placeholder="Enter Password"
           >
             <template v-slot:icon>
@@ -84,7 +81,6 @@
             class="mt-1 block w-full"
             v-model="form.password_confirmation"
             required
-            autocomplete="new-password"
             placeholder="Retype Your Password"
           >
             <template v-slot:icon>
