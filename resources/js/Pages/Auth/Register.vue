@@ -95,6 +95,7 @@
             :message="form.errors.password_confirmation"
           />
         </div>
+
         <div class="mb-3">
           <FormButton> Sign Up </FormButton>
         </div>
@@ -124,7 +125,6 @@ import FormContainer from "@/Components/Form/FormContainer.vue";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 import InputError from "@/Components/Form/InputError.vue";
 import InputLabel from "@/Components/Form/InputLabel.vue";
-import PrimaryButton from "@/Components/Form/PrimaryButton.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 import FormButton from "@/Components/Form/FormButton.vue";

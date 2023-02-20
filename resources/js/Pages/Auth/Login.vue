@@ -6,7 +6,6 @@ import FormContainer from "@/Components/Form/FormContainer.vue";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 import InputError from "@/Components/Form/InputError.vue";
 import InputLabel from "@/Components/Form/InputLabel.vue";
-import PrimaryButton from "@/Components/Form/PrimaryButton.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 
@@ -32,11 +31,13 @@ const submit = () => {
   <GuestLayout>
     <Head title="Login" />
 
-    <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-      {{ status }}
-    </div>
-
     <FormContainer>
+      <div
+        v-if="status"
+        class="mb-4 font-medium text-sm text-green-500 bg-green-100 p-3 w-full rounded-md text-center"
+      >
+        {{ status }}
+      </div>
       <form @submit.prevent="submit" class="w-full">
         <h1 class="text-center text-2xl text-dark mb-5 font-bold">
           Login With Your Stuff Ecommerce Account
@@ -98,16 +99,7 @@ const submit = () => {
             <Link
               v-if="canResetPassword"
               :href="route('password.request')"
-              class="
-                underline
-                text-sm text-gray-600
-                rounded-md
-                hover:text-blue-500
-                focus:outline-none
-                focus:ring-2
-                focus:ring-offset-2
-                focus:ring-indigo-500
-              "
+              class="underline text-sm text-gray-600 rounded-md hover:text-blue-500"
             >
               Forgot your password?
             </Link>
@@ -119,7 +111,7 @@ const submit = () => {
             :class="{ 'opacity-25': form.processing }"
             :disabled="form.processing"
           >
-            Sign In
+            Login
           </FormButton>
         </div>
 
