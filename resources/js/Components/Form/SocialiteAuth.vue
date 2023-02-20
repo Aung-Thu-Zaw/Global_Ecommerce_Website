@@ -1,0 +1,33 @@
+<template>
+  <div
+    class="
+      flex flex-col
+      items-center
+      justify-center
+      w-full
+      md:flex-row md:justify-between
+    "
+  >
+    <a href="#" class="social-btn">
+      <span class="mr-2">
+        <img src="../../assets/images/facebook-logo-2019.ico" alt="" class="w-6" />
+      </span>
+      <span class="md:hidden"> Sign in with facebook </span>
+      <span class="hidden md:block"> Sign in</span>
+    </a>
+    <a href="#" class="social-btn">
+      <span class="mr-2">
+        <img src="../../assets/images/google.ico" alt="" class="w-6" />
+      </span>
+      <span class="md:hidden"> Sign in with google </span>
+      <span class="hidden md:block"> Sign in</span>
+    </a>
+  </div>
+</template>
+
+<script>
+export default {};
+</script>
+
+<style>
+</style>
