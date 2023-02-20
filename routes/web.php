@@ -1,22 +1,26 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Auth\SocialiteFacebookAuthController;
+use App\Http\Controllers\Auth\SocialiteGoogleAuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Vendor\VendorDashboardController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+Route::prefix("/auth/redirect")
+        ->name("redirect.")
+        ->group(function () {
+            Route::get('/facebook', [SocialiteFacebookAuthController::class,"redirectToProvider"])->name("facebook");
+            Route::get('/google', [SocialiteGoogleAuthController::class,"redirectToProvider"])->name("google");
+        });
+
+Route::prefix("/auth/callback")
+        ->group(function () {
+            Route::get('/facebook', [SocialiteFacebookAuthController::class,"handelProviderCallback"]);
+            Route::get('/google', [SocialiteGoogleAuthController::class,"handelProviderCallback"]);
+        });
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
