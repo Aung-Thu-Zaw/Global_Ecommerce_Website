@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Auth\SocialiteFacebookAuthController;
 use App\Http\Controllers\Auth\SocialiteGoogleAuthController;
@@ -44,6 +45,8 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 
+Route::get("admin/login", [AdminAuthController::class,"create"])->name("admin.login");
+Route::delete("admin/logout", [AdminAuthController::class,"destroy"])->name("admin.logout");
 
 Route::middleware(["auth","user.role:admin"])->group(function () {
     Route::get("/admin/dashboard", [AdminDashboardController::class,"index"])->name("admin.dashboard");
