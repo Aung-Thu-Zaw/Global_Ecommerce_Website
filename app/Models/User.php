@@ -28,12 +28,13 @@ class User extends Authenticatable implements MustVerifyEmail
 
 
 
-    // protected function password(): Attribute
-    // {
-    //     return Attribute::make(
-    //         set: fn ($value) => bcrypt($value),
-    //     );
-    // }
+    protected function avatar(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/avatars/$value"),
+            get: fn ($value) => $value ??  asset("storage/avatars/default-avatar-".auth()->user()->id.".png"),
+        );
+    }
 
     public function getRedirectRouteName()
     {

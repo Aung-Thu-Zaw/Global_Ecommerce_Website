@@ -12,6 +12,7 @@ class AdminDashboardController extends Controller
     {
         $avatarUrl=auth()->user()->avatar ?? Storage::url('avatars/default-avatar-'.auth()->user()->id.'.png');
 
+
         return inertia("Admin/Dashboard", compact("avatarUrl"));
     }
 }

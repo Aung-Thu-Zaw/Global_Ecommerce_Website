@@ -1,7 +1,7 @@
 <script setup>
 import { Head, Link } from "@inertiajs/vue3";
 
-defineProps({
+const props = defineProps({
   canLogin: Boolean,
   canRegister: Boolean,
   laravelVersion: String,
@@ -13,18 +13,12 @@ defineProps({
   <Head title="Welcome" />
 
   <div
-    class="
-      relative
-      flex
-      items-top
-      justify-center
-      min-h-screen
-      bg-gray-100
-      dark:bg-gray-900
-      sm:items-center sm:pt-0
-    "
+    class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center sm:pt-0"
   >
-    <div v-if="canLogin" class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
+    <div
+      v-if="props.canLogin"
+      class="hidden fixed top-0 right-0 px-6 py-4 sm:block"
+    >
       <Link
         v-if="$page.props.auth.user"
         :href="route('user.dashboard')"
@@ -40,7 +34,7 @@ defineProps({
         >
 
         <Link
-          v-if="canRegister"
+          v-if="props.canRegister"
           :href="route('register')"
           class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline"
           >Register</Link
@@ -65,14 +59,7 @@ defineProps({
       </div>
 
       <div
-        class="
-          mt-8
-          bg-white
-          dark:bg-gray-800
-          overflow-hidden
-          shadow
-          sm:rounded-lg
-        "
+        class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg"
       >
         <div class="grid grid-cols-1 md:grid-cols-2">
           <div class="p-6">
@@ -110,12 +97,7 @@ defineProps({
           </div>
 
           <div
-            class="
-              p-6
-              border-t border-gray-200
-              dark:border-gray-700
-              md:border-t-0 md:border-l
-            "
+            class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-t-0 md:border-l"
           >
             <div class="flex items-center">
               <svg
@@ -184,12 +166,7 @@ defineProps({
           </div>
 
           <div
-            class="
-              p-6
-              border-t border-gray-200
-              dark:border-gray-700
-              md:border-l
-            "
+            class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-l"
           >
             <div class="flex items-center">
               <svg
@@ -206,14 +183,7 @@ defineProps({
                 ></path>
               </svg>
               <div
-                class="
-                  ml-4
-                  text-lg
-                  leading-7
-                  font-semibold
-                  text-gray-900
-                  dark:text-white
-                "
+                class="ml-4 text-lg leading-7 font-semibold text-gray-900 dark:text-white"
               >
                 Vibrant Ecosystem
               </div>
@@ -303,7 +273,7 @@ defineProps({
         <div
           class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0"
         >
-          Laravel v{{ laravelVersion }} (PHP v{{ phpVersion }})
+          Laravel v{{ props.laravelVersion }} (PHP v{{ props.phpVersion }})
         </div>
       </div>
     </div>

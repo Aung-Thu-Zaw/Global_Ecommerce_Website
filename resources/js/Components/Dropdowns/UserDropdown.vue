@@ -13,7 +13,7 @@
           <img
             alt=""
             class="w-full h-full object-cover rounded-full align-middle border-none shadow-lg ring-2 ring-green-500"
-            :src="$page.props.auth.user.avatar ?? avatarUrl"
+            :src="$page.props.auth.user.avatar"
           />
         </span>
         <span class="text-gray-200 font-bold ml-2">{{
@@ -29,13 +29,14 @@
         block: dropdownPopoverShow,
       }"
     >
-      <a
-        href="javascript:void(0);"
-        class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"
+      <Link
+        :href="route('profile.edit')"
+        as="button"
+        class="text-left text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"
       >
         <i class="fa-solid fa-address-card mr-3"></i>
         Profile
-      </a>
+      </Link>
       <a
         href="javascript:void(0);"
         class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"
@@ -64,7 +65,6 @@ import { createPopper } from "@popperjs/core";
 import image from "@/assets/img/team-1-800x800.jpg";
 
 export default {
-  props: { avatarUrl: String },
   components: {
     Link,
   },

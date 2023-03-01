@@ -1,10 +1,10 @@
 <script setup>
 import InputError from "@/Components/Form/InputError.vue";
 import InputLabel from "@/Components/Form/InputLabel.vue";
-import PrimaryButton from "@/Components/Form/PrimaryButton.vue";
+import FormButton from "@/Components/Form/FormButton.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import { useForm } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { inject, ref } from "vue";
 
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);
@@ -31,10 +31,19 @@ const updatePassword = () => {
     },
   });
 };
+
+const swal = inject("$swal");
+
+const successAlert = () => {
+  swal({
+    icon: "success",
+    title: "Password updated successfully",
+  });
+};
 </script>
 
 <template>
-  <section>
+  <section class="">
     <header>
       <h2 class="text-lg font-medium text-gray-900">Update Password</h2>
 
@@ -89,15 +98,15 @@ const updatePassword = () => {
       </div>
 
       <div class="flex items-center gap-4">
-        <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
+        <FormButton :disabled="form.processing"> Save </FormButton>
 
         <Transition
           enter-from-class="opacity-0"
           leave-to-class="opacity-0"
           class="transition ease-in-out"
         >
-          <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">
-            Saved.
+          <p v-if="form.recentlySuccessful">
+            {{ successAlert() }}
           </p>
         </Transition>
       </div>

@@ -2,7 +2,7 @@
   <div class="font-roboto">
     <AdminSidebar />
     <div class="relative md:ml-64 bg-blueGray-100">
-      <DashboardNavbar :avatarUrl="avatarUrl">
+      <DashboardNavbar>
         <template v-slot:dashboardName>
           <span>Admin Dashboard</span>
         </template>
@@ -22,7 +22,6 @@ import AdminSidebar from "@/Components/Sidebar/AdminSidebar.vue";
 import Footer from "@/Components/Footers/DashboardFooter.vue";
 export default {
   name: "vendor-layout",
-  props: { avatarUrl: String },
   components: {
     DashboardNavbar,
     AdminSidebar,

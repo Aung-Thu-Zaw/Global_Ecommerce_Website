@@ -97,7 +97,9 @@ module.exports = {
         "visited",
         "disabled",
     ],
+
     plugins: [
+        require("tw-elements/dist/plugin"),
         require("@tailwindcss/forms"),
         plugin(function ({ addComponents, theme }) {
             const screens = theme("screens", {});

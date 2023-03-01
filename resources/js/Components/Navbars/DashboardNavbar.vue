@@ -32,7 +32,7 @@
       </form>
       <!-- User -->
       <ul class="flex-col md:flex-row list-none items-center hidden md:flex">
-        <UserDropdown :avatarUrl="avatarUrl" />
+        <UserDropdown />
       </ul>
     </div>
   </nav>
@@ -44,7 +44,6 @@ import { Link } from "@inertiajs/vue3";
 import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
 
 export default {
-  props: { avatarUrl: String },
   components: {
     UserDropdown,
   },
