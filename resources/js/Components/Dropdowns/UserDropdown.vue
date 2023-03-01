@@ -30,19 +30,26 @@
       }"
     >
       <Link
-        :href="route('profile.edit')"
+        :href="route('my-account.edit')"
         as="button"
         class="text-left text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"
       >
         <i class="fa-solid fa-address-card mr-3"></i>
-        Profile
+        My Account
       </Link>
       <a
         href="javascript:void(0);"
         class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"
       >
-        <i class="fa-solid fa-gear mr-3"></i>
-        Setting
+        <i class="fa-solid fa-bag-shopping mr-3"></i>
+        My Orders
+      </a>
+      <a
+        href="javascript:void(0);"
+        class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"
+      >
+        <i class="fa-solid fa-heart mr-3"></i>
+        My Wishlist
       </a>
 
       <Link

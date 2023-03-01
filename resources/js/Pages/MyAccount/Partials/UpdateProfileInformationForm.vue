@@ -17,6 +17,9 @@ const form = useForm({
   name: user.name,
   email: user.email,
   avatar: null,
+  phone: user.phone,
+  address: user.address,
+  gender: user.gender,
 });
 
 const swal = inject("$swal");
@@ -34,13 +37,13 @@ const getPreviewPhotoPath = (path) => {
 </script>
 
 <template>
-  <section class="flex flex-wrap items-center justify-between">
+  <section class="flex flex-wrap items-start justify-between">
     <div v-if="user.avatar" class="mx-auto">
       <img
         ref="previewPhoto"
         :src="user.avatar"
         alt=""
-        class="border-4 overflow-hidden border-gray-600 w-[300px] h-[250px] object-cover rounded-md shadow-md my-3"
+        class="ring-4 ring-blue-400 w-[200px] h-[200px] object-cover rounded-full shadow-md my-3"
       />
     </div>
 
@@ -48,11 +51,11 @@ const getPreviewPhotoPath = (path) => {
       <img
         src="https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg"
         alt=""
-        class="border w-[300px] rounded-md shadow-md my-3"
+        class="ring-4 ring-blue-400 w-[200px] h-[200px] object-cover rounded-full shadow-md my-3"
       />
     </div>
 
-    <div class="mx-auto">
+    <div class="mx-auto w-full md:w-[60%]">
       <header>
         <h2 class="text-lg font-medium text-gray-900">Profile Information</h2>
 
@@ -62,7 +65,7 @@ const getPreviewPhotoPath = (path) => {
       </header>
 
       <form
-        @submit.prevent="form.post(route('profile.update'))"
+        @submit.prevent="form.post(route('my-account.update'))"
         class="mt-6 space-y-6"
       >
         <div>
@@ -115,6 +118,50 @@ const getPreviewPhotoPath = (path) => {
           >
             A new verification link has been sent to your email address.
           </div>
+        </div>
+
+        <div>
+          <InputLabel for="phone" value="Phone" />
+
+          <TextInput
+            id="phone"
+            type="phone"
+            class="mt-1 block w-full"
+            v-model="form.phone"
+            required
+            autocomplete="username"
+          />
+
+          <InputError class="mt-2" :message="form.errors.phone" />
+        </div>
+
+        <div>
+          <InputLabel for="address" value="Address" />
+
+          <TextInput
+            id="address"
+            type="address"
+            class="mt-1 block w-full"
+            v-model="form.address"
+            required
+          />
+
+          <InputError class="mt-2" :message="form.errors.address" />
+        </div>
+
+        <div>
+          <InputLabel for="gender" value="Gender" />
+
+          <select
+            class="p-3 w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 placeholder:text-gray-400 placeholder:text-sm"
+            v-model="form.gender"
+          >
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+
+          <InputError class="mt-2" :message="form.errors.gender" />
         </div>
 
         <div>

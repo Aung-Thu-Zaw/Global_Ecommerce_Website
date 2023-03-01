@@ -4,7 +4,7 @@ use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Auth\SocialiteFacebookAuthController;
 use App\Http\Controllers\Auth\SocialiteGoogleAuthController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\MyAccountController;
 use App\Http\Controllers\Vendor\VendorDashboardController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -37,9 +37,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('user.dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/my-account', [MyAccountController::class, 'edit'])->name('my-account.edit');
+    Route::post('/my-account', [MyAccountController::class, 'update'])->name('my-account.update');
+    Route::delete('/my-account', [MyAccountController::class, 'destroy'])->name('my-account.destroy');
 });
 
 require __DIR__.'/auth.php';

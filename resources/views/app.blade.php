@@ -15,6 +15,7 @@
         rel="stylesheet">
 
     <script src="https://kit.fontawesome.com/18c274e5f3.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
     @routes
@@ -25,7 +26,6 @@
 <body class="font-sans antialiased">
     @inertia
 
-    <script src="./TW-ELEMENTS-PATH/dist/js/index.min.js"></script>
 </body>
 
 </html>
