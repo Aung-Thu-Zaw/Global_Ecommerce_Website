@@ -20,6 +20,7 @@ const form = useForm({
   phone: user.phone,
   address: user.address,
   gender: user.gender,
+  birthday: user.birthday,
 });
 
 const swal = inject("$swal");
@@ -69,7 +70,7 @@ const getPreviewPhotoPath = (path) => {
         class="mt-6 space-y-6"
       >
         <div>
-          <InputLabel for="name" value="Name" />
+          <InputLabel for="name" value="Name *" />
 
           <TextInput
             id="name"
@@ -78,14 +79,13 @@ const getPreviewPhotoPath = (path) => {
             v-model="form.name"
             required
             autofocus
-            autocomplete="name"
           />
 
           <InputError class="mt-2" :message="form.errors.name" />
         </div>
 
         <div>
-          <InputLabel for="email" value="Email" />
+          <InputLabel for="email" value="Email *" />
 
           <TextInput
             id="email"
@@ -93,7 +93,6 @@ const getPreviewPhotoPath = (path) => {
             class="mt-1 block w-full"
             v-model="form.email"
             required
-            autocomplete="username"
           />
 
           <InputError class="mt-2" :message="form.errors.email" />
@@ -162,6 +161,21 @@ const getPreviewPhotoPath = (path) => {
           </select>
 
           <InputError class="mt-2" :message="form.errors.gender" />
+        </div>
+
+        <div>
+          <InputLabel for="birthday" value="Birthday (Year-Month-Day)" />
+          <TextInput
+            id="birthday"
+            type="text"
+            class="mt-1 block w-full"
+            v-model="form.birthday"
+            required
+            autofocus
+            placeholder="Example: 1988-3-11"
+          />
+
+          <InputError class="mt-2" :message="form.errors.birthday" />
         </div>
 
         <div>
