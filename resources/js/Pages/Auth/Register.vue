@@ -3,7 +3,7 @@
     <Head title="Register" />
 
     <FormContainer>
-      <form @submit.prevent="submit" class="w-full">
+      <form @submit.prevent="recaptcha" class="w-full">
         <h1 class="text-center text-2xl text-dark mb-5 font-bold">
           Create Your Stuff Ecommerce Account
         </h1>
@@ -100,6 +100,11 @@
           <FormButton> Sign Up </FormButton>
         </div>
 
+        <InputError
+          class="mt-2 text-center font-bold"
+          :message="form.errors.captcha_token"
+        />
+
         <p class="text-center text-sm">
           Already have account?
           <Link
@@ -121,6 +126,7 @@
 
 
 <script setup>
+import { useReCaptcha } from "vue-recaptcha-v3";
 import FormContainer from "@/Components/Form/FormContainer.vue";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 import InputError from "@/Components/Form/InputError.vue";
@@ -136,7 +142,15 @@ const form = useForm({
   password: "",
   password_confirmation: "",
   terms: false,
+  captcha_token: null,
 });
+
+const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+const recaptcha = async () => {
+  await recaptchaLoaded();
+  form.captcha_token = await executeRecaptcha("register");
+  submit();
+};
 
 const submit = () => {
   form.post(route("register"), {

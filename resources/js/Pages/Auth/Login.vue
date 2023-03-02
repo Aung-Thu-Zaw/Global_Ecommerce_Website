@@ -1,4 +1,5 @@
 <script setup>
+import { useReCaptcha } from "vue-recaptcha-v3";
 import SocialiteAuth from "@/Components/Form/SocialiteAuth.vue";
 import FormButton from "@/Components/Form/FormButton.vue";
 import Checkbox from "@/Components/Form/Checkbox.vue";
@@ -18,7 +19,15 @@ const form = useForm({
   email: "",
   password: "",
   remember: false,
+  captcha_token: null,
 });
+
+const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+const recaptcha = async () => {
+  await recaptchaLoaded();
+  form.captcha_token = await executeRecaptcha("register");
+  submit();
+};
 
 const submit = () => {
   form.post(route("login"), {
@@ -38,7 +47,7 @@ const submit = () => {
       >
         {{ status }}
       </div>
-      <form @submit.prevent="submit" class="w-full">
+      <form @submit.prevent="recaptcha" class="w-full">
         <h1 class="text-center text-2xl text-dark mb-5 font-bold">
           Login With Your Stuff Ecommerce Account
         </h1>
@@ -114,6 +123,11 @@ const submit = () => {
             Login
           </FormButton>
         </div>
+
+        <InputError
+          class="mt-2 text-center font-bold"
+          :message="form.errors.captcha_token"
+        />
 
         <p class="text-center text-sm">
           You don't have account? Please

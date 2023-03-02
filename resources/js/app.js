@@ -8,6 +8,7 @@ import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
 import * as te from "tw-elements";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
+import { VueReCaptcha } from "vue-recaptcha-v3";
 
 const appName =
     window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
@@ -20,8 +21,20 @@ createInertiaApp({
             import.meta.glob("./Pages/**/*.vue")
         ),
     setup({ el, App, props, plugin }) {
+        const captcheKey = props.initialPage.props.recaptcha_site_key;
+
         return createApp({ render: () => h(App, props) })
             .use(plugin)
+            .use(VueReCaptcha, {
+                siteKey: captcheKey,
+                loaderOptions: {
+                    useRecaptchaNet: true,
+                    // container: "string",
+                    // badge: "bottomright",
+                    // size: "invisible",
+                    // tabindex:"number"
+                },
+            })
             .use(ZiggyVue, Ziggy)
             .use(VueSweetalert2)
             .mount(el);
