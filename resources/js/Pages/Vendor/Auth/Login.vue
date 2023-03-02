@@ -37,7 +37,7 @@ const submit = () => {
 
 <template>
   <GuestLayout>
-    <Head title="Admin Dashboard Login" />
+    <Head title="Vendor Dashboard Login" />
 
     <FormContainer>
       <div
@@ -48,7 +48,7 @@ const submit = () => {
       </div>
       <form @submit.prevent="recaptcha" class="w-full">
         <h1 class="text-center text-2xl text-dark mb-5 font-bold">
-          Admin Dashboard Login
+          Vendor Dashboard Login
         </h1>
 
         <div class="mb-3">

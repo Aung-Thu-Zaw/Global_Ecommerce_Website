@@ -19,7 +19,7 @@ class MyAccountUpdateRequest extends FormRequest
         $rules= [
             'name' => ['string', 'max:255'],
             'email' => ['email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
-            'phone'=>["nullable","min:0","max:15", Rule::unique(User::class)->ignore($this->user()->id)],
+            'phone'=>["nullable","min:0","max:25", Rule::unique(User::class)->ignore($this->user()->id)],
             'address'=>["nullable","min:0","max:150"],
             'gender'=>["required",Rule::in(['male','female','other'])],
             'birthday'=>["nullable","min:0","max:10"],

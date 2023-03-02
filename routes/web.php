@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Auth\SocialiteFacebookAuthController;
 use App\Http\Controllers\Auth\SocialiteGoogleAuthController;
 use App\Http\Controllers\MyAccountController;
+use App\Http\Controllers\Vendor\VendorAuthController;
 use App\Http\Controllers\Vendor\VendorDashboardController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -30,7 +31,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name("home");
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -46,7 +47,8 @@ require __DIR__.'/auth.php';
 
 
 Route::get("admin/login", [AdminAuthController::class,"create"])->name("admin.login");
-Route::delete("admin/logout", [AdminAuthController::class,"destroy"])->name("admin.logout");
+
+Route::get("vendor/login", [VendorAuthController::class,"create"])->name("vendor.login");
 
 Route::middleware(["auth","user.role:admin"])->group(function () {
     Route::get("/admin/dashboard", [AdminDashboardController::class,"index"])->name("admin.dashboard");

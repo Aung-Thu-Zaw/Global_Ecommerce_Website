@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 use Inertia\Response;
 
-class AdminAuthController extends Controller
+class VendorAuthController extends Controller
 {
     public function create(): Response
     {
-        return inertia('Admin/Auth/Login', [
+        return inertia('Vendor/Auth/Login', [
             'canResetPassword' => Route::has("password.request"),
             'status' => session('status'),
         ]);

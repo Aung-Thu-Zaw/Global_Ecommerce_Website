@@ -4,6 +4,7 @@ import DeleteUserForm from "./Partials/DeleteUserForm.vue";
 import UpdatePasswordForm from "./Partials/UpdatePasswordForm.vue";
 import UpdateProfileInformationForm from "./Partials/UpdateProfileInformationForm.vue";
 import { Head } from "@inertiajs/vue3";
+import { Link } from "@inertiajs/vue3";
 
 defineProps({
   mustVerifyEmail: Boolean,
@@ -16,9 +17,11 @@ defineProps({
 
   <AuthenticatedLayout>
     <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Manage My Account
-      </h2>
+      <Link :href="route('my-account.edit')">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+          Manage My Account
+        </h2>
+      </Link>
     </template>
 
     <div
