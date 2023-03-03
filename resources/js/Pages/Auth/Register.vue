@@ -9,7 +9,7 @@
         </h1>
 
         <div class="mb-3">
-          <InputLabel for="name" value="Name" />
+          <InputLabel for="name" value="Name *" />
 
           <TextInput
             id="name"
@@ -31,7 +31,7 @@
         </div>
 
         <div class="mb-3">
-          <InputLabel for="email" value="Email" />
+          <InputLabel for="email" value="Email *" />
 
           <TextInput
             id="email"
@@ -52,7 +52,7 @@
         </div>
 
         <div class="mb-3">
-          <InputLabel for="password" value="Password" />
+          <InputLabel for="password" value="Password *" />
 
           <TextInput
             id="password"
@@ -73,7 +73,7 @@
         </div>
 
         <div class="mb-3">
-          <InputLabel for="password_confirmation" value="Confirm Password" />
+          <InputLabel for="password_confirmation" value="Confirm Password *" />
 
           <TextInput
             id="password_confirmation"
@@ -94,6 +94,37 @@
             class="mt-2"
             :message="form.errors.password_confirmation"
           />
+        </div>
+
+        <div class="mb-3">
+          <InputLabel for="gender" value="Gender *" />
+
+          <select
+            class="p-3 w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+            v-model="form.gender"
+          >
+            <option value="" selected disabled>Select Your Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+
+          <InputError class="mt-2" :message="form.errors.gender" />
+        </div>
+
+        <div class="mb-3">
+          <InputLabel for="birthday" value="Birthday *" />
+
+          <InputContainer>
+            <i class="fa-solid fa-calendar text-gray-600"></i>
+            <datepicker
+              class="p-2 w-[400px] border-transparent border-none outline-none focus:ring-0 placeholder:text-gray-400 placeholder:text-sm"
+              v-model="date"
+              placeholder="Select Your Birthday"
+            />
+          </InputContainer>
+
+          <InputError class="mt-2" :message="form.errors.birthday" />
         </div>
 
         <div class="mb-3">
@@ -131,16 +162,31 @@ import FormContainer from "@/Components/Form/FormContainer.vue";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 import InputError from "@/Components/Form/InputError.vue";
 import InputLabel from "@/Components/Form/InputLabel.vue";
+import InputContainer from "@/Components/Form/InputContainer.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 import FormButton from "@/Components/Form/FormButton.vue";
 import SocialiteAuth from "@/Components/Form/SocialiteAuth.vue";
+import datepicker from "vue3-datepicker";
+import { computed, ref } from "vue";
+
+const date = ref(null);
+
+const formatDate = computed(() => {
+  const year = date.value ? date.value.getFullYear() : "";
+  const month = date.value ? date.value.getMonth() + 1 : "";
+  const day = date.value ? date.value.getDate() : "";
+
+  return `${year}-${month}-${day}`;
+});
 
 const form = useForm({
   name: "",
   email: "",
   password: "",
   password_confirmation: "",
+  gender: "",
+  birthday: formatDate,
   terms: false,
   captcha_token: null,
 });

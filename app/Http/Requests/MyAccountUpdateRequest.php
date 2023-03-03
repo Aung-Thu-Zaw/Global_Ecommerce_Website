@@ -22,12 +22,12 @@ class MyAccountUpdateRequest extends FormRequest
             'phone'=>["nullable","min:0","max:25", Rule::unique(User::class)->ignore($this->user()->id)],
             'address'=>["nullable","min:0","max:150"],
             'gender'=>["required",Rule::in(['male','female','other'])],
-            'birthday'=>["nullable","min:0","max:10"],
+            'birthday'=>["nullable"],
         ];
 
 
         if ($this->hasFile("avatar")) {
-            $rules["avatar"]=["required","image","mimes:png,jpg,gif,jpeg"];
+            $rules["avatar"]=["required","image","mimes:png,jpg,gif,jpeg,webp"];
         }
 
 

@@ -52,7 +52,7 @@ const submit = () => {
         </h1>
 
         <div class="mb-3">
-          <InputLabel for="email" value="Email" />
+          <InputLabel for="email" value="Email *" />
 
           <TextInput
             id="email"
@@ -74,7 +74,7 @@ const submit = () => {
         </div>
 
         <div class="mb-3">
-          <InputLabel for="password" value="Password" />
+          <InputLabel for="password" value="Password *" />
 
           <TextInput
             id="password"

@@ -4,7 +4,8 @@ import InputLabel from "@/Components/Form/InputLabel.vue";
 import FormButton from "@/Components/Form/FormButton.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import { Link, useForm, usePage } from "@inertiajs/vue3";
-import { inject, ref } from "vue";
+import { computed, inject, ref } from "vue";
+import datepicker from "vue3-datepicker";
 
 const props = defineProps({
   mustVerifyEmail: Boolean,
@@ -13,14 +14,27 @@ const props = defineProps({
 
 const user = usePage().props.auth.user;
 
+const date = ref(user.birthday ? new Date(user.birthday) : "");
+
+const formatDate = computed(() => {
+  const year = date.value ? date.value.getFullYear() : "";
+  const month = date.value ? date.value.getMonth() + 1 : "";
+  const day = date.value ? date.value.getDate() : "";
+
+  if (year && month && date) {
+    return `${year}-${month}-${day}`;
+  }
+  return "";
+});
+
 const form = useForm({
   name: user.name,
   email: user.email,
-  avatar: null,
+  avatar: user.avatar,
   phone: user.phone,
   address: user.address,
   gender: user.gender,
-  birthday: user.birthday,
+  birthday: formatDate,
 });
 
 const swal = inject("$swal");
@@ -79,6 +93,7 @@ const getPreviewPhotoPath = (path) => {
             v-model="form.name"
             required
             autofocus
+            placeholder="Enter Your Name"
           />
 
           <InputError class="mt-2" :message="form.errors.name" />
@@ -93,6 +108,7 @@ const getPreviewPhotoPath = (path) => {
             class="mt-1 block w-full"
             v-model="form.email"
             required
+            placeholder="Enter Your Email"
           />
 
           <InputError class="mt-2" :message="form.errors.email" />
@@ -127,8 +143,7 @@ const getPreviewPhotoPath = (path) => {
             type="phone"
             class="mt-1 block w-full"
             v-model="form.phone"
-            required
-            autocomplete="username"
+            placeholder="Enter Your Phone Number"
           />
 
           <InputError class="mt-2" :message="form.errors.phone" />
@@ -142,19 +157,20 @@ const getPreviewPhotoPath = (path) => {
             type="address"
             class="mt-1 block w-full"
             v-model="form.address"
-            required
+            placeholder="Enter Your Address"
           />
 
           <InputError class="mt-2" :message="form.errors.address" />
         </div>
 
         <div>
-          <InputLabel for="gender" value="Gender" />
+          <InputLabel for="gender" value="Gender *" />
 
           <select
             class="p-3 w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 placeholder:text-gray-400 placeholder:text-sm"
             v-model="form.gender"
           >
+            <option value="" selected disabled>Select Your Gender</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
             <option value="other">Other</option>
@@ -164,15 +180,12 @@ const getPreviewPhotoPath = (path) => {
         </div>
 
         <div>
-          <InputLabel for="birthday" value="Birthday (Year-Month-Day)" />
-          <TextInput
-            id="birthday"
-            type="text"
-            class="mt-1 block w-full"
-            v-model="form.birthday"
-            required
-            autofocus
-            placeholder="Example: 1988-3-11"
+          <InputLabel for="birthday" value="Birthday" />
+
+          <datepicker
+            class="p-3 w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 placeholder:text-gray-400 placeholder:text-sm"
+            placeholder="Select Your Birthday"
+            v-model="date"
           />
 
           <InputError class="mt-2" :message="form.errors.birthday" />
