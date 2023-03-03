@@ -41,7 +41,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return match ((string)$this->role) {
             "admin"=>"admin.dashboard",
             "vendor"=>"vendor.dashboard",
-            "user"=>"user.dashboard",
+            "user"=>"home",
+        };
+    }
+
+    public function logoutRedirect()
+    {
+        return match ((string)$this->role) {
+            "admin"=>"admin.login",
+            "vendor"=>"vendor.login",
+            "user"=>"home",
         };
     }
 }
