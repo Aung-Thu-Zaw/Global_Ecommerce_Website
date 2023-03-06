@@ -7,3 +7,4 @@
         @apply flex items-center justify-center border border-gray-300 p-3 w-full my-2 rounded-md md:w-[200px] hover:-translate-y-2 hover:shadow-md duration-150;
     }
 }
+

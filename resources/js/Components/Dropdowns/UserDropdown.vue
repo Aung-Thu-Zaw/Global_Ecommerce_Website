@@ -12,11 +12,11 @@
         >
           <img
             alt=""
-            class="w-full h-full object-cover rounded-full align-middle border-none shadow-lg ring-2 ring-green-500"
+            class="w-full h-full object-cover rounded-full align-middle border-none shadow-lg ring-2 ring-blue-400"
             :src="$page.props.auth.user.avatar"
           />
         </span>
-        <span class="text-gray-200 font-bold ml-2">{{
+        <span class="text-slate-600 font-bold ml-2">{{
           $page.props.auth.user.name
         }}</span>
       </div>
