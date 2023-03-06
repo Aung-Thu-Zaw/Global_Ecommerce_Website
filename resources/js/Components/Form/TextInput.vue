@@ -2,7 +2,7 @@
 import InputContainer from "@/Components/Form/InputContainer.vue";
 import { onMounted, ref } from "vue";
 
-defineProps(["modelValue", "placeholder", "type"]);
+defineProps(["modelValue", "placeholder", "type", "required"]);
 
 defineEmits(["update:modelValue"]);
 
@@ -28,6 +28,7 @@ defineExpose({ focus: () => input.value.focus() });
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
       ref="input"
+      :required="required"
     />
   </InputContainer>
 </template>

@@ -8,7 +8,13 @@ use Inertia\Response;
 
 class VendorAuthController extends Controller
 {
-    public function create(): Response
+    public function register(): Response
+    {
+        return inertia('Vendor/Auth/Register');
+    }
+
+
+    public function login(): Response
     {
         return inertia('Vendor/Auth/Login', [
             'canResetPassword' => Route::has("password.request"),

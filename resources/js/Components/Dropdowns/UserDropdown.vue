@@ -16,9 +16,16 @@
             :src="$page.props.auth.user.avatar"
           />
         </span>
-        <span class="text-slate-600 font-bold ml-2">{{
-          $page.props.auth.user.name
-        }}</span>
+        <span
+          class="font-bold ml-2 text-slate-600"
+          :class="{
+            'text-white':
+              $page.url == '/admin/dashboard' ||
+              $page.url == '/vendor/dashboard' ||
+              $page.url == '/seller/dashboard',
+          }"
+          >{{ $page.props.auth.user.name }}</span
+        >
       </div>
     </a>
     <div

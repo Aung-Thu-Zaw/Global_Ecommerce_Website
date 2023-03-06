@@ -46,9 +46,11 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 
-Route::get("admin/login", [AdminAuthController::class,"create"])->name("admin.login");
+Route::get("admin/login", [AdminAuthController::class,"login"])->name("admin.login");
 
-Route::get("vendor/login", [VendorAuthController::class,"create"])->name("vendor.login");
+Route::get("vendor/register", [VendorAuthController::class,"register"])->name("vendor.register");
+Route::get("vendor/login", [VendorAuthController::class,"login"])->name("vendor.login");
+
 
 Route::middleware(["auth","user.role:admin"])->group(function () {
     Route::get("/admin/dashboard", [AdminDashboardController::class,"index"])->name("admin.dashboard");

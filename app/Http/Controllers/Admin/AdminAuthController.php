@@ -8,7 +8,7 @@ use Inertia\Response;
 
 class AdminAuthController extends Controller
 {
-    public function create(): Response
+    public function login(): Response
     {
         return inertia('Admin/Auth/Login', [
             'canResetPassword' => Route::has("password.request"),

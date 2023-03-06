@@ -5,25 +5,48 @@
       <!-- menu -->
       <nav class="hidden lg:flex flex-1 items-center justify-end py-1">
         <a class="text-sm font-bold px-3 py-2 hover:text-gray-300" href="#">
-          <i class="fa-solid fa-truck"></i>
-          TRACK MY ORDER
-        </a>
-        <span>|</span>
-        <a class="text-sm font-bold px-3 py-2 hover:text-gray-300" href="#">
           <i class="fa-solid fa-circle-info"></i>
           HELP CENTER
         </a>
         <span>|</span>
-        <a class="text-sm font-bold px-3 py-2 hover:text-gray-300" href="#">
-          <i class="fa-solid fa-shop"></i>
+        <Link
+          class="text-sm font-bold px-3 py-2 hover:text-gray-300"
+          :href="route('vendor.register')"
+          data-te-toggle="tooltip"
+          data-te-placement="bottom"
+          title="Become a vendor is for those who have their own products and company."
+        >
+          <i class="fa-solid fa-store"></i>
           BECOME A VENDOR
+        </Link>
+        <span>|</span>
+        <!-- <a
+          class="text-sm font-bold px-3 py-2 hover:text-gray-300"
+          href="#"
+          data-te-toggle="tooltip"
+          data-te-placement="bottom"
+          title="Become a seller is for those who wants to sell a variety of products."
+        >
+          <i class="fa-solid fa-shop"></i>
+          BECOME A SELLER
+        </a>
+        <span>|</span> -->
+        <a
+          class="text-sm font-bold px-3 py-2 hover:text-gray-300"
+          href="#"
+          data-te-toggle="tooltip"
+          data-te-placement="bottom"
+          title="Check what happened to my products order?"
+        >
+          <i class="fa-solid fa-truck"></i>
+          TRACK MY ORDER
         </a>
         <span>|</span>
         <div class="flex justify-center">
           <div>
             <div class="relative" data-te-dropdown-ref>
               <a
-                class="flex items-center whitespace-nowrap px-6 pt-2.5 pb-2 text-sm font-bold uppercase leading-normal text-white"
+                class="flex items-center whitespace-nowrap px-4 pt-2.5 pb-2 text-sm font-bold uppercase leading-normal text-white"
                 href="#"
                 type="button"
                 id="dropdownMenuButton2"
@@ -148,24 +171,24 @@
         <!-- Actions -->
         <nav v-else class="hidden md:flex justify-end flex-1 items-center">
           <div class="flex items-center space-x-2 ml-auto">
-            <a
+            <Link
               class="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
-              href="#"
+              :href="route('register')"
             >
               <i class="text-gray-400 w-5 fa fa-user"></i>
               <span class="hidden lg:inline ml-1 text-sm font-bold"
                 >SIGN UP</span
               >
-            </a>
-            <a
+            </Link>
+            <Link
               class="px-3 py-2 inline-block text-center text-white bg-blue-500 shadow-sm border border-gray-200 rounded-md hover:bg-blue-700"
-              href="#"
+              :href="route('login')"
             >
               <i class="w-5 fa fa-user"></i>
               <span class="hidden lg:inline ml-1 text-sm font-bold"
                 >SIGN IN</span
               >
-            </a>
+            </Link>
           </div>
         </nav>
         <!-- Actions .//end -->
@@ -175,11 +198,9 @@
   </header>
 </template>
 
-<script>
+<script setup>
+import { Link } from "@inertiajs/vue3";
 import UserDropdown from "../Dropdowns/UserDropdown.vue";
-export default {
-  components: { UserDropdown },
-};
 </script>
 
 <style>

@@ -36,19 +36,29 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'company_name'=>['nullable'],
+            'shop_name'=>['nullable'],
             'email' => 'required|string|email|max:255|unique:'.User::class,
+            'phone'=>['nullable','numeric'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'gender'=>["required",Rule::in(['male','female','other'])],
-            'birthday'=>["required","date"],
+            'gender'=>["nullable",Rule::in(['male','female','other'])],
+            'birthday'=>["nullable","date"],
+            'role'=>["required",Rule::in(["admin","vendor","user"])],
+            'status'=>["required",Rule::in(["active","inactive"])],
             'captcha_token'  => ['required',new RecaptchaRule()],
         ]);
 
         $user = User::create([
             'name' => $request->name,
+            'company_name' => $request->company_name,
+            'shop_name' => $request->shop_name,
             'email' => $request->email,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password),
             'gender'=>$request->gender,
             'birthday'=>$request->birthday,
+            'role'=>$request->role,
+            'status'=>$request->status
         ]);
 
         $colors=[
