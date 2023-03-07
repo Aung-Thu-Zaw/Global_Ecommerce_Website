@@ -75,7 +75,7 @@
         <h6
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
-          Admin Layout Pages
+          Admin Control Area
         </h6>
         <!-- Navigation -->
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
@@ -94,20 +94,77 @@
               Dashboard
             </Link>
           </li>
+        </ul>
+
+        <!-- Divider -->
+        <hr class="my-4 md:min-w-full" />
+        <!-- Heading -->
+        <h6
+          class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
+        >
+          Management
+        </h6>
+        <!-- Navigation -->
+        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
           <li class="items-center">
-            <Link
-              href="#"
+            <!-- <Link
+              :href="route('admin.dashboard')"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
                 'text-blue-500 hover:text-blue-600':
-                  $page.url === '/admin/setting',
+                  $page.url === '/admin/dashboard',
                 'text-slate-700 hover:text-slate-500':
-                  $page.url !== '/admin/setting',
+                  $page.url !== '/admin/dashboard',
               }"
+            > -->
+            <div
+              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+              @click="vendorManageIsHidden = !vendorManageIsHidden"
             >
-              <i class="fas fa-gear mr-2 text-sm"></i>
-              Setting
-            </Link>
+              <span>
+                <i class="fas fa-store mr-2 text-sm"></i>
+                Vendor Manage
+              </span>
+              <i
+                v-if="vendorManageIsHidden"
+                class="fa-solid fa-chevron-right"
+              ></i>
+              <i
+                v-if="!vendorManageIsHidden"
+                class="fa-solid fa-chevron-down"
+              ></i>
+            </div>
+            <!-- </Link> -->
+
+            <ul
+              v-if="!vendorManageIsHidden"
+              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+            >
+              <Link
+                :href="route('admin.dashboard')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600':
+                    $page.url === '/admin/dashboard',
+                  'text-slate-700 hover:text-slate-500':
+                    $page.url !== '/admin/dashboard',
+                }"
+              >
+                Active Vendor
+              </Link>
+              <Link
+                :href="route('admin.dashboard')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600':
+                    $page.url === '/admin/dashboard',
+                  'text-slate-700 hover:text-slate-500':
+                    $page.url !== '/admin/dashboard',
+                }"
+              >
+                Inactive Vendor
+              </Link>
+            </ul>
           </li>
         </ul>
       </div>
@@ -125,6 +182,8 @@ export default {
   data() {
     return {
       collapseShow: "hidden",
+      vendorManageIsHidden: true,
+      sellerManageIsHidden: true,
     };
   },
   methods: {

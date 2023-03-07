@@ -44,7 +44,7 @@
                 href="#"
                 class="md:block text-left md:pb-2 text-slate-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
               >
-                Your Stuff Ecommerce
+                Global Ecommerce
               </a>
             </div>
             <div class="w-6/12 flex justify-end">
@@ -75,7 +75,7 @@
         <h6
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
-          Vendor Layout Pages
+          Vendor Control Area
         </h6>
         <!-- Navigation -->
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
@@ -94,22 +94,10 @@
               Dashboard
             </Link>
           </li>
-          <li class="items-center">
-            <Link
-              href="#"
-              class="text-xs uppercase py-3 font-bold block"
-              :class="{
-                'text-blue-500 hover:text-blue-600':
-                  $page.url === '/vendor/setting',
-                'text-slate-700 hover:text-slate-500':
-                  $page.url !== '/vendor/setting',
-              }"
-            >
-              <i class="fas fa-gear mr-2 text-sm"></i>
-              Setting
-            </Link>
-          </li>
         </ul>
+
+
+
       </div>
     </div>
   </nav>
