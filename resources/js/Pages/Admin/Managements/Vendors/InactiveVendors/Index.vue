@@ -76,10 +76,12 @@
 
         <div>
           <Link
+            as="button"
             :href="route('admin.vendors.inactive.trash')"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
           >
-            <i class="fa-solid fa-trash"></i>
+          <i class="fa-solid fa-trash"></i>
+
             Trash
           </Link>
         </div>
@@ -93,6 +95,7 @@
             type="text"
             class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
             placeholder="Search"
+            v-model="params.search"
           />
         </form>
       </div>
@@ -186,27 +189,26 @@
               <td class="px-6 py-4">{{ inactiveVendor.name }}</td>
               <td class="px-6 py-4">{{ inactiveVendor.email }}</td>
               <td class="px-6 py-4">
-                <div
-                  class="w-[80px] p-1 bg-red-300 rounded-xl flex items-center"
-                >
-                  <div class="flex items-center justify-center px-1">
-                    <div class="h-2.5 w-2.5 rounded-full bg-red-500 mr-1"></div>
-                    <span class="text-white"> {{ inactiveVendor.status }}</span>
-                  </div>
+                <div class="flex items-center px-1">
+                  <div class="h-2.5 w-2.5 rounded-full bg-red-600 mr-1"></div>
+                  {{ inactiveVendor.status }}
                 </div>
               </td>
               <td class="px-6 py-4">{{ inactiveVendor.created_at }}</td>
               <td class="px-6 py-4">
                 <Link
+                  as="button"
                   :href="
                     route('admin.vendors.inactive.update', inactiveVendor.id)
                   "
                   method="post"
                   class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-green-600 text-white hover:bg-green-700 mr-3"
                 >
-                  Approve
+                  <i class="fa-solid fa-check"></i>
+                  Active
                 </Link>
                 <Link
+                  as="button"
                   :href="
                     route(
                       'admin.vendors.inactive.softDelete',
@@ -216,14 +218,17 @@
                   method="post"
                   class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3"
                 >
+                  <i class="fa-solid fa-minus"></i>
                   Remove
                 </Link>
                 <Link
+                  as="button"
                   :href="
                     route('admin.vendors.inactive.details', inactiveVendor.id)
                   "
                   class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700"
                 >
+                  <i class="fa-solid fa-circle-info"></i>
                   See Details
                 </Link>
               </td>
@@ -243,10 +248,30 @@
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link } from "@inertiajs/vue3";
+import { reactive, watch } from "vue";
+import { router } from "@inertiajs/vue3";
 
 defineProps({
   inactiveVendors: Object,
 });
+
+const params = reactive({
+  search: null,
+});
+
+watch(
+  () => params.search,
+  (current, previous) => {
+    router.get(
+      "/admin/managements/inactive-vendors",
+      { search: params.search },
+      {
+        replace: true,
+        preserveState: true,
+      }
+    );
+  }
+);
 </script>
 
 <style>

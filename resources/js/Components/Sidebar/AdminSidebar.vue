@@ -134,10 +134,9 @@
                 :href="route('admin.vendors.active.index')"
                 class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
                 :class="{
-                  'text-blue-500 hover:text-blue-600':
-                    $page.url === '/admin/managements/active-vendors',
-                  'text-slate-700 hover:text-slate-500':
-                    $page.url !== '/admin/managements/active-vendors',
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/managements/active-vendors'
+                  ),
                 }"
               >
                 Active Vendor
@@ -183,8 +182,8 @@ export default {
   computed: {
     vendorManage() {
       if (
-        this.$page.url == "/admin/managements/active-vendors" ||
-        this.$page.url.startsWith("/admin/managements/inactive-vendors")
+        this.$page.url.startsWith("/admin/managements/inactive-vendors") ||
+        this.$page.url.startsWith("/admin/managements/active-vendors")
       ) {
         return (this.vendorManageIsHidden = false);
       }

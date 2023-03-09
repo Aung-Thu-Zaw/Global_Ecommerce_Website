@@ -63,7 +63,7 @@
                 </svg>
                 <span
                   class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                  >Inactive Vendor</span
+                  >Active Vendor</span
                 >
               </div>
             </li>
@@ -95,7 +95,7 @@
 
         <div>
           <Link
-            :href="route('admin.vendors.inactive.index')"
+            :href="route('admin.vendors.active.index')"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
             <i class="fa-solid fa-arrow-left"></i>
@@ -107,14 +107,14 @@
       <div class="border shadow-md p-10">
         <div class="mb-10 flex items-center justify-between">
           <img
-            :src="inactiveVendor.avatar"
+            :src="activeVendor.avatar"
             alt=""
             class="w-48 h-48 rounded-md object-cover ring-4 mb-5"
           />
           <h2
-            class="uppercase text-md text-red-600 font-bold px-3 py-2 bg-red-100 rounded-md"
+            class="uppercase text-md text-green-600 font-bold px-3 py-2 bg-green-100 rounded-md"
           >
-            Shop is {{ inactiveVendor.status }}
+            Shop is {{ activeVendor.status }}
           </h2>
         </div>
         <form>
@@ -255,15 +255,15 @@ import { Head, Link, useForm } from "@inertiajs/vue3";
 import FormButton from "@/Components/Form/FormButton.vue";
 
 const props = defineProps({
-  inactiveVendor: Object,
+  activeVendor: Object,
 });
 const form = useForm({
-  company_name: props.inactiveVendor.company_name,
-  shop_name: props.inactiveVendor.shop_name,
-  name: props.inactiveVendor.name,
-  email: props.inactiveVendor.email,
-  phone: props.inactiveVendor.phone,
-  about: props.inactiveVendor.about,
+  company_name: props.activeVendor.company_name,
+  shop_name: props.activeVendor.shop_name,
+  name: props.activeVendor.name,
+  email: props.activeVendor.email,
+  phone: props.activeVendor.phone,
+  about: props.activeVendor.about,
   captcha_token: null,
 });
 </script>

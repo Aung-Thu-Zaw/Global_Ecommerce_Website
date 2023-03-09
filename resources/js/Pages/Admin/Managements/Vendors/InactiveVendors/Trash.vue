@@ -164,6 +164,7 @@
                   method="post"
                   class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3"
                 >
+                  <i class="fa-solid fa-recycle"></i>
                   Restore
                 </Link>
                 <Link
@@ -176,6 +177,7 @@
                   method="delete"
                   class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3"
                 >
+                  <i class="fa-solid fa-trash"></i>
                   Delete Forever
                 </Link>
               </td>
