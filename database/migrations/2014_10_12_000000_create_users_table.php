@@ -24,12 +24,13 @@ return new class () extends Migration {
             $table->string('phone')->unique()->nullable();
             $table->string('password')->nullable();
             $table->string('address')->nullable();
-            $table->text('information')->nullable();
+            $table->text('about')->nullable();
             $table->date('birthday')->nullable();
             $table->enum('gender', ['male','female','other'])->default('other');
             $table->enum('role', ['admin','vendor','user'])->default('user');
             $table->enum('status', ['active','inactive'])->default('active');
             $table->timestamp('email_verified_at')->nullable();
+            $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
         });

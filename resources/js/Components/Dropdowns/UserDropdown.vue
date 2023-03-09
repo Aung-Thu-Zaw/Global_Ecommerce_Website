@@ -19,7 +19,7 @@
         <span
           class="font-bold ml-2 text-slate-600"
           :class="{
-            'text-white':
+            'text-slate-600 md:text-white':
               $page.url == '/admin/dashboard' ||
               $page.url == '/vendor/dashboard' ||
               $page.url == '/seller/dashboard',

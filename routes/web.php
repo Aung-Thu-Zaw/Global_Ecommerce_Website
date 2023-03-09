@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\Managements\AdminActiveVendorController;
+use App\Http\Controllers\Admin\Managements\AdminInactiveVendorController;
 use App\Http\Controllers\Auth\SocialiteFacebookAuthController;
 use App\Http\Controllers\Auth\SocialiteGoogleAuthController;
 use App\Http\Controllers\MyAccountController;
@@ -54,7 +56,20 @@ Route::get("vendor/login", [VendorAuthController::class,"login"])->name("vendor.
 
 Route::middleware(["auth","user.role:admin"])->group(function () {
     Route::get("/admin/dashboard", [AdminDashboardController::class,"index"])->name("admin.dashboard");
+    Route::get("/admin/managements/active-vendors", [AdminActiveVendorController::class,"index"])->name("admin.vendors.active.index");
+    Route::get("/admin/managements/inactive-vendors", [AdminInactiveVendorController::class,"index"])->name("admin.vendors.inactive.index");
+
+    Route::post("/admin/managements/inactive-vendors/{id}/soft-delete", [AdminInactiveVendorController::class,"softDelete"])->name("admin.vendors.inactive.softDelete");
+    Route::post("/admin/managements/inactive-vendors/{id}/restore", [AdminInactiveVendorController::class,"restore"])->name("admin.vendors.inactive.restore");
+    Route::delete("/admin/managements/inactive-vendors/{id}/force-delete", [AdminInactiveVendorController::class,"forceDelete"])->name("admin.vendors.inactive.forceDelete");
+
+    Route::get("/admin/managements/inactive-vendors/trash", [AdminInactiveVendorController::class,"trash"])->name("admin.vendors.inactive.trash");
+
+    Route::post("/admin/managements/inactive-vendors/{id}/approve", [AdminInactiveVendorController::class,"update"])->name("admin.vendors.inactive.update");
+    // Route::get("/admin/managements/inactive-vendors", [AdminInactiveVendorController::class,"index"])->name("admin.vendors.inactive.index");
+    Route::get("admin/managements/inactive-vendors/details/{id}", [AdminInactiveVendorController::class,"show"])->name("admin.vendors.inactive.details");
 });
+
 
 
 Route::middleware(["auth","user.role:vendor"])->group(function () {

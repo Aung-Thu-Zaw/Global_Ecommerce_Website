@@ -30,7 +30,7 @@
             </template>
           </TextInput>
 
-          <InputError class="mt-2" :message="form.errors.name" />
+          <InputError class="mt-2" :message="form.errors.company_name" />
         </div>
 
         <div class="mb-3">
@@ -51,7 +51,7 @@
             </template>
           </TextInput>
 
-          <InputError class="mt-2" :message="form.errors.name" />
+          <InputError class="mt-2" :message="form.errors.shop_name" />
         </div>
 
         <div class="mb-3">
