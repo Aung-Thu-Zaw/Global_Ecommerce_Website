@@ -63,7 +63,7 @@ class AdminInactiveVendorController extends Controller
 
     public function trash()
     {
-        $inactiveTrashVendors=User::onlyTrashed()->where([["role","vendor"],["status","inactive"]])->get();
+        $inactiveTrashVendors=User::onlyTrashed()->where([["role","vendor"],["status","inactive"]])->paginate(15);
 
         return inertia("Admin/Managements/Vendors/InactiveVendors/Trash", compact("inactiveTrashVendors"));
     }

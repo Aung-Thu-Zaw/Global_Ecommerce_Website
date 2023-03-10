@@ -141,7 +141,7 @@
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody v-if="activeVendors.data.length">
             <tr
               v-for="(activeVendor, index) in activeVendors.data"
               :key="activeVendor.id"
@@ -182,6 +182,12 @@
             </tr>
           </tbody>
         </table>
+
+        <div v-if="!activeVendors.data.length" class="p-5 w-full">
+          <p class="text-center text-sm uppercase text-slate-500 font-bold">
+            Data is not avliable for this table
+          </p>
+        </div>
       </div>
 
       <div class="flex items-center justify-center">

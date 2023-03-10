@@ -36,6 +36,6 @@ class UserSeeder extends Seeder
             "role"=>"user",
         ]);
 
-        // User::factory(5)->create(["role"=>"vendor","status"=>"inactive"]);
+        User::factory(20)->create(["role"=>"vendor","status"=>"inactive"]);
     }
 }

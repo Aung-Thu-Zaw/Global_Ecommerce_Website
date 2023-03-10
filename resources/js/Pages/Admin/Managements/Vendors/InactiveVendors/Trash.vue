@@ -125,9 +125,9 @@
               <th scope="col" class="px-6 py-3">Action</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody v-if="inactiveTrashVendors.data.length">
             <tr
-              v-for="inactiveTrashVendor in inactiveTrashVendors"
+              v-for="inactiveTrashVendor in inactiveTrashVendors.data"
               :key="inactiveTrashVendor.id"
               class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
             >
@@ -172,12 +172,23 @@
             </tr>
           </tbody>
         </table>
+
+        <div v-if="!inactiveTrashVendors.data.length" class="p-5 w-full">
+          <p class="text-center text-sm uppercase text-slate-500 font-bold">
+            Data is not avliable for this table
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-center">
+        <pagination class="mt-6" :links="inactiveTrashVendors.links" />
       </div>
     </div>
   </AdminDashboardLayout>
 </template>
 
 <script setup>
+import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link } from "@inertiajs/vue3";
 import { inject } from "vue";

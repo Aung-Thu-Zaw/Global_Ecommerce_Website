@@ -18,7 +18,7 @@
           "
           class="px-3 py-1 bg-orange-200 text-orange-700 rounded-xl"
         >
-        <i class="fa-solid fa-spinner animate-spin"></i>
+          <i class="fa-solid fa-spinner animate-spin"></i>
           Pending
         </span>
         <span
@@ -28,7 +28,7 @@
           "
           class="px-3 py-1 bg-green-200 text-green-600 rounded-xl"
         >
-        <i class="fa-solid fa-circle-check"></i>
+          <i class="fa-solid fa-circle-check"></i>
           Verified
         </span>
       </Link>
