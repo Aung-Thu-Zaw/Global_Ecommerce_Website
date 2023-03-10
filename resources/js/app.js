@@ -6,9 +6,9 @@ import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
 import * as te from "tw-elements";
+import { VueReCaptcha } from "vue-recaptcha-v3";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
-import { VueReCaptcha } from "vue-recaptcha-v3";
 
 const appName =
     window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";

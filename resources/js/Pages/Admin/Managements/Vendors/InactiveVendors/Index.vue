@@ -80,7 +80,7 @@
             :href="route('admin.vendors.inactive.trash')"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
           >
-          <i class="fa-solid fa-trash"></i>
+            <i class="fa-solid fa-trash"></i>
 
             Trash
           </Link>
@@ -110,15 +110,6 @@
             <tr>
               <th scope="col" class="px-6 py-3">
                 <span class="mr-1">NO</span>
-                <i
-                  class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-                ></i>
-                <i
-                  class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-                ></i>
-              </th>
-              <th scope="col" class="px-6 py-3">
-                <span class="mr-1">Shop Name</span>
                 <i
                   class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
                 ></i>
@@ -185,7 +176,6 @@
               >
                 {{ index + 1 }}
               </th>
-              <td class="px-6 py-4">{{ inactiveVendor.shop_name }}</td>
               <td class="px-6 py-4">{{ inactiveVendor.name }}</td>
               <td class="px-6 py-4">{{ inactiveVendor.email }}</td>
               <td class="px-6 py-4">
@@ -195,38 +185,28 @@
                 </div>
               </td>
               <td class="px-6 py-4">{{ inactiveVendor.created_at }}</td>
-              <td class="px-6 py-4">
-                <Link
-                  as="button"
-                  :href="
-                    route('admin.vendors.inactive.update', inactiveVendor.id)
-                  "
-                  method="post"
-                  class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-green-600 text-white hover:bg-green-700 mr-3"
+              <td class="px-6 py-4 flex flex-wrap">
+                <button
+                  @click="handleActive(inactiveVendor.id)"
+                  class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-green-600 text-white hover:bg-green-700 mr-3 my-1"
                 >
                   <i class="fa-solid fa-check"></i>
                   Active
-                </Link>
-                <Link
-                  as="button"
-                  :href="
-                    route(
-                      'admin.vendors.inactive.softDelete',
-                      inactiveVendor.id
-                    )
-                  "
-                  method="post"
-                  class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3"
+                </button>
+
+                <button
+                  @click="handleRemove(inactiveVendor.id)"
+                  class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
                 >
                   <i class="fa-solid fa-minus"></i>
                   Remove
-                </Link>
+                </button>
                 <Link
                   as="button"
                   :href="
                     route('admin.vendors.inactive.details', inactiveVendor.id)
                   "
-                  class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700"
+                  class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 my-1"
                 >
                   <i class="fa-solid fa-circle-info"></i>
                   See Details
@@ -247,17 +227,63 @@
 <script setup>
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link } from "@inertiajs/vue3";
-import { reactive, watch } from "vue";
+import { Link, usePage } from "@inertiajs/vue3";
+import { computed, inject, reactive, ref, watch } from "vue";
 import { router } from "@inertiajs/vue3";
-
 defineProps({
   inactiveVendors: Object,
 });
 
+const swal = inject("$swal");
 const params = reactive({
   search: null,
 });
+const handleActive = async (id) => {
+  const result = await swal({
+    icon: "info",
+    title: "Are you sure you want to active this vendor?",
+    showCancelButton: true,
+    confirmButtonText: "Yes, active!",
+    confirmButtonColor: "#027e00",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.post(route("admin.vendors.inactive.update", id));
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
+
+const handleRemove = async (id) => {
+  const result = await swal({
+    icon: "warning",
+    title: "Are you sure you want to move it to the trash?",
+    text: "You will be able to revert this action!",
+    showCancelButton: true,
+    confirmButtonText: "Yes, remove it!",
+    confirmButtonColor: "#ef4444",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.post(route("admin.vendors.inactive.softDelete", id));
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
 
 watch(
   () => params.search,

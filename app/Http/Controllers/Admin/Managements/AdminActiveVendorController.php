@@ -31,6 +31,6 @@ class AdminActiveVendorController extends Controller
 
         $activeVendor->update();
 
-        return back();
+        return to_route('admin.vendors.active.index')->with("success", "Vendor has been successfully inactivated");
     }
 }

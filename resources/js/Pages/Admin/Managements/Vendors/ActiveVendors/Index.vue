@@ -11,7 +11,7 @@
             <li class="inline-flex items-center">
               <a
                 href="#"
-                class="inline-flex items-center font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+                class="inline-flex items-center font-medium text-gray-700 hover:text-blue-600 dark:hover:text-white"
               >
                 <svg
                   aria-hidden="true"
@@ -43,7 +43,7 @@
                   ></path>
                 </svg>
                 <span
-                  class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400 dark:hover:text-white"
+                  class="ml-1 font-medium text-gray-500 md:ml-2 dark:hover:text-white"
                   >Vendor Manage</span
                 >
               </div>
@@ -63,8 +63,7 @@
                     clip-rule="evenodd"
                   ></path>
                 </svg>
-                <span
-                  class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                <span class="ml-1 font-medium text-gray-500 md:ml-2"
                   >Active Vendor</span
                 >
               </div>
@@ -89,24 +88,11 @@
       </div>
 
       <div class="relative overflow-x-auto shadow-md">
-        <table
-          class="w-full text-sm text-left text-gray-500 dark:text-gray-400 border"
-        >
-          <thead
-            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
-          >
+        <table class="w-full text-sm text-left text-gray-500 border">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
               <th scope="col" class="px-6 py-3">
                 <span class="mr-1">NO</span>
-                <i
-                  class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-                ></i>
-                <i
-                  class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-                ></i>
-              </th>
-              <th scope="col" class="px-6 py-3">
-                <span class="mr-1">Shop Name</span>
                 <i
                   class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
                 ></i>
@@ -167,7 +153,6 @@
               >
                 {{ index + 1 }}
               </th>
-              <td class="px-6 py-4">{{ activeVendor.shop_name }}</td>
               <td class="px-6 py-4">{{ activeVendor.name }}</td>
               <td class="px-6 py-4">{{ activeVendor.email }}</td>
               <td class="px-6 py-4">
@@ -178,15 +163,13 @@
               </td>
               <td class="px-6 py-4">{{ activeVendor.created_at }}</td>
               <td class="px-6 py-4">
-                <Link
-                  as="button"
-                  :href="route('admin.vendors.active.update', activeVendor.id)"
-                  method="post"
+                <button
+                  @click="handleInactive(activeVendor.id)"
                   class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3"
                 >
                   <i class="fa-solid fa-xmark"></i>
                   Inactive
-                </Link>
+                </button>
                 <Link
                   as="button"
                   :href="route('admin.vendors.active.details', activeVendor.id)"
@@ -212,8 +195,9 @@
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link } from "@inertiajs/vue3";
-import { reactive, watch } from "vue";
+import { reactive, watch, inject } from "vue";
 import { router } from "@inertiajs/vue3";
+import { usePage } from "@inertiajs/vue3";
 
 defineProps({
   activeVendors: Object,
@@ -222,6 +206,31 @@ defineProps({
 const params = reactive({
   search: null,
 });
+
+const swal = inject("$swal");
+
+const handleInactive = async (id) => {
+  const result = await swal({
+    icon: "info",
+    title: "Are you sure you want to inactive this vendor?",
+    showCancelButton: true,
+    confirmButtonText: "Yes, inactive!",
+    confirmButtonColor: "#027e00",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.post(route("admin.vendors.active.update", id));
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
 
 watch(
   () => params.search,

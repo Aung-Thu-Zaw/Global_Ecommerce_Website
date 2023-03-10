@@ -153,33 +153,21 @@
                 </div>
               </td>
               <td class="px-6 py-4">{{ inactiveTrashVendor.created_at }}</td>
-              <td class="px-6 py-4">
-                <Link
-                  :href="
-                    route(
-                      'admin.vendors.inactive.restore',
-                      inactiveTrashVendor.id
-                    )
-                  "
-                  method="post"
-                  class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3"
+              <td class="px-6 py-4 flex flex-wrap">
+                <button
+                  @click="handleRestore(inactiveTrashVendor.id)"
+                  class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
                 >
                   <i class="fa-solid fa-recycle"></i>
                   Restore
-                </Link>
-                <Link
-                  :href="
-                    route(
-                      'admin.vendors.inactive.forceDelete',
-                      inactiveTrashVendor.id
-                    )
-                  "
-                  method="delete"
-                  class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3"
+                </button>
+                <button
+                  @click="handleDelete(inactiveTrashVendor.id)"
+                  class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
                 >
                   <i class="fa-solid fa-trash"></i>
                   Delete Forever
-                </Link>
+                </button>
               </td>
             </tr>
           </tbody>
@@ -192,10 +180,62 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link } from "@inertiajs/vue3";
+import { inject } from "vue";
+import { router } from "@inertiajs/vue3";
+import { usePage } from "@inertiajs/vue3";
 
 defineProps({
   inactiveTrashVendors: Array,
 });
+
+const swal = inject("$swal");
+
+const handleRestore = async (id) => {
+  const result = await swal({
+    icon: "info",
+    title: "Are you sure you want to restore this vendor?",
+    showCancelButton: true,
+    confirmButtonText: "Yes, restore!",
+    confirmButtonColor: "#027e00",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.post(route("admin.vendors.inactive.restore", id));
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
+
+const handleDelete = async (id) => {
+  const result = await swal({
+    icon: "warning",
+    title: "Are you sure you want to delete it from the trash?",
+    text: "You will not be able to revert this action!",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it!",
+    confirmButtonColor: "#ef4444",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.delete(route("admin.vendors.inactive.forceDelete", id));
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
 </script>
 
   <style>
