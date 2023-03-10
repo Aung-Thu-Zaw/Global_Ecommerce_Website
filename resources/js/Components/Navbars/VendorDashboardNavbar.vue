@@ -1,16 +1,16 @@
 <template>
   <!-- Navbar -->
   <nav
-    class="absolute top-0 left-0 w-full z-3 md:flex-row md:flex-nowrap md:justify-start flex items-center p-4 bg-blue-500"
+    class="absolute top-0 left-0 w-full z-3 md:flex-row md:flex-nowrap md:justify-start flex items-center p-4 bg-cyan-700"
   >
     <div
       class="w-full mx-auto items-center flex justify-end md:flex-nowrap flex-wrap md:px-10 px-4"
     >
       <Link
-        :href="route('admin.dashboard')"
+        :href="route('vendor.dashboard')"
         class="text-white text-sm uppercase hidden lg:inline-block font-semibold text-right ml-60"
       >
-        <slot name="dashboardName"></slot>
+        Vendor Dashboard
       </Link>
 
       <!-- Form -->

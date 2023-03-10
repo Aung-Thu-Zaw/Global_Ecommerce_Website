@@ -152,12 +152,6 @@
               </th>
               <th scope="col" class="px-6 py-3">
                 <span class="mr-1">Action</span>
-                <i
-                  class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-                ></i>
-                <i
-                  class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-                ></i>
               </th>
             </tr>
           </thead>
