@@ -45,7 +45,7 @@ createInertiaApp({
         delay: 250,
 
         // The color of the progress bar.
-        color: "#4B5563",
+        color: "#fc9126",
 
         // Whether to include the default NProgress styles.
         includeCSS: true,

@@ -10,7 +10,7 @@ class AdminInactiveVendorController extends Controller
 {
     public function index()
     {
-        $search=request("search");
+        // $search=request("search");
         $inactiveVendors=User::where([["role","vendor"],["status", "inactive"]])->orderBy("id", "desc")->paginate(15);
 
         return inertia("Admin/Managements/Vendors/InactiveVendors/Index", compact("inactiveVendors"));

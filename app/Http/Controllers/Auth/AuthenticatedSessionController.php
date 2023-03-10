@@ -35,7 +35,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return to_route(User::find(auth()->id())->getRedirectRouteName());
+        $gender=auth()->user()->gender==="male" || auth()->user()->gender === "other" ? "Mr." : "Mrs.";
+
+        return to_route(User::find(auth()->id())->getRedirectRouteName())->with("success", "Welcome Back $gender".auth()->user()->name." 😍");
     }
 
     /**
@@ -45,12 +47,16 @@ class AuthenticatedSessionController extends Controller
     {
         $userId=auth()->user()->id;
 
+        $name=auth()->user()->name;
+
+        $gender=auth()->user()->gender==="male" || auth()->user()->gender === "other" ? "Mr." : "Mrs.";
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
 
-        return to_route(User::find($userId)->logoutRedirect());
+        return to_route(User::find($userId)->logoutRedirect())->with("success", "See you later $gender$name 🤗");
     }
 }

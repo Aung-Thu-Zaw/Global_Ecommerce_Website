@@ -8,6 +8,9 @@ import InputError from "@/Components/Form/InputError.vue";
 import InputLabel from "@/Components/Form/InputLabel.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+import { usePage } from "@inertiajs/vue3";
 
 defineProps({
   canResetPassword: Boolean,
@@ -33,6 +36,12 @@ const submit = () => {
     onFinish: () => form.reset("password"),
   });
 };
+
+if (usePage().props.flash.successMessage) {
+  toast.success(usePage().props.flash.successMessage, {
+    autoClose: 2000,
+  });
+}
 </script>
 
 <template>

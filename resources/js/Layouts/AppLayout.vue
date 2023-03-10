@@ -5,15 +5,9 @@
   <EcommerceFooter />
 </template>
 
-<script>
+<script setup>
 import EcommerceFooter from "../Components/Footers/EcommerceFooter.vue";
 import EcommerceNavbar from "../Components/Navbars/EcommerceNavbar.vue";
-export default {
-  components: {
-    EcommerceFooter,
-    EcommerceNavbar,
-  },
-};
 </script>
 
 <style>

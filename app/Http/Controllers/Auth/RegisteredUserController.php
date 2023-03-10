@@ -43,8 +43,8 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'gender'=>["nullable",Rule::in(['male','female','other'])],
             'birthday'=>["nullable","date"],
-            'role'=>["required",Rule::in(["admin","vendor","user"])],
-            'status'=>["required",Rule::in(["active","inactive"])],
+            'role'=>["nullable",Rule::in(["admin","vendor","user"])],
+            'status'=>["nullable",Rule::in(["active","inactive"])],
             'captcha_token'  => ['required',new RecaptchaRule()],
         ]);
 
@@ -57,8 +57,8 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'gender'=>$request->gender,
             'birthday'=>$request->birthday,
-            'role'=>$request->role,
-            'status'=>$request->status
+            'role'=>$request->role?? "user",
+            'status'=>$request->status?? "active"
         ]);
 
         $colors=[
@@ -89,8 +89,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return to_route(User::find(auth()->id())->getRedirectRouteName());
-
-        // return redirect(RouteServiceProvider::HOME)->with("user-create", "<strong>Account is created successfully.</strong> Check your email box, Please verify your email.");
+        return to_route(User::find(auth()->id())->getRedirectRouteName())->with("success", "Account is created successfully");
     }
 }

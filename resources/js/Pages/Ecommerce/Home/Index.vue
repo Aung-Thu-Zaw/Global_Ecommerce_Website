@@ -2,6 +2,7 @@
   <AppLayout>
     <div class="min-h-screen bg-gray-50">
       <!-- Announcement Bar  -->
+
       <Announcement />
 
       <!-- Main Header Section -->
@@ -68,29 +69,24 @@
   </AppLayout>
 </template>
 
-<script>
+<script setup>
 import Announcement from "@/Components/Announcement.vue";
 import SubscribeNewsLetterSection from "@/Components/Sections/SubscribeNewsLetterSection.vue";
 import WhyChooseUsSection from "@/Components/Sections/WhyChooseUsSection.vue";
 import FeaturedCategory from "@/Components/Sections/FeaturedCategorySection.vue";
 import ProductsForYourSection from "@/Components/Sections/ProductsForYourSection.vue";
 import ProductSection from "@/Components/Sections/ProductSection.vue";
-import ProductCard from "@/Components/Cards/ProductCard.vue";
 import EcommerceMainSection from "@/Components/Headers/EcommerceMainSection.vue";
 import AppLayout from "../../../Layouts/AppLayout.vue";
-export default {
-  components: {
-    Announcement,
-    SubscribeNewsLetterSection,
-    WhyChooseUsSection,
-    FeaturedCategory,
-    ProductsForYourSection,
-    ProductSection,
-    ProductCard,
-    EcommerceMainSection,
-    AppLayout,
-  },
-};
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+import { usePage } from "@inertiajs/vue3";
+
+if (usePage().props.flash.successMessage) {
+  toast.success(usePage().props.flash.successMessage, {
+    autoClose: 2000,
+  });
+}
 </script>
 
 <style>
