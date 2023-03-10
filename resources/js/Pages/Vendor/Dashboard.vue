@@ -1,6 +1,11 @@
 <template>
   <VendorDashboardLayout>
-    <div v-if="user">
+    <div
+      v-if="
+        $page.props.auth.user.role === 'vendor' &&
+        $page.props.auth.user.status === 'active'
+      "
+    >
       <VendorHeaderStats />
       <div class="px-4 md:px-10 mx-auto w-full -m-24 border">
         <div class="relative z-10"></div>

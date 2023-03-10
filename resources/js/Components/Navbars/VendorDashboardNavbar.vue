@@ -8,9 +8,29 @@
     >
       <Link
         :href="route('vendor.dashboard')"
-        class="text-white text-sm uppercase hidden lg:inline-block font-semibold text-right ml-60"
+        class="text-white text-sm hidden lg:inline-block font-semibold text-right ml-60"
       >
-        Vendor Dashboard
+        <span class="uppercase"> Vendor Dashboard </span>
+        <span
+          v-if="
+            $page.props.auth.user.role === 'vendor' &&
+            $page.props.auth.user.status === 'inactive'
+          "
+          class="px-3 py-1 bg-orange-200 text-orange-700 rounded-xl"
+        >
+        <i class="fa-solid fa-spinner animate-spin"></i>
+          Pending
+        </span>
+        <span
+          v-if="
+            $page.props.auth.user.role === 'vendor' &&
+            $page.props.auth.user.status === 'active'
+          "
+          class="px-3 py-1 bg-green-200 text-green-600 rounded-xl"
+        >
+        <i class="fa-solid fa-circle-check"></i>
+          Verified
+        </span>
       </Link>
 
       <!-- Form -->
