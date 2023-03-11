@@ -90,9 +90,60 @@
                   $page.url !== '/admin/dashboard',
               }"
             >
-              <i class="fas fa-tv mr-2 text-sm"></i>
+              <i class="fa-solid fa-chart-line mr-2 text-sm"></i>
               Dashboard
             </Link>
+          </li>
+        </ul>
+
+        <!-- Navigation -->
+        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <li class="items-center cursor-pointer">
+            <div
+              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+              @click="categoriesIsHidden = !categoriesIsHidden"
+            >
+              <span>
+                <i class="fa-solid fa-laptop mr-2 text-sm"></i>
+                Categories
+              </span>
+              <i
+                v-if="categoriesIsHidden"
+                class="fa-solid fa-chevron-right"
+              ></i>
+              <i
+                v-if="!categoriesIsHidden"
+                class="fa-solid fa-chevron-down"
+              ></i>
+            </div>
+            <!-- </Link> -->
+
+            <ul
+              v-if="!categoriesIsHidden || categoriesArea"
+              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+            >
+              <Link
+                :href="route('admin.categories.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600':
+                    $page.url.startsWith('/admin/categories'),
+                }"
+              >
+                Category
+              </Link>
+              <!-- <Link
+                :href="route('admin.vendors.inactive.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/categories/sub-category'
+                  ),
+                }"
+              >
+                Add Category
+              </Link> -->
+            </ul>
           </li>
         </ul>
 
@@ -102,7 +153,7 @@
         <h6
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
-          Management
+          Managements
         </h6>
         <!-- Navigation -->
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
@@ -113,7 +164,7 @@
             >
               <span>
                 <i class="fas fa-store mr-2 text-sm"></i>
-                Vendor Manage
+                Vendors Manage
               </span>
               <i
                 v-if="vendorManageIsHidden"
@@ -170,6 +221,7 @@ export default {
   data() {
     return {
       collapseShow: "hidden",
+      categoriesIsHidden: true,
       vendorManageIsHidden: true,
     };
   },
@@ -186,6 +238,11 @@ export default {
         this.$page.url.startsWith("/admin/managements/active-vendors")
       ) {
         return (this.vendorManageIsHidden = false);
+      }
+    },
+    categoriesArea() {
+      if (this.$page.url.startsWith("/admin/categories")) {
+        return (this.categoriesIsHidden = false);
       }
     },
   },
