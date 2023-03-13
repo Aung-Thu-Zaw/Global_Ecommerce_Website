@@ -172,7 +172,7 @@
                 </button>
                 <Link
                   as="button"
-                  :href="route('admin.vendors.active.details', activeVendor.id)"
+                  :href="route('admin.vendors.active.show', activeVendor.id)"
                   class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700"
                 >
                   <i class="fa-solid fa-circle-info"></i>

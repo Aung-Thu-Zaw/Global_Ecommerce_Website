@@ -30,6 +30,12 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
 
+    protected function password(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => bcrypt($value)
+        );
+    }
 
     protected function avatar(): Attribute
     {

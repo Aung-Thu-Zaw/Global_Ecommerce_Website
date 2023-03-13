@@ -7,15 +7,16 @@ use App\Models\User;
 use Exception;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
 
 class SocialiteGoogleAuthController extends Controller
 {
-    public function redirectToProvider()
+    public function redirectToProvider(): RedirectResponse
     {
         return Socialite::driver("google")->redirect();
     }
 
-    public function handelProviderCallback()
+    public function handelProviderCallback(): RedirectResponse
     {
         try {
             $googleUser= Socialite::driver("google")->stateless()->user();

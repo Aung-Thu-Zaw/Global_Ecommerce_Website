@@ -11,10 +11,18 @@
         <div class="relative z-10"></div>
       </div>
     </div>
-    <div v-else class="mt-28 mx-auto p-5 bg-orange-100">
+    <div v-else class="mt-28 mx-auto p-5 bg-green-100">
+      <h2 class="text-md font-bold text-green-700">
+        Your shop has been successfully registered 🎉.Please verify your email
+        in your email inbox or spam box.
+      </h2>
+    </div>
+    <div
+      v-if="!$page.props.auth.user.email_verified_at"
+      class="mt-2 mx-auto p-5 bg-orange-100"
+    >
       <h2 class="text-md font-bold text-slate-700">
-        Your shop has been successfully registered 🎉. At the moment, Your shop
-        is inactive.Admin will check and contact you.
+        At the moment, Your shop is inactive. Admin will check and contact you.
       </h2>
     </div>
   </VendorDashboardLayout>

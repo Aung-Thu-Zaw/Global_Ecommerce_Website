@@ -204,7 +204,7 @@
                 <Link
                   as="button"
                   :href="
-                    route('admin.vendors.inactive.details', inactiveVendor.id)
+                    route('admin.vendors.inactive.show', inactiveVendor.id)
                   "
                   class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 my-1"
                 >

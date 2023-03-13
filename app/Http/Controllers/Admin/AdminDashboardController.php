@@ -3,15 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
 
 class AdminDashboardController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
-        $avatarUrl=auth()->user()->avatar ?? Storage::url('avatars/default-avatar-'.auth()->user()->id.'.png');
-
-        return inertia("Admin/Dashboard", compact("avatarUrl"));
+        return inertia("Admin/Dashboard");
     }
 }

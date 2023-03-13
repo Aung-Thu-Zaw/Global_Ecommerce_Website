@@ -4,32 +4,30 @@ namespace App\Http\Controllers\Admin\Managements;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\Request;
+use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
 
 class AdminActiveVendorController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
-        $search=request("search");
-        $activeVendors=User::where([["role","vendor"],["status", "active"]])->orderBy("id", "desc")->paginate(15);
+        $activeVendors=User::where([["role","vendor"],["status", "active"]])->paginate(15);
 
         return inertia("Admin/Managements/Vendors/ActiveVendors/Index", compact("activeVendors"));
     }
 
-    public function show($id)
+    public function show($id): Response
     {
-        $activeVendor=User::where("id", $id)->first();
+        $activeVendor=User::find($id);
 
         return inertia("Admin/Managements/Vendors/ActiveVendors/Details", compact("activeVendor"));
     }
 
-    public function update(Request $request, $id)
+    public function update($id): RedirectResponse
     {
-        $activeVendor=User::where("id", $id)->first();
+        $activeVendor=User::find($id);
 
-        $activeVendor->status="inactive";
-
-        $activeVendor->update();
+        $activeVendor->update(["status"=>'inactive']);
 
         return to_route('admin.vendors.active.index')->with("success", "Vendor has been successfully inactivated");
     }

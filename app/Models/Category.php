@@ -12,6 +12,8 @@ class Category extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $guarded=[];
+
     protected function image(): Attribute
     {
         return Attribute::make(

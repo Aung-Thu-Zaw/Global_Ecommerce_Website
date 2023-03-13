@@ -4,46 +4,51 @@ namespace App\Http\Controllers\Admin\Managements;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\Request;
+use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
 
 class AdminInactiveVendorController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
-        // $search=request("search");
-        $inactiveVendors=User::where([["role","vendor"],["status", "inactive"]])->orderBy("id", "desc")->paginate(15);
+        $inactiveVendors=User::where([["role","vendor"],["status", "inactive"]])->paginate(15);
 
         return inertia("Admin/Managements/Vendors/InactiveVendors/Index", compact("inactiveVendors"));
     }
 
-    public function show($id)
+    public function show($id): Response
     {
-        $inactiveVendor=User::where("id", $id)->first();
+        $inactiveVendor=User::find($id);
 
         return inertia("Admin/Managements/Vendors/InactiveVendors/Details", compact("inactiveVendor"));
     }
 
-    public function update(Request $request, $id)
+    public function update($id): RedirectResponse
     {
-        $inactiveVendor=User::where("id", $id)->first();
+        $inactiveVendor=User::find($id);
 
-        $inactiveVendor->status="active";
-
-        $inactiveVendor->update();
+        $inactiveVendor->update(["status"=>"active"]);
 
         return to_route('admin.vendors.inactive.index')->with("success", "Vendor activated successfully.");
     }
 
-    public function softDelete($id)
+    public function softDelete($id): RedirectResponse
     {
-        $inactiveVendor = User::where("id", $id)->first();
+        $inactiveVendor = User::find($id);
 
         $inactiveVendor->delete();
 
         return to_route('admin.vendors.inactive.index')->with("success", "The vendor has been successfully moved to the trash.");
     }
 
-    public function restore($id)
+    public function trash(): Response
+    {
+        $inactiveTrashVendors=User::onlyTrashed()->where([["role","vendor"],["status","inactive"]])->paginate(15);
+
+        return inertia("Admin/Managements/Vendors/InactiveVendors/Trash", compact("inactiveTrashVendors"));
+    }
+
+    public function restore($id): RedirectResponse
     {
         $inactiveVendor = User::onlyTrashed()->where("id", $id)->first();
 
@@ -52,19 +57,12 @@ class AdminInactiveVendorController extends Controller
         return to_route('admin.vendors.inactive.trash')->with("success", "You have successfully restored the vendor.");
     }
 
-    public function forceDelete($id)
+    public function forceDelete($id): RedirectResponse
     {
         $inactiveVendor = User::onlyTrashed()->where("id", $id)->first();
 
         $inactiveVendor->forceDelete();
 
         return to_route('admin.vendors.inactive.trash')->with("success", "You have successfully deleted the vendor.");
-    }
-
-    public function trash()
-    {
-        $inactiveTrashVendors=User::onlyTrashed()->where([["role","vendor"],["status","inactive"]])->paginate(15);
-
-        return inertia("Admin/Managements/Vendors/InactiveVendors/Trash", compact("inactiveTrashVendors"));
     }
 }

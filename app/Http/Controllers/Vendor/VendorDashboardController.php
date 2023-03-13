@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
 
 class VendorDashboardController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
         return inertia("Vendor/Dashboard");
     }

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,9 +14,6 @@ use Inertia\Response;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Display the login view.
-     */
     public function create(): Response
     {
         return Inertia::render('Auth/Login', [
@@ -26,30 +22,22 @@ class AuthenticatedSessionController extends Controller
         ]);
     }
 
-    /**
-     * Handle an incoming authentication request.
-     */
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        $gender=auth()->user()->gender==="male" || auth()->user()->gender === "other" ? "Mr." : "Mrs.";
+        $gender=auth()->user()->gender==="male" ? "Mr." : "Mrs.";
 
         return to_route(User::find(auth()->id())->getRedirectRouteName())->with("success", "Welcome Back $gender".auth()->user()->name." 😍");
     }
 
-    /**
-     * Destroy an authenticated session.
-     */
     public function destroy(Request $request): RedirectResponse
     {
-        $userId=auth()->user()->id;
+        $user=auth()->user();
 
-        $name=auth()->user()->name;
-
-        $gender=auth()->user()->gender==="male" || auth()->user()->gender === "other" ? "Mr." : "Mrs.";
+        $gender=$user->gender==="male" || $user->gender === "other" ? "Mr." : "Mrs.";
 
         Auth::guard('web')->logout();
 
@@ -57,6 +45,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return to_route(User::find($userId)->logoutRedirect())->with("success", "See you later $gender$name 🤗");
+        return to_route(User::find($user->id)->logoutRedirect())->with("success", 'See you later '.$gender.$user->name .' 🤗');
     }
 }

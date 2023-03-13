@@ -16,7 +16,7 @@ import { usePage } from "@inertiajs/vue3";
 
 if (usePage().props.flash.successMessage) {
   toast.success(usePage().props.flash.successMessage, {
-autoClose: 2000,
+    autoClose: 2000,
   });
 }
 </script>

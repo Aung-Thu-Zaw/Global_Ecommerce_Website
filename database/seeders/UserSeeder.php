@@ -18,24 +18,24 @@ class UserSeeder extends Seeder
         User::factory()->create([
             "name"=>"Admin",
             "email"=>"admin@gmail.com",
-            "password"=>bcrypt("Password!"),
+            "password"=>"Password!",
             "role"=>"admin",
         ]);
 
         User::factory()->create([
             "name"=>"Vendor",
             "email"=>"vendor@gmail.com",
-            "password"=>bcrypt("Password!"),
+            "password"=>"Password!",
             "role"=>"vendor",
         ]);
 
         User::factory()->create([
             "name"=>"User",
             "email"=>"user@gmail.com",
-            "password"=>bcrypt("Password!"),
+            "password"=>"Password!",
             "role"=>"user",
         ]);
 
-        User::factory(20)->create(["role"=>"vendor","status"=>"inactive"]);
+        // User::factory(20)->create(["role"=>"vendor","status"=>"inactive"]);
     }
 }
