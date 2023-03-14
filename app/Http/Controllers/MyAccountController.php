@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use App\Actions\DeleteUserAction;
 use Laravolt\Avatar\Avatar;
 use App\Http\Requests\MyAccountUpdateRequest;
-use App\Models\User;
+use App\Services\UserAvatarService;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -30,7 +29,7 @@ class MyAccountController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(MyAccountUpdateRequest $request): RedirectResponse
+    public function update(MyAccountUpdateRequest $request, UserAvatarService $userAvatarService): RedirectResponse
     {
         $request->user()->fill($request->validated());
 
@@ -38,63 +37,9 @@ class MyAccountController extends Controller
             $request->user()->email_verified_at = null;
         }
 
+        $userAvatarService->regenerateDefaultAvatar($request);
 
-
-        if ($request->user()->isDirty('name')) {
-            $userId=$request->user()->id;
-
-
-            if (empty($request->user()->avatar) && file_exists(storage_path("app/public/avatars/default-avatar-$userId.png"))) {
-                unlink(storage_path("app/public/avatars/default-avatar-$userId.png"));
-            }
-
-
-            $colors=[
-                "#f44336",
-                "#E91E63",
-                "#9C27B0",
-                "#673AB7",
-                "#3F51B5",
-                "#2196F3",
-                "#03A9F4",
-                "#00BCD4",
-                "#009688",
-                "#4CAF50",
-                "#8BC34A",
-                "#CDDC39",
-                "#FFC107",
-                "#FF9800",
-                "#FF5722",
-            ];
-
-            $randomColor=array_rand($colors, 1);
-
-            $avatar=new Avatar();
-            $avatar->create($request->name)->setBackground($colors[$randomColor])->setBorder(0, "background")->save(storage_path("app/public/avatars/default-avatar-$userId.png"));
-        }
-
-
-
-        if ($request->hasFile("avatar")) {
-            $user=$request->user();
-
-            if (file_exists(storage_path("app/public/avatars/default-avatar-$user->id.png"))) {
-                unlink(storage_path("app/public/avatars/default-avatar-$user->id.png"));
-            }
-
-            if (!empty($request->user()->avatar) && file_exists(storage_path("app/public/avatars/$user->avatar"))) {
-                unlink(storage_path("app/public/avatars/$user->avatar"));
-            }
-
-            $extension=$request->file("avatar")->extension();
-
-            $finalName="avatar-$user->id.$extension";
-
-            $request->file("avatar")->move(storage_path("app/public/avatars/"), $finalName);
-
-
-            $request->user()->avatar=$finalName;
-        }
+        $userAvatarService->uploadAvatar($request);
 
         $request->user()->save();
 
