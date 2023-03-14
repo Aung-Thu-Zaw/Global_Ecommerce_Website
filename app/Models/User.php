@@ -77,12 +77,4 @@ class User extends Authenticatable implements MustVerifyEmail
             unlink(storage_path("app/public/avatars/$user->avatar"));
         }
     }
-
-    // if (file_exists(storage_path("app/public/avatars/default-avatar-$user->id.png"))) {
-    //     unlink(storage_path("app/public/avatars/default-avatar-$user->id.png"));
-    // }
-
-    // if (!empty($request->user()->avatar) && file_exists(storage_path("app/public/avatars/$user->avatar"))) {
-    //     unlink(storage_path("app/public/avatars/$user->avatar"));
-    // }
 }

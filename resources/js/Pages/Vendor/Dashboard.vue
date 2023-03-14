@@ -1,3 +1,18 @@
+<script setup>
+import VendorHeaderStats from "@/Components/Headers/VendorHeaderStats.vue";
+import VendorDashboardLayout from "@/Layouts/VendorDashboardLayout.vue";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+import { usePage } from "@inertiajs/vue3";
+
+// Success flash message
+if (usePage().props.flash.successMessage) {
+  toast.success(usePage().props.flash.successMessage, {
+    autoClose: 2000,
+  });
+}
+</script>
+
 <template>
   <VendorDashboardLayout>
     <div
@@ -27,20 +42,3 @@
     </div>
   </VendorDashboardLayout>
 </template>
-
-  <script setup>
-import VendorHeaderStats from "@/Components/Headers/VendorHeaderStats.vue";
-import VendorDashboardLayout from "@/Layouts/VendorDashboardLayout.vue";
-import { toast } from "vue3-toastify";
-import "vue3-toastify/dist/index.css";
-import { usePage } from "@inertiajs/vue3";
-
-if (usePage().props.flash.successMessage) {
-  toast.success(usePage().props.flash.successMessage, {
-    autoClose: 2000,
-  });
-}
-</script>
-
-<style>
-</style>

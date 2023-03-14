@@ -53,6 +53,7 @@ const successAlert = () => {
     </header>
 
     <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
+      <!-- Current Password Input -->
       <div>
         <InputLabel for="current_password" value="Current Password" />
 
@@ -68,6 +69,7 @@ const successAlert = () => {
         <InputError :message="form.errors.current_password" class="mt-2" />
       </div>
 
+      <!-- New Password Input -->
       <div>
         <InputLabel for="password" value="New Password" />
 
@@ -83,6 +85,7 @@ const successAlert = () => {
         <InputError :message="form.errors.password" class="mt-2" />
       </div>
 
+      <!-- Confirm Password Input -->
       <div>
         <InputLabel for="password_confirmation" value="Confirm Password" />
 
@@ -97,6 +100,7 @@ const successAlert = () => {
         <InputError :message="form.errors.password_confirmation" class="mt-2" />
       </div>
 
+      <!-- Submit Button -->
       <div class="flex items-center gap-4">
         <FormButton :disabled="form.processing"> Save </FormButton>
 

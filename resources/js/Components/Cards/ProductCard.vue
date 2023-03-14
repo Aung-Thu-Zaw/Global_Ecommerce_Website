@@ -1,3 +1,6 @@
+<script setup>
+</script>
+
 <template>
   <div>
     <!-- COMPONENT: PRODUCT CARD -->
@@ -36,9 +39,3 @@
   </div>
 </template>
 
-<script>
-export default {};
-</script>
-
-<style>
-</style>

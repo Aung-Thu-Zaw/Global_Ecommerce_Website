@@ -1,3 +1,6 @@
+<script setup>
+</script>
+
 <template>
   <nav class="bg-blue-600 text-white my-3">
     <div class="container px-5 flex items-center mx-auto py-3">
@@ -13,9 +16,5 @@
   </nav>
 </template>
 
-<script>
-export default {};
-</script>
 
-<style>
-</style>
+

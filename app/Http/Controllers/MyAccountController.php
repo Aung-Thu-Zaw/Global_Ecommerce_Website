@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Actions\DeleteUserAction;
-use Laravolt\Avatar\Avatar;
 use App\Http\Requests\MyAccountUpdateRequest;
 use App\Services\UserAvatarService;
 use Illuminate\Contracts\Auth\MustVerifyEmail;

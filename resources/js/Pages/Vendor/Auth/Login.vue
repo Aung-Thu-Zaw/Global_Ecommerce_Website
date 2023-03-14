@@ -17,6 +17,7 @@ defineProps({
   status: String,
 });
 
+// Form input data
 const form = useForm({
   email: "",
   password: "",
@@ -24,6 +25,7 @@ const form = useForm({
   captcha_token: null,
 });
 
+// Login with recaptcha v3 token
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 const recaptcha = async () => {
   await recaptchaLoaded();
@@ -37,6 +39,7 @@ const submit = () => {
   });
 };
 
+// Success flash message
 if (usePage().props.flash.successMessage) {
   toast.success(usePage().props.flash.successMessage, {
     autoClose: 2000,
@@ -60,16 +63,15 @@ if (usePage().props.flash.successMessage) {
           Vendor Dashboard Login
         </h1>
 
+        <!-- Email Input -->
         <div class="mb-3">
           <InputLabel for="email" value="Email *" />
 
           <TextInput
             id="email"
             type="email"
-            class="mt-1 block w-full"
             v-model="form.email"
             required
-            autocomplete="username"
             placeholder="Enter Your Email Address"
           >
             <template v-slot:icon>
@@ -82,16 +84,15 @@ if (usePage().props.flash.successMessage) {
           <InputError class="mt-2" :message="form.errors.email" />
         </div>
 
+        <!-- Password Input -->
         <div class="mb-3">
           <InputLabel for="password" value="Password *" />
 
           <TextInput
             id="password"
             type="password"
-            class="mt-1 block w-full"
             v-model="form.password"
             required
-            autocomplete="new-password"
             placeholder="Enter Password"
           >
             <template v-slot:icon>
@@ -104,6 +105,7 @@ if (usePage().props.flash.successMessage) {
           <InputError class="mt-2" :message="form.errors.password" />
         </div>
 
+        <!-- Remember me and Forgot Password -->
         <div class="flex items-center justify-between mb-5">
           <div>
             <label class="flex items-center">
@@ -123,6 +125,7 @@ if (usePage().props.flash.successMessage) {
           </div>
         </div>
 
+        <!-- Submit Button -->
         <div class="mb-3">
           <FormButton
             :class="{ 'opacity-25': form.processing }"

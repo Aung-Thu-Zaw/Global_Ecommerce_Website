@@ -17,6 +17,7 @@ defineProps({
   status: String,
 });
 
+// Form input data
 const form = useForm({
   email: "",
   password: "",
@@ -24,6 +25,7 @@ const form = useForm({
   captcha_token: null,
 });
 
+// Login with recaptcha v3 token
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 const recaptcha = async () => {
   await recaptchaLoaded();
@@ -37,6 +39,7 @@ const submit = () => {
   });
 };
 
+// Success flash message
 if (usePage().props.flash.successMessage) {
   toast.success(usePage().props.flash.successMessage, {
     autoClose: 2000,
@@ -60,6 +63,7 @@ if (usePage().props.flash.successMessage) {
           Admin Dashboard Login
         </h1>
 
+        <!-- Email Input -->
         <div class="mb-3">
           <InputLabel for="email" value="Email *" />
 
@@ -82,6 +86,7 @@ if (usePage().props.flash.successMessage) {
           <InputError class="mt-2" :message="form.errors.email" />
         </div>
 
+        <!-- Password Input -->
         <div class="mb-3">
           <InputLabel for="password" value="Password *" />
 
@@ -104,6 +109,7 @@ if (usePage().props.flash.successMessage) {
           <InputError class="mt-2" :message="form.errors.password" />
         </div>
 
+        <!-- Remember me and Forgot Password -->
         <div class="flex items-center justify-between mb-5">
           <div>
             <label class="flex items-center">
@@ -123,6 +129,7 @@ if (usePage().props.flash.successMessage) {
           </div>
         </div>
 
+        <!-- Submit Button -->
         <div class="mb-3">
           <FormButton
             :class="{ 'opacity-25': form.processing }"
