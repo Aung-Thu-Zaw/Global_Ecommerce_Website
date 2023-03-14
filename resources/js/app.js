@@ -29,10 +29,6 @@ createInertiaApp({
                 siteKey: captcheKey,
                 loaderOptions: {
                     useRecaptchaNet: true,
-                    // container: "string",
-                    // badge: "bottomright",
-                    // size: "invisible",
-                    // tabindex:"number"
                 },
             })
             .use(ZiggyVue, Ziggy)

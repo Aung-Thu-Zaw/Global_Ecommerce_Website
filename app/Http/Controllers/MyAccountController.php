@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\DeleteUserAction;
 use Laravolt\Avatar\Avatar;
 use App\Http\Requests\MyAccountUpdateRequest;
+use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -105,29 +107,8 @@ class MyAccountController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        if (auth()->user() && !auth()->user()->google_id && !auth()->user()->facebook_id) {
-            $request->validate([
-                'password' => ['required', 'current-password'],
-            ]);
-        }
+        (new DeleteUserAction())->execute($request);
 
-        $user = $request->user();
-
-        Auth::logout();
-
-        if (file_exists(storage_path("app/public/avatars/default-avatar-$user->id.png"))) {
-            unlink(storage_path("app/public/avatars/default-avatar-$user->id.png"));
-        }
-
-        if (!empty($user->avatar) && file_exists(storage_path("app/public/avatars/$user->avatar"))) {
-            unlink(storage_path("app/public/avatars/$user->avatar"));
-        }
-
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+        return Redirect::to('/')->with("success", "Your account is deleted successfully.");
     }
 }

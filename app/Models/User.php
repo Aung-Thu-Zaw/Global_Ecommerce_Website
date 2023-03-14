@@ -63,4 +63,18 @@ class User extends Authenticatable implements MustVerifyEmail
             "user"=>"home",
         };
     }
+
+    public static function deleteDefaultAvatar($user)
+    {
+        if (file_exists(storage_path("app/public/avatars/default-avatar-$user->id.png"))) {
+            unlink(storage_path("app/public/avatars/default-avatar-$user->id.png"));
+        }
+    }
+
+    public static function deleteUserAvatar($user)
+    {
+        if (!empty($user->avatar) && file_exists(storage_path("app/public/avatars/$user->avatar"))) {
+            unlink(storage_path("app/public/avatars/$user->avatar"));
+        }
+    }
 }

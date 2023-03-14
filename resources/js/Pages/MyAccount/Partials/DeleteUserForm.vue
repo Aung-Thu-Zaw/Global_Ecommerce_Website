@@ -63,7 +63,13 @@ const closeModal = () => {
           like to permanently delete your account.
         </p>
 
-        <div class="mt-6">
+        <div
+          v-if="
+            !$page.props.auth.user.google_id &&
+            !$page.props.auth.user.facebook_id
+          "
+          class="mt-6"
+        >
           <InputLabel for="password" value="Password" class="sr-only" />
 
           <TextInput
