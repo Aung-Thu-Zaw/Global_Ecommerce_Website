@@ -45,7 +45,7 @@ const handleActive = async (id) => {
   }
 };
 
-const handleRemove = async (id) => {
+const handleDelete = async (id) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to move it to the trash?",
@@ -59,7 +59,7 @@ const handleRemove = async (id) => {
   });
 
   if (result.isConfirmed) {
-    router.post(route("admin.vendors.inactive.softDelete", id));
+    router.delete(route("admin.vendors.inactive.destroy", id));
     setTimeout(() => {
       swal({
         icon: "success",
@@ -164,7 +164,7 @@ watch(
               </button>
 
               <button
-                @click="handleRemove(inactiveVendor.id)"
+                @click="handleDelete(inactiveVendor.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-minus"></i>

@@ -32,7 +32,7 @@ class AdminInactiveVendorController extends Controller
         return to_route('admin.vendors.inactive.index')->with("success", "Vendor activated successfully.");
     }
 
-    public function softDelete($id): RedirectResponse
+    public function destroy($id): RedirectResponse
     {
         $inactiveVendor = User::find($id);
 

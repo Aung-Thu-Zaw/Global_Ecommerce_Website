@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-5 flex items-center justify-end">
+  <div class="flex items-center justify-end">
     <form class="w-[350px]">
       <input
         type="text"

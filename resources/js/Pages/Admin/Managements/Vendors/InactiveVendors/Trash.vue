@@ -18,7 +18,7 @@ import { router } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
 defineProps({
-  inactiveTrashVendors: Array,
+  inactiveTrashVendors: Object,
 });
 
 const swal = inject("$swal");
@@ -135,7 +135,7 @@ const handleDelete = async (id) => {
       </div>
 
       <!-- Search Input Form -->
-      <SearchForm />
+      <SearchForm class="mb-5"/>
 
       <TableContainer>
         <TableHeader>

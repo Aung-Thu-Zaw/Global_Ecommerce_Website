@@ -21,34 +21,42 @@ defineProps({
   categories: Object,
 });
 
+const swal = inject("$swal");
+
 const params = reactive({
   search: null,
 });
 
-// const swal = inject("$swal");
+const handleDelete = async (id) => {
+  const result = await swal({
+    icon: "warning",
+    title: "Are you sure you want to move it to the trash?",
+    text: "You will be able to revert this action!",
+    showCancelButton: true,
+    confirmButtonText: "Yes, remove it!",
+    confirmButtonColor: "#ef4444",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
 
-// const handleInactive = async (id) => {
-//   const result = await swal({
-//     icon: "info",
-//     title: "Are you sure you want to inactive this vendor?",
-//     showCancelButton: true,
-//     confirmButtonText: "Yes, inactive!",
-//     confirmButtonColor: "#027e00",
-//     timer: 20000,
-//     timerProgressBar: true,
-//     reverseButtons: true,
-//   });
+  if (result.isConfirmed) {
+    router.delete(route("admin.categories.destroy", id));
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
 
-//   if (result.isConfirmed) {
-//     router.post(route("admin.vendors.active.update", id));
-//     setTimeout(() => {
-//       swal({
-//         icon: "success",
-//         title: usePage().props.flash.successMessage,
-//       });
-//     }, 500);
-//   }
-// };
+if (usePage().props.flash.successMessage) {
+  swal({
+    icon: "success",
+    title: usePage().props.flash.successMessage,
+  });
+}
 </script>
 
 <template>
@@ -126,10 +134,11 @@ const params = reactive({
                 Edit
               </Link>
               <button
+                @click="handleDelete(category.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>
-                Remove
+                Delete
               </button>
             </Td>
           </Tr>

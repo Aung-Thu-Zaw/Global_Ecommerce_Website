@@ -1,3 +1,57 @@
+
+
+
+
+<script setup>
+import { useReCaptcha } from "vue-recaptcha-v3";
+import FormContainer from "@/Components/Form/FormContainer.vue";
+import GuestLayout from "@/Layouts/GuestLayout.vue";
+import InputError from "@/Components/Form/InputError.vue";
+import InputLabel from "@/Components/Form/InputLabel.vue";
+import InputContainer from "@/Components/Form/InputContainer.vue";
+import TextInput from "@/Components/Form/TextInput.vue";
+import { Head, Link, useForm } from "@inertiajs/vue3";
+import FormButton from "@/Components/Form/FormButton.vue";
+import SocialiteAuth from "@/Components/Form/SocialiteAuth.vue";
+import datepicker from "vue3-datepicker";
+import { computed, ref } from "vue";
+
+const date = ref(null);
+
+const formatDate = computed(() => {
+  const year = date.value ? date.value.getFullYear() : "";
+  const month = date.value ? date.value.getMonth() + 1 : "";
+  const day = date.value ? date.value.getDate() : "";
+
+  return `${year}-${month}-${day}`;
+});
+
+const form = useForm({
+  name: "",
+  email: "",
+  password: "",
+  password_confirmation: "",
+  gender: "",
+  birthday: formatDate,
+  terms: false,
+  captcha_token: null,
+});
+
+const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+const recaptcha = async () => {
+  await recaptchaLoaded();
+  form.captcha_token = await executeRecaptcha("register");
+  submit();
+};
+
+const submit = () => {
+  form.post(route("register"), {
+    onFinish: () => form.reset("password", "password_confirmation"),
+  });
+};
+</script>
+
+
 <template>
   <GuestLayout>
     <Head title="Register" />
@@ -152,55 +206,3 @@
     </FormContainer>
   </GuestLayout>
 </template>
-
-
-
-
-<script setup>
-import { useReCaptcha } from "vue-recaptcha-v3";
-import FormContainer from "@/Components/Form/FormContainer.vue";
-import GuestLayout from "@/Layouts/GuestLayout.vue";
-import InputError from "@/Components/Form/InputError.vue";
-import InputLabel from "@/Components/Form/InputLabel.vue";
-import InputContainer from "@/Components/Form/InputContainer.vue";
-import TextInput from "@/Components/Form/TextInput.vue";
-import { Head, Link, useForm } from "@inertiajs/vue3";
-import FormButton from "@/Components/Form/FormButton.vue";
-import SocialiteAuth from "@/Components/Form/SocialiteAuth.vue";
-import datepicker from "vue3-datepicker";
-import { computed, ref } from "vue";
-
-const date = ref(null);
-
-const formatDate = computed(() => {
-  const year = date.value ? date.value.getFullYear() : "";
-  const month = date.value ? date.value.getMonth() + 1 : "";
-  const day = date.value ? date.value.getDate() : "";
-
-  return `${year}-${month}-${day}`;
-});
-
-const form = useForm({
-  name: "",
-  email: "",
-  password: "",
-  password_confirmation: "",
-  gender: "",
-  birthday: formatDate,
-  terms: false,
-  captcha_token: null,
-});
-
-const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
-const recaptcha = async () => {
-  await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("register");
-  submit();
-};
-
-const submit = () => {
-  form.post(route("register"), {
-    onFinish: () => form.reset("password", "password_confirmation"),
-  });
-};
-</script>

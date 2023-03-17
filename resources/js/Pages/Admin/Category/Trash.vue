@@ -18,7 +18,7 @@ import { router } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
 defineProps({
-  inactiveTrashVendors: Array,
+  trashCategories: Object,
 });
 
 const swal = inject("$swal");
@@ -26,7 +26,7 @@ const swal = inject("$swal");
 const handleRestore = async (id) => {
   const result = await swal({
     icon: "info",
-    title: "Are you sure you want to restore this vendor?",
+    title: "Are you sure you want to restore this category?",
     showCancelButton: true,
     confirmButtonText: "Yes, restore!",
     confirmButtonColor: "#027e00",
@@ -36,7 +36,7 @@ const handleRestore = async (id) => {
   });
 
   if (result.isConfirmed) {
-    router.post(route("admin.vendors.inactive.restore", id));
+    router.post(route("admin.categories.restore", id));
     setTimeout(() => {
       swal({
         icon: "success",
@@ -60,7 +60,7 @@ const handleDelete = async (id) => {
   });
 
   if (result.isConfirmed) {
-    router.delete(route("admin.vendors.inactive.forceDelete", id));
+    router.delete(route("admin.categories.forceDelete", id));
     setTimeout(() => {
       swal({
         icon: "success",
@@ -112,6 +112,9 @@ const handleDelete = async (id) => {
         </div>
       </div>
 
+      <!-- Search Input Form -->
+      <SearchForm class="mb-5" />
+
       <TableContainer>
         <TableHeader>
           <HeaderTh> No </HeaderTh>
@@ -122,51 +125,54 @@ const handleDelete = async (id) => {
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
-        <!-- <tbody v-if="categories.data.length">
-          <Tr v-for="category in categories.data" :key="category.id">
-            <BodyTh>{{ category.id }}</BodyTh>
+        <tbody v-if="trashCategories.data.length">
+          <Tr
+            v-for="trashCategory in trashCategories.data"
+            :key="trashCategory.id"
+          >
+            <BodyTh>{{ trashCategory.id }}</BodyTh>
             <Td>
               <img
-                :src="category.image"
+                :src="trashCategory.image"
                 class="w-[50px] h-[50px] rounded-full object-cover shadow-lg ring-2 ring-slate-300"
                 alt=""
               />
             </Td>
-            <Td>{{ category.name }}</Td>
+            <Td>{{ trashCategory.name }}</Td>
             <Td>
-              <ActiveStatus v-if="category.status == 'show'">
-                {{ category.status }}
+              <ActiveStatus v-if="trashCategory.status == 'show'">
+                {{ trashCategory.status }}
               </ActiveStatus>
-              <InactiveStatus v-if="category.status == 'hide'">
-                {{ category.status }}
+              <InactiveStatus v-if="trashCategory.status == 'hide'">
+                {{ trashCategory.status }}
               </InactiveStatus>
             </Td>
-            <Td>{{ category.created_at }}</Td>
+            <Td>{{ trashCategory.created_at }}</Td>
             <Td>
-              <Link
-                as="button"
-                :href="route('admin.categories.edit', category.id)"
+              <button
+                @click="handleRestore(trashCategory.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
-                <i class="fa-solid fa-edit"></i>
-                Edit
-              </Link>
+                <i class="fa-solid fa-recycle"></i>
+                Restore
+              </button>
               <button
+                @click="handleDelete(trashCategory.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
-                <i class="fa-solid fa-xmark"></i>
-                Remove
+                <i class="fa-solid fa-trash"></i>
+                Delete Forever
               </button>
             </Td>
           </Tr>
-        </tbody> -->
+        </tbody>
       </TableContainer>
 
       <!-- Not Avaliable Data -->
-      <!-- <NotAvaliableData v-if="!categories.data.length" /> -->
+      <NotAvaliableData v-if="!trashCategories.data.length" />
 
       <!-- Pagination -->
-      <!-- <pagination class="mt-6" :links="categories.links" /> -->
+      <pagination class="mt-6" :links="trashCategories.links" />
     </div>
   </AdminDashboardLayout>
 </template>

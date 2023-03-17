@@ -39,7 +39,7 @@ class UserAvatarService
             $randomColor=array_rand($colors, 1);
 
             $avatar=new Avatar();
-            
+
             $avatar->create($request->name)->setBackground($colors[$randomColor])->setBorder(0, "background")->save(storage_path("app/public/avatars/default-avatar-$userId.png"));
         }
     }

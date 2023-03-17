@@ -22,7 +22,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                         Route::get("/", "index")->name("index");
                         Route::get("/details/{id}", "show")->name("show");
                         Route::post("/{id}", "update")->name("update");
-                        Route::post("/{id}/soft-delete", "softDelete")->name("softDelete");
+                        Route::delete("/{id}", "destroy")->name("destroy");
                         Route::get("/trash", "trash")->name("trash");
                         Route::post("/{id}/restore", "restore")->name("restore");
                         Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
@@ -46,8 +46,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                         Route::post("/", "store")->name("store");
                         Route::get("/{category}/edit", "edit")->name("edit");
                         Route::post("/{category}", "update")->name("update");
+                        Route::delete("/{category}", "destroy")->name("destroy");
                         Route::get("/trash", "trash")->name("trash");
-                        Route::post("/{category}/restore", "restore")->name("restore");
-                        Route::delete("/{category}/force-delete", "forceDelete")->name("forceDelete");
+                        Route::post("/{id}/restore", "restore")->name("restore");
+                        Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
                     });
         });

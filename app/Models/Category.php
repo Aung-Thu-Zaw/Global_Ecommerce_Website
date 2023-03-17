@@ -17,7 +17,15 @@ class Category extends Model
     protected function image(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => asset("storage/categories/$value"),
+            set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/categories/$value"),
         );
+    }
+
+
+    public static function deleteImage($category)
+    {
+        if (!empty($category->image) && file_exists(storage_path("app/public/categories/$category->image"))) {
+            unlink(storage_path("app/public/categorys/$category->image"));
+        }
     }
 }
