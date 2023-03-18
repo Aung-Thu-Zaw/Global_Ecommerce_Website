@@ -14,14 +14,14 @@ import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link, usePage, Head } from "@inertiajs/vue3";
 import { computed, inject, reactive, ref, watch } from "vue";
 import { router } from "@inertiajs/vue3";
-defineProps({
+const props = defineProps({
   inactiveVendors: Object,
 });
 
 const swal = inject("$swal");
 const params = reactive({
   search: null,
-  per_page: 10,
+  per_page: props.inactiveVendors.per_page ? props.inactiveVendors.per_page : 10,
 });
 const handleSearchBox = () => {
   params.search = "";

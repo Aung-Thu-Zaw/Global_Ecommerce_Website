@@ -17,7 +17,7 @@ import { reactive, watch, inject } from "vue";
 import { router } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
-defineProps({
+const props = defineProps({
   categories: Object,
 });
 
@@ -25,7 +25,7 @@ const swal = inject("$swal");
 
 const params = reactive({
   search: null,
-  per_page: 10,
+  per_page: props.categories.per_page ? props.categories.per_page : 10,
 });
 
 const handleSearchBox = () => {
@@ -51,7 +51,10 @@ watch(
   (current, previous) => {
     router.get(
       "/admin/categories",
-      { per_page: params.per_page },
+      {
+        page: props.categories.current_page ? props.categories.current_page : 1,
+        per_page: params.per_page,
+      },
       {
         replace: true,
         preserveState: true,
@@ -175,7 +178,7 @@ if (usePage().props.flash.successMessage) {
               class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
               v-model="params.per_page"
             >
-              <option value="" selected disabled>Select</option>
+              <option value="" disabled>Select</option>
               <option value="5">5</option>
               <option value="10">10</option>
               <option value="25">25</option>

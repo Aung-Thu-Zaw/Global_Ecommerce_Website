@@ -25,7 +25,7 @@ const swal = inject("$swal");
 
 const params = reactive({
   search: null,
-  per_page: 10,
+  per_page: props.subCategories.per_page ? props.subCategories.per_page : 10,
 });
 
 const handleSearchBox = () => {

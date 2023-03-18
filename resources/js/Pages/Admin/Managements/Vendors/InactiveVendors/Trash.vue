@@ -17,7 +17,7 @@ import { inject, reactive, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
-defineProps({
+const props = defineProps({
   inactiveTrashVendors: Object,
 });
 
@@ -25,7 +25,9 @@ const swal = inject("$swal");
 
 const params = reactive({
   search: null,
-  per_page: 10,
+  per_page: props.inactiveTrashVendors.per_page
+    ? props.inactiveTrashVendors.per_page
+    : 10,
 });
 
 const handleSearchBox = () => {

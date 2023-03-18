@@ -17,7 +17,7 @@ import { inject, reactive, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
-defineProps({
+const props = defineProps({
   trashSubCategories: Object,
 });
 
@@ -25,7 +25,7 @@ const swal = inject("$swal");
 
 const params = reactive({
   search: null,
-  per_page: 10,
+  per_page: props.trashSubCategories.per_page ? props.trashSubCategories.per_page : 10,
 });
 
 const handleSearchBox = () => {
