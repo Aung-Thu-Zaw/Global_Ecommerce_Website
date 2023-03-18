@@ -36,6 +36,13 @@ class SubCategory extends Model
         );
     }
 
+    protected function createdAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => date("Y/m/d", strtotime($value)),
+        );
+    }
+
     public static function deleteImage($subCategory)
     {
         if (!empty($subCategory->image) && file_exists(storage_path("app/public/subCategories/$subCategory->image"))) {

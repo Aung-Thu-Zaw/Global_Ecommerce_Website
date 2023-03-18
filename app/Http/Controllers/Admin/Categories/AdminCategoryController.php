@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin\Categories;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
-use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Services\CategoryImageUploadService;
 use Inertia\Response;
@@ -14,7 +13,20 @@ class AdminCategoryController extends Controller
 {
     public function index(): Response
     {
-        $categories=CategoryResource::collection(Category::search(request("search"))->paginate(15));
+        $orderColumn=request("sort", "created_at");
+
+        // if (!in_array($orderColumn, ["id","name","status","created_at"])) {
+        //     $orderColumn="created_at";
+        // }
+
+        $orderDirection=request("direction", "desc");
+
+        // if (!in_array($orderDirection, ["asc","desc"])) {
+        //     $orderDirection="desc";
+        // }
+
+
+        $categories=Category::search(request("search"))->orderBy($orderColumn, $orderDirection)->paginate(request("per_page", 10))->withQueryString();
 
         return inertia("Admin/Categories/Category/Index", compact("categories"));
     }
@@ -33,6 +45,10 @@ class AdminCategoryController extends Controller
 
     public function edit(Category $category): Response
     {
+        // if (request()->has("page")) {
+        //     dd(request()->query("page"));
+        // }
+
         return inertia("Admin/Categories/Category/Edit", compact("category"));
     }
 
@@ -54,7 +70,7 @@ class AdminCategoryController extends Controller
 
     public function trash(): Response
     {
-        $trashCategories=Category::search(request("search"))->onlyTrashed()->paginate(15);
+        $trashCategories=Category::search(request("search"))->onlyTrashed()->paginate(request("per_page", 10))->withQueryString();
 
         return inertia("Admin/Categories/Category/Trash", compact("trashCategories"));
     }

@@ -37,6 +37,13 @@ class Category extends Model
         );
     }
 
+    protected function createdAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => date("Y/m/d", strtotime($value)),
+        );
+    }
+
     public static function deleteImage($category)
     {
         if (!empty($category->image) && file_exists(storage_path("app/public/categories/$category->image"))) {

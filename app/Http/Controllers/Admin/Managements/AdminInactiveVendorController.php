@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin\Managements;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\InactiveVendorResource;
+use App\Http\Resources\VendorResource;
 use App\Models\User;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
@@ -12,21 +12,21 @@ class AdminInactiveVendorController extends Controller
 {
     public function index(): Response
     {
-        $inactiveVendors=InactiveVendorResource::collection(User::search(request("search"))->where("role", "vendor")->where("status", "inactive")->paginate(15));
+        $inactiveVendors=User::search(request("search"))->where("role", "vendor")->where("status", "inactive")->paginate(request("per_page", 10))->withQueryString();
 
         return inertia("Admin/Managements/Vendors/InactiveVendors/Index", compact("inactiveVendors"));
     }
 
     public function show($id): Response
     {
-        $inactiveVendor=new InactiveVendorResource(User::find($id));
+        $inactiveVendor=User::find($id);
 
         return inertia("Admin/Managements/Vendors/InactiveVendors/Details", compact("inactiveVendor"));
     }
 
     public function update($id): RedirectResponse
     {
-        $inactiveVendor=new InactiveVendorResource(User::find($id));
+        $inactiveVendor=User::find($id);
 
         $inactiveVendor->update(["status"=>"active"]);
 
@@ -35,7 +35,7 @@ class AdminInactiveVendorController extends Controller
 
     public function destroy($id): RedirectResponse
     {
-        $inactiveVendor = new InactiveVendorResource(User::find($id));
+        $inactiveVendor = User::find($id);
 
         $inactiveVendor->delete();
 
@@ -44,7 +44,7 @@ class AdminInactiveVendorController extends Controller
 
     public function trash(): Response
     {
-        $inactiveTrashVendors=User::search(request("search"))->onlyTrashed()->where("role", "vendor")->where("status", "inactive")->paginate(15);
+        $inactiveTrashVendors=User::search(request("search"))->onlyTrashed()->where("role", "vendor")->where("status", "inactive")->paginate(request("per_page", 10))->withQueryString();
 
         return inertia("Admin/Managements/Vendors/InactiveVendors/Trash", compact("inactiveTrashVendors"));
     }

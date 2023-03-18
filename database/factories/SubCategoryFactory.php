@@ -17,11 +17,12 @@ class SubCategoryFactory extends Factory
     public function definition()
     {
         return [
-            "category_id"=>fake()->numberBetween(2, 8),
+            "category_id"=>fake()->numberBetween(1, 8),
             "name"=>fake()->unique()->name(),
             "slug"=>fake()->unique()->slug(),
             "image"=>fake()->imageUrl(),
-            "status"=>"show"
+            "status"=>fake()->randomElement(["show","hide"]),
+            "created_at"=>fake()->dateTimeBetween("-3 months", now())
         ];
     }
 }

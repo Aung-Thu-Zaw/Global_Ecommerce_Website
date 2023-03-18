@@ -54,6 +54,12 @@ class User extends Authenticatable implements MustVerifyEmail
         );
     }
 
+    protected function createdAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => date("Y/m/d", strtotime($value)),
+        );
+    }
 
     public function getRedirectRouteName()
     {

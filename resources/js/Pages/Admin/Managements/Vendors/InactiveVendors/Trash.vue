@@ -25,6 +25,7 @@ const swal = inject("$swal");
 
 const params = reactive({
   search: null,
+  per_page: 10,
 });
 
 const handleSearchBox = () => {
@@ -37,6 +38,20 @@ watch(
     router.get(
       "/admin/managements/inactive-vendors/trash",
       { search: params.search },
+      {
+        replace: true,
+        preserveState: true,
+      }
+    );
+  }
+);
+
+watch(
+  () => params.per_page,
+  (current, previous) => {
+    router.get(
+      "/admin/managements/inactive-vendors/trash",
+      { per_page: params.per_page },
       {
         replace: true,
         preserveState: true,
@@ -172,16 +187,72 @@ const handleDelete = async (id) => {
             @click="handleSearchBox"
           ></i>
         </form>
+
+        <div class="ml-5">
+          <select
+            class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+            v-model="params.per_page"
+          >
+            <option value="" selected disabled>Select</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="75">75</option>
+            <option value="100">100</option>
+          </select>
+        </div>
       </div>
 
       <TableContainer>
         <TableHeader>
-          <HeaderTh> No# </HeaderTh>
-          <HeaderTh> Shop Name </HeaderTh>
-          <HeaderTh> Username </HeaderTh>
-          <HeaderTh> Email Address </HeaderTh>
-          <HeaderTh> Status </HeaderTh>
-          <HeaderTh> Date </HeaderTh>
+          <HeaderTh>
+            No
+
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+            ></i>
+          </HeaderTh>
+          <HeaderTh>
+            Username
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+            ></i>
+          </HeaderTh>
+          <HeaderTh>
+            Email Address
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+            ></i>
+          </HeaderTh>
+          <HeaderTh>
+            Status
+
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+            ></i>
+          </HeaderTh>
+          <HeaderTh>
+            Created At
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+            ></i>
+          </HeaderTh>
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
@@ -191,7 +262,6 @@ const handleDelete = async (id) => {
             :key="inactiveTrashVendor.id"
           >
             <BodyTh>{{ inactiveTrashVendor.id }}</BodyTh>
-            <Td>{{ inactiveTrashVendor.shop_name }}</Td>
             <Td>{{ inactiveTrashVendor.name }}</Td>
             <Td>{{ inactiveTrashVendor.email }}</Td>
             <Td>

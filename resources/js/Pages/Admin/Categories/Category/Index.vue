@@ -25,6 +25,7 @@ const swal = inject("$swal");
 
 const params = reactive({
   search: null,
+  per_page: 10,
 });
 
 const handleSearchBox = () => {
@@ -36,7 +37,7 @@ watch(
   (current, previous) => {
     router.get(
       "/admin/categories",
-      { search: params.search },
+      { search: params.search, per_page: params.per_page },
       {
         replace: true,
         preserveState: true,
@@ -44,6 +45,30 @@ watch(
     );
   }
 );
+
+watch(
+  () => params.per_page,
+  (current, previous) => {
+    router.get(
+      "/admin/categories",
+      { per_page: params.per_page },
+      {
+        replace: true,
+        preserveState: true,
+      }
+    );
+  }
+);
+
+// const updateOrdering = (sort = "created_at", direction = "desc") => {
+//   router.get(
+//     "/admin/categories",
+//     { sort, direction },
+//     { replace: true, preserveState: true }
+//   );
+
+//   console.log(window.location.sort);
+// };
 
 const handleDelete = async (id) => {
   const result = await swal({
@@ -83,7 +108,6 @@ if (usePage().props.flash.successMessage) {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Category Breadcrumb -->
-
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
           <li aria-current="page">
@@ -131,7 +155,7 @@ if (usePage().props.flash.successMessage) {
           Add Category</Link
         >
         <!-- Search Input Form -->
-        <div class="flex items-center justify-end">
+        <div class="flex items-center">
           <form class="w-[350px] relative">
             <input
               type="text"
@@ -146,16 +170,62 @@ if (usePage().props.flash.successMessage) {
               @click="handleSearchBox"
             ></i>
           </form>
+          <div class="ml-5">
+            <select
+              class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+              v-model="params.per_page"
+            >
+              <option value="" selected disabled>Select</option>
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="75">75</option>
+              <option value="100">100</option>
+            </select>
+          </div>
         </div>
       </div>
 
       <TableContainer>
         <TableHeader>
-          <HeaderTh> No </HeaderTh>
+          <HeaderTh>
+            No
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+            ></i>
+          </HeaderTh>
           <HeaderTh> Image </HeaderTh>
-          <HeaderTh> Name </HeaderTh>
-          <HeaderTh> Status </HeaderTh>
-          <HeaderTh> Date </HeaderTh>
+          <HeaderTh>
+            Name
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+            ></i>
+          </HeaderTh>
+          <HeaderTh>
+            Status
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+            ></i>
+          </HeaderTh>
+          <HeaderTh>
+            Created At
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+            ></i>
+          </HeaderTh>
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
@@ -178,7 +248,7 @@ if (usePage().props.flash.successMessage) {
                 {{ category.status }}
               </InactiveStatus>
             </Td>
-            <Td>{{ category.created_date }}</Td>
+            <Td>{{ category.created_at }}</Td>
             <Td>
               <Link
                 as="button"
