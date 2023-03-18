@@ -145,7 +145,7 @@ if (usePage().props.flash.successMessage) {
                 {{ category.status }}
               </InactiveStatus>
             </Td>
-            <Td>{{ category.created_at }}</Td>
+            <Td>{{ category.created_date }}</Td>
             <Td>
               <Link
                 as="button"

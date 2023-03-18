@@ -153,7 +153,7 @@ watch(
             <Td>
               <InactiveStatus> {{ inactiveVendor.status }} </InactiveStatus>
             </Td>
-            <Td>{{ inactiveVendor.created_at }}</Td>
+            <Td>{{ inactiveVendor.created_date }}</Td>
             <Td>
               <button
                 @click="handleActive(inactiveVendor.id)"

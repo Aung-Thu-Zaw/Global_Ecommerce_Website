@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Categories;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Services\CategoryImageUploadService;
 use Inertia\Response;
@@ -13,7 +14,7 @@ class AdminCategoryController extends Controller
 {
     public function index(): Response
     {
-        $categories=Category::paginate(15);
+        $categories=CategoryResource::collection(Category::paginate(15));
 
         return inertia("Admin/Categories/Category/Index", compact("categories"));
     }

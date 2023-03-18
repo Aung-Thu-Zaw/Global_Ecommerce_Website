@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Categories;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SubCategoryRequest;
+use App\Http\Resources\SubCategoryResource;
 use App\Models\Category;
 use App\Models\SubCategory;
 use App\Services\SubCategoryImageUploadService;
@@ -14,14 +15,14 @@ class AdminSubCategoryController extends Controller
 {
     public function index(): Response
     {
-        $subCategories=SubCategory::with("category")->paginate(15);
+        $subCategories=SubCategoryResource::collection(SubCategory::with("category:id,name")->paginate(15));
 
         return inertia("Admin/Categories/SubCategory/Index", compact("subCategories"));
     }
 
     public function create(): Response
     {
-        $categories=Category::all();
+        $categories=Category::select("id", "name")->get();
 
         return inertia("Admin/Categories/SubCategory/Create", compact("categories"));
     }
@@ -35,9 +36,9 @@ class AdminSubCategoryController extends Controller
 
     public function edit(SubCategory $subCategory): Response
     {
-        $categories=Category::all();
+        $categories=Category::select("id", "name")->get();
 
-        $subCategory->load("category");
+        $subCategory->load("category:id,name");
 
         return inertia("Admin/Categories/SubCategory/Edit", compact("subCategory", "categories"));
     }
@@ -60,7 +61,7 @@ class AdminSubCategoryController extends Controller
 
     public function trash(): Response
     {
-        $trashSubCategories=SubCategory::with("category")->onlyTrashed()->paginate(15);
+        $trashSubCategories=SubCategory::with("category:id,name")->onlyTrashed()->paginate(15);
 
         return inertia("Admin/Categories/SubCategory/Trash", compact("trashSubCategories"));
     }

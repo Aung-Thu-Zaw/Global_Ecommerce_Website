@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Managements;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\InactiveVendorResource;
 use App\Models\User;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
@@ -11,21 +12,21 @@ class AdminInactiveVendorController extends Controller
 {
     public function index(): Response
     {
-        $inactiveVendors=User::where([["role","vendor"],["status", "inactive"]])->paginate(15);
+        $inactiveVendors=InactiveVendorResource::collection(User::where([["role","vendor"],["status", "inactive"]])->paginate(15));
 
         return inertia("Admin/Managements/Vendors/InactiveVendors/Index", compact("inactiveVendors"));
     }
 
     public function show($id): Response
     {
-        $inactiveVendor=User::find($id);
+        $inactiveVendor=new InactiveVendorResource(User::find($id));
 
         return inertia("Admin/Managements/Vendors/InactiveVendors/Details", compact("inactiveVendor"));
     }
 
     public function update($id): RedirectResponse
     {
-        $inactiveVendor=User::find($id);
+        $inactiveVendor=new InactiveVendorResource(User::find($id));
 
         $inactiveVendor->update(["status"=>"active"]);
 
@@ -34,7 +35,7 @@ class AdminInactiveVendorController extends Controller
 
     public function destroy($id): RedirectResponse
     {
-        $inactiveVendor = User::find($id);
+        $inactiveVendor = new InactiveVendorResource(User::find($id));
 
         $inactiveVendor->delete();
 

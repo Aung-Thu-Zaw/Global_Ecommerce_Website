@@ -137,7 +137,8 @@ if (usePage().props.flash.successMessage) {
                 alt=""
               />
             </Td>
-            <Td>{{ subCategory.category.name }}</Td>
+            <!-- <Td>{{ subCategory.category.name }}</Td> -->
+            <Td>{{ subCategory.category }}</Td>
             <Td>{{ subCategory.name }}</Td>
             <Td>
               <ActiveStatus v-if="subCategory.status == 'show'">
@@ -147,7 +148,7 @@ if (usePage().props.flash.successMessage) {
                 {{ subCategory.status }}
               </InactiveStatus>
             </Td>
-            <Td>{{ subCategory.created_at }}</Td>
+            <Td>{{ subCategory.created_date }}</Td>
             <Td>
               <Link
                 as="button"
