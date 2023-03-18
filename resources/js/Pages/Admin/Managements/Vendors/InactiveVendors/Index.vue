@@ -22,6 +22,24 @@ const swal = inject("$swal");
 const params = reactive({
   search: null,
 });
+const handleSearchBox = () => {
+  params.search = "";
+};
+
+watch(
+  () => params.search,
+  (current, previous) => {
+    router.get(
+      "/admin/managements/inactive-vendors",
+      { search: params.search },
+      {
+        replace: true,
+        preserveState: true,
+      }
+    );
+  }
+);
+
 const handleActive = async (id) => {
   const result = await swal({
     icon: "info",
@@ -68,20 +86,6 @@ const handleDelete = async (id) => {
     }, 500);
   }
 };
-
-watch(
-  () => params.search,
-  (current, previous) => {
-    router.get(
-      "/admin/managements/inactive-vendors",
-      { search: params.search },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
 </script>
 
 
@@ -130,7 +134,22 @@ watch(
       </div>
 
       <!-- Search Input Form -->
-      <SearchForm />
+      <div class="flex items-center justify-end mb-5">
+        <form class="w-[350px] relative">
+          <input
+            type="text"
+            class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
+            placeholder="Search"
+            v-model="params.search"
+          />
+
+          <i
+            v-if="params.search"
+            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
+            @click="handleSearchBox"
+          ></i>
+        </form>
+      </div>
 
       <TableContainer>
         <TableHeader>

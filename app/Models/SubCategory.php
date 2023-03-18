@@ -6,13 +6,23 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 
 class SubCategory extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use Searchable;
 
     protected $guarded=[];
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'status' => $this->status,
+        ];
+    }
 
     public function category()
     {

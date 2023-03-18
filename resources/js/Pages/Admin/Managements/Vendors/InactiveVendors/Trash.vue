@@ -13,7 +13,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link, Head } from "@inertiajs/vue3";
-import { inject } from "vue";
+import { inject, reactive, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
@@ -22,6 +22,28 @@ defineProps({
 });
 
 const swal = inject("$swal");
+
+const params = reactive({
+  search: null,
+});
+
+const handleSearchBox = () => {
+  params.search = "";
+};
+
+watch(
+  () => params.search,
+  (current, previous) => {
+    router.get(
+      "/admin/managements/inactive-vendors/trash",
+      { search: params.search },
+      {
+        replace: true,
+        preserveState: true,
+      }
+    );
+  }
+);
 
 const handleRestore = async (id) => {
   const result = await swal({
@@ -135,7 +157,22 @@ const handleDelete = async (id) => {
       </div>
 
       <!-- Search Input Form -->
-      <SearchForm class="mb-5"/>
+      <div class="flex items-center justify-end mb-5">
+        <form class="w-[350px] relative">
+          <input
+            type="text"
+            class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
+            placeholder="Search"
+            v-model="params.search"
+          />
+
+          <i
+            v-if="params.search"
+            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
+            @click="handleSearchBox"
+          ></i>
+        </form>
+      </div>
 
       <TableContainer>
         <TableHeader>

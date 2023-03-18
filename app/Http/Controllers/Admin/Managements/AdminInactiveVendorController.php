@@ -12,7 +12,7 @@ class AdminInactiveVendorController extends Controller
 {
     public function index(): Response
     {
-        $inactiveVendors=InactiveVendorResource::collection(User::where([["role","vendor"],["status", "inactive"]])->paginate(15));
+        $inactiveVendors=InactiveVendorResource::collection(User::search(request("search"))->where("role", "vendor")->where("status", "inactive")->paginate(15));
 
         return inertia("Admin/Managements/Vendors/InactiveVendors/Index", compact("inactiveVendors"));
     }
@@ -44,7 +44,7 @@ class AdminInactiveVendorController extends Controller
 
     public function trash(): Response
     {
-        $inactiveTrashVendors=User::onlyTrashed()->where([["role","vendor"],["status","inactive"]])->paginate(15);
+        $inactiveTrashVendors=User::search(request("search"))->onlyTrashed()->where("role", "vendor")->where("status", "inactive")->paginate(15);
 
         return inertia("Admin/Managements/Vendors/InactiveVendors/Trash", compact("inactiveTrashVendors"));
     }

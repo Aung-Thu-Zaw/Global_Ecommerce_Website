@@ -14,7 +14,7 @@ class AdminCategoryController extends Controller
 {
     public function index(): Response
     {
-        $categories=CategoryResource::collection(Category::paginate(15));
+        $categories=CategoryResource::collection(Category::search(request("search"))->paginate(15));
 
         return inertia("Admin/Categories/Category/Index", compact("categories"));
     }
@@ -54,7 +54,7 @@ class AdminCategoryController extends Controller
 
     public function trash(): Response
     {
-        $trashCategories=Category::onlyTrashed()->paginate(15);
+        $trashCategories=Category::search(request("search"))->onlyTrashed()->paginate(15);
 
         return inertia("Admin/Categories/Category/Trash", compact("trashCategories"));
     }

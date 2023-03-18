@@ -15,7 +15,11 @@ class AdminSubCategoryController extends Controller
 {
     public function index(): Response
     {
-        $subCategories=SubCategoryResource::collection(SubCategory::with("category:id,name")->paginate(15));
+        $getSubCategories=SubCategory::search(request("search"))->paginate(15);
+
+        $getSubCategories->load("category:id,name");
+
+        $subCategories=SubCategoryResource::collection($getSubCategories);
 
         return inertia("Admin/Categories/SubCategory/Index", compact("subCategories"));
     }
@@ -61,7 +65,9 @@ class AdminSubCategoryController extends Controller
 
     public function trash(): Response
     {
-        $trashSubCategories=SubCategory::with("category:id,name")->onlyTrashed()->paginate(15);
+        $trashSubCategories=SubCategory::search(request("search"))->onlyTrashed()->paginate(15);
+
+        $trashSubCategories->load("category:id,name");
 
         return inertia("Admin/Categories/SubCategory/Trash", compact("trashSubCategories"));
     }

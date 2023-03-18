@@ -12,7 +12,7 @@ class AdminActiveVendorController extends Controller
 {
     public function index(): Response
     {
-        $activeVendors=ActiveVendorResource::collection(User::where([["role","vendor"],["status", "active"]])->paginate(15));
+        $activeVendors=ActiveVendorResource::collection(User::search(request("search"))->where("role", "vendor")->where("status", "active")->paginate(15));
 
         return inertia("Admin/Managements/Vendors/ActiveVendors/Index", compact("activeVendors"));
     }
