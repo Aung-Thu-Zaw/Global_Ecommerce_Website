@@ -1,0 +1,205 @@
+<script setup>
+import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
+import ActiveStatus from "@/Components/Table/ActiveStatus.vue";
+import InactiveStatus from "@/Components/Table/InactiveStatus.vue";
+import Tr from "@/Components/Table/Tr.vue";
+import Td from "@/Components/Table/Td.vue";
+import HeaderTh from "@/Components/Table/HeaderTh.vue";
+import BodyTh from "@/Components/Table/BodyTh.vue";
+import TableHeader from "@/Components/Table/TableHeader.vue";
+import TableContainer from "@/Components/Table/TableContainer.vue";
+import SearchForm from "@/Components/Form/SearchForm.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/Categories/Breadcrumb.vue";
+import Pagination from "@/Components/Pagination.vue";
+import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import { Link, Head } from "@inertiajs/vue3";
+import { inject } from "vue";
+import { router } from "@inertiajs/vue3";
+import { usePage } from "@inertiajs/vue3";
+
+defineProps({
+  trashSubCategories: Object,
+});
+
+const swal = inject("$swal");
+
+const handleRestore = async (id) => {
+  const result = await swal({
+    icon: "info",
+    title: "Are you sure you want to restore this subcategory?",
+    showCancelButton: true,
+    confirmButtonText: "Yes, restore!",
+    confirmButtonColor: "#027e00",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.post(route("admin.subcategories.restore", id));
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
+
+const handleDelete = async (id) => {
+  const result = await swal({
+    icon: "warning",
+    title: "Are you sure you want to delete it from the trash?",
+    text: "You will not be able to revert this action!",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it!",
+    confirmButtonColor: "#ef4444",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.delete(route("admin.subcategories.forceDelete", id));
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
+</script>
+
+<template>
+  <AdminDashboardLayout>
+    <Head title="Trash SubCategories" />
+
+    <div class="px-4 md:px-10 mx-auto w-full py-32">
+      <!-- Breadcrumb  -->
+
+      <div class="flex items-center justify-between mb-10">
+        <Breadcrumb>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span
+                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                >SubCategory</span
+              >
+            </div>
+          </li>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span
+                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                >Trash</span
+              >
+            </div>
+          </li>
+        </Breadcrumb>
+
+        <div>
+          <Link
+            :href="route('admin.subcategories.index')"
+            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+          >
+            <i class="fa-solid fa-arrow-left"></i>
+            Go Back
+          </Link>
+        </div>
+      </div>
+
+      <!-- Search Input Form -->
+      <SearchForm class="mb-5" />
+
+      <TableContainer>
+        <TableHeader>
+          <HeaderTh> No </HeaderTh>
+          <HeaderTh> Image </HeaderTh>
+          <HeaderTh> Category </HeaderTh>
+          <HeaderTh> Name ( SubCategory ) </HeaderTh>
+          <HeaderTh> Status </HeaderTh>
+          <HeaderTh> Date </HeaderTh>
+          <HeaderTh> Action </HeaderTh>
+        </TableHeader>
+
+        <tbody v-if="trashSubCategories.data.length">
+          <Tr
+            v-for="trashSubCategory in trashSubCategories.data"
+            :key="trashSubCategory.id"
+          >
+            <BodyTh>{{ trashSubCategory.id }}</BodyTh>
+            <Td>
+              <img
+                :src="trashSubCategory.image"
+                class="w-[50px] h-[50px] rounded-full object-cover shadow-lg ring-2 ring-slate-300"
+                alt=""
+              />
+            </Td>
+            <Td>{{ trashSubCategory.category.name }}</Td>
+            <Td>{{ trashSubCategory.name }}</Td>
+            <Td>
+              <ActiveStatus v-if="trashSubCategory.status == 'show'">
+                {{ trashSubCategory.status }}
+              </ActiveStatus>
+              <InactiveStatus v-if="trashSubCategory.status == 'hide'">
+                {{ trashSubCategory.status }}
+              </InactiveStatus>
+            </Td>
+            <Td>{{ trashSubCategory.created_at }}</Td>
+            <Td>
+              <button
+                @click="handleRestore(trashSubCategory.id)"
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
+              >
+                <i class="fa-solid fa-recycle"></i>
+                Restore
+              </button>
+              <button
+                @click="handleDelete(trashSubCategory.id)"
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
+              >
+                <i class="fa-solid fa-trash"></i>
+                Delete Forever
+              </button>
+            </Td>
+          </Tr>
+        </tbody>
+      </TableContainer>
+
+      <!-- Not Avaliable Data -->
+      <NotAvaliableData v-if="!trashSubCategories.data.length" />
+
+      <!-- Pagination -->
+      <pagination class="mt-6" :links="trashSubCategories.links" />
+    </div>
+  </AdminDashboardLayout>
+</template>
+
+

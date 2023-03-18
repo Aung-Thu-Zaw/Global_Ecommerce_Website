@@ -132,17 +132,17 @@
               >
                 Category
               </Link>
-              <!-- <Link
-                :href="route('admin.vendors.inactive.index')"
+              <Link
+                :href="route('admin.subcategories.index')"
                 class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
                 :class="{
                   'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/categories/sub-category'
+                    '/admin/sub-categories'
                   ),
                 }"
               >
-                Add Category
-              </Link> -->
+                Sub Category
+              </Link>
             </ul>
           </li>
         </ul>
@@ -241,7 +241,10 @@ export default {
       }
     },
     categoriesArea() {
-      if (this.$page.url.startsWith("/admin/categories")) {
+      if (
+        this.$page.url.startsWith("/admin/categories") ||
+        this.$page.url.startsWith("/admin/sub-categories")
+      ) {
         return (this.categoriesIsHidden = false);
       }
     },

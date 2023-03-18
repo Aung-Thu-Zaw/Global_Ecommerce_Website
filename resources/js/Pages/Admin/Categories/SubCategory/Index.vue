@@ -13,12 +13,12 @@ import Breadcrumb from "@/Components/Breadcrumbs/Categories/Breadcrumb.vue";
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link, Head } from "@inertiajs/vue3";
-import { reactive, watch, inject } from "vue";
+import { reactive, watch, inject, computed } from "vue";
 import { router } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
-defineProps({
-  categories: Object,
+const props = defineProps({
+  subCategories: Object,
 });
 
 const swal = inject("$swal");
@@ -41,7 +41,7 @@ const handleDelete = async (id) => {
   });
 
   if (result.isConfirmed) {
-    router.delete(route("admin.categories.destroy", id));
+    router.delete(route("admin.subcategories.destroy", id));
     setTimeout(() => {
       swal({
         icon: "success",
@@ -61,18 +61,40 @@ if (usePage().props.flash.successMessage) {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Category" />
+    <Head title="SubCategory" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Category Breadcrumb -->
 
       <div class="flex items-center justify-between mb-10">
-        <Breadcrumb />
+        <Breadcrumb>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span
+                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                >SubCategory</span
+              >
+            </div>
+          </li>
+        </Breadcrumb>
 
         <div>
           <Link
             as="button"
-            :href="route('admin.categories.trash')"
+            :href="route('admin.subcategories.trash')"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
           >
             <i class="fa-solid fa-trash"></i>
@@ -84,11 +106,11 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <Link
-          :href="route('admin.categories.create')"
+          :href="route('admin.subcategories.create')"
           class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700"
         >
           <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
-          Add Category</Link
+          Add SubCategory</Link
         >
         <!-- Search Input Form -->
         <SearchForm />
@@ -98,43 +120,45 @@ if (usePage().props.flash.successMessage) {
         <TableHeader>
           <HeaderTh> No </HeaderTh>
           <HeaderTh> Image </HeaderTh>
-          <HeaderTh> Name </HeaderTh>
+          <HeaderTh> Category </HeaderTh>
+          <HeaderTh> Name ( SubCategory ) </HeaderTh>
           <HeaderTh> Status </HeaderTh>
           <HeaderTh> Date </HeaderTh>
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="categories.data.length">
-          <Tr v-for="category in categories.data" :key="category.id">
-            <BodyTh>{{ category.id }}</BodyTh>
+        <tbody v-if="subCategories.data.length">
+          <Tr v-for="subCategory in subCategories.data" :key="subCategory.id">
+            <BodyTh>{{ subCategory.id }}</BodyTh>
             <Td>
               <img
-                :src="category.image"
+                :src="subCategory.image"
                 class="w-[50px] h-[50px] rounded-full object-cover shadow-lg ring-2 ring-slate-300"
                 alt=""
               />
             </Td>
-            <Td>{{ category.name }}</Td>
+            <Td>{{ subCategory.category.name }}</Td>
+            <Td>{{ subCategory.name }}</Td>
             <Td>
-              <ActiveStatus v-if="category.status == 'show'">
-                {{ category.status }}
+              <ActiveStatus v-if="subCategory.status == 'show'">
+                {{ subCategory.status }}
               </ActiveStatus>
-              <InactiveStatus v-if="category.status == 'hide'">
-                {{ category.status }}
+              <InactiveStatus v-if="subCategory.status == 'hide'">
+                {{ subCategory.status }}
               </InactiveStatus>
             </Td>
-            <Td>{{ category.created_at }}</Td>
+            <Td>{{ subCategory.created_at }}</Td>
             <Td>
               <Link
                 as="button"
-                :href="route('admin.categories.edit', category.id)"
+                :href="route('admin.subcategories.edit', subCategory.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-edit"></i>
                 Edit
               </Link>
               <button
-                @click="handleDelete(category.id)"
+                @click="handleDelete(subCategory.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>
@@ -146,10 +170,10 @@ if (usePage().props.flash.successMessage) {
       </TableContainer>
 
       <!-- Not Avaliable Data -->
-      <NotAvaliableData v-if="!categories.data.length" />
+      <NotAvaliableData v-if="!subCategories.data.length" />
 
       <!-- Pagination -->
-      <pagination class="mt-6" :links="categories.links" />
+      <pagination class="mt-6" :links="subCategories.links" />
     </div>
   </AdminDashboardLayout>
 </template>

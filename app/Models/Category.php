@@ -14,6 +14,11 @@ class Category extends Model
 
     protected $guarded=[];
 
+    public function subCategories()
+    {
+        return $this->hasMany(SubCategory::class);
+    }
+
     protected function image(): Attribute
     {
         return Attribute::make(
@@ -21,11 +26,10 @@ class Category extends Model
         );
     }
 
-
     public static function deleteImage($category)
     {
         if (!empty($category->image) && file_exists(storage_path("app/public/categories/$category->image"))) {
-            unlink(storage_path("app/public/categorys/$category->image"));
+            unlink(storage_path("app/public/categories/$category->image"));
         }
     }
 }

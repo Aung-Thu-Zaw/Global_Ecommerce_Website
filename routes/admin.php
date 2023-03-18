@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminAuthController;
-use App\Http\Controllers\Admin\AdminCategoryController;
+use App\Http\Controllers\Admin\Categories\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\Categories\AdminSubCategoryController;
 use App\Http\Controllers\Admin\Managements\AdminActiveVendorController;
 use App\Http\Controllers\Admin\Managements\AdminInactiveVendorController;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +48,21 @@ Route::middleware(["auth","verified","user.role:admin"])
                         Route::get("/{category}/edit", "edit")->name("edit");
                         Route::post("/{category}", "update")->name("update");
                         Route::delete("/{category}", "destroy")->name("destroy");
+                        Route::get("/trash", "trash")->name("trash");
+                        Route::post("/{id}/restore", "restore")->name("restore");
+                        Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                    });
+
+            Route::controller(AdminSubCategoryController::class)
+                    ->prefix("/sub-categories")
+                    ->name("subcategories.")
+                    ->group(function () {
+                        Route::get("/", "index")->name("index");
+                        Route::get("/create", "create")->name("create");
+                        Route::post("/", "store")->name("store");
+                        Route::get("/{sub_category}/edit", "edit")->name("edit");
+                        Route::post("/{sub_category}", "update")->name("update");
+                        Route::delete("/{sub_category}", "destroy")->name("destroy");
                         Route::get("/trash", "trash")->name("trash");
                         Route::post("/{id}/restore", "restore")->name("restore");
                         Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");

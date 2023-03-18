@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Categories;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
@@ -15,12 +15,12 @@ class AdminCategoryController extends Controller
     {
         $categories=Category::paginate(15);
 
-        return inertia("Admin/Category/Index", compact("categories"));
+        return inertia("Admin/Categories/Category/Index", compact("categories"));
     }
 
     public function create(): Response
     {
-        return inertia("Admin/Category/Create");
+        return inertia("Admin/Categories/Category/Create");
     }
 
     public function store(CategoryRequest $request, CategoryImageUploadService $categoryImageUploadService): RedirectResponse
@@ -32,7 +32,7 @@ class AdminCategoryController extends Controller
 
     public function edit(Category $category): Response
     {
-        return inertia("Admin/Category/Edit", compact("category"));
+        return inertia("Admin/Categories/Category/Edit", compact("category"));
     }
 
     public function update(CategoryRequest $request, Category $category, CategoryImageUploadService $categoryImageUploadService): RedirectResponse
@@ -55,7 +55,7 @@ class AdminCategoryController extends Controller
     {
         $trashCategories=Category::onlyTrashed()->paginate(15);
 
-        return inertia("Admin/Category/Trash", compact("trashCategories"));
+        return inertia("Admin/Categories/Category/Trash", compact("trashCategories"));
     }
 
     public function restore($id): RedirectResponse
