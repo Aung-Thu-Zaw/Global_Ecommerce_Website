@@ -25,7 +25,9 @@ const swal = inject("$swal");
 
 const params = reactive({
   search: null,
-  per_page: props.trashSubCategories.per_page ? props.trashSubCategories.per_page : 10,
+  per_page: props.trashSubCategories.per_page
+    ? props.trashSubCategories.per_page
+    : 10,
 });
 
 const handleSearchBox = () => {
@@ -37,7 +39,10 @@ watch(
   (current, previous) => {
     router.get(
       "/admin/sub-categories/trash",
-      { search: params.search },
+      {
+        search: params.search,
+        per_page: params.per_page,
+      },
       {
         replace: true,
         preserveState: true,
@@ -51,7 +56,12 @@ watch(
   (current, previous) => {
     router.get(
       "/admin/sub-categories/trash",
-      { per_page: params.per_page },
+      {
+        page: props.trashSubCategories.current_page
+          ? props.trashSubCategories.current_page
+          : 1,
+        per_page: params.per_page,
+      },
       {
         replace: true,
         preserveState: true,
@@ -60,7 +70,7 @@ watch(
   }
 );
 
-const handleRestore = async (id) => {
+const handleRestore = async (trashSubCategoryId) => {
   const result = await swal({
     icon: "info",
     title: "Are you sure you want to restore this subcategory?",
@@ -73,7 +83,13 @@ const handleRestore = async (id) => {
   });
 
   if (result.isConfirmed) {
-    router.post(route("admin.subcategories.restore", id));
+    router.post(
+      route("admin.subcategories.restore", {
+        id: trashSubCategoryId,
+        page: props.trashSubCategories.current_page,
+        per_page: params.per_page,
+      })
+    );
     setTimeout(() => {
       swal({
         icon: "success",
@@ -83,7 +99,7 @@ const handleRestore = async (id) => {
   }
 };
 
-const handleDelete = async (id) => {
+const handleDelete = async (trashSubCategoryId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -97,7 +113,13 @@ const handleDelete = async (id) => {
   });
 
   if (result.isConfirmed) {
-    router.delete(route("admin.subcategories.forceDelete", id));
+    router.delete(
+      route("admin.subcategories.forceDelete", {
+        id: trashSubCategoryId,
+        page: props.trashSubCategories.current_page,
+        per_page: params.per_page,
+      })
+    );
     setTimeout(() => {
       swal({
         icon: "success",

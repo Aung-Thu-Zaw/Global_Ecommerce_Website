@@ -8,6 +8,7 @@ import TextInput from "@/Components/Form/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
+  paginate: Object,
   inactiveVendor: Object,
 });
 const form = useForm({
@@ -77,6 +78,10 @@ const form = useForm({
         <div>
           <Link
             :href="route('admin.vendors.inactive.index')"
+            :data="{
+              page: props.paginate.page,
+              per_page: props.paginate.per_page,
+            }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
             <i class="fa-solid fa-arrow-left"></i>

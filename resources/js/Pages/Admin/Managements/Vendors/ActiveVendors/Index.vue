@@ -34,7 +34,10 @@ watch(
   (current, previous) => {
     router.get(
       "/admin/managements/active-vendors",
-      { search: params.search },
+      {
+        search: params.search,
+        per_page: params.per_page,
+      },
       {
         replace: true,
         preserveState: true,
@@ -48,7 +51,12 @@ watch(
   (current, previous) => {
     router.get(
       "/admin/managements/active-vendors",
-      { per_page: params.per_page },
+      {
+        page: props.activeVendors.current_page
+          ? props.activeVendors.current_page
+          : 1,
+        per_page: params.per_page,
+      },
       {
         replace: true,
         preserveState: true,
@@ -59,7 +67,7 @@ watch(
 
 const swal = inject("$swal");
 
-const handleInactive = async (id) => {
+const handleInactive = async (activeVendorId) => {
   const result = await swal({
     icon: "info",
     title: "Are you sure you want to inactive this vendor?",
@@ -72,7 +80,13 @@ const handleInactive = async (id) => {
   });
 
   if (result.isConfirmed) {
-    router.post(route("admin.vendors.active.update", id));
+    router.post(
+      route("admin.vendors.active.update", {
+        id: activeVendorId,
+        page: props.activeVendors.current_page,
+        per_page: params.per_page,
+      })
+    );
     setTimeout(() => {
       swal({
         icon: "success",
@@ -216,6 +230,10 @@ const handleInactive = async (id) => {
               <Link
                 as="button"
                 :href="route('admin.vendors.active.show', activeVendor.id)"
+                :data="{
+                  page: props.activeVendors.current_page,
+                  per_page: params.per_page,
+                }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700"
               >
                 <i class="fa-solid fa-circle-info"></i>

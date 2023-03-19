@@ -37,7 +37,10 @@ watch(
   (current, previous) => {
     router.get(
       "/admin/categories",
-      { search: params.search, per_page: params.per_page },
+      {
+        search: params.search,
+        per_page: params.per_page,
+      },
       {
         replace: true,
         preserveState: true,
@@ -73,7 +76,7 @@ watch(
 //   console.log(window.location.sort);
 // };
 
-const handleDelete = async (id) => {
+const handleDelete = async (categoryId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to move it to the trash?",
@@ -87,7 +90,13 @@ const handleDelete = async (id) => {
   });
 
   if (result.isConfirmed) {
-    router.delete(route("admin.categories.destroy", id));
+    router.delete(
+      route("admin.categories.destroy", {
+        category: categoryId,
+        page: props.categories.current_page,
+        per_page: params.per_page,
+      })
+    );
     setTimeout(() => {
       swal({
         icon: "success",
@@ -152,6 +161,9 @@ if (usePage().props.flash.successMessage) {
       <div class="mb-5 flex items-center justify-between">
         <Link
           :href="route('admin.categories.create')"
+          :data="{
+            per_page: params.per_page,
+          }"
           class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700"
         >
           <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
@@ -256,6 +268,10 @@ if (usePage().props.flash.successMessage) {
               <Link
                 as="button"
                 :href="route('admin.categories.edit', category.id)"
+                :data="{
+                  page: props.categories.current_page,
+                  per_page: params.per_page,
+                }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-edit"></i>

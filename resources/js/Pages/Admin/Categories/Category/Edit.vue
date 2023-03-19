@@ -10,6 +10,7 @@ import Breadcrumb from "@/Components/Breadcrumbs/Categories/Breadcrumb.vue";
 import { ref } from "vue";
 
 const props = defineProps({
+  paginate: Array,
   category: Object,
 });
 
@@ -34,9 +35,16 @@ const handleEditCatrgory = async () => {
 };
 
 const submit = () => {
-  form.post(route("admin.categories.update", props.category.id), {
-    onFinish: () => form.reset(),
-  });
+  form.post(
+    route("admin.categories.update", {
+      category: props.category.id,
+      page: props.paginate.page,
+      per_page: props.paginate.per_page,
+    }),
+    {
+      onFinish: () => form.reset(),
+    }
+  );
 };
 </script>
 
@@ -96,6 +104,10 @@ const submit = () => {
         <div>
           <Link
             :href="route('admin.categories.index')"
+            :data="{
+              page: props.paginate.page,
+              per_page: props.paginate.per_page,
+            }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
             <i class="fa-solid fa-arrow-left"></i>

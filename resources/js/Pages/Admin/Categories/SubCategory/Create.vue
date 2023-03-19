@@ -9,7 +9,8 @@ import FormButton from "@/Components/Form/FormButton.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Categories/Breadcrumb.vue";
 import { ref } from "vue";
 
-defineProps({
+const props = defineProps({
+  per_page: String,
   categories: Object,
 });
 
@@ -35,9 +36,14 @@ const handleCreateSubCatrgory = async () => {
 };
 
 const submit = () => {
-  form.post(route("admin.subcategories.store"), {
-    onFinish: () => form.reset(),
-  });
+  form.post(
+    route("admin.subcategories.store", {
+      per_page: props.per_page,
+    }),
+    {
+      onFinish: () => form.reset(),
+    }
+  );
 };
 </script>
 
@@ -96,6 +102,9 @@ const submit = () => {
         <div>
           <Link
             :href="route('admin.subcategories.index')"
+            :data="{
+              per_page: props.per_page,
+            }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
             <i class="fa-solid fa-arrow-left"></i>

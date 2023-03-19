@@ -9,6 +9,7 @@ use App\Models\SubCategory;
 use App\Services\SubCategoryImageUploadService;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class AdminSubCategoryController extends Controller
 {
@@ -25,23 +26,27 @@ class AdminSubCategoryController extends Controller
     {
         $categories=Category::select("id", "name")->get();
 
-        return inertia("Admin/Categories/SubCategory/Create", compact("categories"));
+        $per_page=request("per_page");
+
+        return inertia("Admin/Categories/SubCategory/Create", compact("categories", "per_page"));
     }
 
     public function store(SubCategoryRequest $request, SubCategoryImageUploadService $subCategoryImageUploadService): RedirectResponse
     {
         SubCategory::create($request->validated()+["image"=>$subCategoryImageUploadService->uploadImage($request)]);
 
-        return to_route("admin.subcategories.index")->with("success", "SubCategory is created successfully.");
+        return to_route("admin.subcategories.index", "per_page=$request->per_page")->with("success", "SubCategory is created successfully.");
     }
 
     public function edit(SubCategory $subCategory): Response
     {
+        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+
         $categories=Category::select("id", "name")->get();
 
         $subCategory->load("category:id,name");
 
-        return inertia("Admin/Categories/SubCategory/Edit", compact("subCategory", "categories"));
+        return inertia("Admin/Categories/SubCategory/Edit", compact("subCategory", "categories", "paginate"));
     }
 
     public function update(SubCategoryRequest $request, SubCategory $subCategory, SubCategoryImageUploadService $subCategoryImageUploadService): RedirectResponse
@@ -50,14 +55,14 @@ class AdminSubCategoryController extends Controller
 
         $subCategory->update($request->validated()+["image"=>$image]);
 
-        return to_route("admin.subcategories.index")->with("success", "SubCategory is updated successfully.");
+        return to_route("admin.subcategories.index", "page=$request->page&per_page=$request->per_page")->with("success", "SubCategory is updated successfully.");
     }
 
-    public function destroy(SubCategory $subCategory): RedirectResponse
+    public function destroy(Request $request, SubCategory $subCategory): RedirectResponse
     {
         $subCategory->delete();
 
-        return to_route("admin.subcategories.index")->with("success", "SubCategory is deleted successfully.");
+        return to_route("admin.subcategories.index", "page=$request->page&per_page=$request->per_page")->with("success", "SubCategory is deleted successfully.");
     }
 
     public function trash(): Response
@@ -69,21 +74,21 @@ class AdminSubCategoryController extends Controller
         return inertia("Admin/Categories/SubCategory/Trash", compact("trashSubCategories"));
     }
 
-    public function restore($id): RedirectResponse
+    public function restore(Request $request, $id): RedirectResponse
     {
         $subCategory = SubCategory::onlyTrashed()->where("id", $id)->first();
 
         $subCategory->restore();
 
-        return to_route('admin.subcategories.trash')->with("success", "SubCategory is restored successfully.");
+        return to_route('admin.subcategories.trash', "page=$request->page&per_page=$request->per_page")->with("success", "SubCategory is restored successfully.");
     }
 
-    public function forceDelete($id): RedirectResponse
+    public function forceDelete(Request $request, $id): RedirectResponse
     {
         $subCategory = SubCategory::onlyTrashed()->where("id", $id)->first();
 
         $subCategory->forceDelete();
 
-        return to_route('admin.subcategories.trash')->with("success", "SubCategory is deleted successfully");
+        return to_route('admin.subcategories.trash', "page=$request->page&per_page=$request->per_page")->with("success", "SubCategory is deleted successfully");
     }
 }

@@ -9,6 +9,10 @@ import FormButton from "@/Components/Form/FormButton.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Categories/Breadcrumb.vue";
 import { ref } from "vue";
 
+const props = defineProps({
+  per_page: String,
+});
+
 const previewPhoto = ref("");
 const getPreviewPhotoPath = (path) => {
   previewPhoto.value.src = URL.createObjectURL(path);
@@ -30,9 +34,14 @@ const handleCreateCatrgory = async () => {
 };
 
 const submit = () => {
-  form.post(route("admin.categories.store"), {
-    onFinish: () => form.reset(),
-  });
+  form.post(
+    route("admin.categories.store", {
+      per_page: props.per_page,
+    }),
+    {
+      onFinish: () => form.reset(),
+    }
+  );
 };
 </script>
 
@@ -91,6 +100,9 @@ const submit = () => {
         <div>
           <Link
             :href="route('admin.categories.index')"
+            :data="{
+              per_page: props.per_page,
+            }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
             <i class="fa-solid fa-arrow-left"></i>

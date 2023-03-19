@@ -21,7 +21,9 @@ const props = defineProps({
 const swal = inject("$swal");
 const params = reactive({
   search: null,
-  per_page: props.inactiveVendors.per_page ? props.inactiveVendors.per_page : 10,
+  per_page: props.inactiveVendors.per_page
+    ? props.inactiveVendors.per_page
+    : 10,
 });
 const handleSearchBox = () => {
   params.search = "";
@@ -32,7 +34,10 @@ watch(
   (current, previous) => {
     router.get(
       "/admin/managements/inactive-vendors",
-      { search: params.search },
+      {
+        search: params.search,
+        per_page: params.per_page,
+      },
       {
         replace: true,
         preserveState: true,
@@ -46,7 +51,12 @@ watch(
   (current, previous) => {
     router.get(
       "/admin/managements/inactive-vendors",
-      { per_page: params.per_page },
+      {
+        page: props.inactiveVendors.current_page
+          ? props.inactiveVendors.current_page
+          : 1,
+        per_page: params.per_page,
+      },
       {
         replace: true,
         preserveState: true,
@@ -55,7 +65,7 @@ watch(
   }
 );
 
-const handleActive = async (id) => {
+const handleActive = async (inactiveVendorId) => {
   const result = await swal({
     icon: "info",
     title: "Are you sure you want to active this vendor?",
@@ -68,7 +78,13 @@ const handleActive = async (id) => {
   });
 
   if (result.isConfirmed) {
-    router.post(route("admin.vendors.inactive.update", id));
+    router.post(
+      route("admin.vendors.inactive.update", {
+        id: inactiveVendorId,
+        page: props.inactiveVendors.current_page,
+        per_page: params.per_page,
+      })
+    );
     setTimeout(() => {
       swal({
         icon: "success",
@@ -78,7 +94,7 @@ const handleActive = async (id) => {
   }
 };
 
-const handleDelete = async (id) => {
+const handleDelete = async (inactiveVendorId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to move it to the trash?",
@@ -92,7 +108,13 @@ const handleDelete = async (id) => {
   });
 
   if (result.isConfirmed) {
-    router.delete(route("admin.vendors.inactive.destroy", id));
+    router.delete(
+      route("admin.vendors.inactive.destroy", {
+        id: inactiveVendorId,
+        page: props.inactiveVendors.current_page,
+        per_page: params.per_page,
+      })
+    );
     setTimeout(() => {
       swal({
         icon: "success",
@@ -262,6 +284,10 @@ const handleDelete = async (id) => {
               <Link
                 as="button"
                 :href="route('admin.vendors.inactive.show', inactiveVendor.id)"
+                :data="{
+                  page: props.inactiveVendors.current_page,
+                  per_page: params.per_page,
+                }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 my-1"
               >
                 <i class="fa-solid fa-circle-info"></i>

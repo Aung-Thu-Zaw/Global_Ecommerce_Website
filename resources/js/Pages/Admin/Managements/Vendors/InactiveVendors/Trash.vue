@@ -39,7 +39,10 @@ watch(
   (current, previous) => {
     router.get(
       "/admin/managements/inactive-vendors/trash",
-      { search: params.search },
+      {
+        search: params.search,
+        per_page: params.per_page,
+      },
       {
         replace: true,
         preserveState: true,
@@ -53,7 +56,12 @@ watch(
   (current, previous) => {
     router.get(
       "/admin/managements/inactive-vendors/trash",
-      { per_page: params.per_page },
+      {
+        page: props.inactiveTrashVendors.current_page
+          ? props.inactiveTrashVendors.current_page
+          : 1,
+        per_page: params.per_page,
+      },
       {
         replace: true,
         preserveState: true,
@@ -62,7 +70,7 @@ watch(
   }
 );
 
-const handleRestore = async (id) => {
+const handleRestore = async (inactiveVendorId) => {
   const result = await swal({
     icon: "info",
     title: "Are you sure you want to restore this vendor?",
@@ -75,7 +83,13 @@ const handleRestore = async (id) => {
   });
 
   if (result.isConfirmed) {
-    router.post(route("admin.vendors.inactive.restore", id));
+    router.post(
+      route("admin.vendors.inactive.restore", {
+        id: inactiveVendorId,
+        page: props.inactiveTrashVendors.current_page,
+        per_page: params.per_page,
+      })
+    );
     setTimeout(() => {
       swal({
         icon: "success",
@@ -85,7 +99,7 @@ const handleRestore = async (id) => {
   }
 };
 
-const handleDelete = async (id) => {
+const handleDelete = async (inactiveVendorId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -99,7 +113,13 @@ const handleDelete = async (id) => {
   });
 
   if (result.isConfirmed) {
-    router.delete(route("admin.vendors.inactive.forceDelete", id));
+    router.delete(
+      route("admin.vendors.inactive.forceDelete", {
+        id: inactiveVendorId,
+        page: props.inactiveTrashVendors.current_page,
+        per_page: params.per_page,
+      })
+    );
     setTimeout(() => {
       swal({
         icon: "success",
