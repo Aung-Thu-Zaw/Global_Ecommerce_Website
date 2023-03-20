@@ -56,6 +56,7 @@ class CategorySeeder extends Seeder
             "image"=>"fashion.jpg",
         ]);
 
-        Category::factory(30)->create();
+        // Category::factory(30)->create();
+        // Category::factory(30)->create(["deleted_at"=>null]);
     }
 }

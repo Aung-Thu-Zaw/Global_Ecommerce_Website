@@ -12,7 +12,24 @@ class AdminActiveVendorController extends Controller
 {
     public function index(): Response
     {
-        $activeVendors=User::search(request("search"))->where("role", "vendor")->where("status", "active")->paginate(request("per_page", 10))->withQueryString();
+        $orderColumn=request("sort", "id");
+
+        if (!in_array($orderColumn, ["id","name","created_at"])) {
+            $orderColumn="id";
+        }
+
+        $orderDirection=request("direction", "desc");
+
+        if (!in_array($orderDirection, ["asc","desc"])) {
+            $orderDirection="desc";
+        }
+
+        $activeVendors=User::search(request("search"))
+                            ->where("role", "vendor")
+                            ->where("status", "active")
+                            ->orderBy(request("sort", "id"), request("direction", "desc"))
+                            ->paginate(request("per_page", 10))
+                            ->withQueryString();
 
         return inertia("Admin/Managements/Vendors/ActiveVendors/Index", compact("activeVendors"));
     }

@@ -25,7 +25,10 @@ const swal = inject("$swal");
 
 const params = reactive({
   search: null,
+  page: props.subCategories.current_page ? props.subCategories.current_page : 1,
   per_page: props.subCategories.per_page ? props.subCategories.per_page : 10,
+  sort: "id",
+  direction: "desc",
 });
 
 const handleSearchBox = () => {
@@ -40,6 +43,8 @@ watch(
       {
         search: params.search,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       },
       {
         replace: true,
@@ -55,10 +60,11 @@ watch(
     router.get(
       "/admin/sub-categories",
       {
-        page: props.subCategories.current_page
-          ? props.subCategories.current_page
-          : 1,
+        search: params.search,
+        page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       },
       {
         replace: true,
@@ -67,6 +73,23 @@ watch(
     );
   }
 );
+
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  router.get(
+    "/admin/sub-categories",
+    {
+      search: params.search,
+      page: params.page,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    { replace: true, preserveState: true }
+  );
+};
 
 const handleDelete = async (subCategoryId) => {
   const result = await swal({
@@ -197,50 +220,107 @@ if (usePage().props.flash.successMessage) {
 
       <TableContainer>
         <TableHeader>
-          <HeaderTh>
+          <HeaderTh @click="updateSorting('id')">
             No
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'id',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'id',
+              }"
             ></i>
             <i
               class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'id',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'id',
+              }"
             ></i>
           </HeaderTh>
+          <HeaderTh> Category </HeaderTh>
           <HeaderTh> Image </HeaderTh>
-          <HeaderTh>
-            Category
+          <HeaderTh @click="updateSorting('name')">
+            Name
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'name',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'name',
+              }"
             ></i>
             <i
               class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'name',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'name',
+              }"
             ></i>
           </HeaderTh>
-          <HeaderTh>
-            Name ( SubCategory )
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-            ></i>
-          </HeaderTh>
-          <HeaderTh>
+
+          <HeaderTh @click="updateSorting('status')">
             Status
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'status',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'status',
+              }"
             ></i>
             <i
               class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'status',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'status',
+              }"
             ></i>
           </HeaderTh>
-          <HeaderTh>
+          <HeaderTh @click="updateSorting('created_at')">
             Created At
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'created_at',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'created_at',
+              }"
             ></i>
             <i
               class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'created_at',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'created_at',
+              }"
             ></i>
           </HeaderTh>
           <HeaderTh> Action </HeaderTh>
@@ -249,6 +329,7 @@ if (usePage().props.flash.successMessage) {
         <tbody v-if="subCategories.data.length">
           <Tr v-for="subCategory in subCategories.data" :key="subCategory.id">
             <BodyTh>{{ subCategory.id }}</BodyTh>
+            <Td>{{ subCategory.category.name }}</Td>
             <Td>
               <img
                 :src="subCategory.image"
@@ -256,7 +337,6 @@ if (usePage().props.flash.successMessage) {
                 alt=""
               />
             </Td>
-            <Td>{{ subCategory.category.name }}</Td>
             <Td>{{ subCategory.name }}</Td>
             <Td>
               <ActiveStatus v-if="subCategory.status == 'show'">

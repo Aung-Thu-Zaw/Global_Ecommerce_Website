@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
             "email"=>"admin@gmail.com",
             "password"=>"Password!",
             "role"=>"admin",
+            "deleted_at"=>null
         ]);
 
         User::factory()->create([
@@ -27,6 +28,7 @@ class UserSeeder extends Seeder
             "email"=>"vendor@gmail.com",
             "password"=>"Password!",
             "role"=>"vendor",
+            "deleted_at"=>null
         ]);
 
         User::factory()->create([
@@ -34,8 +36,10 @@ class UserSeeder extends Seeder
             "email"=>"user@gmail.com",
             "password"=>"Password!",
             "role"=>"user",
+            "deleted_at"=>null
         ]);
 
         User::factory(30)->create();
+        User::factory(30)->create(["deleted_at"=>null]);
     }
 }

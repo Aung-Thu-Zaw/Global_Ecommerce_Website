@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin\Managements;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\VendorResource;
 use App\Models\User;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
@@ -13,7 +12,12 @@ class AdminInactiveVendorController extends Controller
 {
     public function index(): Response
     {
-        $inactiveVendors=User::search(request("search"))->where("role", "vendor")->where("status", "inactive")->paginate(request("per_page", 10))->withQueryString();
+        $inactiveVendors=User::search(request("search"))
+                              ->where("role", "vendor")
+                              ->where("status", "inactive")
+                              ->orderBy(request("sort", "id"), request("direction", "desc"))
+                              ->paginate(request("per_page", 10))
+                              ->withQueryString();
 
         return inertia("Admin/Managements/Vendors/InactiveVendors/Index", compact("inactiveVendors"));
     }
@@ -47,7 +51,13 @@ class AdminInactiveVendorController extends Controller
 
     public function trash(): Response
     {
-        $inactiveTrashVendors=User::search(request("search"))->onlyTrashed()->where("role", "vendor")->where("status", "inactive")->paginate(request("per_page", 10))->withQueryString();
+        $inactiveTrashVendors=User::search(request("search"))
+                                   ->onlyTrashed()
+                                   ->where("role", "vendor")
+                                   ->where("status", "inactive")
+                                   ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                   ->paginate(request("per_page", 10))
+                                   ->withQueryString();
 
         return inertia("Admin/Managements/Vendors/InactiveVendors/Trash", compact("inactiveTrashVendors"));
     }

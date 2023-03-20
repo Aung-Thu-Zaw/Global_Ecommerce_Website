@@ -15,7 +15,10 @@ class AdminSubCategoryController extends Controller
 {
     public function index(): Response
     {
-        $subCategories=SubCategory::search(request("search"))->paginate(request("per_page", 10))->withQueryString();
+        $subCategories=SubCategory::search(request("search"))
+                                  ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                  ->paginate(request("per_page", 10))
+                                  ->withQueryString();
 
         $subCategories->load("category:id,name");
 
@@ -67,7 +70,11 @@ class AdminSubCategoryController extends Controller
 
     public function trash(): Response
     {
-        $trashSubCategories=SubCategory::search(request("search"))->onlyTrashed()->paginate(request("per_page", 10))->withQueryString();
+        $trashSubCategories=SubCategory::search(request("search"))
+                                       ->onlyTrashed()
+                                       ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                       ->paginate(request("per_page", 10))
+                                       ->withQueryString();
 
         $trashSubCategories->load("category:id,name");
 

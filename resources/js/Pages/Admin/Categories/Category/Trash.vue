@@ -25,9 +25,14 @@ const swal = inject("$swal");
 
 const params = reactive({
   search: null,
+  page: props.trashCategories.current_page
+    ? props.trashCategories.current_page
+    : 1,
   per_page: props.trashCategories.per_page
     ? props.trashCategories.per_page
     : 10,
+  sort: "id",
+  direction: "desc",
 });
 
 const handleSearchBox = () => {
@@ -42,6 +47,8 @@ watch(
       {
         search: params.search,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       },
       {
         replace: true,
@@ -57,10 +64,11 @@ watch(
     router.get(
       "/admin/categories/trash",
       {
-        page: props.trashCategories.current_page
-          ? props.trashCategories.current_page
-          : 1,
+        search: params.search,
+        page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       },
       {
         replace: true,
@@ -69,6 +77,23 @@ watch(
     );
   }
 );
+
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  router.get(
+    "/admin/categories/trash",
+    {
+      search: params.search,
+      page: params.page,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    { replace: true, preserveState: true }
+  );
+};
 
 const handleRestore = async (trashCategoryId) => {
   const result = await swal({
@@ -228,44 +253,105 @@ const handleDelete = async (trashCategoryId) => {
 
       <TableContainer>
         <TableHeader>
-          <HeaderTh>
+          <HeaderTh @click="updateSorting('id')">
             No
-
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'id',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'id',
+              }"
             ></i>
             <i
               class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'id',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'id',
+              }"
             ></i>
           </HeaderTh>
           <HeaderTh> Image </HeaderTh>
-          <HeaderTh>
+          <HeaderTh @click="updateSorting('name')">
             Name
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'name',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'name',
+              }"
             ></i>
             <i
               class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'name',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'name',
+              }"
             ></i>
           </HeaderTh>
-          <HeaderTh>
+          <HeaderTh @click="updateSorting('status')">
             Status
-
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'status',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'status',
+              }"
             ></i>
             <i
               class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'status',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'status',
+              }"
             ></i>
           </HeaderTh>
-          <HeaderTh>
+          <HeaderTh @click="updateSorting('created_at')">
             Created At
-
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'created_at',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'created_at',
+              }"
             ></i>
             <i
               class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'created_at',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'created_at',
+              }"
             ></i>
           </HeaderTh>
           <HeaderTh> Action </HeaderTh>

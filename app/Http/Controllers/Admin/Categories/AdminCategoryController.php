@@ -14,20 +14,11 @@ class AdminCategoryController extends Controller
 {
     public function index(): Response
     {
-        $orderColumn=request("sort", "created_at");
+        $categories=Category::search(request("search"))
+                            ->orderBy(request("sort", "id"), request("direction", "desc"))
+                            ->paginate(request("per_page", 10))
+                            ->withQueryString();
 
-        // if (!in_array($orderColumn, ["id","name","status","created_at"])) {
-        //     $orderColumn="created_at";
-        // }
-
-        $orderDirection=request("direction", "desc");
-
-        // if (!in_array($orderDirection, ["asc","desc"])) {
-        //     $orderDirection="desc";
-        // }
-
-
-        $categories=Category::search(request("search"))->orderBy($orderColumn, $orderDirection)->paginate(request("per_page", 10))->withQueryString();
 
         return inertia("Admin/Categories/Category/Index", compact("categories"));
     }
@@ -71,7 +62,11 @@ class AdminCategoryController extends Controller
 
     public function trash(): Response
     {
-        $trashCategories=Category::search(request("search"))->onlyTrashed()->paginate(request("per_page", 10))->withQueryString();
+        $trashCategories=Category::search(request("search"))
+                                ->onlyTrashed()
+                                ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                ->paginate(request("per_page", 10))
+                                ->withQueryString();
 
         return inertia("Admin/Categories/Category/Trash", compact("trashCategories"));
     }
