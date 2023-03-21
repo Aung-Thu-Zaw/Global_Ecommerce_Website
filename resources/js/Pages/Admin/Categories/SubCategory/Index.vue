@@ -97,7 +97,7 @@ const handleDelete = async (subCategoryId) => {
     title: "Are you sure you want to move it to the trash?",
     text: "You will be able to revert this action!",
     showCancelButton: true,
-    confirmButtonText: "Yes, remove it!",
+    confirmButtonText: "Yes, delete it!",
     confirmButtonColor: "#ef4444",
     timer: 20000,
     timerProgressBar: true,

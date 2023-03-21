@@ -6,15 +6,19 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Laravel\Scout\Searchable;
 
 class Category extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use CascadeSoftDeletes;
     use Searchable;
 
     protected $guarded=[];
+
+    protected $cascadeDeletes = ['subCategories'];
 
     public function toSearchableArray(): array
     {

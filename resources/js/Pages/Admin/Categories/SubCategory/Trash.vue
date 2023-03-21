@@ -365,7 +365,11 @@ const handleDelete = async (trashSubCategoryId) => {
             :key="trashSubCategory.id"
           >
             <BodyTh>{{ trashSubCategory.id }}</BodyTh>
-            <Td>{{ trashSubCategory.category.name }}</Td>
+            <Td>
+              {{
+                trashSubCategory.category ? trashSubCategory.category.name : ""
+              }}
+            </Td>
             <Td>
               <img
                 :src="trashSubCategory.image"

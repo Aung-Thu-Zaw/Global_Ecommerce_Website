@@ -8,7 +8,6 @@ import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
 import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
-import SearchForm from "@/Components/Form/SearchForm.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Categories/Breadcrumb.vue";
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
@@ -97,7 +96,7 @@ const handleDelete = async (categoryId) => {
     title: "Are you sure you want to move it to the trash?",
     text: "You will be able to revert this action!",
     showCancelButton: true,
-    confirmButtonText: "Yes, remove it!",
+    confirmButtonText: "Yes, delete it!",
     confirmButtonColor: "#ef4444",
     timer: 20000,
     timerProgressBar: true,
