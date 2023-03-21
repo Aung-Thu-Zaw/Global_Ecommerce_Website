@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Products;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
@@ -8,9 +8,15 @@ use Illuminate\Http\Request;
 
 class AdminProductController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $products=Product::paginate(10);
+
         return inertia("Admin/Products/Index", compact("products"));
     }
 

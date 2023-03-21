@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class DeleteUserAction
 {
-    public function execute(Request $request)
+    public function execute(Request $request): ?string
     {
         if (auth()->user() && !auth()->user()->google_id && !auth()->user()->facebook_id) {
             $request->validate([
