@@ -94,6 +94,21 @@
               Dashboard
             </Link>
           </li>
+          <li class="items-center">
+            <Link
+              :href="route('admin.products.index')"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url === '/admin/products',
+                'text-slate-700 hover:text-slate-500':
+                  $page.url !== '/admin/products',
+              }"
+            >
+              <i class="fa-solid fa-basket-shopping mr-2 text-sm"></i>
+              Products
+            </Link>
+          </li>
         </ul>
 
         <!-- Navigation -->
