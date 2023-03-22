@@ -17,7 +17,7 @@ class AdminBrandController extends Controller
         $brands=Brand::search(request("search"))
                             ->orderBy(request("sort", "id"), request("direction", "desc"))
                             ->paginate(request("per_page", 10))
-                            ->withQueryString();
+                            ->appends(request()->all());
 
 
         return inertia("Admin/Brands/Index", compact("brands"));
@@ -66,12 +66,12 @@ class AdminBrandController extends Controller
                                 ->onlyTrashed()
                                 ->orderBy(request("sort", "id"), request("direction", "desc"))
                                 ->paginate(request("per_page", 10))
-                                ->withQueryString();
+                                ->appends(request()->all());
 
         return inertia("Admin/Brands/Trash", compact("trashBrands"));
     }
 
-    public function restore(Request $request, $id): RedirectResponse
+    public function restore(Request $request, int $id): RedirectResponse
     {
         $brand = Brand::onlyTrashed()->where("id", $id)->first();
 
@@ -80,7 +80,7 @@ class AdminBrandController extends Controller
         return to_route('admin.brands.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Brand is restored successfully.");
     }
 
-    public function forceDelete(Request $request, $id): RedirectResponse
+    public function forceDelete(Request $request, int $id): RedirectResponse
     {
         $brand = Brand::onlyTrashed()->where("id", $id)->first();
 

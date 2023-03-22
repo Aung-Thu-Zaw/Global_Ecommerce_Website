@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Categories;
 
+/*
+*
+* @return \Illuminate\Pagination\LengthAwarePaginator
+*/
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
@@ -17,7 +22,7 @@ class AdminCategoryController extends Controller
         $categories=Category::search(request("search"))
                             ->orderBy(request("sort", "id"), request("direction", "desc"))
                             ->paginate(request("per_page", 10))
-                            ->withQueryString();
+                            ->appends(request()->all());
 
 
         return inertia("Admin/Categories/Category/Index", compact("categories"));
@@ -66,12 +71,12 @@ class AdminCategoryController extends Controller
                                 ->onlyTrashed()
                                 ->orderBy(request("sort", "id"), request("direction", "desc"))
                                 ->paginate(request("per_page", 10))
-                                ->withQueryString();
+                                ->appends(request()->all());
 
         return inertia("Admin/Categories/Category/Trash", compact("trashCategories"));
     }
 
-    public function restore(Request $request, $id): RedirectResponse
+    public function restore(Request $request, int $id): RedirectResponse
     {
         $category = Category::onlyTrashed()->where("id", $id)->first();
 
@@ -80,7 +85,7 @@ class AdminCategoryController extends Controller
         return to_route('admin.categories.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Category is restored successfully.");
     }
 
-    public function forceDelete(Request $request, $id): RedirectResponse
+    public function forceDelete(Request $request, int $id): RedirectResponse
     {
         $category = Category::onlyTrashed()->where("id", $id)->first();
 

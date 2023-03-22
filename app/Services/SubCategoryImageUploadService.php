@@ -27,7 +27,7 @@ class SubCategoryImageUploadService
         }
     }
 
-    public function updateImage(Request $request, $subCategory): ?string
+    public function updateImage(Request $request, object $subCategory): string
     {
         if ($request->hasFile("image")) {
             $request->validate([

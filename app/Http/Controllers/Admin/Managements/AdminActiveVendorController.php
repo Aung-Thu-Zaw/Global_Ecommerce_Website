@@ -29,12 +29,12 @@ class AdminActiveVendorController extends Controller
                             ->where("status", "active")
                             ->orderBy(request("sort", "id"), request("direction", "desc"))
                             ->paginate(request("per_page", 10))
-                            ->withQueryString();
+                            ->appends(request()->all());
 
         return inertia("Admin/Managements/Vendors/ActiveVendors/Index", compact("activeVendors"));
     }
 
-    public function show($id): Response
+    public function show(int $id): Response
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
@@ -43,7 +43,7 @@ class AdminActiveVendorController extends Controller
         return inertia("Admin/Managements/Vendors/ActiveVendors/Details", compact("activeVendor", "paginate"));
     }
 
-    public function update(Request $request, $id): RedirectResponse
+    public function update(Request $request, int $id): RedirectResponse
     {
         $activeVendor=User::find($id);
 

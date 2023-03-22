@@ -18,9 +18,9 @@ class AdminSubCategoryController extends Controller
         $subCategories=SubCategory::search(request("search"))
                                   ->orderBy(request("sort", "id"), request("direction", "desc"))
                                   ->paginate(request("per_page", 10))
-                                  ->withQueryString();
+                                   ->appends(request()->all());
 
-        $subCategories->load("category:id,name");
+        // $subCategories->load("category:id,name");
 
         return inertia("Admin/Categories/SubCategory/Index", compact("subCategories"));
     }
@@ -74,14 +74,14 @@ class AdminSubCategoryController extends Controller
                                        ->onlyTrashed()
                                        ->orderBy(request("sort", "id"), request("direction", "desc"))
                                        ->paginate(request("per_page", 10))
-                                       ->withQueryString();
+                                       ->appends(request()->all());
 
-        $trashSubCategories->load("category:id,name");
+        // $trashSubCategories->load("category:id,name");
 
         return inertia("Admin/Categories/SubCategory/Trash", compact("trashSubCategories"));
     }
 
-    public function restore(Request $request, $id): RedirectResponse
+    public function restore(Request $request, int $id): RedirectResponse
     {
         $subCategory = SubCategory::onlyTrashed()->where("id", $id)->first();
 
@@ -90,7 +90,7 @@ class AdminSubCategoryController extends Controller
         return to_route('admin.subcategories.trash', "page=$request->page&per_page=$request->per_page")->with("success", "SubCategory is restored successfully.");
     }
 
-    public function forceDelete(Request $request, $id): RedirectResponse
+    public function forceDelete(Request $request, int $id): RedirectResponse
     {
         $subCategory = SubCategory::onlyTrashed()->where("id", $id)->first();
 

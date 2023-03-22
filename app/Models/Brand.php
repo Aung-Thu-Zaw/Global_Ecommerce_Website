@@ -18,6 +18,9 @@ class Brand extends Model
 
     protected $guarded=[];
 
+    /**
+    *     @return array<string>
+    */
     public function toSearchableArray(): array
     {
         return [
@@ -25,6 +28,9 @@ class Brand extends Model
         ];
     }
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Brand, never>
+    */
     protected function image(): Attribute
     {
         return Attribute::make(
@@ -32,6 +38,9 @@ class Brand extends Model
         );
     }
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Brand, never>
+    */
     protected function createdAt(): Attribute
     {
         return Attribute::make(
@@ -39,7 +48,7 @@ class Brand extends Model
         );
     }
 
-    public static function deleteImage($brand)
+    public static function deleteImage(object $brand): void
     {
         if (!empty($brand->image) && file_exists(storage_path("app/public/brands/$brand->image"))) {
             unlink(storage_path("app/public/brands/$brand->image"));

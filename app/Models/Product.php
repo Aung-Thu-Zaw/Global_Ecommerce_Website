@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
@@ -12,11 +13,15 @@ class Product extends Model
 
     protected $guarded=[];
 
-    public function productImages()
+    public function productImages(): HasMany
     {
         return $this->hasMany(ProductImage::class);
     }
 
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Product, never>
+    */
     protected function image(): Attribute
     {
         return Attribute::make(
@@ -24,6 +29,10 @@ class Product extends Model
         );
     }
 
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Product, never>
+    */
     protected function createdAt(): Attribute
     {
         return Attribute::make(

@@ -11,7 +11,7 @@ class MyAccountUpdateRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
+     * @return array<string,mixed>
      */
 
     public function rules(): array
@@ -29,8 +29,6 @@ class MyAccountUpdateRequest extends FormRequest
         if ($this->hasFile("avatar")) {
             $rules["avatar"]=["required","image","mimes:png,jpg,gif,jpeg,webp"];
         }
-
-
 
         return $rules;
     }

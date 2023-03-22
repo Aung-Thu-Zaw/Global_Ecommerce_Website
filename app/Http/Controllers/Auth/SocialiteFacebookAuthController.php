@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Exception;
+use Laravel\Socialite\Two\InvalidStateException;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\RedirectResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class SocialiteFacebookAuthController extends Controller
 {
@@ -19,19 +19,19 @@ class SocialiteFacebookAuthController extends Controller
     public function handelProviderCallback(): RedirectResponse
     {
         try {
-            $facebookUser= Socialite::driver("facebook")->stateless()->user();
-        } catch(Exception $err) {
+            $facebookUser= Socialite::driver("facebook")->user();
+        } catch(InvalidStateException $e) {
             return redirect()->back()->with("status", "Something Went Wrong!");
         }
 
-        $existingUser=User::where("facebook_id", $facebookUser->id)->first();
+        $existingUser=User::where("facebook_id", $facebookUser->getId())->first();
 
         if (!$existingUser) {
             $newUser=User::create([
-                "facebook_id"=>$facebookUser->id,
-                "name"=>$facebookUser->name,
-                "email"=>$facebookUser->email,
-                "avatar"=>$facebookUser->avatar,
+                "facebook_id"=>$facebookUser->getId(),
+                "name"=>$facebookUser->getName(),
+                "email"=>$facebookUser->getEmail(),
+                "avatar"=>$facebookUser->getAvatar(),
                 "email_verified_at"=>now()
             ]);
             Auth::login($newUser);

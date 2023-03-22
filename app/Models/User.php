@@ -28,9 +28,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-        // 'created_at'=>'date'
     ];
 
+
+    /**
+    *     @return array<string>
+    */
     public function toSearchableArray(): array
     {
         return [
@@ -39,6 +42,10 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<User, never>
+    */
     protected function password(): Attribute
     {
         return Attribute::make(
@@ -46,6 +53,10 @@ class User extends Authenticatable implements MustVerifyEmail
         );
     }
 
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<User, never>
+    */
     protected function avatar(): Attribute
     {
         return Attribute::make(
@@ -54,6 +65,10 @@ class User extends Authenticatable implements MustVerifyEmail
         );
     }
 
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<User, never>
+    */
     protected function createdAt(): Attribute
     {
         return Attribute::make(
@@ -61,7 +76,7 @@ class User extends Authenticatable implements MustVerifyEmail
         );
     }
 
-    public function getRedirectRouteName()
+    public function getRedirectRouteName(): string
     {
         return match ((string)$this->role) {
             "admin"=>"admin.dashboard",
@@ -70,7 +85,7 @@ class User extends Authenticatable implements MustVerifyEmail
         };
     }
 
-    public function logoutRedirect()
+    public function logoutRedirect(): string
     {
         return match ((string)$this->role) {
             "admin"=>"admin.login",
@@ -79,14 +94,14 @@ class User extends Authenticatable implements MustVerifyEmail
         };
     }
 
-    public static function deleteDefaultAvatar($user)
+    public static function deleteDefaultAvatar(object $user): void
     {
         if (file_exists(storage_path("app/public/avatars/default-avatar-$user->id.png"))) {
             unlink(storage_path("app/public/avatars/default-avatar-$user->id.png"));
         }
     }
 
-    public static function deleteUserAvatar($user)
+    public static function deleteUserAvatar(object $user): void
     {
         if (!empty($user->avatar) && file_exists(storage_path("app/public/avatars/$user->avatar"))) {
             unlink(storage_path("app/public/avatars/$user->avatar"));

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 
@@ -16,6 +17,10 @@ class SubCategory extends Model
 
     protected $guarded=[];
 
+
+    /**
+    *     @return array<string>
+    */
     public function toSearchableArray(): array
     {
         return [
@@ -24,11 +29,16 @@ class SubCategory extends Model
         ];
     }
 
-    public function category()
+
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<SubCategory, never>
+    */
     protected function image(): Attribute
     {
         return Attribute::make(
@@ -36,6 +46,10 @@ class SubCategory extends Model
         );
     }
 
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<SubCategory, never>
+    */
     protected function createdAt(): Attribute
     {
         return Attribute::make(
@@ -43,7 +57,7 @@ class SubCategory extends Model
         );
     }
 
-    public static function deleteImage($subCategory)
+    public static function deleteImage(object $subCategory): void
     {
         if (!empty($subCategory->image) && file_exists(storage_path("app/public/subCategories/$subCategory->image"))) {
             unlink(storage_path("app/public/subCategories/$subCategory->image"));

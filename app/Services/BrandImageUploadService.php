@@ -23,7 +23,7 @@ class BrandImageUploadService
         return $finalName;
     }
 
-    public function updateImage(Request $request, $brand): ?string
+    public function updateImage(Request $request, object $brand): string
     {
         if ($request->hasFile("image")) {
             $request->validate([

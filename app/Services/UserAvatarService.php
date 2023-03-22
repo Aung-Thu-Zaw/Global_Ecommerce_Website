@@ -8,7 +8,7 @@ use Laravolt\Avatar\Avatar;
 
 class UserAvatarService
 {
-    public function regenerateDefaultAvatar(Request $request)
+    public function regenerateDefaultAvatar(Request $request): void
     {
         if ($request->user()->isDirty('name')) {
             $userId=$request->user()->id;
@@ -44,7 +44,7 @@ class UserAvatarService
         }
     }
 
-    public function uploadAvatar(Request $request)
+    public function uploadAvatar(Request $request): void
     {
         if ($request->hasFile("avatar")) {
             $user=$request->user();
@@ -60,8 +60,6 @@ class UserAvatarService
             $request->file("avatar")->move(storage_path("app/public/avatars/"), $finalName);
 
             $request->user()->avatar=$finalName;
-        } else {
-            return null;
         }
     }
 }

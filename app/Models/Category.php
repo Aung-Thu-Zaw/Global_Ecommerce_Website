@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Scout\Searchable;
 
 class Category extends Model
@@ -18,8 +19,14 @@ class Category extends Model
 
     protected $guarded=[];
 
-    protected $cascadeDeletes = ['subCategories'];
+    /**
+    * @var string[]
+    */
+    protected array $cascadeDeletes = ['subCategories'];
 
+    /**
+    *     @return array<string>
+    */
     public function toSearchableArray(): array
     {
         return [
@@ -29,11 +36,14 @@ class Category extends Model
     }
 
 
-    public function subCategories()
+    public function subCategories(): HasMany
     {
         return $this->hasMany(SubCategory::class);
     }
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Category, never>
+    */
     protected function image(): Attribute
     {
         return Attribute::make(
@@ -41,6 +51,9 @@ class Category extends Model
         );
     }
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Category, never>
+    */
     protected function createdAt(): Attribute
     {
         return Attribute::make(
@@ -48,7 +61,7 @@ class Category extends Model
         );
     }
 
-    public static function deleteImage($category)
+    public static function deleteImage(object $category): void
     {
         if (!empty($category->image) && file_exists(storage_path("app/public/categories/$category->image"))) {
             unlink(storage_path("app/public/categories/$category->image"));
