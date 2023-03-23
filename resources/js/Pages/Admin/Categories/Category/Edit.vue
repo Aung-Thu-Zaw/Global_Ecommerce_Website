@@ -21,7 +21,6 @@ const getPreviewPhotoPath = (path) => {
 
 const form = useForm({
   name: props.category.name,
-  slug: props.category.slug,
   status: props.category.status,
   image: props.category.image,
   captcha_token: null,
@@ -37,7 +36,7 @@ const handleEditCatrgory = async () => {
 const submit = () => {
   form.post(
     route("admin.categories.update", {
-      category: props.category.id,
+      category: props.category.slug,
       page: props.paginate.page,
       per_page: props.paginate.per_page,
     }),
@@ -139,20 +138,6 @@ const submit = () => {
             />
 
             <InputError class="mt-2" :message="form.errors.name" />
-          </div>
-          <div class="mb-6">
-            <InputLabel for="slug" value="Category Slug *" />
-
-            <TextInput
-              id="slug"
-              type="text"
-              class="mt-1 block w-full"
-              v-model="form.slug"
-              required
-              placeholder="Enter Category Slug"
-            />
-
-            <InputError class="mt-2" :message="form.errors.slug" />
           </div>
 
           <div class="mb-6">

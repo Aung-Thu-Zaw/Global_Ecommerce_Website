@@ -26,15 +26,13 @@ class SubCategoryRequest extends FormRequest
     {
         $rules= [
             "category_id"=>["required",Rule::exists("categories", "id")],
-            "name"=>["required","string","max:255",Rule::unique("categories", "name")],
-            "slug"=>["required","string","max:255",Rule::unique("categories", "slug")],
+            "name"=>["required","string","max:255",Rule::unique("sub_categories", "name")],
             "status"=>["required","string",Rule::in(["show","hide"])]
         ];
 
         if (in_array($this->method(), ['POST','PUT', 'PATCH'])) {
             $category = $this->route()->parameter('sub_category');
-            $rules["name"]=["required","string","max:255",Rule::unique("categories", "name")->ignore($category)];
-            $rules["slug"]=["required","string","max:255",Rule::unique("categories", "slug")->ignore($category)];
+            $rules["name"]=["required","string","max:255",Rule::unique("sub_categories", "name")->ignore($category)];
         }
 
         return $rules;

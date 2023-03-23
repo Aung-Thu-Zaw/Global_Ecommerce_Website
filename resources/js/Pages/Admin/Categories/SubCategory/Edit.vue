@@ -23,7 +23,6 @@ const getPreviewPhotoPath = (path) => {
 const form = useForm({
   category_id: props.subCategory.category_id,
   name: props.subCategory.name,
-  slug: props.subCategory.slug,
   status: props.subCategory.status,
   image: props.subCategory.image,
   captcha_token: null,
@@ -39,7 +38,7 @@ const handleEditSubCatrgory = async () => {
 const submit = () => {
   form.post(
     route("admin.subcategories.update", {
-      sub_category: props.subCategory.id,
+      sub_category: props.subCategory.slug,
       page: props.paginate.page,
       per_page: props.paginate.per_page,
     }),
@@ -160,20 +159,6 @@ const submit = () => {
             />
 
             <InputError class="mt-2" :message="form.errors.name" />
-          </div>
-          <div class="mb-6">
-            <InputLabel for="slug" value="SubCategory Slug *" />
-
-            <TextInput
-              id="slug"
-              type="text"
-              class="mt-1 block w-full"
-              v-model="form.slug"
-              required
-              placeholder="Enter SubCategory Slug"
-            />
-
-            <InputError class="mt-2" :message="form.errors.slug" />
           </div>
 
           <div class="mb-6">

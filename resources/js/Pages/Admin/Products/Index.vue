@@ -401,7 +401,7 @@ if (usePage().props.flash.successMessage) {
             <Td>
               <Link
                 as="button"
-                :href="route('admin.products.edit', product.id)"
+                :href="route('admin.products.edit', product.slug)"
                 :data="{
                   page: props.products.current_page,
                   per_page: params.per_page,
@@ -412,7 +412,7 @@ if (usePage().props.flash.successMessage) {
                 Edit
               </Link>
               <button
-                @click="handleDelete(product.id)"
+                @click="handleDelete(product.slug)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>

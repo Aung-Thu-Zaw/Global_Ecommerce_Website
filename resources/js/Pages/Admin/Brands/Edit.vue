@@ -35,7 +35,7 @@ const handleEditBrand = async () => {
 const submit = () => {
   form.post(
     route("admin.brands.update", {
-      brand: props.brand.id,
+      brand: props.brand.slug,
       page: props.paginate.page,
       per_page: props.paginate.per_page,
     }),

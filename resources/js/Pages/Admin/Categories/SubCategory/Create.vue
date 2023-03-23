@@ -22,7 +22,6 @@ const getPreviewPhotoPath = (path) => {
 const form = useForm({
   category_id: "",
   name: "",
-  slug: "",
   status: "",
   image: "",
   captcha_token: null,
@@ -157,21 +156,6 @@ const submit = () => {
 
             <InputError class="mt-2" :message="form.errors.name" />
           </div>
-          <div class="mb-6">
-            <InputLabel for="slug" value="SubCategory Slug *" />
-
-            <TextInput
-              id="slug"
-              type="text"
-              class="mt-1 block w-full"
-              v-model="form.slug"
-              required
-              placeholder="Enter SubCategory Slug"
-            />
-
-            <InputError class="mt-2" :message="form.errors.slug" />
-          </div>
-
           <div class="mb-6">
             <InputLabel for="status" value="Status *" />
 

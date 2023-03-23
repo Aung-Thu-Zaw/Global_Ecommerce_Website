@@ -26,14 +26,12 @@ class CategoryRequest extends FormRequest
     {
         $rules= [
             "name"=>["required","string","max:255",Rule::unique("categories", "name")],
-            "slug"=>["required","string","max:255",Rule::unique("categories", "slug")],
             "status"=>["required","string",Rule::in(["show","hide"])]
         ];
 
         if (in_array($this->method(), ['POST','PUT', 'PATCH'])) {
             $category = $this->route()->parameter('category');
             $rules["name"]=["required","string","max:255",Rule::unique("categories", "name")->ignore($category)];
-            $rules["slug"]=["required","string","max:255",Rule::unique("categories", "slug")->ignore($category)];
         }
 
         return $rules;

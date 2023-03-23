@@ -20,7 +20,7 @@ class AdminSubCategoryController extends Controller
                                   ->paginate(request("per_page", 10))
                                    ->appends(request()->all());
 
-        // $subCategories->load("category:id,name");
+        $subCategories->load("category:id,name");
 
         return inertia("Admin/Categories/SubCategory/Index", compact("subCategories"));
     }
@@ -76,7 +76,7 @@ class AdminSubCategoryController extends Controller
                                        ->paginate(request("per_page", 10))
                                        ->appends(request()->all());
 
-        // $trashSubCategories->load("category:id,name");
+        $trashSubCategories->load("category:id,name");
 
         return inertia("Admin/Categories/SubCategory/Trash", compact("trashSubCategories"));
     }
