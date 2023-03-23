@@ -2,10 +2,6 @@
 
 namespace App\Http\Controllers\Admin\Categories;
 
-/*
-*
-* @return \Illuminate\Pagination\LengthAwarePaginator
-*/
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;

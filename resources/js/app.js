@@ -9,6 +9,7 @@ import * as te from "tw-elements";
 import { VueReCaptcha } from "vue-recaptcha-v3";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
+import CKEditor from "@ckeditor/ckeditor5-vue";
 
 const appName =
     window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
@@ -33,6 +34,7 @@ createInertiaApp({
             })
             .use(ZiggyVue, Ziggy)
             .use(VueSweetalert2)
+            .use(CKEditor)
             .mount(el);
     },
     progress: {

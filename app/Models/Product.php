@@ -6,12 +6,34 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Laravel\Scout\Searchable;
 
 class Product extends Model
 {
     use HasFactory;
+    use Searchable;
+    use SoftDeletes;
+    use CascadeSoftDeletes;
 
     protected $guarded=[];
+
+    /**
+    * @var string[]
+    */
+    protected array $cascadeDeletes = ['subCategories'];
+
+    /**
+    *     @return array<string>
+    */
+    public function toSearchableArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'status' => $this->status,
+        ];
+    }
 
     public function productImages(): HasMany
     {

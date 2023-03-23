@@ -30,7 +30,8 @@ return new class () extends Migration {
             $table->boolean("hot_deal")->nullable();
             $table->boolean("featured")->nullable();
             $table->boolean("special_offer")->nullable();
-            $table->boolean("status")->default(false);
+            // $table->boolean("status")->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

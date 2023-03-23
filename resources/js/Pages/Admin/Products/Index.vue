@@ -159,7 +159,7 @@ if (usePage().props.flash.successMessage) {
           class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700"
         >
           <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
-          Add Category</Link
+          Add Product</Link
         >
         <!-- Search Input Form -->
         <div class="flex items-center">
@@ -381,7 +381,7 @@ if (usePage().props.flash.successMessage) {
             <Td>
               <img
                 :src="product.image"
-                class="w-[50px] h-[50px] rounded-full object-cover shadow-lg ring-2 ring-slate-300"
+                class="w-[50px] h-[50px] rounded-sm object-cover shadow-lg ring-2 ring-slate-300"
                 alt=""
               />
             </Td>
