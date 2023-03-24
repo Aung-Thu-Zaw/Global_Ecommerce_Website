@@ -247,31 +247,6 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh @click="updateSorting('price')">
-            Price
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'price',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'price',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'price',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'price',
-              }"
-            ></i>
-          </HeaderTh>
           <HeaderTh @click="updateSorting('qty')">
             Qty
             <i
@@ -297,8 +272,34 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
+          <HeaderTh @click="updateSorting('price')">
+            Price
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'price',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'price',
+              }"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'price',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'price',
+              }"
+            ></i>
+          </HeaderTh>
+
           <HeaderTh @click="updateSorting('discount')">
-            Discount
+            Discount (%)
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
               :class="{
@@ -386,14 +387,18 @@ if (usePage().props.flash.successMessage) {
               />
             </Td>
             <Td>{{ product.name }}</Td>
-            <Td>{{ product.price }}</Td>
             <Td>{{ product.qty }}</Td>
-            <Td>{{ product.discount }}</Td>
+            <Td>$ {{ product.price }}</Td>
             <Td>
-              <ActiveStatus v-if="product.status == 'show'">
+              <span class="bg-green-200 text-green-600 py-1 px-3 rounded-md">
+                {{ product.discount }}%
+              </span>
+            </Td>
+            <Td>
+              <ActiveStatus v-if="product.status == 'active'">
                 {{ product.status }}
               </ActiveStatus>
-              <InactiveStatus v-if="product.status == 'hide'">
+              <InactiveStatus v-if="product.status == 'inactive'">
                 {{ product.status }}
               </InactiveStatus>
             </Td>

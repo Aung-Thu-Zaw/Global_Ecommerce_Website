@@ -45,12 +45,6 @@ class SubCategory extends Model
     }
 
 
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(Category::class);
-    }
-
-
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<SubCategory, never>
     */
@@ -71,6 +65,14 @@ class SubCategory extends Model
             get: fn ($value) => date("Y/m/d", strtotime($value)),
         );
     }
+
+
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
 
     public static function deleteImage(object $subCategory): void
     {

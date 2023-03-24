@@ -20,6 +20,11 @@ class Category extends Model
     use Searchable;
     use HasSlug;
 
+
+    /**
+    * @var string[]
+    */
+    protected array $cascadeDeletes = ['subCategories'];
     protected $guarded=[];
 
     public function getSlugOptions(): SlugOptions
@@ -34,10 +39,6 @@ class Category extends Model
         return 'slug';
     }
 
-    /**
-    * @var string[]
-    */
-    protected array $cascadeDeletes = ['subCategories'];
 
     /**
     *     @return array<string>
@@ -50,12 +51,6 @@ class Category extends Model
         ];
     }
 
-
-    public function subCategories(): HasMany
-    {
-        return $this->hasMany(SubCategory::class);
-    }
-
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Category, never>
     */
@@ -66,6 +61,7 @@ class Category extends Model
         );
     }
 
+
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Category, never>
     */
@@ -75,6 +71,13 @@ class Category extends Model
             get: fn ($value) => date("Y/m/d", strtotime($value)),
         );
     }
+
+
+    public function subCategories(): HasMany
+    {
+        return $this->hasMany(SubCategory::class);
+    }
+
 
     public static function deleteImage(object $category): void
     {

@@ -33,6 +33,7 @@ class Brand extends Model
         return 'slug';
     }
 
+
     /**
     *     @return array<string>
     */
@@ -53,6 +54,7 @@ class Brand extends Model
         );
     }
 
+
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Brand, never>
     */
@@ -62,6 +64,7 @@ class Brand extends Model
             get: fn ($value) => date("Y/m/d", strtotime($value)),
         );
     }
+
 
     public static function deleteImage(object $brand): void
     {

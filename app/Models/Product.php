@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Scout\Searchable;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -20,7 +21,13 @@ class Product extends Model
     use CascadeSoftDeletes;
     use HasSlug;
 
+
+    /**
+    * @var string[]
+    */
+    protected array $cascadeDeletes = ['subCategories'];
     protected $guarded=[];
+
 
     public function getSlugOptions(): SlugOptions
     {
@@ -34,10 +41,7 @@ class Product extends Model
         return 'slug';
     }
 
-    /**
-    * @var string[]
-    */
-    protected array $cascadeDeletes = ['subCategories'];
+
 
     /**
     *     @return array<string>
@@ -48,11 +52,6 @@ class Product extends Model
             'name' => $this->name,
             'status' => $this->status,
         ];
-    }
-
-    public function productImages(): HasMany
-    {
-        return $this->hasMany(ProductImage::class);
     }
 
 
@@ -75,5 +74,25 @@ class Product extends Model
         return Attribute::make(
             get: fn ($value) => date("Y/m/d", strtotime($value)),
         );
+    }
+
+    public function productImages(): HasMany
+    {
+        return $this->hasMany(ProductImage::class);
+    }
+
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+
+    public function colors(): BelongsToMany
+    {
+        return $this->belongsToMany(Color::class);
+    }
+
+    public function sizes(): BelongsToMany
+    {
+        return $this->belongsToMany(Size::class);
     }
 }
