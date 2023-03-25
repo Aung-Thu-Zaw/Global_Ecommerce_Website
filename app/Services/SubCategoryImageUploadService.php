@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class SubCategoryImageUploadService
 {
-    public function uploadImage(Request $request): ?string
+    public function createImage(Request $request): ?string
     {
         if ($request->hasFile("image")) {
             $request->validate([

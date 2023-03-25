@@ -7,12 +7,15 @@ import InputLabel from "@/Components/Form/InputLabel.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import FormButton from "@/Components/Form/FormButton.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Brands/Breadcrumb.vue";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { ref } from "vue";
 
 const props = defineProps({
   paginate: Array,
   brand: Object,
 });
+
+const editor = ClassicEditor;
 
 const previewPhoto = ref("");
 const getPreviewPhotoPath = (path) => {
@@ -22,6 +25,7 @@ const getPreviewPhotoPath = (path) => {
 const form = useForm({
   name: props.brand.name,
   image: props.brand.image,
+  description: props.brand.description,
   captcha_token: null,
 });
 
@@ -118,6 +122,14 @@ const submit = () => {
           </div>
 
           <div class="mb-6">
+            <InputLabel for="description" value="Brand Description *" />
+
+            <ckeditor :editor="editor" v-model="form.description"></ckeditor>
+
+            <InputError class="mt-2" :message="form.errors.description" />
+          </div>
+
+          <div class="mb-6">
             <InputLabel for="image" value="Image *" />
 
             <input
@@ -144,4 +156,18 @@ const submit = () => {
   </AdminDashboardLayout>
 </template>
 
+<style>
+.ck-editor__editable_inline {
+  min-height: 250px;
+  border-radius: 200px;
+}
+
+:root {
+  --ck-border-radius: 0.375rem;
+  --ck-color-focus-border: rgb(209 213 219);
+  --ck-font-size-base: 0.7rem;
+  --ck-color-shadow-drop: none;
+  --ck-color-shadow-inner: none;
+}
+</style>
 

@@ -7,11 +7,14 @@ import InputLabel from "@/Components/Form/InputLabel.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import FormButton from "@/Components/Form/FormButton.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Brands/Breadcrumb.vue";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { ref } from "vue";
 
 const props = defineProps({
   per_page: String,
 });
+
+const editor = ClassicEditor;
 
 const previewPhoto = ref("");
 const getPreviewPhotoPath = (path) => {
@@ -21,6 +24,7 @@ const getPreviewPhotoPath = (path) => {
 const form = useForm({
   name: "",
   image: "",
+  description: "",
   captcha_token: null,
 });
 
@@ -114,12 +118,21 @@ const submit = () => {
           </div>
 
           <div class="mb-6">
+            <InputLabel for="description" value="Brand Description *" />
+
+            <ckeditor :editor="editor" v-model="form.description"></ckeditor>
+
+            <InputError class="mt-2" :message="form.errors.description" />
+          </div>
+
+          <div class="mb-6">
             <InputLabel for="image" value="Image *" />
 
             <input
               class="relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-neutral-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out file:-mx-3 file:-my-1.5 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-1.5 file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[margin-inline-end:0.75rem] file:[border-inline-end-width:1px] hover:file:bg-neutral-200 focus:border-primary focus:bg-white focus:text-neutral-700 focus:shadow-[0_0_0_1px] focus:shadow-primary focus:outline-none dark:bg-transparent dark:text-neutral-200 dark:focus:bg-transparent"
               type="file"
               id="image"
+              required
               @input="form.image = $event.target.files[0]"
               @change="getPreviewPhotoPath($event.target.files[0])"
             />
@@ -139,5 +152,18 @@ const submit = () => {
     </div>
   </AdminDashboardLayout>
 </template>
+<style>
+.ck-editor__editable_inline {
+  min-height: 250px;
+  border-radius: 200px;
+}
 
+:root {
+  --ck-border-radius: 0.375rem;
+  --ck-color-focus-border: rgb(209 213 219);
+  --ck-font-size-base: 0.7rem;
+  --ck-color-shadow-drop: none;
+  --ck-color-shadow-inner: none;
+}
+</style>
 

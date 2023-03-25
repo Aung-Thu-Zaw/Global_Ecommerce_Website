@@ -32,7 +32,7 @@ class AdminBrandController extends Controller
 
     public function store(BrandRequest $request, BrandImageUploadService $brandImageUploadService): RedirectResponse
     {
-        Brand::create($request->validated()+["image"=>$brandImageUploadService->uploadImage($request)]);
+        Brand::create($request->validated()+["image"=>$brandImageUploadService->createImage($request)]);
 
         return to_route("admin.brands.index", "per_page=$request->per_page")->with("success", "Brand is created successfully.");
     }

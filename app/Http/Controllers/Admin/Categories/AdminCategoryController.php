@@ -32,7 +32,7 @@ class AdminCategoryController extends Controller
 
     public function store(CategoryRequest $request, CategoryImageUploadService $categoryImageUploadService): RedirectResponse
     {
-        Category::create($request->validated()+["image"=>$categoryImageUploadService->uploadImage($request)]);
+        Category::create($request->validated()+["image"=>$categoryImageUploadService->createImage($request)]);
 
         return to_route("admin.categories.index", "per_page=$request->per_page")->with("success", "Category is created successfully.");
     }

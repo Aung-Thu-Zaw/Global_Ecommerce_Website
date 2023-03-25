@@ -36,7 +36,7 @@ class AdminSubCategoryController extends Controller
 
     public function store(SubCategoryRequest $request, SubCategoryImageUploadService $subCategoryImageUploadService): RedirectResponse
     {
-        SubCategory::create($request->validated()+["image"=>$subCategoryImageUploadService->uploadImage($request)]);
+        SubCategory::create($request->validated()+["image"=>$subCategoryImageUploadService->createImage($request)]);
 
         return to_route("admin.subcategories.index", "per_page=$request->per_page")->with("success", "SubCategory is created successfully.");
     }

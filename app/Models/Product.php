@@ -76,9 +76,9 @@ class Product extends Model
         );
     }
 
-    public function productImages(): HasMany
+    public function images(): HasMany
     {
-        return $this->hasMany(ProductImage::class);
+        return $this->hasMany(Image::class);
     }
 
     public function colors()

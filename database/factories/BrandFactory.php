@@ -19,6 +19,7 @@ class BrandFactory extends Factory
         return [
             "name"=>fake()->name(),
             "slug"=>fake()->unique()->slug(),
+            "description"=>fake()->paragraph(),
             "image"=>fake()->imageUrl(),
             "created_at"=>fake()->dateTimeBetween("-4 months", now()),
         ];

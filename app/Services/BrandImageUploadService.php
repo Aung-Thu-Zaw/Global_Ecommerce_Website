@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class BrandImageUploadService
 {
-    public function uploadImage(Request $request): string
+    public function createImage(Request $request): string
     {
         $request->validate([
             "image"=>["required","image","mimes:png,jpg,jpeg,svg,webp,gif"]
