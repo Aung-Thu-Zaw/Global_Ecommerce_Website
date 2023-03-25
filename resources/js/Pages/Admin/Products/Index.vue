@@ -152,6 +152,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <Link
+          as="button"
           :href="route('admin.products.create')"
           :data="{
             per_page: params.per_page,
@@ -423,6 +424,18 @@ if (usePage().props.flash.successMessage) {
                 <i class="fa-solid fa-xmark"></i>
                 Delete
               </button>
+              <Link
+                as="button"
+                :href="route('admin.products.show', product.slug)"
+                :data="{
+                  page: props.products.current_page,
+                  per_page: params.per_page,
+                }"
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-emerald-600 text-white hover:bg-emerald-700 my-1"
+              >
+                <i class="fa-solid fa-eye"></i>
+                Details
+              </Link>
             </Td>
           </Tr>
         </tbody>

@@ -313,10 +313,10 @@ const handleInactive = async (activeVendorId) => {
                   page: props.activeVendors.current_page,
                   per_page: params.per_page,
                 }"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700"
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-emerald-600 text-white hover:bg-emerald-700"
               >
-                <i class="fa-solid fa-circle-info"></i>
-                See Details
+                <i class="fa-solid fa-eye"></i>
+                Details
               </Link>
             </Td>
           </Tr>

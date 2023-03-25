@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\CreateProductColorAction;
+use App\Actions\CreateProductSizeAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
@@ -9,9 +11,9 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\SubCategory;
 use App\Models\User;
+use App\Services\ProductImageUploadService;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class AdminProductController extends Controller
 {
@@ -24,27 +26,37 @@ class AdminProductController extends Controller
 
         return inertia("Admin/Products/Index", compact("products"));
     }
-    // public function create(): Response
-    // {
-    //     $per_page=request("per_page");
 
-    //     $brands=Brand::all();
+    public function create(): Response
+    {
+        $per_page=request("per_page");
 
-    //     $categories=Category::all();
+        $brands=Brand::all();
 
-    //     $subCategories=SubCategory::all();
+        $categories=Category::all();
 
-    //     $vendors=User::where([["status","active"],["role","vendor"]])->get();
+        $subCategories=SubCategory::all();
 
-    //     return inertia("Admin/Products/Create", compact("per_page", "brands", "categories", "subCategories", "vendors"));
-    // }
+        $vendors=User::where([["status","active"],["role","vendor"]])->get();
 
-    // public function store(ProductRequest $request, CategoryImageUploadService $categoryImageUploadService): RedirectResponse
-    // {
-    //     Product::create($request->validated()+["image"=>$categoryImageUploadService->uploadImage($request)]);
+        return inertia("Admin/Products/Create", compact("per_page", "brands", "categories", "subCategories", "vendors"));
+    }
 
-    //     return to_route("admin.products.index", "per_page=$request->per_page")->with("success", "Product is created successfully.");
-    // }
+    public function store(ProductRequest $request, ProductImageUploadService $productImageUploadService): RedirectResponse
+    {
+        $product= Product::create($request->validated()+["image"=>$productImageUploadService->createImage($request)]);
+
+        (new CreateProductColorAction())->execute($request, $product);
+
+        (new CreateProductSizeAction())->execute($request, $product);
+
+        return to_route("admin.products.index", "per_page=$request->per_page")->with("success", "Product is created successfully.");
+    }
+
+    public function show(Product $product)
+    {
+        return $product;
+    }
 
     // public function edit(Product $product): Response
     // {

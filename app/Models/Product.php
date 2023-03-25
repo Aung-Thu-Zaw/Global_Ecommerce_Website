@@ -61,7 +61,7 @@ class Product extends Model
     protected function image(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/categories/$value"),
+            set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/products/$value"),
         );
     }
 
@@ -81,14 +81,9 @@ class Product extends Model
         return $this->hasMany(ProductImage::class);
     }
 
-    public function tags(): BelongsToMany
+    public function colors()
     {
-        return $this->belongsToMany(Tag::class);
-    }
-
-    public function colors(): BelongsToMany
-    {
-        return $this->belongsToMany(Color::class);
+        return $this->belongsToMany(Color::class, 'product_color');
     }
 
     public function sizes(): BelongsToMany

@@ -48,14 +48,15 @@ const form = useForm({
   price: "",
   discount: "",
   code: "",
-  quantity: "",
+  qty: "",
   brand_id: "",
   category_id: "",
   sub_category_id: "",
-  vendor_id: "",
+  user_id: "",
   hot_deal: false,
   special_offer: false,
   featured: false,
+  status: "",
   captcha_token: null,
 });
 
@@ -184,20 +185,6 @@ const submit = () => {
                 </div>
 
                 <div class="mb-6">
-                  <InputLabel for="tags" value="Product Tags" />
-
-                  <TextInput
-                    id="tags"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.tags"
-                    placeholder="Enter Product Tag ( Eg. New Product, Top Product, Best Selling Product)"
-                  />
-
-                  <InputError class="mt-2" :message="form.errors.tags" />
-                </div>
-
-                <div class="mb-6">
                   <InputLabel for="size" value="Product Sizes" />
 
                   <TextInput
@@ -205,13 +192,13 @@ const submit = () => {
                     type="text"
                     class="mt-1 block w-full"
                     v-model="form.sizes"
-                    placeholder="Enter Product Sizes ( Eg. XS, S, M, L, Xl, XXL, etc...)"
+                    placeholder="Enter Product Sizes ( Eg. XS, S, M, L, Xl, XXL, 6 inches etc...)"
                   />
 
                   <InputError class="mt-2" :message="form.errors.sizes" />
                 </div>
                 <div class="mb-6">
-                  <InputLabel for="color" value="Product Colors" />
+                  <InputLabel for="color" value="Product Colors *" />
 
                   <TextInput
                     id="color"
@@ -232,6 +219,21 @@ const submit = () => {
                   ></ckeditor>
 
                   <InputError class="mt-2" :message="form.errors.description" />
+                </div>
+
+                <div class="mb-6">
+                  <InputLabel for="status" value="Status *" />
+
+                  <select
+                    class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+                    v-model="form.status"
+                  >
+                    <option value="" selected disabled>Select Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+
+                  <InputError class="mt-2" :message="form.errors.status" />
                 </div>
 
                 <div class="mb-6">
@@ -294,7 +296,7 @@ const submit = () => {
                   </div>
 
                   <div class="mb-6">
-                    <InputLabel for="discount" value="Discount Price *" />
+                    <InputLabel for="discount" value="Discount Price" />
 
                     <TextInput
                       id="discount"
@@ -330,12 +332,12 @@ const submit = () => {
                       id="quantity"
                       type="text"
                       class="mt-1 block w-full"
-                      v-model="form.quantity"
+                      v-model="form.qty"
                       required
                       placeholder="Enter Product Quantity"
                     />
 
-                    <InputError class="mt-2" :message="form.errors.quantity" />
+                    <InputError class="mt-2" :message="form.errors.qty" />
                   </div>
                 </div>
                 <div class="mb-6">
@@ -411,7 +413,7 @@ const submit = () => {
                   <InputLabel for="name" value="Vendor *" />
 
                   <select
-                    v-model="form.vendor_id"
+                    v-model="form.user_id"
                     class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
                   >
                     <option value="" selected disabled>Select Vendor</option>
@@ -424,7 +426,7 @@ const submit = () => {
                     </option>
                   </select>
 
-                  <InputError class="mt-2" :message="form.errors.vendor_id" />
+                  <InputError class="mt-2" :message="form.errors.user_id" />
                 </div>
 
                 <div class="grid grid-cols-3 gap-3">
