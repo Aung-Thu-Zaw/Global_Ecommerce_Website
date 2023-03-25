@@ -12,6 +12,7 @@ use App\Models\Product;
 use App\Models\SubCategory;
 use App\Models\User;
 use App\Services\ProductImageUploadService;
+use App\Services\ProductMultiImageUploadService;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
 
@@ -42,13 +43,15 @@ class AdminProductController extends Controller
         return inertia("Admin/Products/Create", compact("per_page", "brands", "categories", "subCategories", "vendors"));
     }
 
-    public function store(ProductRequest $request, ProductImageUploadService $productImageUploadService): RedirectResponse
+    public function store(ProductRequest $request, ProductImageUploadService $productImageUploadService, ProductMultiImageUploadService $productMultiImageUploadService): RedirectResponse
     {
         $product= Product::create($request->validated()+["image"=>$productImageUploadService->createImage($request)]);
 
         (new CreateProductColorAction())->execute($request, $product);
 
         (new CreateProductSizeAction())->execute($request, $product);
+
+        $productMultiImageUploadService->createMultiImage($request, $product);
 
         return to_route("admin.products.index", "per_page=$request->per_page")->with("success", "Product is created successfully.");
     }
@@ -58,12 +61,12 @@ class AdminProductController extends Controller
         return $product;
     }
 
-    // public function edit(Product $product): Response
-    // {
-    //     $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+    public function edit(Product $product): Response
+    {
+        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
-    //     return inertia("Admin/Products/Edit", compact("product", "paginate"));
-    // }
+        return inertia("Admin/Products/Edit", compact("product", "paginate"));
+    }
 
     // public function update(ProductRequest $request, Product $product, CategoryImageUploadService $categoryImageUploadService): RedirectResponse
     // {

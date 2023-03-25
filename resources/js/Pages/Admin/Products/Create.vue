@@ -44,7 +44,7 @@ const form = useForm({
   colors: [],
   description: "",
   image: "",
-  multiImage: [],
+  multi_image: [],
   price: "",
   discount: "",
   code: "",
@@ -267,7 +267,7 @@ const submit = () => {
                     id="multiImage"
                     multiple
                     required
-                    @input="form.multiImage = $event.target.files"
+                    @input="form.multi_image = $event.target.files"
                     @change="handleMultiplePhotoChange($event.target.files)"
                   />
 
@@ -275,7 +275,7 @@ const submit = () => {
                     SVG, PNG, JPG, JPEG, WEBP or GIF (MAX. 800x400px)
                   </span>
 
-                  <InputError class="mt-2" :message="form.errors.multiImage" />
+                  <InputError class="mt-2" :message="form.errors.multi_image" />
                 </div>
               </div>
               <div class="border shadow-md p-6 rounded-md mb-5 h-[630px]">
