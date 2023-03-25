@@ -15,7 +15,7 @@ class Image extends Model
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Image, never>
     */
-    protected function name(): Attribute
+    protected function imgPath(): Attribute
     {
         return Attribute::make(
             set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/products/$value"),

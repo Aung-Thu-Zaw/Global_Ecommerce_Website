@@ -65,7 +65,17 @@ class AdminProductController extends Controller
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
-        return inertia("Admin/Products/Edit", compact("product", "paginate"));
+        $brands=Brand::all();
+
+        $categories=Category::all();
+
+        $subCategories=SubCategory::all();
+
+        $vendors=User::where([["status","active"],["role","vendor"]])->get();
+
+        $product->load(["sizes","colors","images"]);
+
+        return inertia("Admin/Products/Edit", compact("product", "paginate", "brands", "categories", "subCategories", "vendors"));
     }
 
     // public function update(ProductRequest $request, Product $product, CategoryImageUploadService $categoryImageUploadService): RedirectResponse

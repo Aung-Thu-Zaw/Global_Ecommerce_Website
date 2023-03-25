@@ -12,7 +12,7 @@ import Breadcrumb from "@/Components/Breadcrumbs/Products/Breadcrumb.vue";
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link, Head } from "@inertiajs/vue3";
-import { reactive, watch, inject } from "vue";
+import { reactive, watch, inject, computed } from "vue";
 import { router } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
@@ -127,6 +127,8 @@ if (usePage().props.flash.successMessage) {
   });
 }
 </script>
+
+
 
 <template>
   <AdminDashboardLayout>
@@ -391,8 +393,22 @@ if (usePage().props.flash.successMessage) {
             <Td>{{ product.qty }}</Td>
             <Td>$ {{ product.price }}</Td>
             <Td>
-              <span class="bg-green-200 text-green-600 py-1 px-3 rounded-md">
-                {{ product.discount }}%
+              <span
+                v-if="product.discount"
+                class="bg-green-200 text-green-600 py-1 px-3 rounded-md"
+              >
+                {{
+                  (
+                    ((product.price - product.discount) / product.price) *
+                    100
+                  ).toFixed(1)
+                }}%
+              </span>
+              <span
+                v-if="!product.discount"
+                class="bg-blue-200 text-blue-600 py-1 px-3 rounded-md"
+              >
+                No Discount
               </span>
             </Td>
             <Td>

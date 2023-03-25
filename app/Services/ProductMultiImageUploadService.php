@@ -25,7 +25,7 @@ class ProductMultiImageUploadService
 
             $image=new Image();
             $image->product_id=$product->id;
-            $image->name=$finalName;
+            $image->img_path=$finalName;
             $image->save();
         }
     }

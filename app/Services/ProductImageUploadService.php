@@ -14,10 +14,9 @@ class ProductImageUploadService
         ]);
 
 
-        $originalName=$request->file("image")->getClientOriginalName();
         $extension=$request->file("image")->extension();
 
-        $finalName= Str::slug($originalName, '-')."."."$extension";
+        $finalName= Str::slug($request->name, '-')."."."$extension";
 
         $request->file("image")->move(storage_path("app/public/products/"), $finalName);
 

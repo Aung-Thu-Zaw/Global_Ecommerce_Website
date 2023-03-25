@@ -9,6 +9,7 @@ import FormButton from "@/Components/Form/FormButton.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Products/Breadcrumb.vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { computed, ref } from "vue";
+import { remove } from "@vue/shared";
 
 const props = defineProps({
   per_page: String,
@@ -20,26 +21,8 @@ const props = defineProps({
 
 const editor = ClassicEditor;
 
-const previewPhoto = ref("");
-const getPreviewPhotoPath = (path) => {
-  previewPhoto.value.src = URL.createObjectURL(path);
-};
-
-const multiPreviewPhotos = ref([]);
-const getMultiPreviewPhotoPath = (paths) => {
-  paths.forEach((path) => {
-    multiPreviewPhotos.value.push(URL.createObjectURL(path));
-  });
-};
-
-const handleMultiplePhotoChange = (files) => {
-  const paths = Array.from(files);
-  getMultiPreviewPhotoPath(paths);
-};
-
 const form = useForm({
   name: "",
-  tags: [],
   sizes: [],
   colors: [],
   description: "",
@@ -60,18 +43,29 @@ const form = useForm({
   captcha_token: null,
 });
 
-// computed: {
-//   filteredSubCategories() {
-//     if (!this.form.category_id) {
-//       // If no category is selected, return all subcategories
-//       return this.subCategories;
-//     }
-//     // Filter subcategories based on selected category's ID
-//     return this.subCategories.filter(
-//       subCategory => subCategory.category_id === this.form.category_id
-//     );
-//   }
-// }
+const previewPhoto = ref("");
+const getPreviewPhotoPath = (path) => {
+  previewPhoto.value.src = URL.createObjectURL(path);
+};
+
+const multiPreviewPhotos = ref([]);
+const getMultiPreviewPhotoPath = (paths) => {
+  paths.forEach((path) => {
+    multiPreviewPhotos.value.push(URL.createObjectURL(path));
+  });
+};
+
+const handleMultiplePhotoChange = (files) => {
+  const paths = Array.from(files);
+  getMultiPreviewPhotoPath(paths);
+};
+
+const removeImage = (index) => {
+  multiPreviewPhotos.value.splice(index, 1);
+
+  form.multi_image = Array.from(form.multi_image);
+  form.multi_image.splice(index, 1);
+};
 
 const filterSubCategories = computed(() => {
   if (!form.category_id) {
@@ -149,23 +143,6 @@ const submit = () => {
 
       <div class="border shadow-md p-10">
         <div class="">
-          <div class="mb-6 flex items-center flex-wrap">
-            <img
-              ref="previewPhoto"
-              src="https://media.istockphoto.com/id/1357365823/vector/default-image-icon-vector-missing-picture-page-for-website-design-or-mobile-app-no-photo.jpg?s=612x612&w=0&k=20&c=PM_optEhHBTZkuJQLlCjLz-v3zzxp-1mpNQZsdjrbns="
-              alt=""
-              class="w-[100px] h-[100px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300 mr-4"
-            />
-
-            <img
-              v-for="(multiPreviewPhoto, index) in multiPreviewPhotos"
-              :key="index"
-              :src="multiPreviewPhoto"
-              alt=""
-              class="w-[100px] h-[100px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300 mr-4"
-            />
-          </div>
-
           <form @submit.prevent="handleCreateProduct" class="">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
               <div class="py-6">
@@ -278,208 +255,261 @@ const submit = () => {
                   <InputError class="mt-2" :message="form.errors.multi_image" />
                 </div>
               </div>
-              <div class="border shadow-md p-6 rounded-md mb-5 h-[630px]">
-                <div class="grid grid-cols-2 gap-3">
-                  <div class="mb-6">
-                    <InputLabel for="price" value="Product Price *" />
 
-                    <TextInput
-                      id="price"
-                      type="text"
-                      class="mt-1 block w-full"
-                      v-model="form.price"
-                      required
-                      placeholder="Enter Product Price"
-                    />
+              <div class="flex flex-col-reverse lg:flex-col">
+                <div class="border shadow-md p-6 rounded-md mb-5 h-[630px]">
+                  <div class="grid grid-cols-2 gap-3">
+                    <div class="mb-6">
+                      <InputLabel for="price" value="Product Price *" />
 
-                    <InputError class="mt-2" :message="form.errors.price" />
+                      <TextInput
+                        id="price"
+                        type="text"
+                        class="mt-1 block w-full"
+                        v-model="form.price"
+                        required
+                        placeholder="Enter Product Price"
+                      >
+                        <template v-slot:icon>
+                          <span class="text-slate-500"> $ </span>
+                        </template>
+                      </TextInput>
+
+                      <InputError class="mt-2" :message="form.errors.price" />
+                    </div>
+
+                    <div class="mb-6">
+                      <InputLabel for="discount" value="Discount Price" />
+
+                      <TextInput
+                        id="discount"
+                        type="text"
+                        class="mt-1 block w-full"
+                        v-model="form.discount"
+                        placeholder="Enter Product Discount"
+                      >
+                        <template v-slot:icon>
+                          <span class="text-slate-500"> $ </span>
+                        </template>
+                      </TextInput>
+
+                      <InputError
+                        class="mt-2"
+                        :message="form.errors.discount"
+                      />
+                    </div>
                   </div>
+                  <div class="grid grid-cols-2 gap-3">
+                    <div class="mb-6">
+                      <InputLabel for="code" value="Product Code *" />
 
-                  <div class="mb-6">
-                    <InputLabel for="discount" value="Discount Price" />
+                      <TextInput
+                        id="code"
+                        type="text"
+                        class="mt-1 block w-full"
+                        v-model="form.code"
+                        required
+                        placeholder="Enter Product Code"
+                      />
 
-                    <TextInput
-                      id="discount"
-                      type="text"
-                      class="mt-1 block w-full"
-                      v-model="form.discount"
-                      required
-                      placeholder="Enter Product Discount"
-                    />
+                      <InputError class="mt-2" :message="form.errors.code" />
+                    </div>
+                    <div class="mb-6">
+                      <InputLabel for="name" value="Product Quantity *" />
 
-                    <InputError class="mt-2" :message="form.errors.discount" />
+                      <TextInput
+                        id="quantity"
+                        type="text"
+                        class="mt-1 block w-full"
+                        v-model="form.qty"
+                        required
+                        placeholder="Enter Product Quantity"
+                      />
+
+                      <InputError class="mt-2" :message="form.errors.qty" />
+                    </div>
                   </div>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
                   <div class="mb-6">
-                    <InputLabel for="code" value="Product Code *" />
-
-                    <TextInput
-                      id="code"
-                      type="text"
-                      class="mt-1 block w-full"
-                      v-model="form.code"
-                      required
-                      placeholder="Enter Product Code"
-                    />
-
-                    <InputError class="mt-2" :message="form.errors.code" />
-                  </div>
-                  <div class="mb-6">
-                    <InputLabel for="name" value="Product Quantity *" />
-
-                    <TextInput
-                      id="quantity"
-                      type="text"
-                      class="mt-1 block w-full"
-                      v-model="form.qty"
-                      required
-                      placeholder="Enter Product Quantity"
-                    />
-
-                    <InputError class="mt-2" :message="form.errors.qty" />
-                  </div>
-                </div>
-                <div class="mb-6">
-                  <InputLabel for="name" value="Product Brand *" />
-
-                  <select
-                    v-model="form.brand_id"
-                    class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-                  >
-                    <option value="" selected disabled>Select Brand</option>
-                    <option
-                      v-for="brand in brands"
-                      :key="brand.id"
-                      :value="brand.id"
-                    >
-                      {{ brand.name }}
-                    </option>
-                  </select>
-
-                  <InputError class="mt-2" :message="form.errors.brand_id" />
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                  <div class="mb-6">
-                    <InputLabel for="category" value="Category *" />
+                    <InputLabel for="name" value="Product Brand *" />
 
                     <select
-                      v-model="form.category_id"
+                      v-model="form.brand_id"
                       class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
                     >
-                      <option value="" selected disabled>
-                        Select Category
-                      </option>
+                      <option value="" selected disabled>Select Brand</option>
                       <option
-                        v-for="category in categories"
-                        :key="category.id"
-                        :value="category.id"
+                        v-for="brand in brands"
+                        :key="brand.id"
+                        :value="brand.id"
                       >
-                        {{ category.name }}
+                        {{ brand.name }}
                       </option>
                     </select>
 
-                    <InputError
-                      class="mt-2"
-                      :message="form.errors.category_id"
-                    />
+                    <InputError class="mt-2" :message="form.errors.brand_id" />
+                  </div>
+                  <div class="grid grid-cols-2 gap-3">
+                    <div class="mb-6">
+                      <InputLabel for="category" value="Category *" />
+
+                      <select
+                        v-model="form.category_id"
+                        class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+                      >
+                        <option value="" selected disabled>
+                          Select Category
+                        </option>
+                        <option
+                          v-for="category in categories"
+                          :key="category.id"
+                          :value="category.id"
+                        >
+                          {{ category.name }}
+                        </option>
+                      </select>
+
+                      <InputError
+                        class="mt-2"
+                        :message="form.errors.category_id"
+                      />
+                    </div>
+                    <div class="mb-6">
+                      <InputLabel for="name" value="SubCategory *" />
+
+                      <select
+                        v-model="form.sub_category_id"
+                        class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+                      >
+                        <option value="" selected disabled>
+                          Select SubCategory
+                        </option>
+                        <option
+                          v-for="subCategory in filterSubCategories"
+                          :key="subCategory.id"
+                          :value="subCategory.id"
+                        >
+                          {{ subCategory.name }}
+                        </option>
+                      </select>
+
+                      <InputError
+                        class="mt-2"
+                        :message="form.errors.sub_category_id"
+                      />
+                    </div>
                   </div>
                   <div class="mb-6">
-                    <InputLabel for="name" value="SubCategory *" />
+                    <InputLabel for="name" value="Vendor *" />
 
                     <select
-                      v-model="form.sub_category_id"
+                      v-model="form.user_id"
                       class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
                     >
-                      <option value="" selected disabled>
-                        Select SubCategory
-                      </option>
+                      <option value="" selected disabled>Select Vendor</option>
                       <option
-                        v-for="subCategory in filterSubCategories"
-                        :key="subCategory.id"
-                        :value="subCategory.id"
+                        v-for="vendor in vendors"
+                        :key="vendor.id"
+                        :value="vendor.id"
                       >
-                        {{ subCategory.name }}
+                        {{ vendor.name }}
                       </option>
                     </select>
 
-                    <InputError
-                      class="mt-2"
-                      :message="form.errors.sub_category_id"
-                    />
+                    <InputError class="mt-2" :message="form.errors.user_id" />
+                  </div>
+
+                  <div class="grid grid-cols-3 gap-3">
+                    <div
+                      class="flex items-center pl-4 border border-gray-200 rounded-md dark:border-gray-700 mb-6"
+                    >
+                      <input
+                        checked
+                        id="bordered-checkbox-2"
+                        type="checkbox"
+                        name="bordered-checkbox"
+                        v-model="form.hot_deal"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="bordered-checkbox-2"
+                        class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >Hot Deal</label
+                      >
+                    </div>
+                    <div
+                      class="flex items-center pl-4 border border-gray-200 rounded-md dark:border-gray-700 mb-6"
+                    >
+                      <input
+                        checked
+                        id="bordered-checkbox-2"
+                        type="checkbox"
+                        v-model="form.special_offer"
+                        name="bordered-checkbox"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="bordered-checkbox-2"
+                        class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >Special Offer</label
+                      >
+                    </div>
+                    <div
+                      class="flex items-center pl-4 border border-gray-200 rounded-md dark:border-gray-700 mb-6"
+                    >
+                      <input
+                        checked
+                        id="bordered-checkbox-2"
+                        type="checkbox"
+                        v-model="form.featured"
+                        name="bordered-checkbox"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="bordered-checkbox-2"
+                        class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >Featured</label
+                      >
+                    </div>
                   </div>
                 </div>
-                <div class="mb-6">
-                  <InputLabel for="name" value="Vendor *" />
 
-                  <select
-                    v-model="form.user_id"
-                    class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-                  >
-                    <option value="" selected disabled>Select Vendor</option>
-                    <option
-                      v-for="vendor in vendors"
-                      :key="vendor.id"
-                      :value="vendor.id"
+                <div
+                  class="mb-5 flex flex-col items-start flex-wrap border shadow-md p-5 rounded-md h-auto"
+                >
+                  <div class="mb-4">
+                    <span class="text-slate-500 text-sm font-bold"
+                      >Main Image</span
                     >
-                      {{ vendor.name }}
-                    </option>
-                  </select>
-
-                  <InputError class="mt-2" :message="form.errors.user_id" />
-                </div>
-
-                <div class="grid grid-cols-3 gap-3">
-                  <div
-                    class="flex items-center pl-4 border border-gray-200 rounded-md dark:border-gray-700 mb-6"
-                  >
-                    <input
-                      checked
-                      id="bordered-checkbox-2"
-                      type="checkbox"
-                      name="bordered-checkbox"
-                      v-model="form.hot_deal"
-                      class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    <img
+                      ref="previewPhoto"
+                      src="https://media.istockphoto.com/id/1357365823/vector/default-image-icon-vector-missing-picture-page-for-website-design-or-mobile-app-no-photo.jpg?s=612x612&w=0&k=20&c=PM_optEhHBTZkuJQLlCjLz-v3zzxp-1mpNQZsdjrbns="
+                      alt=""
+                      class="w-[120px] h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300"
                     />
-                    <label
-                      for="bordered-checkbox-2"
-                      class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                      >Hot Deal</label
-                    >
                   </div>
-                  <div
-                    class="flex items-center pl-4 border border-gray-200 rounded-md dark:border-gray-700 mb-6"
-                  >
-                    <input
-                      checked
-                      id="bordered-checkbox-2"
-                      type="checkbox"
-                      v-model="form.special_offer"
-                      name="bordered-checkbox"
-                      class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    />
-                    <label
-                      for="bordered-checkbox-2"
-                      class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                      >Special Offer</label
+                  <div v-if="multiPreviewPhotos.length" class="mb-4">
+                    <span class="text-slate-500 text-sm font-bold"
+                      >Multiple Image</span
                     >
-                  </div>
-                  <div
-                    class="flex items-center pl-4 border border-gray-200 rounded-md dark:border-gray-700 mb-6"
-                  >
-                    <input
-                      checked
-                      id="bordered-checkbox-2"
-                      type="checkbox"
-                      v-model="form.featured"
-                      name="bordered-checkbox"
-                      class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    />
-                    <label
-                      for="bordered-checkbox-2"
-                      class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                      >Featured</label
-                    >
+                    <div class="flex flex-wrap">
+                      <div
+                        class="relative"
+                        v-for="(multiPreviewPhoto, index) in multiPreviewPhotos"
+                        :key="index"
+                      >
+                        <img
+                          :src="multiPreviewPhoto"
+                          alt=""
+                          class="w-[120px] h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300 mr-6"
+                        />
+                        <span
+                          class="absolute top-0 right-4 bg-slate-300 text-slate-600 w-5 h-5 flex items-center justify-center rounded-full hover:bg-slate-500 hover:text-slate-300 transition-all"
+                          @click="removeImage(index)"
+                        >
+                          <i class="fas fa-xmark text-sm"></i>
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
