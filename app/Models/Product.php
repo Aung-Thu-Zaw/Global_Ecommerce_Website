@@ -90,4 +90,11 @@ class Product extends Model
     {
         return $this->belongsToMany(Size::class);
     }
+
+    public static function deleteImage(object $product): void
+    {
+        if (!empty($product->image) && file_exists(storage_path("app/public/products/$product->image"))) {
+            unlink(storage_path("app/public/products/$product->image"));
+        }
+    }
 }

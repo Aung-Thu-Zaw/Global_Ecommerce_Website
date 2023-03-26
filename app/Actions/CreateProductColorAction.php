@@ -10,17 +10,7 @@ class CreateProductColorAction
     public function execute(Request $request, $product)
     {
         if ($request->input("colors")) {
-            $colorsNewArray=[];
-            $colorsArray=explode(",", $request->colors);
-
-            foreach ($colorsArray as $color) {
-                $colorsNewArray[]=trim($color);
-            }
-
-            $colorsNewArray=array_values(array_unique($colorsNewArray));
-
-
-            foreach ($colorsNewArray as $color) {
+            foreach ($request->colors as $color) {
                 $countExisitngColors=Color::where("name", $color)->count();
 
                 $exisitngColors=Color::where("name", $color)->get();

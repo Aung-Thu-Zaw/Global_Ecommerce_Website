@@ -78,14 +78,22 @@ class AdminProductController extends Controller
         return inertia("Admin/Products/Edit", compact("product", "paginate", "brands", "categories", "subCategories", "vendors"));
     }
 
-    // public function update(ProductRequest $request, Product $product, CategoryImageUploadService $categoryImageUploadService): RedirectResponse
-    // {
-    //     $image=$categoryImageUploadService->updateImage($request, $product);
+    public function update(ProductRequest $request, Product $product, ProductImageUploadService $productImageUploadService, ProductMultiImageUploadService $productMultiImageUploadService): RedirectResponse
+    {
+        // $product= Product::create($request->validated()+["image"=>$productImageUploadService->createImage($request)]);
 
-    //     $product->update($request->validated()+["image"=>$image]);
+        // (new CreateProductColorAction())->execute($request, $product);
 
-    //     return to_route("admin.products.index", "page=$request->page&per_page=$request->per_page")->with("success", "Product is updated successfully.");
-    // }
+        // (new CreateProductSizeAction())->execute($request, $product);
+
+        // $productMultiImageUploadService->createMultiImage($request, $product);
+
+        // $image=$categoryImageUploadService->updateImage($request, $product);
+
+        $product->update($request->validated()+["image"=>$productImageUploadService->updateImage($request, $product)]);
+
+        return to_route("admin.products.index", "page=$request->page&per_page=$request->per_page")->with("success", "Product is updated successfully.");
+    }
 
     // public function destroy(Request $request, Product $product): RedirectResponse
     // {

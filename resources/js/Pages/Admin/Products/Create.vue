@@ -67,6 +67,39 @@ const removeImage = (index) => {
   form.multi_image.splice(index, 1);
 };
 
+const size = ref("");
+
+const createSize = (e) => {
+  if (e.key === ",") {
+    size.value = size.value.split(",").join("").toLowerCase();
+    form.sizes.push(size.value);
+    size.value = "";
+  }
+  form.sizes = [...new Set(form.sizes)];
+};
+const removeSize = (removeSize) => {
+  form.sizes = form.sizes.filter((size) => {
+    return size !== removeSize;
+  });
+};
+
+const color = ref("");
+
+const createColor = (e) => {
+  if (e.key === ",") {
+    color.value = color.value.split(",").join("").toLowerCase();
+    form.colors.push(color.value);
+    color.value = "";
+  }
+
+  form.colors = [...new Set(form.colors)];
+};
+const removeColor = (removeColor) => {
+  form.colors = form.colors.filter((color) => {
+    return color !== removeColor;
+  });
+};
+
 const filterSubCategories = computed(() => {
   if (!form.category_id) {
     return props.subCategories;
@@ -167,12 +200,24 @@ const submit = () => {
                   <TextInput
                     id="size"
                     type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.sizes"
+                    class="mt-1 block w-full mb-2"
+                    v-model="size"
+                    @keyup="createSize"
                     placeholder="Enter Product Sizes ( Eg. XS, S, M, L, Xl, XXL, 6 inches etc...)"
                   />
 
                   <InputError class="mt-2" :message="form.errors.sizes" />
+                  <span
+                    v-for="(size, index) in form.sizes"
+                    :key="index"
+                    class="bg-blue-600 text-white rounded-sm min-w-[80px] h-auto px-3 py-1 mr-2"
+                  >
+                    <span class="text-sm font-blod mr-5">{{ size }}</span>
+                    <i
+                      class="fas fa-xmark text-white arrow-icon cursor-pointer"
+                      @click="removeSize(size)"
+                    ></i>
+                  </span>
                 </div>
                 <div class="mb-6">
                   <InputLabel for="color" value="Product Colors *" />
@@ -180,12 +225,25 @@ const submit = () => {
                   <TextInput
                     id="color"
                     type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.colors"
+                    class="mt-1 block w-full mb-2"
+                    v-model="color"
+                    @keyup="createColor"
                     placeholder="Enter Product Colors ( Eg. White, Red, Gray, Blue, etc...)"
                   />
 
                   <InputError class="mt-2" :message="form.errors.colors" />
+
+                  <span
+                    v-for="(color, index) in form.colors"
+                    :key="index"
+                    class="bg-blue-600 text-white rounded-sm min-w-[80px] h-auto px-3 py-1 mr-2"
+                  >
+                    <span class="text-sm font-blod mr-5">{{ color }}</span>
+                    <i
+                      class="fas fa-xmark text-white arrow-icon cursor-pointer"
+                      @click="removeColor(color)"
+                    ></i>
+                  </span>
                 </div>
                 <div class="mb-6">
                   <InputLabel for="description" value="Product Description *" />

@@ -10,17 +10,7 @@ class CreateProductSizeAction
     public function execute(Request $request, $product)
     {
         if ($request->input("sizes")) {
-            $sizesNewArray=[];
-            $sizesArray=explode(",", $request->sizes);
-
-            foreach ($sizesArray as $size) {
-                $sizesNewArray[]=trim($size);
-            }
-
-            $sizesNewArray=array_values(array_unique($sizesNewArray));
-
-
-            foreach ($sizesNewArray as $size) {
+            foreach ($request->sizes as $size) {
                 $countExisitngSizes=Size::where("name", $size)->count();
 
                 $exisitngSizes=Size::where("name", $size)->get();
@@ -34,7 +24,7 @@ class CreateProductSizeAction
 
                 if ($countExisitngSizes) {
                     foreach ($exisitngSizes as $exisitngSize) {
-                        $product->colors()->attach($exisitngSize);
+                        $product->sizes()->attach($exisitngSize);
                     }
                 }
             }
