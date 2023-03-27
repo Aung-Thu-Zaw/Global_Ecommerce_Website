@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Actions\CreateProductColorAction;
 use App\Actions\CreateProductSizeAction;
+use App\Actions\UpdateProductColorAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Size;
 use App\Models\SubCategory;
 use App\Models\User;
 use App\Services\ProductImageUploadService;
@@ -47,9 +49,9 @@ class AdminProductController extends Controller
     {
         $product= Product::create($request->validated()+["image"=>$productImageUploadService->createImage($request)]);
 
-        (new CreateProductColorAction())->execute($request, $product);
+        (new CreateProductSizeAction())->handle($request, $product);
 
-        (new CreateProductSizeAction())->execute($request, $product);
+        (new CreateProductColorAction())->handle($request, $product);
 
         $productMultiImageUploadService->createMultiImage($request, $product);
 
@@ -80,17 +82,11 @@ class AdminProductController extends Controller
 
     public function update(ProductRequest $request, Product $product, ProductImageUploadService $productImageUploadService, ProductMultiImageUploadService $productMultiImageUploadService): RedirectResponse
     {
-        // $product= Product::create($request->validated()+["image"=>$productImageUploadService->createImage($request)]);
-
-        // (new CreateProductColorAction())->execute($request, $product);
-
-        // (new CreateProductSizeAction())->execute($request, $product);
-
-        // $productMultiImageUploadService->createMultiImage($request, $product);
-
-        // $image=$categoryImageUploadService->updateImage($request, $product);
-
         $product->update($request->validated()+["image"=>$productImageUploadService->updateImage($request, $product)]);
+
+        (new CreateProductSizeAction())->handle($request, $product);
+
+        (new CreateProductColorAction())->handle($request, $product);
 
         return to_route("admin.products.index", "page=$request->page&per_page=$request->per_page")->with("success", "Product is updated successfully.");
     }
@@ -130,4 +126,11 @@ class AdminProductController extends Controller
 
     //     return to_route('admin.products.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Product is deleted successfully");
     // }
+
+    public function removeSize($id)
+    {
+        $size=Size::find($id);
+
+        dd($size);
+    }
 }

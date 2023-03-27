@@ -7,9 +7,12 @@ use Illuminate\Http\Request;
 
 class CreateProductSizeAction
 {
-    public function execute(Request $request, $product)
+    public function handle(Request $request, $product)
     {
         if ($request->input("sizes")) {
+            if ($product->sizes()) {
+                $product->sizes()->detach();
+            }
             foreach ($request->sizes as $size) {
                 $countExisitngSizes=Size::where("name", $size)->count();
 

@@ -33,8 +33,8 @@ const filterImages = computed(() =>
 
 const form = useForm({
   name: props.product.name,
-  sizes: formatSize,
-  colors: formatColor,
+  sizes: [...formatSize.value],
+  colors: [...formatColor.value],
   description: props.product.description,
   image: props.product.image,
   //   multi_image: [],
@@ -172,7 +172,7 @@ const submit = () => {
             </div>
           </li>
         </Breadcrumb>
-        {{ form.hot_deal }}
+
         <div>
           <Link
             :href="route('admin.products.index')"

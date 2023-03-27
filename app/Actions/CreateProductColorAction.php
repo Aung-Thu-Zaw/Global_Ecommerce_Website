@@ -7,9 +7,12 @@ use Illuminate\Http\Request;
 
 class CreateProductColorAction
 {
-    public function execute(Request $request, $product)
+    public function handle(Request $request, $product)
     {
         if ($request->input("colors")) {
+            if ($product->colors()) {
+                $product->colors()->detach();
+            }
             foreach ($request->colors as $color) {
                 $countExisitngColors=Color::where("name", $color)->count();
 

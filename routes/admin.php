@@ -99,5 +99,6 @@ Route::middleware(["auth","verified","user.role:admin"])
                         Route::get("/trash", "trash")->name("trash");
                         Route::post("/{id}/restore", "restore")->name("restore");
                         Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                        Route::post("/sizes/{id}/remove", "removeSize")->name("removeSize");
                     });
         });
