@@ -90,7 +90,7 @@ const updateSorting = (sort = "id") => {
   );
 };
 
-const handleDelete = async (productId) => {
+const handleDelete = async (productSlug) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to move it to the trash?",
@@ -106,8 +106,8 @@ const handleDelete = async (productId) => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.products.destroy", {
-        category: productId,
-        page: props.categories.current_page,
+        product: productSlug,
+        page: props.products.current_page,
         per_page: params.per_page,
       })
     );

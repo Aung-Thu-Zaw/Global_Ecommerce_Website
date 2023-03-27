@@ -10,9 +10,11 @@ class ProductMultiImageUploadService
 {
     public function createMultiImage(Request $request, $product)
     {
-        $request->validate([
-            "multi_image"=>["required","array"]
-        ]);
+        if ($request->multi_image) {
+            $request->validate([
+                "multi_image"=>["required","array"]
+            ]);
+        }
 
         foreach ($request->multi_image as $image) {
             $originalName=$image->getClientOriginalName();

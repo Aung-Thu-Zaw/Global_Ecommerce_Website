@@ -293,7 +293,7 @@ const submit = () => {
                 <div class="mb-6">
                   <InputLabel
                     for="image"
-                    value="Product Image ( Optional You can choose multiple image ctl+click ) *"
+                    value="Product Image ( Optional ) (You can choose multiple image press ctl+click )"
                   />
 
                   <input
@@ -301,7 +301,6 @@ const submit = () => {
                     type="file"
                     id="multiImage"
                     multiple
-                    required
                     @input="form.multi_image = $event.target.files"
                     @change="handleMultiplePhotoChange($event.target.files)"
                   />

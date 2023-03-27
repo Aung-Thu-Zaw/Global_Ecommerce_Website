@@ -88,6 +88,8 @@ class AdminProductController extends Controller
 
         (new CreateProductColorAction())->handle($request, $product);
 
+        $productMultiImageUploadService->createMultiImage($request, $product);
+
         return to_route("admin.products.index", "page=$request->page&per_page=$request->per_page")->with("success", "Product is updated successfully.");
     }
 
@@ -126,11 +128,4 @@ class AdminProductController extends Controller
 
     //     return to_route('admin.products.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Product is deleted successfully");
     // }
-
-    public function removeSize($id)
-    {
-        $size=Size::find($id);
-
-        dd($size);
-    }
 }

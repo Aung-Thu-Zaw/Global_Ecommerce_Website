@@ -27,9 +27,9 @@ const formatColor = computed(() =>
   props.product.colors.map((color) => color.name)
 );
 
-const filterImages = computed(() =>
-  props.product.images.map((image) => image.img_path)
-);
+// const filterImages = computed(() =>
+//   props.product.images.map((image) => image.img_path)
+// );
 
 const form = useForm({
   name: props.product.name,
@@ -37,8 +37,8 @@ const form = useForm({
   colors: [...formatColor.value],
   description: props.product.description,
   image: props.product.image,
-  //   multi_image: [],
-  old_multi_image: filterImages.value,
+  multi_image: [],
+  //   old_multi_image: filterImages.value,
   price: props.product.price,
   discount: props.product.discount,
   code: props.product.code,
@@ -306,7 +306,7 @@ const submit = () => {
                 <div class="mb-6">
                   <InputLabel
                     for="image"
-                    value="Product Image ( Optional You can choose multiple image ctl+click ) *"
+                    value="Product Image ( Optional ) (You can choose multiple image press ctl+click )"
                   />
 
                   <input
@@ -584,34 +584,41 @@ const submit = () => {
                       </div>
                     </div>
                   </div>
-
-                  <div v-if="form.old_multi_image" class="mb-4">
+                  <!-- {{ props.product.images }} -->
+                  <div v-if="props.product.images" class="mb-4">
                     <span class="text-slate-500 text-sm font-bold"
                       >Exisiting Multiple Image</span
                     >
                     <div class="flex flex-wrap">
                       <div
-                        v-for="(image, index) in form.old_multi_image"
-                        :key="index"
+                        v-for="image in props.product.images"
+                        :key="image.id"
                         class="flex flex-col items-center justify-center"
                       >
                         <img
-                          :src="image"
+                          :src="image.img_path"
                           alt=""
                           class="w-[120px] h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300 mx-2"
                         />
 
-                        <button
+                        <Link
+                          :href="
+                            route('admin.image.destroy', {
+                              product_id: props.product.id,
+                              image_id: image.id,
+                            })
+                          "
+                          method="delete"
+                          as="button"
                           class="bg-red-600 rounded-md px-10 py-2 text-sm text-white hover:bg-red-800 transition-all"
                         >
                           Delete
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <!-- fasdffj======================================================================================== -->
             </div>
 
             <div class="mb-6">
@@ -620,8 +627,6 @@ const submit = () => {
           </form>
         </div>
       </div>
-
-      {{ form.multi_image }}
     </div>
   </AdminDashboardLayout>
 </template>
