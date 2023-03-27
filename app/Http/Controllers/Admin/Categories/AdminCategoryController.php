@@ -84,6 +84,8 @@ class AdminCategoryController extends Controller
     {
         $category = Category::onlyTrashed()->where("id", $id)->first();
 
+        Category::deleteImage($category);
+
         $category->forceDelete();
 
         return to_route('admin.categories.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Category is deleted successfully");

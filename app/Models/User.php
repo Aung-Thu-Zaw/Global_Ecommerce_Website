@@ -103,8 +103,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public static function deleteUserAvatar(object $user): void
     {
-        if (!empty($user->avatar) && file_exists(storage_path("app/public/avatars/$user->avatar"))) {
-            unlink(storage_path("app/public/avatars/$user->avatar"));
+        if (!empty($user->avatar) && file_exists(storage_path("app/public/avatars/".pathinfo($user->avatar, PATHINFO_BASENAME)))) {
+            unlink(storage_path("app/public/avatars/".pathinfo($user->avatar, PATHINFO_BASENAME)));
         }
     }
 }

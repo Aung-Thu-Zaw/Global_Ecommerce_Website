@@ -94,6 +94,8 @@ class AdminSubCategoryController extends Controller
     {
         $subCategory = SubCategory::onlyTrashed()->where("id", $id)->first();
 
+        SubCategory::deleteImage($subCategory);
+
         $subCategory->forceDelete();
 
         return to_route('admin.subcategories.trash', "page=$request->page&per_page=$request->per_page")->with("success", "SubCategory is deleted successfully");

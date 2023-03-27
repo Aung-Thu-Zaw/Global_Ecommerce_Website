@@ -88,8 +88,8 @@ class SubCategory extends Model
 
     public static function deleteImage(object $subCategory): void
     {
-        if (!empty($subCategory->image) && file_exists(storage_path("app/public/subCategories/$subCategory->image"))) {
-            unlink(storage_path("app/public/subCategories/$subCategory->image"));
+        if (!empty($subCategory->image) && file_exists(storage_path("app/public/subCategories/".pathinfo($subCategory->image, PATHINFO_BASENAME)))) {
+            unlink(storage_path("app/public/subCategories/".pathinfo($subCategory->image, PATHINFO_BASENAME)));
         }
     }
 }
