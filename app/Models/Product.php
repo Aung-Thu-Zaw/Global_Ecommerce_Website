@@ -22,11 +22,18 @@ class Product extends Model
     use HasSlug;
 
 
+
     /**
     * @var string[]
     */
     protected array $cascadeDeletes = ['subCategories'];
     protected $guarded=[];
+
+    protected $casts = [
+        'hot_deal' => 'boolean',
+        'special_offer' => 'boolean',
+        'featured' => 'boolean',
+    ];
 
 
     public function getSlugOptions(): SlugOptions
@@ -75,6 +82,29 @@ class Product extends Model
             get: fn ($value) => date("Y/m/d", strtotime($value)),
         );
     }
+
+
+    protected function hotDeal(): Attribute
+    {
+        return Attribute::make(
+            get : fn ($value) => (bool) $value
+        );
+    }
+
+    protected function specialOffer(): Attribute
+    {
+        return Attribute::make(
+            get : fn ($value) => (bool) $value
+        );
+    }
+
+    protected function featured(): Attribute
+    {
+        return Attribute::make(
+            get : fn ($value) => (bool) $value
+        );
+    }
+
 
     public function images(): HasMany
     {

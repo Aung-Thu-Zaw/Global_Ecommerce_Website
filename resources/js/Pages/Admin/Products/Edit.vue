@@ -33,11 +33,11 @@ const filterImages = computed(() =>
 
 const form = useForm({
   name: props.product.name,
-  sizes: [],
-  colors: [],
+  sizes: formatSize,
+  colors: formatColor,
   description: props.product.description,
   image: props.product.image,
-  multi_image: [],
+  //   multi_image: [],
   old_multi_image: filterImages.value,
   price: props.product.price,
   discount: props.product.discount,
@@ -47,9 +47,9 @@ const form = useForm({
   category_id: props.product.category_id,
   sub_category_id: props.product.sub_category_id,
   user_id: props.product.user_id,
-  hot_deal: props.product.hot_deal === 1 ? "true" : "false",
-  special_offer: props.product.special_offer === 1 ? "true" : "false",
-  featured: props.product.featured === 1 ? "true" : "false",
+  hot_deal: props.product.hot_deal,
+  special_offer: props.product.special_offer,
+  featured: props.product.featured,
   status: props.product.status,
   captcha_token: null,
 });
@@ -131,7 +131,7 @@ const handleEditCatrgory = async () => {
 const submit = () => {
   form.post(
     route("admin.products.update", {
-      product: props.product.id,
+      product: props.product.slug,
       page: props.paginate.page,
       per_page: props.paginate.per_page,
     }),
@@ -172,6 +172,7 @@ const submit = () => {
             </div>
           </li>
         </Breadcrumb>
+        {{ form.hot_deal }}
         <div>
           <Link
             :href="route('admin.products.index')"
