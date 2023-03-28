@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminAuthController;
+use App\Http\Controllers\Admin\AdminBannerController;
 use App\Http\Controllers\Admin\AdminBrandController;
 use App\Http\Controllers\Admin\Categories\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminDashboardController;
@@ -103,5 +104,22 @@ Route::middleware(["auth","verified","user.role:admin"])
                     });
 
 
+
             Route::delete('products/{product_id}/images/{image_id}', [AdminMultiImageController::class,"destroy"])->name("image.destroy");
+
+
+            Route::controller(AdminBannerController::class)
+                    ->prefix("/banners")
+                    ->name("banners.")
+                    ->group(function () {
+                        Route::get("/", "index")->name("index");
+                        Route::get("/create", "create")->name("create");
+                        Route::post("/", "store")->name("store");
+                        Route::get("/{banner}/edit", "edit")->name("edit");
+                        Route::post("/{banner}", "update")->name("update");
+                        Route::delete("/{banner}", "destroy")->name("destroy");
+                        Route::get("/trash", "trash")->name("trash");
+                        Route::post("/{id}/restore", "restore")->name("restore");
+                        Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                    });
         });
