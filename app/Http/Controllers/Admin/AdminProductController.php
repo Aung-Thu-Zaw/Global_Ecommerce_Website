@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Image;
 use App\Models\Product;
 use App\Models\Size;
 use App\Models\SubCategory;
@@ -17,6 +18,7 @@ use App\Services\ProductImageUploadService;
 use App\Services\ProductMultiImageUploadService;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class AdminProductController extends Controller
 {
@@ -60,7 +62,7 @@ class AdminProductController extends Controller
 
     public function show(Product $product)
     {
-        return $product;
+        return inertia("Admin/Products/Details", compact("product"));
     }
 
     public function edit(Product $product): Response
@@ -93,12 +95,18 @@ class AdminProductController extends Controller
         return to_route("admin.products.index", "page=$request->page&per_page=$request->per_page")->with("success", "Product is updated successfully.");
     }
 
-    // public function destroy(Request $request, Product $product): RedirectResponse
-    // {
-    //     $product->delete();
+    public function destroy(Request $request, Product $product): RedirectResponse
+    {
+        $mulitImages=Image::where("product_id", $product->id)->get();
 
-    //     return to_route("admin.products.index", "page=$request->page&per_page=$request->per_page")->with("success", "Product is deleted successfully.");
-    // }
+        Image::deleteMultiImage($mulitImages);
+
+        Product::deleteImage($product);
+
+        $product->delete();
+
+        return to_route("admin.products.index", "page=$request->page&per_page=$request->per_page")->with("success", "Product is deleted successfully.");
+    }
 
     // public function trash(): Response
     // {

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Laravel\Scout\Searchable;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -18,7 +19,10 @@ class SubCategory extends Model
     use SoftDeletes;
     use Searchable;
     use HasSlug;
+    use CascadeSoftDeletes;
 
+
+    protected array $cascadeDeletes = ['products'];
     protected $guarded=[];
 
     public function getSlugOptions(): SlugOptions
@@ -82,6 +86,12 @@ class SubCategory extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
     }
 
 

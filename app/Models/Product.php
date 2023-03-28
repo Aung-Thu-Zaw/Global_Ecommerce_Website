@@ -106,7 +106,10 @@ class Product extends Model
         );
     }
 
-
+    public function subCategories(): BelongsTo
+    {
+        return $this->belongsTo(SubCategory::class);
+    }
 
     public function images(): HasMany
     {

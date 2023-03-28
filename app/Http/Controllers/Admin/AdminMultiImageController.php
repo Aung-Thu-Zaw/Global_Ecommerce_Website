@@ -12,9 +12,7 @@ class AdminMultiImageController extends Controller
     {
         $image=Image::where([["product_id",$productId],["id",$imageId]])->first();
 
-        if (!empty($image->img_path) && file_exists(storage_path("app/public/products/$image->img_path"))) {
-            unlink(storage_path("app/public/products/$image->img_path"));
-        }
+        Image::deleteImage($image);
 
         $image->delete();
 

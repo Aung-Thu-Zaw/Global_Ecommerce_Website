@@ -26,4 +26,22 @@ class Image extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public static function deleteImage(object $image): void
+    {
+        if (!empty($image->img_path) && file_exists(storage_path("app/public/products/".pathinfo($image->img_path, PATHINFO_BASENAME)))) {
+            unlink(storage_path("app/public/products/".pathinfo($image->img_path, PATHINFO_BASENAME)));
+        }
+    }
+
+    public static function deleteMultiImage(object $multiImages): void
+    {
+        if ($multiImages) {
+            foreach ($multiImages as $image) {
+                if (!empty($image->img_path) && file_exists(storage_path("app/public/products/".pathinfo($image->img_path, PATHINFO_BASENAME)))) {
+                    unlink(storage_path("app/public/products/".pathinfo($image->img_path, PATHINFO_BASENAME)));
+                }
+            }
+        }
+    }
 }
