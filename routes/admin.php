@@ -93,7 +93,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                         Route::get("/", "index")->name("index");
                         Route::get("/create", "create")->name("create");
                         Route::post("/", "store")->name("store");
-                        Route::get("/{product}", "show")->name("show");
+                        // Route::get("/{product}", "show")->name("show");
                         Route::get("/{product}/edit", "edit")->name("edit");
                         Route::post("/{product}", "update")->name("update");
                         Route::delete("/{product}", "destroy")->name("destroy");

@@ -133,9 +133,7 @@ if (usePage().props.flash.successMessage) {
 <template>
   <AdminDashboardLayout>
     <Head title="Products" />
-
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Category Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb />
 
@@ -440,7 +438,7 @@ if (usePage().props.flash.successMessage) {
                 <i class="fa-solid fa-xmark"></i>
                 Delete
               </button>
-              <Link
+              <!-- <Link
                 as="button"
                 :href="route('admin.products.show', product.slug)"
                 :data="{
@@ -451,7 +449,7 @@ if (usePage().props.flash.successMessage) {
               >
                 <i class="fa-solid fa-eye"></i>
                 Details
-              </Link>
+              </Link> -->
             </Td>
           </Tr>
         </tbody>

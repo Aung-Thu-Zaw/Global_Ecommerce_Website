@@ -9,7 +9,7 @@ import BodyTh from "@/Components/Table/BodyTh.vue";
 import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import SearchForm from "@/Components/Form/SearchForm.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/Categories/Breadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/Products/Breadcrumb.vue";
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link, Head } from "@inertiajs/vue3";
@@ -18,19 +18,15 @@ import { router } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
-  trashCategories: Object,
+  trashProducts: Object,
 });
 
 const swal = inject("$swal");
 
 const params = reactive({
   search: null,
-  page: props.trashCategories.current_page
-    ? props.trashCategories.current_page
-    : 1,
-  per_page: props.trashCategories.per_page
-    ? props.trashCategories.per_page
-    : 10,
+  page: props.trashProducts.current_page ? props.trashProducts.current_page : 1,
+  per_page: props.trashProducts.per_page ? props.trashProducts.per_page : 10,
   sort: "id",
   direction: "desc",
 });
@@ -43,7 +39,7 @@ watch(
   () => params.search,
   (current, previous) => {
     router.get(
-      "/admin/categories/trash",
+      "/admin/products/trash",
       {
         search: params.search,
         per_page: params.per_page,
@@ -62,7 +58,7 @@ watch(
   () => params.per_page,
   (current, previous) => {
     router.get(
-      "/admin/categories/trash",
+      "/admin/products/trash",
       {
         search: params.search,
         page: params.page,
@@ -83,7 +79,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/categories/trash",
+    "/admin/products/trash",
     {
       search: params.search,
       page: params.page,
@@ -95,7 +91,7 @@ const updateSorting = (sort = "id") => {
   );
 };
 
-const handleRestore = async (trashCategoryId) => {
+const handleRestore = async (trashProductId) => {
   const result = await swal({
     icon: "info",
     title: "Are you sure you want to restore this category?",
@@ -109,9 +105,9 @@ const handleRestore = async (trashCategoryId) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("admin.categories.restore", {
-        id: trashCategoryId,
-        page: props.trashCategories.current_page,
+      route("admin.products.restore", {
+        id: trashProductId,
+        page: props.trashProducts.current_page,
         per_page: params.per_page,
       })
     );
@@ -124,7 +120,7 @@ const handleRestore = async (trashCategoryId) => {
   }
 };
 
-const handleDelete = async (trashCategoryId) => {
+const handleDelete = async (trashProductId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -139,9 +135,9 @@ const handleDelete = async (trashCategoryId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.categories.forceDelete", {
-        id: trashCategoryId,
-        page: props.trashCategories.current_page,
+      route("admin.products.forceDelete", {
+        id: trashProductId,
+        page: props.trashProducts.current_page,
         per_page: params.per_page,
       })
     );
@@ -157,34 +153,13 @@ const handleDelete = async (trashCategoryId) => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Trash Categories" />
+    <Head title="Trash products" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Breadcrumb  -->
 
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
-          <li aria-current="page">
-            <div class="flex items-center">
-              <svg
-                aria-hidden="true"
-                class="w-6 h-6 text-gray-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <span
-                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Category</span
-              >
-            </div>
-          </li>
           <li aria-current="page">
             <div class="flex items-center">
               <svg
@@ -210,7 +185,7 @@ const handleDelete = async (trashCategoryId) => {
 
         <div>
           <Link
-            :href="route('admin.categories.index')"
+            :href="route('admin.products.index')"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
             <i class="fa-solid fa-arrow-left"></i>
@@ -304,6 +279,82 @@ const handleDelete = async (trashCategoryId) => {
               }"
             ></i>
           </HeaderTh>
+          <HeaderTh @click="updateSorting('qty')">
+            Qty
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'qty',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'qty',
+              }"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'qty',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'qty',
+              }"
+            ></i>
+          </HeaderTh>
+          <HeaderTh @click="updateSorting('price')">
+            Price
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'price',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'price',
+              }"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'price',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'price',
+              }"
+            ></i>
+          </HeaderTh>
+
+          <HeaderTh @click="updateSorting('discount')">
+            Discount (%)
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'discount',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'discount',
+              }"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'discount',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'discount',
+              }"
+            ></i>
+          </HeaderTh>
           <HeaderTh @click="updateSorting('status')">
             Status
             <i
@@ -357,39 +408,58 @@ const handleDelete = async (trashCategoryId) => {
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="trashCategories.data.length">
-          <Tr
-            v-for="trashCategory in trashCategories.data"
-            :key="trashCategory.id"
-          >
-            <BodyTh>{{ trashCategory.id }}</BodyTh>
+        <tbody v-if="trashProducts.data.length">
+          <Tr v-for="trashProduct in trashProducts.data" :key="trashProduct.id">
+            <BodyTh>{{ trashProduct.id }}</BodyTh>
             <Td>
               <img
-                :src="trashCategory.image"
-                class="w-[50px] h-[50px] rounded-full object-cover shadow-lg ring-2 ring-slate-300"
+                :src="trashProduct.image"
+                class="w-[50px] h-[50px] rounded-sm object-cover shadow-lg ring-2 ring-slate-300"
                 alt=""
               />
             </Td>
-            <Td>{{ trashCategory.name }}</Td>
+            <Td>{{ trashProduct.name }}</Td>
+            <Td>{{ trashProduct.qty }}</Td>
+            <Td>$ {{ trashProduct.price }}</Td>
             <Td>
-              <ActiveStatus v-if="trashCategory.status == 'show'">
-                {{ trashCategory.status }}
+              <span
+                v-if="trashProduct.discount"
+                class="bg-green-200 text-green-600 py-1 px-3 rounded-md"
+              >
+                {{
+                  (
+                    ((trashProduct.price - trashProduct.discount) /
+                      trashProduct.price) *
+                    100
+                  ).toFixed(1)
+                }}%
+              </span>
+              <span
+                v-if="!trashProduct.discount"
+                class="bg-blue-200 text-blue-600 py-1 px-3 rounded-md"
+              >
+                No Discount
+              </span>
+            </Td>
+            <Td>
+              <ActiveStatus v-if="trashProduct.status == 'active'">
+                {{ trashProduct.status }}
               </ActiveStatus>
-              <InactiveStatus v-if="trashCategory.status == 'hide'">
-                {{ trashCategory.status }}
+              <InactiveStatus v-if="trashProduct.status == 'inactive'">
+                {{ trashProduct.status }}
               </InactiveStatus>
             </Td>
-            <Td>{{ trashCategory.created_at }}</Td>
+            <Td>{{ trashProduct.created_at }}</Td>
             <Td>
               <button
-                @click="handleRestore(trashCategory.id)"
+                @click="handleRestore(trashProduct.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-recycle"></i>
                 Restore
               </button>
               <button
-                @click="handleDelete(trashCategory.id)"
+                @click="handleDelete(trashProduct.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-trash"></i>
@@ -401,10 +471,10 @@ const handleDelete = async (trashCategoryId) => {
       </TableContainer>
 
       <!-- Not Avaliable Data -->
-      <NotAvaliableData v-if="!trashCategories.data.length" />
+      <NotAvaliableData v-if="!trashProducts.data.length" />
 
       <!-- Pagination -->
-      <pagination class="mt-6" :links="trashCategories.links" />
+      <pagination class="mt-6" :links="trashProducts.links" />
     </div>
   </AdminDashboardLayout>
 </template>
