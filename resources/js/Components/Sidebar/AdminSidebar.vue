@@ -96,17 +96,17 @@
           </li>
           <li class="items-center">
             <Link
-              :href="route('admin.banners.index')"
+              :href="route('admin.sliders.index')"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
                 'text-blue-500 hover:text-blue-600':
-                  $page.url.startsWith('/admin/banners'),
+                  $page.url.startsWith('/admin/sliders'),
                 'text-slate-700 hover:text-slate-500':
-                  !$page.url.startsWith('/admin/banners'),
+                  !$page.url.startsWith('/admin/sliders'),
               }"
             >
               <i class="fa-solid fa-ad mr-2 text-sm"></i>
-              Banners
+              Sliders
             </Link>
           </li>
 

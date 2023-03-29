@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\Categories\AdminSubCategoryController;
 use App\Http\Controllers\Admin\Managements\AdminActiveVendorController;
 use App\Http\Controllers\Admin\Managements\AdminInactiveVendorController;
 use App\Http\Controllers\Admin\AdminProductController;
+use App\Http\Controllers\Admin\AdminSliderController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/admin/login", [AdminAuthController::class,"login"])->name("admin.login");
@@ -108,16 +109,16 @@ Route::middleware(["auth","verified","user.role:admin"])
             Route::delete('products/{product_id}/images/{image_id}', [AdminMultiImageController::class,"destroy"])->name("image.destroy");
 
 
-            Route::controller(AdminBannerController::class)
-                    ->prefix("/banners")
-                    ->name("banners.")
+            Route::controller(AdminSliderController::class)
+                    ->prefix("/sliders")
+                    ->name("sliders.")
                     ->group(function () {
                         Route::get("/", "index")->name("index");
                         Route::get("/create", "create")->name("create");
                         Route::post("/", "store")->name("store");
-                        Route::get("/{banner}/edit", "edit")->name("edit");
-                        Route::post("/{banner}", "update")->name("update");
-                        Route::delete("/{banner}", "destroy")->name("destroy");
+                        Route::get("/{slider}/edit", "edit")->name("edit");
+                        Route::post("/{slider}", "update")->name("update");
+                        Route::delete("/{slider}", "destroy")->name("destroy");
                         Route::get("/trash", "trash")->name("trash");
                         Route::post("/{id}/restore", "restore")->name("restore");
                         Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");

@@ -30,10 +30,10 @@ if (usePage().props.flash.successMessage) {
       <EcommerceMainSection />
 
       <!-- Featured Category Section -->
-      <FeaturedCategory />
+      <!-- <FeaturedCategory /> -->
 
       <!-- New Products Section  -->
-      <ProductSection>
+      <!-- <ProductSection>
         <template v-slot:sectionHeader>
           <h2 class="text-md md:text-2xl font-bold">NEW PRODUCTS</h2>
           <span
@@ -44,10 +44,10 @@ if (usePage().props.flash.successMessage) {
             <i class="fa-solid fa-angles-right ml-3"></i>
           </a>
         </template>
-      </ProductSection>
+      </ProductSection> -->
 
       <!-- New Products Section  -->
-      <ProductSection>
+      <!-- <ProductSection>
         <template v-slot:sectionHeader>
           <h2 class="text-md md:text-2xl font-bold">HOT DEALS PRODUCTS</h2>
           <span
@@ -58,10 +58,10 @@ if (usePage().props.flash.successMessage) {
             <i class="fa-solid fa-angles-right ml-3"></i>
           </a>
         </template>
-      </ProductSection>
+      </ProductSection> -->
 
       <!-- Best Selling Products Section  -->
-      <ProductSection>
+      <!-- <ProductSection>
         <template v-slot:sectionHeader>
           <h2 class="text-md md:text-2xl font-bold">BEST SELLING PRODUCTS</h2>
           <span
@@ -72,20 +72,20 @@ if (usePage().props.flash.successMessage) {
             <i class="fa-solid fa-angles-right ml-3"></i>
           </a>
         </template>
-      </ProductSection>
+      </ProductSection> -->
 
       <!-- Products For You Section -->
-      <ProductsForYourSection>
+      <!-- <ProductsForYourSection>
         <template v-slot:sectionHeader>
           <h2 class="text-md md:text-2xl font-bold">PRODUCTS FOR YOU</h2>
         </template>
-      </ProductsForYourSection>
+      </ProductsForYourSection> -->
 
       <!-- Why Choose Us Section -->
-      <WhyChooseUsSection />
+      <!-- <WhyChooseUsSection /> -->
 
       <!-- Subscribe NewsLetter Section -->
-      <SubscribeNewsLetterSection />
+      <!-- <SubscribeNewsLetterSection /> -->
     </div>
   </AppLayout>
 </template>
