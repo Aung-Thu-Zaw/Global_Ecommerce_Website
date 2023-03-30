@@ -6,7 +6,7 @@ import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
 import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/Sliders/Breadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/Banners/Breadcrumb.vue";
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link, Head } from "@inertiajs/vue3";
@@ -15,15 +15,19 @@ import { router } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
-  trashSliders: Object,
+  trashProductBanners: Object,
 });
 
 const swal = inject("$swal");
 
 const params = reactive({
   search: null,
-  page: props.trashSliders.current_page ? props.trashSliders.current_page : 1,
-  per_page: props.trashSliders.per_page ? props.trashSliders.per_page : 10,
+  page: props.trashProductBanners.current_page
+    ? props.trashProductBanners.current_page
+    : 1,
+  per_page: props.trashProductBanners.per_page
+    ? props.trashProductBanners.per_page
+    : 10,
   sort: "id",
   direction: "desc",
 });
@@ -36,7 +40,7 @@ watch(
   () => params.search,
   (current, previous) => {
     router.get(
-      "/admin/sliders/trash",
+      "/admin/product-banners/trash",
       {
         search: params.search,
         per_page: params.per_page,
@@ -55,7 +59,7 @@ watch(
   () => params.per_page,
   (current, previous) => {
     router.get(
-      "/admin/sliders/trash",
+      "/admin/product-banners/trash",
       {
         search: params.search,
         page: params.page,
@@ -76,7 +80,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/sliders/trash",
+    "/admin/product-banners/trash",
     {
       search: params.search,
       page: params.page,
@@ -88,7 +92,7 @@ const updateSorting = (sort = "id") => {
   );
 };
 
-const handleRestore = async (trashSliderId) => {
+const handleRestore = async (trashBannerId) => {
   const result = await swal({
     icon: "info",
     title: "Are you sure you want to restore this category?",
@@ -102,9 +106,9 @@ const handleRestore = async (trashSliderId) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("admin.sliders.restore", {
-        id: trashSliderId,
-        page: props.trashSliders.current_page,
+      route("admin.product-banners.restore", {
+        id: trashBannerId,
+        page: props.trashProductBanners.current_page,
         per_page: params.per_page,
       })
     );
@@ -117,7 +121,7 @@ const handleRestore = async (trashSliderId) => {
   }
 };
 
-const handleDelete = async (trashSliderId) => {
+const handleDelete = async (trashBannerId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -132,9 +136,9 @@ const handleDelete = async (trashSliderId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.sliders.forceDelete", {
-        id: trashSliderId,
-        page: props.trashSliders.current_page,
+      route("admin.product-banners.forceDelete", {
+        id: trashBannerId,
+        page: props.trashProductBanners.current_page,
         per_page: params.per_page,
       })
     );
@@ -150,13 +154,34 @@ const handleDelete = async (trashSliderId) => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Trash sliders" />
+    <Head title="Trash Product Banners" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Breadcrumb  -->
 
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span
+                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                >Product Banner</span
+              >
+            </div>
+          </li>
           <li aria-current="page">
             <div class="flex items-center">
               <svg
@@ -182,7 +207,7 @@ const handleDelete = async (trashSliderId) => {
 
         <div>
           <Link
-            :href="route('admin.sliders.index')"
+            :href="route('admin.product-banners.index')"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
             <i class="fa-solid fa-arrow-left"></i>
@@ -251,6 +276,31 @@ const handleDelete = async (trashSliderId) => {
             ></i>
           </HeaderTh>
           <HeaderTh> Image </HeaderTh>
+          <HeaderTh @click="updateSorting('title')">
+            Title
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'title',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'title',
+              }"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'title',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'title',
+              }"
+            ></i>
+          </HeaderTh>
           <HeaderTh @click="updateSorting('url')">
             URL
             <i
@@ -304,28 +354,32 @@ const handleDelete = async (trashSliderId) => {
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="trashSliders.data.length">
-          <Tr v-for="trashSlider in trashSliders.data" :key="trashSlider.id">
-            <BodyTh>{{ trashSlider.id }}</BodyTh>
+        <tbody v-if="trashProductBanners.data.length">
+          <Tr
+            v-for="trashProductBanner in trashProductBanners.data"
+            :key="trashProductBanner.id"
+          >
+            <BodyTh>{{ trashProductBanner.id }}</BodyTh>
             <Td>
               <img
-                :src="trashSlider.image"
+                :src="trashProductBanner.image"
                 class="w-[50px] h-[50px] rounded-sm object-cover shadow-lg ring-2 ring-slate-300"
                 alt=""
               />
             </Td>
-            <Td>{{ trashSlider.url }}</Td>
-            <Td>{{ trashSlider.created_at }}</Td>
+            <Td>{{ trashProductBanner.title }}</Td>
+            <Td>{{ trashProductBanner.url }}</Td>
+            <Td>{{ trashProductBanner.created_at }}</Td>
             <Td>
               <button
-                @click="handleRestore(trashSlider.id)"
+                @click="handleRestore(trashProductBanner.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-recycle"></i>
                 Restore
               </button>
               <button
-                @click="handleDelete(trashSlider.id)"
+                @click="handleDelete(trashProductBanner.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-trash"></i>
@@ -337,10 +391,10 @@ const handleDelete = async (trashSliderId) => {
       </TableContainer>
 
       <!-- Not Avaliable Data -->
-      <NotAvaliableData v-if="!trashSliders.data.length" />
+      <NotAvaliableData v-if="!trashProductBanners.data.length" />
 
       <!-- Pagination -->
-      <pagination class="mt-6" :links="trashSliders.links" />
+      <pagination class="mt-6" :links="trashProductBanners.links" />
     </div>
   </AdminDashboardLayout>
 </template>

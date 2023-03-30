@@ -15,15 +15,17 @@ import { router } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
-  banners: Object,
+  productBanners: Object,
 });
 
 const swal = inject("$swal");
 
 const params = reactive({
   search: null,
-  page: props.banners.current_page ? props.banners.current_page : 1,
-  per_page: props.banners.per_page ? props.banners.per_page : 10,
+  page: props.productBanners.current_page
+    ? props.productBanners.current_page
+    : 1,
+  per_page: props.productBanners.per_page ? props.productBanners.per_page : 10,
   sort: "id",
   direction: "desc",
 });
@@ -36,7 +38,7 @@ watch(
   () => params.search,
   (current, previous) => {
     router.get(
-      "/admin/banners",
+      "/admin/product-banners",
       {
         search: params.search,
         per_page: params.per_page,
@@ -55,7 +57,7 @@ watch(
   () => params.per_page,
   (current, previous) => {
     router.get(
-      "/admin/banners",
+      "/admin/product-banners",
       {
         search: params.search,
         page: params.page,
@@ -76,7 +78,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/banners",
+    "/admin/product-banners",
     {
       search: params.search,
       page: params.page,
@@ -103,7 +105,7 @@ const handleDelete = async (bannerId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.banners.destroy", {
+      route("admin.product-banners.destroy", {
         banner: bannerId,
         page: props.banners.current_page,
         per_page: params.per_page,
@@ -128,17 +130,38 @@ if (usePage().props.flash.successMessage) {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Banners" />
+    <Head title="Product Banners" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Category Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
-        <Breadcrumb />
-
+        <Breadcrumb>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span
+                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                >Product Banner</span
+              >
+            </div>
+          </li>
+        </Breadcrumb>
         <div>
           <Link
             as="button"
-            :href="route('admin.banners.trash')"
+            :href="route('admin.product-banners.trash')"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
           >
             <i class="fa-solid fa-trash"></i>
@@ -150,14 +173,14 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <Link
-          :href="route('admin.banners.create')"
+          :href="route('admin.product-banners.create')"
           :data="{
             per_page: params.per_page,
           }"
           class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700"
         >
           <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
-          Add Banner</Link
+          Add Product Banner</Link
         >
         <!-- Search Input Form -->
         <div class="flex items-center">
@@ -220,6 +243,31 @@ if (usePage().props.flash.successMessage) {
             ></i>
           </HeaderTh>
           <HeaderTh> Image </HeaderTh>
+          <HeaderTh @click="updateSorting('title')">
+            Title
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'title',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'title',
+              }"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'title',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'title',
+              }"
+            ></i>
+          </HeaderTh>
           <HeaderTh @click="updateSorting('url')">
             URL
             <i
@@ -273,24 +321,28 @@ if (usePage().props.flash.successMessage) {
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="banners.data.length">
-          <Tr v-for="banner in banners.data" :key="banner.id">
-            <BodyTh>{{ banner.id }}</BodyTh>
+        <tbody v-if="productBanners.data.length">
+          <Tr
+            v-for="productBanner in productBanners.data"
+            :key="productBanner.id"
+          >
+            <BodyTh>{{ productBanner.id }}</BodyTh>
             <Td>
               <img
-                :src="banner.image"
+                :src="productBanner.image"
                 class="w-[50px] h-[50px] rounded-sm object-cover shadow-lg ring-2 ring-slate-300"
                 alt=""
               />
             </Td>
-            <Td>{{ banner.url }}</Td>
-            <Td>{{ banner.created_at }}</Td>
+            <Td>{{ productBanner.title }}</Td>
+            <Td>{{ productBanner.url }}</Td>
+            <Td>{{ productBanner.created_at }}</Td>
             <Td>
               <Link
                 as="button"
-                :href="route('admin.banners.edit', banner.id)"
+                :href="route('admin.product-banners.edit', productBanner.id)"
                 :data="{
-                  page: props.banners.current_page,
+                  page: props.productBanners.current_page,
                   per_page: params.per_page,
                 }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
@@ -299,7 +351,7 @@ if (usePage().props.flash.successMessage) {
                 Edit
               </Link>
               <button
-                @click="handleDelete(banner.id)"
+                @click="handleDelete(productBanner.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>
@@ -311,10 +363,10 @@ if (usePage().props.flash.successMessage) {
       </TableContainer>
 
       <!-- Not Avaliable Data -->
-      <NotAvaliableData v-if="!banners.data.length" />
+      <NotAvaliableData v-if="!productBanners.data.length" />
 
       <!-- Pagination -->
-      <pagination class="mt-6" :links="banners.links" />
+      <pagination class="mt-6" :links="productBanners.links" />
     </div>
   </AdminDashboardLayout>
 </template>

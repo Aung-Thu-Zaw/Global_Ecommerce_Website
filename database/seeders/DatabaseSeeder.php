@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\SliderBanner;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,7 +19,9 @@ class DatabaseSeeder extends Seeder
         $this->call(
             [
             UserSeeder::class,
-            SliderSeeder::class,
+            SliderBannerSeeder::class,
+            CampaignBannerSeeder::class,
+            ProductBannerSeeder::class,
             CategorySeeder::class,
             SubCategorySeeder::class,
             BrandSeeder::class,

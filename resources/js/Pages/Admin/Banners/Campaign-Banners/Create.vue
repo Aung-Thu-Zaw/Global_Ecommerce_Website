@@ -6,7 +6,7 @@ import InputError from "@/Components/Form/InputError.vue";
 import InputLabel from "@/Components/Form/InputLabel.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import FormButton from "@/Components/Form/FormButton.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/Sliders/Breadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/Banners/Breadcrumb.vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { ref } from "vue";
 
@@ -28,15 +28,15 @@ const form = useForm({
 });
 
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
-const handleCreateSlider = async () => {
+const handleCreateCampaignBanner = async () => {
   await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("create_slider");
+  form.captcha_token = await executeRecaptcha("create_campaign_banner");
   submit();
 };
 
 const submit = () => {
   form.post(
-    route("admin.sliders.store", {
+    route("admin.campaign-banners.store", {
       per_page: props.per_page,
     }),
     {
@@ -48,12 +48,33 @@ const submit = () => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Create Slider" />
+    <Head title="Create Campaign Banner" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Breadcrumb start -->
 
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span
+                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                >Campaign Banner</span
+              >
+            </div>
+          </li>
           <li aria-current="page">
             <div class="flex items-center">
               <svg
@@ -79,7 +100,7 @@ const submit = () => {
 
         <div>
           <Link
-            :href="route('admin.sliders.index')"
+            :href="route('admin.campaign-banners.index')"
             :data="{
               per_page: props.per_page,
             }"
@@ -100,7 +121,7 @@ const submit = () => {
             class="w-[100px] h-[100px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300"
           />
         </div>
-        <form @submit.prevent="handleCreateSlider">
+        <form @submit.prevent="handleCreateCampaignBanner">
           <div class="mb-6">
             <InputLabel for="url" value="URL *" />
 

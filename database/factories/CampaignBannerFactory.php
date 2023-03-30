@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Slider>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CampaignBanner>
  */
-class SliderFactory extends Factory
+class CampaignBannerFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,6 +19,7 @@ class SliderFactory extends Factory
         return [
             "image"=>fake()->imageUrl(),
             "url"=>fake()->url(),
+            "is_active"=>true,
         ];
     }
 }

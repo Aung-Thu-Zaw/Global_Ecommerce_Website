@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('sliders', function (Blueprint $table) {
+        Schema::create('campaign_banners', function (Blueprint $table) {
             $table->id();
             $table->string("image");
             $table->string("url");
+            $table->boolean("is_active");
             $table->softDeletes();
             $table->timestamps();
         });
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sliders');
+        Schema::dropIfExists('campaign_banners');
     }
 };

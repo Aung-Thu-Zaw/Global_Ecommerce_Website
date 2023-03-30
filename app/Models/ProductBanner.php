@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 
-class Banner extends Model
+class ProductBanner extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -21,12 +21,13 @@ class Banner extends Model
     public function toSearchableArray(): array
     {
         return [
+            'title' => $this->title,
             'url' => $this->url,
         ];
     }
 
         /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Banner, never>
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductBanner, never>
     */
     protected function createdAt(): Attribute
     {
@@ -36,19 +37,19 @@ class Banner extends Model
     }
 
         /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Banner, never>
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductBanner, never>
     */
     protected function image(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/banners/$value"),
+            set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/product-banners/$value"),
         );
     }
 
-    public static function deleteImage(object $banner): void
+    public static function deleteImage(object $productBanner): void
     {
-        if (!empty($banner->image) && file_exists(storage_path("app/public/banners/".pathinfo($banner->image, PATHINFO_BASENAME)))) {
-            unlink(storage_path("app/public/banners/".pathinfo($banner->image, PATHINFO_BASENAME)));
+        if (!empty($productBanner->image) && file_exists(storage_path("app/public/product-banners/".pathinfo($productBanner->image, PATHINFO_BASENAME)))) {
+            unlink(storage_path("app/public/product-banners/".pathinfo($productBanner->image, PATHINFO_BASENAME)));
         }
     }
 }

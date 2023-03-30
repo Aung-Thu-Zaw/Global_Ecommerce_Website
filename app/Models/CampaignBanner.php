@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 
-class Slider extends Model
+class CampaignBanner extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -26,7 +26,7 @@ class Slider extends Model
     }
 
         /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Slider, never>
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<CampaignBanner, never>
     */
     protected function createdAt(): Attribute
     {
@@ -36,19 +36,19 @@ class Slider extends Model
     }
 
         /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Slider, never>
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<CampaignBanner, never>
     */
     protected function image(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/sliders/$value"),
+            set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/campaign-banners/$value"),
         );
     }
 
-    public static function deleteImage(object $slider): void
+    public static function deleteImage(object $campaignBanner): void
     {
-        if (!empty($slider->image) && file_exists(storage_path("app/public/sliders/".pathinfo($slider->image, PATHINFO_BASENAME)))) {
-            unlink(storage_path("app/public/sliders/".pathinfo($slider->image, PATHINFO_BASENAME)));
+        if (!empty($campaignBanner->image) && file_exists(storage_path("app/public/campaign-banners/".pathinfo($campaignBanner->image, PATHINFO_BASENAME)))) {
+            unlink(storage_path("app/public/campaign-banners/".pathinfo($campaignBanner->image, PATHINFO_BASENAME)));
         }
     }
 }

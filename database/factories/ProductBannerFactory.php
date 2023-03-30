@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Banner>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ProductBanner>
  */
-class BannerFactory extends Factory
+class ProductBannerFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,8 +17,11 @@ class BannerFactory extends Factory
     public function definition()
     {
         return [
+            "title"=>fake()->word(),
+            "description"=>fake()->sentence(),
             "image"=>fake()->imageUrl(),
             "url"=>fake()->url(),
+            "is_active"=>true,
         ];
     }
 }

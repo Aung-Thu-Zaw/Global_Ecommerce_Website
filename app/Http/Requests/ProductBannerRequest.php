@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BannerRequest extends FormRequest
+class ProductBannerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,9 @@ class BannerRequest extends FormRequest
     public function rules()
     {
         return [
-            "url"=>["required","string","url"]
+            "title"=>["required","string"],
+            "description"=>["required","string"],
+            "url"=>["required","string","url"],
         ];
     }
 }

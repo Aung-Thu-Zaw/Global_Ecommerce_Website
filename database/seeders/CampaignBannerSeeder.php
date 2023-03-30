@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Banner;
+use App\Models\CampaignBanner;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class BannerSeeder extends Seeder
+class CampaignBannerSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,6 +15,6 @@ class BannerSeeder extends Seeder
      */
     public function run()
     {
-       Banner::factory(10)->create();
+        CampaignBanner::factory(10)->create();
     }
 }

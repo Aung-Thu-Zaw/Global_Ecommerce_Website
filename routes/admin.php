@@ -1,16 +1,17 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminAuthController;
-use App\Http\Controllers\Admin\AdminBannerController;
 use App\Http\Controllers\Admin\AdminBrandController;
+use App\Http\Controllers\Admin\AdminCampaignBannerController;
 use App\Http\Controllers\Admin\Categories\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminMultiImageController;
+use App\Http\Controllers\Admin\AdminProductBannerController;
 use App\Http\Controllers\Admin\Categories\AdminSubCategoryController;
 use App\Http\Controllers\Admin\Managements\AdminActiveVendorController;
 use App\Http\Controllers\Admin\Managements\AdminInactiveVendorController;
 use App\Http\Controllers\Admin\AdminProductController;
-use App\Http\Controllers\Admin\AdminSliderController;
+use App\Http\Controllers\Admin\AdminSliderBannerController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/admin/login", [AdminAuthController::class,"login"])->name("admin.login");
@@ -109,16 +110,46 @@ Route::middleware(["auth","verified","user.role:admin"])
             Route::delete('products/{product_id}/images/{image_id}', [AdminMultiImageController::class,"destroy"])->name("image.destroy");
 
 
-            Route::controller(AdminSliderController::class)
-                    ->prefix("/sliders")
-                    ->name("sliders.")
+            Route::controller(AdminSliderBannerController::class)
+                    ->prefix("/slider-banners")
+                    ->name("slider-banners.")
                     ->group(function () {
                         Route::get("/", "index")->name("index");
                         Route::get("/create", "create")->name("create");
                         Route::post("/", "store")->name("store");
-                        Route::get("/{slider}/edit", "edit")->name("edit");
-                        Route::post("/{slider}", "update")->name("update");
-                        Route::delete("/{slider}", "destroy")->name("destroy");
+                        Route::get("/{slider_banner}/edit", "edit")->name("edit");
+                        Route::post("/{slider_banner}", "update")->name("update");
+                        Route::delete("/{slider_banner}", "destroy")->name("destroy");
+                        Route::get("/trash", "trash")->name("trash");
+                        Route::post("/{id}/restore", "restore")->name("restore");
+                        Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                    });
+
+            Route::controller(AdminProductBannerController::class)
+                    ->prefix("/product-banners")
+                    ->name("product-banners.")
+                    ->group(function () {
+                        Route::get("/", "index")->name("index");
+                        Route::get("/create", "create")->name("create");
+                        Route::post("/", "store")->name("store");
+                        Route::get("/{product_banner}/edit", "edit")->name("edit");
+                        Route::post("/{product_banner}", "update")->name("update");
+                        Route::delete("/{product_banner}", "destroy")->name("destroy");
+                        Route::get("/trash", "trash")->name("trash");
+                        Route::post("/{id}/restore", "restore")->name("restore");
+                        Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                    });
+
+            Route::controller(AdminCampaignBannerController::class)
+                    ->prefix("/campaign-banners")
+                    ->name("campaign-banners.")
+                    ->group(function () {
+                        Route::get("/", "index")->name("index");
+                        Route::get("/create", "create")->name("create");
+                        Route::post("/", "store")->name("store");
+                        Route::get("/{campaign_banner}/edit", "edit")->name("edit");
+                        Route::post("/{campaign_banner}", "update")->name("update");
+                        Route::delete("/{campaign_banner}", "destroy")->name("destroy");
                         Route::get("/trash", "trash")->name("trash");
                         Route::post("/{id}/restore", "restore")->name("restore");
                         Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
