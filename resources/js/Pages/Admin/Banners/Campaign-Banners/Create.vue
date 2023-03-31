@@ -7,26 +7,27 @@ import InputLabel from "@/Components/Form/InputLabel.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import FormButton from "@/Components/Form/FormButton.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Banners/Breadcrumb.vue";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { ref } from "vue";
 
+// Data From Controller
 const props = defineProps({
   per_page: String,
 });
 
-const editor = ClassicEditor;
-
+// Preview Photo
 const previewPhoto = ref("");
 const getPreviewPhotoPath = (path) => {
   previewPhoto.value.src = URL.createObjectURL(path);
 };
 
+// Banner Create Form Data
 const form = useForm({
   image: "",
   url: "",
   captcha_token: null,
 });
 
+// Handle Banner Create
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 const handleCreateCampaignBanner = async () => {
   await recaptchaLoaded();
@@ -50,8 +51,7 @@ const submit = () => {
   <AdminDashboardLayout>
     <Head title="Create Campaign Banner" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Breadcrumb start -->
-
+      <!-- Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
           <li aria-current="page">
@@ -113,6 +113,7 @@ const submit = () => {
       </div>
 
       <div class="border shadow-md p-10">
+        <!-- Preview Photo -->
         <div class="mb-6">
           <img
             ref="previewPhoto"
@@ -121,6 +122,8 @@ const submit = () => {
             class="w-[100px] h-[100px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300"
           />
         </div>
+
+        <!-- Create Form  -->
         <form @submit.prevent="handleCreateCampaignBanner">
           <div class="mb-6">
             <InputLabel for="url" value="URL *" />

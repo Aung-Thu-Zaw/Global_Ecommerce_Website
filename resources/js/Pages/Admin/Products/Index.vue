@@ -12,16 +12,22 @@ import Breadcrumb from "@/Components/Breadcrumbs/Products/Breadcrumb.vue";
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link, Head } from "@inertiajs/vue3";
-import { reactive, watch, inject, computed } from "vue";
+import { reactive, watch, inject } from "vue";
 import { router } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
+// Data From Controller
 const props = defineProps({
   products: Object,
 });
 
 const swal = inject("$swal");
 
+const handleSearchBox = () => {
+  params.search = "";
+};
+
+// Handle Url Query Params
 const params = reactive({
   search: null,
   page: props.products.current_page ? props.products.current_page : 1,
@@ -30,10 +36,7 @@ const params = reactive({
   direction: "desc",
 });
 
-const handleSearchBox = () => {
-  params.search = "";
-};
-
+// Watch Search Form
 watch(
   () => params.search,
   (current, previous) => {
@@ -53,6 +56,7 @@ watch(
   }
 );
 
+// Watch Perpage Dropdown
 watch(
   () => params.per_page,
   (current, previous) => {
@@ -73,6 +77,7 @@ watch(
   }
 );
 
+// Handle Sorting With Column Arrow
 const updateSorting = (sort = "id") => {
   params.sort = sort;
   params.direction = params.direction === "asc" ? "desc" : "asc";
@@ -90,6 +95,7 @@ const updateSorting = (sort = "id") => {
   );
 };
 
+// Handle Product Delete
 const handleDelete = async (productSlug) => {
   const result = await swal({
     icon: "warning",
@@ -120,6 +126,7 @@ const handleDelete = async (productSlug) => {
   }
 };
 
+// Successful Message
 if (usePage().props.flash.successMessage) {
   swal({
     icon: "success",
@@ -135,8 +142,10 @@ if (usePage().props.flash.successMessage) {
     <Head title="Products" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb  -->
         <Breadcrumb />
 
+        <!-- Trash Button -->
         <div>
           <Link
             as="button"
@@ -151,6 +160,7 @@ if (usePage().props.flash.successMessage) {
       </div>
 
       <div class="mb-5 flex items-center justify-between">
+        <!-- Add Proudct Button -->
         <Link
           as="button"
           :href="route('admin.products.create')"
@@ -162,7 +172,7 @@ if (usePage().props.flash.successMessage) {
           <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
           Add Product</Link
         >
-        <!-- Search Input Form -->
+        <!-- Search Form -->
         <div class="flex items-center">
           <form class="w-[350px] relative">
             <input
@@ -178,6 +188,8 @@ if (usePage().props.flash.successMessage) {
               @click="handleSearchBox"
             ></i>
           </form>
+
+          <!-- PerPage Dropdown  -->
           <div class="ml-5">
             <select
               class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -195,7 +207,9 @@ if (usePage().props.flash.successMessage) {
         </div>
       </div>
 
+      <!-- Product Table -->
       <TableContainer>
+        <!-- Table Header  -->
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
@@ -377,6 +391,7 @@ if (usePage().props.flash.successMessage) {
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
+        <!-- Table Body -->
         <tbody v-if="products.data.length">
           <Tr v-for="product in products.data" :key="product.id">
             <BodyTh>{{ product.id }}</BodyTh>

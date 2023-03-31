@@ -9,8 +9,8 @@ import FormButton from "@/Components/Form/FormButton.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Products/Breadcrumb.vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { computed, ref } from "vue";
-import { remove } from "@vue/shared";
 
+// Datas From Controller
 const props = defineProps({
   per_page: String,
   brands: Object,
@@ -19,8 +19,7 @@ const props = defineProps({
   vendors: Object,
 });
 
-const editor = ClassicEditor;
-
+// Product Create Form Data
 const form = useForm({
   name: "",
   sizes: [],
@@ -43,11 +42,15 @@ const form = useForm({
   captcha_token: null,
 });
 
+const editor = ClassicEditor;
+
+// Handle Single Preview Photo
 const previewPhoto = ref("");
 const getPreviewPhotoPath = (path) => {
   previewPhoto.value.src = URL.createObjectURL(path);
 };
 
+// Handle Mulit Preview Photo
 const multiPreviewPhotos = ref([]);
 const getMultiPreviewPhotoPath = (paths) => {
   paths.forEach((path) => {
@@ -60,6 +63,7 @@ const handleMultiplePhotoChange = (files) => {
   getMultiPreviewPhotoPath(paths);
 };
 
+// Handle Multipreview Photo Remove
 const removeImage = (index) => {
   multiPreviewPhotos.value.splice(index, 1);
 
@@ -67,8 +71,8 @@ const removeImage = (index) => {
   form.multi_image.splice(index, 1);
 };
 
+// Handle Create and Remvoe Dynamic Size Tags
 const size = ref("");
-
 const createSize = (e) => {
   if (e.key === ",") {
     size.value = size.value.split(",").join("").toLowerCase();
@@ -83,8 +87,8 @@ const removeSize = (removeSize) => {
   });
 };
 
+// Handle Create and Remvoe Dynamic Color Tags
 const color = ref("");
-
 const createColor = (e) => {
   if (e.key === ",") {
     color.value = color.value.split(",").join("").toLowerCase();
@@ -100,6 +104,7 @@ const removeColor = (removeColor) => {
   });
 };
 
+// Filter SubCategory Come Form Controller
 const filterSubCategories = computed(() => {
   if (!form.category_id) {
     return props.subCategories;
@@ -110,6 +115,7 @@ const filterSubCategories = computed(() => {
   );
 });
 
+// Handle Create Product
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 const handleCreateProduct = async () => {
   await recaptchaLoaded();
@@ -133,9 +139,8 @@ const submit = () => {
   <AdminDashboardLayout>
     <Head title="Create Product" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Breadcrumb start -->
-
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -160,6 +165,7 @@ const submit = () => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back Button -->
         <div>
           <Link
             :href="route('admin.products.index')"
@@ -176,9 +182,11 @@ const submit = () => {
 
       <div class="border shadow-md p-10">
         <div class="">
+          <!-- Create Product Form -->
           <form @submit.prevent="handleCreateProduct" class="">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
               <div class="py-6">
+                <!-- Product Name Field -->
                 <div class="mb-6">
                   <InputLabel for="name" value="Product Name *" />
 
@@ -194,6 +202,7 @@ const submit = () => {
                   <InputError class="mt-2" :message="form.errors.name" />
                 </div>
 
+                <!-- Product Size Field -->
                 <div class="mb-6">
                   <InputLabel for="size" value="Product Sizes" />
 
@@ -219,6 +228,8 @@ const submit = () => {
                     ></i>
                   </span>
                 </div>
+
+                <!-- Product Color Field -->
                 <div class="mb-6">
                   <InputLabel for="color" value="Product Colors *" />
 
@@ -245,6 +256,8 @@ const submit = () => {
                     ></i>
                   </span>
                 </div>
+
+                <!-- Product Description Field -->
                 <div class="mb-6">
                   <InputLabel for="description" value="Product Description *" />
 
@@ -256,6 +269,7 @@ const submit = () => {
                   <InputError class="mt-2" :message="form.errors.description" />
                 </div>
 
+                <!-- Product Status Field -->
                 <div class="mb-6">
                   <InputLabel for="status" value="Status *" />
 
@@ -271,6 +285,7 @@ const submit = () => {
                   <InputError class="mt-2" :message="form.errors.status" />
                 </div>
 
+                <!-- Product Single Image Field -->
                 <div class="mb-6">
                   <InputLabel for="image" value="Product Image ( Main ) *" />
 
@@ -290,6 +305,7 @@ const submit = () => {
                   <InputError class="mt-2" :message="form.errors.image" />
                 </div>
 
+                <!-- Product Multi Image Field -->
                 <div class="mb-6">
                   <InputLabel
                     for="image"
@@ -316,6 +332,7 @@ const submit = () => {
               <div class="flex flex-col-reverse lg:flex-col">
                 <div class="border shadow-md p-6 rounded-md mb-5 h-[630px]">
                   <div class="grid grid-cols-2 gap-3">
+                    <!-- Product Price Field -->
                     <div class="mb-6">
                       <InputLabel for="price" value="Product Price *" />
 
@@ -335,6 +352,7 @@ const submit = () => {
                       <InputError class="mt-2" :message="form.errors.price" />
                     </div>
 
+                    <!-- Product Discount Price Field -->
                     <div class="mb-6">
                       <InputLabel for="discount" value="Discount Price" />
 
@@ -357,6 +375,7 @@ const submit = () => {
                     </div>
                   </div>
                   <div class="grid grid-cols-2 gap-3">
+                    <!-- Product Code Field -->
                     <div class="mb-6">
                       <InputLabel for="code" value="Product Code *" />
 
@@ -371,8 +390,10 @@ const submit = () => {
 
                       <InputError class="mt-2" :message="form.errors.code" />
                     </div>
+
+                    <!-- Product Quantity Field -->
                     <div class="mb-6">
-                      <InputLabel for="name" value="Product Quantity *" />
+                      <InputLabel for="quantity" value="Product Quantity *" />
 
                       <TextInput
                         id="quantity"
@@ -386,8 +407,10 @@ const submit = () => {
                       <InputError class="mt-2" :message="form.errors.qty" />
                     </div>
                   </div>
+
+                  <!-- Product Brand Field -->
                   <div class="mb-6">
-                    <InputLabel for="name" value="Product Brand *" />
+                    <InputLabel for="brand" value="Product Brand *" />
 
                     <select
                       v-model="form.brand_id"
@@ -406,6 +429,7 @@ const submit = () => {
                     <InputError class="mt-2" :message="form.errors.brand_id" />
                   </div>
                   <div class="grid grid-cols-2 gap-3">
+                    <!-- Product Category Field -->
                     <div class="mb-6">
                       <InputLabel for="category" value="Category *" />
 
@@ -430,8 +454,10 @@ const submit = () => {
                         :message="form.errors.category_id"
                       />
                     </div>
+
+                    <!-- Product SubCategory Field -->
                     <div class="mb-6">
-                      <InputLabel for="name" value="SubCategory *" />
+                      <InputLabel for="subCategory" value="SubCategory *" />
 
                       <select
                         v-model="form.sub_category_id"
@@ -455,8 +481,10 @@ const submit = () => {
                       />
                     </div>
                   </div>
+
+                  <!-- Product Vendor Field -->
                   <div class="mb-6">
-                    <InputLabel for="name" value="Vendor *" />
+                    <InputLabel for="vendor" value="Vendor *" />
 
                     <select
                       v-model="form.user_id"
@@ -476,6 +504,7 @@ const submit = () => {
                   </div>
 
                   <div class="grid grid-cols-3 gap-3">
+                    <!-- Product Hot Deal Checkbox Field -->
                     <div
                       class="flex items-center pl-4 border border-gray-200 rounded-md dark:border-gray-700 mb-6"
                     >
@@ -493,6 +522,8 @@ const submit = () => {
                         >Hot Deal</label
                       >
                     </div>
+
+                    <!-- Product Special Offer Checkbox Field -->
                     <div
                       class="flex items-center pl-4 border border-gray-200 rounded-md dark:border-gray-700 mb-6"
                     >
@@ -510,6 +541,8 @@ const submit = () => {
                         >Special Offer</label
                       >
                     </div>
+
+                    <!-- Product Featured Checkbox Field -->
                     <div
                       class="flex items-center pl-4 border border-gray-200 rounded-md dark:border-gray-700 mb-6"
                     >
@@ -530,6 +563,7 @@ const submit = () => {
                   </div>
                 </div>
 
+                <!-- Product Image Preview Field -->
                 <div
                   class="mb-5 flex flex-col items-start flex-wrap border shadow-md p-5 rounded-md h-auto"
                 >

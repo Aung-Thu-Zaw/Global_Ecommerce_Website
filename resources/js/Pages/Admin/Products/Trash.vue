@@ -8,7 +8,6 @@ import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
 import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
-import SearchForm from "@/Components/Form/SearchForm.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Products/Breadcrumb.vue";
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
@@ -17,12 +16,17 @@ import { inject, reactive, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
+// Data From Controller
 const props = defineProps({
   trashProducts: Object,
 });
 
 const swal = inject("$swal");
+const handleSearchBox = () => {
+  params.search = "";
+};
 
+// Handle Url Query Params
 const params = reactive({
   search: null,
   page: props.trashProducts.current_page ? props.trashProducts.current_page : 1,
@@ -31,10 +35,7 @@ const params = reactive({
   direction: "desc",
 });
 
-const handleSearchBox = () => {
-  params.search = "";
-};
-
+// Watch Search Form
 watch(
   () => params.search,
   (current, previous) => {
@@ -54,6 +55,7 @@ watch(
   }
 );
 
+// Watch Perpage Dropdown
 watch(
   () => params.per_page,
   (current, previous) => {
@@ -74,6 +76,7 @@ watch(
   }
 );
 
+// Handle Sorting With Column Arrow
 const updateSorting = (sort = "id") => {
   params.sort = sort;
   params.direction = params.direction === "asc" ? "desc" : "asc";
@@ -91,6 +94,7 @@ const updateSorting = (sort = "id") => {
   );
 };
 
+// Handle Product Restore
 const handleRestore = async (trashProductId) => {
   const result = await swal({
     icon: "info",
@@ -120,6 +124,7 @@ const handleRestore = async (trashProductId) => {
   }
 };
 
+// Handle Product Delete
 const handleDelete = async (trashProductId) => {
   const result = await swal({
     icon: "warning",
@@ -156,9 +161,8 @@ const handleDelete = async (trashProductId) => {
     <Head title="Trash products" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Breadcrumb  -->
-
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb  -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -183,6 +187,7 @@ const handleDelete = async (trashProductId) => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back Button -->
         <div>
           <Link
             :href="route('admin.products.index')"
@@ -194,8 +199,8 @@ const handleDelete = async (trashProductId) => {
         </div>
       </div>
 
-      <!-- Search Input Form -->
       <div class="flex items-center justify-end mb-5">
+        <!-- Search Form -->
         <form class="w-[350px] relative">
           <input
             type="text"
@@ -210,6 +215,7 @@ const handleDelete = async (trashProductId) => {
             @click="handleSearchBox"
           ></i>
         </form>
+        <!-- PerPage Dropdown -->
         <div class="ml-5">
           <select
             class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -226,7 +232,9 @@ const handleDelete = async (trashProductId) => {
         </div>
       </div>
 
+      <!-- Trash Product Table -->
       <TableContainer>
+        <!-- Table Header -->
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
@@ -408,6 +416,7 @@ const handleDelete = async (trashProductId) => {
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
+        <!-- Table Body  -->
         <tbody v-if="trashProducts.data.length">
           <Tr v-for="trashProduct in trashProducts.data" :key="trashProduct.id">
             <BodyTh>{{ trashProduct.id }}</BodyTh>

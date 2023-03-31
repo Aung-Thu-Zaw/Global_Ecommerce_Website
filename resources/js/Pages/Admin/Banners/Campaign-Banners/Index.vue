@@ -14,12 +14,17 @@ import { reactive, watch, inject } from "vue";
 import { router } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
+// Data From Controller
 const props = defineProps({
   campaignBanners: Object,
 });
 
 const swal = inject("$swal");
+const handleSearchBox = () => {
+  params.search = "";
+};
 
+// Handle Url Query Params
 const params = reactive({
   search: null,
   page: props.campaignBanners.current_page
@@ -32,10 +37,7 @@ const params = reactive({
   direction: "desc",
 });
 
-const handleSearchBox = () => {
-  params.search = "";
-};
-
+// Watch Search Input Form
 watch(
   () => params.search,
   (current, previous) => {
@@ -55,6 +57,7 @@ watch(
   }
 );
 
+// Watch Perpage Dropdown
 watch(
   () => params.per_page,
   (current, previous) => {
@@ -75,6 +78,7 @@ watch(
   }
 );
 
+// Handle Sorting With Column Arrow
 const updateSorting = (sort = "id") => {
   params.sort = sort;
   params.direction = params.direction === "asc" ? "desc" : "asc";
@@ -92,6 +96,7 @@ const updateSorting = (sort = "id") => {
   );
 };
 
+// Handle Delete Banner
 const handleDelete = async (campaignBannerId) => {
   const result = await swal({
     icon: "warning",
@@ -122,6 +127,7 @@ const handleDelete = async (campaignBannerId) => {
   }
 };
 
+// Success Alert
 if (usePage().props.flash.successMessage) {
   swal({
     icon: "success",
@@ -135,10 +141,10 @@ if (usePage().props.flash.successMessage) {
     <Head title="Campaign Banners" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Category Breadcrumb -->
+      <!-- Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
-            <li aria-current="page">
+          <li aria-current="page">
             <div class="flex items-center">
               <svg
                 aria-hidden="true"
@@ -174,6 +180,7 @@ if (usePage().props.flash.successMessage) {
         </div>
       </div>
 
+      <!-- Add Banner Button -->
       <div class="mb-5 flex items-center justify-between">
         <Link
           :href="route('admin.campaign-banners.create')"
@@ -183,10 +190,10 @@ if (usePage().props.flash.successMessage) {
           class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700"
         >
           <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
-          Add slider banner</Link
+          Add Slider Banner</Link
         >
-        <!-- Search Input Form -->
         <div class="flex items-center">
+          <!-- Search Form -->
           <form class="w-[350px] relative">
             <input
               type="text"
@@ -201,6 +208,8 @@ if (usePage().props.flash.successMessage) {
               @click="handleSearchBox"
             ></i>
           </form>
+
+          <!-- PrePage Dropdown  -->
           <div class="ml-5">
             <select
               class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -218,7 +227,9 @@ if (usePage().props.flash.successMessage) {
         </div>
       </div>
 
+      <!-- Banner Table Start -->
       <TableContainer>
+        <!-- Table Headers -->
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
@@ -299,6 +310,7 @@ if (usePage().props.flash.successMessage) {
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
+        <!-- Table Body -->
         <tbody v-if="campaignBanners.data.length">
           <Tr
             v-for="campaignBanner in campaignBanners.data"
@@ -338,6 +350,7 @@ if (usePage().props.flash.successMessage) {
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Banner Table End -->
 
       <!-- Not Avaliable Data -->
       <NotAvaliableData v-if="!campaignBanners.data.length" />

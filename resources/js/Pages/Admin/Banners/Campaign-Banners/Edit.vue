@@ -9,22 +9,26 @@ import FormButton from "@/Components/Form/FormButton.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Banners/Breadcrumb.vue";
 import { ref } from "vue";
 
+// Data From Controller
 const props = defineProps({
   paginate: Array,
   campaignBanner: Object,
 });
 
+// Preview Photo
 const previewPhoto = ref("");
 const getPreviewPhotoPath = (path) => {
   previewPhoto.value.src = URL.createObjectURL(path);
 };
 
+// Edit Banner Form Data
 const form = useForm({
   url: props.campaignBanner.url,
   image: props.campaignBanner.image,
   captcha_token: null,
 });
 
+// Handle Edit Form
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 const handleEditCampaignBanner = async () => {
   await recaptchaLoaded();
@@ -50,8 +54,7 @@ const submit = () => {
   <AdminDashboardLayout>
     <Head title="Edit Campaign Banner" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Breadcrumb start -->
-
+      <!-- Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
           <li aria-current="page">
@@ -114,6 +117,7 @@ const submit = () => {
       </div>
 
       <div class="border shadow-md p-10">
+        <!-- Preview Photo -->
         <div class="mb-6">
           <img
             ref="previewPhoto"
@@ -122,6 +126,8 @@ const submit = () => {
             class="w-[100px] h-[100px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300"
           />
         </div>
+
+        <!-- Edit Form -->
         <form @submit.prevent="handleEditCampaignBanner">
           <div class="mb-6">
             <InputLabel for="url" value="URL *" />

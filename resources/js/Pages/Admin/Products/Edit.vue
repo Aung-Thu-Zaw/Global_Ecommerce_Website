@@ -10,6 +10,7 @@ import Breadcrumb from "@/Components/Breadcrumbs/Products/Breadcrumb.vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { computed, ref } from "vue";
 
+// Datas From Controller
 const props = defineProps({
   paginate: Array,
   product: Object,
@@ -19,26 +20,18 @@ const props = defineProps({
   vendors: Object,
 });
 
-const editor = ClassicEditor;
+const sizes = computed(() => props.product.sizes.map((size) => size.name));
 
-const formatSize = computed(() => props.product.sizes.map((size) => size.name));
+const colors = computed(() => props.product.colors.map((color) => color.name));
 
-const formatColor = computed(() =>
-  props.product.colors.map((color) => color.name)
-);
-
-// const filterImages = computed(() =>
-//   props.product.images.map((image) => image.img_path)
-// );
-
+// Product Edit Form Data
 const form = useForm({
   name: props.product.name,
-  sizes: [...formatSize.value],
-  colors: [...formatColor.value],
+  sizes: [...sizes.value],
+  colors: [...colors.value],
   description: props.product.description,
   image: props.product.image,
   multi_image: [],
-  //   old_multi_image: filterImages.value,
   price: props.product.price,
   discount: props.product.discount,
   code: props.product.code,
@@ -54,8 +47,37 @@ const form = useForm({
   captcha_token: null,
 });
 
-const size = ref("");
+const editor = ClassicEditor;
 
+// Handle Single Preview Photo
+const previewPhoto = ref("");
+const getPreviewPhotoPath = (path) => {
+  previewPhoto.value.src = URL.createObjectURL(path);
+};
+
+// Handle Mulit Preview Photo
+const multiPreviewPhotos = ref([]);
+const getMultiPreviewPhotoPath = (paths) => {
+  paths.forEach((path) => {
+    multiPreviewPhotos.value.push(URL.createObjectURL(path));
+  });
+};
+
+const handleMultiplePhotoChange = (files) => {
+  const paths = Array.from(files);
+  getMultiPreviewPhotoPath(paths);
+};
+
+// Handle Multipreview Photo Remove
+const removeImage = (index) => {
+  multiPreviewPhotos.value.splice(index, 1);
+
+  form.multi_image = Array.from(form.multi_image);
+  form.multi_image.splice(index, 1);
+};
+
+// Handle Create and Remvoe Dynamic Size Tags
+const size = ref("");
 const createSize = (e) => {
   if (e.key === ",") {
     size.value = size.value.split(",").join("").toLowerCase();
@@ -70,8 +92,8 @@ const removeSize = (removeSize) => {
   });
 };
 
+// Handle Create and Remvoe Dynamic Color Tags
 const color = ref("");
-
 const createColor = (e) => {
   if (e.key === ",") {
     color.value = color.value.split(",").join("").toLowerCase();
@@ -87,6 +109,7 @@ const removeColor = (removeColor) => {
   });
 };
 
+// Filter SubCategory Come Form Controller
 const filterSubCategories = computed(() => {
   if (!form.category_id) {
     return props.subCategories;
@@ -97,30 +120,7 @@ const filterSubCategories = computed(() => {
   );
 });
 
-const previewPhoto = ref("");
-const getPreviewPhotoPath = (path) => {
-  previewPhoto.value.src = URL.createObjectURL(path);
-};
-
-const multiPreviewPhotos = ref([]);
-const getMultiPreviewPhotoPath = (paths) => {
-  paths.forEach((path) => {
-    multiPreviewPhotos.value.push(URL.createObjectURL(path));
-  });
-};
-
-const handleMultiplePhotoChange = (files) => {
-  const paths = Array.from(files);
-  getMultiPreviewPhotoPath(paths);
-};
-
-const removeImage = (index) => {
-  multiPreviewPhotos.value.splice(index, 1);
-
-  form.multi_image = Array.from(form.multi_image);
-  form.multi_image.splice(index, 1);
-};
-
+// Handle Edit Product
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 const handleEditCatrgory = async () => {
   await recaptchaLoaded();
@@ -146,9 +146,8 @@ const submit = () => {
   <AdminDashboardLayout>
     <Head title="Edit Product" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Breadcrumb start -->
-
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -173,6 +172,7 @@ const submit = () => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back Button -->
         <div>
           <Link
             :href="route('admin.products.index')"
@@ -190,9 +190,11 @@ const submit = () => {
 
       <div class="border shadow-md p-10">
         <div class="">
+          <!-- Edit Product Form -->
           <form @submit.prevent="handleEditCatrgory" class="">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
               <div class="py-6">
+                <!-- Product Name Field -->
                 <div class="mb-6">
                   <InputLabel for="name" value="Product Name *" />
 
@@ -208,6 +210,7 @@ const submit = () => {
                   <InputError class="mt-2" :message="form.errors.name" />
                 </div>
 
+                <!-- Product Size Field -->
                 <div class="mb-6">
                   <InputLabel for="size" value="Product Sizes" />
 
@@ -233,6 +236,8 @@ const submit = () => {
                     ></i>
                   </span>
                 </div>
+
+                <!-- Product Color Field -->
                 <div class="mb-6">
                   <InputLabel for="color" value="Product Colors *" />
 
@@ -259,6 +264,8 @@ const submit = () => {
                     ></i>
                   </span>
                 </div>
+
+                <!-- Product Description Field -->
                 <div class="mb-6">
                   <InputLabel for="description" value="Product Description *" />
 
@@ -270,6 +277,7 @@ const submit = () => {
                   <InputError class="mt-2" :message="form.errors.description" />
                 </div>
 
+                <!-- Product Status Field -->
                 <div class="mb-6">
                   <InputLabel for="status" value="Status *" />
 
@@ -285,6 +293,7 @@ const submit = () => {
                   <InputError class="mt-2" :message="form.errors.status" />
                 </div>
 
+                <!-- Product Single Image Field -->
                 <div class="mb-6">
                   <InputLabel for="image" value="Product Image ( Main ) *" />
 
@@ -303,6 +312,7 @@ const submit = () => {
                   <InputError class="mt-2" :message="form.errors.image" />
                 </div>
 
+                <!-- Product Multi Image Field -->
                 <div class="mb-6">
                   <InputLabel
                     for="image"
@@ -329,6 +339,7 @@ const submit = () => {
               <div class="flex flex-col-reverse lg:flex-col">
                 <div class="border shadow-md p-6 rounded-md mb-5 h-[630px]">
                   <div class="grid grid-cols-2 gap-3">
+                    <!-- Product Price Field -->
                     <div class="mb-6">
                       <InputLabel for="price" value="Product Price *" />
 
@@ -348,6 +359,7 @@ const submit = () => {
                       <InputError class="mt-2" :message="form.errors.price" />
                     </div>
 
+                    <!-- Product Discount Price Field -->
                     <div class="mb-6">
                       <InputLabel for="discount" value="Discount Price" />
 
@@ -370,6 +382,7 @@ const submit = () => {
                     </div>
                   </div>
                   <div class="grid grid-cols-2 gap-3">
+                    <!-- Product Code Field -->
                     <div class="mb-6">
                       <InputLabel for="code" value="Product Code *" />
 
@@ -384,6 +397,8 @@ const submit = () => {
 
                       <InputError class="mt-2" :message="form.errors.code" />
                     </div>
+
+                    <!-- Product Quantity Field -->
                     <div class="mb-6">
                       <InputLabel for="name" value="Product Quantity *" />
 
@@ -399,6 +414,8 @@ const submit = () => {
                       <InputError class="mt-2" :message="form.errors.qty" />
                     </div>
                   </div>
+
+                  <!-- Product Brand Field -->
                   <div class="mb-6">
                     <InputLabel for="name" value="Product Brand *" />
 
@@ -419,6 +436,7 @@ const submit = () => {
                     <InputError class="mt-2" :message="form.errors.brand_id" />
                   </div>
                   <div class="grid grid-cols-2 gap-3">
+                    <!-- Product Category Field -->
                     <div class="mb-6">
                       <InputLabel for="category" value="Category *" />
 
@@ -444,6 +462,8 @@ const submit = () => {
                         :message="form.errors.category_id"
                       />
                     </div>
+
+                    <!-- Product SubCategory Field -->
                     <div class="mb-6">
                       <InputLabel for="name" value="SubCategory *" />
 
@@ -470,6 +490,8 @@ const submit = () => {
                       />
                     </div>
                   </div>
+
+                  <!-- Product Vendor Field -->
                   <div class="mb-6">
                     <InputLabel for="name" value="Vendor *" />
 
@@ -491,6 +513,7 @@ const submit = () => {
                   </div>
 
                   <div class="grid grid-cols-3 gap-3">
+                    <!-- Product Hot Deal Checkbox Field -->
                     <div
                       class="flex items-center pl-4 border border-gray-200 rounded-md dark:border-gray-700 mb-6"
                     >
@@ -507,6 +530,8 @@ const submit = () => {
                         >Hot Deal</label
                       >
                     </div>
+
+                    <!-- Product Special Offer Checkbox Field -->
                     <div
                       class="flex items-center pl-4 border border-gray-200 rounded-md dark:border-gray-700 mb-6"
                     >
@@ -524,6 +549,7 @@ const submit = () => {
                         >Special Offer</label
                       >
                     </div>
+                    <!-- Product Featured Checkbox Field -->
                     <div
                       class="flex items-center pl-4 border border-gray-200 rounded-md dark:border-gray-700 mb-6"
                     >
@@ -544,6 +570,7 @@ const submit = () => {
                   </div>
                 </div>
 
+                <!-- Product Image Preview Field -->
                 <div
                   class="mb-5 flex flex-col items-start flex-wrap border shadow-md p-5 rounded-md h-auto"
                 >

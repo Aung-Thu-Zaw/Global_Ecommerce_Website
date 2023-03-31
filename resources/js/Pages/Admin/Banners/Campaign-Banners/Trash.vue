@@ -20,6 +20,11 @@ const props = defineProps({
 
 const swal = inject("$swal");
 
+const handleSearchBox = () => {
+  params.search = "";
+};
+
+// Handle Url Query Params
 const params = reactive({
   search: null,
   page: props.trashCampaignBanners.current_page
@@ -32,10 +37,7 @@ const params = reactive({
   direction: "desc",
 });
 
-const handleSearchBox = () => {
-  params.search = "";
-};
-
+// Watch Search Input Form
 watch(
   () => params.search,
   (current, previous) => {
@@ -55,6 +57,7 @@ watch(
   }
 );
 
+// Watch Perpage Dropdown
 watch(
   () => params.per_page,
   (current, previous) => {
@@ -75,6 +78,7 @@ watch(
   }
 );
 
+// Handle Sorting With Column Arrow
 const updateSorting = (sort = "id") => {
   params.sort = sort;
   params.direction = params.direction === "asc" ? "desc" : "asc";
@@ -92,6 +96,7 @@ const updateSorting = (sort = "id") => {
   );
 };
 
+// Handel Restore Banner
 const handleRestore = async (trashCampaignBannerId) => {
   const result = await swal({
     icon: "info",
@@ -121,6 +126,7 @@ const handleRestore = async (trashCampaignBannerId) => {
   }
 };
 
+// Handle Delete Banner
 const handleDelete = async (trashCampaignBannerId) => {
   const result = await swal({
     icon: "warning",
@@ -157,9 +163,8 @@ const handleDelete = async (trashCampaignBannerId) => {
     <Head title="Trash Campaign Banners" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Breadcrumb  -->
-
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb  -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -205,6 +210,7 @@ const handleDelete = async (trashCampaignBannerId) => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back Button  -->
         <div>
           <Link
             :href="route('admin.slider-banners.index')"
@@ -216,8 +222,8 @@ const handleDelete = async (trashCampaignBannerId) => {
         </div>
       </div>
 
-      <!-- Search Input Form -->
       <div class="flex items-center justify-end mb-5">
+        <!-- Search Form -->
         <form class="w-[350px] relative">
           <input
             type="text"
@@ -232,6 +238,8 @@ const handleDelete = async (trashCampaignBannerId) => {
             @click="handleSearchBox"
           ></i>
         </form>
+
+        <!-- Prepage Dropdwon -->
         <div class="ml-5">
           <select
             class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -248,7 +256,9 @@ const handleDelete = async (trashCampaignBannerId) => {
         </div>
       </div>
 
+      <!-- Banner Table Start -->
       <TableContainer>
+        <!-- Table Header -->
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
@@ -329,6 +339,7 @@ const handleDelete = async (trashCampaignBannerId) => {
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
+        <!-- Table Body -->
         <tbody v-if="trashCampaignBanners.data.length">
           <Tr
             v-for="trashCampaignBanner in trashCampaignBanners.data"
@@ -363,6 +374,7 @@ const handleDelete = async (trashCampaignBannerId) => {
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Banner Table End -->
 
       <!-- Not Avaliable Data -->
       <NotAvaliableData v-if="!trashCampaignBanners.data.length" />
