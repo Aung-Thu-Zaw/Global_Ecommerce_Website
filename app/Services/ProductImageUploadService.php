@@ -14,17 +14,21 @@ class ProductImageUploadService
             "image"=>["required","image","mimes:png,jpg,jpeg,svg,webp,gif"]
         ]);
 
+        $file=$request->file("image");
 
-        $extension=$request->file("image")->extension();
+        /** @var \Illuminate\Http\UploadedFile $file */
+
+
+        $extension=$file->extension();
 
         $finalName= Str::slug($request->name, '-')."."."$extension";
 
-        $request->file("image")->move(storage_path("app/public/products/"), $finalName);
+        $file->move(storage_path("app/public/products/"), $finalName);
 
         return $finalName;
     }
 
-    public function updateImage(Request $request, object $product): string
+    public function updateImage(Request $request, Product $product): string
     {
         if ($request->hasFile("image")) {
             $request->validate([
@@ -33,10 +37,14 @@ class ProductImageUploadService
 
             Product::deleteImage($product);
 
-            $extension=$request->file("image")->extension();
+            $file=$request->file("image");
+
+            /** @var \Illuminate\Http\UploadedFile $file */
+
+            $extension=$file->extension();
             $finalName= Str::slug($request->name, '-')."."."$extension";
 
-            $request->file("image")->move(storage_path("app/public/products/"), $finalName);
+            $file->move(storage_path("app/public/products/"), $finalName);
 
             return $finalName;
         } else {

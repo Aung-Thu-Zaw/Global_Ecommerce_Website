@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Image;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class AdminMultiImageController extends Controller
 {
-    public function destroy($productId, $imageId)
+    public function destroy(int $productId, int $imageId): RedirectResponse
     {
         $image=Image::where([["product_id",$productId],["id",$imageId]])->first();
 

@@ -22,8 +22,6 @@ class Product extends Model
     use CascadeSoftDeletes;
     use HasSlug;
 
-
-
     /**
     * @var string[]
     */
@@ -84,7 +82,9 @@ class Product extends Model
         );
     }
 
-
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Product, never>
+    */
     protected function hotDeal(): Attribute
     {
         return Attribute::make(
@@ -92,6 +92,9 @@ class Product extends Model
         );
     }
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Product, never>
+    */
     protected function specialOffer(): Attribute
     {
         return Attribute::make(
@@ -99,6 +102,10 @@ class Product extends Model
         );
     }
 
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Product, never>
+    */
     protected function featured(): Attribute
     {
         return Attribute::make(
@@ -106,27 +113,44 @@ class Product extends Model
         );
     }
 
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<SubCategory,Product>
+    */
     public function subCategories(): BelongsTo
     {
         return $this->belongsTo(SubCategory::class);
     }
 
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\HasMany<Image>
+    */
     public function images(): HasMany
     {
         return $this->hasMany(Image::class);
     }
 
-    public function colors()
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Color>
+    */
+    public function colors(): BelongsToMany
     {
         return $this->belongsToMany(Color::class, 'product_color');
     }
 
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Size>
+    */
     public function sizes(): BelongsToMany
     {
         return $this->belongsToMany(Size::class);
     }
 
-    public static function deleteImage(object $product): void
+
+    public static function deleteImage(Product $product): void
     {
         if (!empty($product->image) && file_exists(storage_path("app/public/products/".pathinfo($product->image, PATHINFO_BASENAME)))) {
             unlink(storage_path("app/public/products/".pathinfo($product->image, PATHINFO_BASENAME)));

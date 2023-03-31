@@ -25,7 +25,7 @@ class SliderBanner extends Model
         ];
     }
 
-        /**
+    /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<SliderBanner, never>
     */
     protected function createdAt(): Attribute
@@ -35,7 +35,7 @@ class SliderBanner extends Model
         );
     }
 
-        /**
+    /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<SliderBanner, never>
     */
     protected function image(): Attribute
@@ -45,7 +45,7 @@ class SliderBanner extends Model
         );
     }
 
-    public static function deleteImage(object $sliderBanner): void
+    public static function deleteImage(SliderBanner $sliderBanner): void
     {
         if (!empty($sliderBanner->image) && file_exists(storage_path("app/public/slider-banners/".pathinfo($sliderBanner->image, PATHINFO_BASENAME)))) {
             unlink(storage_path("app/public/slider-banners/".pathinfo($sliderBanner->image, PATHINFO_BASENAME)));

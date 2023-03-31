@@ -7,25 +7,29 @@ use App\Http\Requests\SubCategoryRequest;
 use App\Models\Category;
 use App\Models\SubCategory;
 use App\Services\SubCategoryImageUploadService;
+use Illuminate\Database\Eloquent\Builder;
 use Inertia\Response;
+use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class AdminSubCategoryController extends Controller
 {
-    public function index(): Response
+    public function index(): Response|ResponseFactory
     {
         $subCategories=SubCategory::search(request("search"))
+                                  ->query(function (Builder $builder) {
+                                      $builder->with("category:id,name");
+                                  })
                                   ->orderBy(request("sort", "id"), request("direction", "desc"))
                                   ->paginate(request("per_page", 10))
-                                   ->appends(request()->all());
+                                  ->appends(request()->all());
 
-        $subCategories->load("category:id,name");
 
         return inertia("Admin/Categories/SubCategory/Index", compact("subCategories"));
     }
 
-    public function create(): Response
+    public function create(): Response|ResponseFactory
     {
         $categories=Category::select("id", "name")->get();
 
@@ -41,7 +45,7 @@ class AdminSubCategoryController extends Controller
         return to_route("admin.subcategories.index", "per_page=$request->per_page")->with("success", "SubCategory is created successfully.");
     }
 
-    public function edit(SubCategory $subCategory): Response
+    public function edit(SubCategory $subCategory): Response|ResponseFactory
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
@@ -54,9 +58,7 @@ class AdminSubCategoryController extends Controller
 
     public function update(SubCategoryRequest $request, SubCategory $subCategory, SubCategoryImageUploadService $subCategoryImageUploadService): RedirectResponse
     {
-        $image=$subCategoryImageUploadService->updateImage($request, $subCategory);
-
-        $subCategory->update($request->validated()+["image"=>$image]);
+        $subCategory->update($request->validated()+["image"=>$subCategoryImageUploadService->updateImage($request, $subCategory)]);
 
         return to_route("admin.subcategories.index", "page=$request->page&per_page=$request->per_page")->with("success", "SubCategory is updated successfully.");
     }
@@ -68,15 +70,17 @@ class AdminSubCategoryController extends Controller
         return to_route("admin.subcategories.index", "page=$request->page&per_page=$request->per_page")->with("success", "SubCategory is deleted successfully.");
     }
 
-    public function trash(): Response
+    public function trash(): Response|ResponseFactory
     {
         $trashSubCategories=SubCategory::search(request("search"))
+                                       ->query(function (Builder $builder) {
+                                           $builder->with("category:id,name");
+                                       })
                                        ->onlyTrashed()
                                        ->orderBy(request("sort", "id"), request("direction", "desc"))
                                        ->paginate(request("per_page", 10))
                                        ->appends(request()->all());
 
-        $trashSubCategories->load("category:id,name");
 
         return inertia("Admin/Categories/SubCategory/Trash", compact("trashSubCategories"));
     }

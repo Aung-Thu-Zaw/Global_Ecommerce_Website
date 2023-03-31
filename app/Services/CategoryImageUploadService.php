@@ -16,10 +16,14 @@ class CategoryImageUploadService
             ]);
 
 
-            $extension=$request->file("image")->extension();
+            $file=$request->file("image");
+
+            /** @var \Illuminate\Http\UploadedFile $file */
+
+            $extension=$file->extension();
             $finalName= Str::slug($request->name, '-')."."."$extension";
 
-            $request->file("image")->move(storage_path("app/public/categories/"), $finalName);
+            $file->move(storage_path("app/public/categories/"), $finalName);
 
             return $finalName;
         } else {
@@ -27,7 +31,7 @@ class CategoryImageUploadService
         }
     }
 
-    public function updateImage(Request $request, object $category): string
+    public function updateImage(Request $request, Category $category): string
     {
         if ($request->hasFile("image")) {
             $request->validate([
@@ -36,10 +40,14 @@ class CategoryImageUploadService
 
             Category::deleteImage($category);
 
-            $extension=$request->file("image")->extension();
+            $file=$request->file("image");
+
+            /** @var \Illuminate\Http\UploadedFile $file */
+
+            $extension=$file->extension();
             $finalName= Str::slug($request->name, '-')."."."$extension";
 
-            $request->file("image")->move(storage_path("app/public/categories/"), $finalName);
+            $file->move(storage_path("app/public/categories/"), $finalName);
 
             return $finalName;
         } else {

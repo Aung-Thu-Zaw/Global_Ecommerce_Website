@@ -5,25 +5,14 @@ namespace App\Http\Controllers\Admin\Managements;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Inertia\Response;
+use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class AdminActiveVendorController extends Controller
 {
-    public function index(): Response
+    public function index(): Response|ResponseFactory
     {
-        $orderColumn=request("sort", "id");
-
-        if (!in_array($orderColumn, ["id","name","created_at"])) {
-            $orderColumn="id";
-        }
-
-        $orderDirection=request("direction", "desc");
-
-        if (!in_array($orderDirection, ["asc","desc"])) {
-            $orderDirection="desc";
-        }
-
         $activeVendors=User::search(request("search"))
                             ->where("role", "vendor")
                             ->where("status", "active")
@@ -34,7 +23,7 @@ class AdminActiveVendorController extends Controller
         return inertia("Admin/Managements/Vendors/ActiveVendors/Index", compact("activeVendors"));
     }
 
-    public function show(int $id): Response
+    public function show(int $id): Response|ResponseFactory
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 

@@ -8,6 +8,9 @@ use Illuminate\Auth\Events\Registered;
 
 class CreateUserAction
 {
+    /**
+    * @param array<string> $userData
+    */
     public function execute(array $userData): User
     {
         unset($userData["captcha_token"]);

@@ -11,15 +11,22 @@ class Color extends Model
 {
     use HasFactory;
 
-    public function products(): BelongsToMany
-    {
-        return $this->belongsToMany(Product::class, "product_color");
-    }
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Color, never>
+    */
     protected function name(): Attribute
     {
         return Attribute::make(
             set: fn ($value) => strtolower($value),
         );
+    }
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Product>
+    */
+    public function products(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, "product_color");
     }
 }

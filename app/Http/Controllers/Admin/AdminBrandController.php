@@ -7,23 +7,24 @@ use App\Http\Requests\BrandRequest;
 use App\Models\Brand;
 use App\Services\BrandImageUploadService;
 use Inertia\Response;
+use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class AdminBrandController extends Controller
 {
-    public function index(): Response
+    public function index(): Response|ResponseFactory
     {
         $brands=Brand::search(request("search"))
-                            ->orderBy(request("sort", "id"), request("direction", "desc"))
-                            ->paginate(request("per_page", 10))
-                            ->appends(request()->all());
+                      ->orderBy(request("sort", "id"), request("direction", "desc"))
+                      ->paginate(request("per_page", 10))
+                      ->appends(request()->all());
 
 
         return inertia("Admin/Brands/Index", compact("brands"));
     }
 
-    public function create(): Response
+    public function create(): Response|ResponseFactory
     {
         $per_page=request("per_page");
 
@@ -37,7 +38,7 @@ class AdminBrandController extends Controller
         return to_route("admin.brands.index", "per_page=$request->per_page")->with("success", "Brand is created successfully.");
     }
 
-    public function edit(Brand $brand): Response
+    public function edit(Brand $brand): Response|ResponseFactory
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
@@ -46,9 +47,7 @@ class AdminBrandController extends Controller
 
     public function update(BrandRequest $request, Brand $brand, BrandImageUploadService $brandImageUploadService): RedirectResponse
     {
-        $image=$brandImageUploadService->updateImage($request, $brand);
-
-        $brand->update($request->validated()+["image"=>$image]);
+        $brand->update($request->validated()+["image"=>$brandImageUploadService->updateImage($request, $brand)]);
 
         return to_route("admin.brands.index", "page=$request->page&per_page=$request->per_page")->with("success", "Brand is updated successfully.");
     }
@@ -60,7 +59,7 @@ class AdminBrandController extends Controller
         return to_route("admin.brands.index", "page=$request->page&per_page=$request->per_page")->with("success", "Brand is deleted successfully.");
     }
 
-    public function trash(): Response
+    public function trash(): Response|ResponseFactory
     {
         $trashBrands=Brand::search(request("search"))
                                 ->onlyTrashed()

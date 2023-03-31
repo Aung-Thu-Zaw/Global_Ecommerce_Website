@@ -8,22 +8,23 @@ use App\Models\SliderBanner;
 use App\Services\SliderBannerImageUploadService;
 use Illuminate\Http\Request;
 use Inertia\Response;
+use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 
 class AdminSliderBannerController extends Controller
 {
-    public function index()
+    public function index(): Response|ResponseFactory
     {
         $sliderBanners=SliderBanner::search(request("search"))
-                 ->orderBy(request("sort", "id"), request("direction", "desc"))
-                 ->paginate(request("per_page", 10))
-                 ->appends(request()->all());
+                                     ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                     ->paginate(request("per_page", 10))
+                                     ->appends(request()->all());
 
 
         return inertia("Admin/Banners/Slider-Banners/Index", compact("sliderBanners"));
     }
 
-    public function create(): Response
+    public function create(): Response|ResponseFactory
     {
         $per_page=request("per_page");
 
@@ -37,7 +38,7 @@ class AdminSliderBannerController extends Controller
         return to_route("admin.slider-banners.index", "per_page=$request->per_page")->with("success", "Slider Banner is created successfully.");
     }
 
-    public function edit(SliderBanner $sliderBanner): Response
+    public function edit(SliderBanner $sliderBanner): Response|ResponseFactory
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
@@ -46,9 +47,7 @@ class AdminSliderBannerController extends Controller
 
     public function update(SliderBannerRequest $request, SliderBanner $sliderBanner, SliderBannerImageUploadService $sliderBannerImageUploadService): RedirectResponse
     {
-        $image=$sliderBannerImageUploadService->updateImage($request, $sliderBanner);
-
-        $sliderBanner->update($request->validated()+["image"=>$image]);
+        $sliderBanner->update($request->validated()+["image"=>$sliderBannerImageUploadService->updateImage($request, $sliderBanner)]);
 
         return to_route("admin.slider-banners.index", "page=$request->page&per_page=$request->per_page")->with("success", "Slider Banner is updated successfully.");
     }
@@ -60,13 +59,13 @@ class AdminSliderBannerController extends Controller
         return to_route("admin.slider-banners.index", "page=$request->page&per_page=$request->per_page")->with("success", "Slider Banner is deleted successfully.");
     }
 
-    public function trash(): Response
+    public function trash(): Response|ResponseFactory
     {
         $trashSliderBanners=SliderBanner::search(request("search"))
-                                ->onlyTrashed()
-                                ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                ->paginate(request("per_page", 10))
-                                ->appends(request()->all());
+                                          ->onlyTrashed()
+                                          ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                          ->paginate(request("per_page", 10))
+                                          ->appends(request()->all());
 
         return inertia("Admin/Banners/Slider-Banners/Trash", compact("trashSliderBanners"));
     }

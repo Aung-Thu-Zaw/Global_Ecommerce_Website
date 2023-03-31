@@ -15,22 +15,23 @@ use App\Models\User;
 use App\Services\ProductImageUploadService;
 use App\Services\ProductMultiImageUploadService;
 use Inertia\Response;
+use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class AdminProductController extends Controller
 {
-    public function index(): Response
+    public function index(): Response|ResponseFactory
     {
         $products=Product::search(request("search"))
-        ->orderBy(request("sort", "id"), request("direction", "desc"))
-        ->paginate(request("per_page", 10))
-        ->appends(request()->all());
+                           ->orderBy(request("sort", "id"), request("direction", "desc"))
+                           ->paginate(request("per_page", 10))
+                           ->appends(request()->all());
 
         return inertia("Admin/Products/Index", compact("products"));
     }
 
-    public function create(): Response
+    public function create(): Response|ResponseFactory
     {
         $per_page=request("per_page");
 
@@ -58,12 +59,12 @@ class AdminProductController extends Controller
         return to_route("admin.products.index", "per_page=$request->per_page")->with("success", "Product is created successfully.");
     }
 
-    public function show(Product $product)
+    public function show(Product $product): Response|ResponseFactory
     {
         return inertia("Admin/Products/Details", compact("product"));
     }
 
-    public function edit(Product $product): Response
+    public function edit(Product $product): Response|ResponseFactory
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
@@ -100,7 +101,7 @@ class AdminProductController extends Controller
         return to_route("admin.products.index", "page=$request->page&per_page=$request->per_page")->with("success", "Product is deleted successfully.");
     }
 
-    public function trash(): Response
+    public function trash(): Response|ResponseFactory
     {
         $trashProducts=Product::search(request("search"))
                                 ->onlyTrashed()
@@ -125,9 +126,11 @@ class AdminProductController extends Controller
     {
         $product = Product::onlyTrashed()->where("id", $id)->first();
 
-        $mulitImages=Image::where("product_id", $product->id)->get();
+        $multiImages=Image::where("product_id", $product->id)->get();
 
-        Image::deleteMultiImage($mulitImages);
+        $multiImages->each(function ($image) {
+            Image::deleteImage($image);
+        });
 
         Product::deleteImage($product);
 

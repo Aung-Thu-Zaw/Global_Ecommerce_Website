@@ -14,18 +14,22 @@ class ProductBannerImageUploadService
             "image"=>["required","image","mimes:png,jpg,jpeg,svg,webp,gif"]
         ]);
 
-        $originalName=$request->file("image")->getClientOriginalName();
+        $file=$request->file("image");
+
+        /** @var \Illuminate\Http\UploadedFile $file */
+
+        $originalName=$file->getClientOriginalName();
 
 
-        $extension=$request->file("image")->extension();
+        $extension=$file->extension();
         $finalName= Str::slug(pathinfo($originalName, PATHINFO_FILENAME), '-')."."."$extension";
 
-        $request->file("image")->move(storage_path("app/public/product-banners/"), $finalName);
+        $file->move(storage_path("app/public/product-banners/"), $finalName);
 
         return $finalName;
     }
 
-    public function updateImage(Request $request, object $productBanner): string
+    public function updateImage(Request $request, ProductBanner $productBanner): string
     {
         if ($request->hasFile("image")) {
             $request->validate([
@@ -34,11 +38,15 @@ class ProductBannerImageUploadService
 
             ProductBanner::deleteImage($productBanner);
 
-            $originalName=$request->file("image")->getClientOriginalName();
-            $extension=$request->file("image")->extension();
+            $file=$request->file("image");
+
+            /** @var \Illuminate\Http\UploadedFile $file */
+
+            $originalName=$file->getClientOriginalName();
+            $extension=$file->extension();
             $finalName= Str::slug(pathinfo($originalName, PATHINFO_FILENAME), '-')."."."$extension";
 
-            $request->file("image")->move(storage_path("app/public/product-banners/"), $finalName);
+            $file->move(storage_path("app/public/product-banners/"), $finalName);
 
             return $finalName;
         } else {

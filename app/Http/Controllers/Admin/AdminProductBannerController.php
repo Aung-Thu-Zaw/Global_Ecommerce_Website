@@ -9,21 +9,22 @@ use App\Services\ProductBannerImageUploadService;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
+use Inertia\ResponseFactory;
 
 class AdminProductBannerController extends Controller
 {
-    public function index()
+    public function index(): Response|ResponseFactory
     {
         $productBanners=ProductBanner::search(request("search"))
-                 ->orderBy(request("sort", "id"), request("direction", "desc"))
-                 ->paginate(request("per_page", 10))
-                 ->appends(request()->all());
+                                       ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                       ->paginate(request("per_page", 10))
+                                       ->appends(request()->all());
 
 
         return inertia("Admin/Banners/Product-Banners/Index", compact("productBanners"));
     }
 
-    public function create(): Response
+    public function create(): Response|ResponseFactory
     {
         $per_page=request("per_page");
 
@@ -37,7 +38,7 @@ class AdminProductBannerController extends Controller
         return to_route("admin.product-banners.index", "per_page=$request->per_page")->with("success", "Product Banner is created successfully.");
     }
 
-    public function edit(ProductBanner $productBanner): Response
+    public function edit(ProductBanner $productBanner): Response|ResponseFactory
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
@@ -46,9 +47,7 @@ class AdminProductBannerController extends Controller
 
     public function update(ProductBannerRequest $request, ProductBanner $productBanner, ProductBannerImageUploadService $productBannerImageUploadService): RedirectResponse
     {
-        $image=$productBannerImageUploadService->updateImage($request, $productBanner);
-
-        $productBanner->update($request->validated()+["image"=>$image]);
+        $productBanner->update($request->validated()+["image"=>$productBannerImageUploadService->updateImage($request, $productBanner)]);
 
         return to_route("admin.product-banners.index", "page=$request->page&per_page=$request->per_page")->with("success", "Product Banner is updated successfully.");
     }
@@ -60,13 +59,13 @@ class AdminProductBannerController extends Controller
         return to_route("admin.product-banners.index", "page=$request->page&per_page=$request->per_page")->with("success", "Product Banner is deleted successfully.");
     }
 
-    public function trash(): Response
+    public function trash(): Response|ResponseFactory
     {
         $trashProductBanners=ProductBanner::search(request("search"))
-                                ->onlyTrashed()
-                                ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                ->paginate(request("per_page", 10))
-                                ->appends(request()->all());
+                                            ->onlyTrashed()
+                                            ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                            ->paginate(request("per_page", 10))
+                                            ->appends(request()->all());
 
         return inertia("Admin/Banners/Product-Banners/Trash", compact("trashProductBanners"));
     }

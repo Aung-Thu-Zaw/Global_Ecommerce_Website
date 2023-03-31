@@ -44,6 +44,8 @@ class UserAvatarService
         }
     }
 
+
+
     public function uploadAvatar(Request $request): void
     {
         if ($request->hasFile("avatar")) {
@@ -53,11 +55,15 @@ class UserAvatarService
 
             User::deleteUserAvatar($user);
 
-            $extension=$request->file("avatar")->extension();
+            $file=$request->file("image");
+
+            /** @var \Illuminate\Http\UploadedFile $file */
+
+            $extension=$file->extension();
 
             $finalName="avatar-$user->id.$extension";
 
-            $request->file("avatar")->move(storage_path("app/public/avatars/"), $finalName);
+            $file->move(storage_path("app/public/avatars/"), $finalName);
 
             $request->user()->avatar=$finalName;
         }

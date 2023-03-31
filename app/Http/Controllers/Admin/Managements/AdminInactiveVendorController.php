@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Admin\Managements;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Inertia\Response;
+use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class AdminInactiveVendorController extends Controller
 {
-    public function index(): Response
+    public function index(): Response|ResponseFactory
     {
         $inactiveVendors=User::search(request("search"))
                               ->where("role", "vendor")
@@ -22,7 +23,7 @@ class AdminInactiveVendorController extends Controller
         return inertia("Admin/Managements/Vendors/InactiveVendors/Index", compact("inactiveVendors"));
     }
 
-    public function show(int $id): Response
+    public function show(int $id): Response|ResponseFactory
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
@@ -49,7 +50,7 @@ class AdminInactiveVendorController extends Controller
         return to_route('admin.vendors.inactive.index', "page=$request->page&per_page=$request->per_page")->with("success", "The vendor has been successfully moved to the trash.");
     }
 
-    public function trash(): Response
+    public function trash(): Response|ResponseFactory
     {
         $inactiveTrashVendors=User::search(request("search"))
                                    ->onlyTrashed()

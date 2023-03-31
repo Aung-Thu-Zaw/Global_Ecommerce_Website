@@ -7,12 +7,13 @@ use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use App\Services\CategoryImageUploadService;
 use Inertia\Response;
+use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class AdminCategoryController extends Controller
 {
-    public function index(): Response
+    public function index(): Response|ResponseFactory
     {
         $categories=Category::search(request("search"))
                             ->orderBy(request("sort", "id"), request("direction", "desc"))
@@ -23,7 +24,7 @@ class AdminCategoryController extends Controller
         return inertia("Admin/Categories/Category/Index", compact("categories"));
     }
 
-    public function create(): Response
+    public function create(): Response|ResponseFactory
     {
         $per_page=request("per_page");
 
@@ -37,7 +38,7 @@ class AdminCategoryController extends Controller
         return to_route("admin.categories.index", "per_page=$request->per_page")->with("success", "Category is created successfully.");
     }
 
-    public function edit(Category $category): Response
+    public function edit(Category $category): Response|ResponseFactory
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
@@ -46,9 +47,7 @@ class AdminCategoryController extends Controller
 
     public function update(CategoryRequest $request, Category $category, CategoryImageUploadService $categoryImageUploadService): RedirectResponse
     {
-        $image=$categoryImageUploadService->updateImage($request, $category);
-
-        $category->update($request->validated()+["image"=>$image]);
+        $category->update($request->validated()+["image"=>$categoryImageUploadService->updateImage($request, $category)]);
 
         return to_route("admin.categories.index", "page=$request->page&per_page=$request->per_page")->with("success", "Category is updated successfully.");
     }
@@ -60,7 +59,7 @@ class AdminCategoryController extends Controller
         return to_route("admin.categories.index", "page=$request->page&per_page=$request->per_page")->with("success", "Category is deleted successfully.");
     }
 
-    public function trash(): Response
+    public function trash(): Response|ResponseFactory
     {
         $trashCategories=Category::search(request("search"))
                                 ->onlyTrashed()

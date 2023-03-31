@@ -21,7 +21,9 @@ class SubCategory extends Model
     use HasSlug;
     use CascadeSoftDeletes;
 
-
+    /**
+    * @var string[]
+    */
     protected array $cascadeDeletes = ['products'];
     protected $guarded=[];
 
@@ -49,11 +51,9 @@ class SubCategory extends Model
         ];
     }
 
-
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<SubCategory, never>
     */
-
     protected function image(): Attribute
     {
         return Attribute::make(
@@ -82,13 +82,18 @@ class SubCategory extends Model
     }
 
 
-
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Category,SubCategory>
+    */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\HasMany<Product>
+    */
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
@@ -96,7 +101,7 @@ class SubCategory extends Model
 
 
 
-    public static function deleteImage(object $subCategory): void
+    public static function deleteImage(SubCategory $subCategory): void
     {
         if (!empty($subCategory->image) && file_exists(storage_path("app/public/subCategories/".pathinfo($subCategory->image, PATHINFO_BASENAME)))) {
             unlink(storage_path("app/public/subCategories/".pathinfo($subCategory->image, PATHINFO_BASENAME)));

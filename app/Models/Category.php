@@ -27,12 +27,14 @@ class Category extends Model
     protected array $cascadeDeletes = ['subCategories'];
     protected $guarded=[];
 
+
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('name')
             ->saveSlugsTo('slug');
     }
+
 
     public function getRouteKeyName()
     {
@@ -50,6 +52,7 @@ class Category extends Model
             'status' => $this->status,
         ];
     }
+
 
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Category, never>
@@ -71,6 +74,7 @@ class Category extends Model
     }
 
 
+
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Category, never>
     */
@@ -81,14 +85,16 @@ class Category extends Model
         );
     }
 
-
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\HasMany<SubCategory>
+    */
     public function subCategories(): HasMany
     {
         return $this->hasMany(SubCategory::class);
     }
 
 
-    public static function deleteImage(object $category): void
+    public static function deleteImage(Category $category): void
     {
         if (!empty($category->image) && file_exists(storage_path("app/public/categories/".pathinfo($category->image, PATHINFO_BASENAME)))) {
             unlink(storage_path("app/public/categories/".pathinfo($category->image, PATHINFO_BASENAME)));

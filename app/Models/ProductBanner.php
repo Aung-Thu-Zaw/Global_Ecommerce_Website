@@ -26,7 +26,7 @@ class ProductBanner extends Model
         ];
     }
 
-        /**
+    /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductBanner, never>
     */
     protected function createdAt(): Attribute
@@ -36,7 +36,7 @@ class ProductBanner extends Model
         );
     }
 
-        /**
+    /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductBanner, never>
     */
     protected function image(): Attribute
@@ -46,7 +46,7 @@ class ProductBanner extends Model
         );
     }
 
-    public static function deleteImage(object $productBanner): void
+    public static function deleteImage(ProductBanner $productBanner): void
     {
         if (!empty($productBanner->image) && file_exists(storage_path("app/public/product-banners/".pathinfo($productBanner->image, PATHINFO_BASENAME)))) {
             unlink(storage_path("app/public/product-banners/".pathinfo($productBanner->image, PATHINFO_BASENAME)));

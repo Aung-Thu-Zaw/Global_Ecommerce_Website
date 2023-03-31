@@ -15,15 +15,20 @@ class BrandImageUploadService
         ]);
 
 
-        $extension=$request->file("image")->extension();
+        $file=$request->file("image");
+
+        /** @var \Illuminate\Http\UploadedFile $file */
+
+        $extension=$file->extension();
+
         $finalName= Str::slug($request->name, '-')."."."$extension";
 
-        $request->file("image")->move(storage_path("app/public/brands/"), $finalName);
+        $file->move(storage_path("app/public/brands/"), $finalName);
 
         return $finalName;
     }
 
-    public function updateImage(Request $request, object $brand): string
+    public function updateImage(Request $request, Brand $brand): string
     {
         if ($request->hasFile("image")) {
             $request->validate([
@@ -32,10 +37,14 @@ class BrandImageUploadService
 
             Brand::deleteImage($brand);
 
-            $extension=$request->file("image")->extension();
+            $file=$request->file("image");
+
+            /** @var \Illuminate\Http\UploadedFile $file */
+
+            $extension=$file->extension();
             $finalName= Str::slug($request->name, '-')."."."$extension";
 
-            $request->file("image")->move(storage_path("app/public/brands/"), $finalName);
+            $file->move(storage_path("app/public/brands/"), $finalName);
 
             return $finalName;
         } else {

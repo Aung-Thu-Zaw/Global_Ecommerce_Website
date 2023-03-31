@@ -66,7 +66,7 @@ class Brand extends Model
     }
 
 
-    public static function deleteImage(object $brand): void
+    public static function deleteImage(Brand $brand): void
     {
         if (!empty($brand->image) && file_exists(storage_path("app/public/brands/".pathinfo($brand->image, PATHINFO_BASENAME)))) {
             unlink(storage_path("app/public/brands/".pathinfo($brand->image, PATHINFO_BASENAME)));

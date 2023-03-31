@@ -15,6 +15,8 @@ class CampaignBanner extends Model
     use Searchable;
 
     protected $guarded=[];
+
+
     /**
     *     @return array<string>
     */
@@ -25,7 +27,8 @@ class CampaignBanner extends Model
         ];
     }
 
-        /**
+
+    /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<CampaignBanner, never>
     */
     protected function createdAt(): Attribute
@@ -35,7 +38,8 @@ class CampaignBanner extends Model
         );
     }
 
-        /**
+
+    /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<CampaignBanner, never>
     */
     protected function image(): Attribute
@@ -45,7 +49,8 @@ class CampaignBanner extends Model
         );
     }
 
-    public static function deleteImage(object $campaignBanner): void
+
+    public static function deleteImage(CampaignBanner $campaignBanner): void
     {
         if (!empty($campaignBanner->image) && file_exists(storage_path("app/public/campaign-banners/".pathinfo($campaignBanner->image, PATHINFO_BASENAME)))) {
             unlink(storage_path("app/public/campaign-banners/".pathinfo($campaignBanner->image, PATHINFO_BASENAME)));

@@ -15,11 +15,14 @@ class SubCategoryImageUploadService
                 "image"=>["required","image","mimes:png,jpg,jpeg,svg,webp,gif"]
             ]);
 
+            $file=$request->file("image");
 
-            $extension=$request->file("image")->extension();
+            /** @var \Illuminate\Http\UploadedFile $file */
+
+            $extension=$file->extension();
             $finalName= Str::slug($request->name, '-')."."."$extension";
 
-            $request->file("image")->move(storage_path("app/public/subCategories/"), $finalName);
+            $file->move(storage_path("app/public/subCategories/"), $finalName);
 
             return $finalName;
         } else {
@@ -27,7 +30,7 @@ class SubCategoryImageUploadService
         }
     }
 
-    public function updateImage(Request $request, object $subCategory): string
+    public function updateImage(Request $request, SubCategory $subCategory): string
     {
         if ($request->hasFile("image")) {
             $request->validate([
@@ -36,10 +39,14 @@ class SubCategoryImageUploadService
 
             SubCategory::deleteImage($subCategory);
 
-            $extension=$request->file("image")->extension();
+            $file=$request->file("image");
+
+            /** @var \Illuminate\Http\UploadedFile $file */
+
+            $extension=$file->extension();
             $finalName= Str::slug($request->name, '-')."."."$extension";
 
-            $request->file("image")->move(storage_path("app/public/subCategories/"), $finalName);
+            $file->move(storage_path("app/public/subCategories/"), $finalName);
 
             return $finalName;
         } else {

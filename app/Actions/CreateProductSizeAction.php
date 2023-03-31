@@ -2,17 +2,16 @@
 
 namespace App\Actions;
 
+use App\Models\Product;
 use App\Models\Size;
 use Illuminate\Http\Request;
 
 class CreateProductSizeAction
 {
-    public function handle(Request $request, $product)
+    public function handle(Request $request, Product $product): void
     {
         if ($request->input("sizes")) {
-            if ($product->sizes()) {
-                $product->sizes()->detach();
-            }
+            $product->sizes()->detach();
             foreach ($request->sizes as $size) {
                 $countExisitngSizes=Size::where("name", $size)->count();
 

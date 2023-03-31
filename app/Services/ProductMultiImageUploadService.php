@@ -3,12 +3,13 @@
 namespace App\Services;
 
 use App\Models\Image;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class ProductMultiImageUploadService
 {
-    public function createMultiImage(Request $request, $product)
+    public function createMultiImage(Request $request, Product $product): void
     {
         if ($request->multi_image) {
             $request->validate([
@@ -31,6 +32,4 @@ class ProductMultiImageUploadService
             }
         }
     }
-
-
 }
