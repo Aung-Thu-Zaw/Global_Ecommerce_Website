@@ -23,6 +23,7 @@ class ProductBanner extends Model
         return [
             'title' => $this->title,
             'url' => $this->url,
+            'status' => $this->status,
         ];
     }
 

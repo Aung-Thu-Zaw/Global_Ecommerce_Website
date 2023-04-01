@@ -1,4 +1,6 @@
 <script setup>
+import ActiveStatus from "@/Components/Table/ActiveStatus.vue";
+import InactiveStatus from "@/Components/Table/InactiveStatus.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
@@ -88,6 +90,126 @@ const updateSorting = (sort = "id") => {
     },
     { replace: true, preserveState: true }
   );
+};
+
+//  Handel Campaign Banner Active
+const handleActive = async (inactiveProductBannerId) => {
+  const result = await swal({
+    icon: "info",
+    title: "Are you sure you want to active this vendor?",
+    showCancelButton: true,
+    confirmButtonText: "Yes, active!",
+    confirmButtonColor: "#027e00",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.post(
+      route("admin.campaign-banners.active", {
+        id: inactiveProductBannerId,
+        page: props.campaignBanners.current_page,
+        per_page: params.per_page,
+      })
+    );
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
+
+// Handel Campaign Banner Inactive
+const handleInactive = async (activeProductBannerId) => {
+  const result = await swal({
+    icon: "info",
+    title: "Are you sure you want to inactive this vendor?",
+    showCancelButton: true,
+    confirmButtonText: "Yes, inactive!",
+    confirmButtonColor: "#027e00",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.post(
+      route("admin.campaign-banners.inactive", {
+        id: activeProductBannerId,
+        page: props.campaignBanners.current_page,
+        per_page: params.per_page,
+      })
+    );
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
+
+// Handel Product Banner Show
+const handleShow = async (hideProductBannerId) => {
+  const result = await swal({
+    icon: "info",
+    title: "Are you sure you want to active this vendor?",
+    showCancelButton: true,
+    confirmButtonText: "Yes, active!",
+    confirmButtonColor: "#027e00",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.post(
+      route("admin.product-banners.show", {
+        id: hideProductBannerId,
+        page: props.productBanners.current_page,
+        per_page: params.per_page,
+      })
+    );
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
+
+// Handel Product Banner Hide
+const handleHide = async (showProductBannerId) => {
+  const result = await swal({
+    icon: "info",
+    title: "Are you sure you want to inactive this vendor?",
+    showCancelButton: true,
+    confirmButtonText: "Yes, inactive!",
+    confirmButtonColor: "#027e00",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.post(
+      route("admin.product-banners.hide", {
+        id: showProductBannerId,
+        page: props.productBanners.current_page,
+        per_page: params.per_page,
+      })
+    );
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
 };
 
 const handleDelete = async (bannerId) => {
@@ -293,6 +415,31 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
+          <HeaderTh @click="updateSorting('status')">
+            Status
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'status',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'status',
+              }"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'status',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'status',
+              }"
+            ></i>
+          </HeaderTh>
           <HeaderTh @click="updateSorting('created_at')">
             Created At
             <i
@@ -336,8 +483,32 @@ if (usePage().props.flash.successMessage) {
             </Td>
             <Td>{{ productBanner.title }}</Td>
             <Td>{{ productBanner.url }}</Td>
+            <Td>
+              <ActiveStatus v-if="productBanner.status == 'show'">
+                {{ productBanner.status }}
+              </ActiveStatus>
+              <InactiveStatus v-if="productBanner.status == 'hide'">
+                {{ productBanner.status }}
+              </InactiveStatus>
+            </Td>
             <Td>{{ productBanner.created_at }}</Td>
             <Td>
+              <button
+                v-if="productBanner.status == 'hide'"
+                @click="handleShow(productBanner.id)"
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-emerald-600 text-white hover:bg-emerald-700 mr-3 my-1"
+              >
+                <i class="fa-solid fa-eye"></i>
+                Show
+              </button>
+              <button
+                v-if="productBanner.status == 'show'"
+                @click="handleHide(productBanner.id)"
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-orange-600 text-white hover:bg-orange-700 mr-3 my-1"
+              >
+                <i class="fa-solid fa-eye-slash"></i>
+                Hide
+              </button>
               <Link
                 as="button"
                 :href="route('admin.product-banners.edit', productBanner.id)"

@@ -21,7 +21,7 @@ class ProductBannerFactory extends Factory
             "description"=>fake()->sentence(),
             "image"=>fake()->imageUrl(),
             "url"=>fake()->url(),
-            "is_active"=>true,
+            "status"=>"hide",
         ];
     }
 }

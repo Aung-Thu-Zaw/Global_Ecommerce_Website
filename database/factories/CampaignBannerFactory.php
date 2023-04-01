@@ -19,7 +19,7 @@ class CampaignBannerFactory extends Factory
         return [
             "image"=>fake()->imageUrl(),
             "url"=>fake()->url(),
-            "is_active"=>true,
+            "status"=>"hide",
         ];
     }
 }

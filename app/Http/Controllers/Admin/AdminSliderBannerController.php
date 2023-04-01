@@ -33,7 +33,7 @@ class AdminSliderBannerController extends Controller
 
     public function store(SliderBannerRequest $request, SliderBannerImageUploadService $sliderBannerImageUploadService): RedirectResponse
     {
-        SliderBanner::create($request->validated()+["image"=>$sliderBannerImageUploadService->createImage($request)]);
+        SliderBanner::create($request->validated()+["image"=>$sliderBannerImageUploadService->createImage($request),"status"=>"hide"]);
 
         return to_route("admin.slider-banners.index", "per_page=$request->per_page")->with("success", "Slider Banner is created successfully.");
     }
@@ -47,7 +47,7 @@ class AdminSliderBannerController extends Controller
 
     public function update(SliderBannerRequest $request, SliderBanner $sliderBanner, SliderBannerImageUploadService $sliderBannerImageUploadService): RedirectResponse
     {
-        $sliderBanner->update($request->validated()+["image"=>$sliderBannerImageUploadService->updateImage($request, $sliderBanner)]);
+        $sliderBanner->update($request->validated()+["image"=>$sliderBannerImageUploadService->updateImage($request, $sliderBanner),"status"=>$sliderBanner->status]);
 
         return to_route("admin.slider-banners.index", "page=$request->page&per_page=$request->per_page")->with("success", "Slider Banner is updated successfully.");
     }
@@ -88,5 +88,29 @@ class AdminSliderBannerController extends Controller
         $sliderBanner->forceDelete();
 
         return to_route('admin.slider-banners.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Slider Banner is deleted successfully");
+    }
+
+    public function handleShow(Request $request, int $id): RedirectResponse
+    {
+        $countsliderBanner=SliderBanner::where("status", "show")->count();
+
+        if ($countsliderBanner >= 4) {
+            return to_route('admin.slider-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "Slider Banner is cannot bla bla show successfully");
+        }
+
+        $sliderBanner = SliderBanner::where([["id", $id],["status","hide"]])->first();
+
+        $sliderBanner->update(["status"=>"show"]);
+
+        return to_route('admin.slider-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "Slider Banner is show successfully");
+    }
+
+    public function handleHide(Request $request, int $id): RedirectResponse
+    {
+        $sliderBanner = SliderBanner::where([["id", $id],["status","show"]])->first();
+
+        $sliderBanner->update(["status"=>"hide"]);
+
+        return to_route('admin.slider-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "Slider Banner is hide successfully");
     }
 }

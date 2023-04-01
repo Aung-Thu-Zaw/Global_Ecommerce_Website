@@ -16,5 +16,6 @@ class SliderBannerSeeder extends Seeder
     public function run()
     {
         SliderBanner::factory(10)->create();
+        SliderBanner::factory(6)->create(["status"=>"show"]);
     }
 }

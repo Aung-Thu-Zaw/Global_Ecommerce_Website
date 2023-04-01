@@ -1,4 +1,6 @@
 <script setup>
+import ActiveStatus from "@/Components/Table/ActiveStatus.vue";
+import InactiveStatus from "@/Components/Table/InactiveStatus.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
@@ -96,6 +98,66 @@ const updateSorting = (sort = "id") => {
   );
 };
 
+// Handel Campaign Banner Show
+const handleShow = async (hideCampaignBannerId) => {
+  const result = await swal({
+    icon: "info",
+    title: "Are you sure you want to active this vendor?",
+    showCancelButton: true,
+    confirmButtonText: "Yes, active!",
+    confirmButtonColor: "#027e00",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.post(
+      route("admin.campaign-banners.show", {
+        id: hideCampaignBannerId,
+        page: props.campaignBanners.current_page,
+        per_page: params.per_page,
+      })
+    );
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
+
+// Handel Campaign Banner Hide
+const handleHide = async (showCampaignBannerId) => {
+  const result = await swal({
+    icon: "info",
+    title: "Are you sure you want to inactive this vendor?",
+    showCancelButton: true,
+    confirmButtonText: "Yes, inactive!",
+    confirmButtonColor: "#027e00",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.post(
+      route("admin.campaign-banners.hide", {
+        id: showCampaignBannerId,
+        page: props.campaignBanners.current_page,
+        per_page: params.per_page,
+      })
+    );
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
+
 // Handle Delete Banner
 const handleDelete = async (campaignBannerId) => {
   const result = await swal({
@@ -190,7 +252,7 @@ if (usePage().props.flash.successMessage) {
           class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700"
         >
           <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
-          Add Slider Banner</Link
+          Add Campaign Banner</Link
         >
         <div class="flex items-center">
           <!-- Search Form -->
@@ -282,6 +344,31 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
+          <HeaderTh @click="updateSorting('status')">
+            Status
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'status',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'status',
+              }"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'status',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'status',
+              }"
+            ></i>
+          </HeaderTh>
           <HeaderTh @click="updateSorting('created_at')">
             Created At
             <i
@@ -325,8 +412,32 @@ if (usePage().props.flash.successMessage) {
               />
             </Td>
             <Td>{{ campaignBanner.url }}</Td>
+            <Td>
+              <ActiveStatus v-if="campaignBanner.status == 'show'">
+                {{ campaignBanner.status }}
+              </ActiveStatus>
+              <InactiveStatus v-if="campaignBanner.status == 'hide'">
+                {{ campaignBanner.status }}
+              </InactiveStatus>
+            </Td>
             <Td>{{ campaignBanner.created_at }}</Td>
             <Td>
+              <button
+                v-if="campaignBanner.status == 'hide'"
+                @click="handleShow(campaignBanner.id)"
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-emerald-600 text-white hover:bg-emerald-700 mr-3 my-1"
+              >
+                <i class="fa-solid fa-eye"></i>
+                Show
+              </button>
+              <button
+                v-if="campaignBanner.status == 'show'"
+                @click="handleHide(campaignBanner.id)"
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-orange-600 text-white hover:bg-orange-700 mr-3 my-1"
+              >
+                <i class="fa-solid fa-eye-slash"></i>
+                Hide
+              </button>
               <Link
                 as="button"
                 :href="route('admin.campaign-banners.edit', campaignBanner.id)"

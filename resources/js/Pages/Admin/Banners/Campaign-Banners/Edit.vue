@@ -39,7 +39,7 @@ const handleEditCampaignBanner = async () => {
 const submit = () => {
   form.post(
     route("admin.campaign-banners.update", {
-      slider: props.campaignBanner.id,
+      campaign_banner: props.campaignBanner.id,
       page: props.paginate.page,
       per_page: props.paginate.per_page,
     }),

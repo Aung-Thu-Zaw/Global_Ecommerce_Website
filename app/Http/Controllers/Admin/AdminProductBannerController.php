@@ -33,7 +33,7 @@ class AdminProductBannerController extends Controller
 
     public function store(ProductBannerRequest $request, ProductBannerImageUploadService $productBannerImageUploadService): RedirectResponse
     {
-        ProductBanner::create($request->validated()+["image"=>$productBannerImageUploadService->createImage($request)]);
+        ProductBanner::create($request->validated()+["image"=>$productBannerImageUploadService->createImage($request),"status"=>"hide"]);
 
         return to_route("admin.product-banners.index", "per_page=$request->per_page")->with("success", "Product Banner is created successfully.");
     }
@@ -47,7 +47,7 @@ class AdminProductBannerController extends Controller
 
     public function update(ProductBannerRequest $request, ProductBanner $productBanner, ProductBannerImageUploadService $productBannerImageUploadService): RedirectResponse
     {
-        $productBanner->update($request->validated()+["image"=>$productBannerImageUploadService->updateImage($request, $productBanner)]);
+        $productBanner->update($request->validated()+["image"=>$productBannerImageUploadService->updateImage($request, $productBanner),"status"=>$productBanner->status]);
 
         return to_route("admin.product-banners.index", "page=$request->page&per_page=$request->per_page")->with("success", "Product Banner is updated successfully.");
     }
@@ -88,5 +88,29 @@ class AdminProductBannerController extends Controller
         $productBanner->forceDelete();
 
         return to_route('admin.product-banners.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Product Banner is deleted successfully");
+    }
+
+    public function handleShow(Request $request, int $id): RedirectResponse
+    {
+        $countProductBanners=ProductBanner::where("status", "show")->count();
+
+        if ($countProductBanners >= 3) {
+            return to_route('admin.product-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "Product Banner is cannot bla bla show successfully");
+        }
+
+        $productBanner = ProductBanner::where([["id", $id],["status","hide"]])->first();
+
+        $productBanner->update(["status"=>"show"]);
+
+        return to_route('admin.product-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "Product Banner is show successfully");
+    }
+
+    public function handleHide(Request $request, int $id): RedirectResponse
+    {
+        $productBanner = ProductBanner::where([["id", $id],["status","show"]])->first();
+
+        $productBanner->update(["status"=>"hide"]);
+
+        return to_route('admin.product-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "Product Banner is hide successfully");
     }
 }

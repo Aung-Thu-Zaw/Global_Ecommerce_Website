@@ -22,6 +22,7 @@ class SliderBanner extends Model
     {
         return [
             'url' => $this->url,
+            'status' => $this->status,
         ];
     }
 

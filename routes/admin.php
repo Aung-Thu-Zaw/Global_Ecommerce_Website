@@ -123,6 +123,8 @@ Route::middleware(["auth","verified","user.role:admin"])
                         Route::get("/trash", "trash")->name("trash");
                         Route::post("/{id}/restore", "restore")->name("restore");
                         Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                        Route::post("/{id}/show", "handleShow")->name("show");
+                        Route::post("/{id}/hide", "handleHide")->name("hide");
                     });
 
             Route::controller(AdminProductBannerController::class)
@@ -138,6 +140,8 @@ Route::middleware(["auth","verified","user.role:admin"])
                         Route::get("/trash", "trash")->name("trash");
                         Route::post("/{id}/restore", "restore")->name("restore");
                         Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                        Route::post("/{id}/show", "handleShow")->name("show");
+                        Route::post("/{id}/hide", "handleHide")->name("hide");
                     });
 
             Route::controller(AdminCampaignBannerController::class)
@@ -153,5 +157,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                         Route::get("/trash", "trash")->name("trash");
                         Route::post("/{id}/restore", "restore")->name("restore");
                         Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                        Route::post("/{id}/show", "handleShow")->name("show");
+                        Route::post("/{id}/hide", "handleHide")->name("hide");
                     });
         });

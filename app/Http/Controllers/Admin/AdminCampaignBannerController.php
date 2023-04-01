@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 
 class AdminCampaignBannerController extends Controller
 {
@@ -33,7 +34,7 @@ class AdminCampaignBannerController extends Controller
 
     public function store(CampaignBannerRequest $request, CampaignBannerImageUploadService $campaignBannerImageUploadService): RedirectResponse
     {
-        CampaignBanner::create($request->validated()+["image"=>$campaignBannerImageUploadService->createImage($request)]);
+        CampaignBanner::create($request->validated()+["status"=>"hide","image"=>$campaignBannerImageUploadService->createImage($request)]);
 
         return to_route("admin.campaign-banners.index", "per_page=$request->per_page")->with("success", "Campaign Banner is created successfully.");
     }
@@ -47,7 +48,7 @@ class AdminCampaignBannerController extends Controller
 
     public function update(CampaignBannerRequest $request, CampaignBanner $campaignBanner, CampaignBannerImageUploadService $campaignBannerImageUploadService): RedirectResponse
     {
-        $campaignBanner->update($request->validated()+["image"=>$campaignBannerImageUploadService->updateImage($request, $campaignBanner)]);
+        $campaignBanner->update($request->validated()+["status"=>$campaignBanner->status,"image"=>$campaignBannerImageUploadService->updateImage($request, $campaignBanner)]);
 
         return to_route("admin.campaign-banners.index", "page=$request->page&per_page=$request->per_page")->with("success", "Campaign Banner is updated successfully.");
     }
@@ -88,5 +89,25 @@ class AdminCampaignBannerController extends Controller
         $campaignBanner->forceDelete();
 
         return to_route('admin.campaign-banners.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Campaign Banner is deleted successfully");
+    }
+
+    public function handleShow(Request $request, int $id): RedirectResponse
+    {
+        DB::table("campaign_banners")->update(["status"=>"hide"]);
+
+        $campaignBanner = CampaignBanner::where([["id", $id],["status","hide"]])->first();
+
+        $campaignBanner->update(["status"=>"show"]);
+
+        return to_route('admin.campaign-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "Campaign Banner is show successfully");
+    }
+
+    public function handleHide(Request $request, int $id): RedirectResponse
+    {
+        $campaignBanner = CampaignBanner::where([["id", $id],["status","show"]])->first();
+
+        $campaignBanner->update(["status"=>"hide"]);
+
+        return to_route('admin.campaign-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "Campaign Banner is hide successfully");
     }
 }

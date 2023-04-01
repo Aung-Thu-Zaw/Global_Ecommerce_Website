@@ -18,12 +18,13 @@ class CampaignBanner extends Model
 
 
     /**
-    *     @return array<string>
+    *     @return array<string|bool>
     */
     public function toSearchableArray(): array
     {
         return [
             'url' => $this->url,
+            'status' => $this->status,
         ];
     }
 

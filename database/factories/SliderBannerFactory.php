@@ -19,6 +19,7 @@ class SliderBannerFactory extends Factory
         return [
             "image"=>fake()->imageUrl(),
             "url"=>fake()->url(),
+            "status"=>"hide",
         ];
     }
 }

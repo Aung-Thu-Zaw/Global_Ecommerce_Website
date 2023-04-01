@@ -18,7 +18,7 @@ return new class () extends Migration {
             $table->string("description")->nullable();
             $table->string("url");
             $table->string("image");
-            $table->boolean("is_active");
+            $table->enum("status", ["show","hide"])->default("hide");
             $table->softDeletes();
             $table->timestamps();
         });

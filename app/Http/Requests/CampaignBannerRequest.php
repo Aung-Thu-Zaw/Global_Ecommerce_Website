@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CampaignBannerRequest extends FormRequest
 {
@@ -24,7 +25,7 @@ class CampaignBannerRequest extends FormRequest
     public function rules()
     {
         return [
-            "url"=>["required","string","url"]
+            "url"=>["required","string","url"],
         ];
     }
 }
