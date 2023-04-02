@@ -87,6 +87,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                         Route::get("/trash", "trash")->name("trash");
                         Route::post("/{id}/restore", "restore")->name("restore");
                         Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                        Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
                     });
 
             Route::controller(AdminProductController::class)

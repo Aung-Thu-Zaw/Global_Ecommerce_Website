@@ -95,10 +95,10 @@ const updateSorting = (sort = "id") => {
 const handleRestore = async (trashBannerId) => {
   const result = await swal({
     icon: "info",
-    title: "Are you sure you want to restore this category?",
+    title: "Are you sure you want to restore this product banner?",
     showCancelButton: true,
-    confirmButtonText: "Yes, restore!",
-    confirmButtonColor: "#027e00",
+    confirmButtonText: "Yes, restore",
+    confirmButtonColor: "#4d9be9",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -125,9 +125,9 @@ const handleDelete = async (trashBannerId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
-    text: "You will not be able to revert this action!",
+    text: "Product Banner in the trash will be permanetly deleted! You can't get it back.",
     showCancelButton: true,
-    confirmButtonText: "Yes, delete it!",
+    confirmButtonText: "Yes, delete it !",
     confirmButtonColor: "#ef4444",
     timer: 20000,
     timerProgressBar: true,

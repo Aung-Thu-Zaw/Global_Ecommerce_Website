@@ -91,10 +91,10 @@ const updateSorting = (sort = "id") => {
 const handleRestore = async (trashBrandId) => {
   const result = await swal({
     icon: "info",
-    title: "Are you sure you want to restore this category?",
+    title: "Are you sure you want to restore this brand?",
     showCancelButton: true,
-    confirmButtonText: "Yes, restore!",
-    confirmButtonColor: "#027e00",
+    confirmButtonText: "Yes, restore",
+    confirmButtonColor: "#4d9be9",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -121,9 +121,9 @@ const handleDelete = async (trashBrandId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
-    text: "You will not be able to revert this action!",
+    text: "Brand in the trash will be permanetly deleted! You can't get it back.",
     showCancelButton: true,
-    confirmButtonText: "Yes, delete it!",
+    confirmButtonText: "Yes, delete it !",
     confirmButtonColor: "#ef4444",
     timer: 20000,
     timerProgressBar: true,
@@ -134,6 +134,35 @@ const handleDelete = async (trashBrandId) => {
     router.delete(
       route("admin.brands.forceDelete", {
         id: trashBrandId,
+        page: props.trashBrands.current_page,
+        per_page: params.per_page,
+      })
+    );
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
+
+const handlePermanentlyDelete = async () => {
+  const result = await swal({
+    icon: "warning",
+    title: "Are you sure you want to delete it from the trash?",
+    text: "All brands in the trash will be permanetly deleted! You can't get it back.",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it !",
+    confirmButtonColor: "#ef4444",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.get(
+      route("admin.brands.permanentlyDelete", {
         page: props.trashBrands.current_page,
         per_page: params.per_page,
       })
@@ -223,6 +252,15 @@ const handleDelete = async (trashBrandId) => {
         </div>
       </div>
 
+      <p class="text-left text-sm font-bold mb-2 text-warning-600">
+        Brand in the Trash will be automatically deleted after 60 days.
+        <button
+          @click="handlePermanentlyDelete"
+          class="text-primary-500 rounded-md px-2 py-1 hover:bg-primary-200 hover:text-primary-600 transition-all hover:animate-bounce"
+        >
+          Empty the trash now
+        </button>
+      </p>
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">

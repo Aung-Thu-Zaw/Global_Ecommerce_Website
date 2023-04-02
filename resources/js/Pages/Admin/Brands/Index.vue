@@ -91,8 +91,8 @@ const updateSorting = (sort = "id") => {
 const handleDelete = async (brandId) => {
   const result = await swal({
     icon: "warning",
-    title: "Are you sure you want to move it to the trash?",
-    text: "You will be able to revert this action!",
+    title: "Are you sure you want to delete this brand?",
+    text: "You will be able to restore this brand in the trash!",
     showCancelButton: true,
     confirmButtonText: "Yes, delete it!",
     confirmButtonColor: "#ef4444",

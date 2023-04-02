@@ -92,74 +92,14 @@ const updateSorting = (sort = "id") => {
   );
 };
 
-//  Handel Campaign Banner Active
-const handleActive = async (inactiveProductBannerId) => {
-  const result = await swal({
-    icon: "info",
-    title: "Are you sure you want to active this vendor?",
-    showCancelButton: true,
-    confirmButtonText: "Yes, active!",
-    confirmButtonColor: "#027e00",
-    timer: 20000,
-    timerProgressBar: true,
-    reverseButtons: true,
-  });
-
-  if (result.isConfirmed) {
-    router.post(
-      route("admin.campaign-banners.active", {
-        id: inactiveProductBannerId,
-        page: props.campaignBanners.current_page,
-        per_page: params.per_page,
-      })
-    );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
-  }
-};
-
-// Handel Campaign Banner Inactive
-const handleInactive = async (activeProductBannerId) => {
-  const result = await swal({
-    icon: "info",
-    title: "Are you sure you want to inactive this vendor?",
-    showCancelButton: true,
-    confirmButtonText: "Yes, inactive!",
-    confirmButtonColor: "#027e00",
-    timer: 20000,
-    timerProgressBar: true,
-    reverseButtons: true,
-  });
-
-  if (result.isConfirmed) {
-    router.post(
-      route("admin.campaign-banners.inactive", {
-        id: activeProductBannerId,
-        page: props.campaignBanners.current_page,
-        per_page: params.per_page,
-      })
-    );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
-  }
-};
-
 // Handel Product Banner Show
 const handleShow = async (hideProductBannerId) => {
   const result = await swal({
     icon: "info",
-    title: "Are you sure you want to active this vendor?",
+    title: "Are you sure you want to show this product banner?",
     showCancelButton: true,
-    confirmButtonText: "Yes, active!",
-    confirmButtonColor: "#027e00",
+    confirmButtonText: "Yes, show",
+    confirmButtonColor: "#4d9be9",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -186,10 +126,10 @@ const handleShow = async (hideProductBannerId) => {
 const handleHide = async (showProductBannerId) => {
   const result = await swal({
     icon: "info",
-    title: "Are you sure you want to inactive this vendor?",
+    title: "Are you sure you want to hide this product banner?",
     showCancelButton: true,
-    confirmButtonText: "Yes, inactive!",
-    confirmButtonColor: "#027e00",
+    confirmButtonText: "Yes, hide",
+    confirmButtonColor: "#4d9be9",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -215,8 +155,8 @@ const handleHide = async (showProductBannerId) => {
 const handleDelete = async (bannerId) => {
   const result = await swal({
     icon: "warning",
-    title: "Are you sure you want to move it to the trash?",
-    text: "You will be able to revert this action!",
+    title: "Are you sure you want to delete this product banner?",
+    text: "You will be able to restore this product banner in the trash!",
     showCancelButton: true,
     confirmButtonText: "Yes, delete it!",
     confirmButtonColor: "#ef4444",
@@ -246,6 +186,14 @@ if (usePage().props.flash.successMessage) {
   swal({
     icon: "success",
     title: usePage().props.flash.successMessage,
+  });
+}
+
+// Error Alert
+if (usePage().props.flash.errorMessage) {
+  swal({
+    icon: "error",
+    title: usePage().props.flash.errorMessage,
   });
 }
 </script>

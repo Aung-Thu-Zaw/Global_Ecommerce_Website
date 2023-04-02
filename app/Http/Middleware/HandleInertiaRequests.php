@@ -39,6 +39,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'flash'=>[
                 'successMessage'=>session('success'),
+                'errorMessage'=>session('error'),
 
             ],
             'ziggy' => function () use ($request) {

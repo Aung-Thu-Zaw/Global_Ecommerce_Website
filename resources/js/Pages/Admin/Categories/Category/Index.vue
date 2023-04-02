@@ -16,12 +16,18 @@ import { reactive, watch, inject } from "vue";
 import { router } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
+// Data come from controller
 const props = defineProps({
   categories: Object,
 });
 
 const swal = inject("$swal");
 
+const handleSearchBox = () => {
+  params.search = "";
+};
+
+// Handle Url Query Params
 const params = reactive({
   search: null,
   page: props.categories.current_page ? props.categories.current_page : 1,
@@ -30,10 +36,7 @@ const params = reactive({
   direction: "desc",
 });
 
-const handleSearchBox = () => {
-  params.search = "";
-};
-
+// Watch Search Input Form
 watch(
   () => params.search,
   (current, previous) => {
@@ -53,6 +56,7 @@ watch(
   }
 );
 
+// Watch Perpage Dropdown
 watch(
   () => params.per_page,
   (current, previous) => {
@@ -73,6 +77,7 @@ watch(
   }
 );
 
+// Handle Sorting With Column Arrow
 const updateSorting = (sort = "id") => {
   params.sort = sort;
   params.direction = params.direction === "asc" ? "desc" : "asc";
@@ -90,11 +95,12 @@ const updateSorting = (sort = "id") => {
   );
 };
 
+// Handle Delete Category
 const handleDelete = async (categoryId) => {
   const result = await swal({
     icon: "warning",
-    title: "Are you sure you want to move it to the trash?",
-    text: "You will be able to revert this action!",
+    title: "Are you sure you want to delete this category?",
+    text: "You will be able to restore this category in the trash!",
     showCancelButton: true,
     confirmButtonText: "Yes, delete it!",
     confirmButtonColor: "#ef4444",

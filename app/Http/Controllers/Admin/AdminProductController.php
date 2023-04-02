@@ -56,7 +56,7 @@ class AdminProductController extends Controller
 
         $productMultiImageUploadService->createMultiImage($request, $product);
 
-        return to_route("admin.products.index", "per_page=$request->per_page")->with("success", "Product is created successfully.");
+        return to_route("admin.products.index", "per_page=$request->per_page")->with("success", "Product has been successfully created.");
     }
 
     public function show(Product $product): Response|ResponseFactory
@@ -91,14 +91,14 @@ class AdminProductController extends Controller
 
         $productMultiImageUploadService->createMultiImage($request, $product);
 
-        return to_route("admin.products.index", "page=$request->page&per_page=$request->per_page")->with("success", "Product is updated successfully.");
+        return to_route("admin.products.index", "page=$request->page&per_page=$request->per_page")->with("success", "Product has been successfully updated.");
     }
 
     public function destroy(Request $request, Product $product): RedirectResponse
     {
         $product->delete();
 
-        return to_route("admin.products.index", "page=$request->page&per_page=$request->per_page")->with("success", "Product is deleted successfully.");
+        return to_route("admin.products.index", "page=$request->page&per_page=$request->per_page")->with("success", "Product has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -119,7 +119,7 @@ class AdminProductController extends Controller
 
         $product->restore();
 
-        return to_route('admin.products.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Product is restored successfully.");
+        return to_route('admin.products.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Product has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $id): RedirectResponse
@@ -136,6 +136,6 @@ class AdminProductController extends Controller
 
         $product->forceDelete();
 
-        return to_route('admin.products.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Product is deleted successfully");
+        return to_route('admin.products.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Product has been permanently deleted.");
     }
 }

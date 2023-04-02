@@ -102,10 +102,10 @@ const updateSorting = (sort = "id") => {
 const handleShow = async (hideCampaignBannerId) => {
   const result = await swal({
     icon: "info",
-    title: "Are you sure you want to active this vendor?",
+    title: "Are you sure you want to show this campaign banner?",
     showCancelButton: true,
-    confirmButtonText: "Yes, active!",
-    confirmButtonColor: "#027e00",
+    confirmButtonText: "Yes, show",
+    confirmButtonColor: "#4d9be9",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -132,10 +132,10 @@ const handleShow = async (hideCampaignBannerId) => {
 const handleHide = async (showCampaignBannerId) => {
   const result = await swal({
     icon: "info",
-    title: "Are you sure you want to inactive this vendor?",
+    title: "Are you sure you want to hide this campaign banner?",
     showCancelButton: true,
-    confirmButtonText: "Yes, inactive!",
-    confirmButtonColor: "#027e00",
+    confirmButtonText: "Yes, hide",
+    confirmButtonColor: "#4d9be9",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -162,8 +162,8 @@ const handleHide = async (showCampaignBannerId) => {
 const handleDelete = async (campaignBannerId) => {
   const result = await swal({
     icon: "warning",
-    title: "Are you sure you want to move it to the trash?",
-    text: "You will be able to revert this action!",
+    title: "Are you sure you want to delete this campaign banner?",
+    text: "You will be able to restore this campaign banner in the trash!",
     showCancelButton: true,
     confirmButtonText: "Yes, delete it!",
     confirmButtonColor: "#ef4444",
@@ -196,6 +196,8 @@ if (usePage().props.flash.successMessage) {
     title: usePage().props.flash.successMessage,
   });
 }
+
+
 </script>
 
 <template>
