@@ -150,6 +150,35 @@ const handleDelete = async (trashBannerId) => {
     }, 500);
   }
 };
+
+const handlePermanentlyDelete = async () => {
+  const result = await swal({
+    icon: "warning",
+    title: "Are you sure you want to delete it from the trash?",
+    text: "All product banners in the trash will be permanetly deleted! You can't get it back.",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it !",
+    confirmButtonColor: "#ef4444",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.get(
+      route("admin.product-banners.permanentlyDelete", {
+        page: props.trashProductBanners.current_page,
+        per_page: params.per_page,
+      })
+    );
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
 </script>
 
 <template>
@@ -247,6 +276,17 @@ const handleDelete = async (trashBannerId) => {
           </select>
         </div>
       </div>
+
+      <!-- Auto delete description and button  -->
+      <p class="text-left text-sm font-bold mb-2 text-warning-600">
+        Product Banners in the Trash will be automatically deleted after 60 days.
+        <button
+          @click="handlePermanentlyDelete"
+          class="text-primary-500 rounded-md px-2 py-1 hover:bg-primary-200 hover:text-primary-600 transition-all hover:animate-bounce"
+        >
+          Empty the trash now
+        </button>
+      </p>
 
       <TableContainer>
         <TableHeader>

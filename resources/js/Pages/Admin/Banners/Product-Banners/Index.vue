@@ -161,7 +161,7 @@ const handleHide = async (showProductBannerId) => {
   }
 };
 
-const handleDelete = async (bannerId) => {
+const handleDelete = async (productBannerId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete this product banner?",
@@ -177,8 +177,8 @@ const handleDelete = async (bannerId) => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.product-banners.destroy", {
-        banner: bannerId,
-        page: props.banners.current_page,
+        product_banner: productBannerId,
+        page: props.productBanners.current_page,
         per_page: params.per_page,
       })
     );

@@ -16,7 +16,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('brand:delete')->monthly();
+        $schedule->command('brand:delete')->daily();
+        $schedule->command('campaign_banner:delete')->daily();
+        $schedule->command('product_banner:delete')->daily();
+        $schedule->command('slider_banner:delete')->daily();
     }
 
     /**

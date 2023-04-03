@@ -126,6 +126,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                         Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
                         Route::post("/{id}/show", "handleShow")->name("show");
                         Route::post("/{id}/hide", "handleHide")->name("hide");
+                        Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
                     });
 
             Route::controller(AdminProductBannerController::class)
@@ -143,6 +144,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                         Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
                         Route::post("/{id}/show", "handleShow")->name("show");
                         Route::post("/{id}/hide", "handleHide")->name("hide");
+                        Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
                     });
 
             Route::controller(AdminCampaignBannerController::class)
@@ -160,5 +162,6 @@ Route::middleware(["auth","verified","user.role:admin"])
                         Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
                         Route::post("/{id}/show", "handleShow")->name("show");
                         Route::post("/{id}/hide", "handleHide")->name("hide");
+                        Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
                     });
         });

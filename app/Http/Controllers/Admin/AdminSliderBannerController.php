@@ -113,4 +113,17 @@ class AdminSliderBannerController extends Controller
 
         return to_route('admin.slider-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "Slider Banner has been successfully hidden.");
     }
+
+
+    public function permanentlyDelete(Request $request): RedirectResponse
+    {
+        $sliderBanners = SliderBanner::onlyTrashed()->get();
+
+        $sliderBanners->each(function ($sliderBanner) {
+            SliderBanner::deleteImage($sliderBanner);
+            $sliderBanner->forceDelete();
+        });
+
+        return to_route('admin.slider-banners.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Slider Banners have been successfully deleted.");
+    }
 }

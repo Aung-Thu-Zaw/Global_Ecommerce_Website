@@ -113,4 +113,17 @@ class AdminProductBannerController extends Controller
 
         return to_route('admin.product-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "Product Banner has been successfully hidden.");
     }
+
+
+    public function permanentlyDelete(Request $request): RedirectResponse
+    {
+        $productBanners = ProductBanner::onlyTrashed()->get();
+
+        $productBanners->each(function ($productBanner) {
+            ProductBanner::deleteImage($productBanner);
+            $productBanner->forceDelete();
+        });
+
+        return to_route('admin.product-banners.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Product Banners have been successfully deleted.");
+    }
 }

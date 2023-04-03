@@ -110,4 +110,16 @@ class AdminCampaignBannerController extends Controller
 
         return to_route('admin.campaign-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "The campaign banner has been successfully hidden.");
     }
+
+    public function permanentlyDelete(Request $request): RedirectResponse
+    {
+        $campaignBanners = CampaignBanner::onlyTrashed()->get();
+
+        $campaignBanners->each(function ($campaignBanner) {
+            CampaignBanner::deleteImage($campaignBanner);
+            $campaignBanner->forceDelete();
+        });
+
+        return to_route('admin.campaign-banners.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Campaign Banners have been successfully deleted.");
+    }
 }
