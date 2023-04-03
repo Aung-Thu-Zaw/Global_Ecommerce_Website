@@ -114,10 +114,19 @@ const handleShow = async (hideProductBannerId) => {
       })
     );
     setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
+      if (usePage().props.flash.successMessage) {
+        swal({
+          icon: "success",
+          title: usePage().props.flash.successMessage,
+        });
+      }
+
+      if (usePage().props.flash.errorMessage) {
+        swal({
+          icon: "error",
+          title: usePage().props.flash.errorMessage,
+        });
+      }
     }, 500);
   }
 };
@@ -188,14 +197,6 @@ if (usePage().props.flash.successMessage) {
     title: usePage().props.flash.successMessage,
   });
 }
-
-// Error Alert
-if (usePage().props.flash.errorMessage) {
-  swal({
-    icon: "error",
-    title: usePage().props.flash.errorMessage,
-  });
-}
 </script>
 
 <template>
@@ -205,6 +206,7 @@ if (usePage().props.flash.errorMessage) {
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Category Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
+        {{ $page.props.flash }}
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">

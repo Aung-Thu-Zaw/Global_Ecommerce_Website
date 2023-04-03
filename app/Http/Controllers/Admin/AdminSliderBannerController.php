@@ -94,7 +94,7 @@ class AdminSliderBannerController extends Controller
     {
         $countsliderBanner=SliderBanner::where("status", "show")->count();
 
-        if ($countsliderBanner >= 4) {
+        if ($countsliderBanner >= 6) {
             return to_route('admin.slider-banners.index', "page=$request->page&per_page=$request->per_page")->with("error", "You can't display the slider banner. Only 6 slider banners are allowed.");
         }
 

@@ -112,10 +112,19 @@ const handleShow = async (hideSliderBannerId) => {
       })
     );
     setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
+      if (usePage().props.flash.successMessage) {
+        swal({
+          icon: "success",
+          title: usePage().props.flash.successMessage,
+        });
+      }
+
+      if (usePage().props.flash.errorMessage) {
+        swal({
+          icon: "error",
+          title: usePage().props.flash.errorMessage,
+        });
+      }
     }, 500);
   }
 };
@@ -184,14 +193,6 @@ if (usePage().props.flash.successMessage) {
   swal({
     icon: "success",
     title: usePage().props.flash.successMessage,
-  });
-}
-
-// Error Alert
-if (usePage().props.flash.errorMessage) {
-  swal({
-    icon: "error",
-    title: usePage().props.flash.errorMessage,
   });
 }
 </script>
