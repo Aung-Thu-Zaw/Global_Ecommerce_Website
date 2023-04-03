@@ -206,7 +206,6 @@ if (usePage().props.flash.successMessage) {
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Category Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
-        {{ $page.props.flash }}
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">

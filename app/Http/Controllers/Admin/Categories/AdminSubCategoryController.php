@@ -19,7 +19,7 @@ class AdminSubCategoryController extends Controller
     {
         $subCategories=SubCategory::search(request("search"))
                                   ->query(function (Builder $builder) {
-                                      $builder->with("category:id,name");
+                                      $builder->with(["category:id,name", "products:id,sub_category_id,name"]);
                                   })
                                   ->orderBy(request("sort", "id"), request("direction", "desc"))
                                   ->paginate(request("per_page", 10))

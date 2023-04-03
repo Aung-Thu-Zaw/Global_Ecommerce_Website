@@ -64,7 +64,7 @@ class SubCategorySeeder extends Seeder
             "image"=>"fashion.jpg",
         ]);
 
-        SubCategory::factory(50)->create();
+        // SubCategory::factory(50)->create();
         // SubCategory::factory(30)->create(["deleted_at"=>null]);
     }
 }

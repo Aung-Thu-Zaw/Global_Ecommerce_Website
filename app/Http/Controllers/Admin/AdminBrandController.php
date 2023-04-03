@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BrandRequest;
 use App\Models\Brand;
 use App\Services\BrandImageUploadService;
+use Illuminate\Database\Eloquent\Builder;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
@@ -16,6 +17,9 @@ class AdminBrandController extends Controller
     public function index(): Response|ResponseFactory
     {
         $brands=Brand::search(request("search"))
+                      ->query(function (Builder $builder) {
+                          $builder->with("products:id,brand_id,name");
+                      })
                       ->orderBy(request("sort", "id"), request("direction", "desc"))
                       ->paginate(request("per_page", 10))
                       ->appends(request()->all());

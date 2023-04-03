@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Scout\Searchable;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -63,6 +64,15 @@ class Brand extends Model
         return Attribute::make(
             get: fn ($value) => date("Y/m/d", strtotime($value)),
         );
+    }
+
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\HasMany<Product>
+    */
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
     }
 
 

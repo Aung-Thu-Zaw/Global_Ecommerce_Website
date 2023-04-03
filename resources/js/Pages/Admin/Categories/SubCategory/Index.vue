@@ -91,33 +91,63 @@ const updateSorting = (sort = "id") => {
   );
 };
 
-const handleDelete = async (subCategoryId) => {
-  const result = await swal({
-    icon: "warning",
-    title: "Are you sure you want to delete this sub-category?",
-    text: "You will be able to restore this sub-category in the trash!",
-    showCancelButton: true,
-    confirmButtonText: "Yes, delete it!",
-    confirmButtonColor: "#ef4444",
-    timer: 20000,
-    timerProgressBar: true,
-    reverseButtons: true,
-  });
+const handleDelete = async (subCategory) => {
+  if (subCategory.products.length > 0) {
+    const result = await swal({
+      icon: "error",
+      title:
+        "You can't delete this subcategory because this subcategory have products?",
+      text: "If you click 'Delete, whatever!' button products will be automatically deleted.You will be able to restore this subcategory in the trash!",
+      showCancelButton: true,
+      confirmButtonText: "Delete, whatever!",
+      confirmButtonColor: "#ef4444",
+      timer: 20000,
+      timerProgressBar: true,
+      reverseButtons: true,
+    });
+    if (result.isConfirmed) {
+      router.delete(
+        route("admin.subcategories.destroy", {
+          sub_category: subCategory.slug,
+          page: props.subCategories.current_page,
+          per_page: params.per_page,
+        })
+      );
+      setTimeout(() => {
+        swal({
+          icon: "success",
+          title: usePage().props.flash.successMessage,
+        });
+      }, 500);
+    }
+  } else {
+    const result = await swal({
+      icon: "warning",
+      title: "Are you sure you want to delete this sub-category?",
+      text: "You will be able to restore this sub-category in the trash!",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      confirmButtonColor: "#ef4444",
+      timer: 20000,
+      timerProgressBar: true,
+      reverseButtons: true,
+    });
 
-  if (result.isConfirmed) {
-    router.delete(
-      route("admin.subcategories.destroy", {
-        sub_category: subCategoryId,
-        page: props.subCategories.current_page,
-        per_page: params.per_page,
-      })
-    );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
+    if (result.isConfirmed) {
+      router.delete(
+        route("admin.subcategories.destroy", {
+          sub_category: subCategory.slug,
+          page: props.subCategories.current_page,
+          per_page: params.per_page,
+        })
+      );
+      setTimeout(() => {
+        swal({
+          icon: "success",
+          title: usePage().props.flash.successMessage,
+        });
+      }, 500);
+    }
   }
 };
 
@@ -361,7 +391,7 @@ if (usePage().props.flash.successMessage) {
                 Edit
               </Link>
               <button
-                @click="handleDelete(subCategory.slug)"
+                @click="handleDelete(subCategory)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>

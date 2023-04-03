@@ -441,7 +441,7 @@ if (usePage().props.flash.successMessage) {
                 Edit
               </Link>
               <button
-                @click="handleDelete(slider.id)"
+                @click="handleDelete(sliderBanner.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>
