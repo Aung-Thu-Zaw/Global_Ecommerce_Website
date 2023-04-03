@@ -36,7 +36,7 @@ const handleCreateSubCatrgory = async () => {
 
 const submit = () => {
   form.post(
-    route("admin.subcategories.store", {
+    route("admin.sub-categories.store", {
       per_page: props.per_page,
     }),
     {
@@ -100,7 +100,7 @@ const submit = () => {
 
         <div>
           <Link
-            :href="route('admin.subcategories.index')"
+            :href="route('admin.sub-categories.index')"
             :data="{
               per_page: props.per_page,
             }"

@@ -37,7 +37,7 @@ const handleEditSubCatrgory = async () => {
 
 const submit = () => {
   form.post(
-    route("admin.subcategories.update", {
+    route("admin.sub-categories.update", {
       sub_category: props.subCategory.slug,
       page: props.paginate.page,
       per_page: props.paginate.per_page,
@@ -103,7 +103,7 @@ const submit = () => {
 
         <div>
           <Link
-            :href="route('admin.subcategories.index')"
+            :href="route('admin.sub-categories.index')"
             :data="{
               page: props.paginate.page,
               per_page: props.paginate.per_page,

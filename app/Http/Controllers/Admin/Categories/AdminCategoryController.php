@@ -93,4 +93,16 @@ class AdminCategoryController extends Controller
 
         return to_route('admin.categories.trash', "page=$request->page&per_page=$request->per_page")->with("success", "The category has been permanently deleted.");
     }
+
+    public function permanentlyDelete(Request $request): RedirectResponse
+    {
+        $categories = Category::onlyTrashed()->get();
+
+        $categories->each(function ($category) {
+            Category::deleteImage($category);
+            $category->forceDelete();
+        });
+
+        return to_route('admin.categories.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Categories have been successfully deleted.");
+    }
 }

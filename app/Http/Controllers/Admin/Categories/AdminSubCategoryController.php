@@ -42,7 +42,7 @@ class AdminSubCategoryController extends Controller
     {
         SubCategory::create($request->validated()+["image"=>$subCategoryImageUploadService->createImage($request)]);
 
-        return to_route("admin.subcategories.index", "per_page=$request->per_page")->with("success", "SubCategory has been successfully created.");
+        return to_route("admin.sub-categories.index", "per_page=$request->per_page")->with("success", "SubCategory has been successfully created.");
     }
 
     public function edit(SubCategory $subCategory): Response|ResponseFactory
@@ -60,14 +60,14 @@ class AdminSubCategoryController extends Controller
     {
         $subCategory->update($request->validated()+["image"=>$subCategoryImageUploadService->updateImage($request, $subCategory)]);
 
-        return to_route("admin.subcategories.index", "page=$request->page&per_page=$request->per_page")->with("success", "SubCategory has been successfully updated.");
+        return to_route("admin.sub-categories.index", "page=$request->page&per_page=$request->per_page")->with("success", "SubCategory has been successfully updated.");
     }
 
     public function destroy(Request $request, SubCategory $subCategory): RedirectResponse
     {
         $subCategory->delete();
 
-        return to_route("admin.subcategories.index", "page=$request->page&per_page=$request->per_page")->with("success", "SubCategory has been successfully deleted.");
+        return to_route("admin.sub-categories.index", "page=$request->page&per_page=$request->per_page")->with("success", "SubCategory has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -91,7 +91,7 @@ class AdminSubCategoryController extends Controller
 
         $subCategory->restore();
 
-        return to_route('admin.subcategories.trash', "page=$request->page&per_page=$request->per_page")->with("success", "SubCategory has been successfully restored.");
+        return to_route('admin.sub-categories.trash', "page=$request->page&per_page=$request->per_page")->with("success", "SubCategory has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $id): RedirectResponse
@@ -102,6 +102,18 @@ class AdminSubCategoryController extends Controller
 
         $subCategory->forceDelete();
 
-        return to_route('admin.subcategories.trash', "page=$request->page&per_page=$request->per_page")->with("success", "The SubCategory has been permanently deleted");
+        return to_route('admin.sub-categories.trash', "page=$request->page&per_page=$request->per_page")->with("success", "The SubCategory has been permanently deleted");
+    }
+
+    public function permanentlyDelete(Request $request): RedirectResponse
+    {
+        $subCategories = SubCategory::onlyTrashed()->get();
+
+        $subCategories->each(function ($subCategory) {
+            SubCategory::deleteImage($subCategory);
+            $subCategory->forceDelete();
+        });
+
+        return to_route('admin.sub-categories.trash', "page=$request->page&per_page=$request->per_page")->with("success", "SubCategories have been successfully deleted.");
     }
 }

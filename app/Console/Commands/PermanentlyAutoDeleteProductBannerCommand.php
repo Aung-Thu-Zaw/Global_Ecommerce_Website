@@ -20,7 +20,7 @@ class PermanentlyAutoDeleteProductBannerCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Product Banner in the Trash will be automatically deleted after 60 days';
+    protected $description = 'Product Banners in the Trash will be automatically deleted after 60 days';
 
 
     public function handle(): void

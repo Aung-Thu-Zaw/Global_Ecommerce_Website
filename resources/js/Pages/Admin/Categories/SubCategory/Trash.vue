@@ -109,7 +109,7 @@ const handleRestore = async (trashSubCategoryId) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("admin.subcategories.restore", {
+      route("admin.sub-categories.restore", {
         id: trashSubCategoryId,
         page: props.trashSubCategories.current_page,
         per_page: params.per_page,
@@ -139,8 +139,37 @@ const handleDelete = async (trashSubCategoryId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.subcategories.forceDelete", {
+      route("admin.sub-categories.forceDelete", {
         id: trashSubCategoryId,
+        page: props.trashSubCategories.current_page,
+        per_page: params.per_page,
+      })
+    );
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
+
+const handlePermanentlyDelete = async () => {
+  const result = await swal({
+    icon: "warning",
+    title: "Are you sure you want to delete it from the trash?",
+    text: "All sub-categories in the trash will be permanetly deleted! You can't get it back.",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it !",
+    confirmButtonColor: "#ef4444",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.get(
+      route("admin.sub-categories.permanentlyDelete", {
         page: props.trashSubCategories.current_page,
         per_page: params.per_page,
       })
@@ -210,7 +239,7 @@ const handleDelete = async (trashSubCategoryId) => {
 
         <div>
           <Link
-            :href="route('admin.subcategories.index')"
+            :href="route('admin.sub-categories.index')"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
             <i class="fa-solid fa-arrow-left"></i>
@@ -250,6 +279,17 @@ const handleDelete = async (trashSubCategoryId) => {
           </select>
         </div>
       </div>
+
+      <!-- Auto delete description and button  -->
+      <p class="text-left text-sm font-bold mb-2 text-warning-600">
+        SubCategories in the Trash will be automatically deleted after 60 days.
+        <button
+          @click="handlePermanentlyDelete"
+          class="text-primary-500 rounded-md px-2 py-1 hover:bg-primary-200 hover:text-primary-600 transition-all hover:animate-bounce"
+        >
+          Empty the trash now
+        </button>
+      </p>
 
       <TableContainer>
         <TableHeader>

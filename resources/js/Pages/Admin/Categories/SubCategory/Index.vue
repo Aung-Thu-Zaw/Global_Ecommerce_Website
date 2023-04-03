@@ -107,7 +107,7 @@ const handleDelete = async (subCategory) => {
     });
     if (result.isConfirmed) {
       router.delete(
-        route("admin.subcategories.destroy", {
+        route("admin.sub-categories.destroy", {
           sub_category: subCategory.slug,
           page: props.subCategories.current_page,
           per_page: params.per_page,
@@ -135,7 +135,7 @@ const handleDelete = async (subCategory) => {
 
     if (result.isConfirmed) {
       router.delete(
-        route("admin.subcategories.destroy", {
+        route("admin.sub-categories.destroy", {
           sub_category: subCategory.slug,
           page: props.subCategories.current_page,
           per_page: params.per_page,
@@ -194,7 +194,7 @@ if (usePage().props.flash.successMessage) {
         <div>
           <Link
             as="button"
-            :href="route('admin.subcategories.trash')"
+            :href="route('admin.sub-categories.trash')"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
           >
             <i class="fa-solid fa-trash"></i>
@@ -206,7 +206,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <Link
-          :href="route('admin.subcategories.create')"
+          :href="route('admin.sub-categories.create')"
           :data="{
             per_page: params.per_page,
           }"
@@ -380,7 +380,7 @@ if (usePage().props.flash.successMessage) {
             <Td>
               <Link
                 as="button"
-                :href="route('admin.subcategories.edit', subCategory.slug)"
+                :href="route('admin.sub-categories.edit', subCategory.slug)"
                 :data="{
                   page: props.subCategories.current_page,
                   per_page: params.per_page,

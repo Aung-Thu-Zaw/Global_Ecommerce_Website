@@ -14,8 +14,13 @@ return [
     */
 
     'commands' => [
-        // App\Console\Commands\ExampleCommand::class,
-        App\Console\Commands\PermanentlyAutoDeleteCategoryCommand::class
+        App\Console\Commands\PermanentlyAutoDeleteBrandCommand::class,
+        App\Console\Commands\PermanentlyAutoDeleteCampaignBannerCommand::class,
+        App\Console\Commands\PermanentlyAutoDeleteCategoryCommand::class,
+        App\Console\Commands\PermanentlyAutoDeleteProductBannerCommand::class,
+        App\Console\Commands\PermanentlyAutoDeleteSliderBannerCommand::class,
+        App\Console\Commands\PermanentlyAutoDeleteSubCategoryCommand::class,
+
     ],
 
     /*

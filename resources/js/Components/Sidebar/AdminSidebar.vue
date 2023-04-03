@@ -162,7 +162,7 @@
                   Category
                 </Link>
                 <Link
-                  :href="route('admin.subcategories.index')"
+                  :href="route('admin.sub-categories.index')"
                   class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
                   :class="{
                     'text-blue-500 hover:text-blue-600': $page.url.startsWith(

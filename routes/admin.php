@@ -57,11 +57,12 @@ Route::middleware(["auth","verified","user.role:admin"])
                         Route::get("/trash", "trash")->name("trash");
                         Route::post("/{id}/restore", "restore")->name("restore");
                         Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                        Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
                     });
 
             Route::controller(AdminSubCategoryController::class)
                     ->prefix("/sub-categories")
-                    ->name("subcategories.")
+                    ->name("sub-categories.")
                     ->group(function () {
                         Route::get("/", "index")->name("index");
                         Route::get("/create", "create")->name("create");
@@ -72,6 +73,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                         Route::get("/trash", "trash")->name("trash");
                         Route::post("/{id}/restore", "restore")->name("restore");
                         Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                        Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
                     });
 
             Route::controller(AdminBrandController::class)
