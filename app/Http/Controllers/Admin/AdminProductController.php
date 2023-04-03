@@ -138,4 +138,16 @@ class AdminProductController extends Controller
 
         return to_route('admin.products.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Product has been permanently deleted.");
     }
+
+    public function permanentlyDelete(Request $request): RedirectResponse
+    {
+        $products = Product::onlyTrashed()->get();
+
+        $products->each(function ($product) {
+            Product::deleteImage($product);
+            $product->forceDelete();
+        });
+
+        return to_route('admin.products.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Products have been successfully deleted.");
+    }
 }

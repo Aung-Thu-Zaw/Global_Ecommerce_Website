@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('slider_banner:delete')->daily();
         $schedule->command('category:delete')->daily();
         $schedule->command('sub_category:delete')->daily();
+        $schedule->command('product:delete')->everyMinute();
     }
 
     /**
