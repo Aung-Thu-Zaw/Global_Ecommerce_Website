@@ -5,11 +5,15 @@ import WhyChooseUsSection from "@/Components/Sections/WhyChooseUsSection.vue";
 import FeaturedCategory from "@/Components/Sections/FeaturedCategorySection.vue";
 import ProductsForYourSection from "@/Components/Sections/ProductsForYourSection.vue";
 import ProductSection from "@/Components/Sections/ProductSection.vue";
-import EcommerceMainSection from "@/Components/Headers/EcommerceMainSection.vue";
+import SliderBanner from "@/Components/Banners/SliderBanner.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import { usePage } from "@inertiajs/vue3";
+
+defineProps({
+  sliderBanners: Object,
+});
 
 // Success flash message
 if (usePage().props.flash.successMessage) {
@@ -26,8 +30,8 @@ if (usePage().props.flash.successMessage) {
 
       <Announcement />
 
-      <!-- Main Header Section -->
-      <EcommerceMainSection />
+      <!-- Header Slider Banner Section -->
+      <SliderBanner :sliderBanners="sliderBanners" />
 
       <!-- Featured Category Section -->
       <!-- <FeaturedCategory /> -->

@@ -15,7 +15,11 @@ class SliderBannerSeeder extends Seeder
      */
     public function run()
     {
-        SliderBanner::factory(10)->create();
-        SliderBanner::factory(6)->create(["status"=>"show"]);
+        SliderBanner::factory()->create(["image"=>"slider-1.jpg","status"=>"show"]);
+        SliderBanner::factory()->create(["image"=>"slider-2.jpg","status"=>"show"]);
+        SliderBanner::factory()->create(["image"=>"slider-3.jpg","status"=>"show"]);
+        SliderBanner::factory()->create(["image"=>"slider-4.jpg","status"=>"show"]);
+        SliderBanner::factory()->create(["image"=>"slider-5.jpg","status"=>"show"]);
+        SliderBanner::factory()->create(["image"=>"slider-6.jpg","status"=>"show"]);
     }
 }

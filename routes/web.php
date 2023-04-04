@@ -1,18 +1,12 @@
 <?php
 
+use App\Http\Controllers\Ecommerce\HomeController;
 use App\Http\Controllers\MyAccountController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Ecommerce/Home/Index', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-})->name("home");
+Route::get('/', [HomeController::class,"index"])->name("home");
 
 
 Route::get('/dashboard', function () {
@@ -24,6 +18,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/my-account', [MyAccountController::class, 'update'])->name('my-account.update');
     Route::delete('/my-account', [MyAccountController::class, 'destroy'])->name('my-account.destroy');
 });
+
+
+
 
 require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';

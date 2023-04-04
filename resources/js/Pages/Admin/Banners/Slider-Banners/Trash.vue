@@ -136,7 +136,7 @@ const handleDelete = async (trashSliderBannerId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.sliders.forceDelete", {
+      route("admin.slider-banners.forceDelete", {
         id: trashSliderBannerId,
         page: props.trashSliderBanners.current_page,
         per_page: params.per_page,
