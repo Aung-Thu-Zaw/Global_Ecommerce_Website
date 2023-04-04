@@ -1,3 +1,10 @@
+<script setup>
+import ProductCard from "@/Components/Cards/ProductCard.vue";
+
+defineProps({
+  randomProducts: Object,
+});
+</script>
 <template>
   <section class="py-10">
     <div class="container max-w-screen-xl mx-auto px-4">
@@ -10,21 +17,9 @@
       <div
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
       >
-        <ProductCard></ProductCard>
-        <ProductCard></ProductCard>
-        <ProductCard></ProductCard>
-        <ProductCard></ProductCard>
-        <ProductCard></ProductCard>
-        <ProductCard></ProductCard>
-        <ProductCard></ProductCard>
-        <ProductCard></ProductCard>
-        <ProductCard></ProductCard>
-        <ProductCard></ProductCard>
-        <ProductCard></ProductCard>
-        <ProductCard></ProductCard>
-        <ProductCard></ProductCard>
-        <ProductCard></ProductCard>
-        <ProductCard></ProductCard>
+        <div v-for="product in randomProducts" :key="product.id">
+          <ProductCard :product="product"></ProductCard>
+        </div>
       </div>
 
       <div class="mt-5 flex items-center justify-center">
@@ -35,17 +30,7 @@
         </button>
       </div>
 
-      <!-- grid .// -->
     </div>
   </section>
 </template>
 
-  <script>
-import ProductCard from "@/Components/Cards/ProductCard.vue";
-export default {
-  components: { ProductCard },
-};
-</script>
-
-  <style>
-</style>

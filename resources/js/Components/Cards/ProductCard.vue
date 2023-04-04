@@ -1,22 +1,25 @@
 <script setup>
+defineProps({
+  product: Object,
+});
 </script>
 
 <template>
-  <div>
+  <div v-if="product">
     <!-- COMPONENT: PRODUCT CARD -->
     <article class="shadow-sm rounded bg-white border border-gray-200">
-      <a href="#" class="relative block p-3">
+      <a href="#" class="relative block p-3 h-[250px]">
         <img
-          src="https://i.ebayimg.com/images/g/UAAAAOSwzhhjvcsh/s-l225.webp"
+          :src="product.image"
           class="mx-auto w-full h-full object-cover"
           height="250"
           alt="Product title here"
         />
-        <span
+        <!-- <span
           class="inline-block px-2 py-1 text-sm font-bold bg-green-100 text-green-600 rounded-full absolute left-4 top-4"
         >
           25% OFF
-        </span>
+        </span> -->
       </a>
       <div class="p-4 border-t border-t-gray-200">
         <a
@@ -26,12 +29,11 @@
           <i class="fa fa-heart text-sm"></i>
         </a>
         <h6>
-          <a href="#" class="text-gray-600 hover:text-blue-500"
-            >Product title here</a
-          >
+          <a href="#" class="text-gray-600 hover:text-blue-500">
+            {{ product.name }}
+          </a>
         </h6>
-        <p class="text-sm text-gray-400">Sizes: S, M, XL</p>
-        <span class="font-semibold">$99.50</span>
+        <span class="font-semibold text-secondary-900">${{ product.price }}</span>
       </div>
     </article>
     <!-- COMPONENT: PRODUCT CARD //END -->
