@@ -17,8 +17,6 @@ class ProductBannerFactory extends Factory
     public function definition()
     {
         return [
-            "title"=>fake()->word(),
-            "description"=>fake()->sentence(),
             "image"=>fake()->imageUrl(),
             "url"=>fake()->url(),
             "status"=>"hide",

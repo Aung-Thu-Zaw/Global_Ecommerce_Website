@@ -24,8 +24,6 @@ class ProductBannerRequest extends FormRequest
     public function rules()
     {
         return [
-            "title"=>["required","string"],
-            "description"=>["required","string"],
             "url"=>["required","string","url"],
         ];
     }

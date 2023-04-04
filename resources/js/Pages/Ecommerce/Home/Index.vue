@@ -7,6 +7,7 @@ import ProductsForYourSection from "@/Components/Sections/ProductsForYourSection
 import ProductSection from "@/Components/Sections/ProductSection.vue";
 import SliderBanner from "@/Components/Banners/SliderBanner.vue";
 import CampaignBanner from "@/Components/Banners/CampaignBanner.vue";
+import ProductBanner from "@/Components/Banners/ProductBanner.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -15,6 +16,7 @@ import { usePage } from "@inertiajs/vue3";
 defineProps({
   sliderBanners: Object,
   campaignBanner: Object,
+  productBanners: Object,
 });
 
 // Success flash message
@@ -35,14 +37,14 @@ if (usePage().props.flash.successMessage) {
       <!-- Header Slider Banner Section -->
       <SliderBanner :sliderBanners="sliderBanners" />
 
+      <!-- Featured Category Section -->
+      <FeaturedCategory />
+
       <!-- Campaign Banner  -->
       <CampaignBanner :campaignBanner="campaignBanner" />
 
-      <!-- Featured Category Section -->
-      <!-- <FeaturedCategory /> -->
-
       <!-- New Products Section  -->
-      <!-- <ProductSection>
+      <ProductSection>
         <template v-slot:sectionHeader>
           <h2 class="text-md md:text-2xl font-bold">NEW PRODUCTS</h2>
           <span
@@ -53,10 +55,10 @@ if (usePage().props.flash.successMessage) {
             <i class="fa-solid fa-angles-right ml-3"></i>
           </a>
         </template>
-      </ProductSection> -->
+      </ProductSection>
 
-      <!-- New Products Section  -->
-      <!-- <ProductSection>
+      <!-- Hot Deal Products Section  -->
+      <ProductSection>
         <template v-slot:sectionHeader>
           <h2 class="text-md md:text-2xl font-bold">HOT DEALS PRODUCTS</h2>
           <span
@@ -67,10 +69,10 @@ if (usePage().props.flash.successMessage) {
             <i class="fa-solid fa-angles-right ml-3"></i>
           </a>
         </template>
-      </ProductSection> -->
+      </ProductSection>
 
       <!-- Best Selling Products Section  -->
-      <!-- <ProductSection>
+      <ProductSection>
         <template v-slot:sectionHeader>
           <h2 class="text-md md:text-2xl font-bold">BEST SELLING PRODUCTS</h2>
           <span
@@ -81,20 +83,23 @@ if (usePage().props.flash.successMessage) {
             <i class="fa-solid fa-angles-right ml-3"></i>
           </a>
         </template>
-      </ProductSection> -->
+      </ProductSection>
 
       <!-- Products For You Section -->
-      <!-- <ProductsForYourSection>
+      <ProductsForYourSection>
         <template v-slot:sectionHeader>
           <h2 class="text-md md:text-2xl font-bold">PRODUCTS FOR YOU</h2>
         </template>
-      </ProductsForYourSection> -->
+      </ProductsForYourSection>
+
+      <!-- Product Banner  -->
+      <ProductBanner :productBanners="productBanners" />
 
       <!-- Why Choose Us Section -->
-      <!-- <WhyChooseUsSection /> -->
+      <WhyChooseUsSection />
 
       <!-- Subscribe NewsLetter Section -->
-      <!-- <SubscribeNewsLetterSection /> -->
+      <SubscribeNewsLetterSection />
     </div>
   </AppLayout>
 </template>

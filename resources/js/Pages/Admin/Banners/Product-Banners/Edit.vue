@@ -20,8 +20,6 @@ const getPreviewPhotoPath = (path) => {
 };
 
 const form = useForm({
-  title: props.productBanner.title,
-  description: props.productBanner.description,
   url: props.productBanner.url,
   image: props.productBanner.image,
   captcha_token: null,
@@ -125,34 +123,6 @@ const submit = () => {
           />
         </div>
         <form @submit.prevent="handleEditProductBanner">
-          <div class="mb-6">
-            <InputLabel for="title" value="Title *" />
-
-            <TextInput
-              id="title"
-              type="text"
-              class="mt-1 block w-full"
-              v-model="form.title"
-              required
-              placeholder="Enter Banner Title"
-            />
-
-            <InputError class="mt-2" :message="form.errors.title" />
-          </div>
-          <div class="mb-6">
-            <InputLabel for="description" value="Description *" />
-
-            <TextInput
-              id="description"
-              type="text"
-              class="mt-1 block w-full"
-              v-model="form.description"
-              required
-              placeholder="Enter Banner Description"
-            />
-
-            <InputError class="mt-2" :message="form.errors.description" />
-          </div>
           <div class="mb-6">
             <InputLabel for="url" value="URL *" />
 
