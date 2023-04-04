@@ -76,8 +76,22 @@ class AdminInactiveVendorController extends Controller
     {
         $inactiveVendor = User::onlyTrashed()->where("id", $id)->first();
 
+        User::deleteUserAvatar($inactiveVendor);
+
         $inactiveVendor->forceDelete();
 
         return to_route('admin.vendors.inactive.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Vendor has been successfully deleted.");
+    }
+
+    public function permanentlyDelete(Request $request): RedirectResponse
+    {
+        $inactiveVendors = User::onlyTrashed()->get();
+
+        $inactiveVendors->each(function ($inactiveVendor) {
+            User::deleteUserAvatar($inactiveVendor);
+            $inactiveVendor->forceDelete();
+        });
+
+        return to_route('admin.vendors.inactive.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Inactive Vendors have been successfully deleted.");
     }
 }

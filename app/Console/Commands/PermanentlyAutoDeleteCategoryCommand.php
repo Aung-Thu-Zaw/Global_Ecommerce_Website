@@ -31,6 +31,7 @@ class PermanentlyAutoDeleteCategoryCommand extends Command
         ->where('deleted_at', '<=', $cutoffDate)->get();
 
         $categories->each(function ($category) {
+            Category::deleteImage($category);
             $category->forceDelete();
         });
     }

@@ -31,6 +31,7 @@ class PermanentlyAutoDeleteSliderBannerCommand extends Command
         ->where('deleted_at', '<=', $cutoffDate)->get();
 
         $sliderBanners->each(function ($sliderBanner) {
+            SliderBanner::deleteImage($sliderBanner);
             $sliderBanner->forceDelete();
         });
     }

@@ -25,12 +25,13 @@ class PermanentlyAutoDeleteProductCommand extends Command
 
     public function handle(): void
     {
-        $cutoffDate = Carbon::now()->subSeconds(60);
+        $cutoffDate = Carbon::now()->subDays(60);
 
         $products=Product::onlyTrashed()
         ->where('deleted_at', '<=', $cutoffDate)->get();
 
         $products->each(function ($product) {
+            Product::deleteImage($product);
             $product->forceDelete();
         });
     }

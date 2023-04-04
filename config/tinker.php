@@ -21,6 +21,7 @@ return [
         App\Console\Commands\PermanentlyAutoDeleteSliderBannerCommand::class,
         App\Console\Commands\PermanentlyAutoDeleteSubCategoryCommand::class,
         App\Console\Commands\PermanentlyAutoDeleteProductCommand::class,
+        App\Console\Commands\PermanentlyAutoDeleteInactiveVendorCommand::class,
 
     ],
 

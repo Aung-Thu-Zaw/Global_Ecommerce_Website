@@ -31,6 +31,7 @@ class PermanentlyAutoDeleteBrandCommand extends Command
         ->where('deleted_at', '<=', $cutoffDate)->get();
 
         $brands->each(function ($brand) {
+            Brand::deleteImage($brand);
             $brand->forceDelete();
         });
     }

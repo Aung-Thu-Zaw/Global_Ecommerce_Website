@@ -31,6 +31,7 @@ class PermanentlyAutoDeleteProductBannerCommand extends Command
         ->where('deleted_at', '<=', $cutoffDate)->get();
 
         $productBanners->each(function ($productBanner) {
+            ProductBanner::deleteImage($productBanner);
             $productBanner->forceDelete();
         });
     }

@@ -28,6 +28,16 @@ const params = reactive({
   per_page: props.inactiveTrashVendors.per_page
     ? props.inactiveTrashVendors.per_page
     : 10,
+
+  search: null,
+  page: props.inactiveTrashVendors.current_page
+    ? props.inactiveTrashVendors.current_page
+    : 1,
+  per_page: props.inactiveTrashVendors.per_page
+    ? props.inactiveTrashVendors.per_page
+    : 10,
+  sort: "id",
+  direction: "desc",
 });
 
 const handleSearchBox = () => {
@@ -42,6 +52,8 @@ watch(
       {
         search: params.search,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       },
       {
         replace: true,
@@ -57,10 +69,11 @@ watch(
     router.get(
       "/admin/managements/inactive-vendors/trash",
       {
-        page: props.inactiveTrashVendors.current_page
-          ? props.inactiveTrashVendors.current_page
-          : 1,
+        search: params.search,
+        page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       },
       {
         replace: true,
@@ -69,6 +82,23 @@ watch(
     );
   }
 );
+
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  router.get(
+    "/admin/managements/inactive-vendors/trash",
+    {
+      search: params.search,
+      page: params.page,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    { replace: true, preserveState: true }
+  );
+};
 
 const handleRestore = async (inactiveVendorId) => {
   const result = await swal({
@@ -116,6 +146,35 @@ const handleDelete = async (inactiveVendorId) => {
     router.delete(
       route("admin.vendors.inactive.forceDelete", {
         id: inactiveVendorId,
+        page: props.inactiveTrashVendors.current_page,
+        per_page: params.per_page,
+      })
+    );
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
+
+const handlePermanentlyDelete = async () => {
+  const result = await swal({
+    icon: "warning",
+    title: "Are you sure you want to delete it from the trash?",
+    text: "All inactive vendors in the trash will be permanetly deleted! You can't get it back.",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it !",
+    confirmButtonColor: "#ef4444",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.get(
+      route("admin.vendors.inactive.permanentlyDelete", {
         page: props.inactiveTrashVendors.current_page,
         per_page: params.per_page,
       })
@@ -226,53 +285,119 @@ const handleDelete = async (inactiveVendorId) => {
         </div>
       </div>
 
+      <!-- Auto delete description and button  -->
+      <p class="text-left text-sm font-bold mb-2 text-warning-600">
+        Inactive Vendors in the Trash will be automatically deleted after 60
+        days.
+        <button
+          @click="handlePermanentlyDelete"
+          class="text-primary-500 rounded-md px-2 py-1 hover:bg-primary-200 hover:text-primary-600 transition-all hover:animate-bounce"
+        >
+          Empty the trash now
+        </button>
+      </p>
+
       <TableContainer>
         <TableHeader>
-          <HeaderTh>
+          <HeaderTh @click="updateSorting('id')">
             No
-
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'id',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'id',
+              }"
             ></i>
             <i
               class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'id',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'id',
+              }"
             ></i>
           </HeaderTh>
-          <HeaderTh>
+          <HeaderTh @click="updateSorting('name')">
             Username
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'name',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'name',
+              }"
             ></i>
             <i
               class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'name',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'name',
+              }"
             ></i>
           </HeaderTh>
-          <HeaderTh>
+          <HeaderTh @click="updateSorting('email')">
             Email Address
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'email',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'email',
+              }"
             ></i>
             <i
               class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'email',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'email',
+              }"
             ></i>
           </HeaderTh>
-          <HeaderTh>
-            Status
-
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-            ></i>
-          </HeaderTh>
-          <HeaderTh>
+          <HeaderTh> Status </HeaderTh>
+          <HeaderTh @click="updateSorting('created_at')">
             Created At
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'created_at',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'created_at',
+              }"
             ></i>
             <i
               class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'created_at',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'created_at',
+              }"
             ></i>
           </HeaderTh>
           <HeaderTh> Action </HeaderTh>
