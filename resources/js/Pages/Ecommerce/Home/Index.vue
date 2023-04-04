@@ -6,6 +6,7 @@ import FeaturedCategory from "@/Components/Sections/FeaturedCategorySection.vue"
 import ProductsForYourSection from "@/Components/Sections/ProductsForYourSection.vue";
 import ProductSection from "@/Components/Sections/ProductSection.vue";
 import SliderBanner from "@/Components/Banners/SliderBanner.vue";
+import CampaignBanner from "@/Components/Banners/CampaignBanner.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -13,6 +14,7 @@ import { usePage } from "@inertiajs/vue3";
 
 defineProps({
   sliderBanners: Object,
+  campaignBanner: Object,
 });
 
 // Success flash message
@@ -32,6 +34,9 @@ if (usePage().props.flash.successMessage) {
 
       <!-- Header Slider Banner Section -->
       <SliderBanner :sliderBanners="sliderBanners" />
+
+      <!-- Campaign Banner  -->
+      <CampaignBanner :campaignBanner="campaignBanner" />
 
       <!-- Featured Category Section -->
       <!-- <FeaturedCategory /> -->

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ecommerce;
 
 use App\Http\Controllers\Controller;
+use App\Models\CampaignBanner;
 use App\Models\SliderBanner;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Application;
@@ -17,6 +18,8 @@ class HomeController extends Controller
     {
         $sliderBanners=SliderBanner::where("status", "show")->orderBy("id", "desc")->limit(6)->get();
 
-        return Inertia::render('Ecommerce/Home/Index', compact("sliderBanners"));
+        $campaignBanner=CampaignBanner::where("status", "show")->first();
+
+        return Inertia::render('Ecommerce/Home/Index', compact("sliderBanners", "campaignBanner"));
     }
 }

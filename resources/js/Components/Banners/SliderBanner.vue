@@ -30,11 +30,13 @@ defineProps({
                   class="hidden duration-700 ease-in-out"
                   data-carousel-item
                 >
-                  <img
-                    :src="sliderBanner.image"
-                    class="absolute block w-[100%] h-[100%] object-cover object-center -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-                    alt="..."
-                  />
+                  <a :href="sliderBanner.url" target="_blank" class="h-full">
+                    <img
+                      :src="sliderBanner.image"
+                      class="absolute block w-[100%] h-[100%] object-cover object-center -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                      alt="..."
+                    />
+                  </a>
                 </div>
               </div>
               <!-- Slider indicators -->
