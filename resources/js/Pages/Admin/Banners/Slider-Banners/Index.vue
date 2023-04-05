@@ -397,7 +397,7 @@ if (usePage().props.flash.successMessage) {
             <Td>
               <img
                 :src="sliderBanner.image"
-                class="w-[50px] h-[50px] rounded-sm object-cover shadow-lg ring-2 ring-slate-300"
+                class="h-[50px] rounded-sm object-cover shadow-lg ring-2 ring-slate-300"
                 alt=""
               />
             </Td>
