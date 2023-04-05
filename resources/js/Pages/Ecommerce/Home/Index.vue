@@ -4,7 +4,9 @@ import SubscribeNewsLetterSection from "@/Components/Sections/SubscribeNewsLette
 import WhyChooseUsSection from "@/Components/Sections/WhyChooseUsSection.vue";
 import FeaturedCategory from "@/Components/Sections/FeaturedCategorySection.vue";
 import ProductsForYourSection from "@/Components/Sections/ProductsForYourSection.vue";
-import ProductSection from "@/Components/Sections/ProductSection.vue";
+import NewProductsSection from "@/Components/Sections/NewProductsSection.vue";
+import HotDealProductsSection from "@/Components/Sections/HotDealProductsSection.vue";
+import BestSellingProductsSection from "@/Components/Sections/BestSellingProductsSection.vue";
 import SliderBanner from "@/Components/Banners/SliderBanner.vue";
 import CampaignBanner from "@/Components/Banners/CampaignBanner.vue";
 import ProductBanner from "@/Components/Banners/ProductBanner.vue";
@@ -46,54 +48,17 @@ if (usePage().props.flash.successMessage) {
       <CampaignBanner :campaignBanner="campaignBanner" />
 
       <!-- New Products Section  -->
-      <ProductSection :newProducts="newProducts">
-        <template v-slot:sectionHeader>
-          <h2 class="text-md md:text-2xl font-bold">NEW PRODUCTS</h2>
-          <span
-            class="hidden border-4 border-slate-300 w-[70%] lg:block"
-          ></span>
-          <a href="" class="text-sm font-bold md:text-md animate-bounce">
-            SEE ALL
-            <i class="fa-solid fa-angles-right ml-3"></i>
-          </a>
-        </template>
-      </ProductSection>
+      <NewProductsSection :newProducts="newProducts" />
 
       <!-- Hot Deal Products Section  -->
-      <ProductSection>
-        <template v-slot:sectionHeader>
-          <h2 class="text-md md:text-2xl font-bold">HOT DEALS PRODUCTS</h2>
-          <span
-            class="hidden border-4 border-slate-300 w-[65%] lg:block"
-          ></span>
-          <a href="" class="text-sm font-bold md:text-md animate-bounce">
-            SEE ALL
-            <i class="fa-solid fa-angles-right ml-3"></i>
-          </a>
-        </template>
-      </ProductSection>
+      <HotDealProductsSection />
 
       <!-- Best Selling Products Section  -->
-      <ProductSection>
-        <template v-slot:sectionHeader>
-          <h2 class="text-md md:text-2xl font-bold">BEST SELLING PRODUCTS</h2>
-          <span
-            class="hidden border-4 border-slate-300 w-[60%] lg:block"
-          ></span>
-          <a href="" class="text-sm font-bold md:text-md animate-bounce">
-            SEE ALL
-            <i class="fa-solid fa-angles-right ml-3"></i>
-          </a>
-        </template>
-      </ProductSection>
+      <BestSellingProductsSection />
 
       <!-- Products For You Section -->
-      <ProductsForYourSection :randomProducts="randomProducts">
-        <template v-slot:sectionHeader>
-          <h2 class="text-md md:text-2xl font-bold">PRODUCTS FOR YOU</h2>
-        </template>
-      </ProductsForYourSection>
-
+      <ProductsForYourSection :randomProducts="randomProducts" />
+      
       <!-- Product Banner  -->
       <ProductBanner :productBanners="productBanners" />
 

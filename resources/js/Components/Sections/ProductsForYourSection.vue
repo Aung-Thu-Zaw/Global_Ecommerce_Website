@@ -37,7 +37,7 @@ const loadMoreProduct = () => {
       <div
         class="bg-orange-500 p-3 text-white lg:text-slate-600 lg:bg-transparent lg:p-0 mb-5 rounded-md flex items-center justify-between"
       >
-        <slot name="sectionHeader"></slot>
+        <h2 class="text-md md:text-2xl font-bold">PRODUCTS FOR YOU</h2>
       </div>
 
       <div
