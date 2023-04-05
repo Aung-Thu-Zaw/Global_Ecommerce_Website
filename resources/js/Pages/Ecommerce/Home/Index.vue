@@ -17,6 +17,7 @@ defineProps({
   sliderBanners: Object,
   campaignBanner: Object,
   productBanners: Object,
+  newProducts: Object,
   randomProducts: Object,
 });
 
@@ -45,7 +46,7 @@ if (usePage().props.flash.successMessage) {
       <CampaignBanner :campaignBanner="campaignBanner" />
 
       <!-- New Products Section  -->
-      <ProductSection>
+      <ProductSection :newProducts="newProducts">
         <template v-slot:sectionHeader>
           <h2 class="text-md md:text-2xl font-bold">NEW PRODUCTS</h2>
           <span

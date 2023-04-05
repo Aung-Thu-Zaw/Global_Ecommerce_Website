@@ -21,8 +21,11 @@ class HomeController extends Controller
 
         $productBanners=ProductBanner::where("status", "show")->orderBy("id", "desc")->limit(3)->get();
 
+        $newProducts=Product::where("status", "active")->orderBy("id", "desc")->limit(5)->get();
+
         $randomProducts=Product::inRandomOrder()->paginate(25);
 
-        return Inertia::render('Ecommerce/Home/Index', compact("sliderBanners", "campaignBanner", "productBanners", "randomProducts"));
+
+        return Inertia::render('Ecommerce/Home/Index', compact("sliderBanners", "campaignBanner", "productBanners", "newProducts", "randomProducts"));
     }
 }
