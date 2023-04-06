@@ -16,29 +16,19 @@ class CategorySeeder extends Seeder
     public function run()
     {
         Category::factory()->create([
-            "name"=>"Home Furniture",
-            "slug"=>"home-furniture",
-            "image"=>"home-furniture.jpg",
+            "name"=>"Fashion & Beauty",
+            "slug"=>"fashion-and-beauty",
+            "image"=>"fashion-and-beauty.jpeg",
         ]);
         Category::factory()->create([
-            "name"=>"Vehicle Parts And Accessories",
-            "slug"=>"vehicle-parts-and-accessories",
-            "image"=>"vechicle-parts.jpg",
+            "name"=>"Foods & Snacks",
+            "slug"=>"foods-and-snacks",
+            "image"=>"foods-and-snacks.jpg",
         ]);
         Category::factory()->create([
             "name"=>"Sport Accessories",
             "slug"=>"sport-accessories",
-            "image"=>"sports.jpg",
-        ]);
-        Category::factory()->create([
-            "name"=>"Beauty Accessories",
-            "slug"=>"beauty-accessories",
-            "image"=>"beauty-accessories.jpg",
-        ]);
-        Category::factory()->create([
-            "name"=>"Electronic Accessories",
-            "slug"=>"electronic-accessories",
-            "image"=>"electronic-accessories.webp",
+            "image"=>"sport-accessories.jpg",
         ]);
         Category::factory()->create([
             "name"=>"Electronic Devices",
@@ -46,17 +36,24 @@ class CategorySeeder extends Seeder
             "image"=>"electronic-devices.jpg",
         ]);
         Category::factory()->create([
+            "name"=>"Electronic Accessories",
+            "slug"=>"electronic-accessories",
+            "image"=>"electronic-accessories.webp",
+        ]);
+        Category::factory()->create([
+            "name"=>"Home Accessories",
+            "slug"=>"home-accessories",
+            "image"=>"home-accessories.jpg",
+        ]);
+        Category::factory()->create([
+            "name"=>"Babies & Toys",
+            "slug"=>"babies-and-toys",
+            "image"=>"babies-and-toys.jpg",
+        ]);
+        Category::factory()->create([
             "name"=>"Pet Accessories",
             "slug"=>"pet-accessories",
             "image"=>"pet-accessories.webp",
         ]);
-        Category::factory()->create([
-            "name"=>"Fashion",
-            "slug"=>"fashion",
-            "image"=>"fashion.jpg",
-        ]);
-
-        // Category::factory(30)->create();
-        // Category::factory(30)->create(["deleted_at"=>null]);
     }
 }

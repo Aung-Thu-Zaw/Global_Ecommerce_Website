@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ecommerce;
 
 use App\Http\Controllers\Controller;
 use App\Models\CampaignBanner;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductBanner;
 use App\Models\SliderBanner;
@@ -15,6 +16,8 @@ class HomeController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
+        $categories=Category::with('subCategories')->limit(8)->get();
+
         $sliderBanners=SliderBanner::where("status", "show")->orderBy("id", "desc")->limit(6)->get();
 
         $campaignBanner=CampaignBanner::where("status", "show")->first();
@@ -26,6 +29,6 @@ class HomeController extends Controller
         $randomProducts=Product::inRandomOrder()->paginate(25);
 
 
-        return Inertia::render('Ecommerce/Home/Index', compact("sliderBanners", "campaignBanner", "productBanners", "newProducts", "randomProducts"));
+        return Inertia::render('Ecommerce/Home/Index', compact("categories", "sliderBanners", "campaignBanner", "productBanners", "newProducts", "randomProducts"));
     }
 }

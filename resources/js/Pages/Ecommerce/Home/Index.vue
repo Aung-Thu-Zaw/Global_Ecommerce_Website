@@ -1,4 +1,5 @@
 <script setup>
+import HeaderMainSection from "@/Components/Headers/HeaderMainSection.vue";
 import Announcement from "@/Components/Announcement.vue";
 import SubscribeNewsLetterSection from "@/Components/Sections/SubscribeNewsLetterSection.vue";
 import WhyChooseUsSection from "@/Components/Sections/WhyChooseUsSection.vue";
@@ -7,7 +8,6 @@ import ProductsForYourSection from "@/Components/Sections/ProductsForYourSection
 import NewProductsSection from "@/Components/Sections/NewProductsSection.vue";
 import HotDealProductsSection from "@/Components/Sections/HotDealProductsSection.vue";
 import BestSellingProductsSection from "@/Components/Sections/BestSellingProductsSection.vue";
-import SliderBanner from "@/Components/Banners/SliderBanner.vue";
 import CampaignBanner from "@/Components/Banners/CampaignBanner.vue";
 import ProductBanner from "@/Components/Banners/ProductBanner.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -16,6 +16,7 @@ import "vue3-toastify/dist/index.css";
 import { usePage } from "@inertiajs/vue3";
 
 defineProps({
+  categories: Object,
   sliderBanners: Object,
   campaignBanner: Object,
   productBanners: Object,
@@ -38,8 +39,11 @@ if (usePage().props.flash.successMessage) {
 
       <Announcement />
 
-      <!-- Header Slider Banner Section -->
-      <SliderBanner :sliderBanners="sliderBanners" />
+      <!-- Header Main Section -->
+      <HeaderMainSection
+        :categories="categories"
+        :sliderBanners="sliderBanners"
+      />
 
       <!-- Featured Category Section -->
       <FeaturedCategory />
@@ -58,7 +62,7 @@ if (usePage().props.flash.successMessage) {
 
       <!-- Products For You Section -->
       <ProductsForYourSection :randomProducts="randomProducts" />
-      
+
       <!-- Product Banner  -->
       <ProductBanner :productBanners="productBanners" />
 
