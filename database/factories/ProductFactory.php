@@ -18,6 +18,7 @@ class ProductFactory extends Factory
     {
         return [
             "brand_id"=>1,
+            "collection_id"=>fake()->numberBetween(1, 20),
             "category_id"=>fake()->numberBetween(1, 8),
             "sub_category_id"=>fake()->numberBetween(1, 8),
             "user_id"=>2,

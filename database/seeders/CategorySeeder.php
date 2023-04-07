@@ -21,9 +21,9 @@ class CategorySeeder extends Seeder
             "image"=>"fashion-and-beauty.jpeg",
         ]);
         Category::factory()->create([
-            "name"=>"Foods & Snacks",
-            "slug"=>"foods-and-snacks",
-            "image"=>"foods-and-snacks.jpg",
+            "name"=>"Foods & Groceries",
+            "slug"=>"foods-and-groceries",
+            "image"=>"foods-and-groceries.jpg",
         ]);
         Category::factory()->create([
             "name"=>"Sport Accessories",

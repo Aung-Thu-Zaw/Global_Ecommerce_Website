@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminBrandController;
 use App\Http\Controllers\Admin\AdminCampaignBannerController;
+use App\Http\Controllers\Admin\AdminCollectionController;
 use App\Http\Controllers\Admin\Categories\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminMultiImageController;
@@ -87,6 +88,22 @@ Route::middleware(["auth","verified","user.role:admin"])
                         Route::get("/{brand}/edit", "edit")->name("edit");
                         Route::post("/{brand}", "update")->name("update");
                         Route::delete("/{brand}", "destroy")->name("destroy");
+                        Route::get("/trash", "trash")->name("trash");
+                        Route::post("/{id}/restore", "restore")->name("restore");
+                        Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                        Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
+                    });
+
+            Route::controller(AdminCollectionController::class)
+                    ->prefix("/collections")
+                    ->name("collections.")
+                    ->group(function () {
+                        Route::get("/", "index")->name("index");
+                        Route::get("/create", "create")->name("create");
+                        Route::post("/", "store")->name("store");
+                        Route::get("/{collection}/edit", "edit")->name("edit");
+                        Route::post("/{collection}", "update")->name("update");
+                        Route::delete("/{collection}", "destroy")->name("destroy");
                         Route::get("/trash", "trash")->name("trash");
                         Route::post("/{id}/restore", "restore")->name("restore");
                         Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");

@@ -7,7 +7,7 @@ defineProps({ newProducts: Object });
 
 
 <template>
-  <section class="py-10">
+  <section class="">
     <div class="container max-w-screen-xl mx-auto px-4">
       <div
         class="bg-orange-500 p-3 text-white lg:text-slate-600 lg:bg-transparent lg:p-0 mb-5 rounded-md flex items-center justify-between"

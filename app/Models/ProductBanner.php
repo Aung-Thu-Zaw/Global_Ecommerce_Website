@@ -21,7 +21,6 @@ class ProductBanner extends Model
     public function toSearchableArray(): array
     {
         return [
-            'title' => $this->title,
             'url' => $this->url,
             'status' => $this->status,
         ];

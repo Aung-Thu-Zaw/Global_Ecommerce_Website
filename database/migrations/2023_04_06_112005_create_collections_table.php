@@ -12,8 +12,13 @@ return new class () extends Migration {
      */
     public function up()
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->foreignId("brand_id")->nullable()->after("id")->constrained()->cascadeOnDelete();
+        Schema::create('collections', function (Blueprint $table) {
+            $table->id();
+            $table->string("image");
+            $table->string("title");
+            $table->string("slug");
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -24,8 +29,6 @@ return new class () extends Migration {
      */
     public function down()
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropConstrainedForeignId("brand_id");
-        });
+        Schema::dropIfExists('collections');
     }
 };

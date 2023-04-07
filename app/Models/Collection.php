@@ -12,7 +12,7 @@ use Laravel\Scout\Searchable;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Brand extends Model
+class Collection extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -29,7 +29,7 @@ class Brand extends Model
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('name')
+            ->generateSlugsFrom('title')
             ->saveSlugsTo('slug');
     }
 
@@ -45,23 +45,23 @@ class Brand extends Model
     public function toSearchableArray(): array
     {
         return [
-            'name' => $this->name,
+            'title' => $this->title,
         ];
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Brand, never>
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Collection, never>
     */
     protected function image(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/brands/$value"),
+            set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/collections/$value"),
         );
     }
 
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Brand, never>
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Collection, never>
     */
     protected function createdAt(): Attribute
     {
@@ -80,10 +80,10 @@ class Brand extends Model
     }
 
 
-    public static function deleteImage(Brand $brand): void
+    public static function deleteImage(Collection $collection): void
     {
-        if (!empty($brand->image) && file_exists(storage_path("app/public/brands/".pathinfo($brand->image, PATHINFO_BASENAME)))) {
-            unlink(storage_path("app/public/brands/".pathinfo($brand->image, PATHINFO_BASENAME)));
+        if (!empty($collection->image) && file_exists(storage_path("app/public/collections/".pathinfo($collection->image, PATHINFO_BASENAME)))) {
+            unlink(storage_path("app/public/collections/".pathinfo($collection->image, PATHINFO_BASENAME)));
         }
     }
 }

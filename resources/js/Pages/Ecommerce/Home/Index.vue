@@ -3,7 +3,7 @@ import HeaderMainSection from "@/Components/Headers/HeaderMainSection.vue";
 import Announcement from "@/Components/Announcement.vue";
 import SubscribeNewsLetterSection from "@/Components/Sections/SubscribeNewsLetterSection.vue";
 import WhyChooseUsSection from "@/Components/Sections/WhyChooseUsSection.vue";
-import FeaturedCategory from "@/Components/Sections/FeaturedCategorySection.vue";
+import CollectionSection from "@/Components/Sections/CollectionSection.vue";
 import ProductsForYourSection from "@/Components/Sections/ProductsForYourSection.vue";
 import NewProductsSection from "@/Components/Sections/NewProductsSection.vue";
 import HotDealProductsSection from "@/Components/Sections/HotDealProductsSection.vue";
@@ -17,6 +17,7 @@ import { usePage } from "@inertiajs/vue3";
 
 defineProps({
   categories: Object,
+  collections: Object,
   sliderBanners: Object,
   campaignBanner: Object,
   productBanners: Object,
@@ -46,7 +47,7 @@ if (usePage().props.flash.successMessage) {
       />
 
       <!-- Featured Category Section -->
-      <FeaturedCategory />
+      <CollectionSection :collections="collections" />
 
       <!-- Campaign Banner  -->
       <CampaignBanner :campaignBanner="campaignBanner" />

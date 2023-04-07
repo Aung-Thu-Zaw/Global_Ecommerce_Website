@@ -246,7 +246,21 @@
               Brands
             </Link>
           </li>
-
+          <li class="items-center">
+            <Link
+              :href="route('admin.collections.index')"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url.startsWith('/admin/collections'),
+                'text-slate-700 hover:text-slate-500':
+                  !$page.url.startsWith('/admin/collections'),
+              }"
+            >
+              <i class="fa-solid fa-box mr-2 text-sm"></i>
+              Collections
+            </Link>
+          </li>
           <li class="items-center">
             <Link
               :href="route('admin.products.index')"
