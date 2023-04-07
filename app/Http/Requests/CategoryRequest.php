@@ -25,6 +25,7 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         $rules= [
+            "parent_id"=>["required",Rule::exists("categories", "id")],
             "name"=>["required","string","max:255",Rule::unique("categories", "name")],
             "status"=>["required","string",Rule::in(["show","hide"])]
         ];

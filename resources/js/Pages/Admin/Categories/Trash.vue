@@ -13,20 +13,24 @@ import Breadcrumb from "@/Components/Breadcrumbs/Categories/Breadcrumb.vue";
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link, Head } from "@inertiajs/vue3";
-import { reactive, watch, inject, computed } from "vue";
+import { inject, reactive, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
-  subCategories: Object,
+  trashCategories: Object,
 });
 
 const swal = inject("$swal");
 
 const params = reactive({
   search: null,
-  page: props.subCategories.current_page ? props.subCategories.current_page : 1,
-  per_page: props.subCategories.per_page ? props.subCategories.per_page : 10,
+  page: props.trashCategories.current_page
+    ? props.trashCategories.current_page
+    : 1,
+  per_page: props.trashCategories.per_page
+    ? props.trashCategories.per_page
+    : 10,
   sort: "id",
   direction: "desc",
 });
@@ -39,7 +43,7 @@ watch(
   () => params.search,
   (current, previous) => {
     router.get(
-      "/admin/sub-categories",
+      "/admin/categories/trash",
       {
         search: params.search,
         per_page: params.per_page,
@@ -58,7 +62,7 @@ watch(
   () => params.per_page,
   (current, previous) => {
     router.get(
-      "/admin/sub-categories",
+      "/admin/categories/trash",
       {
         search: params.search,
         page: params.page,
@@ -79,7 +83,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/sub-categories",
+    "/admin/categories/trash",
     {
       search: params.search,
       page: params.page,
@@ -91,80 +95,101 @@ const updateSorting = (sort = "id") => {
   );
 };
 
-const handleDelete = async (subCategory) => {
-  if (subCategory.products.length > 0) {
-    const result = await swal({
-      icon: "error",
-      title:
-        "You can't delete this subcategory because this subcategory have products?",
-      text: "If you click 'Delete, whatever!' button products will be automatically deleted.You will be able to restore this subcategory in the trash!",
-      showCancelButton: true,
-      confirmButtonText: "Delete, whatever!",
-      confirmButtonColor: "#ef4444",
-      timer: 20000,
-      timerProgressBar: true,
-      reverseButtons: true,
-    });
-    if (result.isConfirmed) {
-      router.delete(
-        route("admin.sub-categories.destroy", {
-          sub_category: subCategory.slug,
-          page: props.subCategories.current_page,
-          per_page: params.per_page,
-        })
-      );
-      setTimeout(() => {
-        swal({
-          icon: "success",
-          title: usePage().props.flash.successMessage,
-        });
-      }, 500);
-    }
-  } else {
-    const result = await swal({
-      icon: "warning",
-      title: "Are you sure you want to delete this sub-category?",
-      text: "You will be able to restore this sub-category in the trash!",
-      showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      confirmButtonColor: "#ef4444",
-      timer: 20000,
-      timerProgressBar: true,
-      reverseButtons: true,
-    });
+const handleRestore = async (trashCategoryId) => {
+  const result = await swal({
+    icon: "info",
+    title: "Are you sure you want to restore this category?",
+    showCancelButton: true,
+    confirmButtonText: "Yes, restore",
+    confirmButtonColor: "#4d9be9",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
 
-    if (result.isConfirmed) {
-      router.delete(
-        route("admin.sub-categories.destroy", {
-          sub_category: subCategory.slug,
-          page: props.subCategories.current_page,
-          per_page: params.per_page,
-        })
-      );
-      setTimeout(() => {
-        swal({
-          icon: "success",
-          title: usePage().props.flash.successMessage,
-        });
-      }, 500);
-    }
+  if (result.isConfirmed) {
+    router.post(
+      route("admin.categories.restore", {
+        id: trashCategoryId,
+        page: props.trashCategories.current_page,
+        per_page: params.per_page,
+      })
+    );
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
   }
 };
 
-if (usePage().props.flash.successMessage) {
-  swal({
-    icon: "success",
-    title: usePage().props.flash.successMessage,
+const handleDelete = async (trashCategoryId) => {
+  const result = await swal({
+    icon: "warning",
+    title: "Are you sure you want to delete it from the trash?",
+    text: "Category in the trash will be permanetly deleted! You can't get it back.",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it !",
+    confirmButtonColor: "#ef4444",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
   });
-}
+
+  if (result.isConfirmed) {
+    router.delete(
+      route("admin.categories.forceDelete", {
+        id: trashCategoryId,
+        page: props.trashCategories.current_page,
+        per_page: params.per_page,
+      })
+    );
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
+
+const handlePermanentlyDelete = async () => {
+  const result = await swal({
+    icon: "warning",
+    title: "Are you sure you want to delete it from the trash?",
+    text: "All categories in the trash will be permanetly deleted! You can't get it back.",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it !",
+    confirmButtonColor: "#ef4444",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.get(
+      route("admin.categories.permanentlyDelete", {
+        page: props.trashCategories.current_page,
+        per_page: params.per_page,
+      })
+    );
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
 </script>
 
 <template>
   <AdminDashboardLayout>
-    <Head title="SubCategory" />
+    <Head title="Trash Categories" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Category Breadcrumb -->
+      <!-- Breadcrumb  -->
 
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
@@ -185,7 +210,7 @@ if (usePage().props.flash.successMessage) {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >SubCategory</span
+                >Trash</span
               >
             </div>
           </li>
@@ -193,60 +218,57 @@ if (usePage().props.flash.successMessage) {
 
         <div>
           <Link
-            as="button"
-            :href="route('admin.sub-categories.trash')"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
+            :href="route('admin.categories.index')"
+            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
-            <i class="fa-solid fa-trash"></i>
-
-            Trash
+            <i class="fa-solid fa-arrow-left"></i>
+            Go Back
           </Link>
         </div>
       </div>
 
-      <div class="mb-5 flex items-center justify-between">
-        <Link
-          :href="route('admin.sub-categories.create')"
-          :data="{
-            per_page: params.per_page,
-          }"
-          class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700"
-        >
-          <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
-          Add SubCategory</Link
-        >
-        <!-- Search Input Form -->
-        <div class="flex items-center justify-end">
-          <form class="w-[350px] relative">
-            <input
-              type="text"
-              class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-              placeholder="Search"
-              v-model="params.search"
-            />
+      <!-- Search Input Form -->
+      <div class="flex items-center justify-end mb-5">
+        <form class="w-[350px] relative">
+          <input
+            type="text"
+            class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
+            placeholder="Search"
+            v-model="params.search"
+          />
 
-            <i
-              v-if="params.search"
-              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-              @click="handleSearchBox"
-            ></i>
-          </form>
-          <div class="ml-5">
-            <select
-              class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-              v-model="params.per_page"
-            >
-              <option value="" selected disabled>Select</option>
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="75">75</option>
-              <option value="100">100</option>
-            </select>
-          </div>
+          <i
+            v-if="params.search"
+            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
+            @click="handleSearchBox"
+          ></i>
+        </form>
+        <div class="ml-5">
+          <select
+            class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+            v-model="params.per_page"
+          >
+            <option value="" selected disabled>Select</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="75">75</option>
+            <option value="100">100</option>
+          </select>
         </div>
       </div>
+
+      <!-- Auto delete description and button  -->
+      <p class="text-left text-sm font-bold mb-2 text-warning-600">
+        Categories in the Trash will be automatically deleted after 60 days.
+        <button
+          @click="handlePermanentlyDelete"
+          class="text-primary-500 rounded-md px-2 py-1 hover:bg-primary-200 hover:text-primary-600 transition-all hover:animate-bounce"
+        >
+          Empty the trash now
+        </button>
+      </p>
 
       <TableContainer>
         <TableHeader>
@@ -275,7 +297,6 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Category </HeaderTh>
           <HeaderTh> Image </HeaderTh>
           <HeaderTh @click="updateSorting('name')">
             Name
@@ -302,7 +323,6 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
-
           <HeaderTh @click="updateSorting('status')">
             Status
             <i
@@ -356,46 +376,43 @@ if (usePage().props.flash.successMessage) {
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="subCategories.data.length">
-          <Tr v-for="subCategory in subCategories.data" :key="subCategory.id">
-            <BodyTh>{{ subCategory.id }}</BodyTh>
-            <Td>{{ subCategory.category.name }}</Td>
+        <tbody v-if="trashCategories.data.length">
+          <Tr
+            v-for="trashCategory in trashCategories.data"
+            :key="trashCategory.id"
+          >
+            <BodyTh>{{ trashCategory.id }}</BodyTh>
             <Td>
               <img
-                :src="subCategory.image"
+                :src="trashCategory.image"
                 class="w-[50px] h-[50px] rounded-full object-cover shadow-lg ring-2 ring-slate-300"
                 alt=""
               />
             </Td>
-            <Td>{{ subCategory.name }}</Td>
+            <Td>{{ trashCategory.name }}</Td>
             <Td>
-              <ActiveStatus v-if="subCategory.status == 'show'">
-                {{ subCategory.status }}
+              <ActiveStatus v-if="trashCategory.status == 'show'">
+                {{ trashCategory.status }}
               </ActiveStatus>
-              <InactiveStatus v-if="subCategory.status == 'hide'">
-                {{ subCategory.status }}
+              <InactiveStatus v-if="trashCategory.status == 'hide'">
+                {{ trashCategory.status }}
               </InactiveStatus>
             </Td>
-            <Td>{{ subCategory.created_at }}</Td>
+            <Td>{{ trashCategory.created_at }}</Td>
             <Td>
-              <Link
-                as="button"
-                :href="route('admin.sub-categories.edit', subCategory.slug)"
-                :data="{
-                  page: props.subCategories.current_page,
-                  per_page: params.per_page,
-                }"
+              <button
+                @click="handleRestore(trashCategory.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
-                <i class="fa-solid fa-edit"></i>
-                Edit
-              </Link>
+                <i class="fa-solid fa-recycle"></i>
+                Restore
+              </button>
               <button
-                @click="handleDelete(subCategory)"
+                @click="handleDelete(trashCategory.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
-                <i class="fa-solid fa-xmark"></i>
-                Delete
+                <i class="fa-solid fa-trash"></i>
+                Delete Forever
               </button>
             </Td>
           </Tr>
@@ -403,13 +420,12 @@ if (usePage().props.flash.successMessage) {
       </TableContainer>
 
       <!-- Not Avaliable Data -->
-      <NotAvaliableData v-if="!subCategories.data.length" />
+      <NotAvaliableData v-if="!trashCategories.data.length" />
 
       <!-- Pagination -->
-      <pagination class="mt-6" :links="subCategories.links" />
+      <pagination class="mt-6" :links="trashCategories.links" />
     </div>
   </AdminDashboardLayout>
 </template>
-
 
 

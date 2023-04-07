@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Scout\Searchable;
 use Spatie\Sluggable\HasSlug;
@@ -25,7 +25,7 @@ class Category extends Model
     /**
     * @var string[]
     */
-    protected array $cascadeDeletes = ['subCategories'];
+    protected array $cascadeDeletes = ['children'];
     protected $guarded=[];
 
 
@@ -87,13 +87,20 @@ class Category extends Model
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasMany<SubCategory>
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Category,Category>
     */
-    public function subCategories(): HasMany
+    public function parent(): BelongsTo
     {
-        return $this->hasMany(SubCategory::class);
+        return $this->belongsTo(Category::class, 'parent_id');
     }
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\HasMany<Category>
+    */
+    public function children(): HasMany
+    {
+        return $this->hasMany(Category::class, 'parent_id');
+    }
 
     public static function deleteImage(Category $category): void
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Categories;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
@@ -18,21 +18,23 @@ class AdminCategoryController extends Controller
     {
         $categories=Category::search(request("search"))
                             ->query(function (Builder $builder) {
-                                $builder->with("subCategories:id,category_id,name");
+                                $builder->with("children");
                             })
                             ->orderBy(request("sort", "id"), request("direction", "desc"))
                             ->paginate(request("per_page", 10))
                             ->appends(request()->all());
 
 
-        return inertia("Admin/Categories/Category/Index", compact("categories"));
+        return inertia("Admin/Categories/Index", compact("categories"));
     }
 
     public function create(): Response|ResponseFactory
     {
         $per_page=request("per_page");
 
-        return inertia("Admin/Categories/Category/Create", compact("per_page"));
+        $categories=Category::all();
+
+        return inertia("Admin/Categories/Create", compact("per_page", "categories"));
     }
 
     public function store(CategoryRequest $request, CategoryImageUploadService $categoryImageUploadService): RedirectResponse
@@ -46,7 +48,9 @@ class AdminCategoryController extends Controller
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
-        return inertia("Admin/Categories/Category/Edit", compact("category", "paginate"));
+        $categories=Category::all();
+
+        return inertia("Admin/Categories/Edit", compact("category", "paginate", "categories"));
     }
 
     public function update(CategoryRequest $request, Category $category, CategoryImageUploadService $categoryImageUploadService): RedirectResponse
@@ -71,7 +75,7 @@ class AdminCategoryController extends Controller
                                 ->paginate(request("per_page", 10))
                                 ->appends(request()->all());
 
-        return inertia("Admin/Categories/Category/Trash", compact("trashCategories"));
+        return inertia("Admin/Categories/Trash", compact("trashCategories"));
     }
 
     public function restore(Request $request, int $id): RedirectResponse

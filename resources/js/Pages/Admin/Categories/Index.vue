@@ -96,12 +96,12 @@ const updateSorting = (sort = "id") => {
 };
 
 const handleDelete = async (category) => {
-  if (category.sub_categories.length > 0) {
+  if (category.children.length > 0) {
     const result = await swal({
       icon: "error",
       title:
-        "You can't delete this category because this category have child subcategories?",
-      text: "If you click 'Delete, whatever!' button child subcategories will be automatically deleted.You will be able to restore this category in the trash!",
+        "You can't delete this category because this category have children category?",
+      text: "If you click 'Delete, whatever!' button children category will be automatically deleted.You will be able to restore this category in the trash!",
       showCancelButton: true,
       confirmButtonText: "Delete, whatever!",
       confirmButtonColor: "#ef4444",
@@ -170,29 +170,7 @@ if (usePage().props.flash.successMessage) {
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Category Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
-        <Breadcrumb>
-          <li aria-current="page">
-            <div class="flex items-center">
-              <svg
-                aria-hidden="true"
-                class="w-6 h-6 text-gray-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <span
-                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Category</span
-              >
-            </div>
-          </li>
-        </Breadcrumb>
+        <Breadcrumb />
 
         <div>
           <Link

@@ -41,9 +41,9 @@ class CategorySeeder extends Seeder
             "image"=>"electronic-accessories.webp",
         ]);
         Category::factory()->create([
-            "name"=>"Home Accessories",
-            "slug"=>"home-accessories",
-            "image"=>"home-accessories.jpg",
+            "name"=>"Home Appliances",
+            "slug"=>"home-appliances",
+            "image"=>"home-appliances.jpg",
         ]);
         Category::factory()->create([
             "name"=>"Babies & Toys",

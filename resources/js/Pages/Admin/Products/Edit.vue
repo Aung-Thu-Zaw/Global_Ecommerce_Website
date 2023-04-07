@@ -16,7 +16,6 @@ const props = defineProps({
   product: Object,
   brands: Object,
   categories: Object,
-  subCategories: Object,
   vendors: Object,
 });
 
@@ -38,7 +37,6 @@ const form = useForm({
   qty: props.product.qty,
   brand_id: props.product.brand_id,
   category_id: props.product.category_id,
-  sub_category_id: props.product.sub_category_id,
   user_id: props.product.user_id,
   hot_deal: props.product.hot_deal,
   special_offer: props.product.special_offer,
@@ -108,17 +106,6 @@ const removeColor = (removeColor) => {
     return color !== removeColor;
   });
 };
-
-// Filter SubCategory Come Form Controller
-const filterSubCategories = computed(() => {
-  if (!form.category_id) {
-    return props.subCategories;
-  }
-
-  return props.subCategories.filter(
-    (subCategory) => subCategory.category_id === form.category_id
-  );
-});
 
 // Handle Edit Product
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
@@ -435,60 +422,32 @@ const submit = () => {
 
                     <InputError class="mt-2" :message="form.errors.brand_id" />
                   </div>
-                  <div class="grid grid-cols-2 gap-3">
-                    <!-- Product Category Field -->
-                    <div class="mb-6">
-                      <InputLabel for="category" value="Category *" />
 
-                      <select
-                        v-model="form.category_id"
-                        class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+                  <!-- Product Category Field -->
+                  <div class="mb-6">
+                    <InputLabel for="category" value="Category *" />
+
+                    <select
+                      v-model="form.category_id"
+                      class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+                    >
+                      <option value="" selected disabled>
+                        Select Category
+                      </option>
+                      <option
+                        v-for="category in categories"
+                        :key="category.id"
+                        :value="category.id"
+                        :selected="category.id === form.category_id"
                       >
-                        <option value="" selected disabled>
-                          Select Category
-                        </option>
-                        <option
-                          v-for="category in categories"
-                          :key="category.id"
-                          :value="category.id"
-                          :selected="category.id === form.category_id"
-                        >
-                          {{ category.name }}
-                        </option>
-                      </select>
+                        {{ category.name }}
+                      </option>
+                    </select>
 
-                      <InputError
-                        class="mt-2"
-                        :message="form.errors.category_id"
-                      />
-                    </div>
-
-                    <!-- Product SubCategory Field -->
-                    <div class="mb-6">
-                      <InputLabel for="name" value="SubCategory *" />
-
-                      <select
-                        v-model="form.sub_category_id"
-                        class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-                      >
-                        <option value="" selected disabled>
-                          Select SubCategory
-                        </option>
-                        <option
-                          v-for="subCategory in filterSubCategories"
-                          :key="subCategory.id"
-                          :value="subCategory.id"
-                          :selected="subCategory.id === form.sub_category_id"
-                        >
-                          {{ subCategory.name }}
-                        </option>
-                      </select>
-
-                      <InputError
-                        class="mt-2"
-                        :message="form.errors.sub_category_id"
-                      />
-                    </div>
+                    <InputError
+                      class="mt-2"
+                      :message="form.errors.category_id"
+                    />
                   </div>
 
                   <!-- Product Vendor Field -->

@@ -39,11 +39,9 @@ class AdminProductController extends Controller
 
         $categories=Category::all();
 
-        $subCategories=SubCategory::all();
-
         $vendors=User::where([["status","active"],["role","vendor"]])->get();
 
-        return inertia("Admin/Products/Create", compact("per_page", "brands", "categories", "subCategories", "vendors"));
+        return inertia("Admin/Products/Create", compact("per_page", "brands", "categories", "vendors"));
     }
 
     public function store(ProductRequest $request, ProductImageUploadService $productImageUploadService, ProductMultiImageUploadService $productMultiImageUploadService): RedirectResponse
@@ -72,13 +70,11 @@ class AdminProductController extends Controller
 
         $categories=Category::all();
 
-        $subCategories=SubCategory::all();
-
         $vendors=User::where([["status","active"],["role","vendor"]])->get();
 
         $product->load(["sizes","colors","images"]);
 
-        return inertia("Admin/Products/Edit", compact("product", "paginate", "brands", "categories", "subCategories", "vendors"));
+        return inertia("Admin/Products/Edit", compact("product", "paginate", "brands", "categories", "vendors"));
     }
 
     public function update(ProductRequest $request, Product $product, ProductImageUploadService $productImageUploadService, ProductMultiImageUploadService $productMultiImageUploadService): RedirectResponse

@@ -28,7 +28,6 @@ class ProductRequest extends FormRequest
         return [
             "brand_id"=>["required","numeric",Rule::exists("brands", "id")],
             "category_id"=>["required","numeric",Rule::exists("categories", "id")],
-            "sub_category_id"=>["required","numeric",Rule::exists("sub_categories", "id")],
             "user_id"=>["required","numeric",Rule::exists("users", "id")],
             "name"=>["required","string"],
             "code"=>["required","string"],

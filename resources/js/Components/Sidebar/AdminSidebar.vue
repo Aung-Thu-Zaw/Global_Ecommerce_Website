@@ -125,56 +125,6 @@
             </Link>
           </li> -->
 
-          <!-- Navigation -->
-          <ul class="md:flex-col md:min-w-full flex flex-col list-none">
-            <li class="items-center cursor-pointer">
-              <div
-                class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
-                @click="categoriesIsHidden = !categoriesIsHidden"
-              >
-                <span>
-                  <i class="fa-solid fa-laptop mr-2 text-sm"></i>
-                  Categories
-                </span>
-                <i
-                  v-if="categoriesIsHidden"
-                  class="fa-solid fa-chevron-right"
-                ></i>
-                <i
-                  v-if="!categoriesIsHidden"
-                  class="fa-solid fa-chevron-down"
-                ></i>
-              </div>
-              <!-- </Link> -->
-
-              <ul
-                v-if="!categoriesIsHidden || categoriesArea"
-                class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
-              >
-                <Link
-                  :href="route('admin.categories.index')"
-                  class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                  :class="{
-                    'text-blue-500 hover:text-blue-600':
-                      $page.url.startsWith('/admin/categories'),
-                  }"
-                >
-                  Category
-                </Link>
-                <Link
-                  :href="route('admin.sub-categories.index')"
-                  class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                  :class="{
-                    'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                      '/admin/sub-categories'
-                    ),
-                  }"
-                >
-                  Sub Category
-                </Link>
-              </ul>
-            </li>
-          </ul>
           <ul class="md:flex-col md:min-w-full flex flex-col list-none">
             <li class="items-center cursor-pointer">
               <div
@@ -231,6 +181,21 @@
             </li>
           </ul>
 
+          <li class="items-center">
+            <Link
+              :href="route('admin.categories.index')"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url.startsWith('/admin/categories'),
+                'text-slate-700 hover:text-slate-500':
+                  !$page.url.startsWith('/admin/categories'),
+              }"
+            >
+              <i class="fa-solid fa-laptop mr-2 text-sm"></i>
+              Categories
+            </Link>
+          </li>
           <li class="items-center">
             <Link
               :href="route('admin.brands.index')"

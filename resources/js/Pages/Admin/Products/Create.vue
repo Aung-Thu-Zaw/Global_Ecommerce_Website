@@ -15,7 +15,6 @@ const props = defineProps({
   per_page: String,
   brands: Object,
   categories: Object,
-  subCategories: Object,
   vendors: Object,
 });
 
@@ -33,7 +32,6 @@ const form = useForm({
   qty: "",
   brand_id: "",
   category_id: "",
-  sub_category_id: "",
   user_id: "",
   hot_deal: false,
   special_offer: false,
@@ -103,17 +101,6 @@ const removeColor = (removeColor) => {
     return color !== removeColor;
   });
 };
-
-// Filter SubCategory Come Form Controller
-const filterSubCategories = computed(() => {
-  if (!form.category_id) {
-    return props.subCategories;
-  }
-
-  return props.subCategories.filter(
-    (subCategory) => subCategory.category_id === form.category_id
-  );
-});
 
 // Handle Create Product
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
@@ -428,58 +415,31 @@ const submit = () => {
 
                     <InputError class="mt-2" :message="form.errors.brand_id" />
                   </div>
-                  <div class="grid grid-cols-2 gap-3">
-                    <!-- Product Category Field -->
-                    <div class="mb-6">
-                      <InputLabel for="category" value="Category *" />
 
-                      <select
-                        v-model="form.category_id"
-                        class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+                  <!-- Product Category Field -->
+                  <div class="mb-6">
+                    <InputLabel for="category" value="Category *" />
+
+                    <select
+                      v-model="form.category_id"
+                      class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+                    >
+                      <option value="" selected disabled>
+                        Select Category
+                      </option>
+                      <option
+                        v-for="category in categories"
+                        :key="category.id"
+                        :value="category.id"
                       >
-                        <option value="" selected disabled>
-                          Select Category
-                        </option>
-                        <option
-                          v-for="category in categories"
-                          :key="category.id"
-                          :value="category.id"
-                        >
-                          {{ category.name }}
-                        </option>
-                      </select>
+                        {{ category.name }}
+                      </option>
+                    </select>
 
-                      <InputError
-                        class="mt-2"
-                        :message="form.errors.category_id"
-                      />
-                    </div>
-
-                    <!-- Product SubCategory Field -->
-                    <div class="mb-6">
-                      <InputLabel for="subCategory" value="SubCategory *" />
-
-                      <select
-                        v-model="form.sub_category_id"
-                        class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-                      >
-                        <option value="" selected disabled>
-                          Select SubCategory
-                        </option>
-                        <option
-                          v-for="subCategory in filterSubCategories"
-                          :key="subCategory.id"
-                          :value="subCategory.id"
-                        >
-                          {{ subCategory.name }}
-                        </option>
-                      </select>
-
-                      <InputError
-                        class="mt-2"
-                        :message="form.errors.sub_category_id"
-                      />
-                    </div>
+                    <InputError
+                      class="mt-2"
+                      :message="form.errors.category_id"
+                    />
                   </div>
 
                   <!-- Product Vendor Field -->

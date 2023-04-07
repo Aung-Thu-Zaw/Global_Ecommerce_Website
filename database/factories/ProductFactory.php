@@ -20,7 +20,6 @@ class ProductFactory extends Factory
             "brand_id"=>1,
             "collection_id"=>fake()->numberBetween(1, 20),
             "category_id"=>fake()->numberBetween(1, 8),
-            "sub_category_id"=>fake()->numberBetween(1, 8),
             "user_id"=>2,
             "name"=>fake()->unique()->name(),
             "slug"=>fake()->unique()->slug(),

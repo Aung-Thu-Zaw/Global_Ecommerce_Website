@@ -21,7 +21,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('product_banner:delete')->daily();
         $schedule->command('slider_banner:delete')->daily();
         $schedule->command('category:delete')->daily();
-        $schedule->command('sub_category:delete')->daily();
         $schedule->command('product:delete')->daily();
         $schedule->command('inactive_vendor:delete')->daily();
         $schedule->command('collection:delete')->daily();

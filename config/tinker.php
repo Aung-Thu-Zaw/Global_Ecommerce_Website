@@ -19,7 +19,6 @@ return [
         App\Console\Commands\PermanentlyAutoDeleteCategoryCommand::class,
         App\Console\Commands\PermanentlyAutoDeleteProductBannerCommand::class,
         App\Console\Commands\PermanentlyAutoDeleteSliderBannerCommand::class,
-        App\Console\Commands\PermanentlyAutoDeleteSubCategoryCommand::class,
         App\Console\Commands\PermanentlyAutoDeleteProductCommand::class,
         App\Console\Commands\PermanentlyAutoDeleteInactiveVendorCommand::class,
 
@@ -62,7 +61,6 @@ return [
         App\Models\ProductBanner::class,
         App\Models\Size::class,
         App\Models\SliderBanner::class,
-        App\Models\SubCategory::class,
         App\Models\User::class,
 
     ],

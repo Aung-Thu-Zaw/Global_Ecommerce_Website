@@ -4,11 +4,10 @@ use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminBrandController;
 use App\Http\Controllers\Admin\AdminCampaignBannerController;
 use App\Http\Controllers\Admin\AdminCollectionController;
-use App\Http\Controllers\Admin\Categories\AdminCategoryController;
+use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminMultiImageController;
 use App\Http\Controllers\Admin\AdminProductBannerController;
-use App\Http\Controllers\Admin\Categories\AdminSubCategoryController;
 use App\Http\Controllers\Admin\Managements\AdminActiveVendorController;
 use App\Http\Controllers\Admin\Managements\AdminInactiveVendorController;
 use App\Http\Controllers\Admin\AdminProductController;
@@ -62,21 +61,6 @@ Route::middleware(["auth","verified","user.role:admin"])
                         Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
                     });
 
-            Route::controller(AdminSubCategoryController::class)
-                    ->prefix("/sub-categories")
-                    ->name("sub-categories.")
-                    ->group(function () {
-                        Route::get("/", "index")->name("index");
-                        Route::get("/create", "create")->name("create");
-                        Route::post("/", "store")->name("store");
-                        Route::get("/{sub_category}/edit", "edit")->name("edit");
-                        Route::post("/{sub_category}", "update")->name("update");
-                        Route::delete("/{sub_category}", "destroy")->name("destroy");
-                        Route::get("/trash", "trash")->name("trash");
-                        Route::post("/{id}/restore", "restore")->name("restore");
-                        Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
-                        Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
-                    });
 
             Route::controller(AdminBrandController::class)
                     ->prefix("/brands")

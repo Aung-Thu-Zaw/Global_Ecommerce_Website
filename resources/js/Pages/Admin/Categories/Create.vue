@@ -10,8 +10,8 @@ import Breadcrumb from "@/Components/Breadcrumbs/Categories/Breadcrumb.vue";
 import { ref } from "vue";
 
 const props = defineProps({
-  paginate: Array,
-  category: Object,
+  per_page: String,
+  categories: Object,
 });
 
 const previewPhoto = ref("");
@@ -20,25 +20,24 @@ const getPreviewPhotoPath = (path) => {
 };
 
 const form = useForm({
-  name: props.category.name,
-  status: props.category.status,
-  image: props.category.image,
+  parent_id: "",
+  name: "",
+  status: "",
+  image: "",
   captcha_token: null,
 });
 
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
-const handleEditCatrgory = async () => {
+const handleCreateCatrgory = async () => {
   await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("edit_category");
+  form.captcha_token = await executeRecaptcha("create_category");
   submit();
 };
 
 const submit = () => {
   form.post(
-    route("admin.categories.update", {
-      category: props.category.slug,
-      page: props.paginate.page,
-      per_page: props.paginate.per_page,
+    route("admin.categories.store", {
+      per_page: props.per_page,
     }),
     {
       onFinish: () => form.reset(),
@@ -49,7 +48,7 @@ const submit = () => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Edit Category" />
+    <Head title="Create Category" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Breadcrumb start -->
 
@@ -76,7 +75,6 @@ const submit = () => {
               >
             </div>
           </li>
-
           <li aria-current="page">
             <div class="flex items-center">
               <svg
@@ -94,7 +92,7 @@ const submit = () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Edit</span
+                >Create</span
               >
             </div>
           </li>
@@ -104,8 +102,7 @@ const submit = () => {
           <Link
             :href="route('admin.categories.index')"
             :data="{
-              page: props.paginate.page,
-              per_page: props.paginate.per_page,
+              per_page: props.per_page,
             }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
@@ -119,12 +116,12 @@ const submit = () => {
         <div class="mb-6">
           <img
             ref="previewPhoto"
-            :src="form.image"
+            src="https://media.istockphoto.com/id/1357365823/vector/default-image-icon-vector-missing-picture-page-for-website-design-or-mobile-app-no-photo.jpg?s=612x612&w=0&k=20&c=PM_optEhHBTZkuJQLlCjLz-v3zzxp-1mpNQZsdjrbns="
             alt=""
             class="w-[100px] h-[100px] object-cover rounded-full shadow-md my-3 ring-2 ring-slate-300"
           />
         </div>
-        <form @submit.prevent="handleEditCatrgory">
+        <form @submit.prevent="handleCreateCatrgory">
           <div class="mb-6">
             <InputLabel for="name" value="Category Name *" />
 
@@ -138,6 +135,26 @@ const submit = () => {
             />
 
             <InputError class="mt-2" :message="form.errors.name" />
+          </div>
+
+          <div class="mb-6">
+            <InputLabel for="parent_category" value="Parent Category" />
+
+            <select
+              class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+              v-model="form.parent_id"
+            >
+              <option value="" selected disabled>Select Parent Category</option>
+              <option
+                v-for="category in categories"
+                :key="category"
+                :value="category.id"
+              >
+                {{ category.name }}
+              </option>
+            </select>
+
+            <InputError class="mt-2" :message="form.errors.parent_id" />
           </div>
 
           <div class="mb-6">
@@ -174,7 +191,7 @@ const submit = () => {
           </div>
 
           <div class="mb-6">
-            <FormButton>Update</FormButton>
+            <FormButton>Save</FormButton>
           </div>
         </form>
       </div>

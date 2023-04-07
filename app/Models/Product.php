@@ -25,7 +25,7 @@ class Product extends Model
     /**
     * @var string[]
     */
-    protected array $cascadeDeletes = ['subCategories'];
+    protected array $cascadeDeletes = ['category'];
     protected $guarded=[];
 
     protected $casts = [
@@ -113,16 +113,6 @@ class Product extends Model
         );
     }
 
-
-    /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<SubCategory,Product>
-    */
-    public function subCategories(): BelongsTo
-    {
-        return $this->belongsTo(SubCategory::class);
-    }
-
-
     /**
     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Image>
     */
@@ -147,6 +137,14 @@ class Product extends Model
     public function sizes(): BelongsToMany
     {
         return $this->belongsToMany(Size::class);
+    }
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Category,Product>
+    */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
 
 
