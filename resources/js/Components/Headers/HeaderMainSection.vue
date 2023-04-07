@@ -26,7 +26,7 @@ defineProps({
               </div>
               <button
                 id="dropdownHoverButton"
-                data-dropdown-toggle="dropdownHover"
+                :data-dropdown-toggle="'dropdownHover' + category.id"
                 data-dropdown-trigger="hover"
                 data-dropdown-placement="right-end"
                 class="w-[80%] md:mb-0 font-medium text-sm text-center inline-flex items-center py-2 hover:text-blue-600"
@@ -50,15 +50,41 @@ defineProps({
 
               <!-- Dropdown menu -->
               <div
-                id="dropdownHover"
+                :id="'dropdownHover' + category.id"
                 class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-md p-5 md:w-[500px] lg:w-[800px] h-[400px] dark:bg-gray-700"
               >
-                vel eaque. Possimus minima cupiditate nemo doloremque incidunt,
-                autem assumenda eius. Quod, ipsum culpa. Dicta accusantium vel
-                magnam excepturi sit sed vero quisquam, neque corrupti nihil
-                impedit omnis repudiandae unde necessitatibus cum reiciendis.
-                Molestias mollitia eius obcaecati odio rerum odit dolor, dolorem
-                culpa nesciunt perspiciatis esse cupiditate excepturi temporibus
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                  <div
+                    v-for="secondChildCategory in category.children"
+                    :key="secondChildCategory.id"
+                    class="p-3 mb-3"
+                  >
+                    <a
+                      href="#"
+                      class="font-bold text-slate-700 hover:text-blue-500 hover:underline cursor-pointer"
+                    >
+                      {{ secondChildCategory.name }}
+                    </a>
+
+                    <ul>
+                      <li
+                        v-for="thirdChildCategory in secondChildCategory.children"
+                        :key="thirdChildCategory"
+                        class=""
+                      >
+                        <i
+                          class="fa-solid fa-circle text-[.4rem] text-slate-600 mx-2"
+                        ></i>
+                        <a
+                          href="#"
+                          class="text-[.8rem] font-bold text-slate-500 hover:text-blue-500 hover:underline cursor-pointer"
+                        >
+                          {{ thirdChildCategory.name }}
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
           </aside>

@@ -17,7 +17,7 @@ class HomeController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $categories=Category::limit(8)->get();
+        $categories=Category::with("children")->limit(8)->get();
 
         $collections=Collection::with("products:id,collection_id")->limit(12)->get();
 

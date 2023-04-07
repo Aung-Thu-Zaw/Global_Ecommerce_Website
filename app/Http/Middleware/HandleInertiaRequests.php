@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -37,6 +38,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'parentCategory'=>Category::with("children")->whereNull("parent_id")->get(),
             'flash'=>[
                 'successMessage'=>session('success'),
                 'errorMessage'=>session('error'),

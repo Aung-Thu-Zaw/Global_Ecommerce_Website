@@ -1,6 +1,5 @@
 <script setup>
 import HeaderMainSection from "@/Components/Headers/HeaderMainSection.vue";
-import Announcement from "@/Components/Announcement.vue";
 import SubscribeNewsLetterSection from "@/Components/Sections/SubscribeNewsLetterSection.vue";
 import WhyChooseUsSection from "@/Components/Sections/WhyChooseUsSection.vue";
 import CollectionSection from "@/Components/Sections/CollectionSection.vue";
@@ -36,10 +35,6 @@ if (usePage().props.flash.successMessage) {
 <template>
   <AppLayout>
     <div class="min-h-screen bg-gray-50">
-      <!-- Announcement Bar  -->
-
-      <Announcement />
-
       <!-- Header Main Section -->
       <HeaderMainSection
         :categories="categories"

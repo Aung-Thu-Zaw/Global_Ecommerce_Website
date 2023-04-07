@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class CategorySeeder extends Seeder
@@ -55,5 +54,26 @@ class CategorySeeder extends Seeder
             "slug"=>"pet-accessories",
             "image"=>"pet-accessories.webp",
         ]);
+
+        Category::factory(5)->create(["parent_id"=>1]);
+        Category::factory(3)->create(["parent_id"=>2]);
+        Category::factory(7)->create(["parent_id"=>3]);
+        Category::factory(8)->create(["parent_id"=>4]);
+        Category::factory(10)->create(["parent_id"=>5]);
+        Category::factory(3)->create(["parent_id"=>6]);
+        Category::factory(6)->create(["parent_id"=>7]);
+        Category::factory(2)->create(["parent_id"=>8]);
+
+
+
+
+        Category::factory(3)->create(["parent_id"=>12]);
+        Category::factory(3)->create(["parent_id"=>14]);
+        Category::factory(3)->create(["parent_id"=>15]);
+        Category::factory(3)->create(["parent_id"=>14]);
+        Category::factory(3)->create(["parent_id"=>19]);
+        Category::factory(3)->create(["parent_id"=>26]);
+        Category::factory(3)->create(["parent_id"=>20]);
+        Category::factory(3)->create(["parent_id"=>18]);
     }
 }
