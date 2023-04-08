@@ -51,7 +51,7 @@ defineProps({
               <!-- Dropdown menu -->
               <div
                 :id="'dropdownHover' + category.id"
-                class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-md p-5 md:w-[500px] lg:w-[800px] h-[400px] dark:bg-gray-700"
+                class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-md p-5 md:w-[500px] lg:w-[920px] h-[400px] dark:bg-gray-700 overflow-auto"
               >
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                   <div

@@ -20,7 +20,7 @@ class CategoryFactory extends Factory
             "name"=>fake()->unique()->name(),
             "slug"=>fake()->unique()->slug(),
             "image"=>fake()->imageUrl(),
-            "status"=>fake()->randomElement(["show","hide"]),
+            "status"=>"show",
             "created_at"=>fake()->dateTimeBetween("-4 months", now()),
             // "deleted_at"=>fake()->dateTimeBetween("-4 months", now())
         ];

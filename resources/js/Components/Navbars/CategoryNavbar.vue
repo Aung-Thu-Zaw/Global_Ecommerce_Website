@@ -62,15 +62,21 @@
                     <li
                       v-for="childCategory in category.children"
                       :key="childCategory.id"
+                      class="flex items-start"
                     >
-                      <i
-                        class="fa-solid fa-circle text-[.4rem] text-slate-600 mx-4"
-                      ></i>
-                      <a
-                        class="font-medium text-sm hover:text-blue-600 hover:underline cursor-pointer"
-                      >
-                        {{ childCategory.name }}
-                      </a>
+                      <span>
+                        <i
+                          class="fa-solid fa-circle text-[.4rem] text-slate-600 mx-4"
+                        ></i>
+                      </span>
+
+                      <span>
+                        <a
+                          class="font-medium text-sm hover:text-blue-600 hover:underline cursor-pointer"
+                        >
+                          {{ childCategory.name }}
+                        </a>
+                      </span>
                     </li>
                   </ul>
                 </div>
