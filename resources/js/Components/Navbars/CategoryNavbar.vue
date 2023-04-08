@@ -4,8 +4,8 @@
 <template>
   <nav class="relative shadow-sm bg-secondary-200">
     <div class="container max-w-screen-xl mx-auto px-4">
-      <!-- Bottom -->
       <div class="hidden lg:flex flex-1 items-center py-1">
+        <!-- Category -->
         <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
           <ul
             class="flex flex-col p-2 mt-4 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:border-0 md:dark:bg-gray-900 font-bold"
@@ -14,7 +14,7 @@
               <button
                 id="dropdownNavbarLink"
                 data-dropdown-toggle="dropdownNavbar"
-                data-dropdown-trigger="click"
+                data-dropdown-trigger="hover"
                 class="flex items-center justify-between w-full pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-gray-400 dark:hover:text-white dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
               >
                 <i class="fa-solid fa-list mr-2"></i>
@@ -84,19 +84,76 @@
             </li>
           </ul>
         </div>
-      </div>
-      <!-- Bottom //end -->
-    </div>
-    <!-- container //end -->
-  </nav>
 
-  <!-- <li>
-    <a
-      href="#"
-      class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-      >Contact</a
-    >
-  </li> -->
+        <!-- Vendor List  -->
+        <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
+          <ul
+            class="flex flex-col p-2 mt-4 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:border-0 md:dark:bg-gray-900 font-bold"
+          >
+            <li class="relative">
+              <button
+                id="dropdownSellersButton"
+                data-dropdown-toggle="dropdownSellers"
+                data-dropdown-placement="bottom"
+                data-dropdown-trigger="hover"
+                class="flex items-center justify-between w-full pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-gray-400 dark:hover:text-white dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
+              >
+                <!-- <i class="fa-solid fa-shop mr-2"></i> -->
+                Our Seller Shops
+                <svg
+                  class="w-5 h-5 ml-1"
+                  aria-hidden="true"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+              <!-- Dropdown menu -->
+              <div
+                id="dropdownSellers"
+                class="z-40 hidden bg-white rounded-lg shadow-md w-[300px] h-[350px] dark:bg-gray-700"
+              >
+                <ul
+                  class="h-full py-2 overflow-y-auto text-gray-700 dark:text-gray-200"
+                  aria-labelledby="dropdownSellersButton"
+                >
+                  <li v-for="vendor in $page.props.vendors" :key="vendor.id">
+                    <a
+                      href="#"
+                      class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      <img
+                        class="w-6 h-6 mr-2 rounded-full"
+                        :src="vendor.avatar"
+                        alt="Jese image"
+                      />
+                      {{ vendor.shop_name }}
+                      <span class="text-green-400 rounded-xl">
+                        <i class="fa-solid fa-circle-check ml-2"></i>
+                      </span>
+                    </a>
+                  </li>
+                </ul>
+                <a
+                  href="#"
+                  class="flex items-center justify-center p-3 text-sm font-medium text-blue-600 border-t border-gray-200 rounded-b-lg bg-gray-50 dark:border-gray-600 hover:bg-gray-100"
+                >
+                  <i class="fas fa-eye mr-2"></i>
+                  View More
+                </a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
 </template>
 
 

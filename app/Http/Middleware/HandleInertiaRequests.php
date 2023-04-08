@@ -39,6 +39,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'parentCategory'=>Category::with("children")->whereNull("parent_id")->get(),
+            'vendors'=>User::where([["role","vendor"],["status","active"]])->limit(30)->get(),
             'flash'=>[
                 'successMessage'=>session('success'),
                 'errorMessage'=>session('error'),

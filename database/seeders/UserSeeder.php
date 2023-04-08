@@ -39,7 +39,7 @@ class UserSeeder extends Seeder
             "deleted_at"=>null
         ]);
 
-        User::factory(30)->create();
-        User::factory(30)->create(["deleted_at"=>null]);
+        User::factory(30)->create(["role"=>"vendor","status"=>"active"]);
+        // User::factory(30)->create(["deleted_at"=>null]);
     }
 }
