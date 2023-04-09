@@ -121,6 +121,14 @@ class Product extends Model
         return $this->hasMany(Image::class);
     }
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Brand,Product>
+    */
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
 
     /**
     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Color>
