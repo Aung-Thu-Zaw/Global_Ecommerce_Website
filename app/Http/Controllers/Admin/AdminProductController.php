@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Collection;
 use App\Models\Image;
 use App\Models\Product;
 use App\Models\SubCategory;
@@ -39,9 +40,11 @@ class AdminProductController extends Controller
 
         $categories=Category::all();
 
+        $collections=Collection::all();
+
         $vendors=User::where([["status","active"],["role","vendor"]])->get();
 
-        return inertia("Admin/Products/Create", compact("per_page", "brands", "categories", "vendors"));
+        return inertia("Admin/Products/Create", compact("per_page", "brands", "categories", "collections", "vendors"));
     }
 
     public function store(ProductRequest $request, ProductImageUploadService $productImageUploadService, ProductMultiImageUploadService $productMultiImageUploadService): RedirectResponse
@@ -70,11 +73,13 @@ class AdminProductController extends Controller
 
         $categories=Category::all();
 
+        $collections=Collection::all();
+
         $vendors=User::where([["status","active"],["role","vendor"]])->get();
 
         $product->load(["sizes","colors","images"]);
 
-        return inertia("Admin/Products/Edit", compact("product", "paginate", "brands", "categories", "vendors"));
+        return inertia("Admin/Products/Edit", compact("product", "paginate", "brands", "categories", "collections", "vendors"));
     }
 
     public function update(ProductRequest $request, Product $product, ProductImageUploadService $productImageUploadService, ProductMultiImageUploadService $productMultiImageUploadService): RedirectResponse

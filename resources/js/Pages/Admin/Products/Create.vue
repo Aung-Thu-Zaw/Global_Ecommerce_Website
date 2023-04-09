@@ -15,6 +15,7 @@ const props = defineProps({
   per_page: String,
   brands: Object,
   categories: Object,
+  collections: Object,
   vendors: Object,
 });
 
@@ -31,6 +32,7 @@ const form = useForm({
   code: "",
   qty: "",
   brand_id: "",
+  collection_id: "",
   category_id: "",
   user_id: "",
   hot_deal: false,
@@ -317,7 +319,7 @@ const submit = () => {
               </div>
 
               <div class="flex flex-col-reverse lg:flex-col">
-                <div class="border shadow-md p-6 rounded-md mb-5 h-[630px]">
+                <div class="border shadow-md p-6 rounded-md mb-5 h-[730px]">
                   <div class="grid grid-cols-2 gap-3">
                     <!-- Product Price Field -->
                     <div class="mb-6">
@@ -414,6 +416,32 @@ const submit = () => {
                     </select>
 
                     <InputError class="mt-2" :message="form.errors.brand_id" />
+                  </div>
+
+                  <!-- Product Collection Field -->
+                  <div class="mb-6">
+                    <InputLabel for="collection" value="Collection" />
+
+                    <select
+                      v-model="form.collection_id"
+                      class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+                    >
+                      <option value="" selected disabled>
+                        Select Collection
+                      </option>
+                      <option
+                        v-for="collection in collections"
+                        :key="collection.id"
+                        :value="collection.id"
+                      >
+                        {{ collection.title }}
+                      </option>
+                    </select>
+
+                    <InputError
+                      class="mt-2"
+                      :message="form.errors.collection_id"
+                    />
                   </div>
 
                   <!-- Product Category Field -->

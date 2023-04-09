@@ -16,6 +16,7 @@ const props = defineProps({
   product: Object,
   brands: Object,
   categories: Object,
+  collections: Object,
   vendors: Object,
 });
 
@@ -37,6 +38,7 @@ const form = useForm({
   qty: props.product.qty,
   brand_id: props.product.brand_id,
   category_id: props.product.category_id,
+  collection_id: props.product.collection_id,
   user_id: props.product.user_id,
   hot_deal: props.product.hot_deal,
   special_offer: props.product.special_offer,
@@ -324,7 +326,7 @@ const submit = () => {
               </div>
 
               <div class="flex flex-col-reverse lg:flex-col">
-                <div class="border shadow-md p-6 rounded-md mb-5 h-[630px]">
+                <div class="border shadow-md p-6 rounded-md mb-5 h-[730px]">
                   <div class="grid grid-cols-2 gap-3">
                     <!-- Product Price Field -->
                     <div class="mb-6">
@@ -421,6 +423,33 @@ const submit = () => {
                     </select>
 
                     <InputError class="mt-2" :message="form.errors.brand_id" />
+                  </div>
+
+                  <!-- Product Collection Field -->
+                  <div class="mb-6">
+                    <InputLabel for="collection" value="Collection" />
+
+                    <select
+                      v-model="form.collection_id"
+                      class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+                    >
+                      <option value="" selected disabled>
+                        Select collection
+                      </option>
+                      <option
+                        v-for="collection in collections"
+                        :key="collection.id"
+                        :value="collection.id"
+                        :selected="collection.id === form.collection_id"
+                      >
+                        {{ collection.title }}
+                      </option>
+                    </select>
+
+                    <InputError
+                      class="mt-2"
+                      :message="form.errors.collection_id"
+                    />
                   </div>
 
                   <!-- Product Category Field -->
