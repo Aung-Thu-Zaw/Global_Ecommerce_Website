@@ -29,9 +29,15 @@ class HomeController extends Controller
 
         $newProducts=Product::where("status", "active")->orderBy("id", "desc")->limit(5)->get();
 
+        $hotDealProducts=Product::where([["status", "active"],["hot_deal",1]])->orderBy("id", "desc")->limit(5)->get();
+
+        $featuredProducts=Product::where([["status", "active"],["featured",1]])->orderBy("id", "desc")->limit(5)->get();
+
+        $specialOfferProducts=Product::where([["status", "active"],["special_offer",1]])->orderBy("id", "desc")->limit(5)->get();
+
         $randomProducts=Product::inRandomOrder()->paginate(25);
 
 
-        return Inertia::render('Ecommerce/Home/Index', compact("categories", "collections", "sliderBanners", "campaignBanner", "productBanners", "newProducts", "randomProducts"));
+        return Inertia::render('Ecommerce/Home/Index', compact("categories", "collections", "sliderBanners", "campaignBanner", "productBanners", "newProducts", "featuredProducts", "hotDealProducts", "specialOfferProducts", "randomProducts"));
     }
 }

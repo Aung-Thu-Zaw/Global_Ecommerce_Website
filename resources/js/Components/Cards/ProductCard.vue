@@ -7,18 +7,21 @@ defineProps({
 <template>
   <div v-if="product">
     <!-- COMPONENT: PRODUCT CARD -->
-    <article class="shadow-sm rounded bg-white border border-gray-200">
-      <a href="#" class="relative block p-3 h-[250px]">
+    <article
+      class="shadow-sm rounded bg-white border border-gray-200 p-2 overflow-hidden"
+    >
+      <a href="#" class="relative block h-[250px]">
         <img
           :src="product.image"
           class="mx-auto h-full object-cover"
           alt="Product title here"
         />
-        <!-- <span
-          class="inline-block px-2 py-1 text-sm font-bold bg-green-100 text-green-600 rounded-full absolute left-4 top-4"
+        <span
+          v-if="product.discount"
+          class="inline-block px-2 text-center py-1 text-[.6rem] font-bold w-[100px] bg-green-200 bg-opacity-90 text-green-600 absolute -right-8 top-2 rotate-45"
         >
           25% OFF
-        </span> -->
+        </span>
       </a>
       <div
         class="p-4 border-t border-t-gray-200 flex items-start justify-between"
