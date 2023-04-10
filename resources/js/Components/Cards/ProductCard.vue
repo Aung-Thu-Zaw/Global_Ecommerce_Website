@@ -1,4 +1,6 @@
 <script setup>
+import { Link } from "@inertiajs/vue3";
+
 defineProps({
   product: Object,
 });
@@ -35,9 +37,12 @@ defineProps({
         >
 
         <h6 class="text-md">
-          <a href="#" class="text-gray-600 hover:text-blue-500">
+          <Link
+            :href="route('products.show', product.slug)"
+            class="text-gray-600"
+          >
             {{ product.name }}
-          </a>
+          </Link>
         </h6>
 
         <div class="my-2">

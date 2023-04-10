@@ -60,10 +60,7 @@ class AdminProductController extends Controller
         return to_route("admin.products.index", "per_page=$request->per_page")->with("success", "Product has been successfully created.");
     }
 
-    public function show(Product $product): Response|ResponseFactory
-    {
-        return inertia("Admin/Products/Details", compact("product"));
-    }
+
 
     public function edit(Product $product): Response|ResponseFactory
     {

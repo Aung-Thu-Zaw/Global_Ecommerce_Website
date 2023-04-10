@@ -40,4 +40,6 @@ class HomeController extends Controller
 
         return Inertia::render('Ecommerce/Home/Index', compact("categories", "collections", "sliderBanners", "campaignBanner", "productBanners", "newProducts", "featuredProducts", "hotDealProducts", "specialOfferProducts", "randomProducts"));
     }
+
+
 }
