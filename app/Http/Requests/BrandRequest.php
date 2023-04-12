@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class BrandRequest extends FormRequest
 {
@@ -23,9 +24,16 @@ class BrandRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            "name"=>["required","string"],
+        $rules= [
+            "name"=>["required","string",Rule::unique("brands", "name")],
             "description"=>["required","string"]
         ];
+
+        if (in_array($this->method(), ['POST','PUT', 'PATCH'])) {
+            $brand = $this->route()->parameter('brand');
+            $rules["name"]=["required","string",Rule::unique("brands", "name")->ignore($brand)];
+        }
+
+        return $rules;
     }
 }

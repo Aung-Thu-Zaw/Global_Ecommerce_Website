@@ -249,7 +249,6 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Image </HeaderTh>
           <HeaderTh @click="updateSorting('title')">
             Title
             <i
@@ -306,13 +305,7 @@ if (usePage().props.flash.successMessage) {
         <tbody v-if="collections.data.length">
           <Tr v-for="collection in collections.data" :key="collection.id">
             <BodyTh>{{ collection.id }}</BodyTh>
-            <Td>
-              <img
-                :src="collection.image"
-                class="h-[50px] rounded-sm object-cover shadow-lg ring-2 ring-slate-300"
-                alt=""
-              />
-            </Td>
+
             <Td>{{ collection.title }}</Td>
             <Td>{{ collection.created_at }}</Td>
             <Td>

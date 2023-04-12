@@ -17,11 +17,11 @@ class BrandFactory extends Factory
     public function definition()
     {
         return [
-            "name"=>fake()->name(),
+            "name"=>fake()->unique()->company(),
             "slug"=>fake()->unique()->slug(),
-            "description"=>fake()->paragraph(),
+            "description"=>fake()->paragraph(20),
             "image"=>fake()->imageUrl(),
-            "created_at"=>fake()->dateTimeBetween("-4 months", now()),
+            "created_at"=>fake()->dateTimeBetween("-9 months", now()),
         ];
     }
 }

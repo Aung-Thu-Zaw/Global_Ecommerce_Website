@@ -19,7 +19,7 @@ class HomeController extends Controller
     {
         $categories=Category::with("children")->limit(8)->get();
 
-        $collections=Collection::with("products:id,collection_id")->limit(12)->get();
+        $collections=Collection::with("products")->limit(12)->get();
 
         $sliderBanners=SliderBanner::where("status", "show")->orderBy("id", "desc")->limit(6)->get();
 

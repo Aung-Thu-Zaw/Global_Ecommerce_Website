@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\CollectionRequest;
 use App\Models\Collection;
-use App\Services\CollectionImageUploadService;
 use Illuminate\Database\Eloquent\Builder;
 use Inertia\Response;
 use Inertia\ResponseFactory;
@@ -35,9 +34,9 @@ class AdminCollectionController extends Controller
         return inertia("Admin/Collections/Create", compact("per_page"));
     }
 
-    public function store(CollectionRequest $request, CollectionImageUploadService $collectionImageUploadService): RedirectResponse
+    public function store(CollectionRequest $request): RedirectResponse
     {
-        Collection::create($request->validated()+["image"=>$collectionImageUploadService->createImage($request)]);
+        Collection::create($request->validated());
 
         return to_route("admin.collections.index", "per_page=$request->per_page")->with("success", "Collection has been successfully created.");
     }
@@ -49,9 +48,9 @@ class AdminCollectionController extends Controller
         return inertia("Admin/Collections/Edit", compact("collection", "paginate"));
     }
 
-    public function update(CollectionRequest $request, Collection $collection, CollectionImageUploadService $collectionImageUploadService): RedirectResponse
+    public function update(CollectionRequest $request, Collection $collection): RedirectResponse
     {
-        $collection->update($request->validated()+["image"=>$collectionImageUploadService->updateImage($request, $collection)]);
+        $collection->update($request->validated());
 
         return to_route("admin.collections.index", "page=$request->page&per_page=$request->per_page")->with("success", "Collection has been successfully updated.");
     }

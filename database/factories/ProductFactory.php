@@ -17,22 +17,23 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            "brand_id"=>1,
-            "collection_id"=>fake()->numberBetween(1, 20),
-            "category_id"=>fake()->numberBetween(1, 8),
-            "user_id"=>2,
-            "name"=>fake()->unique()->name(),
+            "brand_id"=>fake()->numberBetween(1, 70),
+            "collection_id"=>fake()->numberBetween(1, 35),
+            "category_id"=>fake()->numberBetween(1, 69),
+            "user_id"=>fake()->numberBetween(4, 204),
+            "name"=>fake()->unique()->sentence(),
             "slug"=>fake()->unique()->slug(),
             "image"=>fake()->imageUrl(),
             "code"=>fake()->numberBetween(100, 999),
             "qty"=>fake()->numberBetween(10, 100),
-            "price"=>fake()->numberBetween(10, 10000),
-            "discount"=>fake()->numberBetween(5, 50),
-            "description"=>fake()->paragraph(),
-            "hot_deal"=>false,
-            "featured"=>false,
-            "special_offer"=>false,
+            "price"=>fake()->numberBetween(10, 1500),
+            "discount"=>fake()->numberBetween(5, 1000),
+            "description"=>fake()->paragraph(20),
+            "hot_deal"=>fake()->randomElement([true,false]),
+            "featured"=>fake()->randomElement([true,false]),
+            "special_offer"=>fake()->randomElement([true,false]),
+            "status"=>fake()->randomElement(["active","inactive"]),
             "created_at"=>fake()->dateTimeBetween("-4 months", now()),
-        ];
+    ];
     }
 }

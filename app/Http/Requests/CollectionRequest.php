@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CollectionRequest extends FormRequest
 {
@@ -23,8 +24,15 @@ class CollectionRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            "title"=>["required","string"],
+        $rules= [
+            "title"=>["required","string",Rule::unique("collections", "title")],
         ];
+
+        if (in_array($this->method(), ['POST','PUT', 'PATCH'])) {
+            $collection = $this->route()->parameter('collection');
+            $rules["title"]=["required","string",Rule::unique("collections", "title")->ignore($collection)];
+        }
+
+        return $rules;
     }
 }

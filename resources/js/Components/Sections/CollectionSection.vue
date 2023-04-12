@@ -31,19 +31,28 @@ defineProps({
             <div
               class="flex items-center justify-center w-16 h-16 mx-auto mb-2 rounded-md border overflow-hidden"
             >
-              <img :src="collection.image" class="h-full object-cover" />
+              <img
+                :src="collection.products[0].image"
+                class="h-full object-cover"
+              />
             </div>
 
             <div
               class="flex items-center justify-center w-16 h-16 mx-auto mb-2 rounded-md border overflow-hidden"
             >
-              <img :src="collection.image" class="h-full object-cover" />
+              <img
+                :src="collection.products[1].image"
+                class="h-full object-cover"
+              />
             </div>
 
             <div
               class="flex items-center justify-center w-16 h-16 mx-auto mb-2 rounded-md border overflow-hidden"
             >
-              <img :src="collection.image" class="h-full object-cover" />
+              <img
+                :src="collection.products[2].image"
+                class="h-full object-cover"
+              />
             </div>
           </div>
 
@@ -54,7 +63,7 @@ defineProps({
           </p>
 
           <p class="text-sm text-center text-secondary-600 my-2">
-            233 products
+            {{ collection.products.length }} products
           </p>
         </a>
       </nav>

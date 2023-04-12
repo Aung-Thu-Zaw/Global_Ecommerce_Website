@@ -21,7 +21,7 @@ class CategoryFactory extends Factory
             "slug"=>fake()->unique()->slug(),
             "image"=>fake()->imageUrl(),
             "status"=>"show",
-            "created_at"=>fake()->dateTimeBetween("-4 months", now()),
+            "created_at"=>fake()->dateTimeBetween("-9 months", now()),
             // "deleted_at"=>fake()->dateTimeBetween("-4 months", now())
         ];
     }

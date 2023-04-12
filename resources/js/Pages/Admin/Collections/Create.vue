@@ -13,14 +13,8 @@ const props = defineProps({
   per_page: String,
 });
 
-const previewPhoto = ref("");
-const getPreviewPhotoPath = (path) => {
-  previewPhoto.value.src = URL.createObjectURL(path);
-};
-
 const form = useForm({
   title: "",
-  image: "",
   captcha_token: null,
 });
 
@@ -89,14 +83,6 @@ const submit = () => {
       </div>
 
       <div class="border shadow-md p-10">
-        <div class="mb-6">
-          <img
-            ref="previewPhoto"
-            src="https://media.istockphoto.com/id/1357365823/vector/default-image-icon-vector-missing-picture-page-for-website-design-or-mobile-app-no-photo.jpg?s=612x612&w=0&k=20&c=PM_optEhHBTZkuJQLlCjLz-v3zzxp-1mpNQZsdjrbns="
-            alt=""
-            class="w-[100px] h-[100px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300"
-          />
-        </div>
         <form @submit.prevent="handleCreateCollection">
           <div class="mb-6">
             <InputLabel for="title" value="Collection Title *" />
@@ -111,25 +97,6 @@ const submit = () => {
             />
 
             <InputError class="mt-2" :message="form.errors.title" />
-          </div>
-
-          <div class="mb-6">
-            <InputLabel for="image" value="Image *" />
-
-            <input
-              class="relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-neutral-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out file:-mx-3 file:-my-1.5 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-1.5 file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[margin-inline-end:0.75rem] file:[border-inline-end-width:1px] hover:file:bg-neutral-200 focus:border-primary focus:bg-white focus:text-neutral-700 focus:shadow-[0_0_0_1px] focus:shadow-primary focus:outline-none dark:bg-transparent dark:text-neutral-200 dark:focus:bg-transparent"
-              type="file"
-              id="image"
-              required
-              @input="form.image = $event.target.files[0]"
-              @change="getPreviewPhotoPath($event.target.files[0])"
-            />
-
-            <span class="text-xs text-gray-500">
-              SVG, PNG, JPG, JPEG, WEBP or GIF (MAX. 800x400px)
-            </span>
-
-            <InputError class="mt-2" :message="form.errors.image" />
           </div>
 
           <div class="mb-6">

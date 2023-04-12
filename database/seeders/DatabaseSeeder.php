@@ -2,9 +2,6 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-
-use App\Models\SliderBanner;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -26,7 +23,7 @@ class DatabaseSeeder extends Seeder
             BrandSeeder::class,
             CollectionSeeder::class,
             ProductSeeder::class,
-            ImageSeeder::class
+            ImageSeeder::class,
             ]
         );
     }
