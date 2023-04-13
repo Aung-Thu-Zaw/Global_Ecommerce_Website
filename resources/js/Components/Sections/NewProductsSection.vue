@@ -1,6 +1,7 @@
 
 <script setup>
 import ProductCard from "@/Components/Cards/ProductCard.vue";
+import { Link } from "@inertiajs/vue3";
 
 defineProps({ newProducts: Object });
 </script>
@@ -14,10 +15,13 @@ defineProps({ newProducts: Object });
       >
         <h2 class="text-md md:text-2xl font-bold">NEW PRODUCTS</h2>
         <span class="hidden border-4 border-slate-300 w-[70%] lg:block"></span>
-        <a href="" class="text-sm font-bold md:text-md animate-bounce">
+        <Link
+          :href="route('products.new')"
+          class="text-sm font-bold md:text-md animate-bounce"
+        >
           SEE ALL
           <i class="fa-solid fa-angles-right ml-3"></i>
-        </a>
+        </Link>
       </div>
 
       <div

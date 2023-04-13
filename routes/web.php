@@ -8,7 +8,15 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', [HomeController::class,"index"])->name("home");
+
+
+Route::get('/products/new-products', [ProductController::class,"newProducts"])->name("products.new");
+// Route::get('/products/featured-products/{product}', [ProductController::class,"featuredProducts"])->name("products.featured");
+// Route::get('/products/special-offer-products/{product}', [ProductController::class,"specialOfferProducts"])->name("products.special-offer");
+// Route::get('/products/hot-deal-products/{product}', [ProductController::class,"hotDealProducts"])->name("products.hot-deal");
 Route::get('/products/{product}', [ProductController::class,"show"])->name("products.show");
+
+
 Route::get('/collections', [CollectionController::class,"index"])->name("collections.index");
 Route::get('/collections/{collection}/products', [CollectionController::class,"show"])->name("collections.show");
 
