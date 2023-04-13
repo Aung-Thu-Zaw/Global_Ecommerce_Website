@@ -6,8 +6,10 @@ import CategoryNavbar from "@/Components/Navbars/CategoryNavbar.vue";
 
 
 <template>
-  <EcommerceNavbar />
-  <CategoryNavbar />
+  <div class="z-50 fixed top-0 w-full">
+    <EcommerceNavbar />
+    <CategoryNavbar />
+  </div>
   <slot />
   <EcommerceFooter />
 </template>

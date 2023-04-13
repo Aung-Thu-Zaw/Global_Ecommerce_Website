@@ -88,7 +88,7 @@ defineProps({
               </div>
             </div>
           </aside>
-          <main class="md:w-3/4 flex-auto mr-4">
+          <main class="md:w-3/4 flex-auto">
             <SliderBanner :sliderBanners="sliderBanners" />
           </main>
         </div>

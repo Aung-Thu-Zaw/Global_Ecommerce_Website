@@ -39,7 +39,7 @@ if (usePage().props.flash.successMessage) {
 
 <template>
   <AppLayout>
-    <div class="min-h-screen bg-gray-50">
+    <div class="min-h-screen bg-gray-50 mt-40 w-full">
       <!-- Header Main Section -->
       <HeaderMainSection
         :categories="categories"
