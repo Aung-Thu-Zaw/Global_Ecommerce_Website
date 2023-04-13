@@ -12,9 +12,16 @@ class ProductController extends Controller
 {
     public function newProducts(): Response|ResponseFactory
     {
-        $newProducts= Product::whereBetween('created_at', [now()->subDays(30), now()])->orderBy("id", "desc")->paginate(20);
+        $newProducts= Product::where("status", "active")->whereBetween('created_at', [now()->subDays(30), now()])->orderBy("id", "desc")->paginate(20);
 
         return inertia("Ecommerce/Products/NewProducts", compact("newProducts"));
+    }
+
+    public function featuredProducts(): Response|ResponseFactory
+    {
+        $featuredProducts=Product::where([["status", "active"],["featured",1]])->orderBy("id", "desc")->paginate(20);
+
+        return inertia("Ecommerce/Products/FeaturedProducts", compact("featuredProducts"));
     }
 
 
