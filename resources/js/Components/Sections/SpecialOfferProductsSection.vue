@@ -1,5 +1,6 @@
 
 <script setup>
+import { Link } from "@inertiajs/vue3";
 import ProductCard from "@/Components/Cards/ProductCard.vue";
 
 defineProps({
@@ -16,15 +17,17 @@ defineProps({
       >
         <h2 class="text-md md:text-2xl font-bold">SPECIAL OFFER PRODUCTS</h2>
         <span class="hidden border-4 border-slate-300 w-[65%] lg:block"></span>
-        <a href="" class="text-sm font-bold md:text-md animate-bounce">
+        <Link
+          :href="route('products.special-offer')"
+          class="text-sm font-bold md:text-md animate-bounce"
+        >
           SEE ALL
           <i class="fa-solid fa-angles-right ml-3"></i>
-        </a>
+        </Link>
       </div>
 
       <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
-
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
       >
         <div v-for="product in specialOfferProducts" :key="product.id">
           <ProductCard :product="product"></ProductCard>

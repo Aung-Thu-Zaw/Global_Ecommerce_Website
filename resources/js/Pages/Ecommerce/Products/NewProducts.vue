@@ -44,10 +44,7 @@ const loadMoreProduct = () => {
         <div
           class="absolute top-[50%] right-[50%] translate-x-[50%] -translate-y-[50%] text-2xl font-semibold text-white"
         >
-          <p class="text-center">Our Latest Products</p>
-          <p class="text-sm font-normal text-center my-3 text-slate-200">
-            These products are between the current and the last 30 days ago.
-          </p>
+          <p class="text-center uppercase">New Products</p>
         </div>
       </div>
       <div

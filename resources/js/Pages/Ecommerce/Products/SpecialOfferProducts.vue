@@ -4,25 +4,28 @@ import ProductCard from "@/Components/Cards/ProductCard.vue";
 import { ref } from "vue";
 import { usePage, router } from "@inertiajs/vue3";
 
-const props = defineProps({ featuredProducts: Object });
+const props = defineProps({ specialOfferProducts: Object });
 
-const products = ref(props.featuredProducts.data);
+const products = ref(props.specialOfferProducts.data);
 const url = usePage().url;
 
 const loadMoreProduct = () => {
-  if (props.featuredProducts.next_page_url === null) {
+  if (props.specialOfferProducts.next_page_url === null) {
     return;
   }
 
   router.get(
-    props.featuredProducts.next_page_url,
+    props.specialOfferProducts.next_page_url,
     {},
     {
       preserveState: true,
       preserveScroll: true,
-      only: ["featuredProducts"],
+      only: ["specialOfferProducts"],
       onSuccess: () => {
-        products.value = [...products.value, ...props.featuredProducts.data];
+        products.value = [
+          ...products.value,
+          ...props.specialOfferProducts.data,
+        ];
         window.history.replaceState({}, "", url);
       },
     }
@@ -38,13 +41,13 @@ const loadMoreProduct = () => {
         class="relative w-full h-[150px] mb-10 shadow-md rounded-md overflow-hidden border"
       >
         <img
-          src="https://img.freepik.com/free-vector/blurred-abstract-background-design_1107-169.jpg?w=2000"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV8gE_vyLRmsqLoTXUL_cC3P2SZ2t2OkGy8_sDdxJlUIp_KzYEQiTZPUwprpaEPShT9nY&usqp=CAU"
           class="w-full h-full object-cover"
         />
         <div
           class="absolute top-[50%] right-[50%] translate-x-[50%] -translate-y-[50%] text-2xl font-semibold text-white"
         >
-          <p class="text-center uppercase">Featured Products</p>
+          <p class="text-center uppercase">Special Offer Products</p>
           <!-- <p class="text-sm font-normal text-center my-3 text-slate-200">
             These products are between the current and the last 30 days ago.
           </p> -->
@@ -59,7 +62,7 @@ const loadMoreProduct = () => {
       </div>
 
       <div
-        v-if="props.featuredProducts.next_page_url != null"
+        v-if="props.specialOfferProducts.next_page_url != null"
         class="my-5 flex items-center justify-center"
       >
         <button

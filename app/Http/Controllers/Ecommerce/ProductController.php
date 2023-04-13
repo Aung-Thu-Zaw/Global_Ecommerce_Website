@@ -24,6 +24,13 @@ class ProductController extends Controller
         return inertia("Ecommerce/Products/FeaturedProducts", compact("featuredProducts"));
     }
 
+    public function specialOfferProducts(): Response|ResponseFactory
+    {
+        $specialOfferProducts=Product::where([["status", "active"],["special_offer",1]])->orderBy("id", "desc")->paginate(20);
+
+        return inertia("Ecommerce/Products/SpecialOfferProducts", compact("specialOfferProducts"));
+    }
+
 
     public function show(Product $product): Response|ResponseFactory
     {
