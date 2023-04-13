@@ -48,7 +48,10 @@ const loadMoreProduct = () => {
         </div>
       </div>
 
-      <div class="mt-5 flex items-center justify-center">
+      <div
+        v-if="props.randomProducts.next_page_url != null"
+        class="my-5 flex items-center justify-center"
+      >
         <button
           @click="loadMoreProduct"
           class="border-2 border-slate-500 text-slate-600 rounded-sm px-5 py-2 shadow-md font-bold hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all"
@@ -56,6 +59,9 @@ const loadMoreProduct = () => {
           LOAD MORE PRODUCTS
         </button>
       </div>
+      <p v-else class="my-5 text-slate-600 text-center">
+        You have reached the end of the page.
+      </p>
     </div>
   </section>
 </template>

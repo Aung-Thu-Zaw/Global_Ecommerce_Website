@@ -274,6 +274,31 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
+          <HeaderTh @click="updateSorting('description')">
+            Description
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'description',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'description',
+              }"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'description',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'description',
+              }"
+            ></i>
+          </HeaderTh>
           <HeaderTh @click="updateSorting('created_at')">
             Created At
             <i
@@ -307,6 +332,7 @@ if (usePage().props.flash.successMessage) {
             <BodyTh>{{ collection.id }}</BodyTh>
 
             <Td>{{ collection.title }}</Td>
+            <Td>{{ collection.description }}</Td>
             <Td>{{ collection.created_at }}</Td>
             <Td>
               <Link

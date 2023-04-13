@@ -26,6 +26,7 @@ class CollectionRequest extends FormRequest
     {
         $rules= [
             "title"=>["required","string",Rule::unique("collections", "title")],
+            "description"=>["required","string"],
         ];
 
         if (in_array($this->method(), ['POST','PUT', 'PATCH'])) {

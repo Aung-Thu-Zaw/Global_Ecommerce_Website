@@ -16,6 +16,7 @@ const props = defineProps({
 
 const form = useForm({
   title: props.collection.title,
+  description: props.collection.description,
   captcha_token: null,
 });
 
@@ -101,6 +102,21 @@ const submit = () => {
             />
 
             <InputError class="mt-2" :message="form.errors.title" />
+          </div>
+
+          <div class="mb-6">
+            <InputLabel for="description" value="Collection Description *" />
+
+            <TextInput
+              id="description"
+              type="text"
+              class="mt-1 block w-full"
+              v-model="form.description"
+              required
+              placeholder="Enter Collection Description"
+            />
+
+            <InputError class="mt-2" :message="form.errors.description" />
           </div>
 
           <div class="mb-6">

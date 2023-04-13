@@ -16,6 +16,7 @@ return new class () extends Migration {
             $table->id();
             $table->string("title")->unique();
             $table->string("slug")->unique();
+            $table->string("description");
             $table->softDeletes();
             $table->timestamps();
         });

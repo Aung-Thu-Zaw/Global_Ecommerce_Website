@@ -113,6 +113,7 @@ module.exports = {
     ],
 
     plugins: [
+        require("@tailwindcss/line-clamp"),
         require("tw-elements/dist/plugin"),
         require("@tailwindcss/forms"),
         plugin(function ({ addComponents, theme }) {

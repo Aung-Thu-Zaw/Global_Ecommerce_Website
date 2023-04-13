@@ -114,12 +114,12 @@
       <div class="py-3 md:flex items-center">
         <div class="flex items-center flex-shrink-0 mb-4 md:mb-0">
           <!-- brand -->
-          <a
-            href="#"
+          <Link
+            :href="route('home')"
             class="mr-20 md:mr-3 lg:mr-24 pr-4 text-xl text-slate-600 font-bold"
           >
             Global Ecommerce
-          </a>
+          </Link>
           <!-- brand //end -->
 
           <!-- mobile-only -->
