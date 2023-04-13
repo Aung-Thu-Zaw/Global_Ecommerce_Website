@@ -5,13 +5,16 @@ import { usePage, router, Link } from "@inertiajs/vue3";
 
 const props = defineProps({ collections: Object });
 
+const isLoading = ref(false);
 const collections = ref(props.collections.data);
 const url = usePage().url;
 
-const loadMoreProduct = () => {
+const loadMoreCollection = () => {
   if (props.collections.next_page_url === null) {
     return;
   }
+
+  isLoading.value = true;
 
   router.get(
     props.collections.next_page_url,
@@ -21,6 +24,7 @@ const loadMoreProduct = () => {
       preserveScroll: true,
       only: ["collections"],
       onSuccess: () => {
+        isLoading.value = false;
         collections.value = [...collections.value, ...props.collections.data];
         window.history.replaceState({}, "", url);
       },
@@ -35,6 +39,7 @@ const loadMoreProduct = () => {
     <section class="pt-10">
       <div class="container max-w-screen-xl mx-auto px-4">
         <nav
+          v-if="collections"
           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3"
         >
           <Link
@@ -83,13 +88,26 @@ const loadMoreProduct = () => {
             </p>
           </Link>
         </nav>
+        <div v-else>
+          <p class="text-center text-xl font-bold text-red-600 animate-bounce">
+            No Collection Found!
+          </p>
+        </div>
       </div>
       <div
         v-if="props.collections.next_page_url != null"
         class="my-5 flex items-center justify-center"
       >
+        <img
+          v-if="isLoading"
+          src="../../../assets/images/loading.gif"
+          class="w-14 h-14"
+          alt=""
+        />
+
         <button
-          @click="loadMoreProduct"
+          v-else
+          @click="loadMoreCollection"
           class="border-2 border-slate-500 text-slate-600 rounded-sm px-5 py-2 shadow-md font-bold hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all"
         >
           LOAD MORE COLLECTIONS

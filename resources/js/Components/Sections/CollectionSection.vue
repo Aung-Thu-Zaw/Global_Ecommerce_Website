@@ -25,7 +25,10 @@ defineProps({
         </Link>
       </div>
 
-      <nav class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1">
+      <nav
+        v-if="collections"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1"
+      >
         <Link
           v-for="collection in collections"
           :key="collection.id"
@@ -62,7 +65,7 @@ defineProps({
           </div>
 
           <p
-            class="text-center text-gray-600 group-hover:text-blue-600 text-md font-bold"
+            class="text-center text-gray-600 group-hover:text-blue-600 text-md font-bold px-3"
           >
             {{ collection.title }}
           </p>
@@ -72,6 +75,11 @@ defineProps({
           </p>
         </Link>
       </nav>
+      <div v-else>
+        <p class="text-center text-xl font-bold text-red-600 animate-bounce">
+          No Collection Found!
+        </p>
+      </div>
     </div>
     <!-- container //end -->
   </section>

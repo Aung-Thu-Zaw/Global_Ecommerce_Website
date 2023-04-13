@@ -27,11 +27,17 @@ defineProps({
       </div>
 
       <div
+        v-if="featuredProducts"
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
       >
         <div v-for="product in featuredProducts" :key="product.id">
           <ProductCard :product="product"></ProductCard>
         </div>
+      </div>
+      <div v-else>
+        <p class="text-center text-xl font-bold text-red-600 animate-bounce">
+          No Product Found!
+        </p>
       </div>
     </div>
   </section>
