@@ -4,25 +4,25 @@ import ProductCard from "@/Components/Cards/ProductCard.vue";
 import { ref } from "vue";
 import { usePage, router } from "@inertiajs/vue3";
 
-const props = defineProps({ featuredProducts: Object });
+const props = defineProps({ hotDealProducts: Object });
 
-const products = ref(props.featuredProducts.data);
+const products = ref(props.hotDealProducts.data);
 const url = usePage().url;
 
 const loadMoreProduct = () => {
-  if (props.featuredProducts.next_page_url === null) {
+  if (props.hotDealProducts.next_page_url === null) {
     return;
   }
 
   router.get(
-    props.featuredProducts.next_page_url,
+    props.hotDealProducts.next_page_url,
     {},
     {
       preserveState: true,
       preserveScroll: true,
-      only: ["featuredProducts"],
+      only: ["hotDealProducts"],
       onSuccess: () => {
-        products.value = [...products.value, ...props.featuredProducts.data];
+        products.value = [...products.value, ...props.hotDealProducts.data];
         window.history.replaceState({}, "", url);
       },
     }
@@ -38,13 +38,13 @@ const loadMoreProduct = () => {
         class="relative w-full h-[150px] mb-10 shadow-md rounded-md overflow-hidden border"
       >
         <img
-          src="https://img.freepik.com/free-vector/blurred-abstract-background-design_1107-169.jpg?w=2000"
+          src="https://e0.pxfuel.com/wallpapers/661/60/desktop-wallpaper-abstract-background-light-blur-smooth-light-coloured-stains-spots.jpg"
           class="w-full h-full object-cover"
         />
         <div
           class="absolute top-[50%] right-[50%] translate-x-[50%] -translate-y-[50%] text-2xl font-semibold text-white"
         >
-          <p class="text-center uppercase">Featured Products</p>
+          <p class="text-center uppercase">Hot Deal Products</p>
         </div>
       </div>
       <div
@@ -56,7 +56,7 @@ const loadMoreProduct = () => {
       </div>
 
       <div
-        v-if="props.featuredProducts.next_page_url != null"
+        v-if="props.hotDealProducts.next_page_url != null"
         class="my-5 flex items-center justify-center"
       >
         <button

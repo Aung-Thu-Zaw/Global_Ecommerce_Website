@@ -1,6 +1,7 @@
 
 <script setup>
 import ProductCard from "@/Components/Cards/ProductCard.vue";
+import { Link } from "@inertiajs/vue3";
 
 defineProps({
   hotDealProducts: Object,
@@ -14,19 +15,21 @@ defineProps({
       <div
         class="bg-orange-500 p-3 text-white lg:text-slate-600 lg:bg-transparent lg:p-0 mb-5 rounded-md flex items-center justify-between"
       >
-        <h2 class="text-md md:text-2xl font-bold">HOT DEALS PRODUCTS</h2>
+        <h2 class="text-md md:text-2xl font-bold">HOT DEAL PRODUCTS</h2>
         <span class="hidden border-4 border-slate-300 w-[65%] lg:block"></span>
-        <a href="" class="text-sm font-bold md:text-md animate-bounce">
+        <Link
+          :href="route('products.hot-deal')"
+          class="text-sm font-bold md:text-md animate-bounce"
+        >
           SEE ALL
           <i class="fa-solid fa-angles-right ml-3"></i>
-        </a>
+        </Link>
       </div>
 
       <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
-
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
       >
-      <div v-for="product in hotDealProducts" :key="product.id">
+        <div v-for="product in hotDealProducts" :key="product.id">
           <ProductCard :product="product"></ProductCard>
         </div>
       </div>
