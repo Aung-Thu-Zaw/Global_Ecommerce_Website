@@ -238,7 +238,7 @@ const decrement = () => (quantity.value <= 1 ? 1 : quantity.value--);
                 href="#"
               >
                 <i class="fa fa-heart mr-2"></i>
-                Save to whilist
+                Save to watchlist
               </a>
             </div>
 

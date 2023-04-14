@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Ecommerce\CartController;
 use App\Http\Controllers\Ecommerce\CollectionController;
 use App\Http\Controllers\Ecommerce\HomeController;
 use App\Http\Controllers\Ecommerce\ProductController;
@@ -15,6 +16,9 @@ Route::get('/products/featured-products', [ProductController::class,"featuredPro
 Route::get('/products/special-offer-products', [ProductController::class,"specialOfferProducts"])->name("products.special-offer");
 Route::get('/products/hot-deal-products', [ProductController::class,"hotDealProducts"])->name("products.hot-deal");
 Route::get('/products/{product}', [ProductController::class,"show"])->name("products.show");
+
+
+Route::get('/cart', [CartController::class,"index"])->name("cart.index");
 
 
 Route::get('/collections', [CollectionController::class,"index"])->name("collections.index");

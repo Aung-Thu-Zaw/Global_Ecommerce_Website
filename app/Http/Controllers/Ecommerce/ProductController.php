@@ -38,7 +38,6 @@ class ProductController extends Controller
         return inertia("Ecommerce/Products/HotDealProducts", compact("hotDealProducts"));
     }
 
-
     public function show(Product $product): Response|ResponseFactory
     {
         $product->load(["images","brand","colors","sizes","shop"]);

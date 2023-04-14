@@ -1,3 +1,9 @@
+<script setup>
+import { Link } from "@inertiajs/vue3";
+import UserDropdown from "../Dropdowns/UserDropdown.vue";
+</script>
+
+
 <template>
   <nav class="bg-blue-600 text-white">
     <div class="flex items-center justify-between px-10">
@@ -155,9 +161,9 @@
         >
           <UserDropdown />
 
-          <a
+          <Link
             class="relative px-3 py-2 ml-5 inline-block text-center text-white bg-blue-600 shadow-sm border border-gray-300 rounded-md hover:bg-blue-700"
-            href="#"
+            :href="route('cart.index')"
           >
             <i class="w-5 fa fa-shopping-cart"></i>
             <span class="hidden lg:inline ml-1">My cart</span>
@@ -165,7 +171,7 @@
               class="bg-red-500 text-[.5rem] absolute -top-2 -right-2 w-5 h-5 p-2 rounded-full flex items-center justify-center"
               >100</span
             >
-          </a>
+          </Link>
         </nav>
 
         <!-- Actions -->
@@ -198,10 +204,5 @@
   </header>
 </template>
 
-<script setup>
-import { Link } from "@inertiajs/vue3";
-import UserDropdown from "../Dropdowns/UserDropdown.vue";
-</script>
 
-<style>
-</style>
+
