@@ -37,7 +37,7 @@ const loadMoreProduct = () => {
 
 <template>
   <AppLayout>
-    <section class="container mx-auto py-10">
+    <section class="container mx-auto mt-40 py-10">
       <div
         class="relative w-full h-[150px] mb-10 shadow-md rounded-md overflow-hidden border"
       >
@@ -69,7 +69,7 @@ const loadMoreProduct = () => {
         v-if="props.hotDealProducts.next_page_url != null"
         class="my-5 flex items-center justify-center"
       >
-      <img
+        <img
           v-if="isLoading"
           src="../../../assets/images/loading.gif"
           class="w-14 h-14"

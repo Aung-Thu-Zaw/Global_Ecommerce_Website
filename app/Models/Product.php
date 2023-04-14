@@ -129,6 +129,14 @@ class Product extends Model
         return $this->belongsTo(Brand::class);
     }
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,Product>
+    */
+    public function shop(): BelongsTo
+    {
+        return $this->belongsTo(User::class, "user_id");
+    }
+
 
     /**
     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Color>

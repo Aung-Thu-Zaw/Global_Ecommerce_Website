@@ -40,7 +40,7 @@ const loadMoreProduct = () => {
 
 <template>
   <AppLayout>
-    <section class="container mx-auto py-10">
+    <section class="container mt-40 mx-auto py-10">
       <div
         class="relative w-full h-[150px] mb-10 shadow-md rounded-md overflow-hidden border"
       >

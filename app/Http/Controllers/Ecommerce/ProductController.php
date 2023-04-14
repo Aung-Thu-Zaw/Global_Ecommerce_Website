@@ -41,8 +41,10 @@ class ProductController extends Controller
 
     public function show(Product $product): Response|ResponseFactory
     {
-        $images=Image::where("product_id", $product->id)->get();
+        $product->load(["images","brand","colors","sizes","shop"]);
 
-        return inertia("Ecommerce/Products/Detail", compact("product", "images"));
+        $specificShopProducts=Product::where("user_id", $product->shop->id)->limit(5)->get();
+
+        return inertia("Ecommerce/Products/Detail", compact("product", "specificShopProducts"));
     }
 }

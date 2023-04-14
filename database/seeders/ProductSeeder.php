@@ -15,7 +15,7 @@ class ProductSeeder extends Seeder
     public function run()
     {
         Product::factory(300)->create(["brand_id"=>null]);
-        Product::factory(200)->create(["discount"=>null]);
-        Product::factory(500)->create();
+        Product::factory(500)->create(["discount"=>null]);
+        Product::factory(200)->create();
     }
 }
