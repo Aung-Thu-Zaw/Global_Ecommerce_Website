@@ -20,9 +20,9 @@ return new class () extends Migration {
             $table->string("slug");
             $table->string("image");
             $table->string("code");
-            $table->string("qty");
-            $table->string("price");
-            $table->string("discount")->nullable();
+            $table->integer("qty");
+            $table->decimal('price', 8, 2);
+            $table->integer("discount")->nullable();
             $table->text("description");
             $table->boolean("hot_deal")->default(false);
             $table->boolean("special_offer")->default(false);

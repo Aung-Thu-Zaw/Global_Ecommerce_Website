@@ -164,6 +164,15 @@ class Product extends Model
     }
 
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\HasMany<CartItem>
+    */
+     public function cartItems(): HasMany
+     {
+         return $this->hasMany(CartItem::class);
+     }
+
+
     public static function deleteImage(Product $product): void
     {
         if (!empty($product->image) && file_exists(storage_path("app/public/products/".pathinfo($product->image, PATHINFO_BASENAME)))) {
