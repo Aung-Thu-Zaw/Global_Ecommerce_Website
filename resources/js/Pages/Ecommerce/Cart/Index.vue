@@ -89,12 +89,12 @@ const props = defineProps({
                 Checkout
               </a>
 
-              <a
+              <Link
                 class="px-4 py-2 inline-block text-lg w-full text-center font-medium text-blue-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100"
-                href="#"
+                :href="route('home')"
               >
                 Back to shop
-              </a>
+              </Link>
             </article>
 
             <div

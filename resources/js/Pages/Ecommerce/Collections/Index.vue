@@ -36,7 +36,7 @@ const loadMoreCollection = () => {
 
 <template>
   <AppLayout>
-    <section class="pt-10">
+    <section class="pt-10 mt-44">
       <div class="container max-w-screen-xl mx-auto px-4">
         <nav
           v-if="collections"
