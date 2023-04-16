@@ -27,13 +27,13 @@ class CartItemController extends Controller
             ]
         );
 
-        return back()->with("success", "1 item(s) have been added to your cart");
+        return back()->with("success", "$request->qty item(s) have been added to your cart");
     }
 
     public function destroy(CartItem $cartItem): RedirectResponse
     {
         $cartItem->delete();
 
-        return back()->with("success", "1 item(s) have been removed from your cart");
+        return back()->with("success", "$cartItem->qty item(s) have been removed from your cart");
     }
 }

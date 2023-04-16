@@ -3,6 +3,9 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Home/Breadcrumb.vue";
 import Information from "@/Components/Information.vue";
 import { computed, reactive, ref } from "vue";
+import { Link, router, usePage } from "@inertiajs/vue3";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 const props = defineProps({
   specificShopProducts: Object,
@@ -24,6 +27,29 @@ const increment = () =>
     ? (quantity.value = props.product.qty)
     : quantity.value++;
 const decrement = () => (quantity.value <= 1 ? 1 : quantity.value--);
+
+const addToCart = () => {
+  router.post(
+    route("cart-items.store", {
+      cart_id: usePage().props.auth.user.cart
+        ? usePage().props.auth.user.cart.id
+        : null,
+      product_id: props.product.id,
+      shop_id: props.product.shop.id,
+      qty: quantity.value,
+    }),
+    {},
+    {
+      preserveScroll: true,
+      onSuccess: () => {
+        // Success flash message
+        toast.success(usePage().props.flash.successMessage, {
+          autoClose: 2000,
+        });
+      },
+    }
+  );
+};
 </script>
 
 
@@ -226,13 +252,13 @@ const decrement = () => (quantity.value <= 1 ? 1 : quantity.value--);
               >
                 Buy now
               </a>
-              <a
+              <button
                 class="px-4 py-2 inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
-                href="#"
+                @click="addToCart"
               >
                 <i class="fa fa-shopping-cart mr-2"></i>
                 Add to cart
-              </a>
+              </button>
               <a
                 class="px-4 py-2 inline-block text-blue-600 border border-gray-300 rounded-md hover:bg-gray-100"
                 href="#"

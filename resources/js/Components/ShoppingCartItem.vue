@@ -1,11 +1,12 @@
 <script setup >
-import { computed, ref } from "vue";
+import { computed, inject, ref } from "vue";
 import { Link, router, usePage } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
 const props = defineProps({ item: Object });
 
+const swal = inject("$swal");
 const quantity = ref(props.item.qty);
 
 const increment = () =>
@@ -20,19 +21,32 @@ const totalDiscountPrice = computed(
 );
 const totalPrice = computed(() => quantity.value * props.item.product.price);
 
-const removeItem = (item) => {
-  router.post(
-    route("cart-items.destroy", item),
-    {},
-    {
-      preserveScroll: true,
-      onSuccess: () => {
-        toast.warning(usePage().props.flash.successMessage, {
-          autoClose: 2000,
-        });
-      },
-    }
-  );
+const removeItem = async (item) => {
+  const result = await swal({
+    icon: "warning",
+    title: `Are you sure you want to remove this item(s)?`,
+    showCancelButton: true,
+    confirmButtonText: "Yes, remove it!",
+    confirmButtonColor: "#ef4444",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.post(
+      route("cart-items.destroy", item),
+      {},
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          toast.success(usePage().props.flash.successMessage, {
+            autoClose: 2000,
+          });
+        },
+      }
+    );
+  }
 };
 </script>
 
