@@ -168,9 +168,11 @@ import UserDropdown from "../Dropdowns/UserDropdown.vue";
             <i class="w-5 fa fa-shopping-cart"></i>
             <span class="hidden lg:inline ml-1">My cart</span>
             <span
-              class="bg-red-500 text-[.5rem] absolute -top-2 -right-2 w-5 h-5 p-2 rounded-full flex items-center justify-center"
-              >100</span
+              v-if="$page.props.totalCartItems.cart_items.length"
+              class="bg-red-500 text-[.7rem] absolute -top-2 -right-2 w-5 h-5 p-2 rounded-full flex items-center justify-center"
             >
+              {{ $page.props.totalCartItems.cart_items.length }}
+            </span>
           </Link>
         </nav>
 

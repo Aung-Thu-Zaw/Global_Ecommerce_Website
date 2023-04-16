@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Cart;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -40,6 +41,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'parentCategory'=>Category::with("children")->whereNull("parent_id")->get(),
             'vendors'=>User::where([["role","vendor"],["status","active"]])->limit(30)->get(),
+            'totalCartItems'=> Cart::with("cartItems")->where("user_id", $request->user()->id)->first(),
             'flash'=>[
                 'successMessage'=>session('success'),
                 'errorMessage'=>session('error'),

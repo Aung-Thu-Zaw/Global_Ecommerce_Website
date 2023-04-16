@@ -62,23 +62,43 @@ const removeItem = (item) => {
           </p>
           <span class="text-[.8rem] text-gray-500">
             <span v-if="item.product.brand">
-              Brand: {{ item.product.brand.name }}</span
-            >
-            <span v-else> Brand: No Brand</span>
+              Brand:
+              <span class="text-slate-700 font-semibold">
+                {{ item.product.brand.name }}
+              </span>
+            </span>
+            <span v-else>
+              Brand:
+              <span class="text-slate-700 font-semibold"> No Brand </span>
+            </span>
           </span>
           <span
             v-if="item.product.sizes.length"
             class="text-[.8rem] text-gray-500"
           >
             <span class="text-gray-600">|</span>
-            Size: {{ item.product.sizes.name }}
+            Size:
+            <span
+              v-for="size in item.product.sizes"
+              :key="size.id"
+              class="text-slate-700 font-semibold"
+            >
+              {{ size.name }},
+            </span>
           </span>
           <span
             v-if="item.product.colors.length"
             class="text-[.8rem] text-gray-500"
           >
             <span class="text-gray-600">|</span>
-            Color: {{ item.product.colors.name }}
+            Color:
+            <span
+              v-for="color in item.product.colors"
+              :key="color.id"
+              class="text-slate-700 font-semibold"
+            >
+              {{ color.name }},
+            </span>
           </span>
           <p class="text-[.8rem] text-red-500 font-bold">
             Only {{ item.product.qty }} item(s) left

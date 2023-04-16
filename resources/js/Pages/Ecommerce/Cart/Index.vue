@@ -14,13 +14,13 @@ const props = defineProps({
   <AppLayout>
     <section class="py-5 sm:py-7 mt-44">
       <div class="container max-w-screen-xl mx-auto px-4">
-        <h2 class="text-4xl text-slate-800 font-semibold mb-2">
+        <h2 class="text-4xl text-slate-700 font-semibold mb-2">
           Shopping cart
         </h2>
       </div>
     </section>
 
-    <section class="py-5">
+    <section v-if="cartItems.length || shops.length" class="py-5">
       <div class="container max-w-screen-xl mx-auto px-4">
         <div class="flex flex-col md:flex-row gap-4">
           <main class="md:w-3/4">
@@ -115,6 +115,18 @@ const props = defineProps({
           </aside>
         </div>
       </div>
+    </section>
+
+    <section v-else class="min-h-[400px] flex flex-col items-center py-10">
+      <h2 class="font-semibold text-lg text-center text-slate-600 mb-20">
+        There are no items in this cart.
+      </h2>
+      <Link
+        :href="route('home')"
+        class="border border-blue-600 px-5 py-3 shadow animate-bounce font-semibold text-blue-600 rounded text-sm hover:bg-blue-600 hover:text-white transition-all"
+      >
+        Continue Shopping
+      </Link>
     </section>
   </AppLayout>
 </template>
