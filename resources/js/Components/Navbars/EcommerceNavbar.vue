@@ -1,6 +1,14 @@
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import { Link, usePage } from "@inertiajs/vue3";
+import { computed } from "vue";
 import UserDropdown from "../Dropdowns/UserDropdown.vue";
+
+const totalItems = computed(() => {
+  return usePage().props.totalCartItems.cart_items.reduce(
+    (acc, item) => acc + item.qty,
+    0
+  );
+});
 </script>
 
 
@@ -171,7 +179,7 @@ import UserDropdown from "../Dropdowns/UserDropdown.vue";
               v-if="$page.props.totalCartItems.cart_items.length"
               class="bg-red-500 text-[.7rem] absolute -top-2 -right-2 w-5 h-5 p-2 rounded-full flex items-center justify-center"
             >
-              {{ $page.props.totalCartItems.cart_items.length }}
+              {{ totalItems }}
             </span>
           </Link>
         </nav>
