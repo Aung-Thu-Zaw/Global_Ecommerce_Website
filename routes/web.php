@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Ecommerce\CartController;
+use App\Http\Controllers\Ecommerce\CartItemController;
 use App\Http\Controllers\Ecommerce\CollectionController;
 use App\Http\Controllers\Ecommerce\HomeController;
 use App\Http\Controllers\Ecommerce\ProductController;
@@ -19,6 +20,7 @@ Route::get('/products/{product}', [ProductController::class,"show"])->name("prod
 
 
 Route::get('/cart', [CartController::class,"index"])->name("cart.index");
+Route::post('/cart/cart-items', [CartItemController::class,"store"])->name("cart-items.store");
 
 
 Route::get('/collections', [CollectionController::class,"index"])->name("collections.index");

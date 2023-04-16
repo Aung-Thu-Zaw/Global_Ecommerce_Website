@@ -1,9 +1,35 @@
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import { Link, router, usePage } from "@inertiajs/vue3";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
-defineProps({
+const props = defineProps({
   product: Object,
 });
+
+const addToCart = () => {
+  router.post(
+    route("cart-items.store", {
+      cart_id: usePage().props.auth.user.cart
+        ? usePage().props.auth.user.cart.id
+        : null,
+      product_id: props.product.id,
+      shop_id: props.product.shop.id,
+      qty: 1,
+    }),
+    {},
+    {
+      preserveScroll: true,
+      onSuccess: () => {
+        console.log("htllo");
+        // Success flash message
+        toast.success(usePage().props.flash.successMessage, {
+          autoClose: 2000,
+        });
+      },
+    }
+  );
+};
 </script>
 
 <template>
@@ -120,9 +146,9 @@ defineProps({
             ></path>
           </svg>
         </div>
-
         <div class="flex items-center justify-between">
           <button
+            @click="addToCart"
             class="px-4 py-2 mt-3 bg-blue-500 text-white text-sm font-semibold rounded-sm hover:shadow-md hover:bg-blue-600 hover:animate-bounce transition-all"
           >
             <i class="w-5 fa fa-shopping-cart"></i>
