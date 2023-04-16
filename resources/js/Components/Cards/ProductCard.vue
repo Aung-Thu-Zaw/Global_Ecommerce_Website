@@ -21,7 +21,6 @@ const addToCart = () => {
     {
       preserveScroll: true,
       onSuccess: () => {
-        console.log("htllo");
         // Success flash message
         toast.success(usePage().props.flash.successMessage, {
           autoClose: 2000,

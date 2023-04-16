@@ -1,5 +1,8 @@
 <script setup >
 import { computed, ref } from "vue";
+import { Link, router, usePage } from "@inertiajs/vue3";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 const props = defineProps({ item: Object });
 
@@ -16,6 +19,21 @@ const totalDiscountPrice = computed(
   () => quantity.value * props.item.product.discount
 );
 const totalPrice = computed(() => quantity.value * props.item.product.price);
+
+const removeItem = (item) => {
+  router.post(
+    route("cart-items.destroy", item),
+    {},
+    {
+      preserveScroll: true,
+      onSuccess: () => {
+        toast.warning(usePage().props.flash.successMessage, {
+          autoClose: 2000,
+        });
+      },
+    }
+  );
+};
 </script>
 
 <template>
@@ -133,15 +151,16 @@ const totalPrice = computed(() => quantity.value * props.item.product.price);
         >
           <i class="fa fa-heart"></i>
         </a>
-        <a
+        <button
           class="px-4 py-2 inline-block text-red-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-red-600 hover:text-white transition-all ml-3"
-          href="#"
+          @click="removeItem(item.id)"
         >
           <i class="fa fa-trash"></i>
-        </a>
+        </button>
       </div>
     </div>
   </div>
+  <hr />
 </template>
 
 

@@ -21,7 +21,6 @@ class CartController extends Controller
         $cartItems->load(["product.brand","product.sizes","product.colors"]);
 
 
-
         return inertia("Ecommerce/Cart/Index", compact("shops", "cartItems"));
     }
 }
