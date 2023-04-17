@@ -16,6 +16,14 @@ const saved = computed(() => {
     : false;
 });
 
+const goToCart = computed(() => {
+  return props.product.cart_items.some(
+    (cartItem) => cartItem.product_id === props.product.id
+  )
+    ? true
+    : false;
+});
+
 const saveToWatchlist = () => {
   router.post(
     route("watchlist.store", {
@@ -186,12 +194,22 @@ const addToCart = () => {
         </div>
         <div class="flex items-center justify-between">
           <button
+            v-if="!goToCart"
             @click="addToCart"
             class="px-4 py-2 mt-3 bg-blue-500 text-white text-sm font-semibold rounded-sm hover:shadow-md hover:bg-blue-600 hover:animate-bounce transition-all"
           >
             <i class="w-5 fa fa-shopping-cart"></i>
-            Add to Cart
+            Add to cart
           </button>
+          <Link
+            v-else
+            :href="route('cart.index')"
+            class="px-4 py-2 mt-3 bg-blue-500 text-white text-sm font-semibold rounded-sm hover:shadow-md hover:bg-blue-600 hover:animate-bounce transition-all"
+          >
+            <i class="w-5 fa fa-shopping-cart"></i>
+            Go to cart
+          </Link>
+
           <button
             class="mt-3 text-sm font-semibold px-4 py-2 md:px-2 md:py-2 rounded-sm hover:shadow-md hover:animate-bounce transition-all bg-gray-100 hover:bg-gray-200 border border-slate-300 text-blue-500"
             :class="{ 'text-pink-500': saved }"
