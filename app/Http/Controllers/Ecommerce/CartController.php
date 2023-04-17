@@ -18,7 +18,7 @@ class CartController extends Controller
         $shopIds=$cartItems->pluck("shop_id")->unique()->values();
         $shops = User::select("id", "shop_name")->whereIn('id', $shopIds)->get();
 
-        $cartItems->load(["product.brand","product.sizes","product.colors"]);
+        $cartItems->load(["product.shop","product.brand","product.sizes","product.colors"]);
 
 
         return inertia("Ecommerce/Cart/Index", compact("shops", "cartItems"));

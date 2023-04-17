@@ -21,6 +21,43 @@ const totalDiscountPrice = computed(
 );
 const totalPrice = computed(() => quantity.value * props.item.product.price);
 
+const moveToWatchlist = async (item) => {
+  const result = await swal({
+    icon: "warning",
+    title: `Move To Watchlist`,
+    text: `Item(s) will be moved to watchlist and removed from cart.`,
+    showCancelButton: true,
+    confirmButtonText: "Yes, move it!",
+    confirmButtonColor: "#ef4444",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.post(
+      route("watchlist.store", {
+        user_id: usePage().props.auth.user.id,
+        product_id: props.item.product.id,
+        shop_id: props.item.product.shop.id,
+      }),
+      {},
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          router.post(route("cart-items.destroy", props.item.id));
+          // Success flash message
+          if (usePage().props.flash.successMessage) {
+            toast.success(usePage().props.flash.successMessage, {
+              autoClose: 2000,
+            });
+          }
+        },
+      }
+    );
+  }
+};
+
 const removeItem = async (item) => {
   const result = await swal({
     icon: "warning",
@@ -180,12 +217,12 @@ const removeItem = async (item) => {
 
     <div class="flex-auto">
       <div class="float-right">
-        <a
+        <button
           class="px-4 py-2 inline-block text-blue-600 bg-white shadow-sm border border-gray-200 rounded-md ml-3 hover:bg-blue-600 hover:text-white transition-all"
-          href="#"
+          @click="moveToWatchlist"
         >
           <i class="fa fa-heart"></i>
-        </a>
+        </button>
         <button
           class="px-4 py-2 inline-block text-red-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-red-600 hover:text-white transition-all ml-3"
           @click="removeItem(item.id)"
