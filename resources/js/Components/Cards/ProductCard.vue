@@ -7,6 +7,28 @@ const props = defineProps({
   product: Object,
 });
 
+const addToWatchlist = () => {
+  router.post(
+    route("watchlist.store", {
+      user_id: usePage().props.auth.user.id,
+      product_id: props.product.id,
+      shop_id: props.product.shop.id,
+    }),
+    {},
+    {
+      preserveScroll: true,
+      onSuccess: () => {
+        // Success flash message
+        if (usePage().props.flash.successMessage) {
+          toast.success(usePage().props.flash.successMessage, {
+            autoClose: 2000,
+          });
+        }
+      },
+    }
+  );
+};
+
 const addToCart = () => {
   router.post(
     route("cart-items.store", {
@@ -22,9 +44,11 @@ const addToCart = () => {
       preserveScroll: true,
       onSuccess: () => {
         // Success flash message
-        toast.success(usePage().props.flash.successMessage, {
-          autoClose: 2000,
-        });
+        if (usePage().props.flash.successMessage) {
+          toast.success(usePage().props.flash.successMessage, {
+            autoClose: 2000,
+          });
+        }
       },
     }
   );
@@ -155,6 +179,7 @@ const addToCart = () => {
           </button>
           <button
             class="mt-3 text-white text-sm font-semibold px-4 py-2 md:px-2 md:py-2 rounded-sm bg-blue-500 hover:shadow-md hover:bg-blue-600 hover:animate-bounce transition-all"
+            @click="addToWatchlist"
           >
             <i class="w-5 fa fa-heart"></i>
             <span class="md:hidden">Add to Whilist</span>

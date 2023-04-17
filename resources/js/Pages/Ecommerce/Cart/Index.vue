@@ -119,12 +119,15 @@ const props = defineProps({
 
     <section v-else class="min-h-[400px] flex flex-col items-center py-10">
       <h2 class="font-semibold text-lg text-center text-slate-600 mb-20">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <br />
         There are no items in this cart.
       </h2>
       <Link
         :href="route('home')"
         class="border border-blue-600 px-5 py-3 shadow animate-bounce font-semibold text-blue-600 rounded text-sm hover:bg-blue-600 hover:text-white transition-all"
       >
+        <i class="fa-solid fa-cart-shopping"></i>
         Continue Shopping
       </Link>
     </section>

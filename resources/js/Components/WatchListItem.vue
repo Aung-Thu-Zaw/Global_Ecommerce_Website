@@ -1,30 +1,17 @@
-<script setup >
+<script setup>
 import { computed, inject, ref } from "vue";
 import { Link, router, usePage } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
-const props = defineProps({ item: Object });
+defineProps({ watchlist: Object });
 
 const swal = inject("$swal");
-const quantity = ref(props.item.qty);
-
-const increment = () =>
-  quantity.value >= props.item.product.qty
-    ? (quantity.value = props.item.product.qty)
-    : quantity.value++;
-
-const decrement = () => (quantity.value <= 1 ? 1 : quantity.value--);
-
-const totalDiscountPrice = computed(
-  () => quantity.value * props.item.product.discount
-);
-const totalPrice = computed(() => quantity.value * props.item.product.price);
 
 const removeItem = async (item) => {
   const result = await swal({
     icon: "warning",
-    title: `Remove From Shopping Cart`,
+    title: `Remove From Watchlist`,
     text: `Are you sure you want to remove this item(s)?`,
     showCancelButton: true,
     confirmButtonText: "Yes, remove it!",
@@ -36,7 +23,7 @@ const removeItem = async (item) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("cart-items.destroy", item),
+      route("watchlist.destroy", item),
       {},
       {
         preserveScroll: true,
@@ -60,8 +47,8 @@ const removeItem = async (item) => {
             class="block w-16 h-16 rounded border border-gray-200 overflow-hidden"
           >
             <img
-              :src="item.product.image"
-              :alt="item.product.name"
+              :src="watchlist.product.image"
+              :alt="watchlist.product.name"
               class="h-full object-cover"
             />
           </div>
@@ -69,17 +56,17 @@ const removeItem = async (item) => {
         <figcaption class="ml-3">
           <p>
             <Link
-              :href="route('products.show', item.product.slug)"
+              :href="route('products.show', watchlist.product.slug)"
               class="hover:text-blue-600 font-semibold text-slate-600"
             >
-              {{ item.product.name }}
+              {{ watchlist.product.name }}
             </Link>
           </p>
           <span class="text-[.8rem] text-gray-500">
-            <span v-if="item.product.brand">
+            <span v-if="watchlist.product.brand">
               Brand:
               <span class="text-slate-700 font-semibold">
-                {{ item.product.brand.name }}
+                {{ watchlist.product.brand.name }}
               </span>
             </span>
             <span v-else>
@@ -88,13 +75,13 @@ const removeItem = async (item) => {
             </span>
           </span>
           <span
-            v-if="item.product.sizes.length"
+            v-if="watchlist.product.sizes.length"
             class="text-[.8rem] text-gray-500"
           >
             <span class="text-gray-600">|</span>
             Size:
             <span
-              v-for="size in item.product.sizes"
+              v-for="size in watchlist.product.sizes"
               :key="size.id"
               class="text-slate-700 font-semibold"
             >
@@ -102,13 +89,13 @@ const removeItem = async (item) => {
             </span>
           </span>
           <span
-            v-if="item.product.colors.length"
+            v-if="watchlist.product.colors.length"
             class="text-[.8rem] text-gray-500"
           >
             <span class="text-gray-600">|</span>
             Color:
             <span
-              v-for="color in item.product.colors"
+              v-for="color in watchlist.product.colors"
               :key="color.id"
               class="text-slate-700 font-semibold"
             >
@@ -116,28 +103,28 @@ const removeItem = async (item) => {
             </span>
           </span>
           <p class="text-[.8rem] text-red-500 font-bold">
-            Only {{ item.product.qty }} item(s) left
+            Only {{ watchlist.product.qty }} item(s) left
           </p>
         </figcaption>
       </figure>
     </div>
 
     <div class="">
-      <div v-if="item.product.discount" class="leading-5">
-        <p class="font-semibold not-italic">${{ totalDiscountPrice }}</p>
-        <small class="text-gray-600 block">
-          ${{ item.product.discount }} / per item
-        </small>
+      <div v-if="watchlist.product.discount" class="leading-5">
+        <p class="font-semibold not-italic">
+          ${{ watchlist.product.discount }}
+        </p>
+
         <small class="text-gray-400 block line-through">
-          ${{ item.product.price }} / per item
+          ${{ watchlist.product.price }} / per item
         </small>
         <small
           class="bg-green-300 text-green-600 px-2 py-1 rounded-full text-[.6rem]"
         >
           {{
             (
-              ((item.product.price - item.product.discount) /
-                item.product.price) *
+              ((watchlist.product.price - watchlist.product.discount) /
+                watchlist.product.price) *
               100
             ).toFixed(1)
           }}% OFF
@@ -145,36 +132,7 @@ const removeItem = async (item) => {
       </div>
 
       <div v-else class="leading-5">
-        <p class="font-semibold not-italic">${{ totalPrice }}</p>
-        <small class="text-gray-600 block">
-          ${{ item.product.price }} / per item
-        </small>
-      </div>
-    </div>
-
-    <div class="">
-      <!-- selection -->
-      <div class="w-auto relative">
-        <div>
-          <span
-            class="px-3 py-2 bg-slate-500 hover:bg-slate-600 rounded-sm cursor-pointer"
-            @click="increment"
-          >
-            <i class="fa-solid fa-plus text-white"></i>
-          </span>
-
-          <input
-            type="number"
-            class="border-2 text-center border-slate-500 outline-none focus:outline-none focus:ring-0 w-[50px] h-full mx-1 rounded-sm"
-            v-model="quantity"
-          />
-          <span
-            class="px-3 py-2 bg-slate-500 hover:bg-slate-600 mr-2 rounded-sm cursor-pointer"
-            @click="decrement"
-          >
-            <i class="fa-solid fa-minus text-white"></i>
-          </span>
-        </div>
+        <p class="font-semibold not-italic">${{ watchlist.product.price }}</p>
       </div>
     </div>
 
@@ -184,19 +142,20 @@ const removeItem = async (item) => {
           class="px-4 py-2 inline-block text-blue-600 bg-white shadow-sm border border-gray-200 rounded-md ml-3 hover:bg-blue-600 hover:text-white transition-all"
           href="#"
         >
-          <i class="fa fa-heart"></i>
+          <i class="fa-solid fa-cart-shopping"></i>
+          Add to cart
         </a>
         <button
           class="px-4 py-2 inline-block text-red-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-red-600 hover:text-white transition-all ml-3"
-          @click="removeItem(item.id)"
+          @click="removeItem(watchlist.id)"
         >
           <i class="fa fa-trash"></i>
+          Remove
         </button>
       </div>
     </div>
   </div>
   <hr />
 </template>
-
 
 

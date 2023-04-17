@@ -1,13 +1,26 @@
 <script setup>
 import { Link, usePage } from "@inertiajs/vue3";
-import { computed } from "vue";
+import { computed, reactive, watch } from "vue";
 import UserDropdown from "../Dropdowns/UserDropdown.vue";
 
+// const cartItems = reactive(
+//   usePage().props.totalCartItems
+//     ? usePage().props.totalCartItems.cart_items
+//     : null
+// );
+
+// const totalItems = computed(() => {
+//   return cartItems.reduce((acc, item) => acc + item.qty, 0);
+// });
+
 const totalItems = computed(() => {
-  return usePage().props.totalCartItems.cart_items.reduce(
-    (acc, item) => acc + item.qty,
-    0
-  );
+  if (usePage().props.totalCartItems) {
+    return usePage().props.totalCartItems.cart_items.reduce(
+      (acc, item) => acc + item.qty,
+      0
+    );
+  }
+  return;
 });
 </script>
 
@@ -176,7 +189,7 @@ const totalItems = computed(() => {
             <i class="w-5 fa fa-shopping-cart"></i>
             <span class="hidden lg:inline ml-1">My cart</span>
             <span
-              v-if="$page.props.totalCartItems.cart_items.length"
+              v-if="totalItems"
               class="bg-red-500 text-[.7rem] absolute -top-2 -right-2 w-5 h-5 p-2 rounded-full flex items-center justify-center"
             >
               {{ totalItems }}

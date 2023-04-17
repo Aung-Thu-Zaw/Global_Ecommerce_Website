@@ -6,6 +6,7 @@ use App\Http\Controllers\Ecommerce\CollectionController;
 use App\Http\Controllers\Ecommerce\HomeController;
 use App\Http\Controllers\Ecommerce\ProductController;
 use App\Http\Controllers\MyAccountController;
+use App\Http\Controllers\WatchlistController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -23,6 +24,10 @@ Route::get('/cart', [CartController::class,"index"])->name("cart.index");
 
 Route::post('/cart/cart-items', [CartItemController::class,"store"])->name("cart-items.store");
 Route::post('/cart/cart-items/{cart_item}', [CartItemController::class,"destroy"])->name("cart-items.destroy");
+
+Route::get('/watchlist', [WatchlistController::class,"index"])->name("watchlist.index");
+Route::post('/watchlist', [WatchlistController::class,"store"])->name("watchlist.store");
+Route::post('/watchlist/{watchlist}', [WatchlistController::class,"destroy"])->name("watchlist.destroy");
 
 
 Route::get('/collections', [CollectionController::class,"index"])->name("collections.index");
