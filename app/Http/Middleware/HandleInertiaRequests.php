@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\User;
+use App\Models\Watchlist;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
@@ -45,6 +46,7 @@ class HandleInertiaRequests extends Middleware
             'flash'=>[
                 'successMessage'=>session('success'),
                 'errorMessage'=>session('error'),
+                'infoMessage'=>session('info'),
 
             ],
             'ziggy' => function () use ($request) {

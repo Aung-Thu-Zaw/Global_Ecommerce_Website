@@ -1,5 +1,6 @@
 <script setup>
 import { Link, router, usePage } from "@inertiajs/vue3";
+import { computed, ref } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
@@ -7,7 +8,15 @@ const props = defineProps({
   product: Object,
 });
 
-const addToWatchlist = () => {
+const saved = computed(() => {
+  return props.product.watchlists.some(
+    (watchlist) => watchlist.product_id === props.product.id
+  )
+    ? true
+    : false;
+});
+
+const saveToWatchlist = () => {
   router.post(
     route("watchlist.store", {
       user_id: usePage().props.auth.user.id,
@@ -21,6 +30,12 @@ const addToWatchlist = () => {
         // Success flash message
         if (usePage().props.flash.successMessage) {
           toast.success(usePage().props.flash.successMessage, {
+            autoClose: 2000,
+          });
+        }
+        // Info flash message
+        if (usePage().props.flash.infoMessage) {
+          toast.info(usePage().props.flash.infoMessage, {
             autoClose: 2000,
           });
         }
@@ -178,11 +193,14 @@ const addToCart = () => {
             Add to Cart
           </button>
           <button
-            class="mt-3 text-white text-sm font-semibold px-4 py-2 md:px-2 md:py-2 rounded-sm bg-blue-500 hover:shadow-md hover:bg-blue-600 hover:animate-bounce transition-all"
-            @click="addToWatchlist"
+            class="mt-3 text-sm font-semibold px-4 py-2 md:px-2 md:py-2 rounded-sm hover:shadow-md hover:animate-bounce transition-all bg-gray-100 hover:bg-gray-200 border border-slate-300 text-blue-500"
+            :class="{ 'text-pink-500': saved }"
+            @click="saveToWatchlist"
           >
             <i class="w-5 fa fa-heart"></i>
-            <span class="md:hidden">Add to Whilist</span>
+            <span class="md:hidden">
+              {{ saved ? "Saved" : "Save to watchlist" }}
+            </span>
           </button>
         </div>
       </div>

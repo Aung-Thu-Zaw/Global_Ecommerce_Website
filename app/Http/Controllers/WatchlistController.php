@@ -15,7 +15,6 @@ class WatchlistController extends Controller
     public function index(): Response|ResponseFactory
     {
 
-
         $watchlists=auth()->user()->watchlists;
         $shopIds=$watchlists->pluck("shop_id")->unique()->values();
         $shops = User::select("id", "shop_name")->whereIn('id', $shopIds)->get();
@@ -28,9 +27,17 @@ class WatchlistController extends Controller
 
     public function store(WatchlistRequest $request): RedirectResponse
     {
-        Watchlist::create($request->validated());
 
-        return back()->with("success", "Item is moved to watchlist, you can re-add it to cart from watchlist.");
+        $watchlist=Watchlist::where([["user_id",$request->user_id],["product_id",$request->product_id],["shop_id",$request->shop_id]])->first();
+
+        if(!$watchlist) {
+            Watchlist::create($request->validated());
+            return back()->with("success", "Item is moved to watchlist, you can re-add it to cart from watchlist.");
+        }
+
+        $watchlist->delete();
+
+        return back()->with("info", "Item has been removed from your watchlist");
     }
 
     public function destroy(Watchlist $watchlist): RedirectResponse

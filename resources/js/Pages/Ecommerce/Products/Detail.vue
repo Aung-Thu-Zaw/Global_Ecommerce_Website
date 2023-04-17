@@ -28,6 +28,14 @@ const increment = () =>
     : quantity.value++;
 const decrement = () => (quantity.value <= 1 ? 1 : quantity.value--);
 
+const saved = computed(() => {
+  return props.product.watchlists.some(
+    (watchlist) => watchlist.product_id === props.product.id
+  )
+    ? true
+    : false;
+});
+
 const addToCart = () => {
   router.post(
     route("cart-items.store", {
@@ -51,7 +59,7 @@ const addToCart = () => {
   );
 };
 
-const addToWatchlist = () => {
+const saveToWatchlist = () => {
   router.post(
     route("watchlist.store", {
       user_id: usePage().props.auth.user.id,
@@ -65,6 +73,12 @@ const addToWatchlist = () => {
         // Success flash message
         if (usePage().props.flash.successMessage) {
           toast.success(usePage().props.flash.successMessage, {
+            autoClose: 2000,
+          });
+        }
+        // Info flash message
+        if (usePage().props.flash.infoMessage) {
+          toast.info(usePage().props.flash.infoMessage, {
             autoClose: 2000,
           });
         }
@@ -283,10 +297,11 @@ const addToWatchlist = () => {
               </button>
               <button
                 class="px-4 py-2 inline-block text-blue-600 border border-gray-300 rounded-md hover:bg-gray-100"
-                @click="addToWatchlist"
+                :class="{ 'text-pink-500': saved }"
+                @click="saveToWatchlist"
               >
                 <i class="fa fa-heart mr-2"></i>
-                Save to watchlist
+                {{ saved ? "Saved" : "Save to watchlist" }}
               </button>
             </div>
 
