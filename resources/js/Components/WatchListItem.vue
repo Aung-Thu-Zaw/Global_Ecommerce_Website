@@ -4,9 +4,32 @@ import { Link, router, usePage } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
-defineProps({ watchlist: Object });
+const props = defineProps({ watchlist: Object });
 
 const swal = inject("$swal");
+
+const addToCart = () => {
+  router.post(
+    route("cart-items.store", {
+      cart_id: usePage().props.auth.user.cart
+        ? usePage().props.auth.user.cart.id
+        : null,
+      product_id: props.watchlist.product.id,
+      shop_id: props.watchlist.product.shop.id,
+      qty: 1,
+    }),
+    {},
+    {
+      preserveScroll: true,
+      onSuccess: () => {
+        // Success flash message
+        toast.success(usePage().props.flash.successMessage, {
+          autoClose: 2000,
+        });
+      },
+    }
+  );
+};
 
 const removeItem = async (item) => {
   const result = await swal({
@@ -138,13 +161,13 @@ const removeItem = async (item) => {
 
     <div class="flex-auto">
       <div class="float-right">
-        <a
+        <button
           class="px-4 py-2 inline-block text-blue-600 bg-white shadow-sm border border-gray-200 rounded-md ml-3 hover:bg-blue-600 hover:text-white transition-all"
-          href="#"
+          @click="addToCart"
         >
           <i class="fa-solid fa-cart-shopping"></i>
           Add to cart
-        </a>
+        </button>
         <button
           class="px-4 py-2 inline-block text-red-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-red-600 hover:text-white transition-all ml-3"
           @click="removeItem(watchlist.id)"

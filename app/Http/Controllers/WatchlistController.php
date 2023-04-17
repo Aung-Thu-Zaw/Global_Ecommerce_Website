@@ -21,7 +21,7 @@ class WatchlistController extends Controller
         $shops = User::select("id", "shop_name")->whereIn('id', $shopIds)->get();
 
 
-        $watchlists->load(["product.brand","product.sizes","product.colors"]);
+        $watchlists->load(["product.shop","product.brand","product.sizes","product.colors"]);
 
         return inertia("Ecommerce/Watchlist/Index", compact("shops", "watchlists"));
     }
