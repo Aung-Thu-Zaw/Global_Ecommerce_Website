@@ -50,6 +50,28 @@ const addToCart = () => {
     }
   );
 };
+
+const addToWatchlist = () => {
+  router.post(
+    route("watchlist.store", {
+      user_id: usePage().props.auth.user.id,
+      product_id: props.product.id,
+      shop_id: props.product.shop.id,
+    }),
+    {},
+    {
+      preserveScroll: true,
+      onSuccess: () => {
+        // Success flash message
+        if (usePage().props.flash.successMessage) {
+          toast.success(usePage().props.flash.successMessage, {
+            autoClose: 2000,
+          });
+        }
+      },
+    }
+  );
+};
 </script>
 
 
@@ -259,13 +281,13 @@ const addToCart = () => {
                 <i class="fa fa-shopping-cart mr-2"></i>
                 Add to cart
               </button>
-              <a
+              <button
                 class="px-4 py-2 inline-block text-blue-600 border border-gray-300 rounded-md hover:bg-gray-100"
-                href="#"
+                @click="addToWatchlist"
               >
                 <i class="fa fa-heart mr-2"></i>
                 Save to watchlist
-              </a>
+              </button>
             </div>
 
             <div class="w-[450px] border-2 border-slate-300"></div>
