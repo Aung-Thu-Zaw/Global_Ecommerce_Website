@@ -20,6 +20,7 @@ return [
         App\Console\Commands\PermanentlyAutoDeleteProductBannerCommand::class,
         App\Console\Commands\PermanentlyAutoDeleteSliderBannerCommand::class,
         App\Console\Commands\PermanentlyAutoDeleteProductCommand::class,
+        App\Console\Commands\PermanentlyAutoDeleteCouponCommand::class,
         App\Console\Commands\PermanentlyAutoDeleteInactiveVendorCommand::class,
 
     ],

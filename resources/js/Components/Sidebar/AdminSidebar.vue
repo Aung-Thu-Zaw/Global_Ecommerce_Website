@@ -241,6 +241,21 @@
               Products
             </Link>
           </li>
+          <li class="items-center">
+            <Link
+              :href="route('admin.coupons.index')"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url.startsWith('/admin/coupons'),
+                'text-slate-700 hover:text-slate-500':
+                  !$page.url.startsWith('/admin/coupons'),
+              }"
+            >
+              <i class="fa-solid fa-ticket mr-2 text-sm"></i>
+              Coupons
+            </Link>
+          </li>
         </ul>
 
         <!-- Divider -->

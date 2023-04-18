@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AdminBrandController;
 use App\Http\Controllers\Admin\AdminCampaignBannerController;
 use App\Http\Controllers\Admin\AdminCollectionController;
 use App\Http\Controllers\Admin\AdminCategoryController;
+use App\Http\Controllers\Admin\AdminCouponController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminMultiImageController;
 use App\Http\Controllers\Admin\AdminProductBannerController;
@@ -168,4 +169,20 @@ Route::middleware(["auth","verified","user.role:admin"])
                         Route::post("/{id}/hide", "handleHide")->name("hide");
                         Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
                     });
+
+            Route::controller(AdminCouponController::class)
+            ->prefix("/coupons")
+            ->name("coupons.")
+            ->group(function () {
+                Route::get("/", "index")->name("index");
+                Route::get("/create", "create")->name("create");
+                Route::post("/", "store")->name("store");
+                Route::get("/{coupon}/edit", "edit")->name("edit");
+                Route::post("/{coupon}", "update")->name("update");
+                Route::delete("/{coupon}", "destroy")->name("destroy");
+                Route::get("/trash", "trash")->name("trash");
+                Route::post("/{id}/restore", "restore")->name("restore");
+                Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
+            });
         });
