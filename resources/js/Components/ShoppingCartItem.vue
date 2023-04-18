@@ -21,6 +21,9 @@ const totalDiscountPrice = computed(
 );
 const totalPrice = computed(() => quantity.value * props.item.product.price);
 
+
+// const sameproduct=props.item.product.id===props.produc
+
 const moveToWatchlist = async (item) => {
   const result = await swal({
     icon: "warning",
