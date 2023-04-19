@@ -31,7 +31,7 @@ const addToCart = () => {
   );
 };
 
-const removeItem = async (item) => {
+const removeWatchlistItem = async (item) => {
   const result = await swal({
     icon: "warning",
     title: `Remove From Watchlist`,
@@ -45,7 +45,7 @@ const removeItem = async (item) => {
   });
 
   if (result.isConfirmed) {
-    router.post(
+    router.delete(
       route("watchlist.destroy", item),
       {},
       {
@@ -170,7 +170,7 @@ const removeItem = async (item) => {
         </button>
         <button
           class="px-4 py-2 inline-block text-red-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-red-600 hover:text-white transition-all ml-3"
-          @click="removeItem(watchlist.id)"
+          @click="removeWatchlistItem(watchlist.id)"
         >
           <i class="fa fa-trash"></i>
           Remove

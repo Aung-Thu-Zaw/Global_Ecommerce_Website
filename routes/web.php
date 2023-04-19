@@ -23,11 +23,12 @@ Route::get('/products/{product}', [ProductController::class,"show"])->name("prod
 Route::get('/cart', [CartController::class,"index"])->name("cart.index");
 
 Route::post('/cart/cart-items', [CartItemController::class,"store"])->name("cart-items.store");
-Route::post('/cart/cart-items/{cart_item}', [CartItemController::class,"destroy"])->name("cart-items.destroy");
+Route::post('/cart/cart-items/{cart_item}', [CartItemController::class,"update"])->name("cart-items.update");
+Route::delete('/cart/cart-items/{cart_item}', [CartItemController::class,"destroy"])->name("cart-items.destroy");
 
 Route::get('/watchlist', [WatchlistController::class,"index"])->name("watchlist.index");
 Route::post('/watchlist', [WatchlistController::class,"store"])->name("watchlist.store");
-Route::post('/watchlist/{watchlist}', [WatchlistController::class,"destroy"])->name("watchlist.destroy");
+Route::delete('/watchlist/{watchlist}', [WatchlistController::class,"destroy"])->name("watchlist.destroy");
 
 
 Route::get('/collections', [CollectionController::class,"index"])->name("collections.index");

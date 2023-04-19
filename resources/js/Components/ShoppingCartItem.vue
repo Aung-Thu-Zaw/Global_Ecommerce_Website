@@ -1,5 +1,5 @@
 <script setup >
-import { computed, inject, ref } from "vue";
+import { computed, inject, ref, watch } from "vue";
 import { Link, router, usePage } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -16,13 +16,25 @@ const increment = () =>
 
 const decrement = () => (quantity.value <= 1 ? 1 : quantity.value--);
 
+watch(
+  () => quantity.value,
+  () => {
+    router.post(
+      route("cart-items.update", props.item.id),
+      {
+        qty: quantity.value,
+      },
+      {
+        preserveScroll: true,
+      }
+    );
+  }
+);
+
 const totalDiscountPrice = computed(
   () => quantity.value * props.item.product.discount
 );
 const totalPrice = computed(() => quantity.value * props.item.product.price);
-
-
-// const sameproduct=props.item.product.id===props.produc
 
 const moveToWatchlist = async (item) => {
   const result = await swal({
@@ -75,7 +87,7 @@ const removeItem = async (item) => {
   });
 
   if (result.isConfirmed) {
-    router.post(
+    router.delete(
       route("cart-items.destroy", item),
       {},
       {

@@ -22,7 +22,7 @@ return new class () extends Migration {
             $table->string("code");
             $table->integer("qty");
             $table->decimal('price', 8, 2);
-            $table->integer("discount")->nullable();
+            $table->decimal('discount', 8, 2)->nullable();
             $table->text("description");
             $table->boolean("hot_deal")->default(false);
             $table->boolean("special_offer")->default(false);

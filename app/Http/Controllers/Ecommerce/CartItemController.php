@@ -7,6 +7,7 @@ use App\Http\Requests\CartItemRequest;
 use App\Models\Cart;
 use App\Models\CartItem;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class CartItemController extends Controller
 {
@@ -34,6 +35,13 @@ class CartItemController extends Controller
         }
 
         return back()->with("success", "$request->qty item(s) have been added to your cart");
+    }
+
+    public function update(Request $request, CartItem $cartItem): RedirectResponse
+    {
+        $cartItem->update(["qty"=>$request->qty]);
+
+        return back();
     }
 
     public function destroy(CartItem $cartItem): RedirectResponse

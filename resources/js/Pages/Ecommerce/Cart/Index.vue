@@ -2,16 +2,36 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ShoppingCartItem from "@/Components/ShoppingCartItem.vue";
 import { Link } from "@inertiajs/vue3";
+import { computed } from "vue";
 
 const props = defineProps({
   shops: Object,
   cartItems: Object,
 });
+
+const totalItems = computed(() => {
+  return props.cartItems.reduce((total, item) => total + item.qty, 0);
+});
+
+const totalPrice = computed(() =>
+  props.cartItems.reduce((total, item) => {
+    return total + item.qty * parseFloat(item.product.price);
+  }, 0)
+);
+
+const totalDiscountPrice = computed(() =>
+  props.cartItems.reduce((total, item) => {
+    return total + item.qty * parseFloat(item.product.discount);
+  }, 0)
+);
+
+const totalDiscountPriceDropped = totalPrice.value - totalDiscountPrice.value;
 </script>
 
 
 <template>
   <AppLayout>
+    {{ totalItems }}
     <section class="py-5 sm:py-7 mt-44">
       <div class="container max-w-screen-xl mx-auto px-4">
         <h2 class="text-4xl text-slate-700 font-semibold mb-2">
@@ -57,28 +77,43 @@ const props = defineProps({
             <article
               class="border border-gray-200 bg-white shadow-sm rounded mb-5 p-3 lg:p-5"
             >
+              <h2 class="text-center mb-5 font-bold text-2xl text-slate-800">
+                Order Summary
+              </h2>
               <ul class="mb-5">
                 <li class="flex justify-between text-gray-600 mb-1">
                   <span>Total Items:</span>
-                  <span>4 Items</span>
+                  <span>{{ totalItems }} Items</span>
                 </li>
                 <li class="flex justify-between text-gray-600 mb-1">
                   <span>Total price:</span>
-                  <span>$245.97</span>
+                  <span v-if="totalDiscountPrice">${{ totalPrice }}</span>
+                  <span v-else>${{ totalPrice }}</span>
                 </li>
-                <li class="flex justify-between text-gray-600 mb-1">
+                <li
+                  v-if="totalDiscountPrice"
+                  class="flex justify-between text-gray-600 mb-1"
+                >
                   <span>Discount:</span>
-                  <span class="text-green-500">- $60.00</span>
+                  <span class="text-blue-500"
+                    >- ${{ totalDiscountPriceDropped }}</span
+                  >
                 </li>
-                <li class="flex justify-between text-gray-600 mb-1">
+                <!-- <li class="flex justify-between text-gray-600 mb-1">
+                  <span>Coupon:</span>
+                  <span class="text-amber-500 text-sm font-bold"
+                    >HAPPY SHIPPING</span
+                  >
+                </li> -->
+                <!-- <li class="flex justify-between text-gray-600 mb-1">
                   <span>Shipping Fee:</span>
                   <span>$14.00</span>
-                </li>
+                </li> -->
                 <li
                   class="text-lg font-bold border-t flex justify-between mt-3 pt-3"
                 >
                   <span>Total price:</span>
-                  <span>$420.00</span>
+                  <span>${{ totalPrice }}</span>
                 </li>
               </ul>
 
@@ -100,6 +135,9 @@ const props = defineProps({
             <div
               class="border border-gray-200 bg-white shadow-sm rounded my-5 p-3"
             >
+              <h2 class="font-bold text-lg mb-3 text-slate-700">
+                Apply Coupon
+              </h2>
               <input
                 type="text"
                 class="w-full mb-3 rounded-md py-3 border-slate-400"
