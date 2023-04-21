@@ -5,6 +5,7 @@ use App\Http\Controllers\Ecommerce\CartItemController;
 use App\Http\Controllers\Ecommerce\CollectionController;
 use App\Http\Controllers\Ecommerce\HomeController;
 use App\Http\Controllers\Ecommerce\ProductController;
+use App\Http\Controllers\Ecommerce\ShippingController;
 use App\Http\Controllers\MyAccountController;
 use App\Http\Controllers\WatchlistController;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,7 @@ Route::delete('/watchlist/{watchlist}', [WatchlistController::class,"destroy"])-
 Route::get('/collections', [CollectionController::class,"index"])->name("collections.index");
 Route::get('/collections/{collection}/products', [CollectionController::class,"show"])->name("collections.show");
 
+Route::get('/shipping', [ShippingController::class,"index"])->name("shipping.index");
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

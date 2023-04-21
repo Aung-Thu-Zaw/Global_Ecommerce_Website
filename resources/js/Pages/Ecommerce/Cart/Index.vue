@@ -117,17 +117,19 @@ const totalDiscountPriceDropped = totalPrice.value - totalDiscountPrice.value;
                 </li>
               </ul>
 
-              <a
-                class="px-4 py-2 mb-2 inline-block text-lg w-full text-center font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
-                href="#"
+              <Link
+                class="px-4 py-3 mb-2 inline-block text-sm w-full text-center font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 uppercase"
+                :href="route('shipping.index')"
               >
-                Checkout
-              </a>
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Proceed To Checkout
+              </Link>
 
               <Link
-                class="px-4 py-2 inline-block text-lg w-full text-center font-medium text-blue-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100"
+                class="px-4 py-3 inline-block text-sm w-full text-center font-medium text-blue-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 uppercase"
                 :href="route('home')"
               >
+                <i class="fa-solid fa-shop"></i>
                 Back to shop
               </Link>
             </article>
@@ -144,7 +146,7 @@ const totalDiscountPriceDropped = totalPrice.value - totalDiscountPrice.value;
                 placeholder="Enter Cupon Code"
               />
               <a
-                class="px-4 py-2 mb-2 inline-block text-lg w-full text-center font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
+                class="px-4 py-3 mb-2 inline-block text-sm uppercase w-full text-center font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
                 href="#"
               >
                 Apply
