@@ -19,12 +19,15 @@ return new class () extends Migration {
             $table->string("email");
             $table->string("phone");
             $table->text("address");
+            $table->string("country");
             $table->string("region");
             $table->string("city");
             $table->string("township");
-            $table->string("additional_information");
+            $table->string("postal_code");
+            $table->text("additional_information");
             $table->timestamps();
         });
+
     }
 
     /**

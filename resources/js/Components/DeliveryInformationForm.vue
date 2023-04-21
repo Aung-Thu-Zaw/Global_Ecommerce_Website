@@ -9,9 +9,11 @@ const form = useForm({
   email: "",
   phone: "",
   address: "",
+  country: "",
   region: "",
   city: "",
   township: "",
+  postal_code: "",
   additional_information: "",
 });
 </script>
@@ -77,7 +79,23 @@ const form = useForm({
           <InputError class="mt-2" :message="form.errors.phone" />
         </div>
       </div>
-      <div class="grid gap-6 mb-3 md:grid-cols-3">
+      <div class="grid gap-6 mb-3 md:grid-cols-2">
+        <div class="mb-3">
+          <InputLabel for="country" value="Country *" />
+
+          <select
+            class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+          >
+            <option value="" selected disabled>Select Country</option>
+            <option value="">Show</option>
+            <option value="">Show</option>
+            <option value="">Show</option>
+            <option value="">Show</option>
+            <option value="">Show</option>
+          </select>
+
+          <InputError class="mt-2" :message="form.errors.country" />
+        </div>
         <div class="mb-3">
           <InputLabel for="region" value="Region *" />
 
@@ -94,6 +112,8 @@ const form = useForm({
 
           <InputError class="mt-2" :message="form.errors.region" />
         </div>
+      </div>
+      <div class="grid gap-6 mb-3 md:grid-cols-3">
         <div class="mb-3">
           <InputLabel for="city" value="City *" />
 
@@ -110,6 +130,7 @@ const form = useForm({
 
           <InputError class="mt-2" :message="form.errors.city" />
         </div>
+
         <div class="mb-3">
           <InputLabel for="township" value="Township *" />
 
@@ -125,6 +146,20 @@ const form = useForm({
           </select>
 
           <InputError class="mt-2" :message="form.errors.township" />
+        </div>
+
+        <div class="mb-3">
+          <InputLabel for="postal_code" value="Postal Code *" />
+
+          <TextInput
+            id="postal_code"
+            type="postal_code"
+            class="mt-1 block w-full"
+            required
+            placeholder="Enter Postal Code"
+          />
+
+          <InputError class="mt-2" :message="form.errors.postal_code" />
         </div>
       </div>
 

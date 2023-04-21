@@ -13,6 +13,10 @@ use App\Http\Controllers\Admin\Managements\AdminActiveVendorController;
 use App\Http\Controllers\Admin\Managements\AdminInactiveVendorController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminSliderBannerController;
+use App\Http\Controllers\Admin\ShippingArea\AdminCityController;
+use App\Http\Controllers\Admin\ShippingArea\AdminCountryController;
+use App\Http\Controllers\Admin\ShippingArea\AdminRegionController;
+use App\Http\Controllers\Admin\ShippingArea\AdminTownshipController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/admin/login", [AdminAuthController::class,"login"])->name("admin.login");
@@ -185,4 +189,73 @@ Route::middleware(["auth","verified","user.role:admin"])
                 Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
                 Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
             });
+
+
+            Route::controller(AdminCountryController::class)
+            ->prefix("/countries")
+            ->name("countries.")
+            ->group(function () {
+                Route::get("/", "index")->name("index");
+                Route::get("/create", "create")->name("create");
+                Route::post("/", "store")->name("store");
+                Route::get("/{country}/edit", "edit")->name("edit");
+                Route::post("/{country}", "update")->name("update");
+                Route::delete("/{country}", "destroy")->name("destroy");
+                Route::get("/trash", "trash")->name("trash");
+                Route::post("/{id}/restore", "restore")->name("restore");
+                Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
+            });
+
+
+            Route::controller(AdminRegionController::class)
+            ->prefix("/regions")
+            ->name("regions.")
+            ->group(function () {
+                Route::get("/", "index")->name("index");
+                Route::get("/create", "create")->name("create");
+                Route::post("/", "store")->name("store");
+                Route::get("/{region}/edit", "edit")->name("edit");
+                Route::post("/{region}", "update")->name("update");
+                Route::delete("/{region}", "destroy")->name("destroy");
+                Route::get("/trash", "trash")->name("trash");
+                Route::post("/{id}/restore", "restore")->name("restore");
+                Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
+            });
+
+            Route::controller(AdminCityController::class)
+            ->prefix("/cities")
+            ->name("cities.")
+            ->group(function () {
+                Route::get("/", "index")->name("index");
+                Route::get("/create", "create")->name("create");
+                Route::post("/", "store")->name("store");
+                Route::get("/{city}/edit", "edit")->name("edit");
+                Route::post("/{city}", "update")->name("update");
+                Route::delete("/{city}", "destroy")->name("destroy");
+                Route::get("/trash", "trash")->name("trash");
+                Route::post("/{id}/restore", "restore")->name("restore");
+                Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
+            });
+
+
+            Route::controller(AdminTownshipController::class)
+            ->prefix("/townships")
+            ->name("townships.")
+            ->group(function () {
+                Route::get("/", "index")->name("index");
+                Route::get("/create", "create")->name("create");
+                Route::post("/", "store")->name("store");
+                Route::get("/{township}/edit", "edit")->name("edit");
+                Route::post("/{township}", "update")->name("update");
+                Route::delete("/{township}", "destroy")->name("destroy");
+                Route::get("/trash", "trash")->name("trash");
+                Route::post("/{id}/restore", "restore")->name("restore");
+                Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
+            });
+
+
         });
