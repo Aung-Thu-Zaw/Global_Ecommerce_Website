@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
@@ -53,6 +54,16 @@ class Township extends Model
     }
 
     /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Township, never>
+    */
+    protected function createdAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => date("Y/m/d", strtotime($value)),
+        );
+    }
+
+    /**
     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<City,Township>
     */
     public function city(): BelongsTo
@@ -62,12 +73,6 @@ class Township extends Model
 
 
 
-    /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasMany<PostalCode>
-    */
-    public function postalCodes(): HasMany
-    {
-        return $this->hasMany(PostalCode::class);
-    }
+
 
 }

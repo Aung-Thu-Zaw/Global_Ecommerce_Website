@@ -258,6 +258,75 @@
           </li>
         </ul>
 
+        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <li class="items-center cursor-pointer">
+            <div
+              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+              @click="shippingAreaIsHidden = !shippingAreaIsHidden"
+            >
+              <span>
+                <i class="fa-solid fa-map-location-dot mr-2 text-sm"></i>
+                Shipping Areas
+              </span>
+              <i
+                v-if="shippingAreaIsHidden"
+                class="fa-solid fa-chevron-right"
+              ></i>
+              <i
+                v-if="!shippingAreaIsHidden"
+                class="fa-solid fa-chevron-down"
+              ></i>
+            </div>
+            <!-- </Link> -->
+
+            <ul
+              v-if="!shippingAreaIsHidden || shippingArea"
+              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+            >
+              <Link
+                :href="route('admin.countries.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600':
+                    $page.url.startsWith('/admin/countries'),
+                }"
+              >
+                Country
+              </Link>
+              <Link
+                :href="route('admin.regions.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600':
+                    $page.url.startsWith('/admin/regions'),
+                }"
+              >
+                Region
+              </Link>
+              <Link
+                :href="route('admin.cities.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600':
+                    $page.url.startsWith('/admin/cities'),
+                }"
+              >
+                City
+              </Link>
+              <Link
+                :href="route('admin.townships.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600':
+                    $page.url.startsWith('/admin/townships'),
+                }"
+              >
+                Township
+              </Link>
+            </ul>
+          </li>
+        </ul>
+
         <!-- Divider -->
         <hr class="my-4 md:min-w-full" />
         <!-- Heading -->
@@ -334,6 +403,7 @@ export default {
       collapseShow: "hidden",
       categoriesIsHidden: true,
       bannersIsHidden: true,
+      shippingAreaIsHidden: true,
       vendorManageIsHidden: true,
     };
   },
@@ -367,6 +437,16 @@ export default {
         this.$page.url.startsWith("/admin/product-banners")
       ) {
         return (this.bannersIsHidden = false);
+      }
+    },
+    shippingArea() {
+      if (
+        this.$page.url.startsWith("/admin/countries") ||
+        this.$page.url.startsWith("/admin/regions") ||
+        this.$page.url.startsWith("/admin/cities") ||
+        this.$page.url.startsWith("/admin/townships")
+      ) {
+        return (this.shippingAreaIsHidden = false);
       }
     },
   },

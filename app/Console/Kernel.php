@@ -25,6 +25,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('inactive_vendor:delete')->daily();
         $schedule->command('collection:delete')->daily();
         $schedule->command('coupon:delete')->daily();
+        $schedule->command('country:delete')->daily();
+        $schedule->command('region:delete')->daily();
+        $schedule->command('city:delete')->daily();
+        $schedule->command('township:delete')->daily();
     }
 
     /**

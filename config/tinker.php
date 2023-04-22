@@ -22,6 +22,10 @@ return [
         App\Console\Commands\PermanentlyAutoDeleteProductCommand::class,
         App\Console\Commands\PermanentlyAutoDeleteCouponCommand::class,
         App\Console\Commands\PermanentlyAutoDeleteInactiveVendorCommand::class,
+        App\Console\Commands\PermanentlyAutoDeleteCountryCommand::class,
+        App\Console\Commands\PermanentlyAutoDeleteRegionCommand::class,
+        App\Console\Commands\PermanentlyAutoDeleteCityCommand::class,
+        App\Console\Commands\PermanentlyAutoDeleteTownshipCommand::class,
 
     ],
 

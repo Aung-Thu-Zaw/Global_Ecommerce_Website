@@ -17,7 +17,10 @@ class RegionFactory extends Factory
     public function definition()
     {
         return [
-            //
+            "country_id"=>fake()->numberBetween(1, 10),
+            "name"=>fake()->unique()->sentence(),
+            "slug"=>fake()->unique()->slug(),
+            "created_at"=>fake()->dateTimeBetween("-2 months", now()),
         ];
     }
 }

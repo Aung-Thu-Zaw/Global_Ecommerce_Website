@@ -24,6 +24,10 @@ class DatabaseSeeder extends Seeder
             CollectionSeeder::class,
             ProductSeeder::class,
             ImageSeeder::class,
+            CountrySeeder::class,
+            RegionSeeder::class,
+            CitySeeder::class,
+            TownshipSeeder::class
             ]
         );
     }
