@@ -31,7 +31,6 @@ const totalDiscountPriceDropped = totalPrice.value - totalDiscountPrice.value;
 
 <template>
   <AppLayout>
-    {{ totalItems }}
     <section class="py-5 sm:py-7 mt-44">
       <div class="container max-w-screen-xl mx-auto px-4">
         <h2 class="text-4xl text-slate-700 font-semibold mb-2">
@@ -40,7 +39,7 @@ const totalDiscountPriceDropped = totalPrice.value - totalDiscountPrice.value;
       </div>
     </section>
 
-    <section v-if="cartItems.length || shops.length" class="py-5">
+    <section v-if="cartItems.length && shops.length" class="py-5">
       <div class="container max-w-screen-xl mx-auto px-4">
         <div class="flex flex-col md:flex-row gap-4">
           <main class="md:w-3/4">
@@ -119,7 +118,7 @@ const totalDiscountPriceDropped = totalPrice.value - totalDiscountPrice.value;
 
               <Link
                 class="px-4 py-3 mb-2 inline-block text-sm w-full text-center font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 uppercase"
-                :href="route('shipping.index')"
+                :href="route('checkout.index')"
               >
                 <i class="fa-solid fa-right-from-bracket"></i>
                 Proceed To Checkout

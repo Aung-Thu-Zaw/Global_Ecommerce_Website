@@ -72,7 +72,4 @@ class Township extends Model
     }
 
 
-
-
-
 }

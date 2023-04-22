@@ -8,6 +8,11 @@ import { computed } from "vue";
 const props = defineProps({
   shops: Object,
   cartItems: Object,
+  countries: Object,
+  regions: Object,
+  cities: Object,
+  townships: Object,
+  deliveryInformation: Object,
 });
 
 const totalItems = computed(() => {
@@ -39,7 +44,13 @@ const totalDiscountPriceDropped = totalPrice.value - totalDiscountPrice.value;
         </h1>
         <div class="flex flex-col md:flex-row gap-4">
           <main class="md:w-3/5">
-            <DeliveryInformationForm />
+            <DeliveryInformationForm
+              :countries="countries"
+              :regions="regions"
+              :cities="cities"
+              :townships="townships"
+              :deliveryInformation="deliveryInformation"
+            />
 
             <article
               v-for="(shop, index) in shops"
@@ -191,6 +202,7 @@ const totalDiscountPriceDropped = totalPrice.value - totalDiscountPrice.value;
 
               <button
                 class="px-4 py-3 mb-2 inline-block text-md w-full text-center font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 uppercase"
+                :disabled="!deliveryInformation"
               >
                 <i class="fa-solid fa-bag-shopping"></i>
                 Place Order

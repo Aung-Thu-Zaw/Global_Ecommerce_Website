@@ -12,7 +12,7 @@ return new class () extends Migration {
      */
     public function up()
     {
-        Schema::create('delievery_information', function (Blueprint $table) {
+        Schema::create('delivery_information', function (Blueprint $table) {
             $table->id();
             $table->foreignId("user_id")->constrained()->cascadeOnDelete();
             $table->string("name");
@@ -23,8 +23,8 @@ return new class () extends Migration {
             $table->string("region");
             $table->string("city");
             $table->string("township");
-            $table->string("postal_code");
-            $table->text("additional_information");
+            $table->string("postal_code")->nullable();
+            $table->text("additional_information")->nullable();
             $table->timestamps();
         });
 
@@ -37,6 +37,6 @@ return new class () extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('delievery_information');
+        Schema::dropIfExists('delivery_information');
     }
 };
