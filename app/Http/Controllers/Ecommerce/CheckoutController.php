@@ -34,6 +34,8 @@ class CheckoutController extends Controller
 
         $deliveryInformation=DeliveryInformation::where("user_id", auth()->user()->id)->first();
 
-        return inertia("Ecommerce/Checkout/Index", compact("shops", "cartItems", "countries", "regions", "cities", "townships", "deliveryInformation"));
+        $coupon=session("coupon") ?? "";
+
+        return inertia("Ecommerce/Checkout/Index", compact("shops", "cartItems", "countries", "regions", "cities", "townships", "deliveryInformation", "coupon"));
     }
 }

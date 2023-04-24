@@ -43,10 +43,10 @@ const form = useForm({
   code: props.coupon.code,
   discount_type: props.coupon.discount_type,
   discount_amount: props.coupon.discount_amount,
+  min_spend: props.coupon.min_spend,
   start_date: formatStartDate,
   end_date: formatEndDate,
   max_uses: props.coupon.max_uses,
-  uses_count: props.coupon.uses_count,
   captcha_token: null,
 });
 
@@ -168,6 +168,20 @@ const submit = () => {
           </div>
 
           <div class="mb-6">
+            <InputLabel for="min_spend" value="Minmimum Spend" />
+
+            <TextInput
+              id="min_spend"
+              type="text"
+              class="mt-1 block w-full"
+              v-model="form.min_spend"
+              placeholder="Enter User Minimun Spend Amount"
+            />
+
+            <InputError class="mt-2" :message="form.errors.min_spend" />
+          </div>
+
+          <div class="mb-6">
             <InputLabel for="start_date" value="Coupon Start Date *" />
 
             <datepicker
@@ -192,33 +206,17 @@ const submit = () => {
           </div>
 
           <div class="mb-6">
-            <InputLabel for="title" value="Coupon Max Uses *" />
+            <InputLabel for="max_uses" value="Max Uses *" />
 
             <TextInput
               id="max_uses"
               type="text"
               class="mt-1 block w-full"
               v-model="form.max_uses"
-              required
-              placeholder="Enter Max Uses"
+              placeholder="Enter Max Usage Coupon"
             />
 
             <InputError class="mt-2" :message="form.errors.max_uses" />
-          </div>
-
-          <div class="mb-6">
-            <InputLabel for="title" value="Coupon Uses Count" />
-
-            <TextInput
-              id="uses_count"
-              type="text"
-              class="mt-1 block w-full"
-              v-model="form.uses_count"
-              required
-              placeholder="Enter Uses Count"
-            />
-
-            <InputError class="mt-2" :message="form.errors.uses_count" />
           </div>
 
           <div class="mb-6">

@@ -23,6 +23,8 @@ Route::get('/products/{product}', [ProductController::class,"show"])->name("prod
 
 
 Route::get('/cart', [CartController::class,"index"])->name("cart.index");
+Route::post('/cart/apply-coupon', [CartController::class,"applyCoupon"])->name("coupon.apply");
+Route::get('/cart/remove-coupon', [CartController::class,"removeCoupon"])->name("coupon.remove");
 
 Route::post('/cart/cart-items', [CartItemController::class,"store"])->name("cart-items.store");
 Route::post('/cart/cart-items/{cart_item}', [CartItemController::class,"update"])->name("cart-items.update");
@@ -35,6 +37,10 @@ Route::delete('/watchlist/{watchlist}', [WatchlistController::class,"destroy"])-
 
 Route::get('/collections', [CollectionController::class,"index"])->name("collections.index");
 Route::get('/collections/{collection}/products', [CollectionController::class,"show"])->name("collections.show");
+
+// Route::post('/apply-coupon', [::class,"index"])->name("checkout.index");
+
+
 
 Route::get('/checkout', [CheckoutController::class,"index"])->name("checkout.index");
 Route::post('/delivery-information', [DeliveryInformationController::class,"store"])->name("information.store");

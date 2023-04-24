@@ -13,6 +13,7 @@ const props = defineProps({
   cities: Object,
   townships: Object,
   deliveryInformation: Object,
+  coupon: Object,
 });
 
 const totalItems = computed(() => {
@@ -21,17 +22,15 @@ const totalItems = computed(() => {
 
 const totalPrice = computed(() =>
   props.cartItems.reduce((total, item) => {
-    return total + item.qty * parseFloat(item.product.price);
+    return item.product.discount
+      ? total + item.qty * parseFloat(item.product.discount)
+      : total + item.qty * parseFloat(item.product.price);
   }, 0)
 );
 
-const totalDiscountPrice = computed(() =>
-  props.cartItems.reduce((total, item) => {
-    return total + item.qty * parseFloat(item.product.discount);
-  }, 0)
+const totalPriceWithCoupon = computed(
+  () => totalPrice.value - props.coupon.discount_amount
 );
-
-const totalDiscountPriceDropped = totalPrice.value - totalDiscountPrice.value;
 </script>
 
 <template>
@@ -92,35 +91,35 @@ const totalDiscountPriceDropped = totalPrice.value - totalDiscountPrice.value;
                   <span>Total Items:</span>
                   <span>{{ totalItems }} Items</span>
                 </li>
+
                 <li class="flex justify-between text-gray-600 mb-1">
                   <span>Total price:</span>
-                  <span v-if="totalDiscountPrice">${{ totalPrice }}</span>
-                  <span v-else>${{ totalPrice }}</span>
+                  <span>${{ totalPrice }}</span>
                 </li>
-                <li
-                  v-if="totalDiscountPrice"
-                  class="flex justify-between text-gray-600 mb-1"
-                >
-                  <span>Discount:</span>
-                  <span class="text-blue-500"
-                    >- ${{ totalDiscountPriceDropped }}</span
-                  >
-                </li>
-                <li class="flex justify-between text-gray-600 mb-1">
-                  <span>Coupon:</span>
-                  <span class="text-amber-500 text-sm font-bold"
-                    >HAPPY SHIPPING</span
-                  >
-                </li>
-                <li class="flex justify-between text-gray-600 mb-1">
-                  <span>Shipping Fee:</span>
-                  <span>$14.00</span>
-                </li>
+
+                <div v-if="coupon">
+                  <li class="flex justify-between text-gray-600 mb-1">
+                    <span>Coupon Code:</span>
+                    <span class="text-yellow-600 text-sm font-bold">
+                      {{ coupon.code }}
+                    </span>
+                  </li>
+                  <li class="flex justify-between text-gray-600 mb-1">
+                    <span>Coupon Discount:</span>
+                    <span class="text-gray-600 text-sm font-bold">
+                      - ${{ coupon.discount_amount }}
+                    </span>
+                  </li>
+                </div>
+
                 <li
                   class="text-lg font-bold border-t flex justify-between mt-3 pt-3"
                 >
                   <span>Total price:</span>
-                  <span>${{ totalPrice }}</span>
+                  <span v-if="totalPriceWithCoupon">
+                    ${{ totalPriceWithCoupon }}
+                  </span>
+                  <span v-else>${{ totalPrice }}</span>
                 </li>
               </ul>
 

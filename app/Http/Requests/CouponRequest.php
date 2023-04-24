@@ -24,14 +24,22 @@ class CouponRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            "code"=>["required","string"],
+
+        $rules= [
+            "code"=>["required","string",Rule::unique("coupons", "code")],
             "discount_type"=>["required",Rule::in(["percentage", "fixed_amount"])],
             "discount_amount"=>["required","numeric"],
+            "min_spend"=>["nullable","numeric"],
             "start_date"=>["required","date"],
             "end_date"=>["required","date"],
             "max_uses"=>["nullable","numeric"],
-            "uses_count"=>["required","numeric"],
         ];
+
+        if (in_array($this->method(), ['POST','PUT', 'PATCH'])) {
+            $coupon = $this->route()->parameter('coupon');
+            $rules["code"]=["required","string",Rule::unique("coupons", "code")->ignore($coupon)];
+        }
+
+        return $rules;
     }
 }

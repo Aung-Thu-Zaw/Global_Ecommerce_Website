@@ -368,6 +368,31 @@ const handlePermanentlyDelete = async () => {
               }"
             ></i>
           </HeaderTh>
+          <HeaderTh @click="updateSorting('min_spend')">
+            Minmimum Spend
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'min_spend',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'min_spend',
+              }"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'min_spend',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'min_spend',
+              }"
+            ></i>
+          </HeaderTh>
           <HeaderTh @click="updateSorting('max_uses')">
             Max Uses
             <i
@@ -394,7 +419,7 @@ const handlePermanentlyDelete = async () => {
             ></i>
           </HeaderTh>
           <HeaderTh @click="updateSorting('uses_count')">
-            Uses Count
+            Total Used
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
               :class="{
@@ -449,9 +474,11 @@ const handlePermanentlyDelete = async () => {
         <tbody v-if="trashCoupons.data.length">
           <Tr v-for="trashCoupon in trashCoupons.data" :key="trashCoupon.id">
             <BodyTh>{{ trashCoupon.id }}</BodyTh>
+
             <Td>{{ trashCoupon.code }}</Td>
             <Td>{{ trashCoupon.discount_type }}</Td>
             <Td>{{ trashCoupon.discount_amount }}</Td>
+            <Td>{{ trashCoupon.min_spend }}</Td>
             <Td>{{ trashCoupon.max_uses }}</Td>
             <Td>{{ trashCoupon.uses_count }}</Td>
             <Td>{{ trashCoupon.created_at }}</Td>

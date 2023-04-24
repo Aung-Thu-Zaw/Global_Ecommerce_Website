@@ -1,13 +1,18 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ShoppingCartItem from "@/Components/ShoppingCartItem.vue";
-import { Link } from "@inertiajs/vue3";
-import { computed } from "vue";
+import { Link, router, usePage } from "@inertiajs/vue3";
+import { computed, ref } from "vue";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 const props = defineProps({
   shops: Object,
   cartItems: Object,
+  coupon: Object,
 });
+
+const coupon_code = ref(props.coupon ? props.coupon.code : "");
 
 const totalItems = computed(() => {
   return props.cartItems.reduce((total, item) => total + item.qty, 0);
@@ -15,17 +20,66 @@ const totalItems = computed(() => {
 
 const totalPrice = computed(() =>
   props.cartItems.reduce((total, item) => {
-    return total + item.qty * parseFloat(item.product.price);
+    return item.product.discount
+      ? total + item.qty * parseFloat(item.product.discount)
+      : total + item.qty * parseFloat(item.product.price);
   }, 0)
 );
 
-const totalDiscountPrice = computed(() =>
-  props.cartItems.reduce((total, item) => {
-    return total + item.qty * parseFloat(item.product.discount);
-  }, 0)
-);
+const totalPriceWithCoupon = computed(() => {
+  if (props.coupon.discount_type === "fixed_amount") {
+    return totalPrice.value - props.coupon.discount_amount;
+  } else if (props.coupon.discount_type === "percentage") {
+    const discountAmount =
+      (totalPrice.value * props.coupon.discount_amount) / 100;
 
-const totalDiscountPriceDropped = totalPrice.value - totalDiscountPrice.value;
+    return totalPrice.value - discountAmount;
+  }
+});
+
+const applyCoupon = () => {
+  router.post(
+    route("coupon.apply", {
+      code: coupon_code.value,
+      total_price: totalPrice.value,
+    }),
+    {},
+    {
+      preserveScroll: true,
+      onSuccess: () => {
+        // Success flash message
+        if (usePage().props.flash.successMessage) {
+          toast.success(usePage().props.flash.successMessage, {
+            autoClose: 2000,
+          });
+        }
+        if (usePage().props.flash.errorMessage) {
+          toast.error(usePage().props.flash.errorMessage, {
+            autoClose: 2000,
+          });
+        }
+      },
+    }
+  );
+};
+
+const removeCoupon = () => {
+  router.get(
+    route("coupon.remove"),
+    {},
+    {
+      preserveScroll: true,
+      onSuccess: () => {
+        // Success flash message
+        if (usePage().props.flash.successMessage) {
+          toast.success(usePage().props.flash.successMessage, {
+            autoClose: 2000,
+          });
+        }
+      },
+    }
+  );
+};
 </script>
 
 
@@ -84,35 +138,48 @@ const totalDiscountPriceDropped = totalPrice.value - totalDiscountPrice.value;
                   <span>Total Items:</span>
                   <span>{{ totalItems }} Items</span>
                 </li>
+
                 <li class="flex justify-between text-gray-600 mb-1">
                   <span>Total price:</span>
-                  <span v-if="totalDiscountPrice">${{ totalPrice }}</span>
-                  <span v-else>${{ totalPrice }}</span>
+                  <span>${{ totalPrice }}</span>
                 </li>
-                <li
-                  v-if="totalDiscountPrice"
-                  class="flex justify-between text-gray-600 mb-1"
-                >
-                  <span>Discount:</span>
-                  <span class="text-blue-500"
-                    >- ${{ totalDiscountPriceDropped }}</span
-                  >
-                </li>
-                <!-- <li class="flex justify-between text-gray-600 mb-1">
-                  <span>Coupon:</span>
-                  <span class="text-amber-500 text-sm font-bold"
-                    >HAPPY SHIPPING</span
-                  >
-                </li> -->
-                <!-- <li class="flex justify-between text-gray-600 mb-1">
-                  <span>Shipping Fee:</span>
-                  <span>$14.00</span>
-                </li> -->
+
+                <div v-if="coupon">
+                  <li class="flex justify-between text-gray-600 mb-1">
+                    <span>Coupon Code:</span>
+                    <span class="text-yellow-600 text-sm font-bold">
+                      {{ coupon.code }}
+                      <i
+                        class="fas fa-xmark text-slate-600 cursor-pointer hover:text-red-600"
+                        @click="removeCoupon"
+                      ></i>
+                    </span>
+                  </li>
+                  <li class="flex justify-between text-gray-600 mb-1">
+                    <span>Coupon Discount:</span>
+                    <span
+                      v-if="coupon.discount_type === 'fixed_amount'"
+                      class="text-gray-600 text-sm font-bold"
+                    >
+                      - $ {{ coupon.discount_amount }}
+                    </span>
+                    <span
+                      v-else-if="coupon.discount_type === 'percentage'"
+                      class="text-gray-600 text-sm font-bold"
+                    >
+                      - % {{ coupon.discount_amount }}
+                    </span>
+                  </li>
+                </div>
+
                 <li
                   class="text-lg font-bold border-t flex justify-between mt-3 pt-3"
                 >
                   <span>Total price:</span>
-                  <span>${{ totalPrice }}</span>
+                  <span v-if="totalPriceWithCoupon">
+                    ${{ totalPriceWithCoupon }}
+                  </span>
+                  <span v-else>${{ totalPrice }}</span>
                 </li>
               </ul>
 
@@ -136,20 +203,29 @@ const totalDiscountPriceDropped = totalPrice.value - totalDiscountPrice.value;
             <div
               class="border border-gray-200 bg-white shadow-sm rounded my-5 p-3"
             >
-              <h2 class="font-bold text-lg mb-3 text-slate-700">
+              <h2 class="font-bold text-lg mb-1 text-slate-700">
                 Apply Coupon
               </h2>
+
+              <span v-if="coupon" class="font-bold text-green-700 text-sm my-4">
+                Coupon code applied.
+              </span>
+
               <input
                 type="text"
-                class="w-full mb-3 rounded-md py-3 border-slate-400"
+                class="w-full my-2 rounded-md py-2 text-sm font-bold text-slate-700 border-slate-400"
                 placeholder="Enter Cupon Code"
+                v-model="coupon_code"
+                :disabled="coupon ? true : false"
               />
-              <a
+
+              <button
                 class="px-4 py-3 mb-2 inline-block text-sm uppercase w-full text-center font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
-                href="#"
+                @click="applyCoupon"
+                :disabled="coupon ? true : false"
               >
                 Apply
-              </a>
+              </button>
             </div>
           </aside>
         </div>

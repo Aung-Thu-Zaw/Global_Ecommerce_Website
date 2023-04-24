@@ -38,10 +38,10 @@ const form = useForm({
   code: "",
   discount_type: "",
   discount_amount: "",
+  min_spend: "",
   start_date: formatStartDate,
   end_date: formatEndDate,
   max_uses: "",
-  uses_count: "",
   captcha_token: null,
 });
 
@@ -154,9 +154,37 @@ const submit = () => {
               v-model="form.discount_amount"
               required
               placeholder="Enter Discount Amount"
+            >
+              <template v-slot:icon>
+                <span
+                  v-if="form.discount_type === 'fixed_amount'"
+                  class="text-slate-500"
+                >
+                  $
+                </span>
+                <span
+                  v-else-if="form.discount_type === 'percentage'"
+                  class="text-slate-500"
+                >
+                  %
+                </span>
+              </template>
+            </TextInput>
+            <InputError class="mt-2" :message="form.errors.discount_amount" />
+          </div>
+
+          <div class="mb-6">
+            <InputLabel for="min_spend" value="Minmimum Spend" />
+
+            <TextInput
+              id="min_spend"
+              type="text"
+              class="mt-1 block w-full"
+              v-model="form.min_spend"
+              placeholder="Enter User Minimun Spend Amount"
             />
 
-            <InputError class="mt-2" :message="form.errors.discount_amount" />
+            <InputError class="mt-2" :message="form.errors.min_spend" />
           </div>
 
           <div class="mb-6">
@@ -184,33 +212,17 @@ const submit = () => {
           </div>
 
           <div class="mb-6">
-            <InputLabel for="title" value="Coupon Max Uses *" />
+            <InputLabel for="max_uses" value="Max Uses *" />
 
             <TextInput
               id="max_uses"
               type="text"
               class="mt-1 block w-full"
               v-model="form.max_uses"
-              required
-              placeholder="Enter Max Uses"
+              placeholder="Enter Max Usage Coupon"
             />
 
             <InputError class="mt-2" :message="form.errors.max_uses" />
-          </div>
-
-          <div class="mb-6">
-            <InputLabel for="title" value="Coupon Uses Count" />
-
-            <TextInput
-              id="uses_count"
-              type="text"
-              class="mt-1 block w-full"
-              v-model="form.uses_count"
-              required
-              placeholder="Enter Uses Count"
-            />
-
-            <InputError class="mt-2" :message="form.errors.uses_count" />
           </div>
 
           <div class="mb-6">

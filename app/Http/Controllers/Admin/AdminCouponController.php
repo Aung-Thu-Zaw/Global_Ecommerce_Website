@@ -32,6 +32,7 @@ class AdminCouponController extends Controller
 
     public function store(CouponRequest $request): RedirectResponse
     {
+
         Coupon::create($request->validated());
 
         return to_route("admin.coupons.index", "per_page=$request->per_page")->with("success", "Coupon has been successfully created.");

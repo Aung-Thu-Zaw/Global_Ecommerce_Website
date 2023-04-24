@@ -297,6 +297,31 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
+          <HeaderTh @click="updateSorting('min_spend')">
+            Minmimum Spend
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'min_spend',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'min_spend',
+              }"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'min_spend',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'min_spend',
+              }"
+            ></i>
+          </HeaderTh>
           <HeaderTh @click="updateSorting('max_uses')">
             Max Uses
             <i
@@ -323,7 +348,7 @@ if (usePage().props.flash.successMessage) {
             ></i>
           </HeaderTh>
           <HeaderTh @click="updateSorting('uses_count')">
-            Uses Count
+            Total Used
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
               :class="{
@@ -381,7 +406,15 @@ if (usePage().props.flash.successMessage) {
 
             <Td>{{ coupon.code }}</Td>
             <Td>{{ coupon.discount_type }}</Td>
-            <Td>{{ coupon.discount_amount }}</Td>
+            <Td>
+              <span v-if="coupon.discount_type === 'fixed_amount'">
+                $ {{ coupon.discount_amount }}
+              </span>
+              <span v-if="coupon.discount_type === 'percentage'">
+                % {{ coupon.discount_amount }}
+              </span>
+            </Td>
+            <Td>{{ coupon.min_spend }}</Td>
             <Td>{{ coupon.max_uses }}</Td>
             <Td>{{ coupon.uses_count }}</Td>
             <Td>{{ coupon.created_at }}</Td>
