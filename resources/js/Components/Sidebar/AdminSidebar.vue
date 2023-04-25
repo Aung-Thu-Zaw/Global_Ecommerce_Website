@@ -321,8 +321,8 @@
               <i class="fa-solid fa-gear mr-2 text-sm"></i>
               Website Settings
             </Link>
-            <!-- <Link
-              :href="route('admin.seo-settings')"
+            <Link
+              :href="route('admin.seo-settings.edit')"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
                 'text-blue-500 hover:text-blue-600':
@@ -331,9 +331,9 @@
                   $page.url !== '/admin/seo-settings',
               }"
             >
-              <i class="fa-solid fa-browser mr-2 text-sm"></i>
+              <i class="fa-brands fa-searchengin mr-2 text-sm"></i>
               SEO Setting
-            </Link> -->
+            </Link>
           </li>
         </ul>
 

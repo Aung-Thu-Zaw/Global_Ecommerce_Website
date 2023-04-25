@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\AdminProductBannerController;
 use App\Http\Controllers\Admin\Managements\AdminActiveVendorController;
 use App\Http\Controllers\Admin\Managements\AdminInactiveVendorController;
 use App\Http\Controllers\Admin\AdminProductController;
+use App\Http\Controllers\Admin\AdminSeoSettingController;
 use App\Http\Controllers\Admin\AdminWebsiteSettingController;
 use App\Http\Controllers\Admin\AdminSliderBannerController;
 use App\Http\Controllers\Admin\ShippingArea\AdminCityController;
@@ -264,6 +265,14 @@ Route::middleware(["auth","verified","user.role:admin"])
             ->group(function () {
                 Route::get("/", "edit")->name("edit");
                 Route::post("/{website_setting}", "update")->name("update");
+            });
+
+            Route::controller(AdminSeoSettingController::class)
+            ->prefix("/seo-settings")
+            ->name("seo-settings.")
+            ->group(function () {
+                Route::get("/", "edit")->name("edit");
+                Route::post("/{seo_setting}", "update")->name("update");
             });
 
 
