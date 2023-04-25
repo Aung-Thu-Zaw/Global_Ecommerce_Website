@@ -1,86 +1,16 @@
 <script setup>
 import { Link, router, usePage } from "@inertiajs/vue3";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
 const props = defineProps({
   product: Object,
 });
-
-const saved = computed(() => {
-  return props.product.watchlists.some(
-    (watchlist) => watchlist.product_id === props.product.id
-  )
-    ? true
-    : false;
-});
-
-const goToCart = computed(() => {
-  return props.product.cart_items.some(
-    (cartItem) => cartItem.product_id === props.product.id
-  )
-    ? true
-    : false;
-});
-
-const saveToWatchlist = () => {
-  router.post(
-    route("watchlist.store", {
-      user_id: usePage().props.auth.user.id,
-      product_id: props.product.id,
-      shop_id: props.product.shop.id,
-    }),
-    {},
-    {
-      preserveScroll: true,
-      onSuccess: () => {
-        // Success flash message
-        if (usePage().props.flash.successMessage) {
-          toast.success(usePage().props.flash.successMessage, {
-            autoClose: 2000,
-          });
-        }
-        // Info flash message
-        if (usePage().props.flash.infoMessage) {
-          toast.info(usePage().props.flash.infoMessage, {
-            autoClose: 2000,
-          });
-        }
-      },
-    }
-  );
-};
-
-const addToCart = () => {
-  router.post(
-    route("cart-items.store", {
-      cart_id: usePage().props.auth.user.cart
-        ? usePage().props.auth.user.cart.id
-        : null,
-      product_id: props.product.id,
-      shop_id: props.product.shop.id,
-      qty: 1,
-    }),
-    {},
-    {
-      preserveScroll: true,
-      onSuccess: () => {
-        // Success flash message
-        if (usePage().props.flash.successMessage) {
-          toast.success(usePage().props.flash.successMessage, {
-            autoClose: 2000,
-          });
-        }
-      },
-    }
-  );
-};
 </script>
 
 <template>
   <div v-if="product">
-    <!-- COMPONENT: PRODUCT CARD -->
     <article
       class="shadow-sm rounded bg-white border border-gray-200 p-2 overflow-hidden h-[460px]"
     >
@@ -91,19 +21,21 @@ const addToCart = () => {
           :alt="product.name"
         />
         <span
-          v-if="product.discount"
-          class="inline-block px-2 text-center py-1 text-[.6rem] font-bold w-[100px] bg-green-200 bg-opacity-90 text-green-600 absolute -right-8 top-2 rotate-45"
+          v-if="product.special_offer"
+          class="inline-block px-2 text-center py-1 text-[.6rem] font-bold w-[100px] bg-rose-200 bg-opacity-90 text-rose-600 absolute -right-8 top-2 rotate-45"
         >
-          {{
-            (
-              ((product.price - product.discount) / product.price) *
-              100
-            ).toFixed(1)
-          }}% OFF
+          Special Offer
         </span>
       </a>
+
       <div class="p-4 border-t border-t-gray-200">
-        <h6 class="text-md mt-3">
+        <!-- <span
+          class="px-3 rounded-sm py-1 font-bold uppercase text-[0.7rem] text-white bg-fuchsia-600"
+        >
+          <i class="fas fa-crown"></i>
+          Official
+        </span> -->
+        <h6 class="text-md mt-2">
           <Link
             :href="route('products.show', product.slug)"
             class="text-gray-600 line-clamp-2"
@@ -114,11 +46,22 @@ const addToCart = () => {
 
         <div class="my-2">
           <div v-if="product.discount">
-            <span class="font-semibold text-slate-600 mr-3">
+            <span class="font-semibold text-slate-600 block">
               ${{ product.discount }}
             </span>
-            <span class="text-[.8rem] text-secondary-600 line-through">
+            <span class="text-[.8rem] text-secondary-600 line-through mr-5">
               ${{ product.price }}
+            </span>
+            <span
+              v-if="product.discount"
+              class="text-[.6rem] px-2 py-1 bg-green-200 rounded-full text-green-600 font-bold"
+            >
+              {{
+                (
+                  ((product.price - product.discount) / product.price) *
+                  100
+                ).toFixed(1)
+              }}% OFF
             </span>
           </div>
           <div v-else>
@@ -127,8 +70,6 @@ const addToCart = () => {
             </span>
           </div>
         </div>
-
-        <!-- Rating  -->
 
         <div class="flex items-center">
           <svg
@@ -192,38 +133,8 @@ const addToCart = () => {
             ></path>
           </svg>
         </div>
-        <div class="flex items-center justify-between">
-          <button
-            v-if="!goToCart"
-            @click="addToCart"
-            class="px-4 py-2 mt-3 bg-blue-500 text-white text-sm font-semibold rounded-sm hover:shadow-md hover:bg-blue-600 hover:animate-bounce transition-all"
-          >
-            <i class="w-5 fa fa-shopping-cart"></i>
-            Add to cart
-          </button>
-          <Link
-            v-else
-            :href="route('cart.index')"
-            class="px-4 py-2 mt-3 bg-blue-500 text-white text-sm font-semibold rounded-sm hover:shadow-md hover:bg-blue-600 hover:animate-bounce transition-all"
-          >
-            <i class="w-5 fa fa-shopping-cart"></i>
-            Go to cart
-          </Link>
-
-          <button
-            class="mt-3 text-sm font-semibold px-4 py-2 md:px-2 md:py-2 rounded-sm hover:shadow-md hover:animate-bounce transition-all bg-gray-100 hover:bg-gray-200 border border-slate-300 text-blue-500"
-            :class="{ 'text-pink-500': saved }"
-            @click="saveToWatchlist"
-          >
-            <i class="w-5 fa fa-heart"></i>
-            <span class="md:hidden">
-              {{ saved ? "Saved" : "Save to watchlist" }}
-            </span>
-          </button>
-        </div>
       </div>
     </article>
-    <!-- COMPONENT: PRODUCT CARD //END -->
   </div>
 </template>
 
