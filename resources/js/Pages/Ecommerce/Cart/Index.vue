@@ -47,7 +47,6 @@ const applyCoupon = () => {
     {
       preserveScroll: true,
       onSuccess: () => {
-        // Success flash message
         if (usePage().props.flash.successMessage) {
           toast.success(usePage().props.flash.successMessage, {
             autoClose: 2000,
@@ -70,7 +69,6 @@ const removeCoupon = () => {
     {
       preserveScroll: true,
       onSuccess: () => {
-        // Success flash message
         if (usePage().props.flash.successMessage) {
           toast.success(usePage().props.flash.successMessage, {
             autoClose: 2000,

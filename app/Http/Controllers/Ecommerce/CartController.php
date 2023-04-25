@@ -47,17 +47,15 @@ class CartController extends Controller
             return back()->with("error", 'Coupon code is invalid.');
         }
 
-        $usedCount = $coupon->users()->wherePivotNotNull('used_at')->count();
-
-
-        if($usedCount >= $coupon->max_uses) {
-            return back()->with("error", 'Full');
-        }
-
         $isUsed = $user->coupons()->wherePivot('coupon_id', $coupon->id)->whereNotNull('used_at')->exists();
 
         if($isUsed) {
             return back()->with("error", "You've already used this coupon.");
+        }
+
+        $usedCount = $coupon->users()->wherePivotNotNull('used_at')->count();
+        if($usedCount >= $coupon->max_uses) {
+            return back()->with("error", "You're late. The coupon code is limited.");
         }
 
         if ($coupon->min_spend && $request->total_price < $coupon->min_spend) {
@@ -78,9 +76,16 @@ class CartController extends Controller
 
     public function removeCoupon(): RedirectResponse
     {
-        session()->forget("coupon");
 
-        // $coupon->update(["uses_count"=>$coupon->uses_count--]);
+        /** @var \App\Models\User|null $user */
+        $user = auth()->user();
+        $coupon=session("coupon");
+
+        if ($user) {
+            $user->coupons()->detach($coupon->id);
+        }
+
+        session()->forget("coupon");
 
         return back()->with("success", "Coupon code is removed");
     }

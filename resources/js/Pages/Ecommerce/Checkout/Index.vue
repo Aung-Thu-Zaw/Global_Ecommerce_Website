@@ -2,7 +2,6 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import DeliveryInformationForm from "@/Components/DeliveryInformationForm.vue";
 import CheckoutShoppingCartItem from "@/Components/CheckoutShoppingCartItem.vue";
-import { useForm } from "@inertiajs/vue3";
 import { computed } from "vue";
 
 const props = defineProps({
