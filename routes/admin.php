@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\AdminProductBannerController;
 use App\Http\Controllers\Admin\Managements\AdminActiveVendorController;
 use App\Http\Controllers\Admin\Managements\AdminInactiveVendorController;
 use App\Http\Controllers\Admin\AdminProductController;
+use App\Http\Controllers\Admin\AdminWebsiteSettingController;
 use App\Http\Controllers\Admin\AdminSliderBannerController;
 use App\Http\Controllers\Admin\ShippingArea\AdminCityController;
 use App\Http\Controllers\Admin\ShippingArea\AdminCountryController;
@@ -28,7 +29,7 @@ Route::middleware(["auth","verified","user.role:admin"])
             Route::get("/dashboard", [AdminDashboardController::class,"index"])->name("dashboard");
 
             Route::controller(AdminInactiveVendorController::class)
-                    ->prefix("/managements/inactive-vendors")
+                    ->prefix("/vendor-manage/inactive-vendors")
                     ->name("vendors.inactive.")
                     ->group(function () {
                         Route::get("/", "index")->name("index");
@@ -42,7 +43,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                     });
 
             Route::controller(AdminActiveVendorController::class)
-                    ->prefix("/managements/active-vendors")
+                    ->prefix("/vendor-manage/active-vendors")
                     ->name("vendors.active.")
                     ->group(function () {
                         Route::get("/", "index")->name("index");
@@ -255,6 +256,14 @@ Route::middleware(["auth","verified","user.role:admin"])
                 Route::post("/{id}/restore", "restore")->name("restore");
                 Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
                 Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
+            });
+
+            Route::controller(AdminWebsiteSettingController::class)
+            ->prefix("/website-settings")
+            ->name("website-settings.")
+            ->group(function () {
+                Route::get("/", "edit")->name("edit");
+                Route::post("/{website_setting}", "update")->name("update");
             });
 
 
