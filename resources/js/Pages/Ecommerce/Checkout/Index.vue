@@ -3,6 +3,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import DeliveryInformationForm from "@/Components/DeliveryInformationForm.vue";
 import CheckoutShoppingCartItem from "@/Components/CheckoutShoppingCartItem.vue";
 import { computed } from "vue";
+import { Link } from "@inertiajs/vue3";
 
 const props = defineProps({
   shops: Object,
@@ -174,23 +175,6 @@ const totalPriceWithCoupon = computed(
                       for="blue-radio"
                       class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300"
                     >
-                      <i class="fa-brands fa-stripe"></i>
-                      Stripe
-                    </label>
-                  </div>
-
-                  <div class="flex items-center mr-4 mb-3">
-                    <input
-                      id="blue-radio"
-                      type="radio"
-                      value=""
-                      name="colored-radio"
-                      class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    />
-                    <label
-                      for="blue-radio"
-                      class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300"
-                    >
                       <i class="fa-brands fa-paypal"></i>
                       Paypal
                     </label>
@@ -198,13 +182,14 @@ const totalPriceWithCoupon = computed(
                 </div>
               </div>
 
-              <button
+              <Link
+                :href="route('payment.show')"
                 class="px-4 py-3 mb-2 inline-block text-md w-full text-center font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 uppercase"
                 :disabled="!deliveryInformation"
               >
                 <i class="fa-solid fa-bag-shopping"></i>
                 Place Order
-              </button>
+              </Link>
             </article>
           </aside>
         </div>

@@ -7,6 +7,7 @@ use App\Http\Controllers\Ecommerce\HomeController;
 use App\Http\Controllers\Ecommerce\ProductController;
 use App\Http\Controllers\Ecommerce\CheckoutController;
 use App\Http\Controllers\Ecommerce\DeliveryInformationController;
+use App\Http\Controllers\Ecommerce\PaymentController;
 use App\Http\Controllers\MyAccountController;
 use App\Http\Controllers\WatchlistController;
 use Illuminate\Support\Facades\Route;
@@ -43,6 +44,12 @@ Route::get('/collections/{collection}/products', [CollectionController::class,"s
 
 
 Route::get('/checkout', [CheckoutController::class,"index"])->name("checkout.index");
+
+Route::get('/payment', [PaymentController::class,"show"])->name("payment.show");
+Route::post('/payment/processPayment', [PaymentController::class,"processPayment"])->name("payment.processPayment");
+
+
+
 Route::post('/delivery-information', [DeliveryInformationController::class,"store"])->name("information.store");
 
 Route::get('/dashboard', function () {
