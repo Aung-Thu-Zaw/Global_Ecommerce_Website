@@ -19,18 +19,13 @@ class CartItemController extends Controller
             ["user_id"=>auth()->user()->id]
         );
 
-        $cartItem=CartItem::where("product_id", $request->product_id)->first();
+        $cartItem=CartItem::where("product_id", $request->product_id)->where("color", $request->color)->where("size", $request->size)->first();
 
         if($cartItem) {
             $cartItem->update(["qty"=> $cartItem->qty + 1]);
         } else {
             CartItem::create(
-                [
-                    "cart_id"=>$cart->id,
-                    "product_id"=>$request->product_id,
-                    "shop_id"=>$request->shop_id,
-                    "qty"=>$request->qty,
-                ]
+                $request->validated()
             );
         }
 

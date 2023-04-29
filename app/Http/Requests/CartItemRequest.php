@@ -28,6 +28,8 @@ class CartItemRequest extends FormRequest
             "cart_id"=>["nullable","numeric",Rule::exists("carts", "id")],
             "product_id"=>["required","numeric",Rule::exists("products", "id")],
             "shop_id"=>["required","numeric",Rule::exists("users", "id")],
+            "size"=>["nullable","string"],
+            "color"=>["nullable","string"],
             "qty"=>["required","numeric"],
         ];
     }

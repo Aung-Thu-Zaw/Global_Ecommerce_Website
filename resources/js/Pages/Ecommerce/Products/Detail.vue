@@ -21,6 +21,8 @@ const activeImageIndex = ref(0);
 const activeImage = computed(() => images[activeImageIndex.value]);
 
 const quantity = ref(1);
+const selectedColor = ref("");
+const selectedSize = ref("");
 
 const increment = () =>
   quantity.value >= props.product.qty
@@ -45,6 +47,8 @@ const addToCart = () => {
       product_id: props.product.id,
       shop_id: props.product.shop.id,
       qty: quantity.value,
+      color: selectedColor.value,
+      size: selectedSize.value,
     }),
     {},
     {
@@ -216,13 +220,16 @@ const saveToWatchlist = () => {
               >
                 <div class="flex items-center mr-3">
                   <input
-                    type="checkbox"
-                    id="size-option1"
-                    value=""
+                    type="radio"
+                    :id="size.name"
+                    name="size"
+                    :value="size.name"
                     class="hidden peer"
+                    v-model="selectedSize"
+                    required
                   />
                   <label
-                    for="size-option1"
+                    :for="size.name"
                     class="px-3 py-1 text-secondary-800 shadow-md bg-white border-2 border-gray-200 rounded-sm cursor-pointer peer-checked:border-gray-400 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50"
                   >
                     <div class="rounded-sm uppercase font-bold text-sm">
@@ -243,16 +250,22 @@ const saveToWatchlist = () => {
               >
                 <div class="flex items-center mr-3">
                   <input
-                    type="checkbox"
-                    id="color-option1"
-                    value=""
+                    type="radio"
+                    :id="color.name"
+                    name="color"
+                    :value="color.name"
                     class="hidden peer"
+                    v-model="selectedColor"
+                    required
                   />
                   <label
-                    for="color-option1"
-                    class="w-7 h-7 text-gray-500 bg-white border-4 border-gray-100 shadow-md rounded-sm cursor-pointer peer-checked:border-slate-300 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50"
+                    :for="color.name"
+                    class="w-7 h-7 text-gray-500 bg-white border-[3px] border-gray-100 shadow-md rounded-sm cursor-pointer peer-checked:border-gray-400 peer-checked:w-8 peer-checked:h-8 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50"
                   >
-                    <div class="w-full h-full bg-blue-600 rounded-sm"></div>
+                    <div
+                      class="w-full h-full rounded-sm"
+                      :class="'bg-' + color.name + '-600'"
+                    ></div>
                   </label>
                 </div>
               </div>

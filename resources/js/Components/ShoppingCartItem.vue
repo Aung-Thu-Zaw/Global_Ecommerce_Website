@@ -145,26 +145,15 @@ const removeItem = async (item) => {
           >
             <span class="text-gray-600">|</span>
             Size:
-            <span
-              v-for="size in item.product.sizes"
-              :key="size.id"
-              class="text-slate-700 font-semibold"
-            >
-              {{ size.name }},
-            </span>
+            <span class="text-slate-700 font-semibold"> {{ item.size }}, </span>
           </span>
           <span
             v-if="item.product.colors.length"
             class="text-[.8rem] text-gray-500"
           >
-            <span class="text-gray-600">|</span>
             Color:
-            <span
-              v-for="color in item.product.colors"
-              :key="color.id"
-              class="text-slate-700 font-semibold"
-            >
-              {{ color.name }},
+            <span class="text-slate-700 font-semibold">
+              {{ item.color }},
             </span>
           </span>
           <p class="text-[.8rem] text-red-500 font-bold">
