@@ -17,6 +17,9 @@ return new class () extends Migration {
             $table->foreignId("cart_id")->constrained()->cascadeOnDelete();
             $table->foreignId("product_id")->constrained()->cascadeOnDelete();
             $table->foreignId("shop_id")->references("id")->on("users");
+            $table->string("size");
+            $table->string("color");
+            $table->string("type");
             $table->integer("qty");
             $table->timestamps();
         });
