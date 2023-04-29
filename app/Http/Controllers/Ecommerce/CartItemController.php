@@ -32,7 +32,7 @@ class CartItemController extends Controller
 
     public function update(Request $request, CartItem $cartItem): RedirectResponse
     {
-        $cartItem->update(["qty"=>$request->qty]);
+        $cartItem->update(["qty"=>$request->qty,"total_price"=>$request->total_price]);
 
         return back();
     }

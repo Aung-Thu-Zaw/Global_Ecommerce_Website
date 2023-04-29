@@ -29,8 +29,8 @@ watch(
       {
         qty: quantity.value,
         total_price: props.item.product.discount
-          ? totalDiscountPrice
-          : totalPrice,
+          ? totalDiscountPrice.value
+          : totalPrice.value,
       },
       {
         preserveScroll: true,
