@@ -3,7 +3,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import DeliveryInformationForm from "@/Components/DeliveryInformationForm.vue";
 import CheckoutShoppingCartItem from "@/Components/CheckoutShoppingCartItem.vue";
 import { computed } from "vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
 
 const props = defineProps({
   shops: Object,
@@ -183,7 +183,12 @@ const totalPriceWithCoupon = computed(
               </div>
 
               <Link
-                :href="route('payment.show')"
+                :href="route('payment')"
+                :data="{
+                  total_price: coupon ? totalPriceWithCoupon : totalPrice,
+                  cart_items: cartItems,
+                }"
+                method="post"
                 class="px-4 py-3 mb-2 inline-block text-md w-full text-center font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 uppercase"
                 :disabled="!deliveryInformation"
               >

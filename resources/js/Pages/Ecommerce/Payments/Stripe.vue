@@ -72,6 +72,8 @@ export default {
   },
   props: {
     stripeKey: String,
+    totalPrice: String,
+    cartItems: Object,
   },
   methods: {
     async handleSubmit() {
@@ -96,6 +98,8 @@ export default {
         router.post(
           route("payment.processPayment", {
             payment_method_id: this.paymentMethodId,
+            total_price: this.totalPrice,
+            cart_items: this.cartItems,
           }),
           {},
           {
@@ -112,7 +116,7 @@ export default {
 };
 </script>
 
-  <style>
+<style>
 label {
   display: block;
   margin-bottom: 5px;

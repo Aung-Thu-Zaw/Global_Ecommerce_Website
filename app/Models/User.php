@@ -109,6 +109,15 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\HasOne<DeliveryInformation>
+    */
+    public function deliveryInformation(): HasOne
+    {
+        return $this->hasOne(DeliveryInformation::class);
+    }
+
+
 
     public function getRedirectRouteName(): string
     {
