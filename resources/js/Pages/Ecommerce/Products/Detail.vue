@@ -50,8 +50,8 @@ const addToCart = () => {
       color: selectedColor.value,
       size: selectedSize.value,
       total_price: props.product.discount
-        ? props.product.discount
-        : props.product.price,
+        ? quantity.value * props.product.discount
+        : quantity.value * props.product.price,
     }),
     {},
     {

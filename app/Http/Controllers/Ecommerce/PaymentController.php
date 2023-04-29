@@ -29,13 +29,10 @@ class PaymentController extends Controller
 
     public function processPayment(Request $request): RedirectResponse
     {
-
-
-
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
 
-
+        // dd($request->cart_items);
         $paymentIntent = PaymentIntent::create([
             'amount' => $request->total_price,
             'currency' => 'usd',
@@ -56,7 +53,7 @@ class PaymentController extends Controller
 
 
 
-        Order::create([
+        $order=Order::create([
             "user_id"=>$user->id,
             "delivery_information_id"=>$user->deliveryInformation->id,
             'payment_type'=>$paymentIntent->payment_method_types[0],
@@ -68,6 +65,8 @@ class PaymentController extends Controller
             'invoice_no'=>'GLOBAL E-COMMERCE'.mt_rand(100000000, 999999999),
             'order_date'=>Carbon::now()->format("Y-m-d"),
             'status'=>"pending",
+        ]);
+
 
 
 
@@ -79,16 +78,25 @@ class PaymentController extends Controller
         //    'cancel_date'=>,
         //    'return_date'=>,
         //    'return_reason'=>,
-        ]);
-
-
-        // OrderItem::create()
 
 
 
 
+        foreach ($request->cart_items as $item) {
+            OrderItem::create([
+                "order_id"=>$order->id,
+                "product_id"=>$item["product"]["id"],
+                "vendor_id"=>$item["product"]["shop"]["id"],
+                "color"=>$item["color"] ?? null,
+                "size"=>$item["size"] ?? null,
+                "qty"=>$item["qty"],
+                "price"=>$item["total_price"],
+            ]);
+        }
 
 
-        return to_route("payment")->with("success", $paymentIntent);
+
+
+        return to_route("home")->with("success", $paymentIntent);
     }
 }

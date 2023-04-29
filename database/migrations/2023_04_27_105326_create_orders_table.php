@@ -31,8 +31,8 @@ return new class () extends Migration {
             $table->date('delivered_date')->nullable();
             $table->date('cancel_date')->nullable();
             $table->date('return_date')->nullable();
+            $table->text('return_reason')->nullable();
             $table->string('status');
-            $table->text('return_reason');
             $table->timestamps();
 
         });
