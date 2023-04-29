@@ -22,11 +22,9 @@ class CartItemController extends Controller
         $cartItem=CartItem::where("product_id", $request->product_id)->where("color", $request->color)->where("size", $request->size)->first();
 
         if($cartItem) {
-            $cartItem->update(["qty"=> $cartItem->qty + 1]);
+            $cartItem->update(["qty"=> $cartItem->qty + $request->qty]);
         } else {
-            CartItem::create(
-                $request->validated()
-            );
+            CartItem::create($request->validated()+["cart_id"=>$cart->id]);
         }
 
         return back()->with("success", "$request->qty item(s) have been added to your cart");

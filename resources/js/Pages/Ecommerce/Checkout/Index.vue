@@ -31,6 +31,15 @@ const totalPrice = computed(() =>
 const totalPriceWithCoupon = computed(
   () => totalPrice.value - props.coupon.discount_amount
 );
+
+const handlePlaceOrder = () => {
+  router.post(
+    route("payment", {
+      total_price: props.coupon ? totalPriceWithCoupon.value : totalPrice.value,
+      cart_items: props.cartItems,
+    })
+  );
+};
 </script>
 
 <template>
@@ -41,6 +50,7 @@ const totalPriceWithCoupon = computed(
           <i class="fa-solid fa-file-lines"></i>
           Delivery Information
         </h1>
+
         <div class="flex flex-col md:flex-row gap-4">
           <main class="md:w-3/5">
             <DeliveryInformationForm
@@ -182,19 +192,14 @@ const totalPriceWithCoupon = computed(
                 </div>
               </div>
 
-              <Link
-                :href="route('payment')"
-                :data="{
-                  total_price: coupon ? totalPriceWithCoupon : totalPrice,
-                  cart_items: cartItems,
-                }"
-                method="post"
+              <button
+                @click="handlePlaceOrder"
                 class="px-4 py-3 mb-2 inline-block text-md w-full text-center font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 uppercase"
                 :disabled="!deliveryInformation"
               >
                 <i class="fa-solid fa-bag-shopping"></i>
                 Place Order
-              </Link>
+              </button>
             </article>
           </aside>
         </div>

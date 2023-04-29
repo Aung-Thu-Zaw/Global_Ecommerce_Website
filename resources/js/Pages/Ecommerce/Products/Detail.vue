@@ -49,6 +49,9 @@ const addToCart = () => {
       qty: quantity.value,
       color: selectedColor.value,
       size: selectedSize.value,
+      total_price: props.product.discount
+        ? props.product.discount
+        : props.product.price,
     }),
     {},
     {

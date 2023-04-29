@@ -16,6 +16,11 @@ const increment = () =>
 
 const decrement = () => (quantity.value <= 1 ? 1 : quantity.value--);
 
+const totalDiscountPrice = computed(
+  () => quantity.value * props.item.product.discount
+);
+const totalPrice = computed(() => quantity.value * props.item.product.price);
+
 watch(
   () => quantity.value,
   () => {
@@ -23,6 +28,9 @@ watch(
       route("cart-items.update", props.item.id),
       {
         qty: quantity.value,
+        total_price: props.item.product.discount
+          ? totalDiscountPrice
+          : totalPrice,
       },
       {
         preserveScroll: true,
@@ -30,11 +38,6 @@ watch(
     );
   }
 );
-
-const totalDiscountPrice = computed(
-  () => quantity.value * props.item.product.discount
-);
-const totalPrice = computed(() => quantity.value * props.item.product.price);
 
 const moveToWatchlist = async (item) => {
   const result = await swal({

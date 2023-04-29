@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ecommerce;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderItem;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,6 +29,7 @@ class PaymentController extends Controller
 
     public function processPayment(Request $request): RedirectResponse
     {
+
 
 
         Stripe::setApiKey(env('STRIPE_SECRET'));
@@ -78,6 +80,11 @@ class PaymentController extends Controller
         //    'return_date'=>,
         //    'return_reason'=>,
         ]);
+
+
+        // OrderItem::create()
+
+
 
 
 
