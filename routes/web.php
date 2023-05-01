@@ -7,7 +7,9 @@ use App\Http\Controllers\Ecommerce\HomeController;
 use App\Http\Controllers\Ecommerce\ProductController;
 use App\Http\Controllers\Ecommerce\CheckoutController;
 use App\Http\Controllers\Ecommerce\DeliveryInformationController;
-use App\Http\Controllers\Ecommerce\PaymentController;
+use App\Http\Controllers\Ecommerce\Payments\PaymentController;
+use App\Http\Controllers\Ecommerce\Payments\CashOnDeliveryController;
+use App\Http\Controllers\Ecommerce\Payments\StripeController;
 use App\Http\Controllers\MyAccountController;
 use App\Http\Controllers\WatchlistController;
 use Illuminate\Support\Facades\Route;
@@ -46,8 +48,8 @@ Route::get('/collections/{collection}/products', [CollectionController::class,"s
 Route::get('/checkout', [CheckoutController::class,"index"])->name("checkout.index");
 
 Route::post('/payment', [PaymentController::class,"payment"])->name("payment");
-Route::post('/payment/stripePaymentProcess', [PaymentController::class,"stripePaymentProcess"])->name("payment.stripePaymentProcess");
-Route::post('/payment/cashPaymentProcess', [PaymentController::class,"cashPaymentProcess"])->name("payment.cashPaymentProcess");
+Route::post('/payment/stripePaymentProcess', [StripeController::class,"stripePaymentProcess"])->name("payment.stripePaymentProcess");
+Route::post('/payment/cashPaymentProcess', [CashOnDeliveryController::class,"cashPaymentProcess"])->name("payment.cashPaymentProcess");
 
 
 
