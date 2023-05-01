@@ -46,7 +46,8 @@ Route::get('/collections/{collection}/products', [CollectionController::class,"s
 Route::get('/checkout', [CheckoutController::class,"index"])->name("checkout.index");
 
 Route::post('/payment', [PaymentController::class,"payment"])->name("payment");
-Route::post('/payment/processPayment', [PaymentController::class,"processPayment"])->name("payment.processPayment");
+Route::post('/payment/stripePaymentProcess', [PaymentController::class,"stripePaymentProcess"])->name("payment.stripePaymentProcess");
+Route::post('/payment/cashPaymentProcess', [PaymentController::class,"cashPaymentProcess"])->name("payment.cashPaymentProcess");
 
 
 

@@ -1,6 +1,6 @@
 <template>
   <AppLayout>
-    <section class="py-10 mt-44">
+    <section class="py-10 mt-44 min-h-[530px]">
       <div class="p-5 w-[600px] border mx-auto shadow">
         <form @submit.prevent="handleSubmit">
           <input
@@ -8,6 +8,7 @@
             name="payment_method_id"
             v-model="paymentMethodId"
           />
+
           <div class="mb-5">
             <label for="card-element">Credit or debit card</label>
             <div id="card-element" class="form-control"></div>
@@ -22,13 +23,6 @@
               {{ processing ? "Processing..." : "Pay Now" }}
             </button>
           </div>
-
-          <!-- <div v-if="paymentError" class="alert alert-danger">
-            {{ paymentError }}
-          </div>
-          <div v-if="paymentSuccess" class="alert alert-success">
-            {{ paymentSuccess }}
-          </div> -->
         </form>
       </div>
     </section>
@@ -96,7 +90,7 @@ export default {
         this.paymentMethodId = paymentMethod.id;
 
         router.post(
-          route("payment.processPayment", {
+          route("payment.stripePaymentProcess", {
             payment_method_id: this.paymentMethodId,
             total_price: this.totalPrice,
             cart_items: this.cartItems,
@@ -107,6 +101,7 @@ export default {
             onSuccess: () => {
               this.paymentSuccess = "Payment successful";
               this.processing = false;
+              //   window.history.replaceState({}, "", );
             },
           }
         );

@@ -2,8 +2,9 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import DeliveryInformationForm from "@/Components/DeliveryInformationForm.vue";
 import CheckoutShoppingCartItem from "@/Components/CheckoutShoppingCartItem.vue";
-import { computed } from "vue";
-import { Link, router } from "@inertiajs/vue3";
+import { computed, ref } from "vue";
+import { Link, router, useForm } from "@inertiajs/vue3";
+import { useReCaptcha } from "vue-recaptcha-v3";
 
 const props = defineProps({
   shops: Object,
@@ -32,13 +33,23 @@ const totalPriceWithCoupon = computed(
   () => totalPrice.value - props.coupon.discount_amount
 );
 
-const handlePlaceOrder = () => {
-  router.post(
-    route("payment", {
-      total_price: props.coupon ? totalPriceWithCoupon.value : totalPrice.value,
-      cart_items: props.cartItems,
-    })
-  );
+const form = useForm({
+  total_price: ref(
+    props.coupon ? totalPriceWithCoupon.value : totalPrice.value
+  ),
+  cart_items: ref(props.cartItems),
+  payment_method: ref("creditOrDebitCard"),
+});
+
+const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+const handlePlaceOrder = async () => {
+  await recaptchaLoaded();
+  form.captcha_token = await executeRecaptcha("place_order");
+  submit();
+};
+
+const submit = () => {
+  form.post(route("payment"));
 };
 </script>
 
@@ -89,6 +100,7 @@ const handlePlaceOrder = () => {
               <hr />
             </article>
           </main>
+
           <aside class="md:w-1/3">
             <article
               class="border border-gray-200 bg-white shadow-sm rounded mb-5 p-3 lg:p-5"
@@ -133,73 +145,80 @@ const handlePlaceOrder = () => {
                 </li>
               </ul>
 
-              <div class="my-10">
-                <h1 class="font-bold text-lg text-slate-700">
-                  Select Payment Methods
-                </h1>
-                <div class="my-5">
-                  <div class="flex items-center mr-4 mb-3">
-                    <input
-                      id="blue-radio"
-                      type="radio"
-                      value=""
-                      name="colored-radio"
-                      class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    />
-                    <label
-                      for="blue-radio"
-                      class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300"
-                    >
-                      <i class="fa-solid fa-money-bill"></i>
+              <form @submit.prevent="handlePlaceOrder">
+                <div class="my-10">
+                  <h1 class="font-bold text-lg text-slate-700">
+                    Select Payment Methods
+                  </h1>
 
-                      Cash on Delivery
-                    </label>
-                  </div>
+                  <input type="hidden" v-model="form.total_price" />
+                  <input type="hidden" v-model="form.cart_items" />
+                  <div class="my-5">
+                    <div class="flex items-center mr-4 mb-3">
+                      <input
+                        id="blue-radio-1"
+                        type="radio"
+                        name="colored-radio"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        value="creditOrDebitCard"
+                        v-model="form.payment_method"
+                      />
+                      <label
+                        for="blue-radio-1"
+                        class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300"
+                      >
+                        <i class="fa-solid fa-credit-card"></i>
+                        Credit/Debit Card
+                      </label>
+                    </div>
 
-                  <div class="flex items-center mr-4 mb-3">
-                    <input
-                      id="blue-radio"
-                      type="radio"
-                      value=""
-                      name="colored-radio"
-                      class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    />
-                    <label
-                      for="blue-radio"
-                      class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300"
-                    >
-                      <i class="fa-solid fa-credit-card"></i>
-                      Credit/Debit Card
-                    </label>
-                  </div>
+                    <div class="flex items-center mr-4 mb-3">
+                      <input
+                        id="blue-radio-2"
+                        type="radio"
+                        name="colored-radio"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        value="paypal"
+                        v-model="form.payment_method"
+                      />
+                      <label
+                        for="blue-radio-2"
+                        class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300"
+                      >
+                        <i class="fa-brands fa-paypal"></i>
+                        Paypal
+                      </label>
+                    </div>
 
-                  <div class="flex items-center mr-4 mb-3">
-                    <input
-                      id="blue-radio"
-                      type="radio"
-                      value=""
-                      name="colored-radio"
-                      class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    />
-                    <label
-                      for="blue-radio"
-                      class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300"
-                    >
-                      <i class="fa-brands fa-paypal"></i>
-                      Paypal
-                    </label>
+                    <div class="flex items-center mr-4 mb-3">
+                      <input
+                        id="blue-radio-3"
+                        type="radio"
+                        name="colored-radio"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        value="cashOnDelivery"
+                        v-model="form.payment_method"
+                      />
+                      <label
+                        for="blue-radio-3"
+                        class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300"
+                      >
+                        <i class="fa-solid fa-money-bill"></i>
+
+                        Cash on Delivery
+                      </label>
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              <button
-                @click="handlePlaceOrder"
-                class="px-4 py-3 mb-2 inline-block text-md w-full text-center font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 uppercase"
-                :disabled="!deliveryInformation"
-              >
-                <i class="fa-solid fa-bag-shopping"></i>
-                Place Order
-              </button>
+                <button
+                  type="submit"
+                  class="px-4 py-3 mb-2 inline-block text-md w-full text-center font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 uppercase"
+                  :disabled="!deliveryInformation"
+                >
+                  <i class="fa-solid fa-bag-shopping"></i>
+                  Place Order
+                </button>
+              </form>
             </article>
           </aside>
         </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ecommerce;
 
 use App\Http\Controllers\Controller;
+use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Carbon\Carbon;
@@ -24,17 +25,24 @@ class PaymentController extends Controller
 
         $stripeKey = env('STRIPE_KEY');
 
-        return inertia("Ecommerce/Payments/Stripe", compact("stripeKey", "totalPrice", "cartItems"));
+        if($request->payment_method==="creditOrDebitCard") {
+
+            return inertia("Ecommerce/Payments/Stripe", compact("stripeKey", "totalPrice", "cartItems"));
+        } elseif($request->payment_method==="paypal") {
+
+            return inertia("Ecommerce/Payments/Paypal", compact("totalPrice", "cartItems"));
+        }
+
+        return inertia("Ecommerce/Payments/CashOnDelivery", compact("totalPrice", "cartItems"));
     }
 
-    public function processPayment(Request $request): RedirectResponse
+    public function stripePaymentProcess(Request $request): RedirectResponse
     {
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
 
-        // dd($request->cart_items);
         $paymentIntent = PaymentIntent::create([
-            'amount' => $request->total_price,
+            'amount' => $request->total_price*100,
             'currency' => 'usd',
             'description'=>'',
             'payment_method' =>$request->payment_method_id,
@@ -61,7 +69,7 @@ class PaymentController extends Controller
             'transaction_id'=>$balanceTransactionId,
             'currency'=>$paymentIntent->currency,
             'total_amount'=>$paymentIntent->amount,
-            'order_no'=>$paymentIntent->metadata->order_id,
+            'order_no'=>$paymentIntent->metadata['order_id'],
             'invoice_no'=>'GLOBAL E-COMMERCE'.mt_rand(100000000, 999999999),
             'order_date'=>Carbon::now()->format("Y-m-d"),
             'status'=>"pending",
@@ -69,15 +77,6 @@ class PaymentController extends Controller
 
 
 
-
-        //    'confirmed_date'=>,
-        //    'processing_date'=>,
-        //    'picked_date'=>,
-        //    'shipped_date'=>,
-        //    'delivered_date'=>,
-        //    'cancel_date'=>,
-        //    'return_date'=>,
-        //    'return_reason'=>,
 
 
 
@@ -94,9 +93,62 @@ class PaymentController extends Controller
             ]);
         }
 
+        if (session("coupon")) {
+            session()->forget("coupon");
+        }
+
+        $cart=auth()->user()->cart;
+        $cartItems=$cart->cartItems;
+
+        $cartItems->each(function ($item) {
+            $item->destroy($item->id);
+        });
 
 
+        return to_route("home")->with("success", "Your place order is successfully");
+    }
 
-        return to_route("home")->with("success", $paymentIntent);
+    public function cashPaymentProcess(Request $request): RedirectResponse
+    {
+
+        $user=auth()->user();
+
+        $order=Order::create([
+            "user_id"=>$user->id,
+            "delivery_information_id"=>$user->deliveryInformation->id,
+            'payment_type'=>"Cash On Delivery",
+            'payment_method'=>"Cash On Delivery",
+            'total_amount'=>$request->total_price,
+            'currency'=>"usd",
+            'invoice_no'=>'GLOBAL E-COMMERCE'.mt_rand(100000000, 999999999),
+            'order_date'=>Carbon::now()->format("Y-m-d"),
+            'status'=>"pending",
+        ]);
+
+        foreach ($request->cart_items as $item) {
+            OrderItem::create([
+                "order_id"=>$order->id,
+                "product_id"=>$item["product"]["id"],
+                "vendor_id"=>$item["product"]["shop"]["id"],
+                "color"=>$item["color"] ?? null,
+                "size"=>$item["size"] ?? null,
+                "qty"=>$item["qty"],
+                "price"=>$item["total_price"],
+            ]);
+        }
+
+        if (session("coupon")) {
+            session()->forget("coupon");
+        }
+
+        $cart=auth()->user()->cart;
+        $cartItems=$cart->cartItems;
+
+        $cartItems->each(function ($item) {
+            $item->destroy($item->id);
+        });
+
+
+        return to_route("home")->with("success", "Your place order is successfully");
     }
 }
