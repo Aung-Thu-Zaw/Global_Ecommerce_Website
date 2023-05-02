@@ -18,6 +18,10 @@ use Inertia\Inertia;
 Route::get('/', [HomeController::class,"index"])->name("home");
 
 
+
+
+
+
 Route::get('/products/new-products', [ProductController::class,"newProducts"])->name("products.new");
 Route::get('/products/featured-products', [ProductController::class,"featuredProducts"])->name("products.featured");
 Route::get('/products/special-offer-products', [ProductController::class,"specialOfferProducts"])->name("products.special-offer");

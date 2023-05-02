@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Ecommerce\Payments;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderMail;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Stripe\Charge;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
@@ -55,7 +57,20 @@ class StripeController extends Controller
 
 
 
+        $confirmOrder=Order::with("deliveryInformation")->where("id", $order->id)->first();
 
+
+        Mail::to($confirmOrder->deliveryInformation->email)->send(new OrderMail($confirmOrder));
+
+
+        // Mail::to($confirmOrder->deliveryInformation->email)->send(new OrderMail([
+        //     "invoice_no"=>$confirmOrder->id,
+        //     "amount"=>$confirmOrder->total_amount,
+        //     "name"=>$confirmOrder->deliveryInformation->name,
+        //     "email"=>$confirmOrder->deliveryInformation->email,
+        //     "phone"=>$confirmOrder->deliveryInformation->phone,
+        //     "address"=>$confirmOrder->deliveryInformation->address,
+        // ]));
 
 
 
@@ -81,6 +96,8 @@ class StripeController extends Controller
         $cartItems->each(function ($item) {
             $item->destroy($item->id);
         });
+
+
 
 
         return to_route("home")->with("success", "Your place order is successfully");
