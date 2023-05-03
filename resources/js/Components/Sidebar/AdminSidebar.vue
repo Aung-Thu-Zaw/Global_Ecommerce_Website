@@ -200,7 +200,7 @@
                   ),
                 }"
               >
-                Slider Banner
+                Slider Banners
               </Link>
               <Link
                 :href="route('admin.campaign-banners.index')"
@@ -211,7 +211,7 @@
                   ),
                 }"
               >
-                Campaign Banner
+                Campaign Banners
               </Link>
               <Link
                 :href="route('admin.product-banners.index')"
@@ -222,7 +222,7 @@
                   ),
                 }"
               >
-                Product Banner
+                Product Banners
               </Link>
             </ul>
           </li>
@@ -451,7 +451,7 @@
                   ),
                 }"
               >
-                Active Vendor
+                Active Vendors
               </Link>
               <Link
                 :href="route('admin.vendors.inactive.index')"
@@ -462,7 +462,7 @@
                   ),
                 }"
               >
-                Inactive Vendor
+                Inactive Vendors
               </Link>
             </ul>
           </li>

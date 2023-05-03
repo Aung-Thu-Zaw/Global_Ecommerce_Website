@@ -59,7 +59,7 @@ class City extends Model
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("Y/m/d", strtotime($value)),
+            get: fn ($value) => date("j-F-Y", strtotime($value)),
         );
     }
 

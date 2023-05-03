@@ -222,7 +222,7 @@ if (usePage().props.flash.successMessage) {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Slider Banner</span
+                >Slider Banners</span
               >
             </div>
           </li>

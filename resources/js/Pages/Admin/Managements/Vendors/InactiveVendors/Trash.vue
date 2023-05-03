@@ -191,7 +191,7 @@ const handlePermanentlyDelete = async () => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Inactive Vendors Trash" />
+    <Head title="Trash Inactive Vendors" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Vendor Breadcrumb -->
@@ -214,7 +214,7 @@ const handlePermanentlyDelete = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Inactive Vendor</span
+                >Inactive Vendors</span
               >
             </div>
           </li>

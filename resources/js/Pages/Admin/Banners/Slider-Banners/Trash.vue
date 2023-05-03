@@ -106,7 +106,7 @@ const handleRestore = async (trashSliderBannerId) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("admin.sliders.restore", {
+      route("admin.slider-banners.restore", {
         id: trashSliderBannerId,
         page: props.trashSliderBanners.current_page,
         per_page: params.per_page,
@@ -183,7 +183,7 @@ const handlePermanentlyDelete = async () => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Trash sliders" />
+    <Head title="Trash Slider Banners" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Breadcrumb  -->
@@ -207,7 +207,7 @@ const handlePermanentlyDelete = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Slider Banner</span
+                >Slider Banners</span
               >
             </div>
           </li>
@@ -378,7 +378,7 @@ const handlePermanentlyDelete = async () => {
             <Td>
               <img
                 :src="trashSliderBanner.image"
-                class="w-[50px] h-[50px] rounded-sm object-cover shadow-lg ring-2 ring-slate-300"
+                class="h-[50px] rounded-sm object-cover shadow-lg ring-2 ring-slate-300"
                 alt=""
               />
             </Td>

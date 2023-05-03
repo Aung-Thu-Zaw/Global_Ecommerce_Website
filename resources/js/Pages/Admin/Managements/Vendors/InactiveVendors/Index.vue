@@ -38,7 +38,7 @@ watch(
   () => params.search,
   (current, previous) => {
     router.get(
-      "/admin/managements/inactive-vendors",
+      "/admin/vendor-manage/inactive-vendors",
       {
         search: params.search,
         per_page: params.per_page,
@@ -57,7 +57,7 @@ watch(
   () => params.per_page,
   (current, previous) => {
     router.get(
-      "/admin/managements/inactive-vendors",
+      "/admin/vendor-manage/inactive-vendors",
       {
         search: params.search,
         page: params.page,
@@ -78,7 +78,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/managements/inactive-vendors",
+    "/admin/vendor-manage/inactive-vendors",
     {
       search: params.search,
       page: params.page,
@@ -176,7 +176,7 @@ const handleDelete = async (inactiveVendorId) => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Inactive Vendor</span
+                >Inactive Vendors</span
               >
             </div>
           </li>
@@ -369,7 +369,7 @@ const handleDelete = async (inactiveVendorId) => {
                   page: props.inactiveVendors.current_page,
                   per_page: params.per_page,
                 }"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-emerald-600 text-white hover:bg-emerald-700 my-1"
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
               >
                 <i class="fa-solid fa-eye"></i>
                 Details

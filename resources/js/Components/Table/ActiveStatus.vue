@@ -1,7 +1,7 @@
 <template>
-  <div class="flex items-center">
-    <div class="h-2.5 w-2.5 rounded-full bg-green-600 mr-1"></div>
+  <span class="px-3 py-1 bg-green-200 text-green-600 rounded-xl">
+    <i class="fa-solid fa-circle text-[.6rem] animate-pulse mr-2"></i>
     <slot />
-  </div>
+  </span>
 </template>
 

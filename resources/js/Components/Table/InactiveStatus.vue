@@ -1,6 +1,7 @@
 <template>
-    <div class="flex items-center">
-      <div class="h-2.5 w-2.5 rounded-full bg-red-600 mr-1"></div>
-      <slot />
-    </div>
-  </template>
+  <span class="px-3 py-1 bg-red-200 text-red-600 rounded-xl">
+    <i class="fa-solid fa-circle text-[.6rem] animate-pulse mr-2"></i>
+    <slot />
+  </span>
+</template>
+

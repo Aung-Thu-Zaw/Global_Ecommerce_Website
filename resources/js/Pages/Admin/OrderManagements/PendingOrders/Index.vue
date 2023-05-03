@@ -2,7 +2,7 @@
 import Breadcrumb from "@/Components/Breadcrumbs/OrderManage/Breadcrumb.vue";
 import SearchForm from "@/Components/Form/SearchForm.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import InactiveStatus from "@/Components/Table/InactiveStatus.vue";
+import PendingStatus from "@/Components/Table/PendingStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -362,10 +362,9 @@ const updateSorting = (sort = "id") => {
             <Td class="capitalize">{{ pendingOrder.payment_type }}</Td>
             <Td>$ {{ pendingOrder.total_amount }}</Td>
             <Td>
-              <span class="px-3 py-1 bg-sky-200 text-sky-700 rounded-xl">
-                <i class="fa-solid fa-spinner animate-spin"></i>
+              <PendingStatus>
                 {{ pendingOrder.status }}
-              </span>
+              </PendingStatus>
             </Td>
             <Td>{{ pendingOrder.order_date }}</Td>
 

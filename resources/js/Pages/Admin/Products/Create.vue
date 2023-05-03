@@ -563,7 +563,7 @@ const submit = () => {
                       ref="previewPhoto"
                       src="https://media.istockphoto.com/id/1357365823/vector/default-image-icon-vector-missing-picture-page-for-website-design-or-mobile-app-no-photo.jpg?s=612x612&w=0&k=20&c=PM_optEhHBTZkuJQLlCjLz-v3zzxp-1mpNQZsdjrbns="
                       alt=""
-                      class="w-[120px] h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300"
+                      class="h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300"
                     />
                   </div>
                   <div v-if="multiPreviewPhotos.length" class="mb-4">
@@ -579,7 +579,7 @@ const submit = () => {
                         <img
                           :src="multiPreviewPhoto"
                           alt=""
-                          class="w-[120px] h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300 mr-6"
+                          class="h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300 mr-6"
                         />
                         <span
                           class="absolute top-0 right-4 bg-slate-300 text-slate-600 w-5 h-5 flex items-center justify-center rounded-full hover:bg-slate-500 hover:text-slate-300 transition-all"

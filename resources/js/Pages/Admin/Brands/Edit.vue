@@ -102,7 +102,7 @@ const submit = () => {
             ref="previewPhoto"
             :src="form.image"
             alt=""
-            class="w-[100px] h-[100px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300"
+            class="h-[100px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300"
           />
         </div>
         <form @submit.prevent="handleEditBrand">

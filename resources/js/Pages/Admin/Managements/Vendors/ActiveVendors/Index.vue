@@ -36,7 +36,7 @@ watch(
   () => params.search,
   (current, previous) => {
     router.get(
-      "/admin/managements/active-vendors",
+      "/admin/vendor-manage/active-vendors",
       {
         search: params.search,
         per_page: params.per_page,
@@ -55,7 +55,7 @@ watch(
   () => params.per_page,
   (current, previous) => {
     router.get(
-      "/admin/managements/active-vendors",
+      "/admin/vendor-manage/active-vendors",
       {
         search: params.search,
         page: params.page,
@@ -76,7 +76,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/managements/active-vendors",
+    "/admin/vendor-manage/active-vendors",
     {
       search: params.search,
       page: params.page,
@@ -143,7 +143,7 @@ const handleInactive = async (activeVendorId) => {
               ></path>
             </svg>
             <span class="ml-1 font-medium text-gray-500 md:ml-2"
-              >Active Vendor</span
+              >Active Vendors</span
             >
           </div>
         </li>
@@ -313,7 +313,7 @@ const handleInactive = async (activeVendorId) => {
                   page: props.activeVendors.current_page,
                   per_page: params.per_page,
                 }"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-emerald-600 text-white hover:bg-emerald-700"
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700"
               >
                 <i class="fa-solid fa-eye"></i>
                 Details

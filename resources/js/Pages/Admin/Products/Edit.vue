@@ -571,7 +571,7 @@ const submit = () => {
                       ref="previewPhoto"
                       :src="form.image"
                       alt=""
-                      class="w-[120px] h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300 mx-2"
+                      class="h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300 mx-2"
                     />
                   </div>
 
@@ -588,7 +588,7 @@ const submit = () => {
                         <img
                           :src="multiPreviewPhoto"
                           alt=""
-                          class="w-[120px] h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300 mr-6"
+                          class="h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300 mr-6"
                         />
                         <span
                           class="absolute top-0 right-4 bg-slate-300 text-slate-600 w-5 h-5 flex items-center justify-center rounded-full hover:bg-slate-500 hover:text-slate-300 transition-all"
@@ -613,7 +613,7 @@ const submit = () => {
                         <img
                           :src="image.img_path"
                           alt=""
-                          class="w-[120px] h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300 mx-2"
+                          class="h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300 mx-2"
                         />
 
                         <Link

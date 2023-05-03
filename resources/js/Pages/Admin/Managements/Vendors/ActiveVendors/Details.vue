@@ -48,7 +48,7 @@ const form = useForm({
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Active Vendor</span
+                >Active Vendors</span
               >
             </div>
           </li>

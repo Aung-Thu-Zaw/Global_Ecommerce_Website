@@ -165,7 +165,7 @@ if (usePage().props.flash.successMessage) {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Category" />
+    <Head title="Categories" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Category Breadcrumb -->

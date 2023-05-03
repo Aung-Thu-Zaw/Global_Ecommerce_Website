@@ -13,6 +13,7 @@ class AdminActiveVendorController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
+
         $activeVendors=User::search(request("search"))
                             ->where("role", "vendor")
                             ->where("status", "active")

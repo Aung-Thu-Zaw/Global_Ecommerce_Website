@@ -48,7 +48,7 @@ const form = useForm({
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Inactive Vendor</span
+                >Inactive Vendors</span
               >
             </div>
           </li>
@@ -217,7 +217,7 @@ const form = useForm({
                 id="about"
                 cols="30"
                 rows="10"
-                class="p-2 w-full border-transparent outline-none focus:border-transparent focus:ring-0 placeholder:text-gray-400 placeholder:text-sm"
+                class="p-2 w-full border-transparent outline-none focus:border-transparent focus:ring-0 placeholder:text-gray-400 placeholder:text-sm h-[500px]"
                 v-model="form.about"
               ></textarea>
             </InputContainer>

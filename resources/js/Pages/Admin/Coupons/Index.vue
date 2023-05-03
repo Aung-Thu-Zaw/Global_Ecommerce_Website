@@ -414,9 +414,9 @@ if (usePage().props.flash.successMessage) {
                 % {{ coupon.discount_amount }}
               </span>
             </Td>
-            <Td>{{ coupon.min_spend }}</Td>
+            <Td>$ {{ coupon.min_spend }}</Td>
             <Td>{{ coupon.max_uses }}</Td>
-            <Td>{{ coupon.uses_count }}</Td>
+            <Td>{{ coupon.uses_count ? coupon.uses_count : 0 }}</Td>
             <Td>{{ coupon.created_at }}</Td>
             <Td>
               <Link

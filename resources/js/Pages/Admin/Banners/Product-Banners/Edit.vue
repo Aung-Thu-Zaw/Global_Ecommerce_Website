@@ -71,7 +71,7 @@ const submit = () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Product Banner</span
+                >Product Banners</span
               >
             </div>
           </li>
@@ -119,7 +119,7 @@ const submit = () => {
             ref="previewPhoto"
             :src="form.image"
             alt=""
-            class="w-[100px] h-[100px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300"
+            class="h-[100px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300"
           />
         </div>
         <form @submit.prevent="handleEditProductBanner">

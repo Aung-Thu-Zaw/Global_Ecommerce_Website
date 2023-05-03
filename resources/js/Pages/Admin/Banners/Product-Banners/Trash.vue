@@ -207,7 +207,7 @@ const handlePermanentlyDelete = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Product Banner</span
+                >Product Banners</span
               >
             </div>
           </li>
@@ -279,7 +279,8 @@ const handlePermanentlyDelete = async () => {
 
       <!-- Auto delete description and button  -->
       <p class="text-left text-sm font-bold mb-2 text-warning-600">
-        Product Banners in the Trash will be automatically deleted after 60 days.
+        Product Banners in the Trash will be automatically deleted after 60
+        days.
         <button
           @click="handlePermanentlyDelete"
           class="text-primary-500 rounded-md px-2 py-1 hover:bg-primary-200 hover:text-primary-600 transition-all hover:animate-bounce"
@@ -403,7 +404,7 @@ const handlePermanentlyDelete = async () => {
             <Td>
               <img
                 :src="trashProductBanner.image"
-                class="w-[50px] h-[50px] rounded-sm object-cover shadow-lg ring-2 ring-slate-300"
+                class="h-[50px] rounded-sm object-cover shadow-lg ring-2 ring-slate-300"
                 alt=""
               />
             </Td>

@@ -224,7 +224,7 @@ if (usePage().props.flash.successMessage) {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Product Banner</span
+                >Product Banners</span
               >
             </div>
           </li>
