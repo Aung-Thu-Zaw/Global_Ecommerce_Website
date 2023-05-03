@@ -1,5 +1,6 @@
 <template>
   <AppLayout>
+    <Head title="Global E-commerce : Global Online Shopping" />
     <section class="py-10 mt-44 min-h-[530px]">
       <div class="p-5 w-[600px] border mx-auto shadow">
         <form @submit.prevent="handleSubmit">
@@ -29,14 +30,15 @@
   </AppLayout>
 </template>
 
-  <script>
+<script>
 import { loadStripe } from "@stripe/stripe-js";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { router } from "@inertiajs/vue3";
+import { router, Head } from "@inertiajs/vue3";
 
 export default {
   components: {
     AppLayout,
+    Head
   },
   data() {
     return {

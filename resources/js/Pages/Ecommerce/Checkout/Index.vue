@@ -3,7 +3,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import DeliveryInformationForm from "@/Components/DeliveryInformationForm.vue";
 import CheckoutShoppingCartItem from "@/Components/CheckoutShoppingCartItem.vue";
 import { computed, ref } from "vue";
-import { Link, router, useForm } from "@inertiajs/vue3";
+import { Link, router, useForm, Head } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 
 const props = defineProps({
@@ -55,6 +55,7 @@ const submit = () => {
 
 <template>
   <AppLayout>
+    <Head title="Global E-commerce : Global Online Shopping" />
     <section class="py-10 mt-44">
       <div class="container max-w-screen-xl mx-auto px-4">
         <h1 class="font-semibold text-xl text-slate-700 mb-5">

@@ -1,7 +1,7 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ShoppingCartItem from "@/Components/ShoppingCartItem.vue";
-import { Link, router, usePage } from "@inertiajs/vue3";
+import { Link, router, usePage, Head } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -83,6 +83,7 @@ const removeCoupon = () => {
 
 <template>
   <AppLayout>
+    <Head title="Global E-commerce : Global Online Shopping" />
     <section class="py-5 sm:py-7 mt-44">
       <div class="container max-w-screen-xl mx-auto px-4">
         <h2 class="text-4xl text-slate-700 font-semibold mb-2">

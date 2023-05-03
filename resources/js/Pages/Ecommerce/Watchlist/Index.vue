@@ -1,7 +1,7 @@
 <script setup>
 import WatchListItem from "@/Components/WatchListItem.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({ shops: Object, watchlists: Object });
 </script>
@@ -9,6 +9,7 @@ const props = defineProps({ shops: Object, watchlists: Object });
 
 <template>
   <AppLayout>
+    <Head title="My Watchlist" />
     <section class="py-5 sm:py-7 mt-44">
       <div class="container max-w-screen-xl mx-auto px-4">
         <h2 class="text-4xl text-slate-700 font-semibold mb-2">My Watchlist</h2>

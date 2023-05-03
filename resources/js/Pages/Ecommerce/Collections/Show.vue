@@ -2,7 +2,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ProductCard from "@/Components/Cards/ProductCard.vue";
 import { ref } from "vue";
-import { usePage, router } from "@inertiajs/vue3";
+import { usePage, router, Head } from "@inertiajs/vue3";
 
 const props = defineProps({ products: Object, collection: Object });
 
@@ -33,6 +33,7 @@ const loadMoreProduct = () => {
 
 <template>
   <AppLayout>
+    <Head :title="collection.title" />
     <section class="container mx-auto py-10 mt-44">
       <div
         class="relative w-full h-[150px] mb-10 shadow-md rounded-md overflow-hidden border"

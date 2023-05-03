@@ -1,7 +1,7 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { ref } from "vue";
-import { usePage, router, Link } from "@inertiajs/vue3";
+import { usePage, router, Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({ collections: Object });
 
@@ -36,6 +36,7 @@ const loadMoreCollection = () => {
 
 <template>
   <AppLayout>
+    <Head title="All Collections" />
     <section class="pt-10 mt-44">
       <div class="container max-w-screen-xl mx-auto px-4">
         <nav

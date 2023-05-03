@@ -2,7 +2,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ProductCard from "@/Components/Cards/ProductCard.vue";
 import { ref } from "vue";
-import { usePage, router } from "@inertiajs/vue3";
+import { Head, usePage, router } from "@inertiajs/vue3";
 
 const props = defineProps({ featuredProducts: Object });
 
@@ -37,6 +37,7 @@ const loadMoreProduct = () => {
 
 <template>
   <AppLayout>
+    <Head title="All Featured Products" />
     <section class="container mx-auto mt-40 py-10">
       <div
         class="relative w-full h-[150px] mb-10 shadow-md rounded-md overflow-hidden border"

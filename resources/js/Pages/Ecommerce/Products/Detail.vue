@@ -3,7 +3,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Home/Breadcrumb.vue";
 import Information from "@/Components/Information.vue";
 import { computed, reactive, ref } from "vue";
-import { Link, router, usePage } from "@inertiajs/vue3";
+import { Link, router, usePage, Head } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
@@ -98,6 +98,7 @@ const saveToWatchlist = () => {
 
 <template>
   <AppLayout>
+    <Head :title="product.name" />
     <section class="py-4 mt-44">
       <div class="container max-w-screen-xl mx-auto px-4">
         <Breadcrumb />

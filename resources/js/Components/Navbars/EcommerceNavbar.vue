@@ -145,7 +145,7 @@ const totalItems = computed(() => {
             :href="route('home')"
             class="mr-20 md:mr-3 lg:mr-24 pr-4 text-xl text-slate-600 font-bold"
           >
-            Global Ecommerce
+            Global E-commerce
           </Link>
           <!-- brand //end -->
 

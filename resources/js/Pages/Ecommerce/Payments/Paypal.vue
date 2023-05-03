@@ -2,12 +2,13 @@
 <script setup>
 import { loadStripe } from "@stripe/stripe-js";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { router } from "@inertiajs/vue3";
+import { router,Head } from "@inertiajs/vue3";
 </script>
 
 
 <template>
   <AppLayout>
+    <Head title="Global E-commerce : Global Online Shopping" />
     <section class="py-10 mt-44">
       <h1>Paypal</h1>
     </section>
