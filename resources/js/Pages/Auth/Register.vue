@@ -1,7 +1,3 @@
-
-
-
-
 <script setup>
 import { useReCaptcha } from "vue-recaptcha-v3";
 import FormContainer from "@/Components/Form/FormContainer.vue";

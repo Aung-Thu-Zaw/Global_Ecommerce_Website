@@ -34,6 +34,7 @@ return new class () extends Migration {
             $table->text('return_reason')->nullable();
             $table->string('status');
             $table->timestamps();
+            $table->softDeletes();
 
         });
     }

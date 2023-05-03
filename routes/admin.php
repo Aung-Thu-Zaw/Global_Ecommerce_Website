@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\SiteSettings\AdminSeoSettingController;
 use App\Http\Controllers\Admin\SiteSettings\AdminWebsiteSettingController;
 use App\Http\Controllers\Admin\Banners\AdminSliderBannerController;
+use App\Http\Controllers\Admin\OrderManagements\AdminPendingOrderController;
 use App\Http\Controllers\Admin\ShippingArea\AdminCityController;
 use App\Http\Controllers\Admin\ShippingArea\AdminCountryController;
 use App\Http\Controllers\Admin\ShippingArea\AdminRegionController;
@@ -240,6 +241,21 @@ Route::middleware(["auth","verified","user.role:admin"])
                Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
                Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
            });
+
+           // Pending Order Management
+           Route::controller(AdminPendingOrderController::class)
+                   ->prefix("/order-manage/pending-orders")
+                   ->name("orders.pending.")
+                   ->group(function () {
+                       Route::get("/", "index")->name("index");
+                    //    Route::get("/details/{id}", "show")->name("show");
+                    //    Route::post("/{id}", "update")->name("update");
+                    //    Route::delete("/{id}", "destroy")->name("destroy");
+                    //    Route::get("/trash", "trash")->name("trash");
+                    //    Route::post("/{id}/restore", "restore")->name("restore");
+                    //    Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                    //    Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
+                   });
 
            // Inactive Vendors Management
            Route::controller(AdminInactiveVendorController::class)

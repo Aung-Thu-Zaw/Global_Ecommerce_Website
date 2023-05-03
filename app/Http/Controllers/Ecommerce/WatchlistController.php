@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Ecommerce;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\WatchlistRequest;
 use App\Models\User;
 use App\Models\Watchlist;

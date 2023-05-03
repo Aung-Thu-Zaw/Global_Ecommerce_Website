@@ -11,7 +11,7 @@ use App\Http\Controllers\Ecommerce\Payments\PaymentController;
 use App\Http\Controllers\Ecommerce\Payments\CashOnDeliveryController;
 use App\Http\Controllers\Ecommerce\Payments\StripeController;
 use App\Http\Controllers\MyAccountController;
-use App\Http\Controllers\WatchlistController;
+use App\Http\Controllers\Ecommerce\WatchlistController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
