@@ -88,20 +88,6 @@ const submit = () => {
           </div>
 
           <div class="mb-3">
-            <InputLabel for="meta_title" value="Meta Title" />
-
-            <TextInput
-              id="meta_title"
-              type="text"
-              class="mt-1 block w-full"
-              v-model="form.meta_title"
-              placeholder="Enter Meta Title"
-            />
-
-            <InputError class="mt-2" :message="form.errors.meta_title" />
-          </div>
-
-          <div class="mb-3">
             <InputLabel for="meta_keyword" value="Meta Keyword" />
 
             <TextInput

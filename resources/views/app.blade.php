@@ -3,8 +3,11 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="title" content="{{ $meta->meta_title }}">
+    <meta name="author" content=" {{ $meta->meta_author }}">
+    <meta name="keywords" content=" {{ $meta->meta_keyword }}">
+    <meta name="description" content="{{ $meta->meta_description }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
@@ -25,8 +28,6 @@
     @routes
     @vite(['resources/js/app.js','resources/css/app.css', "resources/js/Pages/{$page['component']}.vue"])
     @inertiaHead
-
-
     <style>
         .grecaptcha-badge {
             visibility: visible !important;
@@ -36,8 +37,6 @@
 
 <body class="font-sans antialiased">
     @inertia
-
-
     {{-- <script src="./TW-ELEMENTS-PATH/dist/js/index.min.js"></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.js"></script>
 </body>
