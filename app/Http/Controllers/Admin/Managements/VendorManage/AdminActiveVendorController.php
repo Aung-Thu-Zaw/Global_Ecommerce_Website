@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Managements;
+namespace App\Http\Controllers\Admin\Managements\VendorManage;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;

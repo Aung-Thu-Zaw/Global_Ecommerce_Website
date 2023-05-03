@@ -133,7 +133,7 @@
                   !$page.url.startsWith('/admin/categories'),
               }"
             >
-              <i class="fa-solid fa-laptop mr-2 text-sm"></i>
+              <i class="fa-solid fa-list mr-2 text-sm"></i>
               Categories
             </Link>
           </li>
@@ -299,11 +299,313 @@
 
         <hr class="my-4 md:min-w-full" />
 
+        <!-- Order Management Area -->
+        <h6
+          class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
+        >
+          Order Managements
+        </h6>
+
+        <!-- Order Manage -->
+        <!-- <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <li class="items-center cursor-pointer">
+            <div
+              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+              @click="orderManageIsHidden = !orderManageIsHidden"
+            >
+              <span>
+                <i class="fa-solid fa-boxes-packing mr-2 text-sm"></i>
+                Order Manage
+              </span>
+              <i
+                v-if="orderManageIsHidden"
+                class="fa-solid fa-chevron-right"
+              ></i>
+              <i
+                v-if="!orderManageIsHidden"
+                class="fa-solid fa-chevron-down"
+              ></i>
+            </div>
+
+            <ul
+              v-if="!orderManageIsHidden || orderManage"
+              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+            >
+              <Link
+                :href="route('admin.orders.active.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/order-manage/active-orders'
+                  ),
+                }"
+              >
+                Active Vendor
+              </Link>
+              <Link
+                :href="route('admin.orders.inactive.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/order-manage/inactive-orders'
+                  ),
+                }"
+              >
+                Inactive Vendor
+              </Link>
+            </ul>
+          </li>
+        </ul> -->
+
+        <!-- Return Order Manage -->
+        <!-- <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <li class="items-center cursor-pointer">
+            <div
+              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+              @click="returnOrderIsHidden = !returnOrderIsHidden"
+            >
+              <span>
+                <i class="fa-solid fa-rotate-left mr-2 text-sm"></i>
+                Return Orders
+              </span>
+              <i
+                v-if="returnOrderIsHidden"
+                class="fa-solid fa-chevron-right"
+              ></i>
+              <i
+                v-if="!returnOrderIsHidden"
+                class="fa-solid fa-chevron-down"
+              ></i>
+            </div>
+
+            <ul
+              v-if="!returnOrderIsHidden || returnOrder"
+              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+            >
+              <Link
+                :href="route('admin.orders.active.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/order-manage/active-orders'
+                  ),
+                }"
+              >
+                Active Vendor
+              </Link>
+              <Link
+                :href="route('admin.orders.inactive.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/order-manage/inactive-orders'
+                  ),
+                }"
+              >
+                Inactive Vendor
+              </Link>
+            </ul>
+          </li>
+        </ul> -->
+
+        <hr class="my-4 md:min-w-full" />
+
         <!-- Management Area -->
         <h6
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
-          Settings
+          Managements
+        </h6>
+
+        <!-- Vendor Manage -->
+        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <li class="items-center cursor-pointer">
+            <div
+              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+              @click="vendorManageIsHidden = !vendorManageIsHidden"
+            >
+              <span>
+                <i class="fas fa-store mr-2 text-sm"></i>
+                Vendor Manage
+              </span>
+              <i
+                v-if="vendorManageIsHidden"
+                class="fa-solid fa-chevron-right"
+              ></i>
+              <i
+                v-if="!vendorManageIsHidden"
+                class="fa-solid fa-chevron-down"
+              ></i>
+            </div>
+
+            <ul
+              v-if="!vendorManageIsHidden || vendorManage"
+              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+            >
+              <Link
+                :href="route('admin.vendors.active.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/vendor-manage/active-vendors'
+                  ),
+                }"
+              >
+                Active Vendor
+              </Link>
+              <Link
+                :href="route('admin.vendors.inactive.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/vendor-manage/inactive-vendors'
+                  ),
+                }"
+              >
+                Inactive Vendor
+              </Link>
+            </ul>
+          </li>
+        </ul>
+        <!-- User Manage -->
+        <!-- <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <li class="items-center cursor-pointer">
+            <div
+              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+              @click="vendorManageIsHidden = !vendorManageIsHidden"
+            >
+              <span>
+                <i class="fas fa-users mr-2 text-sm"></i>
+                User Manage
+              </span>
+              <i
+                v-if="vendorManageIsHidden"
+                class="fa-solid fa-chevron-right"
+              ></i>
+              <i
+                v-if="!vendorManageIsHidden"
+                class="fa-solid fa-chevron-down"
+              ></i>
+            </div>
+
+            <ul
+              v-if="!vendorManageIsHidden || vendorManage"
+              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+            >
+              <Link
+                :href="route('admin.vendors.active.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/vendor-manage/active-vendors'
+                  ),
+                }"
+              >
+                Active User
+              </Link>
+              <Link
+                :href="route('admin.vendors.inactive.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/vendor-manage/inactive-vendors'
+                  ),
+                }"
+              >
+                Inactive User
+              </Link>
+            </ul>
+          </li>
+        </ul> -->
+
+        <!-- <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <li class="items-center">
+            <Link
+              :href="route('admin.dashboard')"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url === '/admin/dashboard',
+                'text-slate-700 hover:text-slate-500':
+                  $page.url !== '/admin/dashboard',
+              }"
+            >
+              <i class="fa-solid fa-paper-plane mr-2 text-sm"></i>
+              Send Emails
+            </Link>
+          </li>
+
+          <li class="items-center">
+            <Link
+              :href="route('admin.dashboard')"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url === '/admin/dashboard',
+                'text-slate-700 hover:text-slate-500':
+                  $page.url !== '/admin/dashboard',
+              }"
+            >
+              <i class="fa-solid fa-star mr-2 text-sm"></i>
+              Reviews
+            </Link>
+          </li>
+
+          <li class="items-center">
+            <Link
+              :href="route('admin.dashboard')"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url === '/admin/dashboard',
+                'text-slate-700 hover:text-slate-500':
+                  $page.url !== '/admin/dashboard',
+              }"
+            >
+              <i class="fa-solid fa-flag mr-2 text-sm"></i>
+              Reports
+            </Link>
+          </li>
+
+          <li class="items-center">
+            <Link
+              :href="route('admin.dashboard')"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url === '/admin/dashboard',
+                'text-slate-700 hover:text-slate-500':
+                  $page.url !== '/admin/dashboard',
+              }"
+            >
+              <i class="fa-solid fa-laptop mr-2 text-sm"></i>
+              Blogs
+            </Link>
+          </li>
+
+          <li class="items-center">
+            <Link
+              :href="route('admin.dashboard')"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url === '/admin/dashboard',
+                'text-slate-700 hover:text-slate-500':
+                  $page.url !== '/admin/dashboard',
+              }"
+            >
+              <i class="fa-solid fa-arrow-trend-up mr-2 text-sm"></i>
+              Product Stocks
+            </Link>
+          </li>
+        </ul> -->
+        <hr class="my-4 md:min-w-full" />
+
+        <!-- Site Settings -->
+        <h6
+          class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
+        >
+          Site Settings
         </h6>
 
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
@@ -336,67 +638,6 @@
             </Link>
           </li>
         </ul>
-
-        <hr class="my-4 md:min-w-full" />
-
-        <!-- Management Area -->
-        <h6
-          class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
-        >
-          Managements
-        </h6>
-
-        <!-- Vendor Manage -->
-        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
-          <li class="items-center cursor-pointer">
-            <div
-              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
-              @click="vendorManageIsHidden = !vendorManageIsHidden"
-            >
-              <span>
-                <i class="fas fa-store mr-2 text-sm"></i>
-                Vendors Manage
-              </span>
-              <i
-                v-if="vendorManageIsHidden"
-                class="fa-solid fa-chevron-right"
-              ></i>
-              <i
-                v-if="!vendorManageIsHidden"
-                class="fa-solid fa-chevron-down"
-              ></i>
-            </div>
-            <!-- </Link> -->
-
-            <ul
-              v-if="!vendorManageIsHidden || vendorManage"
-              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
-            >
-              <Link
-                :href="route('admin.vendors.active.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/vendor-manage/active-vendors'
-                  ),
-                }"
-              >
-                Active Vendor
-              </Link>
-              <Link
-                :href="route('admin.vendors.inactive.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/vendor-manage/inactive-vendors'
-                  ),
-                }"
-              >
-                Inactive Vendor
-              </Link>
-            </ul>
-          </li>
-        </ul>
       </div>
     </div>
   </nav>
@@ -416,6 +657,8 @@ export default {
       bannersIsHidden: true,
       shippingAreaIsHidden: true,
       vendorManageIsHidden: true,
+      orderManageIsHidden: true,
+      returnOrderIsHidden: true,
     };
   },
   methods: {
@@ -431,6 +674,22 @@ export default {
         this.$page.url.startsWith("/admin/vendor-manage/active-vendors")
       ) {
         return (this.vendorManageIsHidden = false);
+      }
+    },
+    orderManage() {
+      if (
+        this.$page.url.startsWith("/admin/order-manage/inactive-vendors") ||
+        this.$page.url.startsWith("/admin/order-manage/active-vendors")
+      ) {
+        return (this.orderManageIsHidden = false);
+      }
+    },
+    returnOrder() {
+      if (
+        this.$page.url.startsWith("/admin/return-order/inactive-vendors") ||
+        this.$page.url.startsWith("/admin/return-order/active-vendors")
+      ) {
+        return (this.returnOrderIsHidden = false);
       }
     },
     categoriesArea() {

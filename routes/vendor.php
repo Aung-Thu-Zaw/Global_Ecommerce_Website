@@ -9,6 +9,8 @@ Route::get("vendor/login", [VendorAuthController::class,"login"])->name("vendor.
 
 Route::middleware(["auth","user.role:vendor"])
         ->prefix("vendor")
-        ->name("vendor.")->group(function () {
+        ->name("vendor.")
+        ->group(function () {
+
             Route::get("/dashboard", [VendorDashboardController::class,"index"])->name("dashboard");
         });
