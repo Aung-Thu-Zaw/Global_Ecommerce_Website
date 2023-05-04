@@ -79,6 +79,7 @@ Route::middleware(["auth","verified"])->group(function () {
            ->name("my-orders.")
            ->group(function () {
                Route::get('/', "index")->name("index");
+               Route::get('/invoice/{order_id}/download', "downloadInvoice")->name("download.invoice");
            });
 
 });

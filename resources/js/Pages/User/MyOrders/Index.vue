@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, router } from "@inertiajs/vue3";
 import PendingStatus from "@/Components/Table/PendingStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
@@ -9,15 +9,31 @@ import BodyTh from "@/Components/Table/BodyTh.vue";
 import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import { inject } from "vue";
+import axios from "axios";
 
-defineProps({
+const props = defineProps({
   orders: Object,
 });
 
 const swal = inject("$swal");
 
-const handleDownload = () => {
-  console.log("downloaded.");
+const handleDownload = async (orderId) => {
+  try {
+    const response = await axios.get(`/my-orders/invoice/${orderId}/download`, {
+      responseType: "blob",
+    });
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "invoice.pdf");
+    document.body.appendChild(link);
+    link.click();
+  } catch (error) {
+    this.showSnackbar({
+      message: "Error downloading invoice.",
+      type: "error",
+    });
+  }
 };
 </script>
 
@@ -138,7 +154,7 @@ const handleDownload = () => {
 
                 <Td>
                   <button
-                    @click="handleDownload"
+                    @click="handleDownload(order.id)"
                     class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-orange-600 text-white hover:bg-orange-700 mr-3 my-1"
                   >
                     <i class="fa-solid fa-download"></i>
