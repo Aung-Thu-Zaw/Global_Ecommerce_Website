@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
 use App\Actions\DeleteUserAction;
 use App\Http\Requests\MyAccountUpdateRequest;
 use App\Services\UserAvatarService;
@@ -19,7 +20,7 @@ class MyAccountController extends Controller
      */
     public function edit(Request $request): Response
     {
-        return Inertia::render('MyAccount/Edit', [
+        return Inertia::render('User/MyAccount/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
         ]);

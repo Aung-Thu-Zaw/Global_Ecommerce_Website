@@ -342,17 +342,6 @@
               >
                 Pending Orders
               </Link>
-              <!-- <Link
-                :href="route('admin.orders.inactive.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/order-manage/inactive-orders'
-                  ),
-                }"
-              >
-                Inactive Vendor
-              </Link> -->
             </ul>
           </li>
         </ul>

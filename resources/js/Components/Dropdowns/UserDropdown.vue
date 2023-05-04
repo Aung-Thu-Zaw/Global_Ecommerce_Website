@@ -44,13 +44,15 @@
         <i class="fa-solid fa-address-card mr-3"></i>
         My Account
       </Link>
-      <a
-        href="javascript:void(0);"
-        class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"
+      <Link
+        :href="route('my-orders.index')"
+        as="button"
+        class="text-left text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"
       >
         <i class="fa-solid fa-bag-shopping mr-3"></i>
         My Orders
-      </a>
+      </Link>
+
       <Link
         :href="route('watchlist.index')"
         class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"

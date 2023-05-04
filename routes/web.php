@@ -10,8 +10,9 @@ use App\Http\Controllers\Ecommerce\DeliveryInformationController;
 use App\Http\Controllers\Ecommerce\Payments\PaymentController;
 use App\Http\Controllers\Ecommerce\Payments\CashOnDeliveryController;
 use App\Http\Controllers\Ecommerce\Payments\StripeController;
-use App\Http\Controllers\MyAccountController;
+use App\Http\Controllers\User\MyAccountController;
 use App\Http\Controllers\Ecommerce\WatchlistController;
+use App\Http\Controllers\User\MyOrderController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -73,13 +74,27 @@ Route::middleware(["auth","verified"])->group(function () {
 
     Route::post('/payment/cashPaymentProcess', [CashOnDeliveryController::class,"cashPaymentProcess"])->name("payment.cashPaymentProcess");
 
+    Route::controller(MyOrderController::class)
+           ->prefix("/my-orders")
+           ->name("my-orders.")
+           ->group(function () {
+               Route::get('/', "index")->name("index");
+           });
+
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('/my-account', [MyAccountController::class, 'edit'])->name('my-account.edit');
-    Route::post('/my-account', [MyAccountController::class, 'update'])->name('my-account.update');
-    Route::delete('/my-account', [MyAccountController::class, 'destroy'])->name('my-account.destroy');
-});
+Route::controller(MyAccountController::class)
+       ->middleware('auth')
+       ->prefix("/my-account")
+       ->name("my-account.")
+       ->group(function () {
+           Route::get('/', 'edit')->name('edit');
+           Route::post('/', 'update')->name('update');
+           Route::delete('/', 'destroy')->name('destroy');
+       });
+
+
+
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

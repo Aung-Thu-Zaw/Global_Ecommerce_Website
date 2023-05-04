@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,6 +20,18 @@ class Order extends Model
 
     protected $guarded=[];
 
+
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Order, never>
+    */
+    protected function orderDate(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => date("j-F-Y", strtotime($value)),
+        );
+    }
+
     /**
     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<DeliveryInformation,Order>
     */
@@ -26,5 +39,7 @@ class Order extends Model
     {
         return $this->belongsTo(DeliveryInformation::class);
     }
+
+
 
 }
