@@ -23,7 +23,7 @@ class WatchlistController extends Controller
 
         $watchlists->load(["product.shop","product.brand","product.sizes","product.colors"]);
 
-        return inertia("Ecommerce/Watchlist/Index", compact("shops", "watchlists"));
+        return inertia("User/MyWatchlist/Index", compact("shops", "watchlists"));
     }
 
     public function store(WatchlistRequest $request): RedirectResponse
