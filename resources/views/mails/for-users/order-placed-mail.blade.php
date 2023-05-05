@@ -197,7 +197,6 @@
                 <a href="#" class="text-slate-700 hover:text-red-600 font-bold text-2xl mx-3">
                     <i class="fa-brands fa-youtube"></i>
                 </a>
-
             </div>
 
             <p class="text-center text-sm font-bold text-slate-600 mb-5">This is an automatically generated e-mail.

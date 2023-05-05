@@ -21,8 +21,8 @@ require __DIR__.'/admin.php';
 require __DIR__.'/vendor.php';
 
 // Route::get('/', [HomeController::class,"index"])->name("home");
-Route::get('/', function(){
-    return view("mails.order-placed");
+Route::get('/', function () {
+    return view("mails.for-users.welcome-mail");
 });
 
 Route::controller(ProductController::class)
