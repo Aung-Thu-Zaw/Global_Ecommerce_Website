@@ -84,7 +84,7 @@
 
                     </p>
                     <p class="text-sm font-bold text-slate-600">
-                        The Customer Experience Team at
+                        The Customer Support Team at
                         <a href="#" class="text-blue-600 underline">Global Ecommerce</a>
                     </p>
                 </div>
