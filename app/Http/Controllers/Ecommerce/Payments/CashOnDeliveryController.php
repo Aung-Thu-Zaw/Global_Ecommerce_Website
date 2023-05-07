@@ -21,6 +21,7 @@ class CashOnDeliveryController extends Controller
             'payment_type'=>"cash on delivery",
             'payment_method'=>"cash on delivery",
             'total_amount'=>$request->total_price,
+            'order_no'=>uniqid(),
             'currency'=>"usd",
             'invoice_no'=>'GLOBAL E-COMMERCE'.mt_rand(100000000, 999999999),
             'order_date'=>Carbon::now()->format("Y-m-d"),

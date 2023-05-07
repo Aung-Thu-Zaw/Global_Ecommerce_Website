@@ -1,5 +1,5 @@
-
 <script setup>
+import { Link } from "@inertiajs/vue3";
 const props = defineProps({
   specificShopProducts: Object,
 });
@@ -27,11 +27,12 @@ const props = defineProps({
           </a>
         </div>
         <figcaption class="ml-3">
-          <p class="line-clamp-2">
-            <a href="#" class="text-gray-600 hover:text-blue-600">{{
-              product.name
-            }}</a>
-          </p>
+          <Link
+            :href="route('products.show', product.slug)"
+            class="text-gray-600 line-clamp-2"
+          >
+            {{ product.name }}
+          </Link>
           <p class="mt-1 font-semibold">${{ product.price }}</p>
         </figcaption>
       </figure>
