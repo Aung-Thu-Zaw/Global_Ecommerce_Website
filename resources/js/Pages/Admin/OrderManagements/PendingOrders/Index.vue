@@ -369,33 +369,18 @@ const updateSorting = (sort = "id") => {
             <Td>{{ pendingOrder.order_date }}</Td>
 
             <Td>
-              <!-- <button
-                @click="handleActive(pendingOrder.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-green-600 text-white hover:bg-green-700 mr-3 my-1"
-              >
-                <i class="fa-solid fa-check"></i>
-                Active
-              </button>
-
-              <button
-                @click="handleDelete(pendingOrder.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
-              >
-                <i class="fa-solid fa-minus"></i>
-                Remove
-              </button>
               <Link
                 as="button"
-                :href="route('admin.vendors.inactive.show', pendingOrder.id)"
+                :href="route('admin.orders.pending.show', pendingOrder.id)"
                 :data="{
                   page: props.pendingOrders.current_page,
                   per_page: params.per_page,
                 }"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-emerald-600 text-white hover:bg-emerald-700 my-1"
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
               >
                 <i class="fa-solid fa-eye"></i>
                 Details
-              </Link> -->
+              </Link>
             </Td>
           </Tr>
         </tbody>

@@ -48,7 +48,7 @@ class StripeController extends Controller
             'payment_method'=>$paymentIntent->payment_method,
             'transaction_id'=>$balanceTransactionId,
             'currency'=>$paymentIntent->currency,
-            'total_amount'=>$paymentIntent->amount,
+            'total_amount'=>$request->total_price,
             'order_no'=>$paymentIntent->metadata['order_id'],
             'invoice_no'=>'GLOBAL E-COMMERCE'.mt_rand(100000000, 999999999),
             'order_date'=>Carbon::now()->format("Y-m-d"),
@@ -60,7 +60,7 @@ class StripeController extends Controller
         $confirmOrder=Order::with("deliveryInformation")->where("id", $order->id)->first();
 
 
-        Mail::to($confirmOrder->deliveryInformation->email)->send(new OrderMail($confirmOrder));
+        // Mail::to($confirmOrder->deliveryInformation->email)->send(new OrderMail($confirmOrder));
 
 
         // Mail::to($confirmOrder->deliveryInformation->email)->send(new OrderMail([

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin\OrderManagements;
 
 use App\Http\Controllers\Controller;
+use App\Models\DeliveryInformation;
 use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
@@ -19,5 +21,16 @@ class AdminPendingOrderController extends Controller
                              ->appends(request()->all());
 
         return inertia("Admin/OrderManagements/PendingOrders/Index", compact("pendingOrders"));
+    }
+
+    public function show(int $id): Response|ResponseFactory
+    {
+        $pendingOrderDetail=Order::findOrFail($id);
+
+        $deliveryInformation=DeliveryInformation::where("user_id", auth()->user()->id)->first();
+
+        $orderItems=OrderItem::with("product.shop")->where("order_id", $pendingOrderDetail->id)->get();
+
+        return inertia("Admin/OrderManagements/PendingOrders/Detail", compact("pendingOrderDetail", "deliveryInformation", "orderItems"));
     }
 }

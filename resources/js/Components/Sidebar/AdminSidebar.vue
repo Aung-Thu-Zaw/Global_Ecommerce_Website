@@ -342,6 +342,39 @@
               >
                 Pending Orders
               </Link>
+              <!-- <Link
+                :href="route('admin.orders.confirmed.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/order-manage/confirmed-orders'
+                  ),
+                }"
+              >
+                Confirmed Orders
+              </Link>
+              <Link
+                :href="route('admin.orders.processing.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/order-manage/processing-orders'
+                  ),
+                }"
+              >
+                Processing Orders
+              </Link>
+              <Link
+                :href="route('admin.orders.shipped.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/order-manage/shipped-orders'
+                  ),
+                }"
+              >
+                Shipped Orders
+              </Link> -->
             </ul>
           </li>
         </ul>

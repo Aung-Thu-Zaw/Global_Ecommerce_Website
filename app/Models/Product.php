@@ -180,6 +180,14 @@ class Product extends Model
         return $this->hasMany(Watchlist::class);
     }
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\HasMany<OrderItem>
+    */
+    public function orderItems(): HasMany
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
 
     public static function deleteImage(Product $product): void
     {
