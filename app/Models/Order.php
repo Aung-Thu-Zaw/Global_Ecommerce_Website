@@ -25,6 +25,16 @@ class Order extends Model
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Order, never>
     */
+    protected function createdAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => date("j-F-Y g:i:s A", strtotime($value)),
+        );
+    }
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Order, never>
+    */
     protected function orderDate(): Attribute
     {
         return Attribute::make(

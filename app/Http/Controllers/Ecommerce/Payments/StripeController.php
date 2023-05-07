@@ -18,6 +18,7 @@ class StripeController extends Controller
 {
     public function stripePaymentProcess(Request $request): RedirectResponse
     {
+
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
 

@@ -161,6 +161,7 @@ const handleDownload = async (orderId) => {
                     Invoice
                   </button>
                   <Link
+                    :href="route('my-orders.show', order.id)"
                     as="button"
                     class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
                   >

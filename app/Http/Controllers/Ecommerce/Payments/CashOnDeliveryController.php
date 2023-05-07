@@ -13,7 +13,6 @@ class CashOnDeliveryController extends Controller
 {
     public function cashPaymentProcess(Request $request): RedirectResponse
     {
-
         $user=auth()->user();
 
         $order=Order::create([
