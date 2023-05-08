@@ -17,6 +17,9 @@ import axios from "axios";
 
 const props = defineProps({
   orders: Object,
+  toPayOrders: Object,
+  toReceiveOrders: Object,
+  receivedOrders: Object,
 });
 
 const swal = inject("$swal");
@@ -89,22 +92,7 @@ const handleDownload = async (orderId) => {
               aria-selected="false"
             >
               <i class="fa-solid fa-money-bill-wave mr-2 text-sm"></i>
-              To Pay (2)
-            </a>
-          </li>
-          <li class="mr-2" role="presentation">
-            <a
-              href="#"
-              class="inline-flex p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group"
-              id="toShip-tab"
-              data-tabs-target="#toShip"
-              type="button"
-              role="tab"
-              aria-controls="toShip"
-              aria-selected="false"
-            >
-              <i class="fa-solid fa-truck-fast mr-2 text-sm"></i>
-              To Ship (4)
+              To Pay ({{ toPayOrders.length }})
             </a>
           </li>
           <li class="mr-2" role="presentation">
@@ -119,7 +107,23 @@ const handleDownload = async (orderId) => {
               aria-selected="false"
             >
               <i class="fa-solid fa-boxes-stacked mr-2 text-sm"></i>
-              To Receive (10)
+              To Receive ({{ toReceiveOrders.length }})
+            </a>
+          </li>
+          <li class="mr-2" role="presentation">
+            <a
+              href="#"
+              class="inline-flex p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group"
+              id="received-tab"
+              data-tabs-target="#received"
+              type="button"
+              role="tab"
+              aria-controls="received"
+              aria-selected="false"
+            >
+              <i class="fa-solid fa-handshake text-sm mr-2"></i>
+
+              Received ({{ receivedOrders.length }})
             </a>
           </li>
         </ul>
@@ -194,19 +198,192 @@ const handleDownload = async (orderId) => {
           id="toPay"
           role="tabpanel"
           aria-labelledby="toPay-tab"
-        ></div>
-        <div
-          class="hidden w-full"
-          id="toShip"
-          role="tabpanel"
-          aria-labelledby="toShip-tab"
-        ></div>
+        >
+          <TableContainer class="w-full my-5">
+            <TableHeader>
+              <HeaderTh> No </HeaderTh>
+              <HeaderTh> Invoice </HeaderTh>
+              <HeaderTh> Payment </HeaderTh>
+              <HeaderTh> Amount </HeaderTh>
+              <HeaderTh> Status </HeaderTh>
+              <HeaderTh> Date </HeaderTh>
+              <HeaderTh> Actions </HeaderTh>
+            </TableHeader>
+
+            <tbody v-if="toPayOrders.length">
+              <Tr v-for="order in toPayOrders" :key="order.id">
+                <BodyTh>{{ order.id }}</BodyTh>
+                <Td>{{ order.invoice_no }}</Td>
+                <Td class="capitalize">{{ order.payment_type }}</Td>
+                <Td>$ {{ order.total_amount }}</Td>
+                <Td>
+                  <PendingStatus v-if="order.status === 'pending'">
+                    {{ order.status }}
+                  </PendingStatus>
+                  <ConfirmedStatus v-else-if="order.status === 'confirm'">
+                    {{ order.status }}
+                  </ConfirmedStatus>
+                  <ProcessingStatus v-else-if="order.status === 'processing'">
+                    {{ order.status }}
+                  </ProcessingStatus>
+                  <ShippedStatus v-else-if="order.status === 'shipped'">
+                    {{ order.status }}
+                  </ShippedStatus>
+                  <DeliveredStatus v-else-if="order.status === 'delivered'">
+                    {{ order.status }}
+                  </DeliveredStatus>
+                </Td>
+                <Td>{{ order.order_date }}</Td>
+
+                <Td>
+                  <button
+                    @click="handleDownload(order.id)"
+                    class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-orange-600 text-white hover:bg-orange-700 mr-3 my-1"
+                  >
+                    <i class="fa-solid fa-download"></i>
+                    Invoice
+                  </button>
+                  <Link
+                    :href="route('my-orders.show', order.id)"
+                    as="button"
+                    class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
+                  >
+                    <i class="fa-solid fa-eye"></i>
+                    Details
+                  </Link>
+                </Td>
+              </Tr>
+            </tbody>
+          </TableContainer>
+        </div>
+
         <div
           class="hidden w-full"
           id="toReceive"
           role="tabpanel"
           aria-labelledby="toReceive-tab"
-        ></div>
+        >
+          <TableContainer class="w-full my-5">
+            <TableHeader>
+              <HeaderTh> No </HeaderTh>
+              <HeaderTh> Invoice </HeaderTh>
+              <HeaderTh> Payment </HeaderTh>
+              <HeaderTh> Amount </HeaderTh>
+              <HeaderTh> Status </HeaderTh>
+              <HeaderTh> Date </HeaderTh>
+              <HeaderTh> Actions </HeaderTh>
+            </TableHeader>
+
+            <tbody v-if="toReceiveOrders.length">
+              <Tr v-for="order in toReceiveOrders" :key="order.id">
+                <BodyTh>{{ order.id }}</BodyTh>
+                <Td>{{ order.invoice_no }}</Td>
+                <Td class="capitalize">{{ order.payment_type }}</Td>
+                <Td>$ {{ order.total_amount }}</Td>
+                <Td>
+                  <PendingStatus v-if="order.status === 'pending'">
+                    {{ order.status }}
+                  </PendingStatus>
+                  <ConfirmedStatus v-else-if="order.status === 'confirm'">
+                    {{ order.status }}
+                  </ConfirmedStatus>
+                  <ProcessingStatus v-else-if="order.status === 'processing'">
+                    {{ order.status }}
+                  </ProcessingStatus>
+                  <ShippedStatus v-else-if="order.status === 'shipped'">
+                    {{ order.status }}
+                  </ShippedStatus>
+                  <DeliveredStatus v-else-if="order.status === 'delivered'">
+                    {{ order.status }}
+                  </DeliveredStatus>
+                </Td>
+                <Td>{{ order.order_date }}</Td>
+
+                <Td>
+                  <button
+                    @click="handleDownload(order.id)"
+                    class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-orange-600 text-white hover:bg-orange-700 mr-3 my-1"
+                  >
+                    <i class="fa-solid fa-download"></i>
+                    Invoice
+                  </button>
+                  <Link
+                    :href="route('my-orders.show', order.id)"
+                    as="button"
+                    class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
+                  >
+                    <i class="fa-solid fa-eye"></i>
+                    Details
+                  </Link>
+                </Td>
+              </Tr>
+            </tbody>
+          </TableContainer>
+        </div>
+
+        <div
+          class="hidden w-full"
+          id="received"
+          role="tabpanel"
+          aria-labelledby="received-tab"
+        >
+          <TableContainer class="w-full my-5">
+            <TableHeader>
+              <HeaderTh> No </HeaderTh>
+              <HeaderTh> Invoice </HeaderTh>
+              <HeaderTh> Payment </HeaderTh>
+              <HeaderTh> Amount </HeaderTh>
+              <HeaderTh> Status </HeaderTh>
+              <HeaderTh> Date </HeaderTh>
+              <HeaderTh> Actions </HeaderTh>
+            </TableHeader>
+
+            <tbody v-if="receivedOrders.length">
+              <Tr v-for="order in receivedOrders" :key="order.id">
+                <BodyTh>{{ order.id }}</BodyTh>
+                <Td>{{ order.invoice_no }}</Td>
+                <Td class="capitalize">{{ order.payment_type }}</Td>
+                <Td>$ {{ order.total_amount }}</Td>
+                <Td>
+                  <PendingStatus v-if="order.status === 'pending'">
+                    {{ order.status }}
+                  </PendingStatus>
+                  <ConfirmedStatus v-else-if="order.status === 'confirm'">
+                    {{ order.status }}
+                  </ConfirmedStatus>
+                  <ProcessingStatus v-else-if="order.status === 'processing'">
+                    {{ order.status }}
+                  </ProcessingStatus>
+                  <ShippedStatus v-else-if="order.status === 'shipped'">
+                    {{ order.status }}
+                  </ShippedStatus>
+                  <DeliveredStatus v-else-if="order.status === 'delivered'">
+                    {{ order.status }}
+                  </DeliveredStatus>
+                </Td>
+                <Td>{{ order.order_date }}</Td>
+
+                <Td>
+                  <button
+                    @click="handleDownload(order.id)"
+                    class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-orange-600 text-white hover:bg-orange-700 mr-3 my-1"
+                  >
+                    <i class="fa-solid fa-download"></i>
+                    Invoice
+                  </button>
+                  <Link
+                    :href="route('my-orders.show', order.id)"
+                    as="button"
+                    class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
+                  >
+                    <i class="fa-solid fa-eye"></i>
+                    Details
+                  </Link>
+                </Td>
+              </Tr>
+            </tbody>
+          </TableContainer>
+        </div>
       </div>
     </div>
   </AppLayout>

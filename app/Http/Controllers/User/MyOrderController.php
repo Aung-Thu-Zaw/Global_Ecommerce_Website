@@ -18,7 +18,16 @@ class MyOrderController extends Controller
     {
         $orders=Order::where("user_id", auth()->user()->id)->orderBy("id", "desc")->get();
 
-        return inertia("User/MyOrders/Index", compact("orders"));
+        $toPayOrders=Order::where("user_id", auth()->user()->id)->where("payment_type", "cash on delivery")->orderBy("id", "desc")->get();
+
+        $toReceiveOrders=Order::where("user_id", auth()->user()->id)
+                                ->where(function ($query) {
+                                    $query->where("status", "confirm")->orWhere("status", "shipped");
+                                })->orderBy("id", "desc")->get();
+
+        $receivedOrders=Order::where("user_id", auth()->user()->id)->where("status", "delivered")->orderBy("id", "desc")->get();
+
+        return inertia("User/MyOrders/Index", compact("orders", "toPayOrders", "toReceiveOrders", "receivedOrders"));
     }
 
     public function show(int $id): Response|ResponseFactory
