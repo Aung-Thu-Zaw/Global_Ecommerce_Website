@@ -5,6 +5,10 @@ import OrderCartItem from "@/Components/OrderCartItem.vue";
 import Stepper from "@/Components/Stepper.vue";
 import { inject } from "vue";
 import PendingStatus from "@/Components/Table/PendingStatus.vue";
+import ConfirmedStatus from "@/Components/Table/ConfirmedStatus.vue";
+import ProcessingStatus from "@/Components/Table/ProcessingStatus.vue";
+import ShippedStatus from "@/Components/Table/ShippedStatus.vue";
+import DeliveredStatus from "@/Components/Table/DeliveredStatus.vue";
 
 const props = defineProps({
   order: Object,
@@ -284,9 +288,21 @@ const swal = inject("$swal");
                     Order Status
                   </span>
                   <span class="w-full block">
-                    <PendingStatus>
+                    <PendingStatus v-if="order.status === 'pending'">
                       {{ order.status }}
                     </PendingStatus>
+                    <ConfirmedStatus v-else-if="order.status === 'confirm'">
+                      {{ order.status }}
+                    </ConfirmedStatus>
+                    <ProcessingStatus v-else-if="order.status === 'processing'">
+                      {{ order.status }}
+                    </ProcessingStatus>
+                    <ShippedStatus v-else-if="order.status === 'shipped'">
+                      {{ order.status }}
+                    </ShippedStatus>
+                    <DeliveredStatus v-else-if="order.status === 'delivered'">
+                      {{ order.status }}
+                    </DeliveredStatus>
                   </span>
                 </div>
               </div>

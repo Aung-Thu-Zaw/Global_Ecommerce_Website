@@ -4,6 +4,7 @@ import { Head, Link, router } from "@inertiajs/vue3";
 import PendingStatus from "@/Components/Table/PendingStatus.vue";
 import ConfirmedStatus from "@/Components/Table/ConfirmedStatus.vue";
 import ProcessingStatus from "@/Components/Table/ProcessingStatus.vue";
+import DeliveredStatus from "@/Components/Table/DeliveredStatus.vue";
 import ShippedStatus from "@/Components/Table/ShippedStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
@@ -161,6 +162,9 @@ const handleDownload = async (orderId) => {
                   <ShippedStatus v-else-if="order.status === 'shipped'">
                     {{ order.status }}
                   </ShippedStatus>
+                  <DeliveredStatus v-else-if="order.status === 'delivered'">
+                    {{ order.status }}
+                  </DeliveredStatus>
                 </Td>
                 <Td>{{ order.order_date }}</Td>
 
