@@ -2,6 +2,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import OrderCartItem from "@/Components/OrderCartItem.vue";
+import Stepper from "@/Components/Stepper.vue";
 import { inject } from "vue";
 import PendingStatus from "@/Components/Table/PendingStatus.vue";
 
@@ -41,6 +42,9 @@ const swal = inject("$swal");
           Total: $ {{ order.total_amount }}
         </div>
       </div>
+
+      <!-- Stepper  -->
+      <Stepper :order="order" />
 
       <div class="grid grid-cols-2 gap-3 my-5">
         <div class="p-5 border shadow-md rounded-sm">

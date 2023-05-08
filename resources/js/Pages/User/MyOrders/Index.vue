@@ -2,6 +2,9 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link, router } from "@inertiajs/vue3";
 import PendingStatus from "@/Components/Table/PendingStatus.vue";
+import ConfirmedStatus from "@/Components/Table/ConfirmedStatus.vue";
+import ProcessingStatus from "@/Components/Table/ProcessingStatus.vue";
+import ShippedStatus from "@/Components/Table/ShippedStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -146,9 +149,18 @@ const handleDownload = async (orderId) => {
                 <Td class="capitalize">{{ order.payment_type }}</Td>
                 <Td>$ {{ order.total_amount }}</Td>
                 <Td>
-                  <PendingStatus>
+                  <PendingStatus v-if="order.status === 'pending'">
                     {{ order.status }}
                   </PendingStatus>
+                  <ConfirmedStatus v-else-if="order.status === 'confirm'">
+                    {{ order.status }}
+                  </ConfirmedStatus>
+                  <ProcessingStatus v-else-if="order.status === 'processing'">
+                    {{ order.status }}
+                  </ProcessingStatus>
+                  <ShippedStatus v-else-if="order.status === 'shipped'">
+                    {{ order.status }}
+                  </ShippedStatus>
                 </Td>
                 <Td>{{ order.order_date }}</Td>
 
