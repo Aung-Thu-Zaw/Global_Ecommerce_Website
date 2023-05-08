@@ -2,7 +2,7 @@
 import Breadcrumb from "@/Components/Breadcrumbs/OrderManage/Breadcrumb.vue";
 import SearchForm from "@/Components/Form/SearchForm.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import ShippedStatus from "@/Components/Table/ShippedStatus.vue";
+import DeliveredStatus from "@/Components/Table/DeliveredStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -18,44 +18,17 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 const props = defineProps({
   deliveryInformation: Object,
-  shippedOrderDetail: Object,
+  deliveredOrderDetail: Object,
   orderItems: Object,
 });
 
 const swal = inject("$swal");
-const handleDelivered = async (id) => {
-  const result = await swal({
-    icon: "info",
-    title: "Are you sure you want to delivered this order?",
-    showCancelButton: true,
-    confirmButtonText: "Yes, delivered!",
-    confirmButtonColor: "#2671c1",
-    timer: 20000,
-    timerProgressBar: true,
-    reverseButtons: true,
-  });
-  if (result.isConfirmed) {
-    router.post(
-      route("admin.orders.shipped.update", id),
-      {},
-      {
-        onSuccess: () => {
-          if (usePage().props.flash.successMessage) {
-            toast.success(usePage().props.flash.successMessage, {
-              autoClose: 2000,
-            });
-          }
-        },
-      }
-    );
-  }
-};
 </script>
 
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Details Shipped Order" />
+    <Head title="Details Delivered Order" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Vendor Breadcrumb -->
@@ -78,7 +51,7 @@ const handleDelivered = async (id) => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Shipped Orders</span
+                >Delivered Orders</span
               >
             </div>
           </li>
@@ -234,7 +207,7 @@ const handleDelivered = async (id) => {
           <h1 class="font-bold text-slate-700 text-2xl border-b-4 px-10 py-3">
             Order Details
           </h1>
-          <div v-if="deliveryInformation && shippedOrderDetail" class="my-5">
+          <div v-if="deliveryInformation && deliveredOrderDetail" class="my-5">
             <div
               class="w-full text-sm text-left text-gray-500 border overflow-hidden shadow rounded-md"
             >
@@ -270,7 +243,7 @@ const handleDelivered = async (id) => {
                     Invoice No
                   </span>
                   <span class="w-full text-orange-600 block">
-                    {{ shippedOrderDetail.invoice_no }}
+                    {{ deliveredOrderDetail.invoice_no }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -280,7 +253,7 @@ const handleDelivered = async (id) => {
                     Order No
                   </span>
                   <span class="w-full text-orange-600 block">
-                    {{ shippedOrderDetail.order_no }}
+                    {{ deliveredOrderDetail.order_no }}
                   </span>
                 </div>
                 <div
@@ -292,7 +265,7 @@ const handleDelivered = async (id) => {
                     Currency
                   </span>
                   <span class="w-full block uppercase">
-                    {{ shippedOrderDetail.currency }}
+                    {{ deliveredOrderDetail.currency }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -302,7 +275,7 @@ const handleDelivered = async (id) => {
                     Payment Type
                   </span>
                   <span class="w-full block capitalize">
-                    {{ shippedOrderDetail.payment_type }}
+                    {{ deliveredOrderDetail.payment_type }}
                   </span>
                 </div>
                 <div
@@ -314,7 +287,7 @@ const handleDelivered = async (id) => {
                     Total Amount
                   </span>
                   <span class="w-full block">
-                    $ {{ shippedOrderDetail.total_amount }}
+                    $ {{ deliveredOrderDetail.total_amount }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -324,7 +297,7 @@ const handleDelivered = async (id) => {
                     Transaction Id
                   </span>
                   <span class="w-full block">
-                    {{ shippedOrderDetail.transaction_id }}
+                    {{ deliveredOrderDetail.transaction_id }}
                   </span>
                 </div>
                 <div
@@ -336,7 +309,7 @@ const handleDelivered = async (id) => {
                     Order Date
                   </span>
                   <span class="w-full block">
-                    {{ shippedOrderDetail.order_date }}
+                    {{ deliveredOrderDetail.order_date }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -346,24 +319,17 @@ const handleDelivered = async (id) => {
                     Order Status
                   </span>
                   <span
-                    v-if="shippedOrderDetail.status === 'shipped'"
+                    v-if="deliveredOrderDetail.status === 'delivered'"
                     class="w-full block"
                   >
-                    <ShippedStatus>
-                      {{ shippedOrderDetail.status }}
-                    </ShippedStatus>
+                    <DeliveredStatus>
+                      {{ deliveredOrderDetail.status }}
+                    </DeliveredStatus>
                   </span>
                 </div>
               </div>
             </div>
           </div>
-          <button
-            @click="handleDelivered(shippedOrderDetail.id)"
-            v-if="shippedOrderDetail.status === 'shipped'"
-            class="bg-slate-600 py-3 w-full rounded-sm font-bold text-white hover:bg-slate-700 transition-all shadow"
-          >
-            Delivered Order
-          </button>
         </div>
       </div>
       <div class="border shadow rounded-sm">

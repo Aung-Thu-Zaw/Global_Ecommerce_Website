@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin\OrderManagements;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderDeliveredMail;
 use Illuminate\Http\Request;
 use App\Models\DeliveryInformation;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -36,10 +38,14 @@ class AdminShippedOrderController extends Controller
         return inertia("Admin/OrderManagements/ShippedOrders/Detail", compact("shippedOrderDetail", "deliveryInformation", "orderItems"));
     }
 
-    // public function update(int $id): RedirectResponse
-    // {
-    //     Order::findOrFail($id)->update(["status"=>"shipped"]);
+    public function update(int $id): RedirectResponse
+    {
+        $order=Order::with(["deliveryInformation","orderItems.product.shop"])->where("id", $id)->first();
 
-    //     return to_route("admin.orders.shipped.index")->with("success", "Order is shipped");
-    // }
+        $order->update(["status"=>"delivered"]);
+
+        Mail::to($order->deliveryInformation->email)->send(new OrderDeliveredMail($order));
+
+        return to_route("admin.orders.delivered.index")->with("success", "Order is delivered");
+    }
 }

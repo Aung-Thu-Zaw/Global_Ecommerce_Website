@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin\OrderManagements;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderConfirmMail;
 use App\Models\DeliveryInformation;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -37,8 +39,11 @@ class AdminPendingOrderController extends Controller
 
     public function update(int $id): RedirectResponse
     {
+        $order=Order::with(["deliveryInformation","orderItems.product.shop"])->where("id", $id)->first();
 
-        Order::findOrFail($id)->update(["status"=>"confirm"]);
+        $order->update(["status"=>"confirm"]);
+
+        Mail::to($order->deliveryInformation->email)->send(new OrderConfirmMail($order));
 
         return to_route("admin.orders.confirmed.index")->with("success", "Order is confirmed");
     }

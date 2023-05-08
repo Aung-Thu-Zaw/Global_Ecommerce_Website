@@ -38,35 +38,24 @@
                 <h3 class="font-bold w-full text-center my-5 text-slate-800 text-2xl">GLOBAL E-COMMERCE</h3>
 
                 <p class="text-center text-md font-semibold text-slate-600 mb-5">
-                    Your order is confirmed!
+                    Your package has been delivered!
                 </p>
 
 
                 <p class="text-sm font-bold mb-2">Hi, Aung Thu Zaw,</p>
-
-                <p class="text-sm  mb-2 ">We are pleased to share that the item(s) from your order <span
-                        class="text-blue-600">{{
-                        $order->order_no
-                        }}</span>
-                    have been confirmed.</p>
+                <p class="text-sm  mb-2 ">We are pleased to inform that your order <span
+                        class="text-blue-600">{{$order->order_no}}</span> has been delivered.</p>
                 <p class="text-sm mb-2">
-                    You can check your order status
-                    here.
+                    We hope you are enjoying your recent purchase! Once you have a chance, we would love to hear your
+                    shopping experience to keep us constantly improving.
                 </p>
-
 
                 <div class="flex items-center justify-center">
                     <a href="{{ route('my-orders.show',$order->id) }}"
                         class="font-bold text-sm px-10 uppercase py-3 shadow bg-blue-600 text-white rounded-sm my-5 ">
-                        Your Order
+                        Write a Review
                     </a>
                 </div>
-
-
-                <p class="text-sm  mb-2 ">
-                    Here's a confirmation of what we confirm in your order.
-                </p>
-
 
                 <hr>
 
@@ -82,6 +71,7 @@
                 <hr>
 
                 <h4 class="uppercase font-bold text-slate-700 text-md mt-5 mb-3">Order Details</h4>
+
 
                 @foreach ($order->orderItems as $item)
                 <div class="flex flex-col md:flex-row items-start">
@@ -103,8 +93,6 @@
                     </div>
                 </div>
                 @endforeach
-
-
 
                 <hr>
 
@@ -143,12 +131,12 @@
                 <a href="#" class="text-slate-700 hover:text-red-600 font-bold text-2xl mx-3">
                     <i class="fa-brands fa-youtube"></i>
                 </a>
+
             </div>
 
             <p class="text-center text-sm font-bold text-slate-600 mb-5">This is an automatically generated e-mail.
                 Please do
                 not reply to this e-mail.</p>
-
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.js"></script>

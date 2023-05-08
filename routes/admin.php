@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\SiteSettings\AdminSeoSettingController;
 use App\Http\Controllers\Admin\SiteSettings\AdminWebsiteSettingController;
 use App\Http\Controllers\Admin\Banners\AdminSliderBannerController;
 use App\Http\Controllers\Admin\OrderManagements\AdminConfirmedOrderController;
+use App\Http\Controllers\Admin\OrderManagements\AdminDeliveredOrderController;
 use App\Http\Controllers\Admin\OrderManagements\AdminPendingOrderController;
 use App\Http\Controllers\Admin\OrderManagements\AdminProcessingOrderController;
 use App\Http\Controllers\Admin\OrderManagements\AdminShippedOrderController;
@@ -294,6 +295,21 @@ Route::middleware(["auth","verified","user.role:admin"])
            Route::controller(AdminShippedOrderController::class)
                    ->prefix("/order-manage/shipped-orders")
                    ->name("orders.shipped.")
+                   ->group(function () {
+                       Route::get("/", "index")->name("index");
+                       Route::get("/details/{id}", "show")->name("show");
+                       Route::post("/{id}", "update")->name("update");
+                       //    Route::delete("/{id}", "destroy")->name("destroy");
+                       //    Route::get("/trash", "trash")->name("trash");
+                       //    Route::post("/{id}/restore", "restore")->name("restore");
+                       //    Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                       //    Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
+                   });
+
+           // Delivered Order Management
+           Route::controller(AdminDeliveredOrderController::class)
+                   ->prefix("/order-manage/delivered-orders")
+                   ->name("orders.delivered.")
                    ->group(function () {
                        Route::get("/", "index")->name("index");
                        Route::get("/details/{id}", "show")->name("show");

@@ -362,7 +362,7 @@ const handleShipped = async (id) => {
           <button
             v-if="processingOrderDetail.status === 'processing'"
             @click="handleShipped(processingOrderDetail.id)"
-            class="bg-slate-600 py-3 w-full rounded-sm font-bold text-white hover:bg-slate-700 transition-all shadow"
+            class="bg-red-600 py-3 w-full rounded-sm font-bold text-white hover:bg-red-700 transition-all shadow"
           >
             Shipped Order
           </button>

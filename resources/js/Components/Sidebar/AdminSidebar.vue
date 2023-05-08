@@ -375,6 +375,17 @@
               >
                 Shipped Orders
               </Link>
+              <Link
+                :href="route('admin.orders.delivered.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/order-manage/delivered-orders'
+                  ),
+                }"
+              >
+                Delivered Orders
+              </Link>
             </ul>
           </li>
         </ul>
@@ -703,7 +714,8 @@ export default {
         this.$page.url.startsWith("/admin/order-manage/pending-orders") ||
         this.$page.url.startsWith("/admin/order-manage/confirmed-orders") ||
         this.$page.url.startsWith("/admin/order-manage/processing-orders") ||
-        this.$page.url.startsWith("/admin/order-manage/shipped-orders")
+        this.$page.url.startsWith("/admin/order-manage/shipped-orders") ||
+        this.$page.url.startsWith("/admin/order-manage/delivered-orders")
       ) {
         return (this.orderManageIsHidden = false);
       }
