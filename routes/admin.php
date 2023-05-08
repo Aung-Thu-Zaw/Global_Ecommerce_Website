@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\Banners\AdminSliderBannerController;
 use App\Http\Controllers\Admin\OrderManagements\AdminConfirmedOrderController;
 use App\Http\Controllers\Admin\OrderManagements\AdminPendingOrderController;
 use App\Http\Controllers\Admin\OrderManagements\AdminProcessingOrderController;
+use App\Http\Controllers\Admin\OrderManagements\AdminShippedOrderController;
 use App\Http\Controllers\Admin\ShippingArea\AdminCityController;
 use App\Http\Controllers\Admin\ShippingArea\AdminCountryController;
 use App\Http\Controllers\Admin\ShippingArea\AdminRegionController;
@@ -289,50 +290,20 @@ Route::middleware(["auth","verified","user.role:admin"])
                        //    Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
                    });
 
-           // Confirmed Order Management
-           //    Route::controller(AdminConfirmedOrderController::class)
-           //            ->prefix("/order-manage/pending-orders")
-           //            ->name("orders.pending.")
-           //            ->group(function () {
-           //                Route::get("/", "index")->name("index");
-           //    Route::get("/details/{id}", "show")->name("show");
-           //    Route::post("/{id}", "update")->name("update");
-           //    Route::delete("/{id}", "destroy")->name("destroy");
-           //    Route::get("/trash", "trash")->name("trash");
-           //    Route::post("/{id}/restore", "restore")->name("restore");
-           //    Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
-           //    Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
-           //    });
-
-           // Processing Order Management
-           //    Route::controller(AdminPendingOrderController::class)
-           //            ->prefix("/order-manage/pending-orders")
-           //            ->name("orders.pending.")
-           //            ->group(function () {
-           //                Route::get("/", "index")->name("index");
-           //    Route::get("/details/{id}", "show")->name("show");
-           //    Route::post("/{id}", "update")->name("update");
-           //    Route::delete("/{id}", "destroy")->name("destroy");
-           //    Route::get("/trash", "trash")->name("trash");
-           //    Route::post("/{id}/restore", "restore")->name("restore");
-           //    Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
-           //    Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
-           //    });
-
            // Shipped Order Management
-           //    Route::controller(AdminPendingOrderController::class)
-           //            ->prefix("/order-manage/pending-orders")
-           //            ->name("orders.pending.")
-           //            ->group(function () {
-           //                Route::get("/", "index")->name("index");
-           //    Route::get("/details/{id}", "show")->name("show");
-           //    Route::post("/{id}", "update")->name("update");
-           //    Route::delete("/{id}", "destroy")->name("destroy");
-           //    Route::get("/trash", "trash")->name("trash");
-           //    Route::post("/{id}/restore", "restore")->name("restore");
-           //    Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
-           //    Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
-           //    });
+           Route::controller(AdminShippedOrderController::class)
+                   ->prefix("/order-manage/shipped-orders")
+                   ->name("orders.shipped.")
+                   ->group(function () {
+                       Route::get("/", "index")->name("index");
+                       Route::get("/details/{id}", "show")->name("show");
+                       //    Route::post("/{id}", "update")->name("update");
+                       //    Route::delete("/{id}", "destroy")->name("destroy");
+                       //    Route::get("/trash", "trash")->name("trash");
+                       //    Route::post("/{id}/restore", "restore")->name("restore");
+                       //    Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                       //    Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
+                   });
 
            // Inactive Vendors Management
            Route::controller(AdminInactiveVendorController::class)

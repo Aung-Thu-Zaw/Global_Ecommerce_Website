@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Ecommerce\Payments;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderPlacedMail;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Mail;
 
 class CashOnDeliveryController extends Controller
 {
@@ -28,6 +30,7 @@ class CashOnDeliveryController extends Controller
             'status'=>"pending",
         ]);
 
+
         foreach ($request->cart_items as $item) {
             OrderItem::create([
                 "order_id"=>$order->id,
@@ -39,6 +42,11 @@ class CashOnDeliveryController extends Controller
                 "price"=>$item["total_price"],
             ]);
         }
+
+
+        $placedOrder=Order::with(["deliveryInformation","orderItems.product.shop"])->where("id", $order->id)->first();
+
+        Mail::to($placedOrder->deliveryInformation->email)->send(new OrderPlacedMail($placedOrder));
 
         if (session("coupon")) {
             session()->forget("coupon");

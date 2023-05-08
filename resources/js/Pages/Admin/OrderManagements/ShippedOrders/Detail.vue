@@ -2,7 +2,7 @@
 import Breadcrumb from "@/Components/Breadcrumbs/OrderManage/Breadcrumb.vue";
 import SearchForm from "@/Components/Form/SearchForm.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import ProcessingStatus from "@/Components/Table/ProcessingStatus.vue";
+import ShippedStatus from "@/Components/Table/ShippedStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -18,45 +18,44 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 const props = defineProps({
   deliveryInformation: Object,
-  processingOrderDetail: Object,
+  shippedOrderDetail: Object,
   orderItems: Object,
 });
 
 const swal = inject("$swal");
-
-const handleShipped = async (id) => {
-  const result = await swal({
-    icon: "info",
-    title: "Are you sure you want to shipped this order?",
-    showCancelButton: true,
-    confirmButtonText: "Yes, shipped!",
-    confirmButtonColor: "#2671c1",
-    timer: 20000,
-    timerProgressBar: true,
-    reverseButtons: true,
-  });
-  if (result.isConfirmed) {
-    router.post(
-      route("admin.orders.processing.update", id),
-      {},
-      {
-        onSuccess: () => {
-          if (usePage().props.flash.successMessage) {
-            toast.success(usePage().props.flash.successMessage, {
-              autoClose: 2000,
-            });
-          }
-        },
-      }
-    );
-  }
-};
+// const handleConfirm = async (id) => {
+//   const result = await swal({
+//     icon: "info",
+//     title: "Are you sure you want to processing this order?",
+//     showCancelButton: true,
+//     confirmButtonText: "Yes, process!",
+//     confirmButtonColor: "#2671c1",
+//     timer: 20000,
+//     timerProgressBar: true,
+//     reverseButtons: true,
+//   });
+//   if (result.isConfirmed) {
+//     router.post(
+//       route("admin.orders.shipped.update", id),
+//       {},
+//       {
+//         onSuccess: () => {
+//           if (usePage().props.flash.successMessage) {
+//             toast.success(usePage().props.flash.successMessage, {
+//               autoClose: 2000,
+//             });
+//           }
+//         },
+//       }
+//     );
+//   }
+// };
 </script>
 
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Details Processing Order" />
+    <Head title="Details Shipped Order" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Vendor Breadcrumb -->
@@ -79,7 +78,7 @@ const handleShipped = async (id) => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Processing Orders</span
+                >Shipped Orders</span
               >
             </div>
           </li>
@@ -235,7 +234,7 @@ const handleShipped = async (id) => {
           <h1 class="font-bold text-slate-700 text-2xl border-b-4 px-10 py-3">
             Order Details
           </h1>
-          <div v-if="deliveryInformation && processingOrderDetail" class="my-5">
+          <div v-if="deliveryInformation && shippedOrderDetail" class="my-5">
             <div
               class="w-full text-sm text-left text-gray-500 border overflow-hidden shadow rounded-md"
             >
@@ -271,7 +270,7 @@ const handleShipped = async (id) => {
                     Invoice No
                   </span>
                   <span class="w-full text-orange-600 block">
-                    {{ processingOrderDetail.invoice_no }}
+                    {{ shippedOrderDetail.invoice_no }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -281,7 +280,7 @@ const handleShipped = async (id) => {
                     Order No
                   </span>
                   <span class="w-full text-orange-600 block">
-                    {{ processingOrderDetail.order_no }}
+                    {{ shippedOrderDetail.order_no }}
                   </span>
                 </div>
                 <div
@@ -293,7 +292,7 @@ const handleShipped = async (id) => {
                     Currency
                   </span>
                   <span class="w-full block uppercase">
-                    {{ processingOrderDetail.currency }}
+                    {{ shippedOrderDetail.currency }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -303,7 +302,7 @@ const handleShipped = async (id) => {
                     Payment Type
                   </span>
                   <span class="w-full block capitalize">
-                    {{ processingOrderDetail.payment_type }}
+                    {{ shippedOrderDetail.payment_type }}
                   </span>
                 </div>
                 <div
@@ -315,7 +314,7 @@ const handleShipped = async (id) => {
                     Total Amount
                   </span>
                   <span class="w-full block">
-                    $ {{ processingOrderDetail.total_amount }}
+                    $ {{ shippedOrderDetail.total_amount }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -325,7 +324,7 @@ const handleShipped = async (id) => {
                     Transaction Id
                   </span>
                   <span class="w-full block">
-                    {{ processingOrderDetail.transaction_id }}
+                    {{ shippedOrderDetail.transaction_id }}
                   </span>
                 </div>
                 <div
@@ -337,7 +336,7 @@ const handleShipped = async (id) => {
                     Order Date
                   </span>
                   <span class="w-full block">
-                    {{ processingOrderDetail.order_date }}
+                    {{ shippedOrderDetail.order_date }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -347,25 +346,17 @@ const handleShipped = async (id) => {
                     Order Status
                   </span>
                   <span
-                    v-if="processingOrderDetail.status === 'processing'"
+                    v-if="shippedOrderDetail.status === 'shipped'"
                     class="w-full block"
                   >
-                    <ProcessingStatus>
-                      {{ processingOrderDetail.status }}
-                    </ProcessingStatus>
+                    <ShippedStatus>
+                      {{ shippedOrderDetail.status }}
+                    </ShippedStatus>
                   </span>
                 </div>
               </div>
             </div>
           </div>
-
-          <button
-            v-if="processingOrderDetail.status === 'processing'"
-            @click="handleShipped(processingOrderDetail.id)"
-            class="bg-slate-600 py-3 w-full rounded-sm font-bold text-white hover:bg-slate-700 transition-all shadow"
-          >
-            Shipped Order
-          </button>
         </div>
       </div>
       <div class="border shadow rounded-sm">

@@ -364,7 +364,7 @@
               >
                 Processing Orders
               </Link>
-              <!-- <Link
+              <Link
                 :href="route('admin.orders.shipped.index')"
                 class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
                 :class="{
@@ -374,7 +374,7 @@
                 }"
               >
                 Shipped Orders
-              </Link> -->
+              </Link>
             </ul>
           </li>
         </ul>

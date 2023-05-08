@@ -10,14 +10,11 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Address;
-use InvalidArgumentException;
 
-class OrderMail extends Mailable
+class OrderConfirmMail extends Mailable
 {
     use Queueable;
     use SerializesModels;
-
-
 
     /**
      * Create a new message instance.
@@ -26,6 +23,7 @@ class OrderMail extends Mailable
      */
     public function __construct(protected Order $order)
     {
+        //
     }
 
     /**
@@ -35,10 +33,9 @@ class OrderMail extends Mailable
      */
     public function envelope()
     {
-
         return new Envelope(
             from: new Address('noreply@support.globalecommerce.com', 'Global E-commerce'),
-            subject: 'Order Shipped',
+            subject: 'Order Confirmed',
         );
     }
 
@@ -47,17 +44,21 @@ class OrderMail extends Mailable
      *
      * @return \Illuminate\Mail\Mailables\Content
      */
-    public function content(): Content
+    public function content()
     {
         return new Content(
-            view: 'mails.order-shipped',
+            view: 'mails.for-users.order-confirmed-mail',
             with: [
                 "order"=>$this->order,
             ],
         );
     }
 
-
+    /**
+     * Get the attachments for the message.
+     *
+     * @return array
+     */
     // public function attachments()
     // {
     //     return [];

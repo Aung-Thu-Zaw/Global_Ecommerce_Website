@@ -43,14 +43,21 @@
 
 
                 <p class="text-sm font-bold mb-2">Hi, Aung Thu Zaw,</p>
-                <p class="text-sm  mb-2 ">We are pleased to share that the item(s) from your order #202230037321120
+                <p class="text-sm  mb-2 ">We are pleased to share that the item(s) from your order <span
+                        class="text-blue-600">{{
+                        $order->order_no
+                        }}</span>
                     have been shipped.</p>
+                <p class="text-sm mb-2">
+                    You can check your order status
+                    here.
+                </p>
 
                 <div class="flex items-center justify-center">
-                    <button
+                    <a href="{{ route('my-orders.show',$order->id) }}"
                         class="font-bold text-sm px-10 uppercase py-3 shadow bg-blue-600 text-white rounded-sm my-5 ">
                         Your Order
-                    </button>
+                    </a>
                 </div>
 
                 <hr>
@@ -58,45 +65,51 @@
                 <h4 class="uppercase font-bold text-slate-700 text-md mt-5 mb-3">Delivery Details</h4>
 
                 <div class="mb-5">
-                    <p class="text-sm font-bold text-slate-600">Name : Aung Thu Zaw</p>
-                    <p class="text-sm font-bold text-slate-600">Email : aungthuzaw@gmail.com</p>
-                    <p class="text-sm font-bold text-slate-600">Phone : 09234623473</p>
-                    <p class="text-sm font-bold text-slate-600">Address : House No-2044, Parami( 2 ) Ward , Khatta Road,
-                        Myeik, Tanintharyi</p>
+                    <p class="text-sm font-bold text-slate-600">Name : {{ $order->deliveryInformation->name }}</p>
+                    <p class="text-sm font-bold text-slate-600">Email : {{ $order->deliveryInformation->email }}</p>
+                    <p class="text-sm font-bold text-slate-600">Phone : {{ $order->deliveryInformation->phone }}</p>
+                    <p class="text-sm font-bold text-slate-600">Address : {{ $order->deliveryInformation->address }}</p>
                 </div>
 
                 <hr>
 
                 <h4 class="uppercase font-bold text-slate-700 text-md mt-5 mb-3">Order Details</h4>
 
-                <div class="flex flex-col md:flex-row items-start">
-                    <img src="https://images.pexels.com/photos/4566688/pexels-photo-4566688.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                        alt="" class=" h-28 object-cover mr-3 mb-5">
 
+                @foreach ($order->orderItems as $item)
+                <div class="flex flex-col md:flex-row items-start">
+                    <img src="{{ $item->product->image }}" alt="" class=" h-28 object-cover mr-3 mb-5">
                     <div class="mb-5">
-                        <p class="text-md font-bold text-slate-700 mb-1">Lorem ipsum dolor sit amet consectetur,
-                            adipisicing
-                            elit.
-                            Doloremque esse
+                        <p class="text-md font-bold text-slate-700 mb-1">
+                            {{ $item->product->name }}
                         </p>
-                        <p class="text-sm font-bold text-orange-600">Price: 100$</p>
-                        <p class="text-sm font-bold text-orange-600">Quantity: 1</p>
-                        <p class="text-sm font-bold text-slate-600">Sold by One Stop</p>
-                        <p class="text-sm font-bold text-slate-600">Estimated delivery between 02 May-06 May</p>
+                        @if ($item->product->discount)
+                        <p class="text-sm font-bold text-orange-600">Price: $ {{ $item->product->discount }}</p>
+                        @else
+                        <p class="text-sm font-bold text-orange-600">Price: $ {{ $item->product->price }}</p>
+                        @endif
+                        <p class="text-sm font-bold text-orange-600">Quantity: {{ $item->qty }}</p>
+                        <p class="text-sm font-bold text-orange-600">Total: $ {{ $item->price }}</p>
+                        <p class="text-sm font-bold text-slate-600">Sold by {{ $item->product->shop->shop_name }}</p>
+                        {{-- <p class="text-sm font-bold text-slate-600">Estimated delivery between 02 May-06 May</p>
+                        --}}
                     </div>
                 </div>
+                @endforeach
 
                 <hr>
 
-                <h4 class="uppercase font-bold text-slate-700 text-md mt-5 mb-3">Payment Details</h4>
+                <h4 class="uppercase font-bold text-slate-700 text-md mt-5 mb-3 text-right">Payment Details</h4>
 
-                <p class="text-sm font-bold text-slate-600">Subtotal : 100$</p>
-                <p class="text-sm font-bold text-slate-600">Shipping Fee : 5$</p>
+                <p class="text-sm font-bold text-slate-600 text-right">Subtotal : $ {{ $order->total_amount }}</p>
+                {{-- <p class="text-sm font-bold text-slate-600 text-right">Shipping Fee : 5$</p> --}}
 
                 <hr class="my-3">
 
-                <p class="text-sm font-bold text-slate-600">Total : 105$</p>
-                <p class="text-sm font-bold text-slate-600">Paid By : Paypal</p>
+                <p class="text-sm font-bold text-slate-600 text-right">Total : $ {{ $order->total_amount }}</p>
+                <p class="text-sm font-bold text-slate-600 text-right ">Payment Type : <span class="capitalize">{{
+                        $order->payment_type }}</span>
+                </p>
             </div>
 
 
@@ -127,7 +140,6 @@
             <p class="text-center text-sm font-bold text-slate-600 mb-5">This is an automatically generated e-mail.
                 Please do
                 not reply to this e-mail.</p>
-
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.js"></script>

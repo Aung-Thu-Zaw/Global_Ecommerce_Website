@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Ecommerce\Payments;
 
 use App\Http\Controllers\Controller;
-use App\Mail\OrderMail;
+use App\Mail\OrderPlacedMail;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Carbon\Carbon;
@@ -58,10 +58,7 @@ class StripeController extends Controller
 
 
 
-        $confirmOrder=Order::with("deliveryInformation")->where("id", $order->id)->first();
 
-
-        // Mail::to($confirmOrder->deliveryInformation->email)->send(new OrderMail($confirmOrder));
 
 
         // Mail::to($confirmOrder->deliveryInformation->email)->send(new OrderMail([
@@ -86,6 +83,11 @@ class StripeController extends Controller
                 "price"=>$item["total_price"],
             ]);
         }
+
+        $placedOrder=Order::with(["deliveryInformation","orderItems.product.shop"])->where("id", $order->id)->first();
+
+
+        Mail::to($placedOrder->deliveryInformation->email)->send(new OrderPlacedMail($placedOrder));
 
         if (session("coupon")) {
             session()->forget("coupon");

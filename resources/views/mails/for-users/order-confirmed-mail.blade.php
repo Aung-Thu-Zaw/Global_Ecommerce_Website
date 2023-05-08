@@ -38,14 +38,14 @@
                 <h3 class="font-bold w-full text-center my-5 text-slate-800 text-2xl">GLOBAL E-COMMERCE</h3>
 
                 <p class="text-center text-md font-semibold text-slate-600 mb-5">
-                    Your order is placed!
+                    Your order is confirmed!
                 </p>
 
 
                 <p class="text-sm font-bold mb-2">Hi, Aung Thu Zaw,</p>
-                <p class="text-sm  mb-2 ">We are excited for you to receive your order <span class="text-blue-600">{{
-                        $order->order_no
-                        }}</span> and will
+                <p class="text-sm  mb-2 ">We are excited for you to receive your order <span class="text-blue-600">
+                        {{$order->order_no}}
+                    </span> and will
                     notify
                     you once its on its way. If you have ordered from multiple sellers, your items will be delivered in
                     separate packages. We hope you had a great shopping experience! You can check your order status
@@ -65,6 +65,7 @@
                 <p class="text-sm  mb-2 ">
                     Here's a confirmation of what you bought in your order.
                 </p>
+
 
                 <hr>
 

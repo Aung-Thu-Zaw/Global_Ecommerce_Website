@@ -22,7 +22,7 @@ require __DIR__.'/vendor.php';
 
 Route::get('/', [HomeController::class,"index"])->name("home");
 // Route::get('/', function () {
-//     return view("mails.for-users.feedback-mail");
+//     return view("mails.for-users.order-shipped-mail");
 // });
 
 Route::controller(ProductController::class)
