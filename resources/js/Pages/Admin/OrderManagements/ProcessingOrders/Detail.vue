@@ -23,7 +23,7 @@ const props = defineProps({
 });
 
 const swal = inject("$swal");
-const handleProcessing = async (id) => {
+const handleConfirm = async (id) => {
   const result = await swal({
     icon: "info",
     title: "Are you sure you want to processing this order?",
@@ -355,11 +355,23 @@ const handleProcessing = async (id) => {
             </div>
           </div>
           <button
-            @click="handleProcessing(confirmedOrderDetail.id)"
-            v-if="confirmedOrderDetail.status === 'confirm'"
+            @click="handleConfirm(confirmedOrderDetail.id)"
+            v-if="confirmedOrderDetail.status === 'pending'"
+            class="bg-blue-600 py-3 w-full rounded-sm font-bold text-white hover:bg-blue-700 transition-all shadow"
+          >
+            Confirm Order
+          </button>
+          <button
+            v-else-if="confirmedOrderDetail.status === 'confirm'"
             class="bg-orange-600 py-3 w-full rounded-sm font-bold text-white hover:bg-orange-700 transition-all shadow"
           >
             Processing Order
+          </button>
+          <button
+            v-else-if="confirmedOrderDetail.status === 'processing'"
+            class="bg-slate-600 py-3 w-full rounded-sm font-bold text-white hover:bg-slate-700 transition-all shadow"
+          >
+            Shipped Order
           </button>
         </div>
       </div>

@@ -367,18 +367,6 @@ const handleConfirm = async (id) => {
           >
             Confirm Order
           </button>
-          <button
-            v-else-if="pendingOrderDetail.status === 'confirm'"
-            class="bg-orange-600 py-3 w-full rounded-sm font-bold text-white hover:bg-orange-700 transition-all shadow"
-          >
-            Processing Order
-          </button>
-          <button
-            v-else-if="pendingOrderDetail.status === 'processing'"
-            class="bg-slate-600 py-3 w-full rounded-sm font-bold text-white hover:bg-slate-700 transition-all shadow"
-          >
-            Shipped Order
-          </button>
         </div>
       </div>
       <div class="border shadow rounded-sm">
