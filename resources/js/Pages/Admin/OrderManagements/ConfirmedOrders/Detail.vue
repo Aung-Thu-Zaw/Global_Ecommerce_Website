@@ -2,9 +2,7 @@
 import Breadcrumb from "@/Components/Breadcrumbs/OrderManage/Breadcrumb.vue";
 import SearchForm from "@/Components/Form/SearchForm.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import PendingStatus from "@/Components/Table/PendingStatus.vue";
 import ConfirmedStatus from "@/Components/Table/ConfirmedStatus.vue";
-import ProcessingStatus from "@/Components/Table/ProcessingStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -20,18 +18,17 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 const props = defineProps({
   deliveryInformation: Object,
-  pendingOrderDetail: Object,
+  confirmedOrderDetail: Object,
   orderItems: Object,
 });
 
 const swal = inject("$swal");
-
 const handleConfirm = async (id) => {
   const result = await swal({
     icon: "info",
-    title: "Are you sure you want to confirm this order?",
+    title: "Are you sure you want to processing this order?",
     showCancelButton: true,
-    confirmButtonText: "Yes, confirm!",
+    confirmButtonText: "Yes, process!",
     confirmButtonColor: "#2671c1",
     timer: 20000,
     timerProgressBar: true,
@@ -39,7 +36,7 @@ const handleConfirm = async (id) => {
   });
   if (result.isConfirmed) {
     router.post(
-      route("admin.orders.pending.update", id),
+      route("admin.orders.confirmed.update", id),
       {},
       {
         onSuccess: () => {
@@ -58,7 +55,7 @@ const handleConfirm = async (id) => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Details Pending Order" />
+    <Head title="Details Confirmed Order" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Vendor Breadcrumb -->
@@ -81,7 +78,7 @@ const handleConfirm = async (id) => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Pending Orders</span
+                >Confirmed Orders</span
               >
             </div>
           </li>
@@ -237,7 +234,7 @@ const handleConfirm = async (id) => {
           <h1 class="font-bold text-slate-700 text-2xl border-b-4 px-10 py-3">
             Order Details
           </h1>
-          <div v-if="deliveryInformation && pendingOrderDetail" class="my-5">
+          <div v-if="deliveryInformation && confirmedOrderDetail" class="my-5">
             <div
               class="w-full text-sm text-left text-gray-500 border overflow-hidden shadow rounded-md"
             >
@@ -273,7 +270,7 @@ const handleConfirm = async (id) => {
                     Invoice No
                   </span>
                   <span class="w-full text-orange-600 block">
-                    {{ pendingOrderDetail.invoice_no }}
+                    {{ confirmedOrderDetail.invoice_no }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -283,7 +280,7 @@ const handleConfirm = async (id) => {
                     Order No
                   </span>
                   <span class="w-full text-orange-600 block">
-                    {{ pendingOrderDetail.order_no }}
+                    {{ confirmedOrderDetail.order_no }}
                   </span>
                 </div>
                 <div
@@ -295,7 +292,7 @@ const handleConfirm = async (id) => {
                     Currency
                   </span>
                   <span class="w-full block uppercase">
-                    {{ pendingOrderDetail.currency }}
+                    {{ confirmedOrderDetail.currency }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -305,7 +302,7 @@ const handleConfirm = async (id) => {
                     Payment Type
                   </span>
                   <span class="w-full block capitalize">
-                    {{ pendingOrderDetail.payment_type }}
+                    {{ confirmedOrderDetail.payment_type }}
                   </span>
                 </div>
                 <div
@@ -317,7 +314,7 @@ const handleConfirm = async (id) => {
                     Total Amount
                   </span>
                   <span class="w-full block">
-                    $ {{ pendingOrderDetail.total_amount }}
+                    $ {{ confirmedOrderDetail.total_amount }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -327,7 +324,7 @@ const handleConfirm = async (id) => {
                     Transaction Id
                   </span>
                   <span class="w-full block">
-                    {{ pendingOrderDetail.transaction_id }}
+                    {{ confirmedOrderDetail.transaction_id }}
                   </span>
                 </div>
                 <div
@@ -339,7 +336,7 @@ const handleConfirm = async (id) => {
                     Order Date
                   </span>
                   <span class="w-full block">
-                    {{ pendingOrderDetail.order_date }}
+                    {{ confirmedOrderDetail.order_date }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -348,33 +345,30 @@ const handleConfirm = async (id) => {
                   >
                     Order Status
                   </span>
-                  <span
-                    v-if="pendingOrderDetail.status === 'pending'"
-                    class="w-full block"
-                  >
-                    <PendingStatus>
-                      {{ pendingOrderDetail.status }}
-                    </PendingStatus>
+                  <span class="w-full block">
+                    <ConfirmedStatus>
+                      {{ confirmedOrderDetail.status }}
+                    </ConfirmedStatus>
                   </span>
                 </div>
               </div>
             </div>
           </div>
           <button
-            @click="handleConfirm(pendingOrderDetail.id)"
-            v-if="pendingOrderDetail.status === 'pending'"
-            class="bg-green-600 py-3 w-full rounded-sm font-bold text-white hover:bg-green-700 transition-all shadow"
+            @click="handleConfirm(confirmedOrderDetail.id)"
+            v-if="confirmedOrderDetail.status === 'pending'"
+            class="bg-blue-600 py-3 w-full rounded-sm font-bold text-white hover:bg-blue-700 transition-all shadow"
           >
             Confirm Order
           </button>
           <button
-            v-else-if="pendingOrderDetail.status === 'confirm'"
+            v-else-if="confirmedOrderDetail.status === 'confirm'"
             class="bg-orange-600 py-3 w-full rounded-sm font-bold text-white hover:bg-orange-700 transition-all shadow"
           >
             Processing Order
           </button>
           <button
-            v-else-if="pendingOrderDetail.status === 'processing'"
+            v-else-if="confirmedOrderDetail.status === 'processing'"
             class="bg-slate-600 py-3 w-full rounded-sm font-bold text-white hover:bg-slate-700 transition-all shadow"
           >
             Shipped Order

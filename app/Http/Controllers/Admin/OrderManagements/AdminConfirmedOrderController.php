@@ -11,35 +11,34 @@ use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
-class AdminPendingOrderController extends Controller
+class AdminConfirmedOrderController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $pendingOrders=Order::search(request("search"))
-                             ->where("status", "pending")
+        $confirmedOrders=Order::search(request("search"))
+                             ->where("status", "confirm")
                              ->orderBy(request("sort", "id"), request("direction", "desc"))
                              ->paginate(request("per_page", 10))
                              ->appends(request()->all());
 
-        return inertia("Admin/OrderManagements/PendingOrders/Index", compact("pendingOrders"));
+        return inertia("Admin/OrderManagements/ConfirmedOrders/Index", compact("confirmedOrders"));
     }
 
     public function show(int $id): Response|ResponseFactory
     {
-        $pendingOrderDetail=Order::findOrFail($id);
+        $confirmedOrderDetail=Order::findOrFail($id);
 
         $deliveryInformation=DeliveryInformation::where("user_id", auth()->user()->id)->first();
 
-        $orderItems=OrderItem::with("product.shop")->where("order_id", $pendingOrderDetail->id)->get();
+        $orderItems=OrderItem::with("product.shop")->where("order_id", $confirmedOrderDetail->id)->get();
 
-        return inertia("Admin/OrderManagements/PendingOrders/Detail", compact("pendingOrderDetail", "deliveryInformation", "orderItems"));
+        return inertia("Admin/OrderManagements/ConfirmedOrders/Detail", compact("confirmedOrderDetail", "deliveryInformation", "orderItems"));
     }
 
     public function update(int $id): RedirectResponse
     {
+        Order::findOrFail($id)->update(["status"=>"procesing"]);
 
-        Order::findOrFail($id)->update(["status"=>"confirm"]);
-
-        return to_route("admin.orders.confirmed.index")->with("success", "Order is confirmed");
+        return back()->with("success", "Order is processing");
     }
 }

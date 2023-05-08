@@ -342,7 +342,7 @@
               >
                 Pending Orders
               </Link>
-              <!-- <Link
+              <Link
                 :href="route('admin.orders.confirmed.index')"
                 class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
                 :class="{
@@ -353,7 +353,7 @@
               >
                 Confirmed Orders
               </Link>
-              <Link
+              <!-- <Link
                 :href="route('admin.orders.processing.index')"
                 class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
                 :class="{
@@ -363,8 +363,8 @@
                 }"
               >
                 Processing Orders
-              </Link>
-              <Link
+              </Link> -->
+              <!-- <Link
                 :href="route('admin.orders.shipped.index')"
                 class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
                 :class="{
@@ -701,7 +701,9 @@ export default {
     orderManage() {
       if (
         this.$page.url.startsWith("/admin/order-manage/pending-orders") ||
-        this.$page.url.startsWith("/admin/order-manage/active-vendors")
+        this.$page.url.startsWith("/admin/order-manage/confirmed-orders") ||
+        this.$page.url.startsWith("/admin/order-manage/processing-orders") ||
+        this.$page.url.startsWith("/admin/order-manage/shipped-orders")
       ) {
         return (this.orderManageIsHidden = false);
       }
