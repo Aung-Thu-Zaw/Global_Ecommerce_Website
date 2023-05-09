@@ -1,9 +1,20 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { onMounted } from "vue";
 
 defineProps({
   collections: Object,
 });
+
+onMounted(() =>
+  AOS.init({
+    duration: 500,
+    easing: "ease-in-out",
+    delay: 100,
+  })
+);
 </script>
 
 
@@ -33,6 +44,7 @@ defineProps({
           v-for="collection in collections"
           :key="collection.id"
           class="group border py-4 bg-slate-50 hover:shadow-lg hover:bg-slate-100 transition-all rounded-md"
+          data-aos="flip-left"
           :href="route('collections.show', collection.slug)"
         >
           <div class="flex items-center justify-between">

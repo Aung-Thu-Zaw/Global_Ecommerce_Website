@@ -9,6 +9,7 @@ module.exports = {
         "./storage/framework/views/*.php",
         "./resources/views/**/*.blade.php",
         "./resources/js/**/*.vue",
+        "./node_modules/flowbite/**/*.js",
     ],
 
     theme: {
@@ -113,6 +114,7 @@ module.exports = {
     ],
 
     plugins: [
+        require("flowbite/plugin"),
         require("@tailwindcss/line-clamp"),
         require("tw-elements/dist/plugin"),
         require("@tailwindcss/forms"),

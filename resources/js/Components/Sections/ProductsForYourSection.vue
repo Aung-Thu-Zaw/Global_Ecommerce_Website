@@ -3,10 +3,20 @@ import ProductCard from "@/Components/Cards/ProductCard.vue";
 import { router } from "@inertiajs/core";
 import { usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
+import "aos/dist/aos.css";
+import { onMounted } from "vue";
 
 const props = defineProps({
   randomProducts: Object,
 });
+
+onMounted(() =>
+  AOS.init({
+    duration: 500,
+    easing: "ease-in-out",
+    delay: 100,
+  })
+);
 
 const isLoading = ref(false);
 const products = ref(props.randomProducts.data);
@@ -47,7 +57,7 @@ const loadMoreProduct = () => {
         v-if="products"
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
       >
-        <div v-for="product in products" :key="product.id">
+        <div v-for="product in products" :key="product.id" data-aos="zoom-in">
           <ProductCard :product="product"></ProductCard>
         </div>
       </div>

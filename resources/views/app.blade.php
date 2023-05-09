@@ -21,7 +21,6 @@
     <script src="https://kit.fontawesome.com/18c274e5f3.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap" rel="stylesheet" />
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.css" rel="stylesheet" />
 
     <script src="https://js.stripe.com/v3/"></script>
 
@@ -38,8 +37,7 @@
 
 <body class="font-sans antialiased">
     @inertia
-    {{-- <script src="./TW-ELEMENTS-PATH/dist/js/index.min.js"></script> --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.js"></script>
+
 </body>
 
 </html>
