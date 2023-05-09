@@ -242,31 +242,6 @@ const status = (last_activity) => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh @click="updateSorting('phone')">
-            Phone No
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'phone',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'phone',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'phone',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'phone',
-              }"
-            ></i>
-          </HeaderTh>
           <HeaderTh> Role </HeaderTh>
           <HeaderTh> Status </HeaderTh>
           <HeaderTh @click="updateSorting('created_at')">
@@ -305,7 +280,6 @@ const status = (last_activity) => {
             </Td>
             <Td>{{ user.name }}</Td>
             <Td>{{ user.email }}</Td>
-            <Td>{{ user.phone }}</Td>
             <Td>
               <span
                 class="capitalize bg-sky-200 text-sky-500 px-3 py-1 font-bold text-sm rounded-md"

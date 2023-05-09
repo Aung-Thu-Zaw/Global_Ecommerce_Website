@@ -29,7 +29,7 @@ class StripeController extends Controller
             'payment_method' =>$request->payment_method_id,
             'confirm' => true,
             'metadata'=>[
-                'order_id' => uniqid(),
+                'order_id' => "#".uniqid(),
             ]
             ]);
 

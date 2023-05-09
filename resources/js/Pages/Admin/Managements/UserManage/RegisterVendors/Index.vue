@@ -217,31 +217,6 @@ const status = (last_activity) => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh @click="updateSorting('shop_name')">
-            Shop Name
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'shop_name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'shop_name',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'shop_name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'shop_name',
-              }"
-            ></i>
-          </HeaderTh>
           <HeaderTh @click="updateSorting('email')">
             Email Address
             <i
@@ -264,31 +239,6 @@ const status = (last_activity) => {
                   params.direction !== '' &&
                   params.direction !== 'desc' &&
                   params.sort === 'email',
-              }"
-            ></i>
-          </HeaderTh>
-          <HeaderTh @click="updateSorting('phone')">
-            Phone No
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'phone',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'phone',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'phone',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'phone',
               }"
             ></i>
           </HeaderTh>
@@ -329,9 +279,7 @@ const status = (last_activity) => {
               <img :src="vendor.avatar" alt="" class="h-[50px] object-cover" />
             </Td>
             <Td>{{ vendor.name }}</Td>
-            <Td>{{ vendor.shop_name }}</Td>
             <Td>{{ vendor.email }}</Td>
-            <Td>{{ vendor.phone }}</Td>
             <Td>
               <span
                 class="capitalize bg-sky-200 text-sky-500 px-3 py-1 font-bold text-sm rounded-md"

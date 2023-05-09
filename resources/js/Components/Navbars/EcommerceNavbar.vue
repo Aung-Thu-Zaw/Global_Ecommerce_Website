@@ -61,13 +61,37 @@ const totalItems = computed(() => {
         <a
           class="text-sm font-bold px-3 py-2 hover:text-gray-300"
           href="#"
+          data-dropdown-toggle="dropdownSearch"
+          data-dropdown-placement="bottom"
           data-te-toggle="tooltip"
           data-te-placement="bottom"
           title="Check what happened to my products order?"
         >
-          <i class="fa-solid fa-truck"></i>
+          <i class="fa-solid fa-location-crosshairs"></i>
           TRACK MY ORDER
         </a>
+        <div
+          id="dropdownSearch"
+          class="z-10 hidden bg-gray-50 rounded-lg shadow-md w-[300px] p-5"
+        >
+          <h4 class="font-bold text-lg mb-4 text-slate-700 text-center">
+            Track My Order
+          </h4>
+
+          <label for="" class="text-sm font-bold text-slate-800"
+            >Enter your order number</label
+          >
+          <input
+            type="text"
+            class="w-full rounded-sm text-slate-800"
+            placeholder="Eg. #e5353453er"
+          />
+          <button
+            class="font-bold text-sm bg-blue-600 w-full py-2 px 4 my-3 hover:bg-blue-700"
+          >
+            Search
+          </button>
+        </div>
         <span>|</span>
         <div class="flex justify-center">
           <div>
