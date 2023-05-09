@@ -59,8 +59,8 @@ class OrderDeliveredMail extends Mailable
      *
      * @return array
      */
-    public function attachments()
-    {
-        return [];
-    }
+    // public function attachments()
+    // {
+    //     return [];
+    // }
 }

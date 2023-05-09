@@ -21,7 +21,7 @@ class AdminActiveVendorController extends Controller
                             ->paginate(request("per_page", 10))
                             ->appends(request()->all());
 
-        return inertia("Admin/Managements/Vendors/ActiveVendors/Index", compact("activeVendors"));
+        return inertia("Admin/Managements/VendorManage/ActiveVendors/Index", compact("activeVendors"));
     }
 
     public function show(int $id): Response|ResponseFactory
@@ -30,7 +30,7 @@ class AdminActiveVendorController extends Controller
 
         $activeVendor=User::find($id);
 
-        return inertia("Admin/Managements/Vendors/ActiveVendors/Details", compact("activeVendor", "paginate"));
+        return inertia("Admin/Managements/VendorManage/ActiveVendors/Details", compact("activeVendor", "paginate"));
     }
 
     public function update(Request $request, int $id): RedirectResponse

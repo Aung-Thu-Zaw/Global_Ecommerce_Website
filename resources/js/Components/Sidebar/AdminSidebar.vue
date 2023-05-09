@@ -501,55 +501,78 @@
           </li>
         </ul>
         <!-- User Manage -->
-        <!-- <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
           <li class="items-center cursor-pointer">
             <div
               class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
-              @click="vendorManageIsHidden = !vendorManageIsHidden"
+              @click="userManageIsHidden = !userManageIsHidden"
             >
               <span>
                 <i class="fas fa-users mr-2 text-sm"></i>
                 User Manage
               </span>
               <i
-                v-if="vendorManageIsHidden"
+                v-if="userManageIsHidden"
                 class="fa-solid fa-chevron-right"
               ></i>
               <i
-                v-if="!vendorManageIsHidden"
+                v-if="!userManageIsHidden"
                 class="fa-solid fa-chevron-down"
               ></i>
             </div>
 
             <ul
-              v-if="!vendorManageIsHidden || vendorManage"
+              v-if="!userManageIsHidden || userManage"
               class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
             >
               <Link
-                :href="route('admin.vendors.active.index')"
+                :href="route('admin.users.register.index')"
                 class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
                 :class="{
                   'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/vendor-manage/active-vendors'
+                    '/admin/user-manage/register-users'
                   ),
                 }"
               >
-                Active User
+                Register Users
               </Link>
               <Link
-                :href="route('admin.vendors.inactive.index')"
+                :href="route('admin.vendors.register.index')"
                 class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
                 :class="{
                   'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/vendor-manage/inactive-vendors'
+                    '/admin/user-manage/register-vendors'
                   ),
                 }"
               >
-                Inactive User
+                Register Vendors
               </Link>
+              <!-- <Link
+                :href="route('admin.users.offline.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/user-manage/offline-users'
+                  ),
+                }"
+              >
+                Offline Users
+              </Link>
+
+              <Link
+                :href="route('admin.vendors.offline.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/user-manage/offline-vendors'
+                  ),
+                }"
+              >
+                Offline Vendors
+              </Link> -->
             </ul>
           </li>
-        </ul> -->
+        </ul>
 
         <!-- <ul class="md:flex-col md:min-w-full flex flex-col list-none">
           <li class="items-center">
@@ -690,6 +713,7 @@ export default {
       bannersIsHidden: true,
       shippingAreaIsHidden: true,
       vendorManageIsHidden: true,
+      userManageIsHidden: true,
       orderManageIsHidden: true,
       returnOrderIsHidden: true,
     };
@@ -707,6 +731,16 @@ export default {
         this.$page.url.startsWith("/admin/vendor-manage/active-vendors")
       ) {
         return (this.vendorManageIsHidden = false);
+      }
+    },
+    userManage() {
+      if (
+        this.$page.url.startsWith("/admin/user-manage/register-users") ||
+        this.$page.url.startsWith("/admin/user-manage/offline-users") ||
+        this.$page.url.startsWith("/admin/user-manage/register-vendors") ||
+        this.$page.url.startsWith("/admin/user-manage/offline-vendors")
+      ) {
+        return (this.userManageIsHidden = false);
       }
     },
     orderManage() {

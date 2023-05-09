@@ -20,7 +20,7 @@ class AdminInactiveVendorController extends Controller
                               ->paginate(request("per_page", 10))
                               ->appends(request()->all());
 
-        return inertia("Admin/Managements/Vendors/InactiveVendors/Index", compact("inactiveVendors"));
+        return inertia("Admin/Managements/VendorManage/InactiveVendors/Index", compact("inactiveVendors"));
     }
 
     public function show(int $id): Response|ResponseFactory
@@ -29,7 +29,7 @@ class AdminInactiveVendorController extends Controller
 
         $inactiveVendor=User::find($id);
 
-        return inertia("Admin/Managements/Vendors/InactiveVendors/Details", compact("inactiveVendor", "paginate"));
+        return inertia("Admin/Managements/VendorManage/InactiveVendors/Details", compact("inactiveVendor", "paginate"));
     }
 
     public function update(Request $request, int $id): RedirectResponse
@@ -60,7 +60,7 @@ class AdminInactiveVendorController extends Controller
                                    ->paginate(request("per_page", 10))
                                    ->appends(request()->all());
 
-        return inertia("Admin/Managements/Vendors/InactiveVendors/Trash", compact("inactiveTrashVendors"));
+        return inertia("Admin/Managements/VendorManage/InactiveVendors/Trash", compact("inactiveTrashVendors"));
     }
 
     public function restore(Request $request, int $id): RedirectResponse

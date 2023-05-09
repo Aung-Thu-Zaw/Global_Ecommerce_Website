@@ -15,6 +15,13 @@ use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\SiteSettings\AdminSeoSettingController;
 use App\Http\Controllers\Admin\SiteSettings\AdminWebsiteSettingController;
 use App\Http\Controllers\Admin\Banners\AdminSliderBannerController;
+use App\Http\Controllers\Admin\Managements\UserManage\AdminOfflineUserController;
+use App\Http\Controllers\Admin\Managements\UserManage\AdminOfflineVendorController;
+use App\Http\Controllers\Admin\Managements\UserManage\AdminOnlineUserController;
+use App\Http\Controllers\Admin\Managements\UserManage\AdminOnlineVendorController;
+use App\Http\Controllers\Admin\Managements\UserManage\AdminRegisterUserController;
+use App\Http\Controllers\Admin\Managements\UserManage\AdminRegisterVendorController;
+use App\Http\Controllers\Admin\Managements\UserManage\AdminUserController;
 use App\Http\Controllers\Admin\OrderManagements\AdminConfirmedOrderController;
 use App\Http\Controllers\Admin\OrderManagements\AdminDeliveredOrderController;
 use App\Http\Controllers\Admin\OrderManagements\AdminPendingOrderController;
@@ -345,6 +352,28 @@ Route::middleware(["auth","verified","user.role:admin"])
                        Route::get("/details/{id}", "show")->name("show");
                        Route::post("/{id}", "update")->name("update");
                    });
+
+           // All Register Users Management
+           Route::controller(AdminRegisterUserController::class)
+           ->prefix("/user-manage/register-users")
+           ->name("users.register.")
+           ->group(function () {
+               Route::get("/", "index")->name("index");
+               Route::get("/details/{id}", "show")->name("show");
+               Route::post("/{id}", "update")->name("update");
+           });
+
+           // All Register Vendors Management
+           Route::controller(AdminRegisterVendorController::class)
+           ->prefix("/user-manage/register-vendors")
+           ->name("vendors.register.")
+           ->group(function () {
+               Route::get("/", "index")->name("index");
+               Route::get("/details/{id}", "show")->name("show");
+               Route::post("/{id}", "update")->name("update");
+           });
+
+
 
            // Website Settings
            Route::controller(AdminWebsiteSettingController::class)

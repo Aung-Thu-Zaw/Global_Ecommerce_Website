@@ -4,10 +4,16 @@ import EcommerceNavbar from "@/Components/Navbars/EcommerceNavbar.vue";
 import CategoryNavbar from "@/Components/Navbars/CategoryNavbar.vue";
 import { onMounted } from "vue";
 import { initFlowbite } from "flowbite";
+import "aos/dist/aos.css";
 
 // initialize components based on data attribute selectors
 onMounted(() => {
   initFlowbite();
+  AOS.init({
+    duration: 500,
+    easing: "ease-in-out",
+    delay: 100,
+  });
 });
 </script>
 

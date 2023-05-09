@@ -29,6 +29,7 @@ return new class () extends Migration {
             $table->enum('gender', ['male','female','other'])->default('other');
             $table->enum('role', ['admin','vendor','user'])->default('user');
             $table->enum('status', ['active','inactive'])->default('active');
+         
             $table->timestamp('email_verified_at')->nullable();
             $table->softDeletes();
             $table->rememberToken();
