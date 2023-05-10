@@ -13,6 +13,7 @@ use App\Http\Controllers\Ecommerce\Payments\StripeController;
 use App\Http\Controllers\User\MyAccountController;
 use App\Http\Controllers\Ecommerce\WatchlistController;
 use App\Http\Controllers\User\MyOrderController;
+use App\Http\Controllers\User\TrackMyOrderController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -85,6 +86,8 @@ Route::middleware(["auth","verified"])->group(function () {
                Route::get('/{order_id}', "show")->name("show");
                Route::get('/invoice/{order_id}/download', "downloadInvoice")->name("download.invoice");
            });
+
+    Route::post('/track-my-orders', [TrackMyOrderController::class,"trackMyOrder"])->name("order.track");
 
 });
 

@@ -1,17 +1,10 @@
 <script setup>
-import { Link, usePage } from "@inertiajs/vue3";
+import { Link, router, useForm, usePage } from "@inertiajs/vue3";
 import { computed, reactive, watch } from "vue";
 import UserDropdown from "../Dropdowns/UserDropdown.vue";
-
-// const cartItems = reactive(
-//   usePage().props.totalCartItems
-//     ? usePage().props.totalCartItems.cart_items
-//     : null
-// );
-
-// const totalItems = computed(() => {
-//   return cartItems.reduce((acc, item) => acc + item.qty, 0);
-// });
+import { useReCaptcha } from "vue-recaptcha-v3";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 const totalItems = computed(() => {
   if (usePage().props.totalCartItems) {
@@ -22,6 +15,30 @@ const totalItems = computed(() => {
   }
   return;
 });
+
+const form = useForm({
+  order_no: "",
+});
+
+const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+const handleTrackOrder = async () => {
+  await recaptchaLoaded();
+  form.captcha_token = await executeRecaptcha("track_order");
+  submit();
+};
+
+const submit = () => {
+  form.post(route("order.track"), {
+    onFinish: () => form.reset(),
+    onSuccess: () => {
+      if (usePage().props.flash.errorMessage) {
+        toast.error(usePage().props.flash.errorMessage, {
+          autoClose: 2000,
+        });
+      }
+    },
+  });
+};
 </script>
 
 
@@ -58,9 +75,8 @@ const totalItems = computed(() => {
           BECOME A SELLER
         </a>
         <span>|</span> -->
-        <a
+        <div
           class="text-sm font-bold px-3 py-2 hover:text-gray-300"
-          href="#"
           data-dropdown-toggle="dropdownSearch"
           data-dropdown-placement="bottom"
           data-te-toggle="tooltip"
@@ -69,28 +85,32 @@ const totalItems = computed(() => {
         >
           <i class="fa-solid fa-location-crosshairs"></i>
           TRACK MY ORDER
-        </a>
+        </div>
         <div
           id="dropdownSearch"
           class="z-10 hidden bg-gray-50 rounded-lg shadow-md w-[300px] p-5"
         >
           <h4 class="font-bold text-lg mb-4 text-slate-700 text-center">
+            <i class="fa-solid fa-location-crosshairs"></i>
             Track My Order
           </h4>
 
           <label for="" class="text-sm font-bold text-slate-800"
             >Enter your order number</label
           >
-          <input
-            type="text"
-            class="w-full rounded-sm text-slate-800"
-            placeholder="Eg. #e5353453er"
-          />
-          <button
-            class="font-bold text-sm bg-blue-600 w-full py-2 px 4 my-3 hover:bg-blue-700"
-          >
-            Search
-          </button>
+          <form @submit.prevent="handleTrackOrder">
+            <input
+              type="text"
+              class="w-full rounded-sm text-slate-800"
+              placeholder="Eg. #e5353453er"
+              v-model="form.order_no"
+            />
+            <button
+              class="font-bold text-sm bg-blue-600 w-full py-2 px 4 my-3 hover:bg-blue-700"
+            >
+              Search
+            </button>
+          </form>
         </div>
         <span>|</span>
         <div class="flex justify-center">
