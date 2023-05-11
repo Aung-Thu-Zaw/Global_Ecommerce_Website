@@ -5,6 +5,7 @@ import CategoryNavbar from "@/Components/Navbars/CategoryNavbar.vue";
 import { onMounted } from "vue";
 import { initFlowbite } from "flowbite";
 import "aos/dist/aos.css";
+import { AOS } from "aos";
 
 // initialize components based on data attribute selectors
 onMounted(() => {
