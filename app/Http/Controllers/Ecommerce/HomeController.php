@@ -9,7 +9,6 @@ use App\Models\Collection;
 use App\Models\Product;
 use App\Models\ProductBanner;
 use App\Models\SliderBanner;
-use Inertia\Inertia;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -19,25 +18,61 @@ class HomeController extends Controller
     {
         $categories=Category::with("children")->limit(8)->get();
 
-        $collections=Collection::with("products:id,collection_id,image")->limit(12)->get();
+        $collections=Collection::select("id", "title", "slug")
+                               ->with("products:id,collection_id,image")
+                               ->limit(12)
+                               ->get();
 
-        $sliderBanners=SliderBanner::where("status", "show")->orderBy("id", "desc")->limit(6)->get();
+        $sliderBanners=SliderBanner::select("image", "url")
+                                   ->where("status", "show")
+                                   ->orderBy("id", "desc")
+                                   ->limit(6)
+                                   ->get();
 
-        $campaignBanner=CampaignBanner::where("status", "show")->first();
+        $campaignBanner=CampaignBanner::select("image", "url")
+                                      ->where("status", "show")
+                                      ->first();
 
-        $productBanners=ProductBanner::where("status", "show")->orderBy("id", "desc")->limit(3)->get();
+        $productBanners=ProductBanner::select("image", "url")
+                                     ->where("status", "show")
+                                     ->orderBy("id", "desc")
+                                     ->limit(3)
+                                     ->get();
 
-        $newProducts=Product::with(["shop","watchlists","cartItems"])->where("status", "active")->orderBy("id", "desc")->limit(5)->get();
+        $newProducts=Product::select("image", "name", "slug", "price", "discount")
+                            ->where("status", "active")
+                            ->orderBy("id", "desc")
+                            ->limit(5)
+                            ->get();
 
-        $hotDealProducts=Product::with(["shop","watchlists","cartItems"])->where([["status", "active"],["hot_deal",1]])->orderBy("id", "desc")->limit(5)->get();
+        $hotDealProducts=Product::select("image", "name", "slug", "price", "discount")
+                                ->where([["status", "active"],["hot_deal",1]])
+                                ->orderBy("id", "desc")
+                                ->limit(5)
+                                ->get();
 
-        $featuredProducts=Product::with(["shop","watchlists","cartItems"])->where([["status", "active"],["featured",1]])->orderBy("id", "desc")->limit(5)->get();
+        $featuredProducts=Product::select("image", "name", "slug", "price", "discount")
+                                 ->where([["status", "active"],["featured",1]])
+                                 ->orderBy("id", "desc")
+                                 ->limit(5)
+                                 ->get();
 
+        $randomProducts=Product::select("image", "name", "slug", "price", "discount")
+                               ->where("status", "active")
+                               ->inRandomOrder()
+                               ->paginate(25);
 
-        $randomProducts=Product::with(["shop","watchlists","cartItems"])->where("status", "active")->inRandomOrder()->paginate(25);
-
-
-        return Inertia::render('Ecommerce/Home/Index', compact("categories", "collections", "sliderBanners", "campaignBanner", "productBanners", "newProducts", "featuredProducts", "hotDealProducts", "randomProducts"));
+        return inertia('Ecommerce/Home/Index', compact(
+            "categories",
+            "collections",
+            "sliderBanners",
+            "campaignBanner",
+            "productBanners",
+            "newProducts",
+            "featuredProducts",
+            "hotDealProducts",
+            "randomProducts"
+        ));
 
     }
 

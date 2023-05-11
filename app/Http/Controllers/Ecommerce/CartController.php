@@ -16,8 +16,8 @@ class CartController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-
         $cart=auth()->user()->cart;
+
         $cartItems=$cart->cartItems;
 
         $shopIds=$cartItems->pluck("shop_id")->unique()->values();
@@ -26,7 +26,6 @@ class CartController extends Controller
         $cartItems->load(["product.shop","product.brand","product.sizes","product.colors"]);
 
         $coupon=session("coupon") ?? "";
-
 
         return inertia("Ecommerce/Cart/Index", compact("shops", "cartItems", "coupon"));
     }
@@ -40,7 +39,6 @@ class CartController extends Controller
                         ->where('start_date', '<=', now())
                         ->where('end_date', '>=', now())
                         ->first();
-
 
 
         if (!$coupon) {
@@ -65,7 +63,6 @@ class CartController extends Controller
         if ($user) {
             $user->coupons()->attach($coupon->id, ['used_at' => now()]);
         }
-
 
         session()->put('coupon', $coupon);
 

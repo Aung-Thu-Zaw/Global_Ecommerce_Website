@@ -104,9 +104,12 @@ watch(
               </div>
             </div>
             <div v-else>
-              <h4 class="font-bold text-slate-500 text-center my-20 text-xl">
+              <h4 class="font-bold text-slate-600 text-center mt-20 text-xl">
                 ☹️ Items Not Found!
               </h4>
+              <p class="my-3 font-bold text-slate-500 text-center">
+                We're sorry. We cannot find any matches for your search term.
+              </p>
             </div>
 
             <!-- Pagination -->

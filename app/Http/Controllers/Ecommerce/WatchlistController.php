@@ -7,7 +7,6 @@ use App\Http\Requests\WatchlistRequest;
 use App\Models\User;
 use App\Models\Watchlist;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -20,8 +19,7 @@ class WatchlistController extends Controller
         $shopIds=$watchlists->pluck("shop_id")->unique()->values();
         $shops = User::select("id", "shop_name")->whereIn('id', $shopIds)->get();
 
-
-        $watchlists->load(["product.shop","product.brand","product.sizes","product.colors"]);
+        $watchlists->load(["product.shop:id,shop_name","product.brand:id,name","product.sizes","product.colors"]);
 
         return inertia("User/MyWatchlist/Index", compact("shops", "watchlists"));
     }

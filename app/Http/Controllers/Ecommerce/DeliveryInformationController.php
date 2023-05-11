@@ -11,7 +11,6 @@ class DeliveryInformationController extends Controller
 {
     public function store(DeliveryInformationRequest $request): RedirectResponse
     {
-
         DeliveryInformation::create($request->validated());
 
         return back()->with("success", "Saved Your Delivery Information");
