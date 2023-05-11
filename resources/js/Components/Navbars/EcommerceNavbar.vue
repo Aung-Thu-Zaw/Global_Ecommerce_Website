@@ -39,6 +39,26 @@ const submit = () => {
     },
   });
 };
+
+const params = reactive({
+  search: usePage().props.ziggy.query.search
+    ? usePage().props.ziggy.query.search
+    : "",
+  sort: "id",
+  direction: "desc",
+});
+
+const handleSearch = () => {
+  router.get(
+    route("product.search"),
+    {
+      search: params.search,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {}
+  );
+};
 </script>
 
 
@@ -210,9 +230,11 @@ const submit = () => {
           <input
             class="flex-grow appearance-none border border-gray-200 bg-gray-100 rounded-md mr-2 py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 placeholder:text-sm placeholder:text-gray-400"
             type="text"
+            v-model="params.search"
             placeholder="What are you looking for?"
           />
           <button
+            @click="handleSearch"
             type="button"
             class="px-4 py-2 inline-block text-white border border-transparent bg-blue-600 rounded-md hover:bg-blue-700"
           >

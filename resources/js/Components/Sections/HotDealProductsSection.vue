@@ -2,20 +2,12 @@
 <script setup>
 import ProductCard from "@/Components/Cards/ProductCard.vue";
 import { Link } from "@inertiajs/vue3";
-import "aos/dist/aos.css";
-import { onMounted } from "vue";
+
 
 defineProps({
   hotDealProducts: Object,
 });
 
-onMounted(() =>
-  AOS.init({
-    duration: 500,
-    easing: "ease-in-out",
-    delay: 100,
-  })
-);
 </script>
 
 
@@ -43,7 +35,6 @@ onMounted(() =>
         <div
           v-for="product in hotDealProducts"
           :key="product.id"
-          data-aos="zoom-in"
         >
           <ProductCard :product="product"></ProductCard>
         </div>

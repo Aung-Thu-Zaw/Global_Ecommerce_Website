@@ -56,7 +56,7 @@ class Product extends Model
     {
         return [
             'name' => $this->name,
-            'status' => $this->status,
+            // 'status' => $this->status,
         ];
     }
 

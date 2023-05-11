@@ -3,20 +3,10 @@ import ProductCard from "@/Components/Cards/ProductCard.vue";
 import { router } from "@inertiajs/core";
 import { usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
-import "aos/dist/aos.css";
-import { onMounted } from "vue";
 
 const props = defineProps({
   randomProducts: Object,
 });
-
-onMounted(() =>
-  AOS.init({
-    duration: 500,
-    easing: "ease-in-out",
-    delay: 100,
-  })
-);
 
 const isLoading = ref(false);
 const products = ref(props.randomProducts.data);

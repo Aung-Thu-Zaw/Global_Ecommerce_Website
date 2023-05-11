@@ -10,6 +10,7 @@ use App\Http\Controllers\Ecommerce\DeliveryInformationController;
 use App\Http\Controllers\Ecommerce\Payments\PaymentController;
 use App\Http\Controllers\Ecommerce\Payments\CashOnDeliveryController;
 use App\Http\Controllers\Ecommerce\Payments\StripeController;
+use App\Http\Controllers\Ecommerce\SearchResultProductController;
 use App\Http\Controllers\User\MyAccountController;
 use App\Http\Controllers\Ecommerce\WatchlistController;
 use App\Http\Controllers\User\MyOrderController;
@@ -36,6 +37,9 @@ Route::controller(ProductController::class)
            Route::get('/hot-deal-products', "hotDealProducts")->name("hot-deal");
            Route::get('/{product}', "show")->name("show");
        });
+
+
+Route::get("products", [SearchResultProductController::class,"index"])->name("product.search");
 
 Route::get('/collections', [CollectionController::class,"index"])->name("collections.index");
 

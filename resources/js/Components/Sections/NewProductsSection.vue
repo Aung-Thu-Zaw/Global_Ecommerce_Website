@@ -2,18 +2,8 @@
 <script setup>
 import ProductCard from "@/Components/Cards/ProductCard.vue";
 import { Link } from "@inertiajs/vue3";
-import "aos/dist/aos.css";
-import { onMounted } from "vue";
 
 defineProps({ newProducts: Object });
-
-onMounted(() =>
-  AOS.init({
-    duration: 500,
-    easing: "ease-in-out",
-    delay: 100,
-  })
-);
 </script>
 
 
@@ -38,7 +28,7 @@ onMounted(() =>
         v-if="newProducts"
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
       >
-        <div v-for="product in newProducts" :key="product.id" class="h-auto"     data-aos="zoom-in">
+        <div v-for="product in newProducts" :key="product.id" class="h-auto">
           <ProductCard :product="product"></ProductCard>
         </div>
       </div>
