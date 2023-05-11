@@ -63,7 +63,7 @@ const moveToWatchlist = async (item) => {
       {
         preserveScroll: true,
         onSuccess: () => {
-          router.post(route("cart-items.destroy", props.item.id));
+          router.delete(route("cart-items.destroy", props.item.id));
           // Success flash message
           if (usePage().props.flash.successMessage) {
             toast.success(usePage().props.flash.successMessage, {

@@ -17,6 +17,9 @@ const addToCart = () => {
       product_id: props.watchlist.product.id,
       shop_id: props.watchlist.product.shop.id,
       qty: 1,
+      total_price: props.watchlist.product.discount
+        ? props.watchlist.product.discount
+        : props.watchlist.product.price,
     }),
     {},
     {
