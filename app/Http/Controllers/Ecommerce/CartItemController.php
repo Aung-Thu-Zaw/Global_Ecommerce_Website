@@ -13,7 +13,6 @@ class CartItemController extends Controller
 {
     public function store(CartItemRequest $request): RedirectResponse
     {
-
         $cart=Cart::firstOrCreate(
             ["user_id"=>auth()->user()->id],
             ["user_id"=>auth()->user()->id]

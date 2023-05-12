@@ -10,6 +10,7 @@ use App\Http\Controllers\Ecommerce\DeliveryInformationController;
 use App\Http\Controllers\Ecommerce\Payments\PaymentController;
 use App\Http\Controllers\Ecommerce\Payments\CashOnDeliveryController;
 use App\Http\Controllers\Ecommerce\Payments\StripeController;
+use App\Http\Controllers\Ecommerce\ReviewController;
 use App\Http\Controllers\Ecommerce\SearchResultProductController;
 use App\Http\Controllers\User\MyAccountController;
 use App\Http\Controllers\Ecommerce\WatchlistController;
@@ -72,6 +73,28 @@ Route::middleware(["auth","verified"])->group(function () {
                Route::delete('/{watchlist}', "destroy")->name("destroy");
            });
 
+
+    Route::controller(MyOrderController::class)
+            ->prefix("/my-orders")
+            ->name("my-orders.")
+            ->group(function () {
+                Route::get('/', "index")->name("index");
+                Route::get('/{order_id}', "show")->name("show");
+                Route::get('/invoice/{order_id}/download', "downloadInvoice")->name("download.invoice");
+            });
+
+    Route::post('/track-my-orders', [TrackMyOrderController::class,"trackMyOrder"])->name("order.track");
+
+
+    // Route::controller(ReviewController::class)
+    //         ->prefix("/my-orders")
+    //         ->name("my-orders.")
+    //         ->group(function () {
+    //             Route::get('/', "index")->name("index");
+    //             Route::get('/{order_id}', "show")->name("show");
+    //             Route::get('/invoice/{order_id}/download', "downloadInvoice")->name("download.invoice");
+    //         });
+
     Route::get('/checkout', [CheckoutController::class,"index"])->name("checkout.index");
 
     Route::post('/delivery-information', [DeliveryInformationController::class,"store"])->name("information.store");
@@ -82,16 +105,6 @@ Route::middleware(["auth","verified"])->group(function () {
 
     Route::post('/payment/cashPaymentProcess', [CashOnDeliveryController::class,"cashPaymentProcess"])->name("payment.cashPaymentProcess");
 
-    Route::controller(MyOrderController::class)
-           ->prefix("/my-orders")
-           ->name("my-orders.")
-           ->group(function () {
-               Route::get('/', "index")->name("index");
-               Route::get('/{order_id}', "show")->name("show");
-               Route::get('/invoice/{order_id}/download', "downloadInvoice")->name("download.invoice");
-           });
-
-    Route::post('/track-my-orders', [TrackMyOrderController::class,"trackMyOrder"])->name("order.track");
 
 });
 
