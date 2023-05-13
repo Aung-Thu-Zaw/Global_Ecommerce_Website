@@ -33,42 +33,6 @@ import ProductCard from "@/Components/Cards/ProductCard.vue";
             </a>
           </div>
         </div>
-        <div
-          class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow mx-auto"
-        >
-          <a href="#">
-            <img
-              class="p-8 rounded-t-lg"
-              src="https://www.junglescout.com/wp-content/uploads/2021/01/product-photo-water-bottle-hero.png"
-              alt="product image"
-            />
-          </a>
-          <div class="px-5 pb-5">
-            <a href="#">
-              <h5 class="text-xl font-semibold tracking-tight text-gray-900">
-                Apple Watch Series 7 GPS, Aluminium Case, Starlight Sport
-              </h5>
-            </a>
-          </div>
-        </div>
-        <div
-          class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow mx-auto"
-        >
-          <a href="#">
-            <img
-              class="p-8 rounded-t-lg"
-              src="https://www.junglescout.com/wp-content/uploads/2021/01/product-photo-water-bottle-hero.png"
-              alt="product image"
-            />
-          </a>
-          <div class="px-5 pb-5">
-            <a href="#">
-              <h5 class="text-xl font-semibold tracking-tight text-gray-900">
-                Apple Watch Series 7 GPS, Aluminium Case, Starlight Sport
-              </h5>
-            </a>
-          </div>
-        </div>
       </div>
     </div>
 
