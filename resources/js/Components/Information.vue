@@ -1120,7 +1120,7 @@ const props = defineProps({
                     placeholder="Write Comment"
                   ></textarea>
                   <button
-                    class="bg-blue-600 font-bold text-white w-full py-2 rounded-sm hover:bg-blue-700"
+                    class="bg-blue-600 font-bold text-white w-full py-2 rounded-sm hover:bg-blue-700 my-5"
                   >
                     Add Review
                   </button>
