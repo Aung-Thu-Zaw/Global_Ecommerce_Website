@@ -17,7 +17,7 @@ return new class () extends Migration {
             $table->foreignId("product_id")->constrained()->cascadeOnDelete();
             $table->foreignId("vendor_id")->references("id")->on("users")->cascadeOnDelete();
             $table->foreignId("user_id")->constrained()->cascadeOnDelete();
-            $table->text("text");
+            $table->text("review_text");
             $table->integer("rating");
             $table->boolean("status")->default(false);
             $table->timestamps();

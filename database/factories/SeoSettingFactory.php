@@ -17,7 +17,10 @@ class SeoSettingFactory extends Factory
     public function definition()
     {
         return [
-            //
+            "meta_title"=>"",
+            "meta_author"=>"",
+            "meta_keyword"=>"",
+            "meta_description"=>"",
         ];
     }
 }

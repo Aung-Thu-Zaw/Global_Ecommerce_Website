@@ -12,14 +12,12 @@ return new class () extends Migration {
      */
     public function up()
     {
-        Schema::create('replies', function (Blueprint $table) {
+        Schema::create('product_answers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_review_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignId('shop_review_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->text('text');
+            $table->foreignId("product_question_id")->constrained()->cascadeOnDelete();
+            $table->foreignId("vendor_id")->references("id")->on("users")->cascadeOnDelete();
+            $table->text("answer_text");
             $table->timestamps();
-
         });
     }
 
@@ -30,6 +28,6 @@ return new class () extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('replies');
+        Schema::dropIfExists('product_answers');
     }
 };
