@@ -415,7 +415,7 @@ const saveToWatchlist = () => {
     </section>
 
     <Information
-      :description="product.description"
+      :product="product"
       :specificShopProducts="specificShopProducts"
     />
   </AppLayout>

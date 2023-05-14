@@ -120,6 +120,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\HasMany<ProductQuestion>
+    */
+    public function productQuestions(): HasMany
+    {
+        return $this->hasMany(ProductQuestion::class);
+    }
+
 
     public function getRedirectRouteName(): string
     {

@@ -6,7 +6,7 @@ import { computed } from "vue";
 
 const props = defineProps({
   specificShopProducts: Object,
-  description: String,
+  product: Object,
 });
 </script>
 
@@ -86,7 +86,7 @@ const props = defineProps({
                 aria-labelledby="description-tab"
               >
                 <p
-                  v-html="description"
+                  v-html="product.description"
                   class="text-sm text-gray-600 font-medium dark:text-gray-400"
                 ></p>
               </div>
@@ -117,8 +117,9 @@ const props = defineProps({
               </div>
             </div>
           </div>
-
-          <AskQuestionSection />
+          <div>
+            <AskQuestionSection :product="product" />
+          </div>
         </div>
 
         <FromTheSameStore :specificShopProducts="specificShopProducts" />

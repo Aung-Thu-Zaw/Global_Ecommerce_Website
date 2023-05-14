@@ -188,6 +188,14 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\HasMany<ProductQuestion>
+    */
+    public function productQuestions(): HasMany
+    {
+        return $this->hasMany(ProductQuestion::class);
+    }
+
 
     public static function deleteImage(Product $product): void
     {

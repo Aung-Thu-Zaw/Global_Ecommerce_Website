@@ -10,6 +10,8 @@ use App\Http\Controllers\Ecommerce\DeliveryInformationController;
 use App\Http\Controllers\Ecommerce\Payments\PaymentController;
 use App\Http\Controllers\Ecommerce\Payments\CashOnDeliveryController;
 use App\Http\Controllers\Ecommerce\Payments\StripeController;
+use App\Http\Controllers\Ecommerce\ProductAnswerController;
+use App\Http\Controllers\Ecommerce\ProductQuestionController;
 use App\Http\Controllers\Ecommerce\ReviewController;
 use App\Http\Controllers\Ecommerce\SearchResultProductController;
 use App\Http\Controllers\User\MyAccountController;
@@ -47,6 +49,15 @@ Route::get('/collections', [CollectionController::class,"index"])->name("collect
 Route::get('/collections/{collection}/products', [CollectionController::class,"show"])->name("collections.show");
 
 Route::middleware(["auth","verified"])->group(function () {
+
+    Route::post("products/ask-question", [ProductQuestionController::class,"storeQuestion"])->name("product.question.store");
+
+
+
+    Route::post("products/ask-question/answer", [ProductAnswerController::class,"storeAnswer"])->name("product.question.answer.store");
+    Route::post("products/ask-question/answer/update", [ProductAnswerController::class,"updateAnswer"])->name("product.question.answer.update");
+    Route::post("products/ask-question/answer/destroy", [ProductAnswerController::class,"destroyAnswer"])->name("product.question.answer.destroy");
+
     Route::controller(CartController::class)
            ->prefix("/cart")
            ->group(function () {
@@ -84,16 +95,6 @@ Route::middleware(["auth","verified"])->group(function () {
             });
 
     Route::post('/track-my-orders', [TrackMyOrderController::class,"trackMyOrder"])->name("order.track");
-
-
-    // Route::controller(ReviewController::class)
-    //         ->prefix("/my-orders")
-    //         ->name("my-orders.")
-    //         ->group(function () {
-    //             Route::get('/', "index")->name("index");
-    //             Route::get('/{order_id}', "show")->name("show");
-    //             Route::get('/invoice/{order_id}/download', "downloadInvoice")->name("download.invoice");
-    //         });
 
     Route::get('/checkout', [CheckoutController::class,"index"])->name("checkout.index");
 
