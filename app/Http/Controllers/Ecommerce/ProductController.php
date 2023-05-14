@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ecommerce;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\ProductQuestion;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -52,13 +53,16 @@ class ProductController extends Controller
 
     public function show(Product $product): Response|ResponseFactory
     {
-        $product->load(["images","brand:id,name","colors","sizes","shop:id,shop_name","watchlists","cartItems","productQuestions.user","productQuestions.productAnswer.user:id,shop_name,avatar"]);
+        $product->load(["images","brand:id,name","colors","sizes","shop:id,shop_name","watchlists","cartItems"]);
 
         $specificShopProducts=Product::select("image", "name", "slug", "price", "discount")
                                      ->where("user_id", $product->shop->id)
                                      ->limit(5)
                                      ->get();
 
-        return inertia("Ecommerce/Products/Detail", compact("product", "specificShopProducts"));
+
+        $productQuestions=ProductQuestion::with(["user","productAnswer.user:id,shop_name,avatar"])->where("product_id", $product->id)->orderBy("id", "desc")->paginate(5);
+
+        return inertia("Ecommerce/Products/Detail", compact("product", "specificShopProducts", "productQuestions"));
     }
 }

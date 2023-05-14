@@ -2,9 +2,9 @@
 import FromTheSameStore from "@/Components/FromTheSameStore.vue";
 import AskQuestionSection from "@/Components/Sections/AskQuestionSection.vue";
 import ProductReviewSection from "@/Components/Sections/ProductReviewSection.vue";
-import { computed } from "vue";
 
 const props = defineProps({
+  productQuestions: Object,
   specificShopProducts: Object,
   product: Object,
 });
@@ -118,7 +118,10 @@ const props = defineProps({
             </div>
           </div>
           <div>
-            <AskQuestionSection :product="product" />
+            <AskQuestionSection
+              :product="product"
+              :productQuestions="productQuestions"
+            />
           </div>
         </div>
 

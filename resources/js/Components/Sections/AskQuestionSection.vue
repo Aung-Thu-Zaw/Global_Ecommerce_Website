@@ -3,9 +3,11 @@ import QuestionCard from "@/Components/Cards/QuestionCard.vue";
 import AnswerCard from "@/Components/Cards/AnswerCard.vue";
 import { useForm, usePage, Link } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
+import Pagination from "@/Components/Pagination.vue";
 
 const props = defineProps({
   product: Object,
+  productQuestions: Object,
 });
 
 const form = useForm({
@@ -39,12 +41,12 @@ const submit = () => {
 
     <div v-if="$page.props.auth.user" class="w-full">
       <p class="font-bold text-md text-slate-600 px-5 mb-5">
-        Total Questions ({{ product.product_questions.length }})
+        Total Questions ({{ productQuestions.data.length }})
       </p>
 
-      <div v-if="product.product_questions.length" class="px-5 w-full">
+      <div v-if="productQuestions.data.length" class="px-5 w-full">
         <div
-          v-for="question in product.product_questions"
+          v-for="question in productQuestions.data"
           :key="question.id"
           class="shadow border rounded-md p-5 flex flex-col items-start my-5 w-full"
         >
@@ -52,6 +54,11 @@ const submit = () => {
             <QuestionCard :product="product" :question="question" />
           </div>
           <AnswerCard :question="question" />
+        </div>
+
+        <!-- Pagination -->
+        <div class="my-5">
+          <pagination :links="productQuestions.links" />
         </div>
       </div>
       <div v-else class="px-5 w-full">

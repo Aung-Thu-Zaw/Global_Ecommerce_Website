@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class ProductAnswerController extends Controller
 {
-    public function createAnswer(ProductAnswerRequest $request): RedirectResponse
+    public function storeAnswer(ProductAnswerRequest $request): RedirectResponse
     {
         ProductAnswer::create($request->validated());
 

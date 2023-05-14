@@ -10,6 +10,7 @@ import "vue3-toastify/dist/index.css";
 const props = defineProps({
   specificShopProducts: Object,
   product: Object,
+  productQuestions: Object,
 });
 
 const images = reactive([props.product.image]);
@@ -416,6 +417,7 @@ const saveToWatchlist = () => {
 
     <Information
       :product="product"
+      :productQuestions="productQuestions"
       :specificShopProducts="specificShopProducts"
     />
   </AppLayout>
