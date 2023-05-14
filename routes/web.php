@@ -50,15 +50,23 @@ Route::get('/collections/{collection}/products', [CollectionController::class,"s
 
 Route::middleware(["auth","verified"])->group(function () {
 
-    Route::post("products/ask-questions", [ProductQuestionController::class,"storeQuestion"])->name("product.question.store");
-    Route::post("products/ask-questions/{question_id}/update", [ProductQuestionController::class,"updateQuestion"])->name("product.question.update");
-    Route::post("products/ask-questions/{question_id}/destroy", [ProductQuestionController::class,"destroyQuestion"])->name("product.question.destroy");
+    Route::controller(ProductQuestionController::class)
+           ->prefix("/products/ask-questions")
+           ->name("product.question.")
+           ->group(function () {
+               Route::post("/", "storeQuestion")->name("store");
+               Route::post("/{question_id}/update", "updateQuestion")->name("update");
+               Route::post("/{question_id}/destroy", "destroyQuestion")->name("destroy");
+           });
 
-
-
-    Route::post("products/ask-questions/answer", [ProductAnswerController::class,"storeAnswer"])->name("product.question.answer.store");
-    Route::post("products/ask-questions/answer/{answer_id}/update", [ProductAnswerController::class,"updateAnswer"])->name("product.question.answer.update");
-    Route::post("products/ask-questions/answer/{answer_id}/destroy", [ProductAnswerController::class,"destroyAnswer"])->name("product.question.answer.destroy");
+    Route::controller(ProductAnswerController::class)
+           ->prefix("/products/ask-questions/answer")
+           ->name("product.question.answer.")
+           ->group(function () {
+               Route::post("/", "storeAnswer")->name("store");
+               Route::post("/{answer_id}/update", "updateAnswer")->name("update");
+               Route::post("/{answer_id}/destroy", "destroyAnswer")->name("destroy");
+           });
 
     Route::controller(CartController::class)
            ->prefix("/cart")
@@ -107,8 +115,6 @@ Route::middleware(["auth","verified"])->group(function () {
     Route::post('/payment/stripePaymentProcess', [StripeController::class,"stripePaymentProcess"])->name("payment.stripePaymentProcess");
 
     Route::post('/payment/cashPaymentProcess', [CashOnDeliveryController::class,"cashPaymentProcess"])->name("payment.cashPaymentProcess");
-
-
 });
 
 Route::controller(MyAccountController::class)

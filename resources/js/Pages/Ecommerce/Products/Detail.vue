@@ -332,12 +332,12 @@ const saveToWatchlist = () => {
                 Sold By
               </div>
 
-              <span
+              <!-- <span
                 class="px-3 rounded-sm py-1 ml-5 font-bold uppercase text-[0.6rem] text-white bg-fuchsia-700"
               >
                 <i class="fas fa-crown"></i>
                 Official Store
-              </span>
+              </span> -->
 
               <div class="flex items-center px-5 py-3">
                 <img
@@ -346,16 +346,18 @@ const saveToWatchlist = () => {
                   class="w-14 h-14 rounded-full object-cover ring-2 shadow ring-blue-300 mr-3"
                 />
                 <div class="flex items-start">
-                  <h2
+                  <Link
+                    :href="route()"
                     class="font-bold w-full text-md text-slate-700 hover:text-blue-600 cursor-pointer mr-1"
                   >
                     {{ product.shop.shop_name }}
-                  </h2>
+                  </Link>
+
                   <span
-                    class="rounded-full flex items-center justify-center bg-green-300 text-sm text-green-700 font-bold px-3 py-1"
+                    class="rounded-full flex items-center justify-center bg-green-200 text-sm text-green-600 font-bold px-3 py-1"
                     >Verified
                     <i
-                      class="fas fa-check arrow-icon ml-3 bg-green-500 p-1 rounded-full"
+                      class="fas fa-check arrow-icon ml-3 bg-green-500 p-1 rounded-full text-white"
                     ></i>
                   </span>
                 </div>
@@ -396,12 +398,13 @@ const saveToWatchlist = () => {
                 </div>
               </div>
               <div class="flex items-center justify-between my-3 px-5 py-3">
-                <button
+                <Link
+                  :href="route()"
                   class="px-5 py-2 bg-blue-600 w-1/3 rounded-sm font-bold text-white text-sm hover:bg-blue-700 shadow"
                 >
                   <i class="fas fa-store mr-1"></i>
                   Visit Store
-                </button>
+                </Link>
                 <button
                   class="px-5 py-2 bg-yellow-500 w-1/3 rounded-sm font-bold text-white text-sm hover:bg-yellow-700 shadow"
                 >
