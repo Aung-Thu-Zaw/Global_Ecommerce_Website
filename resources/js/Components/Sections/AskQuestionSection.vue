@@ -4,11 +4,18 @@ import AnswerCard from "@/Components/Cards/AnswerCard.vue";
 import { useForm, usePage, Link } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import Pagination from "@/Components/Pagination.vue";
+import { ref } from "vue";
 
 const props = defineProps({
   product: Object,
   productQuestions: Object,
 });
+
+const isVisible = ref(true);
+
+const handleVisible = (value) => {
+  isVisible.value = value;
+};
 
 const form = useForm({
   user_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
@@ -48,12 +55,19 @@ const submit = () => {
         <div
           v-for="question in productQuestions.data"
           :key="question.id"
-          class="shadow border rounded-md p-5 flex flex-col items-start my-5 w-full"
+          class="shadow relative border rounded-md p-5 flex flex-col items-start my-5 w-full"
         >
-          <div class="flex items-start w-full">
-            <QuestionCard :product="product" :question="question" />
+          <div v-if="isVisible" class="flex flex-col items-start w-full">
+            <QuestionCard
+              :product="product"
+              :question="question"
+              @isVisible="handleVisible"
+            />
+            <AnswerCard :question="question" />
           </div>
-          <AnswerCard :question="question" />
+          <div v-else>
+            <button @click="isVisible = true">Show Question</button>
+          </div>
         </div>
 
         <!-- Pagination -->

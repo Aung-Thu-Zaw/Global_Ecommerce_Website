@@ -17,18 +17,20 @@ class ProductAnswerController extends Controller
         return back();
     }
 
-    public function updateAnswer(ProductAnswerRequest $request): RedirectResponse
+    public function updateAnswer(ProductAnswerRequest $request, int $answerId): RedirectResponse
     {
-        $productAnswer=ProductAnswer::where("product_question_id", $request->product_question_id)->where("user_id", auth()->user()->id)->first();
+
+        $productAnswer=ProductAnswer::findOrFail($answerId);
 
         $productAnswer->update(["answer_text"=>$request->answer_text]);
+
 
         return back();
     }
 
-    public function destroyAnswer(Request $request): RedirectResponse
+    public function destroyAnswer(int $answerId): RedirectResponse
     {
-        $productAnswer=ProductAnswer::where("product_question_id", $request->product_question_id)->where("user_id", auth()->user()->id)->first();
+        $productAnswer=ProductAnswer::findOrFail($answerId);
 
         $productAnswer->delete();
 

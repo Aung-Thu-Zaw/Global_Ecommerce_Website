@@ -3,32 +3,33 @@ import { useForm, usePage } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 
 const props = defineProps({
+  product: Object,
   question: Object,
 });
 
 const form = useForm({
-  product_question_id: props.question.id,
   user_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
-  answer_text: props.question.product_answer.answer_text,
+  product_id: props.product.id,
+  question_text: props.question.question_text,
   captcha_token: null,
 });
 
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
-const handleAnswerEdit = async () => {
+const handleQuestionEdit = async () => {
   await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("edit_answer_question");
+  form.captcha_token = await executeRecaptcha("edit_question");
   submit();
 };
 
 const submit = () => {
   form.post(
-    route("product.question.answer.update", {
-      answer_id: props.question.product_answer.id,
+    route("product.question.update", {
+      question_id: props.question.id,
     }),
     {
       replace: true,
       preserveScroll: true,
-      onFinish: () => (form.answer_text = ""),
+      onFinish: () => (form.question_text = ""),
     }
   );
 };
@@ -36,21 +37,24 @@ const submit = () => {
 
 <template>
   <!-- Modal toggle -->
-  <div v-if="question.product_answer" class="flex items-center justify-end">
+  <div
+    v-if="$page.props.auth.user.id === question.user_id"
+    class="flex items-center justify-end"
+  >
     <button
-      :data-modal-target="'edit-answer-modal' + question.product_answer.id"
-      :data-modal-toggle="'edit-answer-modal' + question.product_answer.id"
-      class="font-bold border text-[.7rem] text-sky-700 px-3 py-2 mt-5 rounded-sm border-sky-700 hover:bg-sky-700 hover:text-white transition-all"
+      :data-modal-target="'edit-question-modal-' + question.id"
+      :data-modal-toggle="'edit-question-modal-' + question.id"
+      class="font-bold border text-[.7rem] text-sky-700 px-3 py-2 rounded-sm border-sky-700 hover:bg-sky-700 hover:text-white transition-all"
       type="button"
     >
       <i class="fa-solid fa-edit"></i>
-      Edit Answer
+      Edit Questions
     </button>
   </div>
 
   <!-- Main modal -->
   <div
-    :id="'edit-answer-modal' + question.product_answer.id"
+    :id="'edit-question-modal-' + question.id"
     tabindex="-1"
     aria-hidden="true"
     class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
@@ -61,7 +65,7 @@ const submit = () => {
         <button
           type="button"
           class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-          :data-modal-hide="'edit-answer-modal' + question.product_answer.id"
+          :data-modal-hide="'edit-question-modal-' + question.id"
         >
           <svg
             aria-hidden="true"
@@ -80,18 +84,16 @@ const submit = () => {
         </button>
 
         <div class="px-6 py-6 lg:px-8">
-          <form @submit.prevent="handleAnswerEdit" class="space-y-3 mr-5">
+          <form @submit.prevent="handleQuestionEdit" class="space-y-3 mr-5">
             <textarea
               cols="30"
               rows="10"
               class="w-full h-[200px] rounded-md border-2 border-slate-400 focus:ring-0 focus:border-slate-400"
-              v-model="form.answer_text"
+              v-model="form.question_text"
             ></textarea>
             <button
               type="submit"
-              :data-modal-hide="
-                'edit-answer-modal' + question.product_answer.id
-              "
+              :data-modal-hide="'edit-question-modal-' + question.id"
               class="bg-blue-600 font-bold text-white w-full py-2 rounded-sm hover:bg-blue-700 mb-3"
             >
               Update Answer

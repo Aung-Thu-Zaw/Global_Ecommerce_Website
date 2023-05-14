@@ -1,22 +1,47 @@
 <script setup>
 import AnswerFormModal from "@/Components/Modals/AnswerFormModal.vue";
+import QuestionEditFormModal from "@/Components/Modals/QuestionEditFormModal.vue";
+import { router, usePage } from "@inertiajs/vue3";
+import { ref } from "vue";
 
 const props = defineProps({
   product: Object,
   question: Object,
 });
+
+const emit = defineEmits(["isVisible"]);
+
+const isVisible = ref(true);
+
+const handleVisible = () => {
+  isVisible.value = !isVisible.value;
+  emit("isVisible", isVisible.value);
+};
+
+const handleDeleteQuestion = () => {
+  router.post(
+    route("product.question.destroy", {
+      question_id: props.question.id,
+    }),
+    {},
+    {
+      replace: true,
+      preserveScroll: true,
+    }
+  );
+};
 </script>
 
 
 <template>
-  <div class="w-full">
+  <div class="relative w-full">
     <div class="flex flex-col items-end w-full">
       <div class="flex items-start justify-between w-full mb-1">
         <div class="flex items-start">
           <img
-            src="https://imglarger.com/Images/before-after/ai-image-enlarger-1-before-2.jpg"
+            :src="question.user.avatar"
             alt=""
-            class="w-10 h-10 object-cover rounded-full mr-5"
+            class="z-10 w-10 h-10 object-cover rounded-full mr-5 ring-2 ring-orange-300"
           />
           <div>
             <h4 class="text-lg font-bold text-slate-700">
@@ -28,7 +53,7 @@ const props = defineProps({
 
         <div class="flex items-center">
           <span class="text-slate-500 text-sm font-bold">
-            {{ question.created_at }}
+            {{ question.updated_at }}
           </span>
           <button
             :id="'dropdownMenuIconButton' + question.id"
@@ -53,36 +78,46 @@ const props = defineProps({
         <!-- Dropdown menu -->
         <div
           :id="'dropdownDot' + question.id"
-          class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
+          class="z-40 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
         >
           <ul
             class="py-2 text-sm text-gray-700 dark:text-gray-200"
             :aria-labelledby="'dropdownMenuIconButton' + question.id"
           >
             <li>
-              <a
-                href="#"
-                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+              <button
+                @click="handleVisible"
+                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white w-full text-left"
               >
+                <i class="fa-solid fa-eye-slash"></i>
                 Hide Question
-              </a>
+              </button>
             </li>
+
             <li>
-              <a
-                href="#"
-                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+              <button
+                v-if="question.user_id === $page.props.auth.user.id"
+                @click="handleDeleteQuestion"
+                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white w-full text-left"
               >
+                <i class="fa-solid fa-trash"></i>
                 Delete Question
-              </a>
+              </button>
             </li>
           </ul>
         </div>
       </div>
-      <p class="w-full text-sm font-normal text-slate-900">
+      <p class="w-[93%] text-sm font-normal text-slate-900 ml-auto mb-3">
         {{ question.question_text }}
       </p>
     </div>
 
+    <div>
+      <QuestionEditFormModal :question="question" :product="product" />
+    </div>
+
     <AnswerFormModal :product="product" :question="question" />
+
+    <hr v-if="question.product_answer" class="mt-5" />
   </div>
 </template>

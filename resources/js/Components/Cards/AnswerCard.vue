@@ -9,8 +9,7 @@ const props = defineProps({
 const handleDeleteAnswer = () => {
   router.post(
     route("product.question.answer.destroy", {
-      product_question_id: props.question.id,
-      user_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
+      answer_id: props.question.product_answer.id,
     }),
     {},
     {
@@ -29,7 +28,7 @@ const handleDeleteAnswer = () => {
         <img
           :src="question.product_answer.user.avatar"
           alt=""
-          class="w-10 h-10 object-cover rounded-full mr-5"
+          class="z-10 w-10 h-10 object-cover rounded-full mr-5 ring-2 ring-orange-300"
         />
         <div>
           <h4 class="text-lg font-bold text-slate-700">
@@ -46,11 +45,11 @@ const handleDeleteAnswer = () => {
       </div>
       <div class="">
         <span class="text-slate-500 text-sm font-bold">
-          {{ question.product_answer.created_at }}
+          {{ question.product_answer.updated_at }}
         </span>
       </div>
     </div>
-    <p class="w-[92%] text-sm font-normal text-slate-900 ml-auto">
+    <p class="w-[93%] text-sm font-normal text-slate-900 ml-auto">
       {{ question.product_answer.answer_text }}
     </p>
 
@@ -65,6 +64,7 @@ const handleDeleteAnswer = () => {
         class="font-bold border text-[.7rem] text-danger-700 px-3 py-2 mt-5 rounded-sm border-danger-700 hover:bg-danger-700 hover:text-white transition-all ml-3"
         type="button"
       >
+        <i class="fa-solid fa-trash"></i>
         Delete Answer
       </button>
     </div>

@@ -57,11 +57,15 @@ class ProductController extends Controller
 
         $specificShopProducts=Product::select("image", "name", "slug", "price", "discount")
                                      ->where("user_id", $product->shop->id)
+                                     ->where("id", "!=", $product->id)
                                      ->limit(5)
                                      ->get();
 
 
-        $productQuestions=ProductQuestion::with(["user","productAnswer.user:id,shop_name,avatar"])->where("product_id", $product->id)->orderBy("id", "desc")->paginate(5);
+        $productQuestions=ProductQuestion::with(["user","productAnswer.user:id,shop_name,avatar"])
+                                         ->where("product_id", $product->id)
+                                         ->orderBy("id", "desc")
+                                         ->paginate(5);
 
         return inertia("Ecommerce/Products/Detail", compact("product", "specificShopProducts", "productQuestions"));
     }

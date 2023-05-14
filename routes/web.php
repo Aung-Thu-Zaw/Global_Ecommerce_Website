@@ -50,13 +50,15 @@ Route::get('/collections/{collection}/products', [CollectionController::class,"s
 
 Route::middleware(["auth","verified"])->group(function () {
 
-    Route::post("products/ask-question", [ProductQuestionController::class,"storeQuestion"])->name("product.question.store");
+    Route::post("products/ask-questions", [ProductQuestionController::class,"storeQuestion"])->name("product.question.store");
+    Route::post("products/ask-questions/{question_id}/update", [ProductQuestionController::class,"updateQuestion"])->name("product.question.update");
+    Route::post("products/ask-questions/{question_id}/destroy", [ProductQuestionController::class,"destroyQuestion"])->name("product.question.destroy");
 
 
 
-    Route::post("products/ask-question/answer", [ProductAnswerController::class,"storeAnswer"])->name("product.question.answer.store");
-    Route::post("products/ask-question/answer/update", [ProductAnswerController::class,"updateAnswer"])->name("product.question.answer.update");
-    Route::post("products/ask-question/answer/destroy", [ProductAnswerController::class,"destroyAnswer"])->name("product.question.answer.destroy");
+    Route::post("products/ask-questions/answer", [ProductAnswerController::class,"storeAnswer"])->name("product.question.answer.store");
+    Route::post("products/ask-questions/answer/{answer_id}/update", [ProductAnswerController::class,"updateAnswer"])->name("product.question.answer.update");
+    Route::post("products/ask-questions/answer/{answer_id}/destroy", [ProductAnswerController::class,"destroyAnswer"])->name("product.question.answer.destroy");
 
     Route::controller(CartController::class)
            ->prefix("/cart")

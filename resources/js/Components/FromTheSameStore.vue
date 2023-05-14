@@ -5,7 +5,10 @@ const props = defineProps({
 });
 </script>
 <template>
-  <aside class="my-5 w-full lg:my-0 lg:w-1/4 px-2">
+  <aside
+    v-if="specificShopProducts.length"
+    class="my-5 w-full lg:my-0 lg:w-1/4 px-2"
+  >
     <article class="border border-gray-200 shadow-sm rounded bg-white p-4">
       <h3 class="mb-5 text-lg font-semibold capitalize">from the same store</h3>
 

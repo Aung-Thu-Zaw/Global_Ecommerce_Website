@@ -18,7 +18,7 @@ class ProductQuestion extends Model
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductQuestion, never>
     */
-    protected function createdAt(): Attribute
+    protected function updatedAt(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => date("j/F/Y h:i:s A", strtotime($value)),
