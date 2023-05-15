@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { ref } from "vue";
+import { computed, inject, ref } from "vue";
 import Home from "./Partials/Home.vue";
 import AllProducts from "./Partials/AllProducts.vue";
 import ShopRating from "./Partials/ShopRating.vue";
@@ -11,6 +11,7 @@ import "vue3-toastify/dist/index.css";
 
 const props = defineProps({
   shop: Object,
+  followings: Object,
 });
 
 const currentTime = new Date();
@@ -22,6 +23,12 @@ const status = (last_activity) => {
 
   return timeDifference < threshold ? "active" : "offline";
 };
+
+const filterFollowing = computed(() => {
+  return props.followings.filter(
+    (following) => following.followable_id === props.shop.id
+  );
+});
 
 const handleFollow = () => {
   router.post(
@@ -41,22 +48,28 @@ const handleFollow = () => {
   );
 };
 
-const handleunFollow = () => {
-  router.post(
-    route("shop.unfollow", {
-      shop_id: props.shop.id,
-    }),
-    {},
-    {
-      onSuccess: () => {
-        if (usePage().props.flash.successMessage) {
-          toast.success(usePage().props.flash.successMessage, {
-            autoClose: 2000,
-          });
-        }
-      },
-    }
-  );
+const swal = inject("$swal");
+
+const handleUnFollow = async () => {
+  const result = await swal({
+    icon: "warning",
+    title: "Are you sure you want unfollow this shop?",
+    text: "If you unfollow selected stores, you won't be able to view the latest arrival and sales from them anymore.",
+    showCancelButton: true,
+    confirmButtonText: "Yes, unfollow!",
+    confirmButtonColor: "#ef4444",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.post(
+      route("shop.unfollow", {
+        shop_id: props.shop.id,
+      })
+    );
+  }
 };
 </script>
 
@@ -64,6 +77,7 @@ const handleunFollow = () => {
 <template>
   <AppLayout>
     <Head :title="shop.shop_name" />
+
     <section class="pt-10 mt-44">
       <div class="container max-w-screen-xl mx-auto px-4">
         <div
@@ -101,24 +115,26 @@ const handleunFollow = () => {
           </div>
           <div>
             <button
-              class="px-5 py-2 rounded-sm mx-2 font-bold shadow bg-yellow-600 hover:bg-yellow-700 text-white"
+              class="px-5 py-2 rounded-sm mx-2 font-bold shadow bg-yellow-500 hover:bg-yellow-600 text-white"
             >
               <i class="fa-solid fa-message"></i>
               Chat Now
             </button>
             <button
+              v-if="filterFollowing.length"
+              @click="handleUnFollow"
+              class="px-5 py-2 rounded-sm mx-2 font-bold shadow bg-blue-500 hover:bg-blue-600 text-white"
+            >
+              <i class="fa-solid fa-check"></i>
+              Following
+            </button>
+            <button
+              v-else
               @click="handleFollow"
               class="px-5 py-2 rounded-sm mx-2 font-bold shadow bg-blue-600 hover:bg-blue-700 text-white"
             >
               <i class="fa-solid fa-store"></i>
               Follow Store
-            </button>
-            <button
-              @click="handleunFollow"
-              class="px-5 py-2 rounded-sm mx-2 font-bold shadow bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              <i class="fa-solid fa-store"></i>
-              Unfollow Store
             </button>
           </div>
         </div>

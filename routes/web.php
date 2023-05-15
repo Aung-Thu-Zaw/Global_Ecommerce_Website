@@ -7,6 +7,7 @@ use App\Http\Controllers\Ecommerce\HomeController;
 use App\Http\Controllers\Ecommerce\ProductController;
 use App\Http\Controllers\Ecommerce\CheckoutController;
 use App\Http\Controllers\Ecommerce\DeliveryInformationController;
+use App\Http\Controllers\Ecommerce\FollowedShopController;
 use App\Http\Controllers\Ecommerce\Payments\PaymentController;
 use App\Http\Controllers\Ecommerce\Payments\CashOnDeliveryController;
 use App\Http\Controllers\Ecommerce\Payments\StripeController;
@@ -108,6 +109,20 @@ Route::middleware(["auth","verified"])->group(function () {
                 Route::get('/{order_id}', "show")->name("show");
                 Route::get('/invoice/{order_id}/download', "downloadInvoice")->name("download.invoice");
             });
+
+    // Route::controller(FollowedShopController::class)
+    //         ->prefix("/followed-stores")
+    //         ->name("followed-stores.")
+    //         ->group(function () {
+    //             Route::get('/', "index")->name("index");
+    //             Route::get('/{order_id}', "show")->name("show");
+    //             Route::get('/invoice/{order_id}/download', "downloadInvoice")->name("download.invoice");
+    //         });
+
+
+    Route::get("followed-shops", [FollowedShopController::class,"index"])->name("user.shop.followed");
+    Route::post("followed-shops/{shop_id}/unfollow", [FollowedShopController::class,"unfollowShop"])->name("user.shop.unfollow");
+
 
     Route::post('/track-my-orders', [TrackMyOrderController::class,"trackMyOrder"])->name("order.track");
 

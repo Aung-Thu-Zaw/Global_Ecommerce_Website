@@ -60,6 +60,13 @@
         <i class="fa-solid fa-heart mr-3"></i>
         My Watchlist
       </Link>
+      <Link
+        :href="route('user.shop.followed')"
+        class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"
+      >
+        <i class="fa-solid fa-store mr-3"></i>
+        Followed Shops
+      </Link>
 
       <Link
         :href="route('logout')"

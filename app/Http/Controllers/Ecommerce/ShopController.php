@@ -15,20 +15,22 @@ class ShopController extends Controller
     {
         $shop=User::findOrFail($shopId);
 
-        return inertia("Ecommerce/Shop/Index", compact("shop"));
+        $user=auth()->user();
 
+        $followings=$user->followings;
+
+        return inertia("Ecommerce/Shop/Index", compact("shop", "followings"));
     }
 
     public function followShop(int $shopId): RedirectResponse
     {
-
         $user=auth()->user();
 
         $shop=User::find($shopId);
 
         $user->follow($shop);
 
-        return back()->with("success", "follow store");
+        return back();
     }
 
 
@@ -40,6 +42,6 @@ class ShopController extends Controller
 
         $user->unfollow($shop);
 
-        return back()->with("success", "unfollow store");
+        return back();
     }
 }
