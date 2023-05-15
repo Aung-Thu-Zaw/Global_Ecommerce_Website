@@ -9,15 +9,6 @@ const props = defineProps({
   question: Object,
 });
 
-const emit = defineEmits(["isVisible"]);
-
-const isVisible = ref(true);
-
-const handleVisible = () => {
-  isVisible.value = !isVisible.value;
-  emit("isVisible", isVisible.value);
-};
-
 const handleDeleteQuestion = () => {
   router.post(
     route("product.question.destroy", {
@@ -86,7 +77,6 @@ const handleDeleteQuestion = () => {
           >
             <li>
               <button
-                @click="handleVisible"
                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white w-full text-left"
               >
                 <i class="fa-solid fa-eye-slash"></i>
@@ -96,7 +86,10 @@ const handleDeleteQuestion = () => {
 
             <li>
               <button
-                v-if="question.user_id === $page.props.auth.user.id"
+                v-if="
+                  $page.props.auth.user &&
+                  question.user_id === $page.props.auth.user.id
+                "
                 @click="handleDeleteQuestion"
                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white w-full text-left"
               >

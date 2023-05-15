@@ -54,7 +54,10 @@ const handleDeleteAnswer = () => {
     </p>
 
     <div
-      v-if="$page.props.auth.user.id === question.product_answer.user.id"
+      v-if="
+        $page.props.auth.user &&
+        $page.props.auth.user.id === question.product_answer.user.id
+      "
       class="flex items-center justify-end"
     >
       <AnswerEditFormModal :question="question" />

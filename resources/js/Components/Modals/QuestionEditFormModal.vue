@@ -38,7 +38,9 @@ const submit = () => {
 <template>
   <!-- Modal toggle -->
   <div
-    v-if="$page.props.auth.user.id === question.user_id"
+    v-if="
+      $page.props.auth.user && $page.props.auth.user.id === question.user_id
+    "
     class="flex items-center justify-end"
   >
     <button

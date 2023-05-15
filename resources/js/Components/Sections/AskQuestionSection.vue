@@ -11,12 +11,6 @@ const props = defineProps({
   productQuestions: Object,
 });
 
-const isVisible = ref(true);
-
-const handleVisible = (value) => {
-  isVisible.value = value;
-};
-
 const form = useForm({
   user_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
   product_id: props.product.id,
@@ -46,7 +40,7 @@ const submit = () => {
       Ask Questions About This Product
     </h3>
 
-    <div v-if="$page.props.auth.user" class="w-full">
+    <div class="w-full">
       <p class="font-bold text-md text-slate-600 px-5 mb-5">
         Total Questions ({{ productQuestions.data.length }})
       </p>
@@ -57,16 +51,13 @@ const submit = () => {
           :key="question.id"
           class="shadow relative border rounded-md p-5 flex flex-col items-start my-5 w-full"
         >
-          <div v-if="isVisible" class="flex flex-col items-start w-full">
+          <div class="flex flex-col items-start w-full">
             <QuestionCard
               :product="product"
               :question="question"
               @isVisible="handleVisible"
             />
             <AnswerCard :question="question" />
-          </div>
-          <div v-else>
-            <button @click="isVisible = true">Show Question</button>
           </div>
         </div>
 
@@ -84,7 +75,12 @@ const submit = () => {
 
       <hr />
 
-      <div v-if="$page.props.auth.user.id !== product.user_id" class="p-5">
+      <div
+        v-if="
+          $page.props.auth.user && $page.props.auth.user.id !== product.user_id
+        "
+        class="p-5"
+      >
         <form @submit.prevent="handleAskQuestion">
           <textarea
             cols="30"
@@ -100,18 +96,18 @@ const submit = () => {
           </button>
         </form>
       </div>
-    </div>
-    <div v-else class="px-5 mb-3">
-      <p class="font-bold text-sm text-slate-600 text-center">
-        If you want to ask questions you need to login first. Here
-        <Link :href="route('login')" class="text-blue-600 underline"
-          >Login</Link
-        >
-        Or
-        <Link :href="route('register')" class="text-blue-600 underline"
-          >Register</Link
-        >
-      </p>
+      <div v-else-if="!$page.props.auth.user" class="px-5 my-5">
+        <p class="font-bold text-sm text-slate-600 text-center">
+          If you want to ask questions you need to login first. Here
+          <Link :href="route('login')" class="text-blue-600 underline">
+            Login
+          </Link>
+          Or
+          <Link :href="route('register')" class="text-blue-600 underline">
+            Register
+          </Link>
+        </p>
+      </div>
     </div>
   </div>
 </template>
