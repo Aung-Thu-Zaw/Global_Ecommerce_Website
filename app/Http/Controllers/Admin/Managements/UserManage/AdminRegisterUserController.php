@@ -12,7 +12,6 @@ class AdminRegisterUserController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-
         $users=User::search(request("search"))
                     ->where("role", "user")
                     ->orderBy(request("sort", "id"), request("direction", "desc"))

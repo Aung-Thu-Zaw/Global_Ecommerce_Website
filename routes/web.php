@@ -14,6 +14,7 @@ use App\Http\Controllers\Ecommerce\ProductAnswerController;
 use App\Http\Controllers\Ecommerce\ProductQuestionController;
 use App\Http\Controllers\Ecommerce\ReviewController;
 use App\Http\Controllers\Ecommerce\SearchResultProductController;
+use App\Http\Controllers\Ecommerce\ShopController;
 use App\Http\Controllers\User\MyAccountController;
 use App\Http\Controllers\Ecommerce\WatchlistController;
 use App\Http\Controllers\User\MyOrderController;
@@ -49,6 +50,10 @@ Route::get('/collections', [CollectionController::class,"index"])->name("collect
 Route::get('/collections/{collection}/products', [CollectionController::class,"show"])->name("collections.show");
 
 Route::middleware(["auth","verified"])->group(function () {
+
+    Route::get("/shops/{shop_id}", [ShopController::class,"show"])->name("shop");
+    Route::post("/shops/{shop_id}/follow", [ShopController::class,"followShop"])->name("shop.follow");
+    Route::post("/shops/{shop_id}/unfollow", [ShopController::class,"unfollowShop"])->name("shop.unfollow");
 
     Route::controller(ProductQuestionController::class)
            ->prefix("/products/ask-questions")

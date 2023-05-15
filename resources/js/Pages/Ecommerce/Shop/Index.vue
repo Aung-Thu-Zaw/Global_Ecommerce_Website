@@ -6,12 +6,64 @@ import AllProducts from "./Partials/AllProducts.vue";
 import ShopRating from "./Partials/ShopRating.vue";
 import ProductRating from "./Partials/ProductRating.vue";
 import { usePage, router, Link, Head } from "@inertiajs/vue3";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+
+const props = defineProps({
+  shop: Object,
+});
+
+const currentTime = new Date();
+const threshold = 1000 * 60 * 3; //3minutes in millseconds
+
+const status = (last_activity) => {
+  const lastActivity = new Date(last_activity);
+  const timeDifference = currentTime.getTime() - lastActivity.getTime();
+
+  return timeDifference < threshold ? "active" : "offline";
+};
+
+const handleFollow = () => {
+  router.post(
+    route("shop.follow", {
+      shop_id: props.shop.id,
+    }),
+    {},
+    {
+      onSuccess: () => {
+        if (usePage().props.flash.successMessage) {
+          toast.success(usePage().props.flash.successMessage, {
+            autoClose: 2000,
+          });
+        }
+      },
+    }
+  );
+};
+
+const handleunFollow = () => {
+  router.post(
+    route("shop.unfollow", {
+      shop_id: props.shop.id,
+    }),
+    {},
+    {
+      onSuccess: () => {
+        if (usePage().props.flash.successMessage) {
+          toast.success(usePage().props.flash.successMessage, {
+            autoClose: 2000,
+          });
+        }
+      },
+    }
+  );
+};
 </script>
 
 
 <template>
   <AppLayout>
-    <Head title="All Collections" />
+    <Head :title="shop.shop_name" />
     <section class="pt-10 mt-44">
       <div class="container max-w-screen-xl mx-auto px-4">
         <div
@@ -19,13 +71,13 @@ import { usePage, router, Link, Head } from "@inertiajs/vue3";
         >
           <div class="flex items-center">
             <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUdHX7OODp6tyUKh-AS88pK5n5MdPKnPxYarCR1R1m9zX2bCUVZSCSrRerMWdcyJGnXlw&usqp=CAU"
+              :src="shop.avatar"
               alt=""
               class="w-16 h-16 rounded-full object-cover mr-5 ring-2 ring-blue-500"
             />
             <div>
               <h3 class="text-2xl font-bold text-slate-700">
-                Samsung
+                {{ shop.shop_name }}
                 <span
                   class="px-3 py-1 bg-green-200 text-green-600 rounded-xl text-[.8rem]"
                 >
@@ -34,13 +86,16 @@ import { usePage, router, Link, Head } from "@inertiajs/vue3";
                 </span>
               </h3>
               <span class="text-sm text-slate-500 block">22 Followers</span>
-              <span class="text-sm text-green-500 animate-pulse font-bold">
-                <i class="fa-solid fa-circle text-[.6rem]"></i>
-                Active
-              </span>
-              <span class="text-sm text-red-500 animate-pulse font-bold">
-                <i class="fa-solid fa-circle text-[.6rem]"></i>
-                Offline
+
+              <span
+                class="capitalize text-sm text-green-500 animate-pulse font-bold"
+                :class="{
+                  ' text-green-500': status(shop.last_activity) == 'active',
+                  ' text-red-500': status(shop.last_activity) == 'offline',
+                }"
+              >
+                <i class="fa-solid fa-circle animate-pulse text-[.6rem]"></i>
+                {{ status(shop.last_activity) }}
               </span>
             </div>
           </div>
@@ -52,10 +107,18 @@ import { usePage, router, Link, Head } from "@inertiajs/vue3";
               Chat Now
             </button>
             <button
+              @click="handleFollow"
               class="px-5 py-2 rounded-sm mx-2 font-bold shadow bg-blue-600 hover:bg-blue-700 text-white"
             >
               <i class="fa-solid fa-store"></i>
               Follow Store
+            </button>
+            <button
+              @click="handleunFollow"
+              class="px-5 py-2 rounded-sm mx-2 font-bold shadow bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              <i class="fa-solid fa-store"></i>
+              Unfollow Store
             </button>
           </div>
         </div>
@@ -69,7 +132,7 @@ import { usePage, router, Link, Head } from "@inertiajs/vue3";
             data-tabs-toggle="#myTabContent"
             role="tablist"
           >
-            <li class="relative mr-2 flex items-center">
+            <!-- <li class="relative mr-2 flex items-center">
               <button
                 id="dropdownNavbarLink"
                 data-dropdown-toggle="dropdownNavbar"
@@ -92,7 +155,7 @@ import { usePage, router, Link, Head } from "@inertiajs/vue3";
                   ></path>
                 </svg>
               </button>
-              <!-- Dropdown menu -->
+
               <div
                 id="dropdownNavbar"
                 class="hidden z-40 font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-md w-[900px] h-[700px] ml-10 overflow-auto"
@@ -140,7 +203,7 @@ import { usePage, router, Link, Head } from "@inertiajs/vue3";
                   </ul>
                 </div>
               </div>
-            </li>
+            </li> -->
             <li class="mr-2" role="presentation">
               <a
                 href="#"

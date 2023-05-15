@@ -74,7 +74,6 @@ class HomeController extends Controller
             "randomProducts"
         ));
 
-        // return inertia("Ecommerce/Vendor/Shop/Index");
 
     }
 

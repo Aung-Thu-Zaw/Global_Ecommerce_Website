@@ -91,13 +91,13 @@ const updateSorting = (sort = "id") => {
 const swal = inject("$swal");
 
 const currentTime = new Date();
-const threshold = 1000 * 60 * 5; //5minutes in millseconds
+const threshold = 1000 * 60 * 3; //3minutes in millseconds
 
 const status = (last_activity) => {
   const lastActivity = new Date(last_activity);
   const timeDifference = currentTime.getTime() - lastActivity.getTime();
 
-  return timeDifference < threshold ? "Online" : "Offline";
+  return timeDifference < threshold ? "active" : "offline";
 };
 </script>
 
@@ -292,9 +292,9 @@ const status = (last_activity) => {
                 class="capitalize px-3 py-1 font-bold text-sm rounded-md"
                 :class="{
                   'bg-green-200 text-green-500':
-                    status(user.last_activity) == 'Online',
+                    status(user.last_activity) == 'active',
                   'bg-red-200 text-red-500':
-                    status(user.last_activity) == 'Offline',
+                    status(user.last_activity) == 'offline',
                 }"
               >
                 <i class="fa-solid fa-circle animate-pulse text-[.6rem]"></i>

@@ -347,7 +347,7 @@ const saveToWatchlist = () => {
                 />
                 <div class="flex items-start">
                   <Link
-                    :href="route()"
+                    :href="route('shop', product.shop.id)"
                     class="font-bold w-full text-md text-slate-700 hover:text-blue-600 cursor-pointer mr-1"
                   >
                     {{ product.shop.shop_name }}
@@ -399,7 +399,7 @@ const saveToWatchlist = () => {
               </div>
               <div class="flex items-center justify-between my-3 px-5 py-3">
                 <Link
-                  :href="route()"
+                  :href="route('shop', product.shop.id)"
                   class="px-5 py-2 bg-blue-600 w-1/3 rounded-sm font-bold text-white text-sm hover:bg-blue-700 shadow"
                 >
                   <i class="fas fa-store mr-1"></i>
