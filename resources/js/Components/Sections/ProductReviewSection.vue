@@ -144,23 +144,34 @@ const props = defineProps({ product: Object, productReviews: Object });
 
   <div class="p-5">
     <h1 class="font-bold text-slate-600 text-xl my-3">
-      Customer Product Reviews
+      Customer Product Reviews ({{ productReviews.data.length }})
     </h1>
 
-    <!-- Card  -->
-    <div
-      v-for="productReview in productReviews.data"
-      :key="productReview.id"
-      class="shadow border rounded-md p-5 flex flex-col items-start my-3"
-    >
-      <ReviewCard :productReview="productReview" />
+    <div v-if="productReviews.data.length">
+      <!-- Card  -->
+      <div
+        v-for="productReview in productReviews.data"
+        :key="productReview.id"
+        class="shadow border rounded-md p-5 flex flex-col items-start my-3"
+      >
+        <ReviewCard :productReview="productReview" />
 
-      <ReplyCard />
+        <ReplyCard />
+      </div>
+
+      <!-- Pagination -->
+      <div>
+        <pagination class="mt-6" :links="productReviews.links" />
+      </div>
     </div>
-
-    <!-- Pagination -->
-    <div>
-      <pagination class="mt-6" :links="productReviews.links" />
+    <div v-else>
+      <div class="font-bold text-center text-sm text-slate-600 my-10">
+        <i class="fa-solid fa-star text-3xl mb-5"></i>
+        <p>This product has no reviews.</p>
+        <p>
+          Let others know what you think and be the first to write a review.
+        </p>
+      </div>
     </div>
   </div>
   <hr />

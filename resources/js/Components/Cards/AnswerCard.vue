@@ -1,10 +1,13 @@
 <script setup>
-import AnswerEditFormModal from "@/Components/Modals/AnswerEditFormModal.vue";
+import AnswerEditForm from "@/Components/Form/AnswerEditForm.vue";
 import { router, usePage } from "@inertiajs/vue3";
+import { ref } from "vue";
 
 const props = defineProps({
   question: Object,
 });
+
+const isEditAnswerFormVisible = ref(false);
 
 const handleDeleteAnswer = () => {
   router.post(
@@ -58,18 +61,33 @@ const handleDeleteAnswer = () => {
         $page.props.auth.user &&
         $page.props.auth.user.id === question.product_answer.user.id
       "
-      class="flex items-center justify-end"
+      class="flex flex-col items-end"
     >
-      <AnswerEditFormModal :question="question" />
+      <div class="my-3">
+        <button
+          @click="isEditAnswerFormVisible = !isEditAnswerFormVisible"
+          class="font-bold border text-[.7rem] text-sky-700 px-3 py-2 rounded-sm border-sky-700 hover:bg-sky-700 hover:text-white transition-all"
+        >
+          <i class="fa-solid fa-flag"></i>
+          Edit Answer
+        </button>
 
-      <button
-        @click="handleDeleteAnswer"
-        class="font-bold border text-[.7rem] text-danger-700 px-3 py-2 mt-5 rounded-sm border-danger-700 hover:bg-danger-700 hover:text-white transition-all ml-3"
-        type="button"
-      >
-        <i class="fa-solid fa-trash"></i>
-        Delete Answer
-      </button>
+        <button
+          @click="handleDeleteAnswer"
+          class="font-bold border text-[.7rem] text-danger-700 px-3 py-2 rounded-sm border-danger-700 hover:bg-danger-700 hover:text-white transition-all ml-3"
+          type="button"
+        >
+          <i class="fa-solid fa-trash"></i>
+          Delete Answer
+        </button>
+      </div>
+
+      <div v-if="isEditAnswerFormVisible" class="w-full">
+        <AnswerEditForm
+          :question="question"
+          @isVisible="isEditAnswerFormVisible = false"
+        />
+      </div>
     </div>
   </div>
 </template>

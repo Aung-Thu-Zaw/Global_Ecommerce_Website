@@ -1,6 +1,6 @@
 <script setup>
-import AnswerFormModal from "@/Components/Modals/AnswerFormModal.vue";
-import QuestionEditFormModal from "@/Components/Modals/QuestionEditFormModal.vue";
+import AnswerForm from "@/Components/Form/AnswerForm.vue";
+import QuestionEditForm from "@/Components/Form/QuestionEditForm.vue";
 import { router, usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
 
@@ -8,6 +8,9 @@ const props = defineProps({
   product: Object,
   question: Object,
 });
+
+const isEditQuestionFormVisible = ref(false);
+const isAnswerFormVisible = ref(false);
 
 const handleDeleteQuestion = () => {
   router.post(
@@ -88,7 +91,8 @@ const handleDeleteQuestion = () => {
               <button
                 v-if="
                   $page.props.auth.user &&
-                  question.user_id === $page.props.auth.user.id
+                  (question.user_id === $page.props.auth.user.id ||
+                    question.product.user_id === $page.props.auth.user.id)
                 "
                 @click="handleDeleteQuestion"
                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white w-full text-left"
@@ -105,11 +109,52 @@ const handleDeleteQuestion = () => {
       </p>
     </div>
 
-    <div>
-      <QuestionEditFormModal :question="question" :product="product" />
+    <div
+      v-if="
+        !question.product_answer &&
+        $page.props.auth.user &&
+        product.user_id == $page.props.auth.user.id
+      "
+      class="my-3 flex items-center justify-end w-full"
+    >
+      <button
+        @click="isAnswerFormVisible = !isAnswerFormVisible"
+        class="font-bold border text-[.7rem] text-sky-700 px-3 py-2 rounded-sm border-sky-700 hover:bg-sky-700 hover:text-white transition-all"
+      >
+        <i class="fa-solid fa-flag"></i>
+        Answer This Question
+      </button>
+    </div>
+    <div
+      v-if="
+        $page.props.auth.user && $page.props.auth.user.id === question.user_id
+      "
+      class="my-3 flex items-center justify-end w-full"
+    >
+      <button
+        @click="isEditQuestionFormVisible = !isEditQuestionFormVisible"
+        class="font-bold border text-[.7rem] text-sky-700 px-3 py-2 rounded-sm border-sky-700 hover:bg-sky-700 hover:text-white transition-all"
+      >
+        <i class="fa-solid fa-flag"></i>
+        Edit Question
+      </button>
     </div>
 
-    <AnswerFormModal :product="product" :question="question" />
+    <div v-if="isEditQuestionFormVisible" class="w-full">
+      <QuestionEditForm
+        :question="question"
+        :product="product"
+        @isVisible="isEditQuestionFormVisible = false"
+      />
+    </div>
+
+    <div v-if="isAnswerFormVisible" class="w-full">
+      <AnswerForm
+        :product="product"
+        :question="question"
+        @isVisible="isAnswerFormVisible = false"
+      />
+    </div>
 
     <hr v-if="question.product_answer" class="mt-5" />
   </div>

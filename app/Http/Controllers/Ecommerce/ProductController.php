@@ -63,7 +63,7 @@ class ProductController extends Controller
                                      ->get();
 
 
-        $productQuestions=ProductQuestion::with(["user","productAnswer.user:id,shop_name,avatar"])
+        $productQuestions=ProductQuestion::with(["user","productAnswer.user:id,shop_name,avatar","product:id,user_id"])
                                          ->where("product_id", $product->id)
                                          ->orderBy("id", "desc")
                                          ->paginate(5);

@@ -1,4 +1,6 @@
 <script setup>
+import ReplyForm from "@/Components/Form/ReplyForm.vue";
+
 const props = defineProps({ productReview: Object });
 </script>
 
@@ -338,9 +340,11 @@ const props = defineProps({ productReview: Object });
           {{ productReview.updated_at }}
         </span>
       </div>
-      <p class="w-full text-sm font-normal text-slate-900">
+      <p class="w-full text-sm font-normal text-slate-900 mb-3">
         {{ productReview.review_text }}
       </p>
+
+      <ReplyForm />
     </div>
   </div>
 </template>
