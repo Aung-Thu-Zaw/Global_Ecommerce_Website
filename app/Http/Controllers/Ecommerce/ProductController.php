@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ecommerce;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductQuestion;
+use App\Models\ProductReview;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -67,6 +68,12 @@ class ProductController extends Controller
                                          ->orderBy("id", "desc")
                                          ->paginate(5);
 
-        return inertia("Ecommerce/Products/Detail", compact("product", "specificShopProducts", "productQuestions"));
+
+        $productReviews=ProductReview::with(["user:id,avatar"])
+                                     ->where("product_id", $product->id)
+                                     ->orderBy("id", "desc")
+                                     ->paginate(5);
+
+        return inertia("Ecommerce/Products/Detail", compact("product", "specificShopProducts", "productQuestions", "productReviews"));
     }
 }

@@ -13,6 +13,7 @@ use App\Http\Controllers\Ecommerce\Payments\CashOnDeliveryController;
 use App\Http\Controllers\Ecommerce\Payments\StripeController;
 use App\Http\Controllers\Ecommerce\ProductAnswerController;
 use App\Http\Controllers\Ecommerce\ProductQuestionController;
+use App\Http\Controllers\Ecommerce\ProductReviewController;
 use App\Http\Controllers\Ecommerce\ReviewController;
 use App\Http\Controllers\Ecommerce\SearchResultProductController;
 use App\Http\Controllers\Ecommerce\ShopController;
@@ -52,9 +53,16 @@ Route::get('/collections/{collection}/products', [CollectionController::class,"s
 
 Route::middleware(["auth","verified"])->group(function () {
 
-    Route::get("/shops/{shop_id}", [ShopController::class,"show"])->name("shop");
-    Route::post("/shops/{shop_id}/follow", [ShopController::class,"followShop"])->name("shop.follow");
-    Route::post("/shops/{shop_id}/unfollow", [ShopController::class,"unfollowShop"])->name("shop.unfollow");
+    Route::post("products/reviews", [ProductReviewController::class,"storeReview"])->name("product.review.store");
+
+    Route::controller(ShopController::class)
+           ->prefix("/shops")
+           ->name("shop.")
+           ->group(function () {
+               Route::get("/{shop_id}", "show")->name("index");
+               Route::post("/{shop_id}/follow", "followShop")->name("follow");
+               Route::post("/{shop_id}/unfollow", "unfollowShop")->name("unfollow");
+           });
 
     Route::controller(ProductQuestionController::class)
            ->prefix("/products/ask-questions")
@@ -110,19 +118,9 @@ Route::middleware(["auth","verified"])->group(function () {
                 Route::get('/invoice/{order_id}/download', "downloadInvoice")->name("download.invoice");
             });
 
-    // Route::controller(FollowedShopController::class)
-    //         ->prefix("/followed-stores")
-    //         ->name("followed-stores.")
-    //         ->group(function () {
-    //             Route::get('/', "index")->name("index");
-    //             Route::get('/{order_id}', "show")->name("show");
-    //             Route::get('/invoice/{order_id}/download', "downloadInvoice")->name("download.invoice");
-    //         });
-
-
     Route::get("followed-shops", [FollowedShopController::class,"index"])->name("user.shop.followed");
-    Route::post("followed-shops/{shop_id}/unfollow", [FollowedShopController::class,"unfollowShop"])->name("user.shop.unfollow");
 
+    Route::post("followed-shops/{shop_id}/unfollow", [FollowedShopController::class,"unfollowShop"])->name("user.shop.unfollow");
 
     Route::post('/track-my-orders', [TrackMyOrderController::class,"trackMyOrder"])->name("order.track");
 

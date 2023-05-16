@@ -20,7 +20,7 @@ class FollowedShopController extends Controller
         return inertia("User/FollowedShops/Index", compact("followedShops"));
     }
 
-    public function unfollowShop($shopId): RedirectResponse
+    public function unfollowShop(int $shopId): RedirectResponse
     {
         $user=auth()->user();
 

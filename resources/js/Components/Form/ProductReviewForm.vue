@@ -1,11 +1,40 @@
 <script setup>
+import { useForm, router, usePage } from "@inertiajs/vue3";
+import { useReCaptcha } from "vue-recaptcha-v3";
+
+const props = defineProps({ product: Object });
+
+const form = useForm({
+  product_id: props.product.id,
+  vendor_id: props.product.user_id,
+  user_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
+  review_text: "",
+  rating: 1,
+  status: false,
+  captcha_token: null,
+});
+
+const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+const handleCreateReview = async () => {
+  await recaptchaLoaded();
+  form.captcha_token = await executeRecaptcha("create_review");
+  submit();
+};
+
+const submit = () => {
+  form.post(route("product.review.store"), {
+    replace: true,
+    preserveScroll: true,
+    onFinish: () => (form.review_text = ""),
+  });
+};
 </script>
 
 
 <template>
   <div class="p-5">
     <h1 class="font-bold text-slate-600 text-xl my-3">Add a Review</h1>
-    <form>
+    <form @submit.prevent="handleCreateReview">
       <div
         class="border shadow-md rounded-sm my-5 flex items-center justify-between"
       >
@@ -30,9 +59,10 @@
             <input
               id="red-radio"
               type="radio"
-              value=""
+              value="1"
               name="colored-radio"
               class="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 focus:ring-yellow-400 focus:ring-2"
+              v-model="form.rating"
             />
           </span>
         </div>
@@ -72,9 +102,10 @@
             <input
               id="red-radio"
               type="radio"
-              value=""
+              value="2"
               name="colored-radio"
               class="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 focus:ring-yellow-400 focus:ring-2"
+              v-model="form.rating"
             />
           </span>
         </div>
@@ -126,9 +157,10 @@
             <input
               id="red-radio"
               type="radio"
-              value=""
+              value="3"
               name="colored-radio"
               class="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 focus:ring-yellow-400 focus:ring-2"
+              v-model="form.rating"
             />
           </span>
         </div>
@@ -192,9 +224,10 @@
             <input
               id="red-radio"
               type="radio"
-              value=""
+              value="4"
               name="colored-radio"
               class="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 focus:ring-yellow-400 focus:ring-2"
+              v-model="form.rating"
             />
           </span>
         </div>
@@ -270,9 +303,10 @@
             <input
               id="red-radio"
               type="radio"
-              value=""
+              value="5"
               name="colored-radio"
               class="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 focus:ring-yellow-400 focus:ring-2"
+              v-model="form.rating"
             />
           </span>
         </div>
@@ -283,6 +317,7 @@
         rows="10"
         class="w-full h-[200px] rounded-md border-2 border-slate-400 focus:ring-0 focus:border-slate-400"
         placeholder="Write Comment"
+        v-model="form.review_text"
       ></textarea>
       <button
         class="bg-blue-600 font-bold text-white w-full py-2 rounded-sm hover:bg-blue-700 my-5"

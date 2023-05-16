@@ -5,6 +5,7 @@ import ProductReviewSection from "@/Components/Sections/ProductReviewSection.vue
 
 const props = defineProps({
   productQuestions: Object,
+  productReviews: Object,
   specificShopProducts: Object,
   product: Object,
 });
@@ -113,7 +114,10 @@ const props = defineProps({
                 role="tabpanel"
                 aria-labelledby="reviews-tab"
               >
-                <ProductReviewSection />
+                <ProductReviewSection
+                  :product="product"
+                  :productReviews="productReviews"
+                />
               </div>
             </div>
           </div>

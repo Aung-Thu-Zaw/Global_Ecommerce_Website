@@ -3,6 +3,10 @@
 import ReplyCard from "@/Components/Cards/ReplyCard.vue";
 import ReviewCard from "@/Components/Cards/ReviewCard.vue";
 import ProductReviewForm from "@/Components/Form/ProductReviewForm.vue";
+import { Link } from "@inertiajs/vue3";
+import Pagination from "@/Components/Pagination.vue";
+
+const props = defineProps({ product: Object, productReviews: Object });
 </script>
 
 <template>
@@ -139,18 +143,45 @@ import ProductReviewForm from "@/Components/Form/ProductReviewForm.vue";
   <hr />
 
   <div class="p-5">
-    <h1 class="font-bold text-slate-600 text-xl my-3">Customer Reviews</h1>
+    <h1 class="font-bold text-slate-600 text-xl my-3">
+      Customer Product Reviews
+    </h1>
 
     <!-- Card  -->
-    <div class="shadow border rounded-md p-5 flex flex-col items-start my-3">
-      <ReviewCard />
+    <div
+      v-for="productReview in productReviews.data"
+      :key="productReview.id"
+      class="shadow border rounded-md p-5 flex flex-col items-start my-3"
+    >
+      <ReviewCard :productReview="productReview" />
 
       <ReplyCard />
+    </div>
+
+    <!-- Pagination -->
+    <div>
+      <pagination class="mt-6" :links="productReviews.links" />
     </div>
   </div>
   <hr />
 
-  <ProductReviewForm />
+  <div
+    v-if="$page.props.auth.user && $page.props.auth.user.id !== product.user_id"
+  >
+    <ProductReviewForm :product="product" />
+  </div>
+  <div v-else-if="!$page.props.auth.user" class="px-5 my-5">
+    <p class="font-bold text-sm text-slate-600 text-center">
+      If you want to review this product you need to login first. Here
+      <Link :href="route('login')" class="text-blue-600 underline">
+        Login
+      </Link>
+      Or
+      <Link :href="route('register')" class="text-blue-600 underline">
+        Register
+      </Link>
+    </p>
+  </div>
 </template>
 
 
