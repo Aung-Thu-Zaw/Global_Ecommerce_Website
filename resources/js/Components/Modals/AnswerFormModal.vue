@@ -36,7 +36,9 @@ const submit = () => {
 
   <div
     v-if="
-      !question.product_answer && product.user_id == $page.props.auth.user.id
+      !question.product_answer &&
+      $page.props.auth.user &&
+      product.user_id == $page.props.auth.user.id
     "
     class="flex items-center justify-end"
   >
