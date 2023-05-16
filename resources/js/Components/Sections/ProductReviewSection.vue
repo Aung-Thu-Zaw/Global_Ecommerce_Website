@@ -155,8 +155,9 @@ const props = defineProps({ product: Object, productReviews: Object });
         class="shadow border rounded-md p-5 flex flex-col items-start my-3"
       >
         <ReviewCard :productReview="productReview" />
-
-        <ReplyCard />
+        <div v-if="productReview.reply" class="w-full">
+          <ReplyCard :productReview="productReview" />
+        </div>
       </div>
 
       <!-- Pagination -->

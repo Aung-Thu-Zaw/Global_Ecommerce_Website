@@ -14,6 +14,7 @@ use App\Http\Controllers\Ecommerce\Payments\StripeController;
 use App\Http\Controllers\Ecommerce\ProductAnswerController;
 use App\Http\Controllers\Ecommerce\ProductQuestionController;
 use App\Http\Controllers\Ecommerce\ProductReviewController;
+use App\Http\Controllers\Ecommerce\ProductReviewReplyController;
 use App\Http\Controllers\Ecommerce\ReviewController;
 use App\Http\Controllers\Ecommerce\SearchResultProductController;
 use App\Http\Controllers\Ecommerce\ShopController;
@@ -53,7 +54,25 @@ Route::get('/collections/{collection}/products', [CollectionController::class,"s
 
 Route::middleware(["auth","verified"])->group(function () {
 
-    Route::post("products/reviews", [ProductReviewController::class,"storeReview"])->name("product.review.store");
+
+
+    Route::controller(ProductReviewController::class)
+           ->prefix("/products/reviews")
+           ->name("product.review.")
+           ->group(function () {
+               Route::post("/", "storeReview")->name("store");
+               // Route::post("/{review_id}/update", "updateReview")->name("update");
+               // Route::post("/{review_id}/destroy", "destroyReview")->name("destroy");
+           });
+
+    Route::controller(ProductReviewReplyController::class)
+           ->prefix("/products/reviews/reply")
+           ->name("product.review.reply.")
+           ->group(function () {
+               Route::post("/", "storeProductReviewReply")->name("store");
+               Route::post("/{reply_id}/update", "updateProductReviewReply")->name("update");
+               Route::post("/{reply_id}/destroy", "destroyProductReviewReply")->name("destroy");
+           });
 
     Route::controller(ShopController::class)
            ->prefix("/shops")

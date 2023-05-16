@@ -15,4 +15,22 @@ class ProductReviewController extends Controller
 
         return back();
     }
+
+    // public function updateReview(ProductReviewRequest $request, int $reviewId): RedirectResponse
+    // {
+    //     $productReview=ProductReview::where("id", $reviewId)->first();
+
+    //     $productReview->update(["review_text"=>$request->review_text]);
+
+    //     return back();
+    // }
+
+    // public function destroyReview(int $reviewId): RedirectResponse
+    // {
+    //     $productReview=ProductReview::where("id", $reviewId)->first();
+
+    //     $productReview->delete();
+
+    //     return back();
+    // }
 }

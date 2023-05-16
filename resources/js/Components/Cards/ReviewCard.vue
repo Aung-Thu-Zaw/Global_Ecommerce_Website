@@ -1,5 +1,8 @@
 <script setup>
 import ReplyForm from "@/Components/Form/ReplyForm.vue";
+import { ref } from "vue";
+
+const isReplyFormVisible = ref(false);
 
 const props = defineProps({ productReview: Object });
 </script>
@@ -330,11 +333,19 @@ const props = defineProps({ productReview: Object });
       </div>
     </div>
     <div class="flex flex-col items-center w-full">
-      <div class="flex items-center justify-between w-full mb-1">
-        <span class="text-green-500 text-sm font-bold">
-          <i class="fa-solid fa-circle-check"></i>
-          Verified Puraches
-        </span>
+      <div class="flex items-start justify-between w-full mb-1">
+        <div class="flex flex-col">
+          <h3 class="text-lg font-bold text-slate-700">
+            {{ productReview.user.name }}
+            <span class="text-green-500 text-[.8rem] font-bold ml-3">
+              <i class="fa-solid fa-circle-check"></i>
+              Verified Puraches
+            </span>
+          </h3>
+          <p class="text-[.8rem] text-slate-400 mb-2">
+            Review From {{ productReview.user.name }}
+          </p>
+        </div>
 
         <span class="text-slate-600 text-sm font-bold">
           {{ productReview.updated_at }}
@@ -344,7 +355,29 @@ const props = defineProps({ productReview: Object });
         {{ productReview.review_text }}
       </p>
 
-      <ReplyForm />
+      <div
+        v-if="
+          !productReview.reply &&
+          $page.props.auth.user &&
+          productReview.vendor_id == $page.props.auth.user.id
+        "
+        class="flex items-center justify-end w-full"
+      >
+        <button
+          @click="isReplyFormVisible = !isReplyFormVisible"
+          class="font-bold border text-[.7rem] text-sky-700 px-3 py-2 rounded-sm border-sky-700 hover:bg-sky-700 hover:text-white transition-all mb-3"
+        >
+          <i class="fa-solid fa-flag"></i>
+          Reply
+        </button>
+      </div>
+
+      <div v-if="isReplyFormVisible" class="w-full">
+        <ReplyForm
+          :productReview="productReview"
+          @isVisible="isReplyFormVisible = false"
+        />
+      </div>
     </div>
   </div>
 </template>
