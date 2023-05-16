@@ -103,6 +103,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Watchlist::class);
     }
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\HasMany<Order>
+    */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
 
     /**
     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Coupon>

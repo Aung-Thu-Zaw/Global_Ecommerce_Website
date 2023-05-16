@@ -1,10 +1,22 @@
 <script setup>
 import ReplyForm from "@/Components/Form/ReplyForm.vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 const isReplyFormVisible = ref(false);
 
 const props = defineProps({ paginateProductReview: Object });
+
+const filterVerifiedPurchaser = computed(() => {
+  const orders = props.paginateProductReview.user.orders.filter((order) =>
+    order.order_items.filter(
+      (orderItem) =>
+        orderItem.produt_id === props.paginateProductReview.product_id &&
+        orderItem.vendor_id === props.paginateProductReview.vendor_id
+    )
+  );
+
+  return orders.length ? true : false;
+});
 </script>
 
 
@@ -337,9 +349,12 @@ const props = defineProps({ paginateProductReview: Object });
         <div class="flex flex-col">
           <h3 class="text-lg font-bold text-slate-700">
             {{ paginateProductReview.user.name }}
-            <span class="text-green-500 text-[.8rem] font-bold ml-3">
+            <span
+              v-if="filterVerifiedPurchaser"
+              class="text-green-500 text-[.8rem] font-bold ml-3"
+            >
               <i class="fa-solid fa-circle-check"></i>
-              Verified Puraches
+              Verified Purchaser
             </span>
           </h3>
           <p class="text-[.8rem] text-slate-400 mb-2">

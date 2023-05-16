@@ -21,8 +21,6 @@ class Order extends Model
 
     protected $guarded=[];
 
-
-
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Order, never>
     */
