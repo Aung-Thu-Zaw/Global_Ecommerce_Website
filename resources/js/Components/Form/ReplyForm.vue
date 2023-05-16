@@ -3,13 +3,13 @@ import { useForm, usePage } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 
 const props = defineProps({
-  productReview: Object,
+  paginateProductReview: Object,
 });
 
 const emit = defineEmits(["isVisible"]);
 
 const form = useForm({
-  product_review_id: props.productReview.id,
+  product_review_id: props.paginateProductReview.id,
   user_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
   reply_text: "",
   captcha_token: null,

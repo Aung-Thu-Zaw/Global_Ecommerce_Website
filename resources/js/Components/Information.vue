@@ -6,8 +6,10 @@ import ProductReviewSection from "@/Components/Sections/ProductReviewSection.vue
 const props = defineProps({
   productQuestions: Object,
   productReviews: Object,
+  paginateProductReviews: Object,
   specificShopProducts: Object,
   product: Object,
+  productReviewsAvg: String,
 });
 </script>
 
@@ -117,6 +119,8 @@ const props = defineProps({
                 <ProductReviewSection
                   :product="product"
                   :productReviews="productReviews"
+                  :paginateProductReviews="paginateProductReviews"
+                  :productReviewsAvg="productReviewsAvg"
                 />
               </div>
             </div>

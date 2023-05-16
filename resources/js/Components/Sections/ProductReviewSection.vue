@@ -5,8 +5,54 @@ import ReviewCard from "@/Components/Cards/ReviewCard.vue";
 import ProductReviewForm from "@/Components/Form/ProductReviewForm.vue";
 import { Link } from "@inertiajs/vue3";
 import Pagination from "@/Components/Pagination.vue";
+import { computed, onMounted, ref } from "vue";
 
-const props = defineProps({ product: Object, productReviews: Object });
+const props = defineProps({
+  product: Object,
+  productReviews: Object,
+  paginateProductReviews: Object,
+  productReviewsAvg: String,
+});
+
+const reviewAvg = computed(() =>
+  parseFloat(props.productReviewsAvg).toFixed(2)
+);
+
+const oneStarRating = computed(() => {
+  const totalRatings = props.productReviews.filter(
+    (review) => review.rating == 1
+  );
+
+  return ((totalRatings.length / props.productReviews.length) * 100).toFixed(0);
+});
+
+const twoStarRating = computed(() => {
+  const totalRatings = props.productReviews.filter(
+    (review) => review.rating == 2
+  );
+  return ((totalRatings.length / props.productReviews.length) * 100).toFixed(0);
+});
+
+const threeStarRating = computed(() => {
+  const totalRatings = props.productReviews.filter(
+    (review) => review.rating == 3
+  );
+  return ((totalRatings.length / props.productReviews.length) * 100).toFixed(0);
+});
+
+const fourStarRating = computed(() => {
+  const totalRatings = props.productReviews.filter(
+    (review) => review.rating == 4
+  );
+  return ((totalRatings.length / props.productReviews.length) * 100).toFixed(0);
+});
+
+const fiveStarRating = computed(() => {
+  const totalRatings = props.productReviews.filter(
+    (review) => review.rating == 5
+  );
+  return ((totalRatings.length / props.productReviews.length) * 100).toFixed(0);
+});
 </script>
 
 <template>
@@ -76,22 +122,27 @@ const props = defineProps({ product: Object, productReviews: Object });
           ></path>
         </svg>
         <p class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">
-          4.95 out of 5
+          {{ reviewAvg }} out of 5
         </p>
       </div>
     </div>
 
-    <p class="text-sm text-slate-400">Based on 123 users ratings</p>
+    <p class="text-sm text-slate-400">
+      Based on {{ productReviews.length }} user ratings
+    </p>
 
     <div class="flex items-center mt-4 justify-center">
       <span class="text-sm font-medium text-blue-600 dark:text-blue-500"
         >5 star</span
       >
       <div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-        <div class="h-5 bg-yellow-400 rounded" style="width: 70%"></div>
+        <div
+          class="h-5 bg-yellow-400 rounded"
+          :style="{ width: `${fiveStarRating}%` }"
+        ></div>
       </div>
       <span class="text-sm font-medium text-blue-600 dark:text-blue-500"
-        >70%</span
+        >{{ fiveStarRating }}%</span
       >
     </div>
     <div class="flex items-center mt-4 justify-center">
@@ -99,10 +150,13 @@ const props = defineProps({ product: Object, productReviews: Object });
         >4 star</span
       >
       <div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-        <div class="h-5 bg-yellow-400 rounded" style="width: 17%"></div>
+        <div
+          class="h-5 bg-yellow-400 rounded"
+          :style="{ width: `${fourStarRating}%` }"
+        ></div>
       </div>
       <span class="text-sm font-medium text-blue-600 dark:text-blue-500"
-        >17%</span
+        >{{ fourStarRating }}%</span
       >
     </div>
     <div class="flex items-center mt-4 justify-center">
@@ -110,10 +164,13 @@ const props = defineProps({ product: Object, productReviews: Object });
         >3 star</span
       >
       <div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-        <div class="h-5 bg-yellow-400 rounded" style="width: 8%"></div>
+        <div
+          class="h-5 bg-yellow-400 rounded"
+          :style="{ width: `${threeStarRating}%` }"
+        ></div>
       </div>
       <span class="text-sm font-medium text-blue-600 dark:text-blue-500"
-        >8%</span
+        >{{ threeStarRating }}%</span
       >
     </div>
     <div class="flex items-center mt-4 justify-center">
@@ -121,10 +178,13 @@ const props = defineProps({ product: Object, productReviews: Object });
         >2 star</span
       >
       <div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-        <div class="h-5 bg-yellow-400 rounded" style="width: 4%"></div>
+        <div
+          class="h-5 bg-yellow-400 rounded"
+          :style="{ width: `${twoStarRating}%` }"
+        ></div>
       </div>
       <span class="text-sm font-medium text-blue-600 dark:text-blue-500"
-        >4%</span
+        >{{ twoStarRating }}%</span
       >
     </div>
     <div class="flex items-center mt-4 justify-center">
@@ -132,10 +192,13 @@ const props = defineProps({ product: Object, productReviews: Object });
         >1 star</span
       >
       <div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-        <div class="h-5 bg-yellow-400 rounded" style="width: 1%"></div>
+        <div
+          class="h-5 bg-yellow-400 rounded"
+          :style="{ width: `${oneStarRating}%` }"
+        ></div>
       </div>
       <span class="text-sm font-medium text-blue-600 dark:text-blue-500"
-        >1%</span
+        >{{ oneStarRating }}%</span
       >
     </div>
   </div>
@@ -144,25 +207,25 @@ const props = defineProps({ product: Object, productReviews: Object });
 
   <div class="p-5">
     <h1 class="font-bold text-slate-600 text-xl my-3">
-      Customer Product Reviews ({{ productReviews.data.length }})
+      Customer Product Reviews ({{ productReviews.length }})
     </h1>
 
-    <div v-if="productReviews.data.length">
+    <div v-if="paginateProductReviews.data.length">
       <!-- Card  -->
       <div
-        v-for="productReview in productReviews.data"
-        :key="productReview.id"
+        v-for="paginateProductReview in paginateProductReviews.data"
+        :key="paginateProductReview.id"
         class="shadow border rounded-md p-5 flex flex-col items-start my-3"
       >
-        <ReviewCard :productReview="productReview" />
-        <div v-if="productReview.reply" class="w-full">
-          <ReplyCard :productReview="productReview" />
+        <ReviewCard :paginateProductReview="paginateProductReview" />
+        <div v-if="paginateProductReview.reply" class="w-full">
+          <ReplyCard :paginateProductReview="paginateProductReview" />
         </div>
       </div>
 
       <!-- Pagination -->
       <div>
-        <pagination class="mt-6" :links="productReviews.links" />
+        <pagination class="mt-6" :links="paginateProductReviews.links" />
       </div>
     </div>
     <div v-else>

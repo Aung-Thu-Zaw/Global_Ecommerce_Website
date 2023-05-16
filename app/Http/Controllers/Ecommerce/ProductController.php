@@ -69,11 +69,17 @@ class ProductController extends Controller
                                          ->paginate(5);
 
 
-        $productReviews=ProductReview::with(["user:id,name,avatar","reply.user:id,shop_name,avatar"])
+        $paginateProductReviews=ProductReview::with(["user:id,name,avatar","reply.user:id,shop_name,avatar"])
                                      ->where("product_id", $product->id)
                                      ->orderBy("id", "desc")
                                      ->paginate(5);
 
-        return inertia("Ecommerce/Products/Detail", compact("product", "specificShopProducts", "productQuestions", "productReviews"));
+        $productReviews=ProductReview::where("product_id", $product->id)->get();
+
+        $productReviewsAvg=ProductReview::where("product_id", $product->id)->avg("rating");
+
+
+
+        return inertia("Ecommerce/Products/Detail", compact("product", "specificShopProducts", "productQuestions", "paginateProductReviews", "productReviews", "productReviewsAvg"));
     }
 }

@@ -4,7 +4,7 @@ import { ref } from "vue";
 
 const isReplyFormVisible = ref(false);
 
-const props = defineProps({ productReview: Object });
+const props = defineProps({ paginateProductReview: Object });
 </script>
 
 
@@ -12,12 +12,12 @@ const props = defineProps({ productReview: Object });
   <div class="flex items-start w-full">
     <div class="flex flex-col items-center justify-center mr-5">
       <img
-        :src="productReview.user.avatar"
+        :src="paginateProductReview.user.avatar"
         alt=""
         class="w-12 h-12 object-cover rounded-full mr-5 mb-3"
       />
 
-      <div v-if="productReview.rating == 1" class="flex items-center">
+      <div v-if="paginateProductReview.rating == 1" class="flex items-center">
         <svg
           aria-hidden="true"
           class="w-5 h-5 text-yellow-400"
@@ -80,7 +80,7 @@ const props = defineProps({ productReview: Object });
         </svg>
       </div>
 
-      <div v-if="productReview.rating == 2" class="flex items-center">
+      <div v-if="paginateProductReview.rating == 2" class="flex items-center">
         <svg
           aria-hidden="true"
           class="w-5 h-5 text-yellow-400"
@@ -143,7 +143,7 @@ const props = defineProps({ productReview: Object });
         </svg>
       </div>
 
-      <div v-if="productReview.rating == 3" class="flex items-center">
+      <div v-if="paginateProductReview.rating == 3" class="flex items-center">
         <svg
           aria-hidden="true"
           class="w-5 h-5 text-yellow-400"
@@ -206,7 +206,7 @@ const props = defineProps({ productReview: Object });
         </svg>
       </div>
 
-      <div v-if="productReview.rating == 4" class="flex items-center">
+      <div v-if="paginateProductReview.rating == 4" class="flex items-center">
         <svg
           aria-hidden="true"
           class="w-5 h-5 text-yellow-400"
@@ -269,7 +269,7 @@ const props = defineProps({ productReview: Object });
         </svg>
       </div>
 
-      <div v-if="productReview.rating == 5" class="flex items-center">
+      <div v-if="paginateProductReview.rating == 5" class="flex items-center">
         <svg
           aria-hidden="true"
           class="w-5 h-5 text-yellow-400"
@@ -336,30 +336,30 @@ const props = defineProps({ productReview: Object });
       <div class="flex items-start justify-between w-full mb-1">
         <div class="flex flex-col">
           <h3 class="text-lg font-bold text-slate-700">
-            {{ productReview.user.name }}
+            {{ paginateProductReview.user.name }}
             <span class="text-green-500 text-[.8rem] font-bold ml-3">
               <i class="fa-solid fa-circle-check"></i>
               Verified Puraches
             </span>
           </h3>
           <p class="text-[.8rem] text-slate-400 mb-2">
-            Review From {{ productReview.user.name }}
+            Review From {{ paginateProductReview.user.name }}
           </p>
         </div>
 
         <span class="text-slate-600 text-sm font-bold">
-          {{ productReview.updated_at }}
+          {{ paginateProductReview.updated_at }}
         </span>
       </div>
       <p class="w-full text-sm font-normal text-slate-900 mb-3">
-        {{ productReview.review_text }}
+        {{ paginateProductReview.review_text }}
       </p>
 
       <div
         v-if="
-          !productReview.reply &&
+          !paginateProductReview.reply &&
           $page.props.auth.user &&
-          productReview.vendor_id == $page.props.auth.user.id
+          paginateProductReview.vendor_id == $page.props.auth.user.id
         "
         class="flex items-center justify-end w-full"
       >
@@ -374,7 +374,7 @@ const props = defineProps({ productReview: Object });
 
       <div v-if="isReplyFormVisible" class="w-full">
         <ReplyForm
-          :productReview="productReview"
+          :paginateProductReview="paginateProductReview"
           @isVisible="isReplyFormVisible = false"
         />
       </div>

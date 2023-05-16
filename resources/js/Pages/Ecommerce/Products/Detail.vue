@@ -11,7 +11,9 @@ const props = defineProps({
   specificShopProducts: Object,
   product: Object,
   productQuestions: Object,
+  paginateProductReviews: Object,
   productReviews: Object,
+  productReviewsAvg: String,
 });
 
 const images = reactive([props.product.image]);
@@ -423,7 +425,9 @@ const saveToWatchlist = () => {
       :product="product"
       :productQuestions="productQuestions"
       :productReviews="productReviews"
+      :paginateProductReviews="paginateProductReviews"
       :specificShopProducts="specificShopProducts"
+      :productReviewsAvg="productReviewsAvg"
     />
   </AppLayout>
 </template>

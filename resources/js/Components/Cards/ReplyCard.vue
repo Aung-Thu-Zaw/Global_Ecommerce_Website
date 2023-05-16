@@ -1,5 +1,5 @@
 <script setup>
-defineProps({ productReview: Object });
+defineProps({ paginateProductReview: Object });
 </script>
 
 
@@ -8,13 +8,13 @@ defineProps({ productReview: Object });
     <div class="flex items-start justify-between my-3 w-full">
       <div class="flex items-center">
         <img
-          :src="productReview.reply.user.avatar"
+          :src="paginateProductReview.reply.user.avatar"
           alt=""
           class="w-10 h-10 object-cover rounded-full mr-5"
         />
         <div class="w-full">
           <h4 class="text-lg font-bold text-slate-700">
-            {{ productReview.reply.user.shop_name }}
+            {{ paginateProductReview.reply.user.shop_name }}
             <span
               class="px-3 py-1 bg-green-200 text-green-600 rounded-xl text-[.7rem] ml-2"
             >
@@ -27,12 +27,12 @@ defineProps({ productReview: Object });
       </div>
       <div class="">
         <span class="text-slate-600 text-sm font-bold">
-          {{ productReview.reply.updated_at }}
+          {{ paginateProductReview.reply.updated_at }}
         </span>
       </div>
     </div>
     <p class="w-[92%] text-sm font-normal text-slate-900 ml-auto">
-      {{ productReview.reply.reply_text }}
+      {{ paginateProductReview.reply.reply_text }}
     </p>
   </div>
 </template>
