@@ -2,6 +2,7 @@
 import EcommerceFooter from "@/Components/Footers/EcommerceFooter.vue";
 import EcommerceNavbar from "@/Components/Navbars/EcommerceNavbar.vue";
 import CategoryNavbar from "@/Components/Navbars/CategoryNavbar.vue";
+import EcommerceRightSideNavbar from "@/Components/Navbars/EcommerceRightSideNavbar.vue";
 import { onMounted } from "vue";
 import { initFlowbite } from "flowbite";
 
@@ -17,6 +18,8 @@ onMounted(() => {
     <EcommerceNavbar />
     <CategoryNavbar />
   </div>
+
+  <EcommerceRightSideNavbar />
   <slot />
   <EcommerceFooter />
 </template>

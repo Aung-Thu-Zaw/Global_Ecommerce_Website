@@ -1,0 +1,97 @@
+<script setup>
+import ChatBox from "@/Components/ChatBox.vue";
+import { ref } from "vue";
+
+const isVisibleChatbox = ref(false);
+</script>
+
+<template>
+  <div
+    class="fixed bottom-0 top-0 right-0 w-auto px-3 rounded-sm shadow-lg bg-gray-50 border-l transition-all"
+  >
+    <div class="h-full flex flex-col items-center justify-center space-y-5">
+      <div>
+        <button
+          @click="isVisibleChatbox = !isVisibleChatbox"
+          data-tooltip-target="chat-box"
+          data-tooltip-placement="left"
+          type="button"
+          class="mb-2 md:mb-0 text-white shadow-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm text-center w-8 h-8"
+        >
+          <i class="fa-solid fa-message"></i>
+        </button>
+        <div
+          id="chat-box"
+          role="tooltip"
+          class="absolute z-10 invisible inline-block p-2 text-sm font-medium text-dark bg-white rounded-md shadow-lg border opacity-0 tooltip w-[100px]"
+        >
+          Chat Box
+          <div class="tooltip-arrow border" data-popper-arrow></div>
+        </div>
+      </div>
+      <div>
+        <button
+          data-tooltip-target="feedbacks"
+          data-tooltip-placement="left"
+          type="button"
+          class="mb-2 md:mb-0 text-white shadow-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm text-center w-8 h-8"
+        >
+          <i class="fa-solid fa-envelope-open-text"></i>
+        </button>
+        <div
+          id="feedbacks"
+          role="tooltip"
+          class="absolute z-10 invisible inline-block p-2 text-sm font-medium text-dark bg-white rounded-md shadow-lg border opacity-0 tooltip w-[100px]"
+        >
+          Feedback
+          <div class="tooltip-arrow border" data-popper-arrow></div>
+        </div>
+      </div>
+
+      <div>
+        <button
+          data-tooltip-target="report-bugs"
+          data-tooltip-placement="left"
+          type="button"
+          class="mb-2 md:mb-0 text-white shadow-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm text-center w-8 h-8"
+        >
+          <i class="fa-solid fa-bug"></i>
+        </button>
+        <div
+          id="report-bugs"
+          role="tooltip"
+          class="absolute z-10 invisible inline-block p-2 text-sm font-medium text-dark bg-white rounded-md shadow-lg border opacity-0 tooltip w-[100px]"
+        >
+          Report Bugs
+          <div class="tooltip-arrow border" data-popper-arrow></div>
+        </div>
+      </div>
+
+      <div>
+        <button
+          data-popover-target="share"
+          data-popover-placement="left"
+          type="button"
+          class="mb-2 md:mb-0 text-white shadow-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm text-center w-8 h-8"
+        >
+          <i class="fa-solid fa-share-nodes"></i>
+        </button>
+        <div
+          data-popover
+          id="share"
+          role="tooltip"
+          class="absolute z-10 invisible inline-block p-2 text-sm font-medium text-dark bg-white rounded-md shadow-lg border opacity-0 tooltip w-[100px]"
+        >
+          Share
+          <div data-popper-arrow></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ChatBox  -->
+  <div v-if="isVisibleChatbox">
+    <ChatBox />
+  </div>
+</template>
+
