@@ -30,7 +30,7 @@ class ProductReviewRequest extends FormRequest
             "user_id"=>["required","numeric",Rule::exists("users", "id")],
             "review_text"=>["required","string"],
             "rating"=>["required","numeric"],
-            "status"=>["required","boolean"],
+
         ];
     }
 }

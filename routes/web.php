@@ -61,8 +61,8 @@ Route::middleware(["auth","verified"])->group(function () {
            ->name("product.review.")
            ->group(function () {
                Route::post("/", "storeReview")->name("store");
-               // Route::post("/{review_id}/update", "updateReview")->name("update");
-               // Route::post("/{review_id}/destroy", "destroyReview")->name("destroy");
+               Route::post("/{review_id}/update", "updateReview")->name("update");
+               Route::post("/{review_id}/destroy", "destroyReview")->name("destroy");
            });
 
     Route::controller(ProductReviewReplyController::class)

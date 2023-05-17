@@ -19,7 +19,6 @@ return new class () extends Migration {
             $table->foreignId("user_id")->constrained()->cascadeOnDelete();
             $table->text("review_text");
             $table->integer("rating");
-            $table->boolean("status")->default(false);
             $table->timestamps();
         });
     }

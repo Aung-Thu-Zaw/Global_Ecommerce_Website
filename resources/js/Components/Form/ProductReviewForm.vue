@@ -10,7 +10,6 @@ const form = useForm({
   user_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
   review_text: "",
   rating: 1,
-  status: false,
   captcha_token: null,
 });
 

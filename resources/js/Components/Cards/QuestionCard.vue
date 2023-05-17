@@ -129,7 +129,7 @@ const handleDeleteQuestion = () => {
       v-if="
         $page.props.auth.user && $page.props.auth.user.id === question.user_id
       "
-      class="my-3 flex items-center justify-end w-full"
+      class="mb-3 flex items-center justify-end w-full"
     >
       <button
         @click="isEditQuestionFormVisible = !isEditQuestionFormVisible"

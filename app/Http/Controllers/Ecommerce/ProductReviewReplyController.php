@@ -17,23 +17,23 @@ class ProductReviewReplyController extends Controller
         return back();
     }
 
-    // public function updateProductReviewReply(ProductReviewReplyRequest $request, int $replyId): RedirectResponse
-    // {
+    public function updateProductReviewReply(ProductReviewReplyRequest $request, int $replyId): RedirectResponse
+    {
 
-    //     $productReviewReply=Reply::findOrFail($replyId);
+        $productReviewReply=Reply::findOrFail($replyId);
 
-    //     $productReviewReply->update(["reply_text"=>$request->reply_text]);
+        $productReviewReply->update(["reply_text"=>$request->reply_text]);
 
-    //     return back();
-    // }
+        return back();
+    }
 
-    // public function destroyProductReviewReply(int $replyId): RedirectResponse
-    // {
-    //     $productReviewReply=Reply::findOrFail($replyId);
+    public function destroyProductReviewReply(int $replyId): RedirectResponse
+    {
+        $productReviewReply=Reply::findOrFail($replyId);
 
-    //     $productReviewReply->delete();
+        $productReviewReply->delete();
 
-    //     return back();
-    // }
+        return back();
+    }
 
 }

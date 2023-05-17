@@ -1,8 +1,11 @@
 <script setup>
 import ReplyForm from "@/Components/Form/ReplyForm.vue";
+import ProductReviewEditForm from "@/Components/Form/ProductReviewEditForm.vue";
 import { computed, ref } from "vue";
+import { router } from "@inertiajs/vue3";
 
 const isReplyFormVisible = ref(false);
+const isEditProductReviewFormVisible = ref(false);
 
 const props = defineProps({ paginateProductReview: Object });
 
@@ -17,6 +20,19 @@ const filterVerifiedPurchaser = computed(() => {
 
   return orders.length ? true : false;
 });
+
+const handleDeleteReview = () => {
+  router.post(
+    route("product.review.destroy", {
+      review_id: props.paginateProductReview.id,
+    }),
+    {},
+    {
+      replace: true,
+      preserveScroll: true,
+    }
+  );
+};
 </script>
 
 
@@ -385,6 +401,38 @@ const filterVerifiedPurchaser = computed(() => {
           <i class="fa-solid fa-flag"></i>
           Reply
         </button>
+      </div>
+
+      <div
+        v-if="
+          $page.props.auth.user &&
+          $page.props.auth.user.id === paginateProductReview.user_id
+        "
+        class="mb-3 flex items-center justify-end w-full"
+      >
+        <button
+          @click="
+            isEditProductReviewFormVisible = !isEditProductReviewFormVisible
+          "
+          class="font-bold border text-[.7rem] text-sky-700 px-3 py-2 rounded-sm border-sky-700 hover:bg-sky-700 hover:text-white transition-all"
+        >
+          <i class="fa-solid fa-flag"></i>
+          Edit Review
+        </button>
+        <button
+          @click="handleDeleteReview"
+          class="font-bold border text-[.7rem] text-danger-700 px-3 py-2 rounded-sm border-danger-700 hover:bg-danger-700 hover:text-white transition-all ml-3"
+        >
+          <i class="fa-solid fa-flag"></i>
+          Delete Review
+        </button>
+      </div>
+
+      <div v-if="isEditProductReviewFormVisible" class="w-full">
+        <ProductReviewEditForm
+          :paginateProductReview="paginateProductReview"
+          @isVisible="isEditProductReviewFormVisible = false"
+        />
       </div>
 
       <div v-if="isReplyFormVisible" class="w-full">

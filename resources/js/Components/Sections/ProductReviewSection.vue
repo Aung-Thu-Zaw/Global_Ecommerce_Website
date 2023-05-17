@@ -1,7 +1,7 @@
 
 <script setup>
 import ReplyCard from "@/Components/Cards/ReplyCard.vue";
-import ReviewCard from "@/Components/Cards/ReviewCard.vue";
+import ProductReviewCard from "@/Components/Cards/ProductReviewCard.vue";
 import ProductReviewForm from "@/Components/Form/ProductReviewForm.vue";
 import { Link } from "@inertiajs/vue3";
 import Pagination from "@/Components/Pagination.vue";
@@ -54,10 +54,6 @@ const fiveStarRating = computed(() => {
   return ((totalRatings.length / props.productReviews.length) * 100).toFixed(0);
 });
 </script>
-
-
-
-
 
 <template>
   <div class="text-center mb-5 p-5">
@@ -236,7 +232,7 @@ const fiveStarRating = computed(() => {
         :key="paginateProductReview.id"
         class="shadow border rounded-md p-5 flex flex-col items-start my-3"
       >
-        <ReviewCard :paginateProductReview="paginateProductReview" />
+        <ProductReviewCard :paginateProductReview="paginateProductReview" />
         <div v-if="paginateProductReview.reply" class="w-full">
           <ReplyCard :paginateProductReview="paginateProductReview" />
         </div>
