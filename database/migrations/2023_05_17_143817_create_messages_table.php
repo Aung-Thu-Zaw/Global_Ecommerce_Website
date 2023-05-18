@@ -16,7 +16,10 @@ return new class () extends Migration {
             $table->id();
             $table->foreignId("conversation_id")->constrained()->cascadeOnDelete();
             $table->foreignId("user_id")->constrained()->cascadeOnDelete();
-            $table->text("message");
+            $table->enum('type', ['text', 'image', 'video']);
+            $table->text('text_content')->nullable();
+            $table->string('image_path')->nullable();
+            $table->string('video_path')->nullable();
             $table->timestamps();
         });
     }
