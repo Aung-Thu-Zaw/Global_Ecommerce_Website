@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ecommerce;
 
 use App\Http\Controllers\Controller;
+use App\Models\Conversation;
 use App\Models\Product;
 use App\Models\ProductQuestion;
 use App\Models\ProductReview;
@@ -78,8 +79,11 @@ class ProductController extends Controller
 
         $productReviewsAvg=ProductReview::where("product_id", $product->id)->avg("rating");
 
+        $conversation=Conversation::with(["messages.user:id,avatar","customer:id,name,avatar","vendor:id,name,avatar"])
+                                   ->where("customer_id", auth()->user() ? auth()->user()->id : null)
+                                   ->Where("vendor_id", $product->user_id)
+                                   ->first();
 
-
-        return inertia("Ecommerce/Products/Detail", compact("product", "specificShopProducts", "productQuestions", "paginateProductReviews", "productReviews", "productReviewsAvg"));
+        return inertia("Ecommerce/Products/Detail", compact("product", "specificShopProducts", "productQuestions", "paginateProductReviews", "productReviews", "productReviewsAvg", "conversation"));
     }
 }

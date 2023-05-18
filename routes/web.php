@@ -6,8 +6,10 @@ use App\Http\Controllers\Ecommerce\CollectionController;
 use App\Http\Controllers\Ecommerce\HomeController;
 use App\Http\Controllers\Ecommerce\ProductController;
 use App\Http\Controllers\Ecommerce\CheckoutController;
+use App\Http\Controllers\Ecommerce\ConversationController;
 use App\Http\Controllers\Ecommerce\DeliveryInformationController;
 use App\Http\Controllers\Ecommerce\FollowedShopController;
+use App\Http\Controllers\Ecommerce\MessageController;
 use App\Http\Controllers\Ecommerce\Payments\PaymentController;
 use App\Http\Controllers\Ecommerce\Payments\CashOnDeliveryController;
 use App\Http\Controllers\Ecommerce\Payments\StripeController;
@@ -54,7 +56,8 @@ Route::get('/collections/{collection}/products', [CollectionController::class,"s
 
 Route::middleware(["auth","verified"])->group(function () {
 
-
+    Route::post("/conversation", [ConversationController::class,"store"])->name("conversation.store");
+    Route::post("/conversation/message", [MessageController::class,"store"])->name("message.store");
 
     Route::controller(ProductReviewController::class)
            ->prefix("/products/reviews")

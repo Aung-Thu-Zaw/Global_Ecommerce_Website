@@ -140,6 +140,22 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(ProductQuestion::class);
     }
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\HasMany<Conversation>
+    */
+    public function conversations(): HasMany
+    {
+        return $this->hasMany(Conversation::class);
+    }
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\HasMany<Message>
+    */
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class);
+    }
+
 
     public function getRedirectRouteName(): string
     {
@@ -158,8 +174,6 @@ class User extends Authenticatable implements MustVerifyEmail
             "user"=>"home",
         };
     }
-
-
 
 
     public static function deleteDefaultAvatar(User $user): void

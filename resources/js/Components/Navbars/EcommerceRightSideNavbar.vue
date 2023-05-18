@@ -31,12 +31,30 @@ const isVisibleChatbox = ref(false);
       </div>
       <div>
         <button
-          data-tooltip-target="feedbacks"
+          data-tooltip-target="request-feature"
           data-tooltip-placement="left"
           type="button"
           class="mb-2 md:mb-0 text-white shadow-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm text-center w-8 h-8"
         >
           <i class="fa-solid fa-envelope-open-text"></i>
+        </button>
+        <div
+          id="request-feature"
+          role="tooltip"
+          class="absolute z-10 invisible inline-block p-2 text-sm font-medium text-dark bg-white rounded-md shadow-lg border opacity-0 tooltip w-[150px]"
+        >
+          Request Features
+          <div class="tooltip-arrow border" data-popper-arrow></div>
+        </div>
+      </div>
+      <div>
+        <button
+          data-tooltip-target="feedbacks"
+          data-tooltip-placement="left"
+          type="button"
+          class="mb-2 md:mb-0 text-white shadow-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm text-center w-8 h-8"
+        >
+          <i class="fa-solid fa-pen-nib"></i>
         </button>
         <div
           id="feedbacks"
@@ -80,9 +98,33 @@ const isVisibleChatbox = ref(false);
           data-popover
           id="share"
           role="tooltip"
-          class="absolute z-10 invisible inline-block p-2 text-sm font-medium text-dark bg-white rounded-md shadow-lg border opacity-0 tooltip w-[100px]"
+          class="absolute z-10 invisible inline-block p-2 text-sm font-medium text-dark bg-white rounded-md shadow-lg border opacity-0 tooltip w-[170px] text-left"
         >
-          Share
+          <div class="px-3 font-bold py-1 text-blue-600">
+            <a href="#">
+              <i class="fa-brands fa-facebook mr-3 text-xl"></i>
+              Facebook
+            </a>
+          </div>
+          <div class="px-3 font-bold py-1 text-pink-600">
+            <a href="#">
+              <i class="fa-brands fa-instagram mr-3 text-xl"></i>
+              Instagram
+            </a>
+          </div>
+          <div class="px-3 font-bold py-1 text-sky-600">
+            <a href="#">
+              <i class="fa-brands fa-twitter mr-3 text-xl"></i>
+              Twitter
+            </a>
+          </div>
+          <div class="px-3 font-bold py-1 text-red-600">
+            <a href="#">
+              <i class="fa-brands fa-youtube mr-3 text-xl"></i>
+              Youtube
+            </a>
+          </div>
+
           <div data-popper-arrow></div>
         </div>
       </div>
