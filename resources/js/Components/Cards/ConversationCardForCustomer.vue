@@ -6,7 +6,7 @@ defineProps({
 
 <template>
   <!-- For Vendor  -->
-  <div class="border-2 rounded-md shadow-md">
+  <div class="border-2 rounded-md shadow-md cursor-pointer">
     <div class="py-3 flex items-start px-3">
       <img
         :src="conversation.vendor.avatar"
@@ -20,6 +20,9 @@ defineProps({
           >
             <span class="line-clamp-1">
               {{ conversation.vendor.shop_name }}
+            </span>
+            <span class="text-green-500 text-[.7rem] font-bold">
+              <i class="fa-solid fa-circle-check"></i>
             </span>
           </h1>
           <span class="text-[.7rem] text-slate-500"> 2 minutes ago </span>

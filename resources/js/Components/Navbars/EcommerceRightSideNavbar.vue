@@ -10,7 +10,7 @@ const isVisibleChatbox = ref(false);
     class="fixed bottom-0 top-0 right-0 w-auto px-3 rounded-sm shadow-lg bg-gray-50 border-l transition-all"
   >
     <div class="h-full flex flex-col items-center justify-center space-y-5">
-      <div>
+      <div class="relative">
         <button
           @click="isVisibleChatbox = !isVisibleChatbox"
           data-tooltip-target="chat-box"
@@ -19,6 +19,12 @@ const isVisibleChatbox = ref(false);
           class="mb-2 md:mb-0 text-white shadow-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm text-center w-8 h-8"
         >
           <i class="fa-solid fa-message"></i>
+
+          <div
+            class="absolute -top-1 -right-1 bg-red-600 w-4 h-4 rounded-full text-[.7rem] flex items-center justify-center"
+          >
+            <span>2</span>
+          </div>
         </button>
         <div
           id="chat-box"
@@ -133,7 +139,7 @@ const isVisibleChatbox = ref(false);
 
   <!-- ChatBox  -->
   <div v-if="isVisibleChatbox">
-    <ChatBox />
+    <ChatBox @isVisible="isVisibleChatbox = false" />
   </div>
 </template>
 

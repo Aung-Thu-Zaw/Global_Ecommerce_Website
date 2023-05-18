@@ -16,6 +16,8 @@ const handleClose = () => {
   emit("isVisible");
 };
 
+const selected = ref(null);
+
 const selectedConversation = ref(null);
 const conversations = computed(() => usePage().props.conversations);
 
@@ -23,8 +25,9 @@ const handleSelectedConversation = (conversationId) => {
   selectedConversation.value = conversations.value.find(
     (conversation) => conversation.id === conversationId
   );
-};
 
+  selected.value = conversationId;
+};
 </script>
 
 
@@ -60,6 +63,9 @@ const handleSelectedConversation = (conversationId) => {
               <ConversationCardForCustomer
                 :conversation="conversation"
                 @click="handleSelectedConversation(conversation.id)"
+                :class="{
+                  'bg-slate-300': selected === conversation.id,
+                }"
               />
             </div>
             <div
@@ -68,7 +74,13 @@ const handleSelectedConversation = (conversationId) => {
                 $page.props.auth.user.id === conversation.vendor_id
               "
             >
-              <ConversationCardForVendor :conversation="conversation" />
+              <ConversationCardForVendor
+                :conversation="conversation"
+                @click="handleSelectedConversation(conversation.id)"
+                :class="{
+                  'bg-slate-300': selected === conversation.id,
+                }"
+              />
             </div>
             <div v-else>
               <p class="text-center font-bold text-sm text-slate-600">
@@ -80,24 +92,29 @@ const handleSelectedConversation = (conversationId) => {
       </div>
       <div class="border-l border-r w-full h-full">
         <div
-          class="border-b-2 border-b-slate-300 shadow-md py-3 flex items-center px-3"
+          v-if="!selectedConversation && !conversation"
+          class="border-b-2 border-b-slate-300 shadow-md py-5 flex items-center px-3"
         >
-          <img
-            src="https://images.samsung.com/is/image/samsung/assets/samsung-and-you/SamsungAndYouBlackBanner.png?$FB_TYPE_B_PNG$"
-            alt=""
-            class="w-10 h-10 object-cover rounded-full ring-2 ring-blue-400 mr-3"
-          />
-          <h1 class="text-left text-lg font-semibold text-slate-700">
-            Samsung
+          <h1 class="text-left text-md font-semibold text-slate-700">
+            Global E-commerce ( Chat Box )
           </h1>
         </div>
-
-        <div class="overflow-auto w-full h-[565px] py-5">
+        <div v-if="selectedConversation || conversation" class="">
           <MessageBox
             :conversation="
               selectedConversation ? selectedConversation : conversation
             "
           />
+        </div>
+        <div
+          v-else
+          class="font-bold text-slate-500 text-center flex flex-col items-center justify-center h-[630px]"
+        >
+          <p>
+            Once you start a new conversation or selected exisiting
+            conversation,
+          </p>
+          <p>you'll see it messages here.</p>
         </div>
       </div>
     </div>
