@@ -56,7 +56,7 @@ const fiveStarRating = computed(() => {
 </script>
 
 <template>
-  <div class="text-center mb-5 p-5">
+  <div v-if="productReviews.length" class="text-center mb-5 p-5">
     <h1 class="font-bold text-slate-600 text-xl my-3">Product Reviews</h1>
 
     <div class="flex items-center justify-center">
