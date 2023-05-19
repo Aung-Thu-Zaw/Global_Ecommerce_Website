@@ -24,10 +24,11 @@ class MessageRequest extends FormRequest
      */
     public function rules()
     {
+
         return [
             "conversation_id"=>["required","numeric",Rule::exists("conversations", "id", )],
             "user_id"=>["required","numeric",Rule::exists("users", "id")],
-            "message"=>["required","string"],
+            "message"=>["nullable","string"],
         ];
     }
 }

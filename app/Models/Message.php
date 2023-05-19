@@ -15,6 +15,26 @@ class Message extends Model
     protected $guarded=[];
 
     /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Message, never>
+    */
+    protected function imagePath(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/message-files/images/$value"),
+        );
+    }
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Message, never>
+    */
+    protected function videoPath(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/message-files/videos/$value"),
+        );
+    }
+
+    /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductQuestion, never>
     */
     protected function createdAt(): Attribute

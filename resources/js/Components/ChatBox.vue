@@ -49,7 +49,17 @@ const handleSelectedConversation = (conversationId) => {
           <h1><i class="fa-solid fa-message"></i> Messages</h1>
         </div>
 
-        <div class="p-2 space-y-1 h-[630px] overflow-auto">
+        <div
+          class="p-2 space-y-1 h-[630px] overflow-auto conversation-container"
+        >
+          <div
+            v-if="!$page.props.conversations.length"
+            class="h-full flex items-center justify-center"
+          >
+            <p class="text-center font-bold text-sm text-slate-600">
+              You don't have any conversations.
+            </p>
+          </div>
           <div
             v-for="conversation in $page.props.conversations"
             :key="conversation.id"
@@ -124,5 +134,23 @@ const handleSelectedConversation = (conversationId) => {
 <style>
 .chat-box {
   box-shadow: -5px 0px 8px 0px #3737377f;
+}
+
+.conversation-container {
+  scrollbar-width: thin;
+  scrollbar-color: #999 #f0f0f0;
+}
+
+.conversation-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.conversation-container::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
+
+.conversation-container::-webkit-scrollbar-thumb {
+  background-color: #999;
+  border-radius: 3px;
 }
 </style>

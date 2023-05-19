@@ -2,9 +2,25 @@
 <script setup>
 import ChatMessageForm from "@/Components/Form/ChatMessageForm.vue";
 
+import { onMounted, onUpdated, ref } from "vue";
+
 defineProps({
   conversation: Object,
 });
+
+const msgScroll = ref(null);
+
+onMounted(() => {
+  scrollToBottom();
+});
+
+onUpdated(() => {
+  scrollToBottom();
+});
+
+function scrollToBottom() {
+  msgScroll.value.scrollTop = msgScroll.value.scrollHeight;
+}
 </script>
 <template>
   <div
@@ -43,8 +59,10 @@ defineProps({
       </span>
     </h1>
   </div>
-
-  <div class="overflow-auto w-full h-[565px] py-5">
+  <div
+    class="overflow-auto w-full h-[565px] py-5 chat-container"
+    ref="msgScroll"
+  >
     <div class="w-full h-auto px-3 mb-5">
       <!-- left text  -->
 
@@ -55,17 +73,40 @@ defineProps({
       >
         <!-- Right Side  -->
         <div v-if="message.user_id === $page.props.auth.user.id" class="mb-2">
-          <p class="text-center text-sm text-slate-500 font-bold mb-2">
+          <p class="text-center text-sm text-slate-500 font-bold mb-5">
             {{ message.created_at }}
           </p>
           <div class="flex items-end justify-end">
             <div class="flex items-center justify-end mb-3">
               <div class="pl-28">
                 <p
+                  v-if="message.type === 'text'"
                   class="p-3 border-2 border-slate-300 rounded-lg rounded-br-none shadow-md w-auto"
                 >
                   {{ message.message }}
                 </p>
+                <div
+                  v-if="message.type === 'image'"
+                  class="h-[250px] border-2 border-slate-300 shadow-xl rounded-md overflow-hidden"
+                >
+                  <img
+                    :src="message.image_path"
+                    alt=""
+                    class="h-full object-cover"
+                  />
+                </div>
+                <div
+                  v-if="message.type === 'video'"
+                  class="w-full h-[400px] max-w-full border border-gray-200 rounded-lg shadow-lg overflow-hidden"
+                >
+                  <video
+                    :src="message.video_path"
+                    autoplay
+                    muted
+                    controls
+                    class="w-full h-full"
+                  ></video>
+                </div>
               </div>
             </div>
             <img
@@ -79,7 +120,7 @@ defineProps({
         <!-- left Side -->
         <div v-else class="mb-2">
           <div>
-            <p class="text-center text-sm text-slate-500 font-bold mb-2">
+            <p class="text-center text-sm text-slate-500 font-bold mb-5">
               {{ message.created_at }}
             </p>
             <div class="flex items-end">
@@ -104,8 +145,26 @@ defineProps({
       </div>
     </div>
   </div>
-
   <ChatMessageForm :conversation="conversation" />
 </template>
 
 
+<style>
+.chat-container {
+  scrollbar-width: thin;
+  scrollbar-color: #999 #f0f0f0;
+}
+
+.chat-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-container::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+  background-color: #999;
+  border-radius: 3px;
+}
+</style>
