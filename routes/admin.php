@@ -7,7 +7,7 @@ use App\Http\Controllers\Admin\AdminCollectionController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminCouponController;
 use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\AdminMultiImageController;
+use App\Http\Controllers\Admin\MultiImageController;
 use App\Http\Controllers\Admin\Banners\AdminProductBannerController;
 use App\Http\Controllers\Admin\Managements\VendorManage\AdminActiveVendorController;
 use App\Http\Controllers\Admin\Managements\VendorManage\AdminInactiveVendorController;
@@ -109,7 +109,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                        Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
                        Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
                    });
-           Route::delete('products/{product_id}/images/{image_id}', [AdminMultiImageController::class,"destroy"])->name("image.destroy");
+           Route::delete('products/{product_id}/images/{image_id}', [MultiImageController::class,"destroy"])->name("image.destroy");
 
            // Coupons
            Route::controller(AdminCouponController::class)

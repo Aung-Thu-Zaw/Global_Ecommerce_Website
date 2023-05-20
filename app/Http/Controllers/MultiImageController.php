@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Image;
 use Illuminate\Http\RedirectResponse;
 
-class AdminMultiImageController extends Controller
+class MultiImageController extends Controller
 {
     public function destroy(int $productId, int $imageId): RedirectResponse
     {

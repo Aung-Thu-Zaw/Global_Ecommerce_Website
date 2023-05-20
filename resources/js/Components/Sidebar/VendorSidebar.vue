@@ -94,7 +94,122 @@
               Dashboard
             </Link>
           </li>
+          <!-- Product Section -->
+          <li
+            v-if="
+              $page.props.auth.user.role === 'vendor' &&
+              $page.props.auth.user.status === 'active'
+            "
+            class="items-center"
+          >
+            <Link
+              :href="route('vendor.products.index')"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url.startsWith('/vendor/products'),
+                'text-slate-700 hover:text-slate-500':
+                  !$page.url.startsWith('/vendor/products'),
+              }"
+            >
+              <i class="fa-solid fa-basket-shopping mr-2 text-sm"></i>
+              Products
+            </Link>
+          </li>
         </ul>
+
+        <hr class="my-4 md:min-w-full" />
+
+        <!-- Order Management Area -->
+        <h6
+          class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
+        >
+          Order Managements
+        </h6>
+
+        <!-- Order Manage -->
+        <!-- <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <li class="items-center cursor-pointer">
+            <div
+              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+              @click="orderManageIsHidden = !orderManageIsHidden"
+            >
+              <span>
+                <i class="fa-solid fa-boxes-packing mr-2 text-sm"></i>
+                Order Manage
+              </span>
+              <i
+                v-if="orderManageIsHidden"
+                class="fa-solid fa-chevron-right"
+              ></i>
+              <i
+                v-if="!orderManageIsHidden"
+                class="fa-solid fa-chevron-down"
+              ></i>
+            </div>
+
+            <ul
+              v-if="!orderManageIsHidden || orderManage"
+              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+            >
+              <Link
+                :href="route('vendor.orders.pending.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/vendor/order-manage/pending-orders'
+                  ),
+                }"
+              >
+                Pending Orders
+              </Link>
+              <Link
+                :href="route('vendor.orders.confirmed.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/vendor/order-manage/confirmed-orders'
+                  ),
+                }"
+              >
+                Confirmed Orders
+              </Link>
+              <Link
+                :href="route('vendor.orders.processing.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/vendor/order-manage/processing-orders'
+                  ),
+                }"
+              >
+                Processing Orders
+              </Link>
+              <Link
+                :href="route('vendor.orders.shipped.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/vendor/order-manage/shipped-orders'
+                  ),
+                }"
+              >
+                Shipped Orders
+              </Link>
+              <Link
+                :href="route('vendor.orders.delivered.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/vendor/order-manage/delivered-orders'
+                  ),
+                }"
+              >
+                Delivered Orders
+              </Link>
+            </ul>
+          </li>
+        </ul> -->
       </div>
     </div>
   </nav>

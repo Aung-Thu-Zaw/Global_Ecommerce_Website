@@ -3,7 +3,7 @@ import VendorHeaderStats from "@/Components/Headers/VendorHeaderStats.vue";
 import VendorDashboardLayout from "@/Layouts/VendorDashboardLayout.vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-import { usePage } from "@inertiajs/vue3";
+import { usePage, Head } from "@inertiajs/vue3";
 
 // Success flash message
 if (usePage().props.flash.successMessage) {
@@ -15,6 +15,7 @@ if (usePage().props.flash.successMessage) {
 
 <template>
   <VendorDashboardLayout>
+    <Head title="Vendor Dashboard" />
     <div
       v-if="
         $page.props.auth.user.role === 'vendor' &&
