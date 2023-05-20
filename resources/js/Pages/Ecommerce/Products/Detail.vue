@@ -18,6 +18,10 @@ const props = defineProps({
   conversation: Object,
 });
 
+const reviewAvg = computed(() =>
+  parseFloat(props.productReviewsAvg).toFixed(2)
+);
+
 const images = reactive([props.product.image]);
 
 props.product.images.forEach((image) => images.push(image.img_path));
@@ -45,31 +49,37 @@ const saved = computed(() => {
 });
 
 const addToCart = () => {
-  router.post(
-    route("cart-items.store", {
-      cart_id: usePage().props.auth.user.cart
-        ? usePage().props.auth.user.cart.id
-        : null,
-      product_id: props.product.id,
-      shop_id: props.product.shop.id,
-      qty: quantity.value,
-      color: selectedColor.value,
-      size: selectedSize.value,
-      total_price: props.product.discount
-        ? quantity.value * props.product.discount
-        : quantity.value * props.product.price,
-    }),
-    {},
-    {
-      preserveScroll: true,
-      onSuccess: () => {
-        // Success flash message
-        toast.success(usePage().props.flash.successMessage, {
-          autoClose: 2000,
-        });
-      },
-    }
-  );
+  if (props.product.qty !== 0) {
+    router.post(
+      route("cart-items.store", {
+        cart_id: usePage().props.auth.user.cart
+          ? usePage().props.auth.user.cart.id
+          : null,
+        product_id: props.product.id,
+        shop_id: props.product.shop.id,
+        qty: quantity.value,
+        color: selectedColor.value,
+        size: selectedSize.value,
+        total_price: props.product.discount
+          ? quantity.value * props.product.discount
+          : quantity.value * props.product.price,
+      }),
+      {},
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          // Success flash message
+          toast.success(usePage().props.flash.successMessage, {
+            autoClose: 2000,
+          });
+        },
+      }
+    );
+  } else {
+    toast.error("Product is sold out.", {
+      autoClose: 2000,
+    });
+  }
 };
 
 const saveToWatchlist = () => {
@@ -143,7 +153,7 @@ const saveToWatchlist = () => {
               {{ product.name }}
             </h2>
 
-            <!-- <div class="flex items-center">
+            <div v-if="productReviewsAvg" class="flex items-center">
               <svg
                 aria-hidden="true"
                 class="w-5 h-5 text-yellow-400"
@@ -157,7 +167,7 @@ const saveToWatchlist = () => {
                 ></path>
               </svg>
               <p class="ml-2 text-sm font-bold text-gray-900 dark:text-white">
-                4.95
+                {{ reviewAvg }}
               </p>
               <span
                 class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"
@@ -165,9 +175,25 @@ const saveToWatchlist = () => {
               <a
                 href="#"
                 class="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white"
-                >73 reviews</a
+                >{{ productReviews.length }} reviews</a
               >
-            </div> -->
+            </div>
+            <div v-else class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-5 h-5 text-yellow-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <title>Rating star</title>
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                ></path>
+              </svg>
+
+              <p class="text-sm font-medium text-gray-600 ml-3">No Reviews</p>
+            </div>
 
             <div v-if="product.qty != 0" class="my-3">
               <span class="text-secondary-700 font-semibold text-sm mr-3"
@@ -175,7 +201,7 @@ const saveToWatchlist = () => {
               >
               <span
                 class="text-green-500 font-bold text-sm bg-green-200 px-2 py-1 rounded-full"
-                >Active</span
+                >In Stock</span
               >
             </div>
             <div v-else-if="product.qty == 0" class="my-3">

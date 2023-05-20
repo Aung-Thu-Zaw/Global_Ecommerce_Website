@@ -7,6 +7,7 @@ use App\Mail\OrderShippedMail;
 use App\Models\DeliveryInformation;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -39,6 +40,13 @@ class AdminProcessingOrderController extends Controller
 
     public function update(int $id): RedirectResponse
     {
+
+        $orderItems=OrderItem::where("order_id", $id)->get();
+
+        $orderItems->each(function ($orderItem) {
+            $product=Product::where("id", $orderItem->product_id)->first();
+            $product->update(["qty"=>$product->qty - $orderItem->qty]);
+        });
 
         $order=Order::with(["deliveryInformation","orderItems.product.shop"])->where("id", $id)->first();
 
