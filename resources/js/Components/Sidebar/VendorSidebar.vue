@@ -116,6 +116,30 @@
               Products
             </Link>
           </li>
+          <!-- Product Section -->
+          <li
+            v-if="
+              $page.props.auth.user.role === 'vendor' &&
+              $page.props.auth.user.status === 'active'
+            "
+            class="items-center"
+          >
+            <Link
+              :href="route('vendor.product-banners.index')"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                  '/vendor/product-banners'
+                ),
+                'text-slate-700 hover:text-slate-500': !$page.url.startsWith(
+                  '/vendor/product-banners'
+                ),
+              }"
+            >
+              <i class="fa-solid fa-basket-shopping mr-2 text-sm"></i>
+              Product Banners
+            </Link>
+          </li>
           <!-- Order Section -->
           <li
             v-if="

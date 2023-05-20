@@ -1,5 +1,5 @@
 <script setup>
-import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import VendorDashboardLayout from "@/Layouts/VendorDashboardLayout.vue";
 import { Link, useForm, Head, usePage } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Form/InputError.vue";
@@ -7,12 +7,14 @@ import InputLabel from "@/Components/Form/InputLabel.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import FormButton from "@/Components/Form/FormButton.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Banners/Breadcrumb.vue";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { ref } from "vue";
 
 const props = defineProps({
-  paginate: Array,
-  productBanner: Object,
+  per_page: String,
 });
+
+const editor = ClassicEditor;
 
 const previewPhoto = ref("");
 const getPreviewPhotoPath = (path) => {
@@ -21,24 +23,22 @@ const getPreviewPhotoPath = (path) => {
 
 const form = useForm({
   user_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
-  url: props.productBanner.url,
-  image: props.productBanner.image,
+  url: "",
+  image: "",
   captcha_token: null,
 });
 
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
-const handleEditProductBanner = async () => {
+const handleCreateProductBanner = async () => {
   await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("edit_product_banner");
+  form.captcha_token = await executeRecaptcha("create_product_banner");
   submit();
 };
 
 const submit = () => {
   form.post(
-    route("admin.product-banners.update", {
-      product_banner: props.productBanner.id,
-      page: props.paginate.page,
-      per_page: props.paginate.per_page,
+    route("vendor.product-banners.store", {
+      per_page: props.per_page,
     }),
     {
       onFinish: () => form.reset(),
@@ -48,8 +48,8 @@ const submit = () => {
 </script>
 
 <template>
-  <AdminDashboardLayout>
-    <Head title="Edit Product Banner" />
+  <VendorDashboardLayout>
+    <Head title="Create Product Banner" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Breadcrumb start -->
 
@@ -93,7 +93,7 @@ const submit = () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Edit</span
+                >Create</span
               >
             </div>
           </li>
@@ -101,10 +101,9 @@ const submit = () => {
 
         <div>
           <Link
-            :href="route('admin.product-banners.index')"
+            :href="route('vendor.product-banners.index')"
             :data="{
-              page: props.paginate.page,
-              per_page: props.paginate.per_page,
+              per_page: props.per_page,
             }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
@@ -118,12 +117,12 @@ const submit = () => {
         <div class="mb-6">
           <img
             ref="previewPhoto"
-            :src="form.image"
+            src="https://media.istockphoto.com/id/1357365823/vector/default-image-icon-vector-missing-picture-page-for-website-design-or-mobile-app-no-photo.jpg?s=612x612&w=0&k=20&c=PM_optEhHBTZkuJQLlCjLz-v3zzxp-1mpNQZsdjrbns="
             alt=""
             class="h-[100px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300"
           />
         </div>
-        <form @submit.prevent="handleEditProductBanner">
+        <form @submit.prevent="handleCreateProductBanner">
           <div class="mb-6">
             <InputLabel for="url" value="URL *" />
 
@@ -133,7 +132,7 @@ const submit = () => {
               class="mt-1 block w-full"
               v-model="form.url"
               required
-              placeholder="Enter Banner URL"
+              placeholder="Enter banner url"
             />
 
             <InputError class="mt-2" :message="form.errors.url" />
@@ -146,6 +145,7 @@ const submit = () => {
               class="relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-neutral-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out file:-mx-3 file:-my-1.5 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-1.5 file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[margin-inline-end:0.75rem] file:[border-inline-end-width:1px] hover:file:bg-neutral-200 focus:border-primary focus:bg-white focus:text-neutral-700 focus:shadow-[0_0_0_1px] focus:shadow-primary focus:outline-none dark:bg-transparent dark:text-neutral-200 dark:focus:bg-transparent"
               type="file"
               id="image"
+              required
               @input="form.image = $event.target.files[0]"
               @change="getPreviewPhotoPath($event.target.files[0])"
             />
@@ -158,12 +158,10 @@ const submit = () => {
           </div>
 
           <div class="mb-6">
-            <FormButton>Update</FormButton>
+            <FormButton>Save</FormButton>
           </div>
         </form>
       </div>
     </div>
-  </AdminDashboardLayout>
+  </VendorDashboardLayout>
 </template>
-
-

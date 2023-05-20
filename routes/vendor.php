@@ -4,6 +4,7 @@ use App\Http\Controllers\MultiImageController;
 use App\Http\Controllers\Vendor\VendorAuthController;
 use App\Http\Controllers\Vendor\VendorDashboardController;
 use App\Http\Controllers\Vendor\VendorOrderController;
+use App\Http\Controllers\Vendor\VendorProductBannerController;
 use App\Http\Controllers\Vendor\VendorProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +35,26 @@ Route::middleware(["auth","user.role:vendor"])
                 Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
             });
             Route::delete('products/{product_id}/images/{image_id}', [MultiImageController::class,"destroy"])->name("image.destroy");
+
+
+            // Product Banner
+            Route::controller(VendorProductBannerController::class)
+                    ->prefix("/product-banners")
+                    ->name("product-banners.")
+                    ->group(function () {
+                        Route::get("/", "index")->name("index");
+                        Route::get("/create", "create")->name("create");
+                        Route::post("/", "store")->name("store");
+                        Route::get("/{product_banner}/edit", "edit")->name("edit");
+                        Route::post("/{product_banner}", "update")->name("update");
+                        Route::delete("/{product_banner}", "destroy")->name("destroy");
+                        Route::get("/trash", "trash")->name("trash");
+                        Route::post("/{id}/restore", "restore")->name("restore");
+                        Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                        Route::post("/{id}/show", "handleShow")->name("show");
+                        Route::post("/{id}/hide", "handleHide")->name("hide");
+                        Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
+                    });
 
 
             // Vendor Orders

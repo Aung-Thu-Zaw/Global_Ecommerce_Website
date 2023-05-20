@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProductBannerRequest extends FormRequest
 {
@@ -24,6 +25,7 @@ class ProductBannerRequest extends FormRequest
     public function rules()
     {
         return [
+            "user_id"=>["required","numeric",Rule::exists("users", "id")],
             "url"=>["required","string","url"],
         ];
     }

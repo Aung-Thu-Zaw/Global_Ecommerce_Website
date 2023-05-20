@@ -1,5 +1,5 @@
 <script setup>
-import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import VendorDashboardLayout from "@/Layouts/VendorDashboardLayout.vue";
 import { Link, useForm, Head, usePage } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Form/InputError.vue";
@@ -35,7 +35,7 @@ const handleEditProductBanner = async () => {
 
 const submit = () => {
   form.post(
-    route("admin.product-banners.update", {
+    route("vendor.product-banners.update", {
       product_banner: props.productBanner.id,
       page: props.paginate.page,
       per_page: props.paginate.per_page,
@@ -48,7 +48,7 @@ const submit = () => {
 </script>
 
 <template>
-  <AdminDashboardLayout>
+  <VendorDashboardLayout>
     <Head title="Edit Product Banner" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Breadcrumb start -->
@@ -101,7 +101,7 @@ const submit = () => {
 
         <div>
           <Link
-            :href="route('admin.product-banners.index')"
+            :href="route('vendor.product-banners.index')"
             :data="{
               page: props.paginate.page,
               per_page: props.paginate.per_page,
@@ -163,7 +163,7 @@ const submit = () => {
         </form>
       </div>
     </div>
-  </AdminDashboardLayout>
+  </VendorDashboardLayout>
 </template>
 
 

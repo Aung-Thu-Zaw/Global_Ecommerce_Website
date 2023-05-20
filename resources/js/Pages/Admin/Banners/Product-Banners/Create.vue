@@ -1,6 +1,6 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, useForm, Head } from "@inertiajs/vue3";
+import { Link, useForm, Head, usePage } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Form/InputError.vue";
 import InputLabel from "@/Components/Form/InputLabel.vue";
@@ -22,6 +22,7 @@ const getPreviewPhotoPath = (path) => {
 };
 
 const form = useForm({
+  user_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
   url: "",
   image: "",
   captcha_token: null,
