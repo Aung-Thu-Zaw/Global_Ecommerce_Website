@@ -434,25 +434,6 @@ if (usePage().props.flash.successMessage) {
             </Td>
             <Td>{{ product.created_at }}</Td>
             <Td>
-              <Link
-                as="button"
-                :href="route('vendor.products.edit', product.slug)"
-                :data="{
-                  page: props.products.current_page,
-                  per_page: params.per_page,
-                }"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
-              >
-                <i class="fa-solid fa-edit"></i>
-                Edit
-              </Link>
-              <button
-                @click="handleDelete(product.slug)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
-              >
-                <i class="fa-solid fa-xmark"></i>
-                Delete
-              </button>
               <!-- <Link
                 as="button"
                 :href="route('vendor.products.show', product.slug)"
@@ -465,6 +446,34 @@ if (usePage().props.flash.successMessage) {
                 <i class="fa-solid fa-eye"></i>
                 Details
               </Link> -->
+
+              <Link
+                as="button"
+                :href="route('vendor.products.edit', product.slug)"
+                :data="{
+                  page: props.products.current_page,
+                  per_page: params.per_page,
+                }"
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
+              >
+                <i class="fa-solid fa-edit"></i>
+                Edit
+              </Link>
+
+              <button
+                @click="handleDelete(product.slug)"
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
+              >
+                <i class="fa-solid fa-xmark"></i>
+                Delete
+              </button>
+
+              <button
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1 mr-3"
+              >
+                <i class="fa-solid fa-eye"></i>
+                Details
+              </button>
             </Td>
           </Tr>
         </tbody>

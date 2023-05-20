@@ -7,7 +7,7 @@ use App\Http\Controllers\Admin\AdminCollectionController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminCouponController;
 use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\MultiImageController;
+use App\Http\Controllers\MultiImageController;
 use App\Http\Controllers\Admin\Banners\AdminProductBannerController;
 use App\Http\Controllers\Admin\Managements\VendorManage\AdminActiveVendorController;
 use App\Http\Controllers\Admin\Managements\VendorManage\AdminInactiveVendorController;

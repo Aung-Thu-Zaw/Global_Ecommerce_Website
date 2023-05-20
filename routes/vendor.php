@@ -3,6 +3,7 @@
 use App\Http\Controllers\MultiImageController;
 use App\Http\Controllers\Vendor\VendorAuthController;
 use App\Http\Controllers\Vendor\VendorDashboardController;
+use App\Http\Controllers\Vendor\VendorOrderController;
 use App\Http\Controllers\Vendor\VendorProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,4 +34,20 @@ Route::middleware(["auth","user.role:vendor"])
                 Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
             });
             Route::delete('products/{product_id}/images/{image_id}', [MultiImageController::class,"destroy"])->name("image.destroy");
+
+
+            // Vendor Orders
+            Route::controller(VendorOrderController::class)
+            ->prefix("/orders")
+            ->name("orders.")
+            ->group(function () {
+                Route::get("/", "index")->name("index");
+                Route::get("/details/{id}", "show")->name("show");
+                Route::post("/{id}", "update")->name("update");
+                //    Route::delete("/{id}", "destroy")->name("destroy");
+                //    Route::get("/trash", "trash")->name("trash");
+                //    Route::post("/{id}/restore", "restore")->name("restore");
+                //    Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                //    Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
+            });
         });
