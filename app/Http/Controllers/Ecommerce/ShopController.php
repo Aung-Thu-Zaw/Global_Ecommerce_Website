@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Ecommerce;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
-use App\Models\ProductBanner;
+use App\Models\VendorProductBanner;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,8 +20,9 @@ class ShopController extends Controller
         $user=auth()->user();
 
         $followings=$user->followings;
+        $followers=$user->followers;
 
-        $vendorProductBanners=ProductBanner::select("user_id", "image", "url")
+        $vendorProductBanners=VendorProductBanner::select("user_id", "image", "url")
                                      ->where([["status", "show"],["user_id",$shopId]])
                                      ->orderBy("id", "desc")
                                      ->get();
@@ -32,7 +33,7 @@ class ShopController extends Controller
                          ->limit(20)
                          ->get();
 
-        return inertia("Ecommerce/Shop/Index", compact("shop", "followings", "vendorProductBanners", "products"));
+        return inertia("Ecommerce/Shop/Index", compact("shop", "followings", "followers", "vendorProductBanners", "products"));
     }
 
     public function followShop(int $shopId): RedirectResponse

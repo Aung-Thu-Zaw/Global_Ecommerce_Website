@@ -45,9 +45,9 @@ Route::middleware(["auth","user.role:vendor"])
                         Route::get("/", "index")->name("index");
                         Route::get("/create", "create")->name("create");
                         Route::post("/", "store")->name("store");
-                        Route::get("/{product_banner}/edit", "edit")->name("edit");
-                        Route::post("/{product_banner}", "update")->name("update");
-                        Route::delete("/{product_banner}", "destroy")->name("destroy");
+                        Route::get("/{vendor_product_banner}/edit", "edit")->name("edit");
+                        Route::post("/{vendor_product_banner}", "update")->name("update");
+                        Route::delete("/{vendor_product_banner}", "destroy")->name("destroy");
                         Route::get("/trash", "trash")->name("trash");
                         Route::post("/{id}/restore", "restore")->name("restore");
                         Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");

@@ -9,7 +9,9 @@ const props = defineProps({
     v-if="specificShopProducts.length"
     class="my-5 w-full lg:my-0 lg:w-1/4 px-2"
   >
-    <article class="border border-gray-200 shadow-sm rounded bg-white p-4">
+    <article
+      class="border border-gray-200 shadow-sm rounded bg-white w-full p-4"
+    >
       <h3 class="mb-5 text-lg font-semibold capitalize">from the same store</h3>
 
       <figure
@@ -40,12 +42,16 @@ const props = defineProps({
         </figcaption>
       </figure>
 
-      <button
+      <Link
+        as="button"
+        :href="
+          route('shop.index', { shop_id: specificShopProducts[0].user_id })
+        "
         class="bg-blue-600 text-white w-full font-bold py-2 rounded-sm shadow-md hover:bg-blue-700"
       >
         <i class="fas fa-shop mr-1"></i>
-        Visit Store
-      </button>
+        Visit Shop
+      </Link>
     </article>
   </aside>
 </template>

@@ -17,17 +17,19 @@ import { router } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
-  productBanners: Object,
+  vendorProductBanners: Object,
 });
 
 const swal = inject("$swal");
 
 const params = reactive({
   search: null,
-  page: props.productBanners.current_page
-    ? props.productBanners.current_page
+  page: props.vendorProductBanners.current_page
+    ? props.vendorProductBanners.current_page
     : 1,
-  per_page: props.productBanners.per_page ? props.productBanners.per_page : 10,
+  per_page: props.vendorProductBanners.per_page
+    ? props.vendorProductBanners.per_page
+    : 10,
   sort: "id",
   direction: "desc",
 });
@@ -109,7 +111,7 @@ const handleShow = async (hideProductBannerId) => {
     router.post(
       route("vendor.product-banners.show", {
         id: hideProductBannerId,
-        page: props.productBanners.current_page,
+        page: props.vendorProductBanners.current_page,
         per_page: params.per_page,
       })
     );
@@ -148,7 +150,7 @@ const handleHide = async (showProductBannerId) => {
     router.post(
       route("vendor.product-banners.hide", {
         id: showProductBannerId,
-        page: props.productBanners.current_page,
+        page: props.vendorProductBanners.current_page,
         per_page: params.per_page,
       })
     );
@@ -177,8 +179,8 @@ const handleDelete = async (productBannerId) => {
   if (result.isConfirmed) {
     router.delete(
       route("vendor.product-banners.destroy", {
-        product_banner: productBannerId,
-        page: props.productBanners.current_page,
+        vendor_product_banner: productBannerId,
+        page: props.vendorProductBanners.current_page,
         per_page: params.per_page,
       })
     );
@@ -314,31 +316,7 @@ if (usePage().props.flash.successMessage) {
             ></i>
           </HeaderTh>
           <HeaderTh> Image </HeaderTh>
-          <HeaderTh @click="updateSorting('title')">
-            Title
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'title',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'title',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'title',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'title',
-              }"
-            ></i>
-          </HeaderTh>
+
           <HeaderTh @click="updateSorting('url')">
             URL
             <i
@@ -417,42 +395,41 @@ if (usePage().props.flash.successMessage) {
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="productBanners.data.length">
+        <tbody v-if="vendorProductBanners.data.length">
           <Tr
-            v-for="productBanner in productBanners.data"
-            :key="productBanner.id"
+            v-for="vendorProductBanner in vendorProductBanners.data"
+            :key="vendorProductBanner.id"
           >
-            <BodyTh>{{ productBanner.id }}</BodyTh>
+            <BodyTh>{{ vendorProductBanner.id }}</BodyTh>
             <Td>
               <img
-                :src="productBanner.image"
+                :src="vendorProductBanner.image"
                 class="h-[50px] rounded-sm object-cover shadow-lg ring-2 ring-slate-300"
                 alt=""
               />
             </Td>
-            <Td>{{ productBanner.title }}</Td>
-            <Td>{{ productBanner.url }}</Td>
+            <Td>{{ vendorProductBanner.url }}</Td>
             <Td>
-              <ActiveStatus v-if="productBanner.status == 'show'">
-                {{ productBanner.status }}
+              <ActiveStatus v-if="vendorProductBanner.status == 'show'">
+                {{ vendorProductBanner.status }}
               </ActiveStatus>
-              <InactiveStatus v-if="productBanner.status == 'hide'">
-                {{ productBanner.status }}
+              <InactiveStatus v-if="vendorProductBanner.status == 'hide'">
+                {{ vendorProductBanner.status }}
               </InactiveStatus>
             </Td>
-            <Td>{{ productBanner.created_at }}</Td>
+            <Td>{{ vendorProductBanner.created_at }}</Td>
             <Td>
               <button
-                v-if="productBanner.status == 'hide'"
-                @click="handleShow(productBanner.id)"
+                v-if="vendorProductBanner.status == 'hide'"
+                @click="handleShow(vendorProductBanner.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-emerald-600 text-white hover:bg-emerald-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-eye"></i>
                 Show
               </button>
               <button
-                v-if="productBanner.status == 'show'"
-                @click="handleHide(productBanner.id)"
+                v-if="vendorProductBanner.status == 'show'"
+                @click="handleHide(vendorProductBanner.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-orange-600 text-white hover:bg-orange-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-eye-slash"></i>
@@ -460,9 +437,11 @@ if (usePage().props.flash.successMessage) {
               </button>
               <Link
                 as="button"
-                :href="route('vendor.product-banners.edit', productBanner.id)"
+                :href="
+                  route('vendor.product-banners.edit', vendorProductBanner.id)
+                "
                 :data="{
-                  page: props.productBanners.current_page,
+                  page: props.vendorProductBanners.current_page,
                   per_page: params.per_page,
                 }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
@@ -471,7 +450,7 @@ if (usePage().props.flash.successMessage) {
                 Edit
               </Link>
               <button
-                @click="handleDelete(productBanner.id)"
+                @click="handleDelete(vendorProductBanner.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>
@@ -483,10 +462,10 @@ if (usePage().props.flash.successMessage) {
       </TableContainer>
 
       <!-- Not Avaliable Data -->
-      <NotAvaliableData v-if="!productBanners.data.length" />
+      <NotAvaliableData v-if="!vendorProductBanners.data.length" />
 
       <!-- Pagination -->
-      <pagination class="mt-6" :links="productBanners.links" />
+      <pagination class="mt-6" :links="vendorProductBanners.links" />
     </div>
   </VendorDashboardLayout>
 </template>

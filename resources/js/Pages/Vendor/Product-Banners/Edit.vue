@@ -11,7 +11,7 @@ import { ref } from "vue";
 
 const props = defineProps({
   paginate: Array,
-  productBanner: Object,
+  vendorProductBanner: Object,
 });
 
 const previewPhoto = ref("");
@@ -21,13 +21,13 @@ const getPreviewPhotoPath = (path) => {
 
 const form = useForm({
   user_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
-  url: props.productBanner.url,
-  image: props.productBanner.image,
+  url: props.vendorProductBanner.url,
+  image: props.vendorProductBanner.image,
   captcha_token: null,
 });
 
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
-const handleEditProductBanner = async () => {
+const handleEditVendorProductBanner = async () => {
   await recaptchaLoaded();
   form.captcha_token = await executeRecaptcha("edit_product_banner");
   submit();
@@ -36,7 +36,7 @@ const handleEditProductBanner = async () => {
 const submit = () => {
   form.post(
     route("vendor.product-banners.update", {
-      product_banner: props.productBanner.id,
+      vendor_product_banner: props.vendorProductBanner.id,
       page: props.paginate.page,
       per_page: props.paginate.per_page,
     }),
@@ -123,7 +123,7 @@ const submit = () => {
             class="h-[100px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300"
           />
         </div>
-        <form @submit.prevent="handleEditProductBanner">
+        <form @submit.prevent="handleEditVendorProductBanner">
           <div class="mb-6">
             <InputLabel for="url" value="URL *" />
 

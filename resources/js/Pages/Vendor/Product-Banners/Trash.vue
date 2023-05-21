@@ -15,18 +15,18 @@ import { router } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
-  trashProductBanners: Object,
+  trashVendorProductBanners: Object,
 });
 
 const swal = inject("$swal");
 
 const params = reactive({
   search: null,
-  page: props.trashProductBanners.current_page
-    ? props.trashProductBanners.current_page
+  page: props.trashVendorProductBanners.current_page
+    ? props.trashVendorProductBanners.current_page
     : 1,
-  per_page: props.trashProductBanners.per_page
-    ? props.trashProductBanners.per_page
+  per_page: props.trashVendorProductBanners.per_page
+    ? props.trashVendorProductBanners.per_page
     : 10,
   sort: "id",
   direction: "desc",
@@ -108,7 +108,7 @@ const handleRestore = async (trashBannerId) => {
     router.post(
       route("vendor.product-banners.restore", {
         id: trashBannerId,
-        page: props.trashProductBanners.current_page,
+        page: props.trashVendorProductBanners.current_page,
         per_page: params.per_page,
       })
     );
@@ -138,7 +138,7 @@ const handleDelete = async (trashBannerId) => {
     router.delete(
       route("vendor.product-banners.forceDelete", {
         id: trashBannerId,
-        page: props.trashProductBanners.current_page,
+        page: props.trashVendorProductBanners.current_page,
         per_page: params.per_page,
       })
     );
@@ -167,7 +167,7 @@ const handlePermanentlyDelete = async () => {
   if (result.isConfirmed) {
     router.get(
       route("vendor.product-banners.permanentlyDelete", {
-        page: props.trashProductBanners.current_page,
+        page: props.trashVendorProductBanners.current_page,
         per_page: params.per_page,
       })
     );
@@ -317,31 +317,7 @@ const handlePermanentlyDelete = async () => {
             ></i>
           </HeaderTh>
           <HeaderTh> Image </HeaderTh>
-          <HeaderTh @click="updateSorting('title')">
-            Title
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'title',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'title',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'title',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'title',
-              }"
-            ></i>
-          </HeaderTh>
+
           <HeaderTh @click="updateSorting('url')">
             URL
             <i
@@ -395,32 +371,31 @@ const handlePermanentlyDelete = async () => {
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="trashProductBanners.data.length">
+        <tbody v-if="trashVendorProductBanners.data.length">
           <Tr
-            v-for="trashProductBanner in trashProductBanners.data"
-            :key="trashProductBanner.id"
+            v-for="trashVendorProductBanner in trashVendorProductBanners.data"
+            :key="trashVendorProductBanner.id"
           >
-            <BodyTh>{{ trashProductBanner.id }}</BodyTh>
+            <BodyTh>{{ trashVendorProductBanner.id }}</BodyTh>
             <Td>
               <img
-                :src="trashProductBanner.image"
+                :src="trashVendorProductBanner.image"
                 class="h-[50px] rounded-sm object-cover shadow-lg ring-2 ring-slate-300"
                 alt=""
               />
             </Td>
-            <Td>{{ trashProductBanner.title }}</Td>
-            <Td>{{ trashProductBanner.url }}</Td>
-            <Td>{{ trashProductBanner.created_at }}</Td>
+            <Td>{{ trashVendorProductBanner.url }}</Td>
+            <Td>{{ trashVendorProductBanner.created_at }}</Td>
             <Td>
               <button
-                @click="handleRestore(trashProductBanner.id)"
+                @click="handleRestore(trashVendorProductBanner.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-recycle"></i>
                 Restore
               </button>
               <button
-                @click="handleDelete(trashProductBanner.id)"
+                @click="handleDelete(trashVendorProductBanner.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-trash"></i>
@@ -432,10 +407,10 @@ const handlePermanentlyDelete = async () => {
       </TableContainer>
 
       <!-- Not Avaliable Data -->
-      <NotAvaliableData v-if="!trashProductBanners.data.length" />
+      <NotAvaliableData v-if="!trashVendorProductBanners.data.length" />
 
       <!-- Pagination -->
-      <pagination class="mt-6" :links="trashProductBanners.links" />
+      <pagination class="mt-6" :links="trashVendorProductBanners.links" />
     </div>
   </VendorDashboardLayout>
 </template>

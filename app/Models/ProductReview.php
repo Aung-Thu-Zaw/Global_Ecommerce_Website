@@ -40,4 +40,13 @@ class ProductReview extends Model
         return $this->hasOne(Reply::class);
     }
 
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Product,ProductReview>
+    */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
+
 }

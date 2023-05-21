@@ -57,10 +57,10 @@ class ProductController extends Controller
     {
         $product->load(["images","brand:id,name","colors","sizes","shop:id,shop_name,avatar","watchlists","cartItems"]);
 
-        $specificShopProducts=Product::select("image", "name", "slug", "price", "discount")
+        $specificShopProducts=Product::select("user_id", "image", "name", "slug", "price", "discount")
                                      ->where("user_id", $product->shop->id)
                                      ->where("id", "!=", $product->id)
-                                     ->limit(5)
+                                     ->limit(10)
                                      ->get();
 
 

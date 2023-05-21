@@ -20,7 +20,6 @@ const getPreviewPhotoPath = (path) => {
 };
 
 const form = useForm({
-  user_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
   url: props.productBanner.url,
   image: props.productBanner.image,
   captcha_token: null,

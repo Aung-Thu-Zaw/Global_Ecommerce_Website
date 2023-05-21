@@ -16,7 +16,6 @@ class AdminProductBannerController extends Controller
     public function index(): Response|ResponseFactory
     {
         $productBanners=ProductBanner::search(request("search"))
-                                       ->where("user_id", auth()->user()->id)
                                        ->orderBy(request("sort", "id"), request("direction", "desc"))
                                        ->paginate(request("per_page", 10))
                                        ->appends(request()->all());
@@ -63,7 +62,7 @@ class AdminProductBannerController extends Controller
     {
         $trashProductBanners=ProductBanner::search(request("search"))
                                             ->onlyTrashed()
-                                            ->where("user_id", auth()->user()->id)
+
                                             ->orderBy(request("sort", "id"), request("direction", "desc"))
                                             ->paginate(request("per_page", 10))
                                             ->appends(request()->all());
@@ -93,7 +92,7 @@ class AdminProductBannerController extends Controller
 
     public function handleShow(Request $request, int $id): RedirectResponse
     {
-        $countProductBanners=ProductBanner::where([["user_id", auth()->user()->id ],["status", "show"]])->count();
+        $countProductBanners=ProductBanner::where("status", "show")->count();
 
         if ($countProductBanners >= 3) {
             return to_route('admin.product-banners.index', "page=$request->page&per_page=$request->per_page")->with("error", "You can't display the product banner. Only 3 product banners are allowed.");
@@ -118,7 +117,7 @@ class AdminProductBannerController extends Controller
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $productBanners = ProductBanner::onlyTrashed()->where("user_id", auth()->user()->id)->get();
+        $productBanners = ProductBanner::onlyTrashed()->get();
 
         $productBanners->each(function ($productBanner) {
             ProductBanner::deleteImage($productBanner);

@@ -12,6 +12,7 @@ import "vue3-toastify/dist/index.css";
 const props = defineProps({
   shop: Object,
   followings: Object,
+  followers: Object,
   vendorProductBanners: Object,
   products: Object,
 });
@@ -101,7 +102,9 @@ const handleUnFollow = async () => {
                   Verified
                 </span>
               </h3>
-              <span class="text-sm text-slate-500 block">22 Followers</span>
+              <span class="text-sm text-slate-500 block"
+                >{{ followers.length }} Followers
+              </span>
 
               <span
                 class="capitalize text-sm text-green-500 animate-pulse font-bold"
@@ -115,7 +118,9 @@ const handleUnFollow = async () => {
               </span>
             </div>
           </div>
-          <div>
+          <div
+            v-if="$page.props.auth.user && $page.props.auth.user.id !== shop.id"
+          >
             <button
               class="px-5 py-2 rounded-sm mx-2 font-bold shadow bg-yellow-500 hover:bg-yellow-600 text-white"
             >

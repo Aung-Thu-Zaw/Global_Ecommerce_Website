@@ -196,6 +196,14 @@ class Product extends Model
         return $this->hasMany(ProductQuestion::class);
     }
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\HasMany<ProductReview>
+    */
+    public function productReviews(): HasMany
+    {
+        return $this->hasMany(ProductReview::class);
+    }
+
 
     public static function deleteImage(Product $product): void
     {

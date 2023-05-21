@@ -40,24 +40,28 @@ class HomeController extends Controller
                                      ->get();
 
         $newProducts=Product::select("image", "name", "slug", "price", "discount")
+                               ->with("productReviews:id,product_id,rating")
                             ->where("status", "active")
                             ->orderBy("id", "desc")
                             ->limit(5)
                             ->get();
 
         $hotDealProducts=Product::select("image", "name", "slug", "price", "discount")
+                               ->with("productReviews:id,product_id,rating")
                                 ->where([["status", "active"],["hot_deal",1]])
                                 ->orderBy("id", "desc")
                                 ->limit(5)
                                 ->get();
 
         $featuredProducts=Product::select("image", "name", "slug", "price", "discount")
+                               ->with("productReviews:id,product_id,rating")
                                  ->where([["status", "active"],["featured",1]])
                                  ->orderBy("id", "desc")
                                  ->limit(5)
                                  ->get();
 
         $randomProducts=Product::select("image", "name", "slug", "price", "discount")
+                               ->with("productReviews:id,product_id,rating")
                                ->where("status", "active")
                                ->inRandomOrder()
                                ->paginate(25);

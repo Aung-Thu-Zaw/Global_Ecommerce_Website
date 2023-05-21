@@ -12,8 +12,9 @@ return new class () extends Migration {
      */
     public function up()
     {
-        Schema::create('product_banners', function (Blueprint $table) {
+        Schema::create('vendor_product_banners', function (Blueprint $table) {
             $table->id();
+            $table->foreignId("user_id")->constrained()->cascadeOnDelete();
             $table->string("image");
             $table->string("url");
             $table->enum("status", ["show","hide"])->default("hide");
@@ -29,6 +30,6 @@ return new class () extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('product_banners');
+        Schema::dropIfExists('vendor_product_banners');
     }
 };
