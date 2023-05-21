@@ -1,44 +1,52 @@
 <script setup>
 import ProductCard from "@/Components/Cards/ProductCard.vue";
+import { Link } from "@inertiajs/vue3";
+
+defineProps({
+  vendorProductBanners: Object,
+  products: Object,
+});
 </script>
 
 
 <template>
   <section>
-    <div class="w-full flex items-center justify-center my-5">
-      <img
-        src="https://img.freepik.com/free-vector/dark-blue-banner-with-arrow-style-yellow-shapes_1017-32328.jpg"
-        alt=""
-        class="h-[200px] object-cover"
-      />
-    </div>
-
     <div class="w-full my-5">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div
+        v-if="vendorProductBanners.length"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
+      >
         <div
-          class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow mx-auto"
+          v-for="vendorProductBanner in vendorProductBanners"
+          :key="vendorProductBanner.id"
+          class="w-full max-w-sm bg-white border border-gray-200 rounded-sm shadow mx-auto"
         >
-          <a href="#">
+          <Link :href="vendorProductBanner.url">
             <img
-              class="p-8 rounded-t-lg"
-              src="https://www.junglescout.com/wp-content/uploads/2021/01/product-photo-water-bottle-hero.png"
+              class="rounded-sm h-full object-center object-contain"
+              :src="vendorProductBanner.image"
               alt="product image"
             />
-          </a>
-          <div class="px-5 pb-5">
-            <a href="#">
-              <h5 class="text-xl font-semibold tracking-tight text-gray-900">
-                Apple Watch Series 7 GPS, Aluminium Case, Starlight Sport
-              </h5>
-            </a>
-          </div>
+          </Link>
         </div>
       </div>
     </div>
 
     <div class="my-5">
-      <h1 class="text-2xl text-slate-700 font-bold">Just For You</h1>
-      <ProductCard></ProductCard>
+      <h1 class="text-2xl text-slate-700 font-bold my-10">Just For You</h1>
+
+      <div
+        v-if="products"
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
+      >
+        <div v-for="product in products" :key="product.id">
+          <ProductCard :product="product"></ProductCard>
+        </div>
+      </div>
+
+      <div v-else class="my-10">
+        <p class="text-center font-bold text-slate-600">Product Not Found!</p>
+      </div>
     </div>
   </section>
 </template>

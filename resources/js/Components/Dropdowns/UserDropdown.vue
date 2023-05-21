@@ -52,7 +52,14 @@
         <i class="fa-solid fa-bag-shopping mr-3"></i>
         My Orders
       </Link>
-
+      <!-- <Link
+        :href="route('shop.index')"
+        as="button"
+        class="text-left text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"
+      >
+        <i class="fa-solid fa-bag-shopping mr-3"></i>
+        My Shop
+      </Link> -->
       <Link
         :href="route('watchlist.index')"
         class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"

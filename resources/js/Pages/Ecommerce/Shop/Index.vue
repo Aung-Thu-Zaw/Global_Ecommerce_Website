@@ -12,6 +12,8 @@ import "vue3-toastify/dist/index.css";
 const props = defineProps({
   shop: Object,
   followings: Object,
+  vendorProductBanners: Object,
+  products: Object,
 });
 
 const currentTime = new Date();
@@ -304,7 +306,10 @@ const handleUnFollow = async () => {
             role="tabpanel"
             aria-labelledby="home-tab"
           >
-            <Home />
+            <Home
+              :vendorProductBanners="vendorProductBanners"
+              :products="products"
+            />
           </div>
           <div
             class="hidden w-full"
