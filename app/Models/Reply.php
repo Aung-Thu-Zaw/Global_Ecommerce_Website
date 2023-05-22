@@ -30,6 +30,16 @@ class Reply extends Model
     {
         return $this->belongsTo(ProductReview::class);
     }
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<ShopReview,Reply>
+    */
+    public function shopReview(): BelongsTo
+    {
+        return $this->belongsTo(ShopReview::class);
+    }
+
+
     /**
     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,Reply>
     */

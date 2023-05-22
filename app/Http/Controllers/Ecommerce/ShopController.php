@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ecommerce;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductReview;
+use App\Models\ShopReview;
 use App\Models\VendorProductBanner;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -47,6 +48,15 @@ class ShopController extends Controller
 
         $productReviewsAvg=ProductReview::where("vendor_id", $shopId)->avg("rating");
 
+        $paginateShopReviews=ShopReview::with(["user:id,name,avatar","reply.user:id,shop_name,avatar"])
+                                     ->where("vendor_id", $shopId)
+                                     ->orderBy("id", "desc")
+                                     ->paginate(5);
+
+        $shopReviews=ShopReview::where("vendor_id", $shopId)->get();
+
+        $shopReviewsAvg=ShopReview::where("vendor_id", $shopId)->avg("rating");
+
 
         return inertia("Ecommerce/Shop/Index", compact(
             "shop",
@@ -57,7 +67,10 @@ class ShopController extends Controller
             "vendorProducts",
             "productReviews",
             "paginateProductReviews",
-            "productReviewsAvg"
+            "productReviewsAvg",
+            "shopReviews",
+            "paginateShopReviews",
+            "shopReviewsAvg"
         ));
     }
 

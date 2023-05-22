@@ -1,6 +1,6 @@
 
 <script setup>
-import ReplyCard from "@/Components/Cards/ReplyCard.vue";
+import ProductReplyCard from "@/Components/Cards/ProductReplyCard.vue";
 import ProductReviewCard from "@/Components/Cards/ProductReviewCard.vue";
 import ProductReviewForm from "@/Components/Form/ProductReviewForm.vue";
 import { Link } from "@inertiajs/vue3";
@@ -234,7 +234,7 @@ const fiveStarRating = computed(() => {
       >
         <ProductReviewCard :paginateProductReview="paginateProductReview" />
         <div v-if="paginateProductReview.reply" class="w-full">
-          <ReplyCard :paginateProductReview="paginateProductReview" />
+          <ProductReplyCard :paginateProductReview="paginateProductReview" />
         </div>
       </div>
 
@@ -260,6 +260,7 @@ const fiveStarRating = computed(() => {
   >
     <ProductReviewForm :product="product" />
   </div>
+
   <div v-else-if="!$page.props.auth.user" class="px-5 my-5">
     <p class="font-bold text-sm text-slate-600 text-center">
       If you want to review this product you need to login first. Here

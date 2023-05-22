@@ -20,6 +20,8 @@ use App\Http\Controllers\Ecommerce\ProductReviewReplyController;
 use App\Http\Controllers\Ecommerce\ReviewController;
 use App\Http\Controllers\Ecommerce\SearchResultProductController;
 use App\Http\Controllers\Ecommerce\ShopController;
+use App\Http\Controllers\Ecommerce\ShopReviewController;
+use App\Http\Controllers\Ecommerce\ShopReviewReplyController;
 use App\Http\Controllers\User\MyAccountController;
 use App\Http\Controllers\Ecommerce\WatchlistController;
 use App\Http\Controllers\User\MyOrderController;
@@ -75,6 +77,24 @@ Route::middleware(["auth","verified"])->group(function () {
                Route::post("/", "storeProductReviewReply")->name("store");
                Route::post("/{reply_id}/update", "updateProductReviewReply")->name("update");
                Route::post("/{reply_id}/destroy", "destroyProductReviewReply")->name("destroy");
+           });
+
+    Route::controller(ShopReviewController::class)
+           ->prefix("/shop/reviews")
+           ->name("shop.review.")
+           ->group(function () {
+               Route::post("/", "storeReview")->name("store");
+               Route::post("/{review_id}/update", "updateReview")->name("update");
+               Route::post("/{review_id}/destroy", "destroyReview")->name("destroy");
+           });
+
+    Route::controller(ShopReviewReplyController::class)
+           ->prefix("/shop/reviews/reply")
+           ->name("shop.review.reply.")
+           ->group(function () {
+               Route::post("/", "storeShopReviewReply")->name("store");
+               Route::post("/{reply_id}/update", "updateShopReviewReply")->name("update");
+               Route::post("/{reply_id}/destroy", "destroyShopReviewReply")->name("destroy");
            });
 
     Route::controller(ShopController::class)
