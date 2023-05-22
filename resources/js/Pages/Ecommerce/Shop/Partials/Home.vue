@@ -4,7 +4,7 @@ import { Link } from "@inertiajs/vue3";
 
 defineProps({
   vendorProductBanners: Object,
-  products: Object,
+  vendorRandomProducts: Object,
 });
 </script>
 
@@ -32,20 +32,15 @@ defineProps({
       </div>
     </div>
 
-    <div class="my-5">
+    <div v-if="vendorRandomProducts.length" class="my-5">
       <h1 class="text-2xl text-slate-700 font-bold my-10">Just For You</h1>
 
       <div
-        v-if="products.length"
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
       >
-        <div v-for="product in products" :key="product.id">
+        <div v-for="product in vendorRandomProducts" :key="product.id">
           <ProductCard :product="product"></ProductCard>
         </div>
-      </div>
-
-      <div v-else class="my-10">
-        <p class="text-center font-bold text-slate-600">Product Not Found!</p>
       </div>
     </div>
   </section>

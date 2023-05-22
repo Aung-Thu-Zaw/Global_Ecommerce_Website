@@ -17,5 +17,6 @@ class ProductSeeder extends Seeder
         Product::factory(300)->create(["brand_id"=>null]);
         Product::factory(500)->create(["discount"=>null]);
         Product::factory(200)->create();
+        Product::factory(100)->create(["user_id"=>2]);
     }
 }

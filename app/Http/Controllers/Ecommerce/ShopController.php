@@ -27,13 +27,17 @@ class ShopController extends Controller
                                      ->orderBy("id", "desc")
                                      ->get();
 
-        $products=Product::select("image", "name", "slug", "price", "discount")
+        $vendorRandomProducts=Product::select("image", "name", "slug", "price", "discount")
                          ->where([["status", "active"],["user_id",$shopId]])
                          ->inRandomOrder()
                          ->limit(20)
                          ->get();
 
-        return inertia("Ecommerce/Shop/Index", compact("shop", "followings", "followers", "vendorProductBanners", "products"));
+        $vendorProducts=Product::select("image", "name", "slug", "price", "discount")
+                               ->where([["status", "active"],["user_id",$shopId]])
+                               ->paginate(20);
+
+        return inertia("Ecommerce/Shop/Index", compact("shop", "followings", "followers", "vendorProductBanners", "vendorRandomProducts", "vendorProducts"));
     }
 
     public function followShop(int $shopId): RedirectResponse

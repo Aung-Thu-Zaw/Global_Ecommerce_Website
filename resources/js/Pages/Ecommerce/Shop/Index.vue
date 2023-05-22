@@ -14,7 +14,8 @@ const props = defineProps({
   followings: Object,
   followers: Object,
   vendorProductBanners: Object,
-  products: Object,
+  vendorRandomProducts: Object,
+  vendorProducts: Object,
 });
 
 const currentTime = new Date();
@@ -228,65 +229,62 @@ const handleUnFollow = async () => {
               </div>
             </li> -->
             <li class="mr-2" role="presentation">
-              <a
-                href="#"
-                class="inline-flex p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group"
-                id="home-tab"
-                data-tabs-target="#home"
-                type="button"
-                role="tab"
-                aria-controls="home"
-                aria-selected="false"
+              <Link
+                :href="route('shop.index', shop.id)"
+                :data="{ tab: 'home' }"
+                class="inline-flex p-4 rounded-t-lg active group"
+                :class="{
+                  'text-blue-600 border-b-2 border-blue-600':
+                    $page.props.ziggy.query.tab === 'home',
+                }"
               >
                 <i class="fa-solid fa-home mr-2 text-sm"></i>
                 Home
-              </a>
+              </Link>
             </li>
             <li class="mr-2" role="presentation">
-              <a
-                href="#"
-                class="inline-flex p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group"
-                aria-current="page"
-                id="products-tab"
-                data-tabs-target="#products"
-                type="button"
-                role="tab"
-                aria-controls="products"
-                aria-selected="false"
+              <Link
+                :href="route('shop.index', shop.id)"
+                :data="{ tab: 'all-products' }"
+                class="inline-flex p-4 rounded-t-lg active group"
+                :class="{
+                  'text-blue-600 border-b-2 border-blue-600':
+                    $page.props.ziggy.query.tab === 'all-products',
+                }"
               >
                 <i class="fa-solid fa-basket-shopping mr-2 text-sm"></i>
                 All Products
-              </a>
+              </Link>
             </li>
             <li class="mr-2" role="presentation">
-              <a
-                href="#"
-                class="inline-flex p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group"
-                id="ratingsForShop-tab"
-                data-tabs-target="#ratingsForShop"
-                type="button"
-                role="tab"
-                aria-controls="ratingsForShop"
-                aria-selected="false"
+              <Link
+                :href="route('shop.index', shop.id)"
+                :data="{ tab: 'ratings-and-reviews-for-shop' }"
+                class="inline-flex p-4 rounded-t-lg active group"
+                :class="{
+                  'text-blue-600 border-b-2 border-blue-600':
+                    $page.props.ziggy.query.tab ===
+                    'ratings-and-reviews-for-shop',
+                }"
               >
                 <i class="fa-solid fa-star mr-2 text-sm"></i>
                 Ratings & Reviews For Shop
-              </a>
+              </Link>
             </li>
             <li class="mr-2" role="presentation">
-              <a
-                href="#"
-                class="inline-flex p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group"
-                id="ratingsForProducts-tab"
-                data-tabs-target="#ratingsForProducts"
-                type="button"
-                role="tab"
-                aria-controls="ratingsForProducts"
-                aria-selected="false"
+              <Link
+                :href="route('shop.index', shop.id)"
+                :data="{ tab: 'ratings-and-reviews-for-products' }"
+                class="inline-flex p-4 rounded-t-lg active group"
+                :class="{
+                  'text-blue-600 border-b-2 border-blue-600':
+                    $page.props.ziggy.query.tab ===
+                    'ratings-and-reviews-for-products',
+                }"
               >
                 <i class="fa-solid fa-star mr-2 text-sm"></i>
                 Ratings & Reviews For Products
-              </a>
+              </Link>
             </li>
           </ul>
 
@@ -305,42 +303,37 @@ const handleUnFollow = async () => {
         </div>
 
         <div id="myTabContet" class="w-full">
-          <div
-            class="hidden w-full"
-            id="home"
-            role="tabpanel"
-            aria-labelledby="home-tab"
-          >
-            <Home
-              :vendorProductBanners="vendorProductBanners"
-              :products="products"
-            />
-          </div>
-          <div
-            class="hidden w-full"
-            id="products"
-            role="tabpanel"
-            aria-labelledby="products-tab"
-          >
-            <AllProducts />
-          </div>
+          <div class="w-full">
+            <div v-if="$page.props.ziggy.query.tab === 'home'">
+              <Home
+                :vendorProductBanners="vendorProductBanners"
+                :vendorRandomProducts="vendorRandomProducts"
+              />
 
-          <div
-            class="hidden w-full"
-            id="ratingsForShop"
-            role="tabpanel"
-            aria-labelledby="ratingsForShop-tab"
-          >
-            <ShopRating />
-          </div>
+              This is home
+            </div>
+            <div v-else-if="$page.props.ziggy.query.tab === 'all-products'">
+              <AllProducts :vendorProducts="vendorProducts" />
+              This is products
+            </div>
+            <div
+              v-else-if="
+                $page.props.ziggy.query.tab === 'ratings-and-reviews-for-shop'
+              "
+            >
+              <ShopRating />
 
-          <div
-            class="hidden w-full"
-            id="ratingsForProducts"
-            role="tabpanel"
-            aria-labelledby="ratingsForProducts-tab"
-          >
-            <ProductRating />
+              This is rating for shop
+            </div>
+            <div
+              v-else-if="
+                $page.props.ziggy.query.tab ===
+                'ratings-and-reviews-for-products'
+              "
+            >
+              <ProductRating />
+              This is rating for products
+            </div>
           </div>
         </div>
       </div>
