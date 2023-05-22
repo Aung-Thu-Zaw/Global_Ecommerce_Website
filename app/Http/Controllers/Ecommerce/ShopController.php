@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ecommerce;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\ProductReview;
 use App\Models\VendorProductBanner;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -37,7 +38,27 @@ class ShopController extends Controller
                                ->where([["status", "active"],["user_id",$shopId]])
                                ->paginate(20);
 
-        return inertia("Ecommerce/Shop/Index", compact("shop", "followings", "followers", "vendorProductBanners", "vendorRandomProducts", "vendorProducts"));
+        $paginateProductReviews=ProductReview::with(["product.sizes","product.colors","product.brand","user.orders.orderItems","reply.user:id,shop_name,avatar"])
+                                     ->where("vendor_id", $shopId)
+                                     ->orderBy("id", "desc")
+                                     ->paginate(5);
+
+        $productReviews=ProductReview::where("vendor_id", $shopId)->get();
+
+        $productReviewsAvg=ProductReview::where("vendor_id", $shopId)->avg("rating");
+
+
+        return inertia("Ecommerce/Shop/Index", compact(
+            "shop",
+            "followings",
+            "followers",
+            "vendorProductBanners",
+            "vendorRandomProducts",
+            "vendorProducts",
+            "productReviews",
+            "paginateProductReviews",
+            "productReviewsAvg"
+        ));
     }
 
     public function followShop(int $shopId): RedirectResponse

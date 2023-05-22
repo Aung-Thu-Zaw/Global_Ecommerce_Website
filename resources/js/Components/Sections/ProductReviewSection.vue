@@ -245,7 +245,7 @@ const fiveStarRating = computed(() => {
     </div>
     <div v-else>
       <div class="font-bold text-center text-sm text-slate-600 my-10">
-        <i class="fa-solid fa-star text-3xl mb-5"></i>
+        <i class="fa-solid fa-star text-3xl mb-5 animate-bounce"></i>
         <p>This product has no reviews.</p>
         <p>
           Let others know what you think and be the first to write a review.

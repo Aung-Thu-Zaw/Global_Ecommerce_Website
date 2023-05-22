@@ -16,14 +16,25 @@ defineProps({
             v-html="link.label"
           />
 
-          <Link
-            v-else
-            class="mr-1 mb-1 px-4 py-3 text-sm leading-4 border rounded hover:bg-white focus:border-indigo-500 focus:text-indigo-500"
-            :class="{ 'bg-blue-700 text-white': link.active }"
-            :href="link.url"
-            v-html="link.label"
-          >
-          </Link>
+          <div v-else class="flex items-center">
+            <Link
+              v-if="$page.props.ziggy.query.tab"
+              class="mr-1 px-4 py-3 text-sm leading-4 border rounded hover:bg-gray-300 focus:border-indigo-500 focus:text-indigo-500"
+              :class="{ 'bg-blue-700 text-white': link.active }"
+              :href="link.url"
+              :data="{ tab: $page.props.ziggy.query.tab }"
+              v-html="link.label"
+            >
+            </Link>
+            <Link
+              v-else
+              class="mr-1 mb-1 px-4 py-3 text-sm leading-4 border rounded hover:bg-gray-300 focus:border-indigo-500 focus:text-indigo-500"
+              :class="{ 'bg-blue-700 text-white': link.active }"
+              :href="link.url"
+              v-html="link.label"
+            >
+            </Link>
+          </div>
         </template>
       </div>
     </div>

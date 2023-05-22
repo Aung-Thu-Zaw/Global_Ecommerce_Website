@@ -16,6 +16,9 @@ const props = defineProps({
   vendorProductBanners: Object,
   vendorRandomProducts: Object,
   vendorProducts: Object,
+  paginateProductReviews: Object,
+  productReviews: Object,
+  productReviewsAvg: Object,
 });
 
 const currentTime = new Date();
@@ -314,7 +317,6 @@ const handleUnFollow = async () => {
             </div>
             <div v-else-if="$page.props.ziggy.query.tab === 'all-products'">
               <AllProducts :vendorProducts="vendorProducts" />
-              This is products
             </div>
             <div
               v-else-if="
@@ -322,8 +324,6 @@ const handleUnFollow = async () => {
               "
             >
               <ShopRating />
-
-              This is rating for shop
             </div>
             <div
               v-else-if="
@@ -331,8 +331,11 @@ const handleUnFollow = async () => {
                 'ratings-and-reviews-for-products'
               "
             >
-              <ProductRating />
-              This is rating for products
+              <ProductRating
+                :paginateProductReviews="paginateProductReviews"
+                :productReviews="productReviews"
+                :productReviewsAvg="productReviewsAvg"
+              />
             </div>
           </div>
         </div>
