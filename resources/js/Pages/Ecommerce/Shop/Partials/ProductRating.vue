@@ -2,6 +2,7 @@
 import Pagination from "@/Components/Pagination.vue";
 import { computed } from "vue";
 import ProductRatingStar from "@/Components/ProductRatingStar.vue";
+import { Link } from "@inertiajs/vue3";
 
 const props = defineProps({
   paginateProductReviews: Object,
@@ -49,17 +50,20 @@ const fiveStarRating = computed(() => {
   return ((totalRatings.length / props.productReviews.length) * 100).toFixed(0);
 });
 
-// const filterVerifiedPurchaser = computed(() => {
-//   const ordefrs = props.paginateProductReviews.user.orders.filter((order) =>
-//     order.order_items.filter(
-//       (orderItem) =>
-//         orderItem.produt_id === props.paginateProductReviews.product_id &&
-//         orderItem.vendor_id === props.paginateProductReviews.vendor_id
-//     )
-//   );
+const filterVerifiedPurchaser = computed(() => {
+  const orders = props.paginateProductReviews.data.filter(
+    (paginateProductReview) => {
+      paginateProductReview.user.orders.filter((order) => {
+        order.order_items.filter((orderItem) => {
+          orderItem.produt_id === props.paginateProductReviews.product_id &&
+            orderItem.vendor_id === props.paginateProductReviews.vendor_id;
+        });
+      });
+    }
+  );
 
-//   return ordefrs.length ? true : false;
-// });
+  return orders.length ? true : false;
+});
 </script>
 
 <template>
@@ -156,7 +160,7 @@ const fiveStarRating = computed(() => {
       </div>
 
       <p class="text-sm text-slate-400">
-        Based on {{ productReviews.length }} user ratings
+        Based on {{ productReviews.length }} customer ratings
       </p>
 
       <div class="flex items-center mt-4 justify-center">
@@ -252,9 +256,12 @@ const fiveStarRating = computed(() => {
                 class="h-28 object-cover border shadow rounded-sm mr-5"
               />
               <div>
-                <h1 class="font-bold text-lg text-slate-700">
+                <Link
+                  :href="route('products.show', productReview.product.slug)"
+                  class="font-bold text-lg text-slate-700"
+                >
                   {{ productReview.product.name }}
-                </h1>
+                </Link>
                 <p class="text-sm text-slate-600">
                   Brand :
                   {{
