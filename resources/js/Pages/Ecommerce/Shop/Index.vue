@@ -313,7 +313,6 @@ const handleUnFollow = async () => {
                 :vendorRandomProducts="vendorRandomProducts"
               />
 
-              This is home
             </div>
             <div v-else-if="$page.props.ziggy.query.tab === 'all-products'">
               <AllProducts :vendorProducts="vendorProducts" />
