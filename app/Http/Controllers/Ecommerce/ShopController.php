@@ -40,7 +40,7 @@ class ShopController extends Controller
                          ->get();
 
 
-        $vendorProducts=Product::with(["shop","watchlists","cartItems"])
+        $vendorProducts=Product::with(["shop","watchlists","cartItems","images"])
                          ->filterBy(request(["search","category","brand","rating","price"]))
                          ->where("status", "active")
                          ->where("user_id", $shopId)

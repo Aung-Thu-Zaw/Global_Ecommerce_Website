@@ -95,6 +95,9 @@ const params = reactive({
   category: usePage().props.ziggy.query.category,
   rating: usePage().props.ziggy.query.rating,
   price: usePage().props.ziggy.query.price,
+  view: usePage().props.ziggy.query.view
+    ? usePage().props.ziggy.query.view
+    : "grid",
 });
 
 const handleSearch = () => {
@@ -107,6 +110,7 @@ const handleSearch = () => {
     category: params.category,
     rating: params.rating,
     price: params.price,
+    view: params.view,
   });
 };
 </script>
@@ -280,7 +284,7 @@ const handleSearch = () => {
             <li class="mr-2" role="presentation">
               <Link
                 :href="route('shop.index', shop.id)"
-                :data="{ tab: 'all-products' }"
+                :data="{ tab: 'all-products', view: 'grid' }"
                 class="inline-flex p-4 rounded-t-lg active group"
                 :class="{
                   'text-blue-600 border-b-2 border-blue-600':

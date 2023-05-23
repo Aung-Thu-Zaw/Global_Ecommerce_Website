@@ -1,8 +1,9 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ProductCard from "@/Components/Cards/ProductCard.vue";
+import ProductCardList from "@/Components/Cards/ProductCardList.vue";
 import { onMounted, reactive, ref, watch } from "vue";
-import { usePage, router, useForm } from "@inertiajs/vue3";
+import { usePage, router, useForm, Link } from "@inertiajs/vue3";
 import EcommerceFilterSidebar from "@/Components/Sidebar/EcommerceFilterSidebar.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Home/Breadcrumb.vue";
 import { useReCaptcha } from "vue-recaptcha-v3";
@@ -112,25 +113,77 @@ const handleRemoveRating = () => {
               <span class="text-blue-600">"{{ params.search }}"</span>
             </p>
 
-            <div class="w-[210px] flex items-center justify-between ml-auto">
-              <span class="mr-2">Sort By</span>
-              <select
-                id="countries"
-                class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[150px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-slate-700"
-                v-model="params.direction"
-              >
-                <option
-                  value="desc"
-                  :selected="
-                    params.direction === 'desc' || params.direction === null
-                  "
+            <div class="flex items-center ml-auto">
+              <div class="w-[220px] flex items-center justify-between">
+                <span class="">Sort By : </span>
+                <select
+                  id="countries"
+                  class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[150px] p-2.5 text-slate-700"
+                  v-model="params.direction"
                 >
-                  Latest Arrivals
-                </option>
-                <option value="asc" :selected="params.direction === 'asc'">
-                  Earliest Arrivals
-                </option>
-              </select>
+                  <option
+                    value="desc"
+                    :selected="
+                      params.direction === 'desc' || params.direction === null
+                    "
+                  >
+                    Latest Arrivals
+                  </option>
+                  <option value="asc" :selected="params.direction === 'asc'">
+                    Earliest Arrivals
+                  </option>
+                </select>
+              </div>
+
+              <div class="flex items-center ml-3">
+                <span class="mr-2">View : </span>
+                <div class="flex items-center justify-between">
+                  <Link
+                    :href="route('shop.index', shop.id)"
+                    :data="{
+                      search: $page.props.ziggy.query.search,
+                      tab: $page.props.ziggy.query.tab,
+                      category: $page.props.ziggy.query.category,
+                      sort: $page.props.ziggy.query.sort,
+                      direction: $page.props.ziggy.query.direction,
+                      page: $page.props.ziggy.query.page,
+                      rating: $page.props.ziggy.query.rating,
+                      price: $page.props.ziggy.query.price,
+                      view: 'grid',
+                    }"
+                    class="px-2 py-1 rounded-md cursor-pointer hover:bg-gray-300 transition-none"
+                    :class="{
+                      'bg-gray-400 text-white':
+                        $page.props.ziggy.query.view === 'grid',
+                      'bg-gray-200': $page.props.ziggy.query.view !== 'grid',
+                    }"
+                  >
+                    <i class="fa-solid fa-grip"></i>
+                  </Link>
+                  <Link
+                    :href="route('shop.index', shop.id)"
+                    :data="{
+                      search: $page.props.ziggy.query.search,
+                      tab: $page.props.ziggy.query.tab,
+                      category: $page.props.ziggy.query.category,
+                      sort: $page.props.ziggy.query.sort,
+                      direction: $page.props.ziggy.query.direction,
+                      page: $page.props.ziggy.query.page,
+                      rating: $page.props.ziggy.query.rating,
+                      price: $page.props.ziggy.query.price,
+                      view: 'list',
+                    }"
+                    class="ml-3 px-2 py-1 rounded-md cursor-pointer hover:bg-gray-300 transition-none"
+                    :class="{
+                      'bg-gray-400 text-white':
+                        $page.props.ziggy.query.view === 'list',
+                      'bg-gray-200': $page.props.ziggy.query.view !== 'list',
+                    }"
+                  >
+                    <i class="fa-solid fa-list"></i>
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -198,29 +251,53 @@ const handleRemoveRating = () => {
               </i>
             </span>
           </div>
-          <div
-            v-if="vendorProducts.data.length"
-            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
-          >
+
+          <div v-if="$page.props.ziggy.query.view === 'list'">
             <div
-              v-for="product in vendorProducts.data"
-              :key="product.id"
-              class="my-3"
+              v-if="vendorProducts.data.length"
+              class="flex flex-col items-center space-y-2"
             >
-              <ProductCard :product="product"></ProductCard>
+              <div v-for="product in vendorProducts.data" :key="product.id" class="w-full">
+                <ProductCardList :product="product" />
+              </div>
             </div>
-          </div>
-          <div v-else>
-            <h4 class="font-bold text-slate-600 text-center mt-20 text-xl">
-              ☹️ Items Not Found!
-            </h4>
-            <p class="my-3 font-bold text-slate-500 text-center">
-              We're sorry. We cannot find any matches for your search term.
-            </p>
+            <div v-else>
+              <h4 class="font-bold text-slate-600 text-center mt-20 text-xl">
+                ☹️ Items Not Found!
+              </h4>
+              <p class="my-3 font-bold text-slate-500 text-center">
+                We're sorry. We cannot find any matches for your search term.
+              </p>
+            </div>
+            <!-- Pagination -->
+            <Pagination class="mt-6" :links="vendorProducts.links" />
           </div>
 
-          <!-- Pagination -->
-          <Pagination class="mt-6" :links="vendorProducts.links" />
+          <div v-if="$page.props.ziggy.query.view === 'grid'">
+            <div
+              v-if="vendorProducts.data.length"
+              class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+            >
+              <div
+                v-for="product in vendorProducts.data"
+                :key="product.id"
+                class="my-3"
+              >
+                <ProductCard :product="product"></ProductCard>
+              </div>
+            </div>
+            <div v-else>
+              <h4 class="font-bold text-slate-600 text-center mt-20 text-xl">
+                ☹️ Items Not Found!
+              </h4>
+              <p class="my-3 font-bold text-slate-500 text-center">
+                We're sorry. We cannot find any matches for your search term.
+              </p>
+            </div>
+
+            <!-- Pagination -->
+            <Pagination class="mt-6" :links="vendorProducts.links" />
+          </div>
         </main>
       </div>
     </div>
