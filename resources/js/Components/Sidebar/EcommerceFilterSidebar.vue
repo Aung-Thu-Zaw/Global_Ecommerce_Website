@@ -44,6 +44,9 @@ const params = reactive({
   price: usePage().props.ziggy.query.price
     ? usePage().props.ziggy.query.price
     : `${minPrice.value}-${maxPrice.value}`,
+  view: usePage().props.ziggy.query.view
+    ? usePage().props.ziggy.query.view
+    : "grid",
 });
 
 watch(
@@ -58,6 +61,7 @@ watch(
       category: params.category,
       rating: params.rating,
       price: params.price,
+      view: params.view,
     });
   }
 );
@@ -73,6 +77,7 @@ const handlePrice = () => {
     category: params.category,
     rating: params.rating,
     price: params.price,
+    view: params.view,
   });
 };
 </script>
@@ -112,6 +117,7 @@ const handlePrice = () => {
                 page: $page.props.ziggy.query.page,
                 rating: $page.props.ziggy.query.rating,
                 price: $page.props.ziggy.query.price,
+                view: params.view,
               }"
             >
               {{ category.name }}
@@ -137,6 +143,7 @@ const handlePrice = () => {
                 page: $page.props.ziggy.query.page,
                 rating: $page.props.ziggy.query.rating,
                 price: $page.props.ziggy.query.price,
+                view: params.view,
               }"
             >
               {{ category.name }}

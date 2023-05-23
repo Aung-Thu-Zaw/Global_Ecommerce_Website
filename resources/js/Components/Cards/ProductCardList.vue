@@ -13,7 +13,7 @@ const props = defineProps({
   <div v-if="product" class="w-full">
     <a
       href="#"
-      class="border hover:shadow-md rounded-sm bg-white p-5 w-full h-[280px] flex items-start justify-between"
+      class="border hover:shadow-md rounded-sm bg-white p-5 w-full h-[280px] flex items-start justify-between relative overflow-hidden"
     >
       <div class="flex flex-col items-start w-[500px] mr-3">
         <img
@@ -21,6 +21,13 @@ const props = defineProps({
           alt=""
           class="h-[180px] object-contain rounded-md shadow border-2 border-slate-400"
         />
+
+        <span
+          v-if="product.special_offer"
+          class="inline-block px-2 text-center py-1 text-[.6rem] font-bold w-[100px] bg-rose-200 bg-opacity-90 text-rose-600 absolute -right-6 top-4 rotate-45"
+        >
+          Special Offer
+        </span>
 
         <div
           class="flex items-center space-x-1 mt-2 w-[250px] overflow-auto pb-1"

@@ -28,6 +28,9 @@ const params = reactive({
   category: usePage().props.ziggy.query.category,
   rating: usePage().props.ziggy.query.rating,
   price: usePage().props.ziggy.query.price,
+  view: usePage().props.ziggy.query.view
+    ? usePage().props.ziggy.query.view
+    : "grid",
 });
 
 watch(
@@ -42,6 +45,7 @@ watch(
       category: params.category,
       rating: params.rating,
       price: params.price,
+      view: params.view,
     });
   }
 );
@@ -66,6 +70,7 @@ const handleRemoveCategory = () => {
     tab: params.tab,
     rating: params.rating,
     price: params.price,
+    view: params.view,
   });
 };
 
@@ -78,6 +83,7 @@ const handleRemovePrice = () => {
     tab: params.tab,
     category: params.category,
     rating: params.rating,
+    view: params.view,
   });
 };
 
@@ -90,6 +96,7 @@ const handleRemoveRating = () => {
     tab: params.tab,
     category: params.category,
     price: params.price,
+    view: params.view,
   });
 };
 </script>
@@ -257,7 +264,11 @@ const handleRemoveRating = () => {
               v-if="vendorProducts.data.length"
               class="flex flex-col items-center space-y-2"
             >
-              <div v-for="product in vendorProducts.data" :key="product.id" class="w-full">
+              <div
+                v-for="product in vendorProducts.data"
+                :key="product.id"
+                class="w-full"
+              >
                 <ProductCardList :product="product" />
               </div>
             </div>
