@@ -40,17 +40,13 @@ class ShopController extends Controller
                          ->get();
 
 
-        $vendorProducts=Product::search(request("search"))
-                         ->query(function (Builder $builder) {
-                             $builder->with(["shop","watchlists","cartItems"]);
-                         })
+        $vendorProducts=Product::with(["shop","watchlists","cartItems"])
+                         ->filterBy(request(["search","category","brand","rating","price"]))
                          ->where("status", "active")
                          ->where("user_id", $shopId)
                          ->orderBy(request("sort", "id"), request("direction", "desc"))
                          ->paginate(20)
                          ->appends(request()->all());
-
-
 
 
         $paginateProductReviews=ProductReview::with(["product.sizes","product.colors","product.brand","user.orders.orderItems","reply.user:id,shop_name,avatar"])

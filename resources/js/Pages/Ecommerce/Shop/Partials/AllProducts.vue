@@ -17,10 +17,16 @@ const props = defineProps({
 
 const params = reactive({
   search: usePage().props.ziggy.query.search,
-  sort: usePage().props.ziggy.query.sort,
+  sort: "id",
   direction: usePage().props.ziggy.query.direction
     ? usePage().props.ziggy.query.direction
     : "desc",
+
+  page: usePage().props.ziggy.query.page,
+  tab: usePage().props.ziggy.query.tab,
+  category: usePage().props.ziggy.query.category,
+  rating: usePage().props.ziggy.query.rating,
+  price: usePage().props.ziggy.query.price,
 });
 
 watch(
@@ -30,11 +36,25 @@ watch(
       search: params.search,
       sort: params.sort,
       direction: params.direction,
-      page: usePage().props.ziggy.query.page,
-      tab: usePage().props.ziggy.query.tab,
+      page: params.page,
+      tab: params.tab,
+      category: params.category,
+      rating: params.rating,
+      price: params.price,
     });
   }
 );
+
+const price = ref(
+  usePage().props.ziggy.query.price ? usePage().props.ziggy.query.price : ""
+);
+
+const [minValue, maxValue] = price.value
+  .split("-")
+  .map((value) => parseInt(value));
+
+const minPrice = ref(minValue);
+const maxPrice = ref(maxValue);
 </script>
 
 
@@ -42,7 +62,11 @@ watch(
   <section class="container mx-auto py-10">
     <div class="container max-w-screen-xl mx-auto">
       <div class="flex flex-col md:flex-row -mx-4">
-        <EcommerceFilterSidebar :categories="categories" :brands="brands" />
+        <EcommerceFilterSidebar
+          :categories="categories"
+          :brands="brands"
+          :shop="shop"
+        />
         <main class="md:w-2/3 lg:w-3/4 px-4">
           <div
             class="text-sm font-bold text-slate-600 px-5 py-3 border-t border-b flex items-center justify-between"
@@ -72,6 +96,61 @@ watch(
                 </option>
               </select>
             </div>
+          </div>
+
+          <div class="my-3 w-full">
+            <span class="font-bold text-slate-600 text-lg mr-3"
+              >Filtered By :</span
+            >
+
+            <span
+              v-if="$page.props.ziggy.query.category"
+              class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow capitalize"
+            >
+              Category : {{ $page.props.ziggy.query.category }}
+
+              <i
+                class="fa-solid fa-xmark font-bold hover:text-red-600 cursor-pointer"
+              >
+              </i>
+            </span>
+
+            <span v-if="$page.props.ziggy.query.brand">
+              <span
+                class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
+              >
+                Brand : Apple
+
+                <i
+                  class="fa-solid fa-xmark font-bold hover:text-red-600 cursor-pointer"
+                >
+                </i>
+              </span>
+            </span>
+
+            <span
+              v-if="$page.props.ziggy.query.rating"
+              class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
+            >
+              Rating : {{ $page.props.ziggy.query.rating }} Stars And Up
+
+              <i
+                class="fa-solid fa-xmark font-bold hover:text-red-600 cursor-pointer"
+              >
+              </i>
+            </span>
+
+            <span
+              v-if="$page.props.ziggy.query.price"
+              class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
+            >
+              Price : {{ minPrice }} - {{ maxPrice }}
+
+              <i
+                class="fa-solid fa-xmark font-bold hover:text-red-600 cursor-pointer"
+              >
+              </i>
+            </span>
           </div>
           <div
             v-if="vendorProducts.data.length"

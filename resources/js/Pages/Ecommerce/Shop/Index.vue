@@ -90,6 +90,11 @@ const params = reactive({
     : "",
   sort: "id",
   direction: "desc",
+  page: usePage().props.ziggy.query.page,
+  tab: "all-products",
+  category: usePage().props.ziggy.query.category,
+  rating: usePage().props.ziggy.query.rating,
+  price: usePage().props.ziggy.query.price,
 });
 
 const handleSearch = () => {
@@ -97,7 +102,11 @@ const handleSearch = () => {
     search: params.search,
     sort: params.sort,
     direction: params.direction,
-    tab: "all-products",
+    page: params.page,
+    tab: params.tab,
+    category: params.category,
+    rating: params.rating,
+    price: params.price,
   });
 };
 </script>

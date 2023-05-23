@@ -1,8 +1,10 @@
 <script setup>
-import { Link } from "@inertiajs/vue3";
-import { onMounted, ref } from "vue";
+import { Link, router, usePage } from "@inertiajs/vue3";
+import { formatPostcssSourceMap } from "vite";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 
 const props = defineProps({
+  shop: Object,
   categories: Object,
   brands: Object,
 });
@@ -13,10 +15,69 @@ const isBrandShowLess = ref(true);
 const limitedCategories = ref([]);
 const limitedBrands = ref([]);
 
+const price = ref(
+  usePage().props.ziggy.query.price ? usePage().props.ziggy.query.price : ""
+);
+
+const [minValue, maxValue] = price.value
+  .split("-")
+  .map((value) => parseInt(value));
+
+const minPrice = ref(minValue);
+const maxPrice = ref(maxValue);
+
 onMounted(() => {
   limitedCategories.value = props.categories.slice(0, 10);
   limitedBrands.value = props.brands.slice(0, 10);
 });
+
+
+
+const params = reactive({
+  search: usePage().props.ziggy.query.search,
+  sort: "id",
+  direction: usePage().props.ziggy.query.direction
+    ? usePage().props.ziggy.query.direction
+    : "desc",
+
+  page: usePage().props.ziggy.query.page,
+  tab: usePage().props.ziggy.query.tab,
+  category: usePage().props.ziggy.query.category,
+  rating: usePage().props.ziggy.query.rating,
+  price: usePage().props.ziggy.query.price
+    ? usePage().props.ziggy.query.price
+    : `${minPrice.value}-${maxPrice.value}`,
+});
+
+watch(
+  () => params.rating,
+  (current, previous) => {
+    router.get(route("shop.index", props.shop.id), {
+      search: params.search,
+      sort: params.sort,
+      direction: params.direction,
+      page: params.page,
+      tab: params.tab,
+      category: params.category,
+      rating: params.rating,
+      price: params.price,
+    });
+  }
+);
+
+const handlePrice = () => {
+  params.price = `${minPrice.value}-${maxPrice.value}`;
+  router.get(route("shop.index", props.shop.id), {
+    search: params.search,
+    sort: params.sort,
+    direction: params.direction,
+    page: params.page,
+    tab: params.tab,
+    category: params.category,
+    rating: params.rating,
+    price: params.price,
+  });
+};
 </script>
 
 <template>
@@ -38,7 +99,24 @@ onMounted(() => {
 
         <ul v-if="isCategoryShowLess" class="text-gray-500 space-y-1">
           <li v-for="category in limitedCategories" :key="category.id">
-            <Link class="hover:text-blue-600" href="#">
+            <Link
+              class="hover:text-blue-600"
+              :class="{
+                'text-blue-600':
+                  $page.props.ziggy.query.category === category.slug,
+              }"
+              :href="route('shop.index', shop.id)"
+              :data="{
+                search: $page.props.ziggy.query.search,
+                tab: $page.props.ziggy.query.tab,
+                category: category.slug,
+                sort: $page.props.ziggy.query.sort,
+                direction: $page.props.ziggy.query.direction,
+                page: $page.props.ziggy.query.page,
+                rating: $page.props.ziggy.query.rating,
+                price: $page.props.ziggy.query.price,
+              }"
+            >
               {{ category.name }}
             </Link>
           </li>
@@ -46,7 +124,24 @@ onMounted(() => {
 
         <ul v-else class="text-gray-500 space-y-1">
           <li v-for="category in categories" :key="category.id">
-            <Link class="hover:text-blue-600" href="#">
+            <Link
+              class="hover:text-blue-600"
+              :class="{
+                'text-blue-600':
+                  $page.props.ziggy.query.category === category.slug,
+              }"
+              :href="route('shop.index', shop.id)"
+              :data="{
+                search: $page.props.ziggy.query.search,
+                tab: $page.props.ziggy.query.tab,
+                category: category.slug,
+                sort: $page.props.ziggy.query.sort,
+                direction: $page.props.ziggy.query.direction,
+                page: $page.props.ziggy.query.page,
+                rating: $page.props.ziggy.query.rating,
+                price: $page.props.ziggy.query.price,
+              }"
+            >
               {{ category.name }}
             </Link>
           </li>
@@ -76,7 +171,7 @@ onMounted(() => {
         <ul v-if="isBrandShowLess" class="space-y-1">
           <li v-for="brand in limitedBrands" :key="brand.id">
             <label class="flex items-center">
-              <input type="checkbox" :value="brand.name" class="h-4 w-4" />
+              <input type="checkbox" :value="brand.slug" class="h-4 w-4" />
               <span class="ml-2 text-gray-500"> {{ brand.name }} </span>
             </label>
           </li>
@@ -85,11 +180,13 @@ onMounted(() => {
         <ul v-else class="space-y-1">
           <li v-for="brand in brands" :key="brand.id">
             <label class="flex items-center">
-              <input type="checkbox" :value="brand.name" class="h-4 w-4" />
+              <input type="checkbox" :value="brand.slug" class="h-4 w-4" />
               <span class="ml-2 text-gray-500"> {{ brand.name }} </span>
             </label>
           </li>
         </ul>
+
+        {{ params.brand }}
 
         <button
           v-if="brands.length > 10"
@@ -115,8 +212,9 @@ onMounted(() => {
             <input
               name="myselection"
               type="radio"
-              checked=""
+              value="5"
               class="h-4 w-4 mr-2"
+              v-model="params.rating"
             />
 
             <div class="flex items-center">
@@ -193,7 +291,8 @@ onMounted(() => {
             <input
               name="myselection"
               type="radio"
-              checked=""
+              value="4"
+              v-model="params.rating"
               class="h-4 w-4 mr-2"
             />
 
@@ -271,7 +370,8 @@ onMounted(() => {
             <input
               name="myselection"
               type="radio"
-              checked=""
+              value="3"
+              v-model="params.rating"
               class="h-4 w-4 mr-2"
             />
 
@@ -349,7 +449,8 @@ onMounted(() => {
             <input
               name="myselection"
               type="radio"
-              checked=""
+              value="2"
+              v-model="params.rating"
               class="h-4 w-4 mr-2"
             />
 
@@ -427,7 +528,8 @@ onMounted(() => {
             <input
               name="myselection"
               type="radio"
-              checked=""
+              value="1"
+              v-model="params.rating"
               class="h-4 w-4 mr-2"
             />
 
@@ -505,17 +607,19 @@ onMounted(() => {
       <h3 class="font-semibold mb-2">Price</h3>
       <ul class="space-y-1">
         <li>
-          <form class="flex items-center">
+          <form @submit.prevent="handlePrice" class="flex items-center">
             <input
               type="number"
               placeholder="Min"
               class="w-20 h-8 border-slate-400 rounded-sm"
+              v-model="minPrice"
             />
             <span class="mx-2 text-slate-500">-</span>
             <input
               type="number"
               placeholder="Max"
               class="w-20 h-8 border-slate-400 rounded-sm"
+              v-model="maxPrice"
             />
             <button
               class="bg-blue-600 px-3 py-1 ml-4 text-white rounded-sm hover:bg-blue-700"

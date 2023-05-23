@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
+use GuzzleHttp\Psr7\Query;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Scout\Searchable;
@@ -210,5 +211,53 @@ class Product extends Model
         if (!empty($product->image) && file_exists(storage_path("app/public/products/".pathinfo($product->image, PATHINFO_BASENAME)))) {
             unlink(storage_path("app/public/products/".pathinfo($product->image, PATHINFO_BASENAME)));
         }
+    }
+
+
+    public function scopeFilterBy($query, array $filterBy): void
+    {
+        $query->when(
+            $filterBy["search"]??null,
+            function ($query, $search) {
+                $query->where(
+                    function ($query) use ($search) {
+                        $query->where("name", "LIKE", "%".$search."%");
+                    }
+                );
+            }
+        );
+
+        $query->when($filterBy["price"] ?? null, function ($query, $price) {
+            $priceRange = explode("-", $price);
+
+            if (count($priceRange) === 2) {
+                $minPrice = $priceRange[0];
+                $maxPrice = $priceRange[1];
+
+                $query->where(function ($query) use ($minPrice, $maxPrice) {
+                    $query->whereBetween("price", [$minPrice, $maxPrice])
+                        ->orWhereBetween("discount", [$minPrice, $maxPrice]);
+                });
+            }
+        });
+
+        $query->when($filterBy["category"]?? null, function ($query, $categorySlug) {
+            $query->whereHas("category", function ($query) use ($categorySlug) {
+                $query->where("slug", $categorySlug);
+            });
+        });
+
+        $query->when($filterBy["brand"]?? null, function ($query, $brandSlug) {
+            $query->whereHas("brand", function ($query) use ($brandSlug) {
+                $query->where("slug", $brandSlug);
+            });
+        });
+
+        // $query->when($filterBy["rating"]?? null, function ($query, $rating) {
+        //     $query->whereHas("productReviews", function ($query) use ($rating) {
+        //         $query->groupBy("product_id")
+        //               ->havingRaw("AVG(rating) >= ?", [$rating]);
+        //     });
+        // });
     }
 }

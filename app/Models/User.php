@@ -189,4 +189,5 @@ class User extends Authenticatable implements MustVerifyEmail
             unlink(storage_path("app/public/avatars/".pathinfo($user->avatar, PATHINFO_BASENAME)));
         }
     }
+
 }
