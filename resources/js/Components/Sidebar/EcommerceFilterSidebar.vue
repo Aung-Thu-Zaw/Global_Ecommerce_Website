@@ -1,81 +1,111 @@
+<script setup>
+import { Link } from "@inertiajs/vue3";
+import { onMounted, ref } from "vue";
+
+const props = defineProps({
+  categories: Object,
+  brands: Object,
+});
+
+const isCategoryShowLess = ref(true);
+const isBrandShowLess = ref(true);
+
+const limitedCategories = ref([]);
+const limitedBrands = ref([]);
+
+onMounted(() => {
+  limitedCategories.value = props.categories.slice(0, 10);
+  limitedBrands.value = props.brands.slice(0, 10);
+});
+</script>
+
 <template>
   <aside class="md:w-1/3 lg:w-1/4 px-4">
     <!-- filter wrap -->
 
-    <a
+    <!-- <a
       class="md:hidden mb-5 w-full text-center px-4 py-2 inline-block text-lg text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:text-blue-600"
       href="#"
     >
       Filter by
-    </a>
+    </a> -->
 
     <div
       class="hidden md:block px-6 py-4 border border-gray-200 bg-white rounded shadow-sm"
     >
-      <h3 class="font-semibold mb-2">Category</h3>
+      <div v-if="categories.length">
+        <h3 class="font-semibold mb-2">Category</h3>
 
-      <ul class="text-gray-500 space-y-1">
-        <li>
-          <a class="hover:text-blue-600 hover:underline" href="#"
-            >Electronics
-          </a>
-        </li>
-        <li>
-          <a class="hover:text-blue-600 hover:underline" href="#">Watches </a>
-        </li>
-        <li>
-          <a class="hover:text-blue-600 hover:underline" href="#">Cinema </a>
-        </li>
-        <li>
-          <a class="hover:text-blue-600 hover:underline" href="#">Clothes </a>
-        </li>
-        <li>
-          <a class="hover:text-blue-600 hover:underline" href="#"
-            >Home items
-          </a>
-        </li>
-        <li>
-          <a class="hover:text-blue-600 hover:underline" href="#"
-            >Smartwatches
-          </a>
-        </li>
-      </ul>
+        <ul v-if="isCategoryShowLess" class="text-gray-500 space-y-1">
+          <li v-for="category in limitedCategories" :key="category.id">
+            <Link class="hover:text-blue-600" href="#">
+              {{ category.name }}
+            </Link>
+          </li>
+        </ul>
+
+        <ul v-else class="text-gray-500 space-y-1">
+          <li v-for="category in categories" :key="category.id">
+            <Link class="hover:text-blue-600" href="#">
+              {{ category.name }}
+            </Link>
+          </li>
+        </ul>
+
+        <button
+          v-if="categories.length > 10"
+          @click="isCategoryShowLess = !isCategoryShowLess"
+          class="font-bold text-sm w-full hover:text-blue-700 mt-5"
+        >
+          <span v-if="!isCategoryShowLess">
+            Show Less
+            <i class="fa-solid fa-chevron-up ml-3 animate-bounce"></i>
+          </span>
+          <span v-else>
+            Show More
+            <i class="fa-solid fa-chevron-down ml-3 animate-bounce"></i>
+          </span>
+        </button>
+      </div>
 
       <hr class="my-4" />
 
-      <h3 class="font-semibold mb-2">Brand</h3>
-      <ul class="space-y-1">
-        <li>
-          <label class="flex items-center">
-            <input name="" type="checkbox" checked="" class="h-4 w-4" />
-            <span class="ml-2 text-gray-500"> Samsung </span>
-          </label>
-        </li>
-        <li>
-          <label class="flex items-center">
-            <input name="" type="checkbox" checked="" class="h-4 w-4" />
-            <span class="ml-2 text-gray-500"> Huawei </span>
-          </label>
-        </li>
-        <li>
-          <label class="flex items-center">
-            <input name="" type="checkbox" class="h-4 w-4" />
-            <span class="ml-2 text-gray-500"> Tesla model </span>
-          </label>
-        </li>
-        <li>
-          <label class="flex items-center">
-            <input name="" type="checkbox" class="h-4 w-4" />
-            <span class="ml-2 text-gray-500"> Best brand </span>
-          </label>
-        </li>
-        <li>
-          <label class="flex items-center">
-            <input name="" type="checkbox" class="h-4 w-4" />
-            <span class="ml-2 text-gray-500"> Other brands </span>
-          </label>
-        </li>
-      </ul>
+      <div v-if="brands.length">
+        <h3 class="font-semibold mb-2">Brand</h3>
+
+        <ul v-if="isBrandShowLess" class="space-y-1">
+          <li v-for="brand in limitedBrands" :key="brand.id">
+            <label class="flex items-center">
+              <input type="checkbox" :value="brand.name" class="h-4 w-4" />
+              <span class="ml-2 text-gray-500"> {{ brand.name }} </span>
+            </label>
+          </li>
+        </ul>
+
+        <ul v-else class="space-y-1">
+          <li v-for="brand in brands" :key="brand.id">
+            <label class="flex items-center">
+              <input type="checkbox" :value="brand.name" class="h-4 w-4" />
+              <span class="ml-2 text-gray-500"> {{ brand.name }} </span>
+            </label>
+          </li>
+        </ul>
+
+        <button
+          v-if="brands.length > 10"
+          @click="isBrandShowLess = !isBrandShowLess"
+          class="font-bold text-sm w-full hover:text-blue-700 mt-5"
+        >
+          <span v-if="!isBrandShowLess">
+            Show Less
+            <i class="fa-solid fa-chevron-up ml-3 animate-bounce"></i>
+          </span>
+          <span v-else>
+            Show More
+            <i class="fa-solid fa-chevron-down ml-3 animate-bounce"></i>
+          </span>
+        </button>
+      </div>
 
       <hr class="my-4" />
       <h3 class="font-semibold mb-2">Ratings</h3>
@@ -140,7 +170,7 @@
               </svg>
               <svg
                 aria-hidden="true"
-                class="w-5 h-5 text-gray-300 dark:text-gray-500"
+                class="w-5 h-5 text-yellow-400"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -153,7 +183,7 @@
               <p
                 class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400"
               >
-                4.95 out of 5
+                5 Stars
               </p>
             </div>
           </label>
@@ -218,7 +248,7 @@
               </svg>
               <svg
                 aria-hidden="true"
-                class="w-5 h-5 text-gray-300 dark:text-gray-500"
+                class="w-5 h-5 text-gray-300"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -231,7 +261,7 @@
               <p
                 class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400"
               >
-                4.95 out of 5
+                4 Stars And Up
               </p>
             </div>
           </label>
@@ -284,7 +314,7 @@
               </svg>
               <svg
                 aria-hidden="true"
-                class="w-5 h-5 text-yellow-400"
+                class="w-5 h-5 text-gray-300"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -296,7 +326,7 @@
               </svg>
               <svg
                 aria-hidden="true"
-                class="w-5 h-5 text-gray-300 dark:text-gray-500"
+                class="w-5 h-5 text-gray-300"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -309,7 +339,7 @@
               <p
                 class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400"
               >
-                4.95 out of 5
+                3 Stars And Up
               </p>
             </div>
           </label>
@@ -350,7 +380,7 @@
               </svg>
               <svg
                 aria-hidden="true"
-                class="w-5 h-5 text-yellow-400"
+                class="w-5 h-5 text-gray-300"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -362,7 +392,7 @@
               </svg>
               <svg
                 aria-hidden="true"
-                class="w-5 h-5 text-yellow-400"
+                class="w-5 h-5 text-gray-300"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -374,7 +404,7 @@
               </svg>
               <svg
                 aria-hidden="true"
-                class="w-5 h-5 text-gray-300 dark:text-gray-500"
+                class="w-5 h-5 text-gray-300"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -387,7 +417,7 @@
               <p
                 class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400"
               >
-                4.95 out of 5
+                2 Stars And Up
               </p>
             </div>
           </label>
@@ -416,7 +446,7 @@
               </svg>
               <svg
                 aria-hidden="true"
-                class="w-5 h-5 text-yellow-400"
+                class="w-5 h-5 text-gray-300"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -428,7 +458,7 @@
               </svg>
               <svg
                 aria-hidden="true"
-                class="w-5 h-5 text-yellow-400"
+                class="w-5 h-5 text-gray-300"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -440,7 +470,7 @@
               </svg>
               <svg
                 aria-hidden="true"
-                class="w-5 h-5 text-yellow-400"
+                class="w-5 h-5 text-gray-300"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -452,7 +482,7 @@
               </svg>
               <svg
                 aria-hidden="true"
-                class="w-5 h-5 text-gray-300 dark:text-gray-500"
+                class="w-5 h-5 text-gray-300"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -465,7 +495,7 @@
               <p
                 class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400"
               >
-                4.95 out of 5
+                1 Star And Up
               </p>
             </div>
           </label>
@@ -499,4 +529,3 @@
     <!-- filter wrap -->
   </aside>
 </template>
-

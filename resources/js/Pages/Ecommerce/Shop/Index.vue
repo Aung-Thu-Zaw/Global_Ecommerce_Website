@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { computed, inject, ref } from "vue";
+import { computed, inject, reactive, ref } from "vue";
 import Home from "./Partials/Home.vue";
 import AllProducts from "./Partials/AllProducts.vue";
 import ShopRating from "./Partials/ShopRating.vue";
@@ -16,6 +16,8 @@ const props = defineProps({
   vendorProductBanners: Object,
   vendorRandomProducts: Object,
   vendorProducts: Object,
+  categories: Object,
+  brands: Object,
   paginateProductReviews: Object,
   productReviews: Object,
   productReviewsAvg: Object,
@@ -80,6 +82,23 @@ const handleUnFollow = async () => {
       })
     );
   }
+};
+
+const params = reactive({
+  search: usePage().props.ziggy.query.search
+    ? usePage().props.ziggy.query.search
+    : "",
+  sort: "id",
+  direction: "desc",
+});
+
+const handleSearch = () => {
+  router.get(route("shop.index", props.shop.id), {
+    search: params.search,
+    sort: params.sort,
+    direction: params.direction,
+    tab: "all-products",
+  });
 };
 </script>
 
@@ -241,7 +260,8 @@ const handleUnFollow = async () => {
                 class="inline-flex p-4 rounded-t-lg active group"
                 :class="{
                   'text-blue-600 border-b-2 border-blue-600':
-                    $page.props.ziggy.query.tab === 'home',
+                    $page.props.ziggy.query.tab === 'home' ||
+                    !$page.props.ziggy.query.tab,
                 }"
               >
                 <i class="fa-solid fa-home mr-2 text-sm"></i>
@@ -295,29 +315,42 @@ const handleUnFollow = async () => {
           </ul>
 
           <div>
-            <input
-              type="text"
-              class="border-2 border-slate-400 rounded-sm focus:ring-0 focus:border-slate-400 mr-2"
-              placeholder="Search in store"
-            />
-            <button
-              class="px-3 py-2 bg-blue-600 hover:bg-blue-70 text-white rounded-sm"
-            >
-              <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
+            <form @submit.prevent="handleSearch">
+              <input
+                type="text"
+                class="border-2 border-slate-400 rounded-sm focus:ring-0 focus:border-slate-400 mr-2"
+                placeholder="Search in store"
+                v-model="params.search"
+              />
+              <button
+                class="px-3 py-2 bg-blue-600 hover:bg-blue-70 text-white rounded-sm"
+              >
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </button>
+            </form>
           </div>
         </div>
 
         <div id="myTabContet" class="w-full">
           <div class="w-full">
-            <div v-if="$page.props.ziggy.query.tab === 'home'">
+            <div
+              v-if="
+                $page.props.ziggy.query.tab === 'home' ||
+                !$page.props.ziggy.query.tab
+              "
+            >
               <Home
                 :vendorProductBanners="vendorProductBanners"
                 :vendorRandomProducts="vendorRandomProducts"
               />
             </div>
             <div v-else-if="$page.props.ziggy.query.tab === 'all-products'">
-              <AllProducts :vendorProducts="vendorProducts" />
+              <AllProducts
+                :vendorProducts="vendorProducts"
+                :categories="categories"
+                :brands="brands"
+                :shop="shop"
+              />
             </div>
             <div
               v-else-if="

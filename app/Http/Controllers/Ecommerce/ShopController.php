@@ -3,13 +3,17 @@
 namespace App\Http\Controllers\Ecommerce;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductReview;
 use App\Models\ShopReview;
 use App\Models\VendorProductBanner;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -35,9 +39,19 @@ class ShopController extends Controller
                          ->limit(20)
                          ->get();
 
-        $vendorProducts=Product::select("image", "name", "slug", "price", "discount")
-                               ->where([["status", "active"],["user_id",$shopId]])
-                               ->paginate(20);
+
+        $vendorProducts=Product::search(request("search"))
+                         ->query(function (Builder $builder) {
+                             $builder->with(["shop","watchlists","cartItems"]);
+                         })
+                         ->where("status", "active")
+                         ->where("user_id", $shopId)
+                         ->orderBy(request("sort", "id"), request("direction", "desc"))
+                         ->paginate(20)
+                         ->appends(request()->all());
+
+
+
 
         $paginateProductReviews=ProductReview::with(["product.sizes","product.colors","product.brand","user.orders.orderItems","reply.user:id,shop_name,avatar"])
                                      ->where("vendor_id", $shopId)
@@ -57,6 +71,20 @@ class ShopController extends Controller
 
         $shopReviewsAvg=ShopReview::where("vendor_id", $shopId)->avg("rating");
 
+        $categories =  Category::join('products', 'categories.id', '=', 'products.category_id')
+                               ->join('users', 'products.user_id', '=', 'users.id')
+                               ->where('users.id', $shopId)
+                               ->distinct()
+                               ->select('categories.*')
+                               ->get();
+
+        $brands =  Brand::join('products', 'brands.id', '=', 'products.brand_id')
+                               ->join('users', 'products.user_id', '=', 'users.id')
+                               ->where('users.id', $shopId)
+                               ->distinct()
+                               ->select('brands.*')
+                               ->get();
+
 
         return inertia("Ecommerce/Shop/Index", compact(
             "shop",
@@ -65,6 +93,8 @@ class ShopController extends Controller
             "vendorProductBanners",
             "vendorRandomProducts",
             "vendorProducts",
+            "categories",
+            "brands",
             "productReviews",
             "paginateProductReviews",
             "productReviewsAvg",
