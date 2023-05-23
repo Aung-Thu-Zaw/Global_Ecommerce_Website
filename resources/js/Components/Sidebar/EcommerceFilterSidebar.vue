@@ -1,6 +1,5 @@
 <script setup>
 import { Link, router, usePage } from "@inertiajs/vue3";
-import { formatPostcssSourceMap } from "vite";
 import { computed, onMounted, reactive, ref, watch } from "vue";
 
 const props = defineProps({
@@ -30,8 +29,6 @@ onMounted(() => {
   limitedCategories.value = props.categories.slice(0, 10);
   limitedBrands.value = props.brands.slice(0, 10);
 });
-
-
 
 const params = reactive({
   search: usePage().props.ziggy.query.search,
@@ -185,8 +182,6 @@ const handlePrice = () => {
             </label>
           </li>
         </ul>
-
-        {{ params.brand }}
 
         <button
           v-if="brands.length > 10"

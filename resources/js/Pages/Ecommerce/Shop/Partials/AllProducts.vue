@@ -55,6 +55,42 @@ const [minValue, maxValue] = price.value
 
 const minPrice = ref(minValue);
 const maxPrice = ref(maxValue);
+
+const handleRemoveCategory = () => {
+  router.get(route("shop.index", props.shop.id), {
+    search: params.search,
+    sort: params.sort,
+    direction: params.direction,
+    page: params.page,
+    tab: params.tab,
+    rating: params.rating,
+    price: params.price,
+  });
+};
+
+const handleRemovePrice = () => {
+  router.get(route("shop.index", props.shop.id), {
+    search: params.search,
+    sort: params.sort,
+    direction: params.direction,
+    page: params.page,
+    tab: params.tab,
+    category: params.category,
+    rating: params.rating,
+  });
+};
+
+const handleRemoveRating = () => {
+  router.get(route("shop.index", props.shop.id), {
+    search: params.search,
+    sort: params.sort,
+    direction: params.direction,
+    page: params.page,
+    tab: params.tab,
+    category: params.category,
+    price: params.price,
+  });
+};
 </script>
 
 
@@ -76,22 +112,22 @@ const maxPrice = ref(maxValue);
               <span class="text-blue-600">"{{ params.search }}"</span>
             </p>
 
-            <div class="w-[250px] flex items-center justify-between ml-auto">
+            <div class="w-[210px] flex items-center justify-between ml-auto">
               <span class="mr-2">Sort By</span>
               <select
                 id="countries"
-                class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[180px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-slate-700"
+                class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[150px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-slate-700"
                 v-model="params.direction"
               >
                 <option
                   value="desc"
                   :selected="
-                    params.direction == 'desc' || params.direction == null
+                    params.direction === 'desc' || params.direction === null
                   "
                 >
                   Latest Arrivals
                 </option>
-                <option value="asc" :selected="params.direction == 'asc'">
+                <option value="asc" :selected="params.direction === 'asc'">
                   Earliest Arrivals
                 </option>
               </select>
@@ -99,7 +135,14 @@ const maxPrice = ref(maxValue);
           </div>
 
           <div class="my-3 w-full">
-            <span class="font-bold text-slate-600 text-lg mr-3"
+            <span
+              v-if="
+                $page.props.ziggy.query.category ||
+                $page.props.ziggy.query.price ||
+                $page.props.ziggy.query.rating ||
+                $page.props.ziggy.query.brand
+              "
+              class="font-bold text-slate-600 text-lg mr-3"
               >Filtered By :</span
             >
 
@@ -110,6 +153,7 @@ const maxPrice = ref(maxValue);
               Category : {{ $page.props.ziggy.query.category }}
 
               <i
+                @click="handleRemoveCategory"
                 class="fa-solid fa-xmark font-bold hover:text-red-600 cursor-pointer"
               >
               </i>
@@ -135,6 +179,7 @@ const maxPrice = ref(maxValue);
               Rating : {{ $page.props.ziggy.query.rating }} Stars And Up
 
               <i
+                @click="handleRemoveRating"
                 class="fa-solid fa-xmark font-bold hover:text-red-600 cursor-pointer"
               >
               </i>
@@ -147,6 +192,7 @@ const maxPrice = ref(maxValue);
               Price : {{ minPrice }} - {{ maxPrice }}
 
               <i
+                @click="handleRemovePrice"
                 class="fa-solid fa-xmark font-bold hover:text-red-600 cursor-pointer"
               >
               </i>
