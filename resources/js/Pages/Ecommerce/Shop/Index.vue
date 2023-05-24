@@ -115,6 +115,22 @@ const handleSearch = () => {
     view: params.view,
   });
 };
+
+const handelRemoveSearch = () => {
+  params.search = "";
+  router.get(route("shop.index", props.shop.id), {
+    search: params.search,
+    sort: params.sort,
+    direction: params.direction,
+    page: params.page,
+    tab: params.tab,
+    category: params.category,
+    brand: params.brand,
+    rating: params.rating,
+    price: params.price,
+    view: params.view,
+  });
+};
 </script>
 
 
@@ -330,15 +346,24 @@ const handleSearch = () => {
           </ul>
 
           <div>
-            <form @submit.prevent="handleSearch">
-              <input
-                type="text"
-                class="border-2 border-slate-400 rounded-sm focus:ring-0 focus:border-slate-400 mr-2"
-                placeholder="Search in store"
-                v-model="params.search"
-              />
+            <form @submit.prevent="handleSearch" class="flex items-center">
+              <div
+                class="border-2 border-slate-400 rounded-sm focus:ring-0 focus:border-slate-400 mr-2 w-[300px] flex items-center justify-between"
+              >
+                <input
+                  type="text"
+                  class="border-none focus:ring-0 w-full"
+                  placeholder="Search product in shop"
+                  v-model="params.search"
+                />
+                <i
+                  v-if="params.search"
+                  @click="handelRemoveSearch"
+                  class="fa-solid fa-xmark mx-2 cursor-pointer hover:text-slate-600"
+                ></i>
+              </div>
               <button
-                class="px-3 py-2 bg-blue-600 hover:bg-blue-70 text-white rounded-sm"
+                class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-sm"
               >
                 <i class="fa-solid fa-magnifying-glass"></i>
               </button>
