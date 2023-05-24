@@ -19,6 +19,14 @@ use Inertia\ResponseFactory;
 
 class ShopController extends Controller
 {
+    public function index(): Response | ResponseFactory
+    {
+        $vendorShops=User::where([["role","vendor"],["status","active"]])->paginate(30);
+
+        return inertia("Ecommerce/Shops/Index", compact("vendorShops"));
+    }
+
+
     public function show(int $shopId): Response|ResponseFactory
     {
         $shop=User::findOrFail($shopId);
@@ -82,7 +90,7 @@ class ShopController extends Controller
                                ->get();
 
 
-        return inertia("Ecommerce/Shop/Index", compact(
+        return inertia("Ecommerce/Shops/Show", compact(
             "shop",
             "followings",
             "followers",

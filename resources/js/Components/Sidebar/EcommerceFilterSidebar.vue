@@ -51,7 +51,7 @@ const params = reactive({
 watch(
   () => params.rating,
   (current, previous) => {
-    router.get(route("shop.index", props.shop.id), {
+    router.get(route("shop.show", props.shop.id), {
       search: params.search,
       sort: params.sort,
       direction: params.direction,
@@ -69,7 +69,7 @@ watch(
 watch(
   () => params.brand,
   (current, previous) => {
-    router.get(route("shop.index", props.shop.id), {
+    router.get(route("shop.show", props.shop.id), {
       search: params.search,
       sort: params.sort,
       direction: params.direction,
@@ -86,7 +86,7 @@ watch(
 
 const handlePrice = () => {
   params.price = `${minPrice.value}-${maxPrice.value}`;
-  router.get(route("shop.index", props.shop.id), {
+  router.get(route("shop.show", props.shop.id), {
     search: params.search,
     sort: params.sort,
     direction: params.direction,
@@ -126,7 +126,7 @@ const handlePrice = () => {
                 'text-blue-600':
                   $page.props.ziggy.query.category === category.slug,
               }"
-              :href="route('shop.index', shop.id)"
+              :href="route('shop.show', shop.id)"
               :data="{
                 search: $page.props.ziggy.query.search,
                 tab: $page.props.ziggy.query.tab,
@@ -153,7 +153,7 @@ const handlePrice = () => {
                 'text-blue-600':
                   $page.props.ziggy.query.category === category.slug,
               }"
-              :href="route('shop.index', shop.id)"
+              :href="route('shop.show', shop.id)"
               :data="{
                 search: $page.props.ziggy.query.search,
                 tab: $page.props.ziggy.query.tab,

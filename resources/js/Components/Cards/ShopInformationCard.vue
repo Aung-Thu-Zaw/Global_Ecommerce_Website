@@ -54,7 +54,7 @@ const handleCreateConversion = () => {
       />
       <div class="flex items-start">
         <Link
-          :href="route('shop.index', product.shop.id)"
+          :href="route('shop.show', product.shop.id)"
           :data="{ tab: 'home' }"
           class="font-bold w-full text-md text-slate-700 hover:text-blue-600 cursor-pointer mr-1"
         >
@@ -100,7 +100,7 @@ const handleCreateConversion = () => {
       class="flex items-center justify-between my-3 px-5 py-3"
     >
       <Link
-        :href="route('shop.index', product.shop.id)"
+        :href="route('shop.show', product.shop.id)"
         :data="{ tab: 'home' }"
         class="px-5 py-2 bg-blue-600 w-1/3 rounded-sm font-bold text-white text-sm hover:bg-blue-700 shadow"
       >
@@ -120,7 +120,7 @@ const handleCreateConversion = () => {
       class="flex items-center justify-center text-center my-3 px-5 py-3"
     >
       <Link
-        :href="route('shop.index', product.shop.id)"
+        :href="route('shop.show', product.shop.id)"
         :data="{ tab: 'home' }"
         class="px-5 py-2 bg-blue-600 w-1/2 rounded-sm font-bold text-white text-sm hover:bg-blue-700 shadow"
       >

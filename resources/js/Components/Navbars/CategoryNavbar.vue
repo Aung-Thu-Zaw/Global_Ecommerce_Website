@@ -1,4 +1,5 @@
 <script setup>
+import { Link } from "@inertiajs/vue3";
 </script>
 
 <template>
@@ -117,15 +118,16 @@
               <!-- Dropdown menu -->
               <div
                 id="dropdownSellers"
-                class="z-40 hidden bg-white rounded-lg shadow-md w-[300px] h-[350px] dark:bg-gray-700"
+                class="z-40 hidden bg-white shadow-md w-[300px] h-[350px] dark:bg-gray-700"
               >
                 <ul
-                  class="h-full py-2 overflow-y-auto text-gray-700 dark:text-gray-200"
+                  class="h-full py-2 overflow-y-auto text-gray-700 dark:text-gray-200 scrollbar"
                   aria-labelledby="dropdownSellersButton"
                 >
                   <li v-for="vendor in $page.props.vendors" :key="vendor.id">
-                    <a
-                      href="#"
+                    <Link
+                      :href="route('shop.index', vendor.id)"
+                      :data="{ tab: 'home' }"
                       class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
                       <img
@@ -137,12 +139,12 @@
                       <span class="text-green-400 rounded-xl">
                         <i class="fa-solid fa-circle-check ml-2"></i>
                       </span>
-                    </a>
+                    </Link>
                   </li>
                 </ul>
                 <a
                   href="#"
-                  class="flex items-center justify-center p-3 text-sm font-medium text-blue-600 border-t border-gray-200 rounded-b-lg bg-gray-50 dark:border-gray-600 hover:bg-gray-100"
+                  class="flex items-center justify-center p-3 text-sm font-medium text-blue-600 border-2 border-gray-200 bg-white rounded-b-lg dark:border-gray-600 hover:bg-gray-100"
                 >
                   <i class="fas fa-eye mr-2"></i>
                   View More
@@ -158,3 +160,26 @@
 
 
 
+<style>
+.chat-box {
+  box-shadow: -5px 0px 8px 0px #3737377f;
+}
+
+.scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #999 #f0f0f0;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #999;
+  border-radius: 3px;
+}
+</style>

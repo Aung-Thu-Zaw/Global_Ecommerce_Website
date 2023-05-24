@@ -102,7 +102,7 @@ const params = reactive({
 });
 
 const handleSearch = () => {
-  router.get(route("shop.index", props.shop.id), {
+  router.get(route("shop.show", props.shop.id), {
     search: params.search,
     sort: params.sort,
     direction: params.direction,
@@ -118,7 +118,7 @@ const handleSearch = () => {
 
 const handelRemoveSearch = () => {
   params.search = "";
-  router.get(route("shop.index", props.shop.id), {
+  router.get(route("shop.show", props.shop.id), {
     search: params.search,
     sort: params.sort,
     direction: params.direction,
@@ -286,7 +286,7 @@ const handelRemoveSearch = () => {
             </li> -->
             <li class="mr-2" role="presentation">
               <Link
-                :href="route('shop.index', shop.id)"
+                :href="route('shop.show', shop.id)"
                 :data="{ tab: 'home' }"
                 class="inline-flex p-4 rounded-t-lg active group"
                 :class="{
@@ -301,7 +301,7 @@ const handelRemoveSearch = () => {
             </li>
             <li class="mr-2" role="presentation">
               <Link
-                :href="route('shop.index', shop.id)"
+                :href="route('shop.show', shop.id)"
                 :data="{ tab: 'all-products', view: 'grid' }"
                 class="inline-flex p-4 rounded-t-lg active group"
                 :class="{
@@ -315,7 +315,7 @@ const handelRemoveSearch = () => {
             </li>
             <li class="mr-2" role="presentation">
               <Link
-                :href="route('shop.index', shop.id)"
+                :href="route('shop.show', shop.id)"
                 :data="{ tab: 'ratings-and-reviews-for-shop' }"
                 class="inline-flex p-4 rounded-t-lg active group"
                 :class="{
@@ -330,7 +330,7 @@ const handelRemoveSearch = () => {
             </li>
             <li class="mr-2" role="presentation">
               <Link
-                :href="route('shop.index', shop.id)"
+                :href="route('shop.show', shop.id)"
                 :data="{ tab: 'ratings-and-reviews-for-products' }"
                 class="inline-flex p-4 rounded-t-lg active group"
                 :class="{

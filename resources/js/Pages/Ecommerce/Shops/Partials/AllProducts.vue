@@ -37,7 +37,7 @@ const params = reactive({
 watch(
   () => params.direction,
   (current, previous) => {
-    router.get(route("shop.index", props.shop.id), {
+    router.get(route("shop.show", props.shop.id), {
       search: params.search,
       sort: params.sort,
       direction: params.direction,
@@ -64,7 +64,7 @@ const minPrice = ref(minValue);
 const maxPrice = ref(maxValue);
 
 const handleRemoveCategory = () => {
-  router.get(route("shop.index", props.shop.id), {
+  router.get(route("shop.show", props.shop.id), {
     search: params.search,
     sort: params.sort,
     direction: params.direction,
@@ -78,7 +78,7 @@ const handleRemoveCategory = () => {
 };
 
 const handleRemovePrice = () => {
-  router.get(route("shop.index", props.shop.id), {
+  router.get(route("shop.show", props.shop.id), {
     search: params.search,
     sort: params.sort,
     direction: params.direction,
@@ -92,7 +92,7 @@ const handleRemovePrice = () => {
 };
 
 const handleRemoveRating = () => {
-  router.get(route("shop.index", props.shop.id), {
+  router.get(route("shop.show", props.shop.id), {
     search: params.search,
     sort: params.sort,
     direction: params.direction,
@@ -106,7 +106,7 @@ const handleRemoveRating = () => {
 };
 
 const handleRemoveBrand = () => {
-  router.get(route("shop.index", props.shop.id), {
+  router.get(route("shop.show", props.shop.id), {
     search: params.search,
     sort: params.sort,
     direction: params.direction,
@@ -165,7 +165,7 @@ const handleRemoveBrand = () => {
                 <span class="mr-2">View : </span>
                 <div class="flex items-center justify-between">
                   <Link
-                    :href="route('shop.index', shop.id)"
+                    :href="route('shop.show', shop.id)"
                     :data="{
                       search: $page.props.ziggy.query.search,
                       tab: $page.props.ziggy.query.tab,
@@ -188,7 +188,7 @@ const handleRemoveBrand = () => {
                     <i class="fa-solid fa-grip"></i>
                   </Link>
                   <Link
-                    :href="route('shop.index', shop.id)"
+                    :href="route('shop.show', shop.id)"
                     :data="{
                       search: $page.props.ziggy.query.search,
                       tab: $page.props.ziggy.query.tab,
