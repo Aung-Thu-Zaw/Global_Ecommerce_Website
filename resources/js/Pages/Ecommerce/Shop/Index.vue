@@ -93,6 +93,7 @@ const params = reactive({
   page: usePage().props.ziggy.query.page,
   tab: "all-products",
   category: usePage().props.ziggy.query.category,
+  brand: usePage().props.ziggy.query.brand,
   rating: usePage().props.ziggy.query.rating,
   price: usePage().props.ziggy.query.price,
   view: usePage().props.ziggy.query.view
@@ -108,6 +109,7 @@ const handleSearch = () => {
     page: params.page,
     tab: params.tab,
     category: params.category,
+    brand: params.brand,
     rating: params.rating,
     price: params.price,
     view: params.view,

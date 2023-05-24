@@ -40,10 +40,9 @@ const params = reactive({
   page: usePage().props.ziggy.query.page,
   tab: usePage().props.ziggy.query.tab,
   category: usePage().props.ziggy.query.category,
+  brand: usePage().props.ziggy.query.brand,
   rating: usePage().props.ziggy.query.rating,
-  price: usePage().props.ziggy.query.price
-    ? usePage().props.ziggy.query.price
-    : `${minPrice.value}-${maxPrice.value}`,
+  price: usePage().props.ziggy.query.price,
   view: usePage().props.ziggy.query.view
     ? usePage().props.ziggy.query.view
     : "grid",
@@ -59,6 +58,25 @@ watch(
       page: params.page,
       tab: params.tab,
       category: params.category,
+      brand: params.brand,
+      rating: params.rating,
+      price: params.price,
+      view: params.view,
+    });
+  }
+);
+
+watch(
+  () => params.brand,
+  (current, previous) => {
+    router.get(route("shop.index", props.shop.id), {
+      search: params.search,
+      sort: params.sort,
+      direction: params.direction,
+      page: params.page,
+      tab: params.tab,
+      category: params.category,
+      brand: params.brand,
       rating: params.rating,
       price: params.price,
       view: params.view,
@@ -75,6 +93,7 @@ const handlePrice = () => {
     page: params.page,
     tab: params.tab,
     category: params.category,
+    brand: params.brand,
     rating: params.rating,
     price: params.price,
     view: params.view,
@@ -112,6 +131,7 @@ const handlePrice = () => {
                 search: $page.props.ziggy.query.search,
                 tab: $page.props.ziggy.query.tab,
                 category: category.slug,
+                brand: $page.props.ziggy.query.brand,
                 sort: $page.props.ziggy.query.sort,
                 direction: $page.props.ziggy.query.direction,
                 page: $page.props.ziggy.query.page,
@@ -138,6 +158,7 @@ const handlePrice = () => {
                 search: $page.props.ziggy.query.search,
                 tab: $page.props.ziggy.query.tab,
                 category: category.slug,
+                brand: $page.props.ziggy.query.brand,
                 sort: $page.props.ziggy.query.sort,
                 direction: $page.props.ziggy.query.direction,
                 page: $page.props.ziggy.query.page,
@@ -175,7 +196,13 @@ const handlePrice = () => {
         <ul v-if="isBrandShowLess" class="space-y-1">
           <li v-for="brand in limitedBrands" :key="brand.id">
             <label class="flex items-center">
-              <input type="checkbox" :value="brand.slug" class="h-4 w-4" />
+              <input
+                name="myselection"
+                type="radio"
+                :value="brand.slug"
+                class="h-4 w-4"
+                v-model="params.brand"
+              />
               <span class="ml-2 text-gray-500"> {{ brand.name }} </span>
             </label>
           </li>
@@ -184,7 +211,13 @@ const handlePrice = () => {
         <ul v-else class="space-y-1">
           <li v-for="brand in brands" :key="brand.id">
             <label class="flex items-center">
-              <input type="checkbox" :value="brand.slug" class="h-4 w-4" />
+              <input
+                name="myselection"
+                type="radio"
+                :value="brand.slug"
+                class="h-4 w-4"
+                v-model="params.brand"
+              />
               <span class="ml-2 text-gray-500"> {{ brand.name }} </span>
             </label>
           </li>

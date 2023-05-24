@@ -26,6 +26,7 @@ const params = reactive({
   page: usePage().props.ziggy.query.page,
   tab: usePage().props.ziggy.query.tab,
   category: usePage().props.ziggy.query.category,
+  brand: usePage().props.ziggy.query.brand,
   rating: usePage().props.ziggy.query.rating,
   price: usePage().props.ziggy.query.price,
   view: usePage().props.ziggy.query.view
@@ -43,6 +44,7 @@ watch(
       page: params.page,
       tab: params.tab,
       category: params.category,
+      brand: params.brand,
       rating: params.rating,
       price: params.price,
       view: params.view,
@@ -67,6 +69,7 @@ const handleRemoveCategory = () => {
     sort: params.sort,
     direction: params.direction,
     page: params.page,
+    brand: params.brand,
     tab: params.tab,
     rating: params.rating,
     price: params.price,
@@ -82,6 +85,7 @@ const handleRemovePrice = () => {
     page: params.page,
     tab: params.tab,
     category: params.category,
+    brand: params.brand,
     rating: params.rating,
     view: params.view,
   });
@@ -95,6 +99,21 @@ const handleRemoveRating = () => {
     page: params.page,
     tab: params.tab,
     category: params.category,
+    brand: params.brand,
+    price: params.price,
+    view: params.view,
+  });
+};
+
+const handleRemoveBrand = () => {
+  router.get(route("shop.index", props.shop.id), {
+    search: params.search,
+    sort: params.sort,
+    direction: params.direction,
+    page: params.page,
+    tab: params.tab,
+    category: params.category,
+    rating: params.rating,
     price: params.price,
     view: params.view,
   });
@@ -151,6 +170,7 @@ const handleRemoveRating = () => {
                       search: $page.props.ziggy.query.search,
                       tab: $page.props.ziggy.query.tab,
                       category: $page.props.ziggy.query.category,
+                      brand: $page.props.ziggy.query.brand,
                       sort: $page.props.ziggy.query.sort,
                       direction: $page.props.ziggy.query.direction,
                       page: $page.props.ziggy.query.page,
@@ -173,6 +193,7 @@ const handleRemoveRating = () => {
                       search: $page.props.ziggy.query.search,
                       tab: $page.props.ziggy.query.tab,
                       category: $page.props.ziggy.query.category,
+                      brand: $page.props.ziggy.query.brand,
                       sort: $page.props.ziggy.query.sort,
                       direction: $page.props.ziggy.query.direction,
                       page: $page.props.ziggy.query.page,
@@ -223,9 +244,10 @@ const handleRemoveRating = () => {
               <span
                 class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
               >
-                Brand : Apple
+                Brand : {{ $page.props.ziggy.query.brand }}
 
                 <i
+                  @click="handleRemoveBrand"
                   class="fa-solid fa-xmark font-bold hover:text-red-600 cursor-pointer"
                 >
                 </i>
