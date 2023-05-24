@@ -2,6 +2,7 @@
 import FromTheSameStore from "@/Components/FromTheSameStore.vue";
 import AskQuestionSection from "@/Components/Sections/AskQuestionSection.vue";
 import ProductReviewSection from "@/Components/Sections/ProductReviewSection.vue";
+import { Link } from "@inertiajs/vue3";
 
 const props = defineProps({
   productQuestions: Object,
@@ -27,101 +28,113 @@ const props = defineProps({
                 role="tablist"
               >
                 <li class="mr-2" role="presentation">
-                  <button
-                    class="inline-block p-4 border-b-2 rounded-t-lg"
-                    id="description-tab"
-                    data-tabs-target="#description"
-                    type="button"
-                    role="tab"
-                    aria-controls="description"
-                    aria-selected="false"
+                  <Link
+                    :href="route('products.show', product.slug)"
+                    :data="{ tab: 'description' }"
+                    preserve-scroll
+                    class="inline-flex p-4 rounded-t-lg active group"
+                    :class="{
+                      'text-blue-600 border-b-2 border-blue-600':
+                        $page.props.ziggy.query.tab === 'description' ||
+                        !$page.props.ziggy.query.tab,
+                    }"
                   >
+                    <i class="fa-solid fa-scroll mr-2 text-sm"></i>
                     Description
-                  </button>
+                  </Link>
                 </li>
                 <li class="mr-2" role="presentation">
-                  <button
-                    class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300"
-                    id="delivery-tab"
-                    data-tabs-target="#delivery"
-                    type="button"
-                    role="tab"
-                    aria-controls="delivery"
-                    aria-selected="false"
+                  <Link
+                    :href="route('products.show', product.slug)"
+                    :data="{ tab: 'delievery-and-services' }"
+                    preserve-scroll
+                    class="inline-flex p-4 rounded-t-lg active group"
+                    :class="{
+                      'text-blue-600 border-b-2 border-blue-600':
+                        $page.props.ziggy.query.tab ===
+                        'delievery-and-services',
+                    }"
                   >
+                    <i class="fa-solid fa-truck mr-2 text-sm"></i>
                     Delievery & Services
-                  </button>
+                  </Link>
                 </li>
                 <li class="mr-2" role="presentation">
-                  <button
-                    class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300"
-                    id="payment-tab"
-                    data-tabs-target="#payment"
-                    type="button"
-                    role="tab"
-                    aria-controls="payment"
-                    aria-selected="false"
+                  <Link
+                    :href="route('products.show', product.slug)"
+                    :data="{ tab: 'available-payments' }"
+                    preserve-scroll
+                    class="inline-flex p-4 rounded-t-lg active group"
+                    :class="{
+                      'text-blue-600 border-b-2 border-blue-600':
+                        $page.props.ziggy.query.tab === 'available-payments',
+                    }"
                   >
-                    Available Payments
-                  </button>
-                </li>
+                    <i class="fa-solid fa-money-bill mr-2 text-sm"></i>
 
-                <li role="presentation">
-                  <button
-                    class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300"
-                    id="reviews-tab"
-                    data-tabs-target="#reviews"
-                    type="button"
-                    role="tab"
-                    aria-controls="reviews"
-                    aria-selected="false"
+                    Available Payments
+                  </Link>
+                </li>
+                <li class="mr-2" role="presentation">
+                  <Link
+                    :href="route('products.show', product.slug)"
+                    :data="{ tab: 'product-reviews' }"
+                    preserve-scroll
+                    class="inline-flex p-4 rounded-t-lg active group"
+                    :class="{
+                      'text-blue-600 border-b-2 border-blue-600':
+                        $page.props.ziggy.query.tab === 'product-reviews',
+                    }"
                   >
+                    <i class="fa-solid fa-star mr-2 text-sm"></i>
                     Product Reviews
-                  </button>
+                  </Link>
                 </li>
               </ul>
             </div>
             <div id="myTabContent" class="">
               <div
-                class="hidden border border-gray-200 shadow-sm border-t-0 p-5 bg-white"
-                id="description"
-                role="tabpanel"
-                aria-labelledby="description-tab"
+                class="w-full border border-gray-200 shadow-sm border-t-0 p-5 bg-white"
               >
-                <p
-                  v-html="product.description"
-                  class="text-sm text-gray-600 font-medium dark:text-gray-400"
-                ></p>
-              </div>
-              <div
-                class="hidden border border-gray-200 shadow-sm border-t-0 p-5 bg-white"
-                id="delivery"
-                role="tabpanel"
-                aria-labelledby="delivery-tab"
-              >
-                <p class="text-sm text-gray-500 dark:text-gray-400"></p>
-              </div>
-              <div
-                class="hidden border border-gray-200 shadow-sm border-t-0 p-5 bg-white"
-                id="payment"
-                role="tabpanel"
-                aria-labelledby="payment-tab"
-              >
-                <p class="text-sm text-gray-500 dark:text-gray-400">Wavepay</p>
-              </div>
-
-              <div
-                class="hidden border border-gray-200 shadow-sm border-t-0 bg-white"
-                id="reviews"
-                role="tabpanel"
-                aria-labelledby="reviews-tab"
-              >
-                <ProductReviewSection
-                  :product="product"
-                  :productReviews="productReviews"
-                  :paginateProductReviews="paginateProductReviews"
-                  :productReviewsAvg="productReviewsAvg"
-                />
+                <div
+                  v-if="
+                    $page.props.ziggy.query.tab === 'description' ||
+                    !$page.props.ziggy.query.tab
+                  "
+                >
+                  <p
+                    v-html="product.description"
+                    class="text-sm text-gray-600 font-medium dark:text-gray-400"
+                  ></p>
+                </div>
+                <div
+                  v-else-if="
+                    $page.props.ziggy.query.tab === 'delievery-and-services'
+                  "
+                >
+                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                    Services
+                  </p>
+                </div>
+                <div
+                  v-else-if="
+                    $page.props.ziggy.query.tab === 'available-payments'
+                  "
+                >
+                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                    Wavepay
+                  </p>
+                </div>
+                <div
+                  v-else-if="$page.props.ziggy.query.tab === 'product-reviews'"
+                >
+                  <ProductReviewSection
+                    :product="product"
+                    :productReviews="productReviews"
+                    :paginateProductReviews="paginateProductReviews"
+                    :productReviewsAvg="productReviewsAvg"
+                  />
+                </div>
               </div>
             </div>
           </div>
