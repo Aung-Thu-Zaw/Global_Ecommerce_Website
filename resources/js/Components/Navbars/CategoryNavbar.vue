@@ -142,13 +142,13 @@ import { Link } from "@inertiajs/vue3";
                     </Link>
                   </li>
                 </ul>
-                <a
-                  href="#"
+                <Link
+                  :href="route('shop.index')"
                   class="flex items-center justify-center p-3 text-sm font-medium text-blue-600 border-2 border-gray-200 bg-white rounded-b-lg dark:border-gray-600 hover:bg-gray-100"
                 >
                   <i class="fas fa-eye mr-2"></i>
                   View More
-                </a>
+                </Link>
               </div>
             </li>
           </ul>
