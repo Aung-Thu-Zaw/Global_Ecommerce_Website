@@ -42,7 +42,7 @@ class AdminPendingOrderController extends Controller
         $order=Order::with(["deliveryInformation","orderItems.product.shop"])->where("id", $id)->first();
 
         $order->update([
-            "status"=>"confirm",
+            "order_status"=>"confirmed",
             "confirmed_date"=>now()->format("Y-m-d")
         ]);
 

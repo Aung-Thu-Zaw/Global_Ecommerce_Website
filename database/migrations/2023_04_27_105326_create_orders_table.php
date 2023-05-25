@@ -26,13 +26,13 @@ return new class () extends Migration {
             $table->date('order_date');
             $table->date('confirmed_date')->nullable();
             $table->date('processing_date')->nullable();
-            $table->date('picked_date')->nullable();
             $table->date('shipped_date')->nullable();
             $table->date('delivered_date')->nullable();
             $table->date('cancel_date')->nullable();
             $table->date('return_date')->nullable();
             $table->text('return_reason')->nullable();
-            $table->string('status');
+            $table->enum('return_status', ["pending","approved","processing","refunded"])->nullable();
+            $table->enum('order_status', ["pending","confirmed","processing","shipped","delivered"]);
             $table->timestamps();
             $table->softDeletes();
 

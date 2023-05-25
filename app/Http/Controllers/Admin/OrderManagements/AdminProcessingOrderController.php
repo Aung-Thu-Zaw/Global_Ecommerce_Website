@@ -51,7 +51,7 @@ class AdminProcessingOrderController extends Controller
         $order=Order::with(["deliveryInformation","orderItems.product.shop"])->where("id", $id)->first();
 
         $order->update([
-            "status"=>"shipped",
+            "order_status"=>"shipped",
             "shipped_date"=>now()->format("Y-m-d")
     ]);
 

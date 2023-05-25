@@ -38,7 +38,7 @@ class AdminConfirmedOrderController extends Controller
     public function update(int $id): RedirectResponse
     {
         Order::findOrFail($id)->update([
-            "status"=>"processing",
+            "order_status"=>"processing",
             "processing_date"=>now()->format("Y-m-d")
         ]);
 

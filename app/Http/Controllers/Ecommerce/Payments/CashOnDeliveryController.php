@@ -27,7 +27,7 @@ class CashOnDeliveryController extends Controller
             'currency'=>"usd",
             'invoice_no'=>'GLOBAL E-COMMERCE'.mt_rand(100000000, 999999999),
             'order_date'=>Carbon::now()->format("Y-m-d"),
-            'status'=>"pending",
+            'order_status'=>"pending",
         ]);
 
 

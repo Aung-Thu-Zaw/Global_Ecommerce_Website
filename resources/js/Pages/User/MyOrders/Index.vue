@@ -157,7 +157,7 @@ const handleDownload = async (orderId) => {
                   <PendingStatus v-if="order.status === 'pending'">
                     {{ order.status }}
                   </PendingStatus>
-                  <ConfirmedStatus v-else-if="order.status === 'confirm'">
+                  <ConfirmedStatus v-else-if="order.status === 'confirmed'">
                     {{ order.status }}
                   </ConfirmedStatus>
                   <ProcessingStatus v-else-if="order.status === 'processing'">
