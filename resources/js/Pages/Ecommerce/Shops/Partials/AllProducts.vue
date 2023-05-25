@@ -4,7 +4,7 @@ import ProductCard from "@/Components/Cards/ProductCard.vue";
 import ProductCardList from "@/Components/Cards/ProductCardList.vue";
 import { onMounted, reactive, ref, watch } from "vue";
 import { usePage, router, useForm, Link } from "@inertiajs/vue3";
-import EcommerceFilterSidebar from "@/Components/Sidebar/EcommerceFilterSidebar.vue";
+import EcommerceFilterSidebarForShop from "@/Components/Sidebar/EcommerceFilterSidebarForShop.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Home/Breadcrumb.vue";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import Pagination from "@/Components/Pagination.vue";
@@ -125,7 +125,7 @@ const handleRemoveBrand = () => {
   <section class="container mx-auto py-10">
     <div class="container max-w-screen-xl mx-auto">
       <div class="flex flex-col md:flex-row -mx-4">
-        <EcommerceFilterSidebar
+        <EcommerceFilterSidebarForShop
           :categories="categories"
           :brands="brands"
           :shop="shop"
@@ -138,6 +138,9 @@ const handleRemoveBrand = () => {
               {{ vendorProducts.data.length }} items found for result
               <span class="text-blue-600">"{{ params.search }}"</span>
             </p>
+
+
+
 
             <div class="flex items-center ml-auto">
               <div class="w-[220px] flex items-center justify-between">
@@ -214,6 +217,7 @@ const handleRemoveBrand = () => {
               </div>
             </div>
           </div>
+          
 
           <div class="my-3 w-full">
             <span
@@ -331,6 +335,9 @@ const handleRemoveBrand = () => {
             <!-- Pagination -->
             <Pagination class="mt-6" :links="vendorProducts.links" />
           </div>
+
+
+
         </main>
       </div>
     </div>

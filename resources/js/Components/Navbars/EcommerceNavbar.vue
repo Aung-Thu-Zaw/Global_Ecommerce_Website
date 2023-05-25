@@ -46,6 +46,9 @@ const params = reactive({
     : "",
   sort: "id",
   direction: "desc",
+  view: usePage().props.ziggy.query.view
+    ? usePage().props.ziggy.query.view
+    : "grid",
 });
 
 const handleSearch = () => {
@@ -55,6 +58,7 @@ const handleSearch = () => {
       search: params.search,
       sort: params.sort,
       direction: params.direction,
+      view: params.view,
     },
     {}
   );

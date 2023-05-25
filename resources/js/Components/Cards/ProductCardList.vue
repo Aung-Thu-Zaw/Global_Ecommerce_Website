@@ -30,7 +30,7 @@ const props = defineProps({
         </span>
 
         <div
-          class="flex items-center space-x-1 mt-2 w-[250px] overflow-auto pb-1"
+          class="flex items-center space-x-1 mt-2 w-[250px] overflow-auto pb-1 scrollbar"
         >
           <img
             v-for="image in product.images"
@@ -153,3 +153,23 @@ const props = defineProps({
   </div>
 </template>
 
+<style>
+.scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #999 #f0f0f0;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #999;
+  border-radius: 3px;
+}
+</style>

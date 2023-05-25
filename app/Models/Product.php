@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
-use GuzzleHttp\Psr7\Query;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Scout\Searchable;
@@ -214,7 +214,7 @@ class Product extends Model
     }
 
 
-    public function scopeFilterBy($query, array $filterBy): void
+    public function scopeFilterBy(Builder $query, array $filterBy=[]): void
     {
         $query->when(
             $filterBy["search"]??null,
@@ -257,6 +257,13 @@ class Product extends Model
         //     $query->whereHas("productReviews", function ($query) use ($rating) {
         //         $query->groupBy("product_id")
         //               ->havingRaw("AVG(rating) >= ?", [$rating]);
+        //     });
+        // });
+
+        // $query->when($filterBy["rating"] ?? null, function ($query, $rating) {
+        //     $query->whereHas("productReviews", function ($query) use ($rating) {
+        //         $query->groupBy("product_id");
+
         //     });
         // });
     }
