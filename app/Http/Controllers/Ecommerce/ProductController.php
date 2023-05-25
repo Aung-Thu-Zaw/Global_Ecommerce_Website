@@ -14,7 +14,8 @@ class ProductController extends Controller
 {
     public function newProducts(): Response|ResponseFactory
     {
-        $newProducts= Product::select("image", "name", "slug", "price", "discount")
+        $newProducts= Product::select("id", "image", "name", "slug", "price", "discount")
+                             ->with("productReviews:id,product_id,rating")
                              ->where("status", "active")
                              ->whereBetween('created_at', [now()->subDays(30), now()])
                              ->orderBy("id", "desc")
@@ -25,7 +26,8 @@ class ProductController extends Controller
 
     public function featuredProducts(): Response|ResponseFactory
     {
-        $featuredProducts=Product::select("image", "name", "slug", "price", "discount")
+        $featuredProducts=Product::select("id", "image", "name", "slug", "price", "discount")
+                                 ->with("productReviews:id,product_id,rating")
                                  ->where([["status", "active"],["featured",1]])
                                  ->orderBy("id", "desc")
                                  ->paginate(20);
@@ -35,7 +37,8 @@ class ProductController extends Controller
 
     public function specialOfferProducts(): Response|ResponseFactory
     {
-        $specialOfferProducts=Product::select("image", "name", "slug", "price", "discount")
+        $specialOfferProducts=Product::select("id", "image", "name", "slug", "price", "discount")
+                                     ->with("productReviews:id,product_id,rating")
                                      ->where([["status", "active"],["special_offer",1]])
                                      ->orderBy("id", "desc")
                                      ->paginate(20);
@@ -45,7 +48,8 @@ class ProductController extends Controller
 
     public function hotDealProducts(): Response|ResponseFactory
     {
-        $hotDealProducts=Product::select("image", "name", "slug", "price", "discount")
+        $hotDealProducts=Product::select("id", "image", "name", "slug", "price", "discount")
+                                     ->with("productReviews:id,product_id,rating")
                                 ->where([["status", "active"],["hot_deal",1]])
                                 ->orderBy("id", "desc")
                                 ->paginate(20);

@@ -41,20 +41,21 @@ class ShopController extends Controller
                                      ->orderBy("id", "desc")
                                      ->get();
 
-        $vendorRandomProducts=Product::select("image", "name", "slug", "price", "discount")
-                         ->where([["status", "active"],["user_id",$shopId]])
-                         ->inRandomOrder()
-                         ->limit(20)
-                         ->get();
+        $vendorRandomProducts=Product::select("id","image", "name", "slug", "price", "discount")
+                                     ->with("productReviews:id,product_id,rating")
+                                     ->where([["status", "active"],["user_id",$shopId]])
+                                     ->inRandomOrder()
+                                     ->limit(20)
+                                     ->get();
 
 
-        $vendorProducts=Product::with(["shop","watchlists","cartItems","images"])
-                         ->filterBy(request(["search","category","brand","rating","price"]))
-                         ->where("status", "active")
-                         ->where("user_id", $shopId)
-                         ->orderBy(request("sort", "id"), request("direction", "desc"))
-                         ->paginate(20)
-                         ->appends(request()->all());
+        $vendorProducts=Product::with(["shop","watchlists","cartItems","images","productReviews:id,product_id,rating"])
+                               ->filterBy(request(["search","category","brand","rating","price"]))
+                               ->where("status", "active")
+                               ->where("user_id", $shopId)
+                               ->orderBy(request("sort", "id"), request("direction", "desc"))
+                               ->paginate(20)
+                               ->appends(request()->all());
 
 
         $paginateProductReviews=ProductReview::with(["product.sizes","product.colors","product.brand","user.orders.orderItems","reply.user:id,shop_name,avatar"])

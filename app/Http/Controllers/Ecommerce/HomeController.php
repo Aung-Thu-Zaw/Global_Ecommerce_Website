@@ -23,48 +23,50 @@ class HomeController extends Controller
                                ->limit(12)
                                ->get();
 
-        $sliderBanners=SliderBanner::select("image", "url")
+        $sliderBanners=SliderBanner::select("id", "image", "url")
                                    ->where("status", "show")
                                    ->orderBy("id", "desc")
                                    ->limit(6)
                                    ->get();
 
-        $campaignBanner=CampaignBanner::select("image", "url")
+        $campaignBanner=CampaignBanner::select("id", "image", "url")
                                       ->where("status", "show")
                                       ->first();
 
-        $productBanners=ProductBanner::select("image", "url")
+        $productBanners=ProductBanner::select("id", "image", "url")
                                      ->where("status", "show")
                                      ->orderBy("id", "desc")
                                      ->limit(3)
                                      ->get();
 
-        $newProducts=Product::select("image", "name", "slug", "price", "discount")
+        $newProducts=Product::select("id", "image", "name", "slug", "price", "discount")
                                ->with("productReviews:id,product_id,rating")
                             ->where("status", "active")
                             ->orderBy("id", "desc")
                             ->limit(5)
                             ->get();
 
-        $hotDealProducts=Product::select("image", "name", "slug", "price", "discount")
+        $hotDealProducts=Product::select("id", "image", "name", "slug", "price", "discount")
                                ->with("productReviews:id,product_id,rating")
                                 ->where([["status", "active"],["hot_deal",1]])
                                 ->orderBy("id", "desc")
                                 ->limit(5)
                                 ->get();
 
-        $featuredProducts=Product::select("image", "name", "slug", "price", "discount")
+        $featuredProducts=Product::select("id", "image", "name", "slug", "price", "discount")
                                ->with("productReviews:id,product_id,rating")
                                  ->where([["status", "active"],["featured",1]])
                                  ->orderBy("id", "desc")
                                  ->limit(5)
                                  ->get();
 
-        $randomProducts=Product::select("image", "name", "slug", "price", "discount")
+        $randomProducts=Product::select("id", "image", "name", "slug", "price", "discount")
                                ->with("productReviews:id,product_id,rating")
                                ->where("status", "active")
                                ->inRandomOrder()
                                ->paginate(25);
+
+
 
         return inertia('Ecommerce/Home/Index', compact(
             "categories",
