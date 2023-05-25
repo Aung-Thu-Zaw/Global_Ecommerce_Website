@@ -5,6 +5,7 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import { usePage, Head } from "@inertiajs/vue3";
 
+
 // Success flash message
 if (usePage().props.flash.successMessage) {
   toast.success(usePage().props.flash.successMessage, {

@@ -1,16 +1,6 @@
 <template>
   <div
-    class="
-      relative
-      flex flex-col
-      min-w-0
-      break-words
-      bg-white
-      rounded
-      mb-6
-      xl:mb-0
-      shadow-lg
-    "
+    class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg"
   >
     <div class="flex-auto p-4">
       <div class="flex flex-wrap">
@@ -24,18 +14,7 @@
         </div>
         <div class="relative w-auto pl-4 flex-initial">
           <div
-            class="
-              text-white
-              p-3
-              text-center
-              inline-flex
-              items-center
-              justify-center
-              w-12
-              h-12
-              shadow-lg
-              rounded-full
-            "
+            class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full"
             :class="[statIconColor]"
           >
             <i :class="[statIconName]"></i>
@@ -43,7 +22,7 @@
         </div>
       </div>
       <p class="text-sm text-slate-400 mt-4">
-        <span class="mr-2" :class="[statPercentColor]">
+        <span class="mr-2 animate-pulse" :class="[statPercentColor]">
           <i
             :class="[
               statArrow === 'up' ? `fas fa-arrow-up` : `fas fa-arrow-down`,
