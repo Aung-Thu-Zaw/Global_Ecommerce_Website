@@ -42,7 +42,10 @@ class AdminShippedOrderController extends Controller
     {
         $order=Order::with(["deliveryInformation","orderItems.product.shop"])->where("id", $id)->first();
 
-        $order->update(["status"=>"delivered"]);
+        $order->update([
+            "status"=>"delivered",
+            "delivered_date"=>now()->format("Y-m-d")
+        ]);
 
         Mail::to($order->deliveryInformation->email)->send(new OrderDeliveredMail($order));
 

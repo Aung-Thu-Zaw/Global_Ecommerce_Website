@@ -50,7 +50,10 @@ class AdminProcessingOrderController extends Controller
 
         $order=Order::with(["deliveryInformation","orderItems.product.shop"])->where("id", $id)->first();
 
-        $order->update(["status"=>"shipped"]);
+        $order->update([
+            "status"=>"shipped",
+            "shipped_date"=>now()->format("Y-m-d")
+    ]);
 
         Mail::to($order->deliveryInformation->email)->send(new OrderShippedMail($order));
 

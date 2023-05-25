@@ -41,7 +41,10 @@ class AdminPendingOrderController extends Controller
     {
         $order=Order::with(["deliveryInformation","orderItems.product.shop"])->where("id", $id)->first();
 
-        $order->update(["status"=>"confirm"]);
+        $order->update([
+            "status"=>"confirm",
+            "confirmed_date"=>now()->format("Y-m-d")
+        ]);
 
         Mail::to($order->deliveryInformation->email)->send(new OrderConfirmMail($order));
 
