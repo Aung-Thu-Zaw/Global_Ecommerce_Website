@@ -214,7 +214,7 @@ class Product extends Model
     }
 
 
-    public function scopeFilterBy(Builder $query, array $filterBy=[]): void
+    public function scopeFilterBy(Builder $query, array $filterBy): void
     {
         $query->when(
             $filterBy["search"]??null,

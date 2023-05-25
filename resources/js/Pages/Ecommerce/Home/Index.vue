@@ -24,6 +24,7 @@ defineProps({
   featuredProducts: Object,
   hotDealProducts: Object,
   randomProducts: Object,
+  socialMedia: Object,
 });
 
 if (usePage().props.flash.successMessage) {
@@ -68,7 +69,7 @@ if (usePage().props.flash.successMessage) {
       <WhyChooseUsSection />
 
       <!-- Subscribe NewsLetter Section -->
-      <SubscribeNewsLetterSection />
+      <SubscribeNewsLetterSection :socialMedia="socialMedia"/>
     </div>
   </AppLayout>
 </template>

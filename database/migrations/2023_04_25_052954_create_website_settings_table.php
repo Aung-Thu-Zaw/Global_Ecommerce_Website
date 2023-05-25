@@ -21,10 +21,13 @@ return new class () extends Migration {
             $table->string("email")->nullable();
             $table->text("company_address")->nullable();
             $table->string("copyright")->nullable();
+            $table->string("youtube")->nullable();
             $table->string("facebook")->nullable();
             $table->string("twitter")->nullable();
             $table->string("instagram")->nullable();
-            $table->string("youtube")->nullable();
+            $table->string("reddit")->nullable();
+            $table->string("linked_in")->nullable();
+            $table->string("blog")->nullable();
             $table->timestamps();
         });
     }

@@ -22,6 +22,7 @@ use App\Http\Controllers\Ecommerce\SearchResultProductController;
 use App\Http\Controllers\Ecommerce\ShopController;
 use App\Http\Controllers\Ecommerce\ShopReviewController;
 use App\Http\Controllers\Ecommerce\ShopReviewReplyController;
+use App\Http\Controllers\Ecommerce\SubscriberController;
 use App\Http\Controllers\User\MyAccountController;
 use App\Http\Controllers\Ecommerce\WatchlistController;
 use App\Http\Controllers\User\MyOrderController;
@@ -35,7 +36,7 @@ require __DIR__.'/vendor.php';
 
 Route::get('/', [HomeController::class,"index"])->name("home");
 // Route::get('/', function () {
-//     return view("mails.for-users.order-shipped-mail");
+//     return view("mails.for-subscribers.subscriber-welcome-mail");
 // });
 
 Route::controller(ProductController::class)
@@ -48,6 +49,9 @@ Route::controller(ProductController::class)
            Route::get('/hot-deal-products', "hotDealProducts")->name("hot-deal");
            Route::get('/{product}', "show")->name("show");
        });
+
+
+Route::post('/subscribe', [SubscriberController::class, 'store'])->name("subscribe");
 
 
 Route::get("products", [SearchResultProductController::class,"index"])->name("product.search");

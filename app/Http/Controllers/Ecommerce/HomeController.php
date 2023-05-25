@@ -9,6 +9,7 @@ use App\Models\Collection;
 use App\Models\Product;
 use App\Models\ProductBanner;
 use App\Models\SliderBanner;
+use App\Models\WebsiteSetting;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -67,6 +68,8 @@ class HomeController extends Controller
                                ->paginate(25);
 
 
+        $socialMedia=WebsiteSetting::select("id", "facebook", "twitter", "instagram", "youtube")->first();
+
 
         return inertia('Ecommerce/Home/Index', compact(
             "categories",
@@ -77,7 +80,8 @@ class HomeController extends Controller
             "newProducts",
             "featuredProducts",
             "hotDealProducts",
-            "randomProducts"
+            "randomProducts",
+            "socialMedia"
         ));
 
 
