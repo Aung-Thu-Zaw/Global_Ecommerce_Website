@@ -162,6 +162,7 @@ Route::middleware(["auth","verified"])->group(function () {
             ->group(function () {
                 Route::get('/', "index")->name("index");
                 Route::get('/{order_id}', "show")->name("show");
+                Route::post('/{order_id}/return', "return")->name("return");
                 Route::get('/invoice/{order_id}/download', "downloadInvoice")->name("download.invoice");
             });
 

@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link, router } from "@inertiajs/vue3";
 import PendingStatus from "@/Components/Table/PendingStatus.vue";
@@ -169,12 +169,6 @@ const handleDownload = async (orderId) => {
                   <DeliveredStatus v-else-if="order.status === 'delivered'">
                     {{ order.status }}
                   </DeliveredStatus>
-
-                  <span
-                    class="text-red-600 font-bold text-sm bg-red-300 px-3 py-1 rounded-full ml-2 animate-pulse"
-                  >
-                    Return
-                  </span>
                 </Td>
                 <Td>{{ order.order_date }}</Td>
 
@@ -393,4 +387,4 @@ const handleDownload = async (orderId) => {
       </div>
     </div>
   </AppLayout>
-</template>
+</template> -->

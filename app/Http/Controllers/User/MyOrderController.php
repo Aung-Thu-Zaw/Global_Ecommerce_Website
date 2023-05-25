@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ReturnOrderRequest;
 use App\Models\DeliveryInformation;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -10,6 +11,7 @@ use App\Models\User;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response as HttpResponse;
 
 class MyOrderController extends Controller
@@ -72,11 +74,21 @@ class MyOrderController extends Controller
         ));
     }
 
+    public function return(ReturnOrderRequest $request, int $order_id): RedirectResponse
+    {
+        $order=Order::find($order_id);
+
+        $order->update([
+            "return_date"=>now()->format("Y-m-d"),
+            "return_reason"=>$request->return_reason,
+        ]);
+
+        return back()->with("success", "Return request successfully.");
+    }
+
     public function downloadInvoice(int $order_id): HttpResponse
     {
-        $order=Order::where("id", $order_id)
-                    ->where("user_id", auth()->user()->id)
-                    ->first();
+        $order=Order::find($order_id);
 
         $pdf = PDF::loadView('files.invoice', compact("order"))->setPaper('a4');
 

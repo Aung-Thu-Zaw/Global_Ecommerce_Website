@@ -1,14 +1,17 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, useForm, usePage } from "@inertiajs/vue3";
 import OrderCartItem from "@/Components/OrderCartItem.vue";
 import Stepper from "@/Components/Stepper.vue";
-import { inject } from "vue";
+import { inject, ref } from "vue";
 import PendingStatus from "@/Components/Table/PendingStatus.vue";
 import ConfirmedStatus from "@/Components/Table/ConfirmedStatus.vue";
 import ProcessingStatus from "@/Components/Table/ProcessingStatus.vue";
 import ShippedStatus from "@/Components/Table/ShippedStatus.vue";
 import DeliveredStatus from "@/Components/Table/DeliveredStatus.vue";
+import { useReCaptcha } from "vue-recaptcha-v3";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 const props = defineProps({
   order: Object,
@@ -18,6 +21,33 @@ const props = defineProps({
 });
 
 const swal = inject("$swal");
+
+const isReturnFormOpened = ref(false);
+
+const form = useForm({
+  return_reason: "",
+  captcha_token: null,
+});
+
+const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+const handleReturnOrder = async () => {
+  await recaptchaLoaded();
+  form.captcha_token = await executeRecaptcha("return_order");
+  submit();
+};
+
+const submit = () => {
+  form.post(route("my-orders.return", props.order.id), {
+    onFinish: () => {
+      isReturnFormOpened.value = false;
+      if (usePage().props.flash.successMessage) {
+        toast.success(usePage().props.flash.successMessage, {
+          autoClose: 2000,
+        });
+      }
+    },
+  });
+};
 </script>
 
 <template>
@@ -335,6 +365,42 @@ const swal = inject("$swal");
           </div>
         </div>
       </article>
+
+      <button
+        v-if="order.status !== 'shipped' && !order.return_reason"
+        @click="isReturnFormOpened = !isReturnFormOpened"
+        class="bg-red-600 font-bold text-md py-3 px-5 text-white rounded-md hover:bg-red-700 transition-all ml-auto"
+      >
+        <span v-if="!isReturnFormOpened">
+          <i class="fa-solid fa-rotate-left mr-3"></i>
+          Return Order
+        </span>
+        <span v-else>
+          <i class="fa-solid fa-xmark mr-3"></i>
+          Close
+        </span>
+      </button>
+
+      <div v-if="isReturnFormOpened" class="w-full my-5">
+        <form
+          @submit.prevent="handleReturnOrder"
+          class="flex flex-col items-center"
+        >
+          <textarea
+            cols="30"
+            rows="10"
+            placeholder="Please, write reason why do you return this order."
+            class="w-full h-[200px] border-2 border-slate-400 focus:border-slate-400 focus:ring-0 rounded-md"
+            v-model="form.return_reason"
+          ></textarea>
+          <button
+            class="px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-md ml-auto my-3"
+          >
+            <i class="fa-solid fa-paper-plane mr-2"></i>
+            Submit
+          </button>
+        </form>
+      </div>
     </div>
   </AppLayout>
 </template>
