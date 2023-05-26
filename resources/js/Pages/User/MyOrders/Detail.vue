@@ -367,23 +367,21 @@ const submit = () => {
 
         <div v-for="item in orderItems" :key="item.id" class="w-full my-3">
           <div v-if="item.vendor_id === shop.id">
-            <OrderCartItem :item="item" />
+            <OrderCartItem :item="item" :order="order" />
           </div>
         </div>
       </article>
 
       <button
         v-if="
-          order.order_status !== 'shipped' &&
-          order.order_status !== 'delivered' &&
-          !order.return_reason
+          order.order_status !== 'shipped' && order.order_status !== 'delivered'
         "
         @click="isReturnFormOpened = !isReturnFormOpened"
         class="bg-red-600 font-bold text-md py-3 px-5 text-white rounded-md hover:bg-red-700 transition-all ml-auto"
       >
         <span v-if="!isReturnFormOpened">
           <i class="fa-solid fa-rotate-left mr-3"></i>
-          Return Order
+          Return The Whole Order
         </span>
         <span v-else>
           <i class="fa-solid fa-xmark mr-3"></i>

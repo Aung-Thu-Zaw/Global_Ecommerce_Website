@@ -4,7 +4,9 @@ import { Link, router, usePage } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
-const props = defineProps({ item: Object });
+const props = defineProps({ item: Object, order: Object });
+
+const isReturnFormOpen = ref(false);
 </script>
 
 <template>
@@ -67,11 +69,42 @@ const props = defineProps({ item: Object });
       </p>
     </div>
 
-    <div class="leading-5">
-      <p class="font-semibold not-italic text-slate-700">
+    <div class="leading-5 flex items-start justify-center space-x-3">
+      <span class="font-semibold not-italic text-slate-700">
         Total : ${{ item.price }}
-      </p>
+      </span>
+
+      <button
+        v-if="
+          order.order_status !== 'shipped' &&
+          order.order_status !== 'delivered' &&
+          !item.return_reason
+        "
+        @click="isReturnFormOpen = !isReturnFormOpen"
+        class="text-sm font-bold text-red-700 underline"
+      >
+        Return Item
+      </button>
     </div>
+
+    <form v-if="isReturnFormOpen" class="w-full">
+      <div class="w-full flex flex-col items-end">
+        <textarea
+          name=""
+          id=""
+          cols="30"
+          rows="10"
+          class="w-full h-[150px] focus:ring-0 border-2 border-slate-400 focus:border-slate-400 rounded-md"
+          placeholder="Please, write reason why do you want to return this item."
+        ></textarea>
+        <button
+          class="px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-md my-3"
+        >
+          <i class="fa-solid fa-paper-plane mr-2"></i>
+          Submit
+        </button>
+      </div>
+    </form>
   </div>
   <hr />
 </template>
