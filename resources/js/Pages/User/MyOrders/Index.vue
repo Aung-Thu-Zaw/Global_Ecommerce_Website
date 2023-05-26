@@ -171,8 +171,9 @@ const handleDownload = async (orderId) => {
                   </DeliveredStatus>
 
                   <span
-                    class="text-red-600 font-bold text-sm bg-red-300 px-3 py-1 rounded-full ml-2 animate-pulse"
+                    class="text-red-600 text-sm bg-red-300 px-3 py-1 rounded-full ml-2"
                   >
+                    <i class="fa-solid fa-rotate-left animate-pulse"></i>
                     Return
                   </span>
                 </Td>

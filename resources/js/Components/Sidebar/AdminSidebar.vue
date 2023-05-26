@@ -389,57 +389,78 @@
             </ul>
           </li>
         </ul>
-
-        <!-- Return Order Manage -->
-        <!-- <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
           <li class="items-center cursor-pointer">
             <div
               class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
-              @click="returnOrderIsHidden = !returnOrderIsHidden"
+              @click="returnOrderManageIsHidden = !returnOrderManageIsHidden"
             >
               <span>
                 <i class="fa-solid fa-rotate-left mr-2 text-sm"></i>
-                Return Orders
+                Return Order Manage
               </span>
               <i
-                v-if="returnOrderIsHidden"
+                v-if="returnOrderManageIsHidden"
                 class="fa-solid fa-chevron-right"
               ></i>
               <i
-                v-if="!returnOrderIsHidden"
+                v-if="!returnOrderManageIsHidden"
                 class="fa-solid fa-chevron-down"
               ></i>
             </div>
 
             <ul
-              v-if="!returnOrderIsHidden || returnOrder"
+              v-if="!returnOrderManageIsHidden || returnOrderManage"
               class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
             >
               <Link
-                :href="route('admin.orders.active.index')"
+                :href="route('admin.return-orders.pending.index')"
                 class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
                 :class="{
                   'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/order-manage/active-orders'
+                    '/admin/return-order-manage/pending-return'
                   ),
                 }"
               >
-                Active Vendor
+                Pending Return Orders
               </Link>
               <Link
-                :href="route('admin.orders.inactive.index')"
+                :href="route('admin.return-orders.approved.index')"
                 class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
                 :class="{
                   'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/order-manage/inactive-orders'
+                    '/admin/return-order-manage/approved-return'
                   ),
                 }"
               >
-                Inactive Vendor
+                Approved Return Orders
+              </Link>
+              <Link
+                :href="route('admin.return-orders.processing.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/return-order-manage/processing-return'
+                  ),
+                }"
+              >
+                Processing Return Orders
+              </Link>
+              <Link
+                :href="route('admin.return-orders.refunded.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/return-order-manage/refunded-return'
+                  ),
+                }"
+              >
+                Refunded Return Orders
               </Link>
             </ul>
           </li>
-        </ul> -->
+        </ul>
+
 
         <hr class="my-4 md:min-w-full" />
 
@@ -547,29 +568,7 @@
               >
                 Register Vendors
               </Link>
-              <!-- <Link
-                :href="route('admin.users.offline.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/user-manage/offline-users'
-                  ),
-                }"
-              >
-                Offline Users
-              </Link>
 
-              <Link
-                :href="route('admin.vendors.offline.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/user-manage/offline-vendors'
-                  ),
-                }"
-              >
-                Offline Vendors
-              </Link> -->
             </ul>
           </li>
         </ul>
@@ -715,6 +714,7 @@ export default {
       vendorManageIsHidden: true,
       userManageIsHidden: true,
       orderManageIsHidden: true,
+      returnOrderManageIsHidden: true,
       returnOrderIsHidden: true,
     };
   },
@@ -754,14 +754,23 @@ export default {
         return (this.orderManageIsHidden = false);
       }
     },
-    returnOrder() {
+    returnOrderManage() {
       if (
-        this.$page.url.startsWith("/admin/return-order/inactive-vendors") ||
-        this.$page.url.startsWith("/admin/return-order/active-vendors")
+        this.$page.url.startsWith(
+          "/admin/return-order-manage/pending-return"
+        ) ||
+        this.$page.url.startsWith(
+          "/admin/return-order-manage/approved-return"
+        ) ||
+        this.$page.url.startsWith(
+          "/admin/return-order-manage/processing-return"
+        ) ||
+        this.$page.url.startsWith("/admin/return-order-manage/refunded-return")
       ) {
-        return (this.returnOrderIsHidden = false);
+        return (this.returnOrderManageIsHidden = false);
       }
     },
+
     categoriesArea() {
       if (
         this.$page.url.startsWith("/admin/categories") ||

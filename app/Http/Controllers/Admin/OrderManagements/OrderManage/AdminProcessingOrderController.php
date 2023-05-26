@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\OrderManagements;
+namespace App\Http\Controllers\Admin\OrderManagements\OrderManage;
 
 use App\Http\Controllers\Controller;
 use App\Mail\OrderShippedMail;
