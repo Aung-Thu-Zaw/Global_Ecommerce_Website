@@ -1,8 +1,9 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/OrderManage/Breadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/ReturnOrderManage/Breadcrumb.vue";
 import SearchForm from "@/Components/Form/SearchForm.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import ConfirmedStatus from "@/Components/Table/ConfirmedStatus.vue";
+import ProcessingStatus from "@/Components/Table/ProcessingStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -18,17 +19,18 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 const props = defineProps({
   deliveryInformation: Object,
-  confirmedOrderDetail: Object,
+  processingReturnOrderDetail: Object,
   orderItems: Object,
 });
 
 const swal = inject("$swal");
-const handleProcessing = async (id) => {
+
+const handleRefund = async (id) => {
   const result = await swal({
     icon: "info",
-    title: "Are you sure you want to processing this order?",
+    title: "Are you sure you want to refund this return order?",
     showCancelButton: true,
-    confirmButtonText: "Yes, process!",
+    confirmButtonText: "Yes, refund!",
     confirmButtonColor: "#2671c1",
     timer: 20000,
     timerProgressBar: true,
@@ -36,7 +38,7 @@ const handleProcessing = async (id) => {
   });
   if (result.isConfirmed) {
     router.post(
-      route("admin.orders.confirmed.update", id),
+      route("admin.return-orders.processing.update", id),
       {},
       {
         onSuccess: () => {
@@ -55,7 +57,7 @@ const handleProcessing = async (id) => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Details Confirmed Order" />
+    <Head title="Details Approved Return Order" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Vendor Breadcrumb -->
@@ -78,8 +80,8 @@ const handleProcessing = async (id) => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Confirmed Orders</span
-              >
+                >Approved Return
+              </span>
             </div>
           </li>
           <li aria-current="page">
@@ -234,7 +236,10 @@ const handleProcessing = async (id) => {
           <h1 class="font-bold text-slate-700 text-2xl border-b-4 px-10 py-3">
             Order Details
           </h1>
-          <div v-if="deliveryInformation && confirmedOrderDetail" class="my-5">
+          <div
+            v-if="deliveryInformation && processingReturnOrderDetail"
+            class="my-5"
+          >
             <div
               class="w-full text-sm text-left text-gray-500 border overflow-hidden shadow rounded-md"
             >
@@ -270,7 +275,7 @@ const handleProcessing = async (id) => {
                     Invoice No
                   </span>
                   <span class="w-full text-orange-600 block">
-                    {{ confirmedOrderDetail.invoice_no }}
+                    {{ processingReturnOrderDetail.invoice_no }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -280,7 +285,7 @@ const handleProcessing = async (id) => {
                     Order No
                   </span>
                   <span class="w-full text-orange-600 block">
-                    {{ confirmedOrderDetail.order_no }}
+                    {{ processingReturnOrderDetail.order_no }}
                   </span>
                 </div>
                 <div
@@ -292,7 +297,7 @@ const handleProcessing = async (id) => {
                     Currency
                   </span>
                   <span class="w-full block uppercase">
-                    {{ confirmedOrderDetail.currency }}
+                    {{ processingReturnOrderDetail.currency }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -302,7 +307,7 @@ const handleProcessing = async (id) => {
                     Payment Type
                   </span>
                   <span class="w-full block capitalize">
-                    {{ confirmedOrderDetail.payment_type }}
+                    {{ processingReturnOrderDetail.payment_type }}
                   </span>
                 </div>
                 <div
@@ -314,7 +319,7 @@ const handleProcessing = async (id) => {
                     Total Amount
                   </span>
                   <span class="w-full block">
-                    $ {{ confirmedOrderDetail.total_amount }}
+                    $ {{ processingReturnOrderDetail.total_amount }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -324,7 +329,7 @@ const handleProcessing = async (id) => {
                     Transaction Id
                   </span>
                   <span class="w-full block">
-                    {{ confirmedOrderDetail.transaction_id }}
+                    {{ processingReturnOrderDetail.transaction_id }}
                   </span>
                 </div>
                 <div
@@ -336,7 +341,7 @@ const handleProcessing = async (id) => {
                     Order Date
                   </span>
                   <span class="w-full block">
-                    {{ confirmedOrderDetail.order_date }}
+                    {{ processingReturnOrderDetail.order_date }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -346,22 +351,120 @@ const handleProcessing = async (id) => {
                     Order Status
                   </span>
                   <span class="w-full block">
-                    <ConfirmedStatus>
-                      {{ confirmedOrderDetail.status }}
+                    <PendingStatus
+                      v-if="
+                        processingReturnOrderDetail.order_status === 'pending'
+                      "
+                    >
+                      {{ processingReturnOrderDetail.order_status }}
+                    </PendingStatus>
+                    <ConfirmedStatus
+                      v-if="
+                        processingReturnOrderDetail.order_status === 'confirmed'
+                      "
+                    >
+                      {{ processingReturnOrderDetail.order_status }}
                     </ConfirmedStatus>
+                    <ProcessingStatus
+                      v-if="
+                        processingReturnOrderDetail.order_status ===
+                        'processing'
+                      "
+                    >
+                      {{ processingReturnOrderDetail.order_status }}
+                    </ProcessingStatus>
                   </span>
                 </div>
               </div>
             </div>
           </div>
-          <button
-            @click="handleProcessing(confirmedOrderDetail.id)"
-            v-if="confirmedOrderDetail.status === 'confirm'"
-            class="bg-orange-600 py-3 w-full rounded-sm font-bold text-white hover:bg-orange-700 transition-all shadow"
-          >
-            Processing Order
-          </button>
         </div>
+      </div>
+
+      <div class="p-5 my-5 border shadow-md rounded-sm">
+        <h1 class="font-bold text-slate-700 text-2xl border-b-4 px-10 py-3">
+          Return Order Request Details
+        </h1>
+        <div v-if="processingReturnOrderDetail.return_reason" class="my-5">
+          <div
+            class="w-full text-sm text-left text-gray-500 border overflow-hidden shadow rounded-md"
+          >
+            <div>
+              <div class="border-b py-3 bg-gray-50 flex items-center">
+                <span
+                  class="px-10 w-full font-medium text-gray-900 whitespace-nowrap"
+                >
+                  Return Reason
+                </span>
+                <span class="w-full block">
+                  {{ processingReturnOrderDetail.return_reason }}
+                </span>
+              </div>
+            </div>
+            <div>
+              <div class="border-b py-3 bg-gray-50 flex items-center">
+                <span
+                  class="px-10 w-full font-medium text-gray-900 whitespace-nowrap"
+                >
+                  Return Request Date
+                </span>
+                <span class="w-full block">
+                  {{ processingReturnOrderDetail.return_date }}
+                </span>
+              </div>
+            </div>
+            <div>
+              <div class="border-b py-3 bg-gray-50 flex items-center">
+                <span
+                  class="px-10 w-full font-medium text-gray-900 whitespace-nowrap"
+                >
+                  Return Approved Date
+                </span>
+                <span class="w-full block">
+                  {{ processingReturnOrderDetail.return_approved_date }}
+                </span>
+              </div>
+            </div>
+            <div>
+              <div class="border-b py-3 bg-gray-50 flex items-center">
+                <span
+                  class="px-10 w-full font-medium text-gray-900 whitespace-nowrap"
+                >
+                  Return Processing Date
+                </span>
+                <span class="w-full block">
+                  {{ processingReturnOrderDetail.return_processing_date }}
+                </span>
+              </div>
+            </div>
+            <div>
+              <div class="border-b py-3 bg-gray-50 flex items-center">
+                <span
+                  class="px-10 w-full font-medium text-gray-900 whitespace-nowrap"
+                >
+                  Return Status
+                </span>
+                <span
+                  v-if="
+                    processingReturnOrderDetail.return_status === 'processing'
+                  "
+                  class="w-full block"
+                >
+                  <ProcessingStatus>
+                    {{ processingReturnOrderDetail.return_status }}
+                  </ProcessingStatus>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button
+          @click="handleRefund(processingReturnOrderDetail.id)"
+          v-if="processingReturnOrderDetail.return_status === 'processing'"
+          class="bg-slate-600 py-3 w-full rounded-sm font-bold text-white hover:bg-slate-700 transition-all shadow"
+        >
+          Refund Return
+        </button>
       </div>
       <div class="border shadow rounded-sm">
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">

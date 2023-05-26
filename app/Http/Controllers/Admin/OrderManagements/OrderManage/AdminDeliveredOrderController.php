@@ -16,23 +16,23 @@ class AdminDeliveredOrderController extends Controller
     public function index(): Response|ResponseFactory
     {
         $deliveredOrders=Order::search(request("search"))
-                             ->where("status", "delivered")
+                             ->where("order_status", "delivered")
                              ->orderBy(request("sort", "id"), request("direction", "desc"))
                              ->paginate(request("per_page", 10))
                              ->appends(request()->all());
 
 
-        return inertia("Admin/OrderManagements/DeliveredOrders/Index", compact("deliveredOrders"));
+        return inertia("Admin/OrderManagements/OrderManage/DeliveredOrders/Index", compact("deliveredOrders"));
     }
 
     public function show(int $id): Response|ResponseFactory
     {
         $deliveredOrderDetail=Order::findOrFail($id);
 
-        $deliveryInformation=DeliveryInformation::where("user_id", auth()->user()->id)->first();
+        $deliveryInformation=DeliveryInformation::where("user_id", $deliveredOrderDetail->user_id)->first();
 
         $orderItems=OrderItem::with("product.shop")->where("order_id", $deliveredOrderDetail->id)->get();
 
-        return inertia("Admin/OrderManagements/DeliveredOrders/Detail", compact("deliveredOrderDetail", "deliveryInformation", "orderItems"));
+        return inertia("Admin/OrderManagements/OrderManage/DeliveredOrders/Detail", compact("deliveredOrderDetail", "deliveryInformation", "orderItems"));
     }
 }

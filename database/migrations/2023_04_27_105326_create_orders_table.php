@@ -32,6 +32,9 @@ return new class () extends Migration {
             $table->date('return_date')->nullable();
             $table->text('return_reason')->nullable();
             $table->enum('return_status', ["pending","approved","processing","refunded"])->nullable();
+            $table->date('return_approved_date')->nullable();
+            $table->date('return_processing_date')->nullable();
+            $table->date('return_refunded_date')->nullable();
             $table->enum('order_status', ["pending","confirmed","processing","shipped","delivered"]);
             $table->timestamps();
             $table->softDeletes();

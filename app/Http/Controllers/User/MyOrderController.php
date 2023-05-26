@@ -29,14 +29,14 @@ class MyOrderController extends Controller
 
         $toReceiveOrders=Order::where("user_id", auth()->user()->id)
                                 ->where(function ($query) {
-                                    $query->where("status", "confirm")
-                                          ->orWhere("status", "shipped");
+                                    $query->where("order_status", "confirmed")
+                                          ->orWhere("order_status", "shipped");
                                 })
                                 ->orderBy("id", "desc")
                                 ->get();
 
         $receivedOrders=Order::where("user_id", auth()->user()->id)
-                             ->where("status", "delivered")
+                             ->where("order_status", "delivered")
                              ->orderBy("id", "desc")
                              ->get();
 
@@ -81,6 +81,7 @@ class MyOrderController extends Controller
         $order->update([
             "return_date"=>now()->format("Y-m-d"),
             "return_reason"=>$request->return_reason,
+            "return_status"=>"pending",
         ]);
 
         return back()->with("success", "Return request successfully.");

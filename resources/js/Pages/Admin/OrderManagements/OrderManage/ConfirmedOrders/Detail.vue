@@ -2,7 +2,7 @@
 import Breadcrumb from "@/Components/Breadcrumbs/OrderManage/Breadcrumb.vue";
 import SearchForm from "@/Components/Form/SearchForm.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import DeliveredStatus from "@/Components/Table/DeliveredStatus.vue";
+import ConfirmedStatus from "@/Components/Table/ConfirmedStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -18,17 +18,44 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 const props = defineProps({
   deliveryInformation: Object,
-  deliveredOrderDetail: Object,
+  confirmedOrderDetail: Object,
   orderItems: Object,
 });
 
 const swal = inject("$swal");
+const handleProcessing = async (id) => {
+  const result = await swal({
+    icon: "info",
+    title: "Are you sure you want to processing this order?",
+    showCancelButton: true,
+    confirmButtonText: "Yes, process!",
+    confirmButtonColor: "#2671c1",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+  if (result.isConfirmed) {
+    router.post(
+      route("admin.orders.confirmed.update", id),
+      {},
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            toast.success(usePage().props.flash.successMessage, {
+              autoClose: 2000,
+            });
+          }
+        },
+      }
+    );
+  }
+};
 </script>
 
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Details Delivered Order" />
+    <Head title="Details Confirmed Order" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Vendor Breadcrumb -->
@@ -51,7 +78,7 @@ const swal = inject("$swal");
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Delivered Orders</span
+                >Confirmed Orders</span
               >
             </div>
           </li>
@@ -207,7 +234,7 @@ const swal = inject("$swal");
           <h1 class="font-bold text-slate-700 text-2xl border-b-4 px-10 py-3">
             Order Details
           </h1>
-          <div v-if="deliveryInformation && deliveredOrderDetail" class="my-5">
+          <div v-if="deliveryInformation && confirmedOrderDetail" class="my-5">
             <div
               class="w-full text-sm text-left text-gray-500 border overflow-hidden shadow rounded-md"
             >
@@ -243,7 +270,7 @@ const swal = inject("$swal");
                     Invoice No
                   </span>
                   <span class="w-full text-orange-600 block">
-                    {{ deliveredOrderDetail.invoice_no }}
+                    {{ confirmedOrderDetail.invoice_no }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -253,7 +280,7 @@ const swal = inject("$swal");
                     Order No
                   </span>
                   <span class="w-full text-orange-600 block">
-                    {{ deliveredOrderDetail.order_no }}
+                    {{ confirmedOrderDetail.order_no }}
                   </span>
                 </div>
                 <div
@@ -265,7 +292,7 @@ const swal = inject("$swal");
                     Currency
                   </span>
                   <span class="w-full block uppercase">
-                    {{ deliveredOrderDetail.currency }}
+                    {{ confirmedOrderDetail.currency }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -275,7 +302,7 @@ const swal = inject("$swal");
                     Payment Type
                   </span>
                   <span class="w-full block capitalize">
-                    {{ deliveredOrderDetail.payment_type }}
+                    {{ confirmedOrderDetail.payment_type }}
                   </span>
                 </div>
                 <div
@@ -287,7 +314,7 @@ const swal = inject("$swal");
                     Total Amount
                   </span>
                   <span class="w-full block">
-                    $ {{ deliveredOrderDetail.total_amount }}
+                    $ {{ confirmedOrderDetail.total_amount }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -297,7 +324,7 @@ const swal = inject("$swal");
                     Transaction Id
                   </span>
                   <span class="w-full block">
-                    {{ deliveredOrderDetail.transaction_id }}
+                    {{ confirmedOrderDetail.transaction_id }}
                   </span>
                 </div>
                 <div
@@ -309,7 +336,19 @@ const swal = inject("$swal");
                     Order Date
                   </span>
                   <span class="w-full block">
-                    {{ deliveredOrderDetail.order_date }}
+                    {{ confirmedOrderDetail.order_date }}
+                  </span>
+                </div>
+                <div
+                  class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
+                >
+                  <span
+                    class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
+                  >
+                    Order Confirmed Date
+                  </span>
+                  <span class="w-full block">
+                    {{ confirmedOrderDetail.confirmed_date }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -318,18 +357,22 @@ const swal = inject("$swal");
                   >
                     Order Status
                   </span>
-                  <span
-                    v-if="deliveredOrderDetail.status === 'delivered'"
-                    class="w-full block"
-                  >
-                    <DeliveredStatus>
-                      {{ deliveredOrderDetail.status }}
-                    </DeliveredStatus>
+                  <span class="w-full block">
+                    <ConfirmedStatus>
+                      {{ confirmedOrderDetail.order_status }}
+                    </ConfirmedStatus>
                   </span>
                 </div>
               </div>
             </div>
           </div>
+          <button
+            @click="handleProcessing(confirmedOrderDetail.id)"
+            v-if="confirmedOrderDetail.order_status === 'confirmed'"
+            class="bg-orange-600 py-3 w-full rounded-sm font-bold text-white hover:bg-orange-700 transition-all shadow"
+          >
+            Processing Order
+          </button>
         </div>
       </div>
       <div class="border shadow rounded-sm">

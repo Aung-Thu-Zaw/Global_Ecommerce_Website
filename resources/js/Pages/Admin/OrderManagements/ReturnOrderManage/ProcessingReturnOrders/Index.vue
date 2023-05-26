@@ -1,8 +1,8 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/OrderManage/Breadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/ReturnOrderManage/Breadcrumb.vue";
 import SearchForm from "@/Components/Form/SearchForm.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import ConfirmedStatus from "@/Components/Table/ConfirmedStatus.vue";
+import ProcessingStatus from "@/Components/Table/ProcessingStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -15,17 +15,17 @@ import { Link, usePage, Head } from "@inertiajs/vue3";
 import { computed, inject, reactive, ref, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 const props = defineProps({
-  confirmedOrders: Object,
+  processingReturnOrders: Object,
 });
 
 const swal = inject("$swal");
 const params = reactive({
   search: null,
-  page: props.confirmedOrders.current_page
-    ? props.confirmedOrders.current_page
+  page: props.processingReturnOrders.current_page
+    ? props.processingReturnOrders.current_page
     : 1,
-  per_page: props.confirmedOrders.per_page
-    ? props.confirmedOrders.per_page
+  per_page: props.processingReturnOrders.per_page
+    ? props.processingReturnOrders.per_page
     : 10,
   sort: "id",
   direction: "desc",
@@ -38,7 +38,7 @@ watch(
   () => params.search,
   (current, previous) => {
     router.get(
-      "/admin/order-manage/confirmed-orders",
+      "/admin/return-order-manage/processing-return",
       {
         search: params.search,
         per_page: params.per_page,
@@ -57,7 +57,7 @@ watch(
   () => params.per_page,
   (current, previous) => {
     router.get(
-      "/admin/order-manage/confirmed-orders",
+      "/admin/return-order-manage/processing-return",
       {
         search: params.search,
         page: params.page,
@@ -78,7 +78,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/order-manage/confirmed-orders",
+    "/admin/return-order-manage/processing-return",
     {
       search: params.search,
       page: params.page,
@@ -153,7 +153,7 @@ const updateSorting = (sort = "id") => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Confirmed Orders" />
+    <Head title="Processing Return Orders" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Vendor Breadcrumb -->
@@ -176,7 +176,7 @@ const updateSorting = (sort = "id") => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Confirmed Orders</span
+                >Processing Return</span
               >
             </div>
           </li>
@@ -330,9 +330,9 @@ const updateSorting = (sort = "id") => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Status </HeaderTh>
+          <HeaderTh> Return Status </HeaderTh>
           <HeaderTh @click="updateSorting('order_date')">
-            Date
+            Return Date
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
               :class="{
@@ -359,28 +359,33 @@ const updateSorting = (sort = "id") => {
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="confirmedOrders.data.length">
+        <tbody v-if="processingReturnOrders.data.length">
           <Tr
-            v-for="confirmedOrder in confirmedOrders.data"
-            :key="confirmedOrder.id"
+            v-for="processingReturnOrder in processingReturnOrders.data"
+            :key="processingReturnOrder.id"
           >
-            <BodyTh>{{ confirmedOrder.id }}</BodyTh>
-            <Td>{{ confirmedOrder.invoice_no }}</Td>
-            <Td class="capitalize">{{ confirmedOrder.payment_type }}</Td>
-            <Td>$ {{ confirmedOrder.total_amount }}</Td>
+            <BodyTh>{{ processingReturnOrder.id }}</BodyTh>
+            <Td>{{ processingReturnOrder.invoice_no }}</Td>
+            <Td class="capitalize">{{ processingReturnOrder.payment_type }}</Td>
+            <Td>$ {{ processingReturnOrder.total_amount }}</Td>
             <Td>
-              <ConfirmedStatus>
-                {{ confirmedOrder.status }}
-              </ConfirmedStatus>
+              <ProcessingStatus>
+                {{ processingReturnOrder.return_status }}
+              </ProcessingStatus>
             </Td>
-            <Td>{{ confirmedOrder.order_date }}</Td>
+            <Td>{{ processingReturnOrder.return_date }}</Td>
 
             <Td>
               <Link
                 as="button"
-                :href="route('admin.orders.confirmed.show', confirmedOrder.id)"
+                :href="
+                  route(
+                    'admin.return-orders.processing.show',
+                    processingReturnOrder.id
+                  )
+                "
                 :data="{
-                  page: props.confirmedOrders.current_page,
+                  page: props.processingReturnOrders.current_page,
                   per_page: params.per_page,
                 }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
@@ -394,10 +399,10 @@ const updateSorting = (sort = "id") => {
       </TableContainer>
 
       <!-- Not Avaliable Data -->
-      <NotAvaliableData v-if="!confirmedOrders.data.length" />
+      <NotAvaliableData v-if="!processingReturnOrders.data.length" />
 
       <!-- Pagination -->
-      <pagination class="mt-6" :links="confirmedOrders.links" />
+      <pagination class="mt-6" :links="processingReturnOrders.links" />
     </div>
   </AdminDashboardLayout>
 </template>

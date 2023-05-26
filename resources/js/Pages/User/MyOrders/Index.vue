@@ -154,23 +154,30 @@ const handleDownload = async (orderId) => {
                 <Td class="capitalize">{{ order.payment_type }}</Td>
                 <Td>$ {{ order.total_amount }}</Td>
                 <Td>
-                  <PendingStatus v-if="order.status === 'pending'">
-                    {{ order.status }}
+                  <PendingStatus v-if="order.order_status === 'pending'">
+                    {{ order.order_status }}
                   </PendingStatus>
-                  <ConfirmedStatus v-else-if="order.status === 'confirmed'">
-                    {{ order.status }}
+                  <ConfirmedStatus
+                    v-else-if="order.order_status === 'confirmed'"
+                  >
+                    {{ order.order_status }}
                   </ConfirmedStatus>
-                  <ProcessingStatus v-else-if="order.status === 'processing'">
-                    {{ order.status }}
+                  <ProcessingStatus
+                    v-else-if="order.order_status === 'processing'"
+                  >
+                    {{ order.order_status }}
                   </ProcessingStatus>
-                  <ShippedStatus v-else-if="order.status === 'shipped'">
-                    {{ order.status }}
+                  <ShippedStatus v-else-if="order.order_status === 'shipped'">
+                    {{ order.order_status }}
                   </ShippedStatus>
-                  <DeliveredStatus v-else-if="order.status === 'delivered'">
-                    {{ order.status }}
+                  <DeliveredStatus
+                    v-else-if="order.order_status === 'delivered'"
+                  >
+                    {{ order.order_status }}
                   </DeliveredStatus>
 
                   <span
+                    v-if="order.return_reason && order.return_date"
                     class="text-red-600 text-sm bg-red-300 px-3 py-1 rounded-full ml-2"
                   >
                     <i class="fa-solid fa-rotate-left animate-pulse"></i>
@@ -224,20 +231,24 @@ const handleDownload = async (orderId) => {
                 <Td class="capitalize">{{ order.payment_type }}</Td>
                 <Td>$ {{ order.total_amount }}</Td>
                 <Td>
-                  <PendingStatus v-if="order.status === 'pending'">
-                    {{ order.status }}
+                  <PendingStatus v-if="order.order_status === 'pending'">
+                    {{ order.order_status }}
                   </PendingStatus>
-                  <ConfirmedStatus v-else-if="order.status === 'confirm'">
-                    {{ order.status }}
+                  <ConfirmedStatus v-else-if="order.order_status === 'confirm'">
+                    {{ order.order_status }}
                   </ConfirmedStatus>
-                  <ProcessingStatus v-else-if="order.status === 'processing'">
-                    {{ order.status }}
+                  <ProcessingStatus
+                    v-else-if="order.order_status === 'processing'"
+                  >
+                    {{ order.order_status }}
                   </ProcessingStatus>
-                  <ShippedStatus v-else-if="order.status === 'shipped'">
-                    {{ order.status }}
+                  <ShippedStatus v-else-if="order.order_status === 'shipped'">
+                    {{ order.order_status }}
                   </ShippedStatus>
-                  <DeliveredStatus v-else-if="order.status === 'delivered'">
-                    {{ order.status }}
+                  <DeliveredStatus
+                    v-else-if="order.order_status === 'delivered'"
+                  >
+                    {{ order.order_status }}
                   </DeliveredStatus>
                 </Td>
                 <Td>{{ order.order_date }}</Td>
@@ -288,20 +299,24 @@ const handleDownload = async (orderId) => {
                 <Td class="capitalize">{{ order.payment_type }}</Td>
                 <Td>$ {{ order.total_amount }}</Td>
                 <Td>
-                  <PendingStatus v-if="order.status === 'pending'">
-                    {{ order.status }}
+                  <PendingStatus v-if="order.order_status === 'pending'">
+                    {{ order.order_status }}
                   </PendingStatus>
-                  <ConfirmedStatus v-else-if="order.status === 'confirm'">
-                    {{ order.status }}
+                  <ConfirmedStatus v-else-if="order.order_status === 'confirm'">
+                    {{ order.order_status }}
                   </ConfirmedStatus>
-                  <ProcessingStatus v-else-if="order.status === 'processing'">
-                    {{ order.status }}
+                  <ProcessingStatus
+                    v-else-if="order.order_status === 'processing'"
+                  >
+                    {{ order.order_status }}
                   </ProcessingStatus>
-                  <ShippedStatus v-else-if="order.status === 'shipped'">
-                    {{ order.status }}
+                  <ShippedStatus v-else-if="order.order_status === 'shipped'">
+                    {{ order.order_status }}
                   </ShippedStatus>
-                  <DeliveredStatus v-else-if="order.status === 'delivered'">
-                    {{ order.status }}
+                  <DeliveredStatus
+                    v-else-if="order.order_status === 'delivered'"
+                  >
+                    {{ order.order_status }}
                   </DeliveredStatus>
                 </Td>
                 <Td>{{ order.order_date }}</Td>
@@ -352,20 +367,24 @@ const handleDownload = async (orderId) => {
                 <Td class="capitalize">{{ order.payment_type }}</Td>
                 <Td>$ {{ order.total_amount }}</Td>
                 <Td>
-                  <PendingStatus v-if="order.status === 'pending'">
-                    {{ order.status }}
+                  <PendingStatus v-if="order.order_status === 'pending'">
+                    {{ order.order_status }}
                   </PendingStatus>
-                  <ConfirmedStatus v-else-if="order.status === 'confirm'">
-                    {{ order.status }}
+                  <ConfirmedStatus v-else-if="order.order_status === 'confirm'">
+                    {{ order.order_status }}
                   </ConfirmedStatus>
-                  <ProcessingStatus v-else-if="order.status === 'processing'">
-                    {{ order.status }}
+                  <ProcessingStatus
+                    v-else-if="order.order_status === 'processing'"
+                  >
+                    {{ order.order_status }}
                   </ProcessingStatus>
-                  <ShippedStatus v-else-if="order.status === 'shipped'">
-                    {{ order.status }}
+                  <ShippedStatus v-else-if="order.order_status === 'shipped'">
+                    {{ order.order_status }}
                   </ShippedStatus>
-                  <DeliveredStatus v-else-if="order.status === 'delivered'">
-                    {{ order.status }}
+                  <DeliveredStatus
+                    v-else-if="order.order_status === 'delivered'"
+                  >
+                    {{ order.order_status }}
                   </DeliveredStatus>
                 </Td>
                 <Td>{{ order.order_date }}</Td>

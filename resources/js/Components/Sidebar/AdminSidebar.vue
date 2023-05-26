@@ -422,7 +422,7 @@
                   ),
                 }"
               >
-                Pending Return Orders
+                Pending Return
               </Link>
               <Link
                 :href="route('admin.return-orders.approved.index')"
@@ -433,7 +433,7 @@
                   ),
                 }"
               >
-                Approved Return Orders
+                Approved Return
               </Link>
               <Link
                 :href="route('admin.return-orders.processing.index')"
@@ -444,7 +444,7 @@
                   ),
                 }"
               >
-                Processing Return Orders
+                Processing Return
               </Link>
               <Link
                 :href="route('admin.return-orders.refunded.index')"
@@ -455,12 +455,11 @@
                   ),
                 }"
               >
-                Refunded Return Orders
+                Refunded Return
               </Link>
             </ul>
           </li>
         </ul>
-
 
         <hr class="my-4 md:min-w-full" />
 
@@ -568,7 +567,6 @@
               >
                 Register Vendors
               </Link>
-
             </ul>
           </li>
         </ul>

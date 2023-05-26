@@ -21,7 +21,7 @@ class AdminDashboardController extends Controller
 
         // $totalLastMonthVendors=User::where([["role","vendor"],["status","active"]])->where("created_at")->count();
 
-        $totalOrders=Order::where("status", "delivered")->count();
+        $totalOrders=Order::where("order_status", "delivered")->count();
 
         $todaySales = Order::where('order_date', date('y-m-d'))->sum('total_amount');
 

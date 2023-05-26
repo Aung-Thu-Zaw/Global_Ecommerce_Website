@@ -2,7 +2,7 @@
 import Breadcrumb from "@/Components/Breadcrumbs/OrderManage/Breadcrumb.vue";
 import SearchForm from "@/Components/Form/SearchForm.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import ProcessingStatus from "@/Components/Table/ProcessingStatus.vue";
+import ShippedStatus from "@/Components/Table/ShippedStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -15,18 +15,14 @@ import { Link, usePage, Head } from "@inertiajs/vue3";
 import { computed, inject, reactive, ref, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 const props = defineProps({
-  processingOrders: Object,
+  shippedOrders: Object,
 });
 
 const swal = inject("$swal");
 const params = reactive({
   search: null,
-  page: props.processingOrders.current_page
-    ? props.processingOrders.current_page
-    : 1,
-  per_page: props.processingOrders.per_page
-    ? props.processingOrders.per_page
-    : 10,
+  page: props.shippedOrders.current_page ? props.shippedOrders.current_page : 1,
+  per_page: props.shippedOrders.per_page ? props.shippedOrders.per_page : 10,
   sort: "id",
   direction: "desc",
 });
@@ -38,7 +34,7 @@ watch(
   () => params.search,
   (current, previous) => {
     router.get(
-      "/admin/order-manage/processing-orders",
+      "/admin/order-manage/shipped-orders",
       {
         search: params.search,
         per_page: params.per_page,
@@ -57,7 +53,7 @@ watch(
   () => params.per_page,
   (current, previous) => {
     router.get(
-      "/admin/order-manage/processing-orders",
+      "/admin/order-manage/shipped-orders",
       {
         search: params.search,
         page: params.page,
@@ -78,7 +74,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/order-manage/processing-orders",
+    "/admin/order-manage/shipped-orders",
     {
       search: params.search,
       page: params.page,
@@ -153,7 +149,7 @@ const updateSorting = (sort = "id") => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Processing Orders" />
+    <Head title="Shipped Orders" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Vendor Breadcrumb -->
@@ -176,7 +172,7 @@ const updateSorting = (sort = "id") => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Processing Orders</span
+                >Shipped Orders</span
               >
             </div>
           </li>
@@ -330,9 +326,9 @@ const updateSorting = (sort = "id") => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Status </HeaderTh>
+          <HeaderTh> Order Status </HeaderTh>
           <HeaderTh @click="updateSorting('order_date')">
-            Date
+            Order Date
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
               :class="{
@@ -359,30 +355,25 @@ const updateSorting = (sort = "id") => {
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="processingOrders.data.length">
-          <Tr
-            v-for="processingOrder in processingOrders.data"
-            :key="processingOrder.id"
-          >
-            <BodyTh>{{ processingOrder.id }}</BodyTh>
-            <Td>{{ processingOrder.invoice_no }}</Td>
-            <Td class="capitalize">{{ processingOrder.payment_type }}</Td>
-            <Td>$ {{ processingOrder.total_amount }}</Td>
+        <tbody v-if="shippedOrders.data.length">
+          <Tr v-for="shippedOrder in shippedOrders.data" :key="shippedOrder.id">
+            <BodyTh>{{ shippedOrder.id }}</BodyTh>
+            <Td>{{ shippedOrder.invoice_no }}</Td>
+            <Td class="capitalize">{{ shippedOrder.payment_type }}</Td>
+            <Td>$ {{ shippedOrder.total_amount }}</Td>
             <Td>
-              <ProcessingStatus>
-                {{ processingOrder.status }}
-              </ProcessingStatus>
+              <ShippedStatus>
+                {{ shippedOrder.order_status }}
+              </ShippedStatus>
             </Td>
-            <Td>{{ processingOrder.order_date }}</Td>
+            <Td>{{ shippedOrder.order_date }}</Td>
 
             <Td>
               <Link
                 as="button"
-                :href="
-                  route('admin.orders.processing.show', processingOrder.id)
-                "
+                :href="route('admin.orders.shipped.show', shippedOrder.id)"
                 :data="{
-                  page: props.processingOrders.current_page,
+                  page: props.shippedOrders.current_page,
                   per_page: params.per_page,
                 }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
@@ -396,10 +387,10 @@ const updateSorting = (sort = "id") => {
       </TableContainer>
 
       <!-- Not Avaliable Data -->
-      <NotAvaliableData v-if="!processingOrders.data.length" />
+      <NotAvaliableData v-if="!shippedOrders.data.length" />
 
       <!-- Pagination -->
-      <pagination class="mt-6" :links="processingOrders.links" />
+      <pagination class="mt-6" :links="shippedOrders.links" />
     </div>
   </AdminDashboardLayout>
 </template>

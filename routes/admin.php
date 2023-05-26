@@ -22,6 +22,10 @@ use App\Http\Controllers\Admin\OrderManagements\OrderManage\AdminDeliveredOrderC
 use App\Http\Controllers\Admin\OrderManagements\OrderManage\AdminPendingOrderController;
 use App\Http\Controllers\Admin\OrderManagements\OrderManage\AdminProcessingOrderController;
 use App\Http\Controllers\Admin\OrderManagements\OrderManage\AdminShippedOrderController;
+use App\Http\Controllers\Admin\OrderManagements\ReturnOrderManage\AdminApprovedReturnOrderController;
+use App\Http\Controllers\Admin\OrderManagements\ReturnOrderManage\AdminPendingReturnOrderController;
+use App\Http\Controllers\Admin\OrderManagements\ReturnOrderManage\AdminProcessingReturnOrderController;
+use App\Http\Controllers\Admin\OrderManagements\ReturnOrderManage\AdminRefundedReturnOrderController;
 use App\Http\Controllers\Admin\ShippingArea\AdminCityController;
 use App\Http\Controllers\Admin\ShippingArea\AdminCountryController;
 use App\Http\Controllers\Admin\ShippingArea\AdminRegionController;
@@ -256,11 +260,6 @@ Route::middleware(["auth","verified","user.role:admin"])
                        Route::get("/", "index")->name("index");
                        Route::get("/details/{id}", "show")->name("show");
                        Route::post("/{id}", "update")->name("update");
-                       //    Route::delete("/{id}", "destroy")->name("destroy");
-                       //    Route::get("/trash", "trash")->name("trash");
-                       //    Route::post("/{id}/restore", "restore")->name("restore");
-                       //    Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
-                       //    Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
                    });
 
            // Confirmed Order Management
@@ -271,11 +270,6 @@ Route::middleware(["auth","verified","user.role:admin"])
                        Route::get("/", "index")->name("index");
                        Route::get("/details/{id}", "show")->name("show");
                        Route::post("/{id}", "update")->name("update");
-                       //    Route::delete("/{id}", "destroy")->name("destroy");
-                       //    Route::get("/trash", "trash")->name("trash");
-                       //    Route::post("/{id}/restore", "restore")->name("restore");
-                       //    Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
-                       //    Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
                    });
 
            // Processing Order Management
@@ -286,11 +280,6 @@ Route::middleware(["auth","verified","user.role:admin"])
                        Route::get("/", "index")->name("index");
                        Route::get("/details/{id}", "show")->name("show");
                        Route::post("/{id}", "update")->name("update");
-                       //    Route::delete("/{id}", "destroy")->name("destroy");
-                       //    Route::get("/trash", "trash")->name("trash");
-                       //    Route::post("/{id}/restore", "restore")->name("restore");
-                       //    Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
-                       //    Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
                    });
 
            // Shipped Order Management
@@ -301,11 +290,6 @@ Route::middleware(["auth","verified","user.role:admin"])
                        Route::get("/", "index")->name("index");
                        Route::get("/details/{id}", "show")->name("show");
                        Route::post("/{id}", "update")->name("update");
-                       //    Route::delete("/{id}", "destroy")->name("destroy");
-                       //    Route::get("/trash", "trash")->name("trash");
-                       //    Route::post("/{id}/restore", "restore")->name("restore");
-                       //    Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
-                       //    Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
                    });
 
            // Delivered Order Management
@@ -315,13 +299,74 @@ Route::middleware(["auth","verified","user.role:admin"])
                    ->group(function () {
                        Route::get("/", "index")->name("index");
                        Route::get("/details/{id}", "show")->name("show");
-                       //    Route::post("/{id}", "update")->name("update");
-                       //    Route::delete("/{id}", "destroy")->name("destroy");
-                       //    Route::get("/trash", "trash")->name("trash");
-                       //    Route::post("/{id}/restore", "restore")->name("restore");
-                       //    Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
-                       //    Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
                    });
+
+
+
+
+           // Pending Return Order Management
+           Route::controller(AdminPendingReturnOrderController::class)
+           ->prefix("/return-order-manage/pending-return")
+           ->name("return-orders.pending.")
+           ->group(function () {
+               Route::get("/", "index")->name("index");
+               Route::get("/details/{id}", "show")->name("show");
+               Route::post("/{id}", "update")->name("update");
+           });
+
+           // Approved Return Order Management
+           Route::controller(AdminApprovedReturnOrderController::class)
+                   ->prefix("/return-order-manage/approved-return")
+                   ->name("return-orders.approved.")
+                   ->group(function () {
+                       Route::get("/", "index")->name("index");
+                       Route::get("/details/{id}", "show")->name("show");
+                       Route::post("/{id}", "update")->name("update");
+                   });
+
+           // Processing Return Order Management
+           Route::controller(AdminProcessingReturnOrderController::class)
+                   ->prefix("/return-order-manage/processing-return")
+                   ->name("return-orders.processing.")
+                   ->group(function () {
+                       Route::get("/", "index")->name("index");
+                       Route::get("/details/{id}", "show")->name("show");
+                       Route::post("/{id}", "update")->name("update");
+                   });
+
+           // Refunded Return Order Management
+           Route::controller(AdminRefundedReturnOrderController::class)
+                   ->prefix("/return-order-manage/refunded-return")
+                   ->name("return-orders.refunded.")
+                   ->group(function () {
+                       Route::get("/", "index")->name("index");
+                       Route::get("/details/{id}", "show")->name("show");
+                       Route::post("/{id}", "update")->name("update");
+                   });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
            // Inactive Vendors Management
            Route::controller(AdminInactiveVendorController::class)

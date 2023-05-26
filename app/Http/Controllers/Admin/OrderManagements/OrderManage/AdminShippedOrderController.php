@@ -18,24 +18,24 @@ class AdminShippedOrderController extends Controller
     public function index(): Response|ResponseFactory
     {
         $shippedOrders=Order::search(request("search"))
-                             ->where("status", "shipped")
+                             ->where("order_status", "shipped")
                              ->orderBy(request("sort", "id"), request("direction", "desc"))
                              ->paginate(request("per_page", 10))
                              ->appends(request()->all());
 
 
-        return inertia("Admin/OrderManagements/ShippedOrders/Index", compact("shippedOrders"));
+        return inertia("Admin/OrderManagements/OrderManage/ShippedOrders/Index", compact("shippedOrders"));
     }
 
     public function show(int $id): Response|ResponseFactory
     {
         $shippedOrderDetail=Order::findOrFail($id);
 
-        $deliveryInformation=DeliveryInformation::where("user_id", auth()->user()->id)->first();
+        $deliveryInformation=DeliveryInformation::where("user_id", $shippedOrderDetail->user_id)->first();
 
         $orderItems=OrderItem::with("product.shop")->where("order_id", $shippedOrderDetail->id)->get();
 
-        return inertia("Admin/OrderManagements/ShippedOrders/Detail", compact("shippedOrderDetail", "deliveryInformation", "orderItems"));
+        return inertia("Admin/OrderManagements/OrderManage/ShippedOrders/Detail", compact("shippedOrderDetail", "deliveryInformation", "orderItems"));
     }
 
     public function update(int $id): RedirectResponse

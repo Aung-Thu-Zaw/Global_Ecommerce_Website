@@ -19,23 +19,23 @@ class AdminProcessingOrderController extends Controller
     public function index(): Response|ResponseFactory
     {
         $processingOrders=Order::search(request("search"))
-                             ->where("status", "processing")
+                             ->where("order_status", "processing")
                              ->orderBy(request("sort", "id"), request("direction", "desc"))
                              ->paginate(request("per_page", 10))
                              ->appends(request()->all());
 
-        return inertia("Admin/OrderManagements/ProcessingOrders/Index", compact("processingOrders"));
+        return inertia("Admin/OrderManagements/OrderManage/ProcessingOrders/Index", compact("processingOrders"));
     }
 
     public function show(int $id): Response|ResponseFactory
     {
         $processingOrderDetail=Order::findOrFail($id);
 
-        $deliveryInformation=DeliveryInformation::where("user_id", auth()->user()->id)->first();
+        $deliveryInformation=DeliveryInformation::where("user_id", $processingOrderDetail->user_id)->first();
 
         $orderItems=OrderItem::with("product.shop")->where("order_id", $processingOrderDetail->id)->get();
 
-        return inertia("Admin/OrderManagements/ProcessingOrders/Detail", compact("processingOrderDetail", "deliveryInformation", "orderItems"));
+        return inertia("Admin/OrderManagements/OrderManage/ProcessingOrders/Detail", compact("processingOrderDetail", "deliveryInformation", "orderItems"));
     }
 
     public function update(int $id): RedirectResponse

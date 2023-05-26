@@ -85,6 +85,7 @@ const handleConfirm = async (id) => {
               >
             </div>
           </li>
+
           <li aria-current="page">
             <div class="flex items-center">
               <svg
@@ -349,11 +350,11 @@ const handleConfirm = async (id) => {
                     Order Status
                   </span>
                   <span
-                    v-if="pendingOrderDetail.status === 'pending'"
+                    v-if="pendingOrderDetail.order_status === 'pending'"
                     class="w-full block"
                   >
                     <PendingStatus>
-                      {{ pendingOrderDetail.status }}
+                      {{ pendingOrderDetail.order_status }}
                     </PendingStatus>
                   </span>
                 </div>
@@ -362,7 +363,7 @@ const handleConfirm = async (id) => {
           </div>
           <button
             @click="handleConfirm(pendingOrderDetail.id)"
-            v-if="pendingOrderDetail.status === 'pending'"
+            v-if="pendingOrderDetail.order_status === 'pending'"
             class="bg-green-600 py-3 w-full rounded-sm font-bold text-white hover:bg-green-700 transition-all shadow"
           >
             Confirm Order

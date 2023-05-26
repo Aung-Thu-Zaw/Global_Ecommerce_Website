@@ -1,8 +1,8 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/OrderManage/Breadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/ReturnOrderManage/Breadcrumb.vue";
 import SearchForm from "@/Components/Form/SearchForm.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import DeliveredStatus from "@/Components/Table/DeliveredStatus.vue";
+import RefundedStatus from "@/Components/Table/RefundedStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -15,17 +15,17 @@ import { Link, usePage, Head } from "@inertiajs/vue3";
 import { computed, inject, reactive, ref, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 const props = defineProps({
-  deliveredOrders: Object,
+  refundedReturnOrders: Object,
 });
 
 const swal = inject("$swal");
 const params = reactive({
   search: null,
-  page: props.deliveredOrders.current_page
-    ? props.deliveredOrders.current_page
+  page: props.refundedReturnOrders.current_page
+    ? props.refundedReturnOrders.current_page
     : 1,
-  per_page: props.deliveredOrders.per_page
-    ? props.deliveredOrders.per_page
+  per_page: props.refundedReturnOrders.per_page
+    ? props.refundedReturnOrders.per_page
     : 10,
   sort: "id",
   direction: "desc",
@@ -38,7 +38,7 @@ watch(
   () => params.search,
   (current, previous) => {
     router.get(
-      "/admin/order-manage/delivered-orders",
+      "/admin/return-order-manage/refunded-return",
       {
         search: params.search,
         per_page: params.per_page,
@@ -57,7 +57,7 @@ watch(
   () => params.per_page,
   (current, previous) => {
     router.get(
-      "/admin/order-manage/delivered-orders",
+      "/admin/return-order-manage/refunded-return",
       {
         search: params.search,
         page: params.page,
@@ -78,7 +78,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/order-manage/delivered-orders",
+    "/admin/return-order-manage/refunded-return",
     {
       search: params.search,
       page: params.page,
@@ -89,12 +89,71 @@ const updateSorting = (sort = "id") => {
     { replace: true, preserveState: true }
   );
 };
+
+// const handleActive = async (inactiveVendorId) => {
+//   const result = await swal({
+//     icon: "info",
+//     title: "Are you sure you want to active this vendor?",
+//     showCancelButton: true,
+//     confirmButtonText: "Yes, active!",
+//     confirmButtonColor: "#027e00",
+//     timer: 20000,
+//     timerProgressBar: true,
+//     reverseButtons: true,
+//   });
+
+//   if (result.isConfirmed) {
+//     router.post(
+//       route("admin.vendors.inactive.update", {
+//         id: inactiveVendorId,
+//         page: props.inactiveVendors.current_page,
+//         per_page: params.per_page,
+//       })
+//     );
+//     setTimeout(() => {
+//       swal({
+//         icon: "success",
+//         title: usePage().props.flash.successMessage,
+//       });
+//     }, 500);
+//   }
+// };
+
+// const handleDelete = async (inactiveVendorId) => {
+//   const result = await swal({
+//     icon: "warning",
+//     title: "Are you sure you want to move it to the trash?",
+//     text: "You will be able to revert this action!",
+//     showCancelButton: true,
+//     confirmButtonText: "Yes, remove it!",
+//     confirmButtonColor: "#ef4444",
+//     timer: 20000,
+//     timerProgressBar: true,
+//     reverseButtons: true,
+//   });
+
+//   if (result.isConfirmed) {
+//     router.delete(
+//       route("admin.vendors.inactive.destroy", {
+//         id: inactiveVendorId,
+//         page: props.inactiveVendors.current_page,
+//         per_page: params.per_page,
+//       })
+//     );
+//     setTimeout(() => {
+//       swal({
+//         icon: "success",
+//         title: usePage().props.flash.successMessage,
+//       });
+//     }, 500);
+//   }
+// };
 </script>
 
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Delivered Orders" />
+    <Head title="Refunded Return Orders" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Vendor Breadcrumb -->
@@ -117,7 +176,7 @@ const updateSorting = (sort = "id") => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Delivered Orders</span
+                >Refunded Return</span
               >
             </div>
           </li>
@@ -271,9 +330,9 @@ const updateSorting = (sort = "id") => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Status </HeaderTh>
+          <HeaderTh> Return Status </HeaderTh>
           <HeaderTh @click="updateSorting('order_date')">
-            Date
+            Return Date
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
               :class="{
@@ -300,28 +359,33 @@ const updateSorting = (sort = "id") => {
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="deliveredOrders.data.length">
+        <tbody v-if="refundedReturnOrders.data.length">
           <Tr
-            v-for="deliveredOrder in deliveredOrders.data"
-            :key="deliveredOrder.id"
+            v-for="refundedReturnOrder in refundedReturnOrders.data"
+            :key="refundedReturnOrder.id"
           >
-            <BodyTh>{{ deliveredOrder.id }}</BodyTh>
-            <Td>{{ deliveredOrder.invoice_no }}</Td>
-            <Td class="capitalize">{{ deliveredOrder.payment_type }}</Td>
-            <Td>$ {{ deliveredOrder.total_amount }}</Td>
+            <BodyTh>{{ refundedReturnOrder.id }}</BodyTh>
+            <Td>{{ refundedReturnOrder.invoice_no }}</Td>
+            <Td class="capitalize">{{ refundedReturnOrder.payment_type }}</Td>
+            <Td>$ {{ refundedReturnOrder.total_amount }}</Td>
             <Td>
-              <DeliveredStatus>
-                {{ deliveredOrder.status }}
-              </DeliveredStatus>
+              <RefundedStatus>
+                {{ refundedReturnOrder.return_status }}
+              </RefundedStatus>
             </Td>
-            <Td>{{ deliveredOrder.order_date }}</Td>
+            <Td>{{ refundedReturnOrder.return_date }}</Td>
 
             <Td>
               <Link
                 as="button"
-                :href="route('admin.orders.delivered.show', deliveredOrder.id)"
+                :href="
+                  route(
+                    'admin.return-orders.refunded.show',
+                    refundedReturnOrder.id
+                  )
+                "
                 :data="{
-                  page: props.deliveredOrders.current_page,
+                  page: props.refundedReturnOrders.current_page,
                   per_page: params.per_page,
                 }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
@@ -335,10 +399,10 @@ const updateSorting = (sort = "id") => {
       </TableContainer>
 
       <!-- Not Avaliable Data -->
-      <NotAvaliableData v-if="!deliveredOrders.data.length" />
+      <NotAvaliableData v-if="!refundedReturnOrders.data.length" />
 
       <!-- Pagination -->
-      <pagination class="mt-6" :links="deliveredOrders.links" />
+      <pagination class="mt-6" :links="refundedReturnOrders.links" />
     </div>
   </AdminDashboardLayout>
 </template>

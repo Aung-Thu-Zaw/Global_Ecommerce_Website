@@ -340,6 +340,30 @@ const handleShipped = async (id) => {
                     {{ processingOrderDetail.order_date }}
                   </span>
                 </div>
+                <div
+                  class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
+                >
+                  <span
+                    class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
+                  >
+                    Order Confirmed Date
+                  </span>
+                  <span class="w-full block">
+                    {{ processingOrderDetail.confirmed_date }}
+                  </span>
+                </div>
+                <div
+                  class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
+                >
+                  <span
+                    class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
+                  >
+                    Order Processing Date
+                  </span>
+                  <span class="w-full block">
+                    {{ processingOrderDetail.processing_date }}
+                  </span>
+                </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
                   <span
                     class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
@@ -347,11 +371,11 @@ const handleShipped = async (id) => {
                     Order Status
                   </span>
                   <span
-                    v-if="processingOrderDetail.status === 'processing'"
+                    v-if="processingOrderDetail.order_status === 'processing'"
                     class="w-full block"
                   >
                     <ProcessingStatus>
-                      {{ processingOrderDetail.status }}
+                      {{ processingOrderDetail.order_status }}
                     </ProcessingStatus>
                   </span>
                 </div>
@@ -360,7 +384,7 @@ const handleShipped = async (id) => {
           </div>
 
           <button
-            v-if="processingOrderDetail.status === 'processing'"
+            v-if="processingOrderDetail.order_status === 'processing'"
             @click="handleShipped(processingOrderDetail.id)"
             class="bg-red-600 py-3 w-full rounded-sm font-bold text-white hover:bg-red-700 transition-all shadow"
           >
