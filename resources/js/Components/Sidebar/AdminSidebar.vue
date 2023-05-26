@@ -435,28 +435,6 @@
               >
                 Approved Return
               </Link>
-              <Link
-                :href="route('admin.return-orders.processing.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/return-order-manage/processing-return'
-                  ),
-                }"
-              >
-                Processing Return
-              </Link>
-              <Link
-                :href="route('admin.return-orders.refunded.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/return-order-manage/refunded-return'
-                  ),
-                }"
-              >
-                Refunded Return
-              </Link>
             </ul>
           </li>
         </ul>
@@ -757,13 +735,7 @@ export default {
         this.$page.url.startsWith(
           "/admin/return-order-manage/pending-return"
         ) ||
-        this.$page.url.startsWith(
-          "/admin/return-order-manage/approved-return"
-        ) ||
-        this.$page.url.startsWith(
-          "/admin/return-order-manage/processing-return"
-        ) ||
-        this.$page.url.startsWith("/admin/return-order-manage/refunded-return")
+        this.$page.url.startsWith("/admin/return-order-manage/approved-return")
       ) {
         return (this.returnOrderManageIsHidden = false);
       }

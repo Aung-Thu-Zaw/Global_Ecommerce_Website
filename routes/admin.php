@@ -324,28 +324,6 @@ Route::middleware(["auth","verified","user.role:admin"])
                        Route::post("/{id}", "update")->name("update");
                    });
 
-           // Processing Return Order Management
-           Route::controller(AdminProcessingReturnOrderController::class)
-                   ->prefix("/return-order-manage/processing-return")
-                   ->name("return-orders.processing.")
-                   ->group(function () {
-                       Route::get("/", "index")->name("index");
-                       Route::get("/details/{id}", "show")->name("show");
-                       Route::post("/{id}", "update")->name("update");
-                   });
-
-           // Refunded Return Order Management
-           Route::controller(AdminRefundedReturnOrderController::class)
-                   ->prefix("/return-order-manage/refunded-return")
-                   ->name("return-orders.refunded.")
-                   ->group(function () {
-                       Route::get("/", "index")->name("index");
-                       Route::get("/details/{id}", "show")->name("show");
-                       Route::post("/{id}", "update")->name("update");
-                   });
-
-
-
 
 
 

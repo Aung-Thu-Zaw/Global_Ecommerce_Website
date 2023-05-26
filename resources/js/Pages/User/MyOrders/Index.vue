@@ -180,8 +180,8 @@ const handleDownload = async (orderId) => {
                     v-if="order.return_reason && order.return_date"
                     class="text-red-600 text-sm bg-red-300 px-3 py-1 rounded-full ml-2"
                   >
-                    <i class="fa-solid fa-rotate-left animate-pulse"></i>
-                    Return
+                    <i class="fa-solid fa-rotate-right animate-spin"></i>
+                    return
                   </span>
                 </Td>
                 <Td>{{ order.order_date }}</Td>
@@ -250,6 +250,13 @@ const handleDownload = async (orderId) => {
                   >
                     {{ order.order_status }}
                   </DeliveredStatus>
+                  <span
+                    v-if="order.return_reason && order.return_date"
+                    class="text-red-600 text-sm bg-red-300 px-3 py-1 rounded-full ml-2"
+                  >
+                    <i class="fa-solid fa-rotate-right animate-spin"></i>
+                    return
+                  </span>
                 </Td>
                 <Td>{{ order.order_date }}</Td>
 
@@ -318,6 +325,13 @@ const handleDownload = async (orderId) => {
                   >
                     {{ order.order_status }}
                   </DeliveredStatus>
+                  <span
+                    v-if="order.return_reason && order.return_date"
+                    class="text-red-600 text-sm bg-red-300 px-3 py-1 rounded-full ml-2"
+                  >
+                    <i class="fa-solid fa-rotate-right animate-spin"></i>
+                    return
+                  </span>
                 </Td>
                 <Td>{{ order.order_date }}</Td>
 
@@ -386,6 +400,13 @@ const handleDownload = async (orderId) => {
                   >
                     {{ order.order_status }}
                   </DeliveredStatus>
+                  <span
+                    v-if="order.return_reason && order.return_date"
+                    class="text-red-600 text-sm bg-red-300 px-3 py-1 rounded-full ml-2"
+                  >
+                    <i class="fa-solid fa-rotate-right animate-spin"></i>
+                    return
+                  </span>
                 </Td>
                 <Td>{{ order.order_date }}</Td>
 
