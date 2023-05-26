@@ -20,6 +20,9 @@ return new class () extends Migration {
             $table->string("color")->nullable();
             $table->string("size")->nullable();
             $table->integer("qty");
+            $table->date('return_date')->nullable();
+            $table->text('return_reason')->nullable();
+            $table->enum('return_status', ["request","approved","processing","refunded"])->nullable();
             $table->decimal('price', 8, 2);
             $table->timestamps();
         });
