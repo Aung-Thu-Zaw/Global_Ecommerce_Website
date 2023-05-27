@@ -321,7 +321,6 @@ Route::middleware(["auth","verified","user.role:admin"])
                    ->group(function () {
                        Route::get("/", "index")->name("index");
                        Route::get("/details/{id}", "show")->name("show");
-                       Route::post("/{id}", "update")->name("update");
                    });
 
 

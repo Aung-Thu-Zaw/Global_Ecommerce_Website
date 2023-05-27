@@ -143,7 +143,7 @@ const handleDownload = async (orderId) => {
               <HeaderTh> Payment </HeaderTh>
               <HeaderTh> Amount </HeaderTh>
               <HeaderTh> Status </HeaderTh>
-              <HeaderTh> Date </HeaderTh>
+              <HeaderTh> Order Date </HeaderTh>
               <HeaderTh> Actions </HeaderTh>
             </TableHeader>
 
@@ -177,11 +177,26 @@ const handleDownload = async (orderId) => {
                   </DeliveredStatus>
 
                   <span
-                    v-if="order.return_reason && order.return_date"
-                    class="text-red-600 text-sm bg-red-300 px-3 py-1 rounded-full ml-2"
+                    v-if="
+                      order.return_reason &&
+                      order.return_date &&
+                      order.return_status === 'pending'
+                    "
+                    class="text-red-600 text-sm bg-red-200 px-3 py-1 rounded-full ml-2"
                   >
                     <i class="fa-solid fa-rotate-right animate-spin"></i>
                     return
+                  </span>
+                  <span
+                    v-if="
+                      order.return_reason &&
+                      order.return_approved_date &&
+                      order.return_status === 'approved'
+                    "
+                    class="text-green-600 text-sm bg-green-200 px-3 py-1 rounded-full ml-2"
+                  >
+                    <i class="fa-solid fa-circle-check animate-pulse"></i>
+                    approved
                   </span>
                 </Td>
                 <Td>{{ order.order_date }}</Td>
@@ -220,7 +235,7 @@ const handleDownload = async (orderId) => {
               <HeaderTh> Payment </HeaderTh>
               <HeaderTh> Amount </HeaderTh>
               <HeaderTh> Status </HeaderTh>
-              <HeaderTh> Date </HeaderTh>
+              <HeaderTh> Order Date </HeaderTh>
               <HeaderTh> Actions </HeaderTh>
             </TableHeader>
 
@@ -251,11 +266,26 @@ const handleDownload = async (orderId) => {
                     {{ order.order_status }}
                   </DeliveredStatus>
                   <span
-                    v-if="order.return_reason && order.return_date"
-                    class="text-red-600 text-sm bg-red-300 px-3 py-1 rounded-full ml-2"
+                    v-if="
+                      order.return_reason &&
+                      order.return_date &&
+                      order.return_status === 'pending'
+                    "
+                    class="text-red-600 text-sm bg-red-200 px-3 py-1 rounded-full ml-2"
                   >
                     <i class="fa-solid fa-rotate-right animate-spin"></i>
                     return
+                  </span>
+                  <span
+                    v-if="
+                      order.return_reason &&
+                      order.return_approved_date &&
+                      order.return_status === 'approved'
+                    "
+                    class="text-green-600 text-sm bg-green-200 px-3 py-1 rounded-full ml-2"
+                  >
+                    <i class="fa-solid fa-circle-check animate-pulse"></i>
+                    approved
                   </span>
                 </Td>
                 <Td>{{ order.order_date }}</Td>
@@ -295,7 +325,7 @@ const handleDownload = async (orderId) => {
               <HeaderTh> Payment </HeaderTh>
               <HeaderTh> Amount </HeaderTh>
               <HeaderTh> Status </HeaderTh>
-              <HeaderTh> Date </HeaderTh>
+              <HeaderTh> Order Date </HeaderTh>
               <HeaderTh> Actions </HeaderTh>
             </TableHeader>
 
@@ -326,11 +356,26 @@ const handleDownload = async (orderId) => {
                     {{ order.order_status }}
                   </DeliveredStatus>
                   <span
-                    v-if="order.return_reason && order.return_date"
-                    class="text-red-600 text-sm bg-red-300 px-3 py-1 rounded-full ml-2"
+                    v-if="
+                      order.return_reason &&
+                      order.return_date &&
+                      order.return_status === 'pending'
+                    "
+                    class="text-red-600 text-sm bg-red-200 px-3 py-1 rounded-full ml-2"
                   >
                     <i class="fa-solid fa-rotate-right animate-spin"></i>
                     return
+                  </span>
+                  <span
+                    v-if="
+                      order.return_reason &&
+                      order.return_approved_date &&
+                      order.return_status === 'approved'
+                    "
+                    class="text-green-600 text-sm bg-green-200 px-3 py-1 rounded-full ml-2"
+                  >
+                    <i class="fa-solid fa-circle-check animate-pulse"></i>
+                    approved
                   </span>
                 </Td>
                 <Td>{{ order.order_date }}</Td>
@@ -370,7 +415,7 @@ const handleDownload = async (orderId) => {
               <HeaderTh> Payment </HeaderTh>
               <HeaderTh> Amount </HeaderTh>
               <HeaderTh> Status </HeaderTh>
-              <HeaderTh> Date </HeaderTh>
+              <HeaderTh> Order Date </HeaderTh>
               <HeaderTh> Actions </HeaderTh>
             </TableHeader>
 
@@ -401,11 +446,26 @@ const handleDownload = async (orderId) => {
                     {{ order.order_status }}
                   </DeliveredStatus>
                   <span
-                    v-if="order.return_reason && order.return_date"
-                    class="text-red-600 text-sm bg-red-300 px-3 py-1 rounded-full ml-2"
+                    v-if="
+                      order.return_reason &&
+                      order.return_date &&
+                      order.return_status === 'pending'
+                    "
+                    class="text-red-600 text-sm bg-red-200 px-3 py-1 rounded-full ml-2"
                   >
                     <i class="fa-solid fa-rotate-right animate-spin"></i>
                     return
+                  </span>
+                  <span
+                    v-if="
+                      order.return_reason &&
+                      order.return_approved_date &&
+                      order.return_status === 'approved'
+                    "
+                    class="text-green-600 text-sm bg-green-200 px-3 py-1 rounded-full ml-2"
+                  >
+                    <i class="fa-solid fa-circle-check animate-pulse"></i>
+                    approved
                   </span>
                 </Td>
                 <Td>{{ order.order_date }}</Td>

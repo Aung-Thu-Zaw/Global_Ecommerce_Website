@@ -19,11 +19,17 @@ class MyOrderController extends Controller
     public function index(): Response|ResponseFactory
     {
         $orders=Order::where("user_id", auth()->user()->id)
+                     ->whereNull("return_reason")
+                     ->whereNull("return_date")
+                     ->whereNull("return_status")
                      ->orderBy("id", "desc")
                      ->get();
 
         $toPayOrders=Order::where("user_id", auth()->user()->id)
                           ->where("payment_type", "cash on delivery")
+                          ->whereNull("return_reason")
+                          ->whereNull("return_date")
+                          ->whereNull("return_status")
                           ->orderBy("id", "desc")
                           ->get();
 
@@ -32,11 +38,17 @@ class MyOrderController extends Controller
                                     $query->where("order_status", "confirmed")
                                           ->orWhere("order_status", "shipped");
                                 })
+                                ->whereNull("return_reason")
+                                ->whereNull("return_date")
+                                ->whereNull("return_status")
                                 ->orderBy("id", "desc")
                                 ->get();
 
         $receivedOrders=Order::where("user_id", auth()->user()->id)
                              ->where("order_status", "delivered")
+                             ->whereNull("return_reason")
+                             ->whereNull("return_date")
+                             ->whereNull("return_status")
                              ->orderBy("id", "desc")
                              ->get();
 
@@ -83,6 +95,14 @@ class MyOrderController extends Controller
             "return_reason"=>$request->return_reason,
             "return_status"=>"pending",
         ]);
+
+        $order->orderItems()->each(function ($orderItem) use ($request) {
+            $orderItem->update([
+                    "return_date"=>now()->format("Y-m-d"),
+                    "return_reason"=>$request->return_reason,
+                    "return_status"=>"pending",
+                ]);
+        });
 
         return back()->with("success", "Return request successfully.");
     }

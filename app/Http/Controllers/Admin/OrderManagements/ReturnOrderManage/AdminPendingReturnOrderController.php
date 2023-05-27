@@ -43,6 +43,13 @@ class AdminPendingReturnOrderController extends Controller
             "return_approved_date"=>now()->format("Y-m-d")
         ]);
 
+        $order->orderItems()->each(function ($orderItem) {
+            $orderItem->update([
+                "return_status"=>"approved",
+                "return_approved_date"=>now()->format("Y-m-d")
+                ]);
+        });
+
         // Mail::to($order->deliveryInformation->email)->send(new OrderDeliveredMail($order));
 
         return to_route("admin.return-orders.approved.index")->with("success", "Order is approved.");

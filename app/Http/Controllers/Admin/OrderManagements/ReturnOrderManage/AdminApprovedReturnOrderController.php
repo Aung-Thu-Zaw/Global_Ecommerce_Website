@@ -35,17 +35,4 @@ class AdminApprovedReturnOrderController extends Controller
         return inertia("Admin/OrderManagements/ReturnOrderManage/ApprovedReturnOrders/Detail", compact("approvedReturnOrderDetail", "deliveryInformation", "orderItems"));
     }
 
-    public function update(int $id): RedirectResponse
-    {
-        $order=Order::with(["deliveryInformation","orderItems.product.shop"])->where("id", $id)->first();
-
-        $order->update([
-            "return_status"=>"processing",
-            "return_processing_date"=>now()->format("Y-m-d")
-        ]);
-
-        // Mail::to($order->deliveryInformation->email)->send(new OrderDeliveredMail($order));
-
-        return to_route("admin.return-orders.processing.index")->with("success", "Order is processing.");
-    }
 }

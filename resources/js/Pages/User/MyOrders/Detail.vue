@@ -374,7 +374,9 @@ const submit = () => {
 
       <button
         v-if="
-          order.order_status !== 'shipped' && order.order_status !== 'delivered'
+          order.order_status !== 'shipped' &&
+          order.order_status !== 'delivered' &&
+          !order.return_reason
         "
         @click="isReturnFormOpened = !isReturnFormOpened"
         class="bg-red-600 font-bold text-md py-3 px-5 text-white rounded-md hover:bg-red-700 transition-all ml-auto"

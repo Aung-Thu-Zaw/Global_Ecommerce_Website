@@ -443,13 +443,6 @@ const handleConfirm = async (id) => {
             </div>
           </div>
         </div>
-        <button
-          @click="handleConfirm(approvedReturnOrderDetail.id)"
-          v-if="approvedReturnOrderDetail.return_status === 'approved'"
-          class="bg-orange-600 py-3 w-full rounded-sm font-bold text-white hover:bg-orange-700 transition-all shadow"
-        >
-          Processing Return
-        </button>
       </div>
       <div class="border shadow rounded-sm">
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
