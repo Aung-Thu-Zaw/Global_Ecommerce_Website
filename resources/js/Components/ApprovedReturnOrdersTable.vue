@@ -20,7 +20,7 @@ import ToReceiveOrdersTable from "@/Components/ToReceiveOrdersTable.vue";
 import ReceivedOrdersTable from "@/Components/ReceivedOrdersTable.vue";
 
 const props = defineProps({
-  receivedOrders: Object,
+  approvedReturnOrders: Object,
 });
 
 const swal = inject("$swal");
@@ -58,8 +58,8 @@ const handleDownload = async (orderId) => {
       <HeaderTh> Actions </HeaderTh>
     </TableHeader>
 
-    <tbody v-if="receivedOrders.length">
-      <Tr v-for="order in receivedOrders" :key="order.id">
+    <tbody v-if="approvedReturnOrders.length">
+      <Tr v-for="order in approvedReturnOrders" :key="order.id">
         <BodyTh>{{ order.id }}</BodyTh>
         <Td>{{ order.invoice_no }}</Td>
         <Td class="capitalize">{{ order.payment_type }}</Td>
@@ -85,17 +85,6 @@ const handleDownload = async (orderId) => {
           <span
             v-if="
               order.return_reason &&
-              order.return_date &&
-              order.return_status === 'pending'
-            "
-            class="text-red-600 text-sm bg-red-200 px-3 py-1 rounded-full"
-          >
-            <i class="fa-solid fa-rotate-right animate-spin"></i>
-            return
-          </span>
-          <span
-            v-else-if="
-              order.return_reason &&
               order.return_approved_date &&
               order.return_status === 'approved'
             "
@@ -103,13 +92,6 @@ const handleDownload = async (orderId) => {
           >
             <i class="fa-solid fa-circle-check animate-pulse"></i>
             approved
-          </span>
-          <span
-            v-else
-            class="text-slate-600 text-sm bg-slate-200 px-3 py-1 rounded-full"
-          >
-            <i class="fa-solid fa-circle text-[.6rem] animate-pulse"></i>
-            No Requested
           </span>
         </Td>
         <Td>{{ order.order_date }}</Td>
@@ -134,9 +116,9 @@ const handleDownload = async (orderId) => {
       </Tr>
     </tbody>
   </TableContainer>
-  <div v-if="!receivedOrders.length" class="p-5 w-full bg-gray-100">
+  <div v-if="!approvedReturnOrders.length" class="p-5 w-full bg-gray-100">
     <p class="text-center text-sm uppercase text-slate-500 font-bold">
-      There is no received orders.
+      There is no approved return orders.
     </p>
   </div>
 </template>

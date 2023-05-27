@@ -22,7 +22,7 @@ return new class () extends Migration {
             $table->integer("qty");
             $table->date('return_date')->nullable();
             $table->text('return_reason')->nullable();
-            $table->enum('return_status', ["pending","approved"])->nullable();
+            $table->enum('return_status', ["pending","approved","refunded"])->nullable();
             $table->date('return_approved_date')->nullable();
             $table->decimal('price', 8, 2);
             $table->timestamps();

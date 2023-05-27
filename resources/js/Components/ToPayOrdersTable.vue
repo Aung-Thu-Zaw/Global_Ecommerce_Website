@@ -23,7 +23,6 @@ const props = defineProps({
   toPayOrders: Object,
 });
 
-
 const swal = inject("$swal");
 
 const handleDownload = async (orderId) => {
@@ -47,13 +46,14 @@ const handleDownload = async (orderId) => {
 </script>
 
 <template>
-  <TableContainer class="w-full my-5">
+  <TableContainer class="w-full mt-5">
     <TableHeader>
       <HeaderTh> No </HeaderTh>
       <HeaderTh> Invoice </HeaderTh>
       <HeaderTh> Payment </HeaderTh>
       <HeaderTh> Amount </HeaderTh>
-      <HeaderTh> Status </HeaderTh>
+      <HeaderTh> Order Status </HeaderTh>
+      <HeaderTh> Return Status </HeaderTh>
       <HeaderTh> Order Date </HeaderTh>
       <HeaderTh> Actions </HeaderTh>
     </TableHeader>
@@ -68,7 +68,7 @@ const handleDownload = async (orderId) => {
           <PendingStatus v-if="order.order_status === 'pending'">
             {{ order.order_status }}
           </PendingStatus>
-          <ConfirmedStatus v-else-if="order.order_status === 'confirm'">
+          <ConfirmedStatus v-else-if="order.order_status === 'confirmed'">
             {{ order.order_status }}
           </ConfirmedStatus>
           <ProcessingStatus v-else-if="order.order_status === 'processing'">
@@ -80,27 +80,36 @@ const handleDownload = async (orderId) => {
           <DeliveredStatus v-else-if="order.order_status === 'delivered'">
             {{ order.order_status }}
           </DeliveredStatus>
+        </Td>
+        <Td>
           <span
             v-if="
               order.return_reason &&
               order.return_date &&
               order.return_status === 'pending'
             "
-            class="text-red-600 text-sm bg-red-200 px-3 py-1 rounded-full ml-2"
+            class="text-red-600 text-sm bg-red-200 px-3 py-1 rounded-full"
           >
             <i class="fa-solid fa-rotate-right animate-spin"></i>
             return
           </span>
           <span
-            v-if="
+            v-else-if="
               order.return_reason &&
               order.return_approved_date &&
               order.return_status === 'approved'
             "
-            class="text-green-600 text-sm bg-green-200 px-3 py-1 rounded-full ml-2"
+            class="text-green-600 text-sm bg-green-200 px-3 py-1 rounded-full"
           >
             <i class="fa-solid fa-circle-check animate-pulse"></i>
             approved
+          </span>
+          <span
+            v-else
+            class="text-slate-600 text-sm bg-slate-200 px-3 py-1 rounded-full"
+          >
+            <i class="fa-solid fa-circle text-[.6rem] animate-pulse"></i>
+            No Requested
           </span>
         </Td>
         <Td>{{ order.order_date }}</Td>
@@ -125,4 +134,9 @@ const handleDownload = async (orderId) => {
       </Tr>
     </tbody>
   </TableContainer>
+  <div v-if="!toPayOrders.length" class="p-5 w-full bg-gray-100">
+    <p class="text-center text-sm uppercase text-slate-500 font-bold">
+      There is no to pay orders.
+    </p>
+  </div>
 </template>

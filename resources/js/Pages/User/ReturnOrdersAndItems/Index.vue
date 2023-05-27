@@ -14,28 +14,26 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import { inject } from "vue";
 import axios from "axios";
-import AllOrdersTable from "@/Components/AllOrdersTable.vue";
-import ToPayOrdersTable from "@/Components/ToPayOrdersTable.vue";
+import RequestedReturnOrdersTable from "@/Components/RequestedReturnOrdersTable.vue";
+import ApprovedReturnOrdersTable from "@/Components/ApprovedReturnOrdersTable.vue";
 import ToReceiveOrdersTable from "@/Components/ToReceiveOrdersTable.vue";
 import ReceivedOrdersTable from "@/Components/ReceivedOrdersTable.vue";
 
 const props = defineProps({
-  orders: Object,
-  toPayOrders: Object,
-  toReceiveOrders: Object,
-  receivedOrders: Object,
+  requestedReturnOrders: Object,
+  approvedReturnOrders: Object,
 });
 </script>
 
 <template>
-  <Head title="My Orders" />
+  <Head title="Return Orders And Items" />
 
   <AppLayout>
     <div
       class="max-w-[1400px] mx-auto mt-48 mb-10 flex flex-col items-center min-h-[500px] w-full p-5"
     >
       <h1 class="font-bold text-2xl text-slate-600 uppercase mb-5 self-start">
-        My Orders
+        Return Orders And Items
       </h1>
 
       <div
@@ -49,35 +47,35 @@ const props = defineProps({
         >
           <li class="mr-2" role="presentation">
             <Link
-              :href="route('my-orders.index')"
-              :data="{ tab: 'all-orders' }"
+              :href="route('return-orders.index')"
+              :data="{ tab: 'requested-return-orders' }"
               class="inline-flex p-4 rounded-t-lg active group"
               :class="{
                 'text-blue-600 border-b-2 border-blue-600':
-                  $page.props.ziggy.query.tab === 'all-orders',
+                  $page.props.ziggy.query.tab === 'requested-return-orders',
               }"
             >
-              <i class="fa-solid fa-boxes-packing mr-2 text-sm"></i>
-              All Orders ({{ orders.length }})
+              <i class="fa-solid fa-rotate-right mr-2 text-sm"></i>
+              Requested Return Orders ({{ requestedReturnOrders.length }})
             </Link>
           </li>
 
           <li class="mr-2" role="presentation">
             <Link
-              :href="route('my-orders.index')"
-              :data="{ tab: 'to-pay-orders' }"
+              :href="route('return-orders.index')"
+              :data="{ tab: 'approved-return-orders' }"
               class="inline-flex p-4 rounded-t-lg active group"
               :class="{
                 'text-blue-600 border-b-2 border-blue-600':
-                  $page.props.ziggy.query.tab === 'to-pay-orders',
+                  $page.props.ziggy.query.tab === 'approved-return-orders',
               }"
             >
-              <i class="fa-solid fa-money-bill-wave mr-2 text-sm"></i>
-              To Pay ({{ toPayOrders.length }})
+              <i class="fa-solid fa-check-circle mr-2 text-sm"></i>
+              Approved Return Orders ({{ approvedReturnOrders.length }})
             </Link>
           </li>
 
-          <li class="mr-2" role="presentation">
+          <!-- <li class="mr-2" role="presentation">
             <Link
               :href="route('my-orders.index')"
               :data="{ tab: 'to-receive-orders' }"
@@ -106,7 +104,7 @@ const props = defineProps({
 
               Received ({{ receivedOrders.length }})
             </Link>
-          </li>
+          </li> -->
         </ul>
       </div>
 
@@ -114,21 +112,27 @@ const props = defineProps({
         <div class="w-full">
           <div
             v-if="
-              $page.props.ziggy.query.tab === 'all-orders' ||
+              $page.props.ziggy.query.tab === 'requested-return-orders' ||
               !$page.props.ziggy.query.tab
             "
           >
-            <AllOrdersTable :orders="orders" />
+            <RequestedReturnOrdersTable
+              :requestedReturnOrders="requestedReturnOrders"
+            />
           </div>
-          <div v-else-if="$page.props.ziggy.query.tab === 'to-pay-orders'">
-            <ToPayOrdersTable :toPayOrders="toPayOrders" />
+          <div
+            v-else-if="$page.props.ziggy.query.tab === 'approved-return-orders'"
+          >
+            <ApprovedReturnOrdersTable
+              :approvedReturnOrders="approvedReturnOrders"
+            />
           </div>
-          <div v-else-if="$page.props.ziggy.query.tab === 'to-receive-orders'">
+          <!-- <div v-else-if="$page.props.ziggy.query.tab === 'to-receive-orders'">
             <ToReceiveOrdersTable :toReceiveOrders="toReceiveOrders" />
           </div>
           <div v-else-if="$page.props.ziggy.query.tab === 'received-orders'">
             <ReceivedOrdersTable :receivedOrders="receivedOrders" />
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

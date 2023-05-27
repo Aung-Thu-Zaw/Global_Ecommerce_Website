@@ -17,6 +17,7 @@ use App\Http\Controllers\Ecommerce\ProductAnswerController;
 use App\Http\Controllers\Ecommerce\ProductQuestionController;
 use App\Http\Controllers\Ecommerce\ProductReviewController;
 use App\Http\Controllers\Ecommerce\ProductReviewReplyController;
+use App\Http\Controllers\Ecommerce\ReturnOrderAndItemController;
 use App\Http\Controllers\Ecommerce\ReviewController;
 use App\Http\Controllers\Ecommerce\SearchResultProductController;
 use App\Http\Controllers\Ecommerce\ShopController;
@@ -159,6 +160,16 @@ Route::middleware(["auth","verified"])->group(function () {
     Route::controller(MyOrderController::class)
             ->prefix("/my-orders")
             ->name("my-orders.")
+            ->group(function () {
+                Route::get('/', "index")->name("index");
+                Route::get('/{order_id}', "show")->name("show");
+                Route::post('/{order_id}/return', "return")->name("return");
+                Route::get('/invoice/{order_id}/download', "downloadInvoice")->name("download.invoice");
+            });
+
+    Route::controller(ReturnOrderAndItemController::class)
+            ->prefix("/return-orders")
+            ->name("return-orders.")
             ->group(function () {
                 Route::get('/', "index")->name("index");
                 Route::get('/{order_id}', "show")->name("show");
