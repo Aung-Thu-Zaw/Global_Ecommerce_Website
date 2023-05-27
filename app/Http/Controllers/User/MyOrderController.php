@@ -104,7 +104,7 @@ class MyOrderController extends Controller
                 ]);
         });
 
-        return to_route("return-orders.index", "tab=requested-return-orders")->with("success", "Return request successfully.");
+        return to_route("return-orders.index", "tab=all-return-orders")->with("success", "Return request successfully.");
     }
 
     public function downloadInvoice(int $order_id): HttpResponse

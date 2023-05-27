@@ -16,6 +16,7 @@ return new class () extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('delivery_information_id')->references("id")->on("delivery_information");
+            $table->string('payment_id')->nullable();
             $table->string('payment_type')->nullable();
             $table->string('payment_method')->nullable();
             $table->string('transaction_id')->nullable();
@@ -33,6 +34,7 @@ return new class () extends Migration {
             $table->text('return_reason')->nullable();
             $table->enum('return_status', ["pending","approved","refunded"])->nullable();
             $table->date('return_approved_date')->nullable();
+            $table->date('return_refunded_date')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

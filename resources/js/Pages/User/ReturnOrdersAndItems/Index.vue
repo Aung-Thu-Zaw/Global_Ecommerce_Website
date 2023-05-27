@@ -16,12 +16,16 @@ import { inject } from "vue";
 import axios from "axios";
 import RequestedReturnOrdersTable from "@/Components/RequestedReturnOrdersTable.vue";
 import ApprovedReturnOrdersTable from "@/Components/ApprovedReturnOrdersTable.vue";
+import AllReturnOrdersTable from "@/Components/AllReturnOrdersTable.vue";
+import RefundedReturnOrdersTable from "@/Components/RefundedReturnOrdersTable.vue";
 import ToReceiveOrdersTable from "@/Components/ToReceiveOrdersTable.vue";
 import ReceivedOrdersTable from "@/Components/ReceivedOrdersTable.vue";
 
 const props = defineProps({
+  allReturnOrders: Object,
   requestedReturnOrders: Object,
   approvedReturnOrders: Object,
+  refundedReturnOrders: Object,
 });
 </script>
 
@@ -45,6 +49,21 @@ const props = defineProps({
           data-tabs-toggle="#myTabContent"
           role="tablist"
         >
+          <li class="mr-2" role="presentation">
+            <Link
+              :href="route('return-orders.index')"
+              :data="{ tab: 'all-return-orders' }"
+              class="inline-flex p-4 rounded-t-lg active group"
+              :class="{
+                'text-blue-600 border-b-2 border-blue-600':
+                  $page.props.ziggy.query.tab === 'all-return-orders',
+              }"
+            >
+              <i class="fa-solid fa-boxes-packing mr-2 text-sm"></i>
+              All Return Orders ({{ allReturnOrders.length }})
+            </Link>
+          </li>
+
           <li class="mr-2" role="presentation">
             <Link
               :href="route('return-orders.index')"
@@ -72,6 +91,21 @@ const props = defineProps({
             >
               <i class="fa-solid fa-check-circle mr-2 text-sm"></i>
               Approved Return Orders ({{ approvedReturnOrders.length }})
+            </Link>
+          </li>
+
+          <li class="mr-2" role="presentation">
+            <Link
+              :href="route('return-orders.index')"
+              :data="{ tab: 'refunded-return-orders' }"
+              class="inline-flex p-4 rounded-t-lg active group"
+              :class="{
+                'text-blue-600 border-b-2 border-blue-600':
+                  $page.props.ziggy.query.tab === 'refunded-return-orders',
+              }"
+            >
+              <i class="fa-solid fa-money-bill-transfer mr-2 text-sm"></i>
+              Refunded Return Orders ({{ refundedReturnOrders.length }})
             </Link>
           </li>
 
@@ -110,12 +144,10 @@ const props = defineProps({
 
       <div id="myTabContet" class="w-full">
         <div class="w-full">
-          <div
-            v-if="
-              $page.props.ziggy.query.tab === 'requested-return-orders' ||
-              !$page.props.ziggy.query.tab
-            "
-          >
+          <div v-if="$page.props.ziggy.query.tab === 'all-return-orders'">
+            <AllReturnOrdersTable :allReturnOrders="allReturnOrders" />
+          </div>
+          <div v-if="$page.props.ziggy.query.tab === 'requested-return-orders'">
             <RequestedReturnOrdersTable
               :requestedReturnOrders="requestedReturnOrders"
             />
@@ -127,12 +159,13 @@ const props = defineProps({
               :approvedReturnOrders="approvedReturnOrders"
             />
           </div>
-          <!-- <div v-else-if="$page.props.ziggy.query.tab === 'to-receive-orders'">
-            <ToReceiveOrdersTable :toReceiveOrders="toReceiveOrders" />
+          <div
+            v-else-if="$page.props.ziggy.query.tab === 'refunded-return-orders'"
+          >
+            <RefundedReturnOrdersTable
+              :refundedReturnOrders="refundedReturnOrders"
+            />
           </div>
-          <div v-else-if="$page.props.ziggy.query.tab === 'received-orders'">
-            <ReceivedOrdersTable :receivedOrders="receivedOrders" />
-          </div> -->
         </div>
       </div>
     </div>

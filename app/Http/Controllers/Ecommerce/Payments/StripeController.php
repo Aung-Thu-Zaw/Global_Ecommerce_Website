@@ -45,6 +45,7 @@ class StripeController extends Controller
         $order=Order::create([
             "user_id"=>$user->id,
             "delivery_information_id"=>$user->deliveryInformation->id,
+            'payment_id'=>$paymentIntent->id,
             'payment_type'=>$paymentIntent->payment_method_types[0],
             'payment_method'=>$paymentIntent->payment_method,
             'transaction_id'=>$balanceTransactionId,
