@@ -64,7 +64,7 @@ class MyOrderController extends Controller
     {
         $order=Order::findOrFail($id);
 
-        $deliveryInformation=DeliveryInformation::where("user_id", auth()->user()->id)->first();
+        $deliveryInformation=DeliveryInformation::where("user_id", $order->user_id)->first();
 
         $orderItems=OrderItem::with(["product.shop","product.brand"])
                              ->where("order_id", $order->id)

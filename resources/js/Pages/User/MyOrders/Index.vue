@@ -14,6 +14,10 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import { inject } from "vue";
 import axios from "axios";
+import AllOrdersTable from "@/Components/AllOrdersTable.vue";
+import ToPayOrdersTable from "@/Components/ToPayOrdersTable.vue";
+import ToReceiveOrdersTable from "@/Components/ToReceiveOrdersTable.vue";
+import ReceivedOrdersTable from "@/Components/ReceivedOrdersTable.vue";
 
 const props = defineProps({
   orders: Object,
@@ -22,26 +26,6 @@ const props = defineProps({
   receivedOrders: Object,
 });
 
-const swal = inject("$swal");
-
-const handleDownload = async (orderId) => {
-  try {
-    const response = await axios.get(`/my-orders/invoice/${orderId}/download`, {
-      responseType: "blob",
-    });
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "invoice.pdf");
-    document.body.appendChild(link);
-    link.click();
-  } catch (error) {
-    this.showSnackbar({
-      message: "Error downloading invoice.",
-      type: "error",
-    });
-  }
-};
 </script>
 
 <template>
@@ -65,431 +49,87 @@ const handleDownload = async (orderId) => {
           role="tablist"
         >
           <li class="mr-2" role="presentation">
-            <a
-              href="#"
-              class="inline-flex p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group"
-              id="orders-tab"
-              data-tabs-target="#orders"
-              type="button"
-              role="tab"
-              aria-controls="orders"
-              aria-selected="false"
+            <Link
+              :href="route('my-orders.index')"
+              :data="{ tab: 'all-orders' }"
+              class="inline-flex p-4 rounded-t-lg active group"
+              :class="{
+                'text-blue-600 border-b-2 border-blue-600':
+                  $page.props.ziggy.query.tab === 'all-orders',
+              }"
             >
               <i class="fa-solid fa-boxes-packing mr-2 text-sm"></i>
               All Orders ({{ orders.length }})
-            </a>
+            </Link>
           </li>
+
           <li class="mr-2" role="presentation">
-            <a
-              href="#"
-              class="inline-flex p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group"
-              aria-current="page"
-              id="toPay-tab"
-              data-tabs-target="#toPay"
-              type="button"
-              role="tab"
-              aria-controls="toPay"
-              aria-selected="false"
+            <Link
+              :href="route('my-orders.index')"
+              :data="{ tab: 'to-pay-orders' }"
+              class="inline-flex p-4 rounded-t-lg active group"
+              :class="{
+                'text-blue-600 border-b-2 border-blue-600':
+                  $page.props.ziggy.query.tab === 'to-pay-orders',
+              }"
             >
               <i class="fa-solid fa-money-bill-wave mr-2 text-sm"></i>
               To Pay ({{ toPayOrders.length }})
-            </a>
+            </Link>
           </li>
+
           <li class="mr-2" role="presentation">
-            <a
-              href="#"
-              class="inline-flex p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group"
-              id="toReceive-tab"
-              data-tabs-target="#toReceive"
-              type="button"
-              role="tab"
-              aria-controls="toReceive"
-              aria-selected="false"
+            <Link
+              :href="route('my-orders.index')"
+              :data="{ tab: 'to-receive-orders' }"
+              class="inline-flex p-4 rounded-t-lg active group"
+              :class="{
+                'text-blue-600 border-b-2 border-blue-600':
+                  $page.props.ziggy.query.tab === 'to-receive-orders',
+              }"
             >
               <i class="fa-solid fa-boxes-stacked mr-2 text-sm"></i>
               To Receive ({{ toReceiveOrders.length }})
-            </a>
+            </Link>
           </li>
+
           <li class="mr-2" role="presentation">
-            <a
-              href="#"
-              class="inline-flex p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group"
-              id="received-tab"
-              data-tabs-target="#received"
-              type="button"
-              role="tab"
-              aria-controls="received"
-              aria-selected="false"
+            <Link
+              :href="route('my-orders.index')"
+              :data="{ tab: 'received-orders' }"
+              class="inline-flex p-4 rounded-t-lg active group"
+              :class="{
+                'text-blue-600 border-b-2 border-blue-600':
+                  $page.props.ziggy.query.tab === 'received-orders',
+              }"
             >
               <i class="fa-solid fa-handshake text-sm mr-2"></i>
 
               Received ({{ receivedOrders.length }})
-            </a>
+            </Link>
           </li>
         </ul>
       </div>
 
       <div id="myTabContet" class="w-full">
-        <div
-          class="hidden w-full"
-          id="orders"
-          role="tabpanel"
-          aria-labelledby="orders-tab"
-        >
-          <TableContainer class="w-full my-5">
-            <TableHeader>
-              <HeaderTh> No </HeaderTh>
-              <HeaderTh> Invoice </HeaderTh>
-              <HeaderTh> Payment </HeaderTh>
-              <HeaderTh> Amount </HeaderTh>
-              <HeaderTh> Status </HeaderTh>
-              <HeaderTh> Order Date </HeaderTh>
-              <HeaderTh> Actions </HeaderTh>
-            </TableHeader>
-
-            <tbody v-if="orders.length">
-              <Tr v-for="order in orders" :key="order.id">
-                <BodyTh>{{ order.id }}</BodyTh>
-                <Td>{{ order.invoice_no }}</Td>
-                <Td class="capitalize">{{ order.payment_type }}</Td>
-                <Td>$ {{ order.total_amount }}</Td>
-                <Td>
-                  <PendingStatus v-if="order.order_status === 'pending'">
-                    {{ order.order_status }}
-                  </PendingStatus>
-                  <ConfirmedStatus
-                    v-else-if="order.order_status === 'confirmed'"
-                  >
-                    {{ order.order_status }}
-                  </ConfirmedStatus>
-                  <ProcessingStatus
-                    v-else-if="order.order_status === 'processing'"
-                  >
-                    {{ order.order_status }}
-                  </ProcessingStatus>
-                  <ShippedStatus v-else-if="order.order_status === 'shipped'">
-                    {{ order.order_status }}
-                  </ShippedStatus>
-                  <DeliveredStatus
-                    v-else-if="order.order_status === 'delivered'"
-                  >
-                    {{ order.order_status }}
-                  </DeliveredStatus>
-
-                  <span
-                    v-if="
-                      order.return_reason &&
-                      order.return_date &&
-                      order.return_status === 'pending'
-                    "
-                    class="text-red-600 text-sm bg-red-200 px-3 py-1 rounded-full ml-2"
-                  >
-                    <i class="fa-solid fa-rotate-right animate-spin"></i>
-                    return
-                  </span>
-                  <span
-                    v-if="
-                      order.return_reason &&
-                      order.return_approved_date &&
-                      order.return_status === 'approved'
-                    "
-                    class="text-green-600 text-sm bg-green-200 px-3 py-1 rounded-full ml-2"
-                  >
-                    <i class="fa-solid fa-circle-check animate-pulse"></i>
-                    approved
-                  </span>
-                </Td>
-                <Td>{{ order.order_date }}</Td>
-
-                <Td>
-                  <button
-                    @click="handleDownload(order.id)"
-                    class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-orange-600 text-white hover:bg-orange-700 mr-3 my-1"
-                  >
-                    <i class="fa-solid fa-download"></i>
-                    Invoice
-                  </button>
-                  <Link
-                    :href="route('my-orders.show', order.id)"
-                    as="button"
-                    class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
-                  >
-                    <i class="fa-solid fa-eye"></i>
-                    Details
-                  </Link>
-                </Td>
-              </Tr>
-            </tbody>
-          </TableContainer>
-        </div>
-        <div
-          class="hidden w-full"
-          id="toPay"
-          role="tabpanel"
-          aria-labelledby="toPay-tab"
-        >
-          <TableContainer class="w-full my-5">
-            <TableHeader>
-              <HeaderTh> No </HeaderTh>
-              <HeaderTh> Invoice </HeaderTh>
-              <HeaderTh> Payment </HeaderTh>
-              <HeaderTh> Amount </HeaderTh>
-              <HeaderTh> Status </HeaderTh>
-              <HeaderTh> Order Date </HeaderTh>
-              <HeaderTh> Actions </HeaderTh>
-            </TableHeader>
-
-            <tbody v-if="toPayOrders.length">
-              <Tr v-for="order in toPayOrders" :key="order.id">
-                <BodyTh>{{ order.id }}</BodyTh>
-                <Td>{{ order.invoice_no }}</Td>
-                <Td class="capitalize">{{ order.payment_type }}</Td>
-                <Td>$ {{ order.total_amount }}</Td>
-                <Td>
-                  <PendingStatus v-if="order.order_status === 'pending'">
-                    {{ order.order_status }}
-                  </PendingStatus>
-                  <ConfirmedStatus v-else-if="order.order_status === 'confirm'">
-                    {{ order.order_status }}
-                  </ConfirmedStatus>
-                  <ProcessingStatus
-                    v-else-if="order.order_status === 'processing'"
-                  >
-                    {{ order.order_status }}
-                  </ProcessingStatus>
-                  <ShippedStatus v-else-if="order.order_status === 'shipped'">
-                    {{ order.order_status }}
-                  </ShippedStatus>
-                  <DeliveredStatus
-                    v-else-if="order.order_status === 'delivered'"
-                  >
-                    {{ order.order_status }}
-                  </DeliveredStatus>
-                  <span
-                    v-if="
-                      order.return_reason &&
-                      order.return_date &&
-                      order.return_status === 'pending'
-                    "
-                    class="text-red-600 text-sm bg-red-200 px-3 py-1 rounded-full ml-2"
-                  >
-                    <i class="fa-solid fa-rotate-right animate-spin"></i>
-                    return
-                  </span>
-                  <span
-                    v-if="
-                      order.return_reason &&
-                      order.return_approved_date &&
-                      order.return_status === 'approved'
-                    "
-                    class="text-green-600 text-sm bg-green-200 px-3 py-1 rounded-full ml-2"
-                  >
-                    <i class="fa-solid fa-circle-check animate-pulse"></i>
-                    approved
-                  </span>
-                </Td>
-                <Td>{{ order.order_date }}</Td>
-
-                <Td>
-                  <button
-                    @click="handleDownload(order.id)"
-                    class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-orange-600 text-white hover:bg-orange-700 mr-3 my-1"
-                  >
-                    <i class="fa-solid fa-download"></i>
-                    Invoice
-                  </button>
-                  <Link
-                    :href="route('my-orders.show', order.id)"
-                    as="button"
-                    class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
-                  >
-                    <i class="fa-solid fa-eye"></i>
-                    Details
-                  </Link>
-                </Td>
-              </Tr>
-            </tbody>
-          </TableContainer>
-        </div>
-
-        <div
-          class="hidden w-full"
-          id="toReceive"
-          role="tabpanel"
-          aria-labelledby="toReceive-tab"
-        >
-          <TableContainer class="w-full my-5">
-            <TableHeader>
-              <HeaderTh> No </HeaderTh>
-              <HeaderTh> Invoice </HeaderTh>
-              <HeaderTh> Payment </HeaderTh>
-              <HeaderTh> Amount </HeaderTh>
-              <HeaderTh> Status </HeaderTh>
-              <HeaderTh> Order Date </HeaderTh>
-              <HeaderTh> Actions </HeaderTh>
-            </TableHeader>
-
-            <tbody v-if="toReceiveOrders.length">
-              <Tr v-for="order in toReceiveOrders" :key="order.id">
-                <BodyTh>{{ order.id }}</BodyTh>
-                <Td>{{ order.invoice_no }}</Td>
-                <Td class="capitalize">{{ order.payment_type }}</Td>
-                <Td>$ {{ order.total_amount }}</Td>
-                <Td>
-                  <PendingStatus v-if="order.order_status === 'pending'">
-                    {{ order.order_status }}
-                  </PendingStatus>
-                  <ConfirmedStatus v-else-if="order.order_status === 'confirm'">
-                    {{ order.order_status }}
-                  </ConfirmedStatus>
-                  <ProcessingStatus
-                    v-else-if="order.order_status === 'processing'"
-                  >
-                    {{ order.order_status }}
-                  </ProcessingStatus>
-                  <ShippedStatus v-else-if="order.order_status === 'shipped'">
-                    {{ order.order_status }}
-                  </ShippedStatus>
-                  <DeliveredStatus
-                    v-else-if="order.order_status === 'delivered'"
-                  >
-                    {{ order.order_status }}
-                  </DeliveredStatus>
-                  <span
-                    v-if="
-                      order.return_reason &&
-                      order.return_date &&
-                      order.return_status === 'pending'
-                    "
-                    class="text-red-600 text-sm bg-red-200 px-3 py-1 rounded-full ml-2"
-                  >
-                    <i class="fa-solid fa-rotate-right animate-spin"></i>
-                    return
-                  </span>
-                  <span
-                    v-if="
-                      order.return_reason &&
-                      order.return_approved_date &&
-                      order.return_status === 'approved'
-                    "
-                    class="text-green-600 text-sm bg-green-200 px-3 py-1 rounded-full ml-2"
-                  >
-                    <i class="fa-solid fa-circle-check animate-pulse"></i>
-                    approved
-                  </span>
-                </Td>
-                <Td>{{ order.order_date }}</Td>
-
-                <Td>
-                  <button
-                    @click="handleDownload(order.id)"
-                    class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-orange-600 text-white hover:bg-orange-700 mr-3 my-1"
-                  >
-                    <i class="fa-solid fa-download"></i>
-                    Invoice
-                  </button>
-                  <Link
-                    :href="route('my-orders.show', order.id)"
-                    as="button"
-                    class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
-                  >
-                    <i class="fa-solid fa-eye"></i>
-                    Details
-                  </Link>
-                </Td>
-              </Tr>
-            </tbody>
-          </TableContainer>
-        </div>
-
-        <div
-          class="hidden w-full"
-          id="received"
-          role="tabpanel"
-          aria-labelledby="received-tab"
-        >
-          <TableContainer class="w-full my-5">
-            <TableHeader>
-              <HeaderTh> No </HeaderTh>
-              <HeaderTh> Invoice </HeaderTh>
-              <HeaderTh> Payment </HeaderTh>
-              <HeaderTh> Amount </HeaderTh>
-              <HeaderTh> Status </HeaderTh>
-              <HeaderTh> Order Date </HeaderTh>
-              <HeaderTh> Actions </HeaderTh>
-            </TableHeader>
-
-            <tbody v-if="receivedOrders.length">
-              <Tr v-for="order in receivedOrders" :key="order.id">
-                <BodyTh>{{ order.id }}</BodyTh>
-                <Td>{{ order.invoice_no }}</Td>
-                <Td class="capitalize">{{ order.payment_type }}</Td>
-                <Td>$ {{ order.total_amount }}</Td>
-                <Td>
-                  <PendingStatus v-if="order.order_status === 'pending'">
-                    {{ order.order_status }}
-                  </PendingStatus>
-                  <ConfirmedStatus v-else-if="order.order_status === 'confirm'">
-                    {{ order.order_status }}
-                  </ConfirmedStatus>
-                  <ProcessingStatus
-                    v-else-if="order.order_status === 'processing'"
-                  >
-                    {{ order.order_status }}
-                  </ProcessingStatus>
-                  <ShippedStatus v-else-if="order.order_status === 'shipped'">
-                    {{ order.order_status }}
-                  </ShippedStatus>
-                  <DeliveredStatus
-                    v-else-if="order.order_status === 'delivered'"
-                  >
-                    {{ order.order_status }}
-                  </DeliveredStatus>
-                  <span
-                    v-if="
-                      order.return_reason &&
-                      order.return_date &&
-                      order.return_status === 'pending'
-                    "
-                    class="text-red-600 text-sm bg-red-200 px-3 py-1 rounded-full ml-2"
-                  >
-                    <i class="fa-solid fa-rotate-right animate-spin"></i>
-                    return
-                  </span>
-                  <span
-                    v-if="
-                      order.return_reason &&
-                      order.return_approved_date &&
-                      order.return_status === 'approved'
-                    "
-                    class="text-green-600 text-sm bg-green-200 px-3 py-1 rounded-full ml-2"
-                  >
-                    <i class="fa-solid fa-circle-check animate-pulse"></i>
-                    approved
-                  </span>
-                </Td>
-                <Td>{{ order.order_date }}</Td>
-
-                <Td>
-                  <button
-                    @click="handleDownload(order.id)"
-                    class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-orange-600 text-white hover:bg-orange-700 mr-3 my-1"
-                  >
-                    <i class="fa-solid fa-download"></i>
-                    Invoice
-                  </button>
-                  <Link
-                    :href="route('my-orders.show', order.id)"
-                    as="button"
-                    class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
-                  >
-                    <i class="fa-solid fa-eye"></i>
-                    Details
-                  </Link>
-                </Td>
-              </Tr>
-            </tbody>
-          </TableContainer>
+        <div class="w-full">
+          <div
+            v-if="
+              $page.props.ziggy.query.tab === 'all-orders' ||
+              !$page.props.ziggy.query.tab
+            "
+          >
+            <AllOrdersTable :orders="orders" />
+          </div>
+          <div v-else-if="$page.props.ziggy.query.tab === 'to-pay-orders'">
+            <ToPayOrdersTable :toPayOrders="toPayOrders" />
+          </div>
+          <div v-else-if="$page.props.ziggy.query.tab === 'to-receive-orders'">
+            <ToReceiveOrdersTable :toReceiveOrders="toReceiveOrders" />
+          </div>
+          <div v-else-if="$page.props.ziggy.query.tab === 'received-orders'">
+            <ReceivedOrdersTable :receivedOrders="receivedOrders" />
+          </div>
         </div>
       </div>
     </div>
