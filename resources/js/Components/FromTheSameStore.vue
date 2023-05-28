@@ -17,11 +17,11 @@ const props = defineProps({
       <figure
         v-for="product in specificShopProducts"
         :key="product.id"
-        class="flex flex-row mb-4"
+        class="flex flex-row mb-4 border p-3 shadow rounded-md"
       >
         <div>
-          <a
-            href="#"
+          <Link
+            :href="route('products.show', product.slug)"
             class="block w-20 h-20 rounded border border-gray-200 overflow-hidden"
           >
             <img
@@ -29,7 +29,7 @@ const props = defineProps({
               class="h-full object-cover"
               :alt="product.name"
             />
-          </a>
+          </Link>
         </div>
         <figcaption class="ml-3">
           <Link
@@ -38,15 +38,38 @@ const props = defineProps({
           >
             {{ product.name }}
           </Link>
-          <p class="mt-1 font-semibold">${{ product.price }}</p>
+
+          <div v-if="product.discount">
+            <span class="font-semibold text-slate-600 block">
+              ${{ product.discount }}
+            </span>
+            <span class="text-[.8rem] text-secondary-600 line-through mr-5">
+              ${{ product.price }}
+            </span>
+            <span
+              v-if="product.discount"
+              class="text-[.6rem] px-2 py-1 bg-green-200 rounded-full text-green-600 font-bold"
+            >
+              {{
+                (
+                  ((product.price - product.discount) / product.price) *
+                  100
+                ).toFixed(1)
+              }}% OFF
+            </span>
+          </div>
+          <div v-else>
+            <span class="font-semibold text-slate-600 mr-3">
+              ${{ product.price }}
+            </span>
+          </div>
         </figcaption>
       </figure>
 
       <Link
         as="button"
-        :href="
-          route('shop.index', { shop_id: specificShopProducts[0].user_id })
-        "
+        :href="route('shop.show', { shop_id: specificShopProducts[0].user_id })"
+        :data="{ tab: 'home' }"
         class="bg-blue-600 text-white w-full font-bold py-2 rounded-sm shadow-md hover:bg-blue-700"
       >
         <i class="fas fa-shop mr-1"></i>
