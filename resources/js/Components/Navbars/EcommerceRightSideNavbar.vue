@@ -29,12 +29,13 @@ const isVisibleChatbox = ref(false);
         <div
           id="chat-box"
           role="tooltip"
-          class="absolute z-10 invisible inline-block p-2 text-sm font-medium text-dark bg-white rounded-md shadow-lg border opacity-0 tooltip w-[100px]"
+          class="absolute z-10 invisible inline-block p-2 text-sm font-medium text-white bg-gray-600 rounded-md shadow-lg border opacity-0 tooltip w-[100px]"
         >
           Chat Box
-          <div class="tooltip-arrow border" data-popper-arrow></div>
+          <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
       </div>
+
       <div>
         <button
           data-tooltip-target="request-feature"
@@ -47,10 +48,10 @@ const isVisibleChatbox = ref(false);
         <div
           id="request-feature"
           role="tooltip"
-          class="absolute z-10 invisible inline-block p-2 text-sm font-medium text-dark bg-white rounded-md shadow-lg border opacity-0 tooltip w-[150px]"
+          class="absolute z-10 invisible inline-block p-2 text-sm font-medium text-white bg-gray-600 rounded-md shadow-lg border opacity-0 tooltip w-[150px]"
         >
           Request Features
-          <div class="tooltip-arrow border" data-popper-arrow></div>
+          <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
       </div>
       <div>
@@ -65,10 +66,10 @@ const isVisibleChatbox = ref(false);
         <div
           id="feedbacks"
           role="tooltip"
-          class="absolute z-10 invisible inline-block p-2 text-sm font-medium text-dark bg-white rounded-md shadow-lg border opacity-0 tooltip w-[100px]"
+          class="absolute z-10 invisible inline-block p-2 text-sm font-medium text-white bg-gray-600 rounded-md shadow-lg border opacity-0 tooltip w-[100px]"
         >
           Feedback
-          <div class="tooltip-arrow border" data-popper-arrow></div>
+          <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
       </div>
 
@@ -84,10 +85,10 @@ const isVisibleChatbox = ref(false);
         <div
           id="report-bugs"
           role="tooltip"
-          class="absolute z-10 invisible inline-block p-2 text-sm font-medium text-dark bg-white rounded-md shadow-lg border opacity-0 tooltip w-[100px]"
+          class="absolute z-10 invisible inline-block p-2 text-sm font-medium text-white bg-gray-600 rounded-md shadow-lg border opacity-0 tooltip w-[100px]"
         >
           Report Bugs
-          <div class="tooltip-arrow border" data-popper-arrow></div>
+          <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
       </div>
 
@@ -107,31 +108,121 @@ const isVisibleChatbox = ref(false);
           class="absolute z-10 invisible inline-block p-2 text-sm font-medium text-dark bg-white rounded-md shadow-lg border opacity-0 tooltip w-[170px] text-left"
         >
           <div class="px-3 font-bold py-1 text-blue-600">
-            <a href="#">
+            <a
+              :href="$page.props.socialShares.facebook"
+              target="_blank"
+              data-tooltip-target="facebook"
+              data-tooltip-placement="top"
+            >
               <i class="fa-brands fa-facebook mr-3 text-xl"></i>
               Facebook
             </a>
-          </div>
-          <div class="px-3 font-bold py-1 text-pink-600">
-            <a href="#">
-              <i class="fa-brands fa-instagram mr-3 text-xl"></i>
-              Instagram
-            </a>
+            <div
+              id="facebook"
+              role="tooltip"
+              class="absolute z-10 border invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+            >
+              Share on facebook
+              <div class="tooltip-arrow" data-popper-arrow></div>
+            </div>
           </div>
           <div class="px-3 font-bold py-1 text-sky-600">
-            <a href="#">
+            <a
+              :href="$page.props.socialShares.twitter"
+              target="_blank"
+              data-tooltip-target="twitter"
+              data-tooltip-placement="top"
+            >
               <i class="fa-brands fa-twitter mr-3 text-xl"></i>
               Twitter
             </a>
-          </div>
-          <div class="px-3 font-bold py-1 text-red-600">
-            <a href="#">
-              <i class="fa-brands fa-youtube mr-3 text-xl"></i>
-              Youtube
-            </a>
+            <div
+              id="twitter"
+              role="tooltip"
+              class="absolute z-10 border invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+            >
+              Share on twitter
+              <div class="tooltip-arrow" data-popper-arrow></div>
+            </div>
           </div>
 
+          <div class="px-3 font-bold py-1 text-blue-800">
+            <a
+              :href="$page.props.socialShares.linkedin"
+              target="_blank"
+              data-tooltip-target="linkedin"
+              data-tooltip-placement="top"
+            >
+              <i class="fa-brands fa-linkedin mr-3 text-xl"></i>
+              Linked In
+            </a>
+            <div
+              id="linkedin"
+              role="tooltip"
+              class="absolute z-10 border invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+            >
+              Share on LinkedIn
+              <div class="tooltip-arrow" data-popper-arrow></div>
+            </div>
+          </div>
           <div data-popper-arrow></div>
+          <div class="px-3 font-bold py-1 text-orange-500">
+            <a
+              :href="$page.props.socialShares.reddit"
+              target="_blank"
+              data-tooltip-target="reddit"
+              data-tooltip-placement="top"
+            >
+              <i class="fa-brands fa-reddit mr-3 text-xl"></i>
+              Reddit
+            </a>
+            <div
+              id="reddit"
+              role="tooltip"
+              class="absolute z-10 border invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+            >
+              Share on reddit
+              <div class="tooltip-arrow" data-popper-arrow></div>
+            </div>
+          </div>
+          <div class="px-3 font-bold py-1 text-blue-500">
+            <a
+              :href="$page.props.socialShares.telegram"
+              target="_blank"
+              data-tooltip-target="telegram"
+              data-tooltip-placement="top"
+            >
+              <i class="fa-brands fa-telegram mr-3 text-xl"></i>
+              Telegram
+            </a>
+            <div
+              id="telegram"
+              role="tooltip"
+              class="absolute z-10 border invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+            >
+              Share on telegram
+              <div class="tooltip-arrow" data-popper-arrow></div>
+            </div>
+          </div>
+          <div class="px-3 font-bold py-1 text-emerald-600">
+            <a
+              :href="$page.props.socialShares.whatsapp"
+              target="_blank"
+              data-tooltip-target="whatsapp"
+              data-tooltip-placement="top"
+            >
+              <i class="fa-brands fa-whatsapp mr-3 text-xl"></i>
+              Whatsapp
+            </a>
+            <div
+              id="whatsapp"
+              role="tooltip"
+              class="absolute z-10 border invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+            >
+              Share on whatsapp
+              <div class="tooltip-arrow" data-popper-arrow></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

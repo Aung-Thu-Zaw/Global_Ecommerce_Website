@@ -48,11 +48,6 @@ class FollowedShopController extends Controller
 
             return inertia("User/FollowedShops/Index", compact("followedShops", "justForYouProducts"));
         }
-
-
-
-
-
     }
 
     public function unfollowShop(int $shopId): RedirectResponse

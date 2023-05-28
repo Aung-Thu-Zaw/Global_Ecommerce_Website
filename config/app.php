@@ -190,6 +190,7 @@ return [
          */
 
          Intervention\Image\ImageServiceProvider::class,
+         Jorenvh\Share\Providers\ShareServiceProvider::class,
 
 
         /*
@@ -217,7 +218,8 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
-        'Image' => Intervention\Image\Facades\Image::class
+        'Image' => Intervention\Image\Facades\Image::class,
+        'Share' => Jorenvh\Share\ShareFacade::class,
     ])->toArray(),
 
 ];

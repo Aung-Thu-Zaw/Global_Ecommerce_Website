@@ -6,11 +6,11 @@ use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Conversation;
 use App\Models\User;
-use App\Models\Watchlist;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Jorenvh\Share\Share;
+use Jorenvh\Share\ShareFacade;
 use Tightenco\Ziggy\Ziggy;
-use Illuminate\Support\Facades\Storage;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -44,6 +44,15 @@ class HandleInertiaRequests extends Middleware
             'parentCategory'=>Category::with("children")->whereNull("parent_id")->get(),
             'vendors'=>User::where([["role","vendor"],["status","active"]])->limit(30)->get(),
             'totalCartItems'=> Cart::with("cartItems")->where("user_id", $request->user()->id ?? null)->first(),
+            'socialShares'=>ShareFacade::currentPage("Global E-commerce")
+                               ->facebook()
+                               ->twitter()
+                               ->linkedIn()
+                               ->reddit()
+                               ->telegram()
+                               ->whatsApp()
+                               ->getRawLinks(),
+
             "conversations"=>Conversation::with(["messages.user:id,avatar","customer:id,name,avatar","vendor:id,shop_name,avatar"])
                                          ->where("customer_id", auth()->user() ? auth()->user()->id : null)
                                          ->orWhere("vendor_id", auth()->user() ? auth()->user()->id : null)
