@@ -27,81 +27,68 @@ defineProps({
         <ul
           class="mb-5 flex list-none flex-col flex-wrap items-center justify-between w-full border-b-2 pl-0 md:flex-row"
           role="tablist"
-          data-te-nav-ref
         >
-          <li role="presentation" class="flex-grow basis-0 text-center h-full">
-            <a
-              href="#tabs-home02"
-              class="block border-x-0 border-t-0 border-b-2 border-transparent px-7 pt-4 pb-3.5 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
-              data-te-toggle="pill"
-              data-te-target="#tabs-home02"
-              data-te-nav-active
-              role="tab"
-              aria-controls="tabs-home02"
-              aria-selected="true"
+          <li class="flex-grow basis-0 text-center h-full" role="presentation">
+            <Link
+              :href="route('my-account.edit')"
+              :data="{ tab: 'edit-profile' }"
+              class="block border-transparent px-7 pt-4 pb-3.5 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100"
+              :class="{
+                'bg-neutral-200':
+                  $page.props.ziggy.query.tab === 'edit-profile' ||
+                  !$page.props.ziggy.query.tab,
+              }"
             >
-              <i class="fa-solid fa-address-card"></i>
+              <i class="fa-solid fa-address-card mr-2 text-sm"></i>
               Edit Profile
-            </a>
+            </Link>
           </li>
-          <li role="presentation" class="flex-grow basis-0 text-center h-full">
-            <a
-              href="#tabs-profile02"
-              class="focus:border-transparen block border-x-0 border-t-0 border-b-2 border-transparent px-7 pt-4 pb-3.5 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
-              data-te-toggle="pill"
-              data-te-target="#tabs-profile02"
-              role="tab"
-              aria-controls="tabs-profile02"
-              aria-selected="false"
+          <li class="flex-grow basis-0 text-center h-full" role="presentation">
+            <Link
+              :href="route('my-account.edit')"
+              :data="{ tab: 'change-password' }"
+              class="block border-transparent px-7 pt-4 pb-3.5 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100"
+              :class="{
+                'bg-neutral-200':
+                  $page.props.ziggy.query.tab === 'change-password' ||
+                  !$page.props.ziggy.query.tab,
+              }"
             >
-              <i class="fa-solid fa-key"></i>
+              <i class="fa-solid fa-key mr-2 text-sm"></i>
               Change Password
-            </a>
+            </Link>
           </li>
-          <li role="presentation" class="flex-grow basis-0 text-center h-full">
-            <a
-              href="#tabs-messages02"
-              class="block border-x-0 border-t-0 border-b-2 border-transparent px-7 pt-4 pb-3.5 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
-              data-te-toggle="pill"
-              data-te-target="#tabs-messages02"
-              role="tab"
-              aria-controls="tabs-messages02"
-              aria-selected="false"
+          <li class="flex-grow basis-0 text-center h-full" role="presentation">
+            <Link
+              :href="route('my-account.edit')"
+              :data="{ tab: 'delete-account' }"
+              class="block border-transparent px-7 pt-4 pb-3.5 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100"
+              :class="{
+                'bg-neutral-200':
+                  $page.props.ziggy.query.tab === 'delete-account' ||
+                  !$page.props.ziggy.query.tab,
+              }"
             >
-              <i class="fa-solid fa-trash"></i>
+              <i class="fa-solid fa-trash mr-2 text-sm"></i>
               Delete Account
-            </a>
+            </Link>
           </li>
         </ul>
 
         <div class="mb-6 w-full min-h-[250px]">
-          <div
-            class="hidden opacity-100 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
-            id="tabs-home02"
-            role="tabpanel"
-            aria-labelledby="tabs-home-tab02"
-            data-te-tab-active
-          >
-            <UpdateProfileInformationForm
-              :must-verify-email="mustVerifyEmail"
-              :status="status"
-            />
-          </div>
-          <div
-            class="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
-            id="tabs-profile02"
-            role="tabpanel"
-            aria-labelledby="tabs-profile-tab02"
-          >
-            <UpdatePasswordForm />
-          </div>
-          <div
-            class="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
-            id="tabs-messages02"
-            role="tabpanel"
-            aria-labelledby="tabs-profile-tab02"
-          >
-            <DeleteUserForm />
+          <div class="w-full">
+            <div v-if="$page.props.ziggy.query.tab === 'edit-profile'">
+              <UpdateProfileInformationForm
+                :must-verify-email="mustVerifyEmail"
+                :status="status"
+              />
+            </div>
+            <div v-else-if="$page.props.ziggy.query.tab === 'change-password'">
+              <UpdatePasswordForm />
+            </div>
+            <div v-else-if="$page.props.ziggy.query.tab === 'delete-account'">
+              <DeleteUserForm />
+            </div>
           </div>
         </div>
       </div>
