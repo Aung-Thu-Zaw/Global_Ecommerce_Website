@@ -7,10 +7,12 @@ import { computed, reactive, ref } from "vue";
 import { Link, router, usePage, Head } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+import ProductCard from "@/Components/Cards/ProductCard.vue";
 
 const props = defineProps({
   specificShopProducts: Object,
   product: Object,
+  relatedProducts: Object,
   productQuestions: Object,
   paginateProductReviews: Object,
   productReviews: Object,
@@ -373,6 +375,20 @@ const saveToWatchlist = () => {
       :specificShopProducts="specificShopProducts"
       :productReviewsAvg="productReviewsAvg"
     />
+
+    <section v-if="relatedProducts.length" class="pt-10 pb-20 bg-white">
+      <div class="container max-w-screen-xl mx-auto px-4">
+        <h2 class="text-2xl font-semibold mb-8">Related products</h2>
+
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
+        >
+          <div v-for="product in relatedProducts" :key="product.id">
+            <ProductCard :product="product"></ProductCard>
+          </div>
+        </div>
+      </div>
+    </section>
   </AppLayout>
 </template>
 

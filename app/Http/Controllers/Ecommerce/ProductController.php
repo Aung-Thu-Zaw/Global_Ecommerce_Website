@@ -64,8 +64,19 @@ class ProductController extends Controller
         $specificShopProducts=Product::select("user_id", "image", "name", "slug", "price", "discount")
                                      ->where("user_id", $product->shop->id)
                                      ->where("id", "!=", $product->id)
-                                     ->limit(10)
+                                     ->limit(5)
                                      ->get();
+
+
+
+        $relatedProducts = Product::select("id", "image", "name", "slug", "price", "discount")
+                                  ->with("productReviews:id,product_id,rating")
+                                  ->where("status", "active")
+                                  ->where('category_id', $product->category_id)
+                                  ->where('id', '!=', $product->id)
+                                  ->limit(10)
+                                  ->get();
+
 
 
         $productQuestions=ProductQuestion::with(["user","productAnswer.user:id,shop_name,avatar","product:id,user_id"])
@@ -88,6 +99,6 @@ class ProductController extends Controller
                                    ->Where("vendor_id", $product->user_id)
                                    ->first();
 
-        return inertia("Ecommerce/Products/Detail", compact("product", "specificShopProducts", "productQuestions", "paginateProductReviews", "productReviews", "productReviewsAvg", "conversation"));
+        return inertia("Ecommerce/Products/Detail", compact("product", "specificShopProducts", "relatedProducts", "productQuestions", "paginateProductReviews", "productReviews", "productReviewsAvg", "conversation"));
     }
 }
