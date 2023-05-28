@@ -1,9 +1,14 @@
 <script setup>
 import WatchListItem from "@/Components/WatchListItem.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
+import ProductCard from "@/Components/Cards/ProductCard.vue";
 import { Link, Head } from "@inertiajs/vue3";
 
-const props = defineProps({ shops: Object, watchlists: Object });
+const props = defineProps({
+  shops: Object,
+  watchlists: Object,
+  recommendedProducts: Object,
+});
 </script>
 
 
@@ -66,23 +71,17 @@ const props = defineProps({ shops: Object, watchlists: Object });
     </section>
 
     <!-- SECTION-RECOMMENDED -->
-    <section class="pt-10 pb-20 bg-gray-100">
+    <section v-if="recommendedProducts.length" class="pt-10 pb-20 bg-gray-100">
       <div class="container max-w-screen-xl mx-auto px-4">
         <h2 class="text-2xl font-semibold mb-8">Recommended products</h2>
 
-        <!-- <div
-          v-if="products"
+        <div
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
         >
-          <div v-for="product in products" :key="product.id">
+          <div v-for="product in recommendedProducts" :key="product.id">
             <ProductCard :product="product"></ProductCard>
           </div>
         </div>
-        <div v-else>
-          <p class="text-center text-xl font-bold text-red-600 animate-bounce">
-            No Product Found!
-          </p>
-        </div> -->
       </div>
     </section>
   </AppLayout>

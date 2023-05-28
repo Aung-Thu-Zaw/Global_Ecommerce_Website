@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Ecommerce;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WatchlistRequest;
+use App\Models\Product;
 use App\Models\User;
+use App\Models\UserProductInteraction;
 use App\Models\Watchlist;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -21,7 +24,21 @@ class WatchlistController extends Controller
 
         $watchlists->load(["product.shop:id,shop_name","product.brand:id,name","product.sizes","product.colors"]);
 
-        return inertia("User/MyWatchlist/Index", compact("shops", "watchlists"));
+        $mostViewedProducts=UserProductInteraction::where('user_id', auth()->user()->id)
+                                                  ->groupBy('product_id')
+                                                  ->pluck('product_id')
+                                                  ->toArray();
+
+        $recommendedProducts = Product::select("id", "image", "name", "slug", "price", "discount")
+                                      ->with("productReviews:id,product_id,rating")
+                                      ->where("status", "active")
+                                      ->whereIn('id', $mostViewedProducts)
+                                      ->inRandomOrder()
+                                      ->limit(10)
+                                      ->get();
+
+
+        return inertia("User/MyWatchlist/Index", compact("shops", "watchlists", "recommendedProducts"));
     }
 
     public function store(WatchlistRequest $request): RedirectResponse

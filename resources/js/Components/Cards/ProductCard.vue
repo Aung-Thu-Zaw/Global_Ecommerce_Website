@@ -24,6 +24,27 @@ if (props.product.product_reviews) {
     2
   );
 }
+
+const handleTrackInteraction = () => {
+  router.post(route("product.track-interaction"), {
+    user_id: usePage().props.auth.user?.id,
+    product_id: props.product.id,
+  });
+};
+
+const handleGoToProductDetailPage = (slug) => {
+  router.get(
+    route("products.show", slug),
+    {},
+    {
+      onSuccess: () => {
+        if (usePage().props.auth.user) {
+          handleTrackInteraction();
+        }
+      },
+    }
+  );
+};
 </script>
 
 <template>
@@ -31,7 +52,10 @@ if (props.product.product_reviews) {
     <article
       class="shadow-sm rounded bg-white border border-gray-200 p-2 overflow-hidden h-[460px]"
     >
-      <a href="#" class="relative block h-[250px]">
+      <h3
+        @click="handleGoToProductDetailPage(product.slug)"
+        class="relative block h-[250px] cursor-pointer"
+      >
         <img
           :src="product.image"
           class="mx-auto h-full object-cover"
@@ -43,7 +67,7 @@ if (props.product.product_reviews) {
         >
           Special Offer
         </span>
-      </a>
+      </h3>
 
       <div class="p-4 border-t border-t-gray-200">
         <!-- <span
@@ -53,12 +77,12 @@ if (props.product.product_reviews) {
           Official
         </span> -->
         <h6 class="text-md mt-2">
-          <Link
-            :href="route('products.show', product.slug)"
-            class="text-gray-600 line-clamp-2"
+          <h3
+            @click="handleGoToProductDetailPage(product.slug)"
+            class="text-gray-600 line-clamp-2 cursor-pointer"
           >
             {{ product.name }}
-          </Link>
+          </h3>
         </h6>
 
         <div class="my-2">
@@ -88,7 +112,7 @@ if (props.product.product_reviews) {
           </div>
         </div>
 
-        <div v-if="averageRating!='NaN'" class="flex items-center">
+        <div v-if="averageRating != 'NaN'" class="flex items-center">
           <svg
             aria-hidden="true"
             class="w-4 h-4"

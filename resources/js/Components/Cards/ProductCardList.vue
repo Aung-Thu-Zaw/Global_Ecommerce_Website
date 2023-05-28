@@ -1,6 +1,6 @@
 <script setup>
 import { Link, router, usePage } from "@inertiajs/vue3";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
@@ -24,13 +24,34 @@ if (props.product.product_reviews) {
     2
   );
 }
+
+const handleTrackInteraction = () => {
+  router.post(route("product.track-interaction"), {
+    user_id: usePage().props.auth.user?.id,
+    product_id: props.product.id,
+  });
+};
+
+const handleGoToProductDetailPage = (slug) => {
+  router.get(
+    route("products.show", slug),
+    {},
+    {
+      onSuccess: () => {
+        if (usePage().props.auth.user) {
+          handleTrackInteraction();
+        }
+      },
+    }
+  );
+};
 </script>
 
 <template>
   <div v-if="product" class="w-full">
-    <a
-      href="#"
-      class="border hover:shadow-md rounded-sm bg-white p-5 w-full h-[280px] flex items-start justify-between relative overflow-hidden"
+    <div
+      @click="handleGoToProductDetailPage(product.slug)"
+      class="border hover:shadow-md rounded-sm bg-white p-5 w-full h-[280px] flex items-start justify-between relative overflow-hidden cursor-pointer"
     >
       <div class="flex flex-col items-start w-[500px] mr-3">
         <img
@@ -61,12 +82,7 @@ if (props.product.product_reviews) {
 
       <div class="w-full">
         <h1 class="line-clamp-1 font-semibold text-slate-600 text-md mb-3">
-          <Link
-            :href="route('products.show', product.slug)"
-            class="text-gray-600 line-clamp-2"
-          >
-            {{ product.name }}
-          </Link>
+          {{ product.name }}
         </h1>
         <p class="text-sm text-slate-500 line-clamp-6 mb-5">
           {{ product.description }}
@@ -102,7 +118,7 @@ if (props.product.product_reviews) {
             </div>
           </div>
 
-          <div v-if="averageRating!='NaN'" class="flex items-center">
+          <div v-if="averageRating != 'NaN'" class="flex items-center">
             <svg
               aria-hidden="true"
               class="w-4 h-4"
@@ -181,7 +197,7 @@ if (props.product.product_reviews) {
           </div>
         </div>
       </div>
-    </a>
+    </div>
   </div>
 </template>
 

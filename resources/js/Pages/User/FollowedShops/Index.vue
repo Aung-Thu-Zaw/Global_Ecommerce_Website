@@ -1,5 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
+import ProductCard from "@/Components/Cards/ProductCard.vue";
 import { Link, Head, router, usePage } from "@inertiajs/vue3";
 import { inject } from "vue";
 import { toast } from "vue3-toastify";
@@ -7,6 +8,8 @@ import "vue3-toastify/dist/index.css";
 
 const props = defineProps({
   followedShops: Object,
+  recommendedProducts: Object,
+  justForYouProducts: Object,
 });
 
 const swal = inject("$swal");
@@ -57,7 +60,7 @@ const handleUnfollowShop = async (shop_id) => {
                 class="w-14 h-14 object-cover rounded-full ring-2 ring-slate-300 shadow-md mr-5"
               />
               <h2 class="text-lg font-bold text-slate-700">
-                <Link :href="route('shop', followedShop.followable.id)">
+                <Link :href="route('shop.show', followedShop.followable.id)">
                   {{ followedShop.followable.shop_name }}
                 </Link>
 
@@ -79,7 +82,7 @@ const handleUnfollowShop = async (shop_id) => {
                 Following
               </button>
               <Link
-                :href="route('shop', followedShop.followable_id)"
+                :href="route('shop.show', followedShop.followable_id)"
                 class="bg-blue-500 text-sm font-bold px-5 rounded-sm shadow-sm text-white mx-2 py-3 hover:bg-blue-600"
               >
                 <i class="fa-solid fa-shop"></i>
@@ -104,24 +107,33 @@ const handleUnfollowShop = async (shop_id) => {
       </Link>
     </section>
 
-    <!-- SECTION-RECOMMENDED -->
-    <section class="pt-10 pb-20 bg-gray-100">
+    <section v-if="recommendedProducts" class="pt-10 pb-20 bg-gray-100">
       <div class="container max-w-screen-xl mx-auto px-4">
         <h2 class="text-2xl font-semibold mb-8">Recommended products</h2>
 
-        <!-- <div
-          v-if="products"
+        <div
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
         >
-          <div v-for="product in products" :key="product.id">
+          <div v-for="product in recommendedProducts" :key="product.id">
             <ProductCard :product="product"></ProductCard>
           </div>
         </div>
-        <div v-else>
-          <p class="text-center text-xl font-bold text-red-600 animate-bounce">
-            No Product Found!
-          </p>
-        </div> -->
+      </div>
+    </section>
+    <section
+      v-else-if="justForYouProducts.length"
+      class="pt-10 pb-20 bg-gray-100"
+    >
+      <div class="container max-w-screen-xl mx-auto px-4">
+        <h2 class="text-2xl font-semibold mb-8">Just For You</h2>
+
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
+        >
+          <div v-for="product in justForYouProducts" :key="product.id">
+            <ProductCard :product="product"></ProductCard>
+          </div>
+        </div>
       </div>
     </section>
   </AppLayout>

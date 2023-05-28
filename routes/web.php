@@ -24,6 +24,7 @@ use App\Http\Controllers\Ecommerce\ShopController;
 use App\Http\Controllers\Ecommerce\ShopReviewController;
 use App\Http\Controllers\Ecommerce\ShopReviewReplyController;
 use App\Http\Controllers\Ecommerce\SubscriberController;
+use App\Http\Controllers\Ecommerce\UserProductInteractionController;
 use App\Http\Controllers\User\MyAccountController;
 use App\Http\Controllers\Ecommerce\WatchlistController;
 use App\Http\Controllers\User\MyOrderController;
@@ -62,6 +63,9 @@ Route::get('/collections', [CollectionController::class,"index"])->name("collect
 Route::get('/collections/{collection}/products', [CollectionController::class,"show"])->name("collections.show");
 
 Route::middleware(["auth","verified"])->group(function () {
+
+
+    Route::post("/product/track-interaction", [UserProductInteractionController::class,"store"])->name("product.track-interaction");
 
     Route::post("/conversation", [ConversationController::class,"store"])->name("conversation.store");
     Route::post("/conversation/message", [MessageController::class,"store"])->name("message.store");
