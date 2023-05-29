@@ -126,7 +126,7 @@ import { Link } from "@inertiajs/vue3";
                 >
                   <li v-for="vendor in $page.props.vendors" :key="vendor.id">
                     <Link
-                      :href="route('shop.index', vendor.id)"
+                      :href="route('shop.show', vendor.id)"
                       :data="{ tab: 'home' }"
                       class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >

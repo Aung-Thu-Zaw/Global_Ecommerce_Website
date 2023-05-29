@@ -119,7 +119,6 @@ const handleSearch = () => {
 const handelRemoveSearch = () => {
   params.search = "";
   router.get(route("shop.show", props.shop.id), {
-    search: params.search,
     sort: params.sort,
     direction: params.direction,
     page: params.page,
