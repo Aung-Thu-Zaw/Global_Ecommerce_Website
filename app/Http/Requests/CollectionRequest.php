@@ -36,4 +36,15 @@ class CollectionRequest extends FormRequest
 
         return $rules;
     }
+
+    /**
+    *     @return array<string>
+    */
+    public function messages(): array
+    {
+        return [
+            "title.required" => "Collection title is required.",
+            "description.required" => "Collection description is required.",
+        ];
+    }
 }

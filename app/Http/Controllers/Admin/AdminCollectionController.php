@@ -16,13 +16,12 @@ class AdminCollectionController extends Controller
     public function index(): Response|ResponseFactory
     {
         $collections=Collection::search(request("search"))
-                      ->query(function (Builder $builder) {
-                          $builder->with("products:id,collection_id,name");
-                      })
-                      ->orderBy(request("sort", "id"), request("direction", "desc"))
-                      ->paginate(request("per_page", 10))
-                      ->appends(request()->all());
-
+                               ->query(function (Builder $builder) {
+                                   $builder->with("products:id,collection_id");
+                               })
+                               ->orderBy(request("sort", "id"), request("direction", "desc"))
+                               ->paginate(request("per_page", 10))
+                               ->appends(request()->all());
 
         return inertia("Admin/Collections/Index", compact("collections"));
     }
@@ -65,17 +64,17 @@ class AdminCollectionController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashCollections=Collection::search(request("search"))
-                                ->onlyTrashed()
-                                ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                ->paginate(request("per_page", 10))
-                                ->appends(request()->all());
+                                    ->onlyTrashed()
+                                    ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                    ->paginate(request("per_page", 10))
+                                    ->appends(request()->all());
 
         return inertia("Admin/Collections/Trash", compact("trashCollections"));
     }
 
     public function restore(Request $request, int $id): RedirectResponse
     {
-        $collection = Collection::onlyTrashed()->where("id", $id)->first();
+        $collection = Collection::onlyTrashed()->findOrFail($id);
 
         $collection->restore();
 
@@ -84,7 +83,7 @@ class AdminCollectionController extends Controller
 
     public function forceDelete(Request $request, int $id): RedirectResponse
     {
-        $collection = Collection::onlyTrashed()->where("id", $id)->first();
+        $collection = Collection::onlyTrashed()->findOrFail($id);
 
         Collection::deleteImage($collection);
 

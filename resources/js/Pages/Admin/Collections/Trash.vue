@@ -9,10 +9,8 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Collections/Breadcrumb.vue";
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, Head } from "@inertiajs/vue3";
 import { inject, reactive, watch } from "vue";
-import { router } from "@inertiajs/vue3";
-import { usePage } from "@inertiajs/vue3";
+import { router, usePage, Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
   trashCollections: Object,
@@ -38,9 +36,9 @@ const handleSearchBox = () => {
 
 watch(
   () => params.search,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/collections/trash",
+      route("admin.collections.trash"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -57,9 +55,9 @@ watch(
 
 watch(
   () => params.per_page,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/collections/trash",
+      route("admin.collections.trash"),
       {
         search: params.search,
         page: params.page,
@@ -80,7 +78,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/collections/trash",
+    route("admin.collections.trash"),
     {
       search: params.search,
       page: params.page,
@@ -108,7 +106,7 @@ const handleRestore = async (trashCollectionId) => {
     router.post(
       route("admin.collections.restore", {
         id: trashCollectionId,
-        page: props.trashCollections.current_page,
+        page: params.current_page,
         per_page: params.per_page,
       })
     );
@@ -138,7 +136,7 @@ const handleDelete = async (trashCollectionId) => {
     router.delete(
       route("admin.collections.forceDelete", {
         id: trashCollectionId,
-        page: props.trashCollections.current_page,
+        page: params.current_page,
         per_page: params.per_page,
       })
     );
@@ -167,7 +165,7 @@ const handlePermanentlyDelete = async () => {
   if (result.isConfirmed) {
     router.get(
       route("admin.collections.permanentlyDelete", {
-        page: props.trashCollections.current_page,
+        page: params.current_page,
         per_page: params.per_page,
       })
     );
@@ -186,8 +184,6 @@ const handlePermanentlyDelete = async () => {
     <Head title="Trash Collections" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Breadcrumb  -->
-
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
           <li aria-current="page">
@@ -215,6 +211,7 @@ const handlePermanentlyDelete = async () => {
 
         <div>
           <Link
+            as="button"
             :href="route('admin.collections.index')"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
@@ -224,7 +221,6 @@ const handlePermanentlyDelete = async () => {
         </div>
       </div>
 
-      <!-- Search Input Form -->
       <div class="flex items-center justify-end mb-5">
         <form class="w-[350px] relative">
           <input
@@ -256,7 +252,6 @@ const handlePermanentlyDelete = async () => {
         </div>
       </div>
 
-      <!-- Auto delete description and button  -->
       <p class="text-left text-sm font-bold mb-2 text-warning-600">
         Collections in the Trash will be automatically deleted after 60 days.
         <button
@@ -294,7 +289,6 @@ const handlePermanentlyDelete = async () => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Image </HeaderTh>
           <HeaderTh @click="updateSorting('title')">
             Title
             <i
@@ -320,28 +314,53 @@ const handlePermanentlyDelete = async () => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh @click="updateSorting('created_at')">
-            Created At
+          <HeaderTh @click="updateSorting('description')">
+            Description
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
               :class="{
                 'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'created_at',
+                  params.direction === 'asc' && params.sort === 'description',
                 'visually-hidden':
                   params.direction !== '' &&
                   params.direction !== 'asc' &&
-                  params.sort === 'created_at',
+                  params.sort === 'description',
               }"
             ></i>
             <i
               class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
               :class="{
                 'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'created_at',
+                  params.direction === 'desc' && params.sort === 'description',
                 'visually-hidden':
                   params.direction !== '' &&
                   params.direction !== 'desc' &&
-                  params.sort === 'created_at',
+                  params.sort === 'description',
+              }"
+            ></i>
+          </HeaderTh>
+          <HeaderTh @click="updateSorting('deleted_at')">
+            Deleted At
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'deleted_at',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'deleted_at',
+              }"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'deleted_at',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'deleted_at',
               }"
             ></i>
           </HeaderTh>
@@ -354,15 +373,9 @@ const handlePermanentlyDelete = async () => {
             :key="trashCollection.id"
           >
             <BodyTh>{{ trashCollection.id }}</BodyTh>
-            <Td>
-              <img
-                :src="trashCollection.image"
-                class="w-[50px] h-[50px] rounded-sm object-cover shadow-lg ring-2 ring-slate-300"
-                alt=""
-              />
-            </Td>
             <Td>{{ trashCollection.title }}</Td>
-            <Td>{{ trashCollection.created_at }}</Td>
+            <Td>{{ trashCollection.description }}</Td>
+            <Td>{{ trashCollection.deleted_at }}</Td>
             <Td>
               <button
                 @click="handleRestore(trashCollection.id)"
@@ -387,7 +400,7 @@ const handlePermanentlyDelete = async () => {
       <NotAvaliableData v-if="!trashCollections.data.length" />
 
       <!-- Pagination -->
-      <pagination class="mt-6" :links="trashCollections.links" />
+      <Pagination class="mt-6" :links="trashCollections.links" />
     </div>
   </AdminDashboardLayout>
 </template>

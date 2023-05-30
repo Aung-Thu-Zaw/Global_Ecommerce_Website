@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Scout\Searchable;
 use Spatie\Sluggable\HasSlug;
@@ -16,21 +15,19 @@ class Collection extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    use CascadeSoftDeletes;
     use Searchable;
     use HasSlug;
 
     /**
     * @var string[]
     */
-    protected array $cascadeDeletes = ['products'];
     protected $guarded=[];
 
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('title')
-            ->saveSlugsTo('slug');
+                          ->generateSlugsFrom('title')
+                          ->saveSlugsTo('slug');
     }
 
     public function getRouteKeyName()
@@ -46,6 +43,7 @@ class Collection extends Model
     {
         return [
             'title' => $this->title,
+            'description' => $this->description,
         ];
     }
 
@@ -59,7 +57,6 @@ class Collection extends Model
         );
     }
 
-
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Collection, never>
     */
@@ -70,6 +67,15 @@ class Collection extends Model
         );
     }
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Collection, never>
+    */
+    protected function deletedAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => date("j-F-Y", strtotime($value)),
+        );
+    }
 
     /**
     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Product>
@@ -78,7 +84,6 @@ class Collection extends Model
     {
         return $this->hasMany(Product::class);
     }
-
 
     public static function deleteImage(Collection $collection): void
     {

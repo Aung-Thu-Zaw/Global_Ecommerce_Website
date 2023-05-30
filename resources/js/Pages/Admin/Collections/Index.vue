@@ -9,10 +9,8 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Collections/Breadcrumb.vue";
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, Head } from "@inertiajs/vue3";
 import { reactive, watch, inject } from "vue";
-import { router } from "@inertiajs/vue3";
-import { usePage } from "@inertiajs/vue3";
+import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
   collections: Object,
@@ -34,9 +32,9 @@ const handleSearchBox = () => {
 
 watch(
   () => params.search,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/collections",
+      route("admin.collections.index"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -44,7 +42,6 @@ watch(
         direction: params.direction,
       },
       {
-        replace: true,
         preserveState: true,
       }
     );
@@ -53,9 +50,9 @@ watch(
 
 watch(
   () => params.per_page,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/collections",
+      route("admin.collections.index"),
       {
         search: params.search,
         page: params.page,
@@ -64,7 +61,6 @@ watch(
         direction: params.direction,
       },
       {
-        replace: true,
         preserveState: true,
       }
     );
@@ -76,7 +72,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/collections",
+    route("admin.collections.index"),
     {
       search: params.search,
       page: params.page,
@@ -84,67 +80,37 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    { preserveState: true }
   );
 };
 
 const handleDelete = async (collection) => {
-  if (collection.products.length > 0) {
-    const result = await swal({
-      icon: "error",
-      title:
-        "You can't delete this collection because this collection have products?",
-      text: "If you click 'Delete, whatever!' button products will be automatically deleted.You will be able to restore this collection in the trash!",
-      showCancelButton: true,
-      confirmButtonText: "Delete, whatever!",
-      confirmButtonColor: "#ef4444",
-      timer: 20000,
-      timerProgressBar: true,
-      reverseButtons: true,
-    });
-    if (result.isConfirmed) {
-      router.delete(
-        route("admin.collections.destroy", {
-          collection: collection.slug,
-          page: props.collections.current_page,
-          per_page: params.per_page,
-        })
-      );
-      setTimeout(() => {
-        swal({
-          icon: "success",
-          title: usePage().props.flash.successMessage,
-        });
-      }, 500);
-    }
-  } else {
-    const result = await swal({
-      icon: "warning",
-      title: "Are you sure you want to delete this collection?",
-      text: "You will be able to restore this collection in the trash!",
-      showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      confirmButtonColor: "#ef4444",
-      timer: 20000,
-      timerProgressBar: true,
-      reverseButtons: true,
-    });
+  const result = await swal({
+    icon: "warning",
+    title: "Are you sure you want to delete this collection?",
+    text: "You will be able to restore this collection in the trash!",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it!",
+    confirmButtonColor: "#ef4444",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
 
-    if (result.isConfirmed) {
-      router.delete(
-        route("admin.collections.destroy", {
-          collection: collection.slug,
-          page: props.collections.current_page,
-          per_page: params.per_page,
-        })
-      );
-      setTimeout(() => {
-        swal({
-          icon: "success",
-          title: usePage().props.flash.successMessage,
-        });
-      }, 500);
-    }
+  if (result.isConfirmed) {
+    router.delete(
+      route("admin.collections.destroy", {
+        collection: collection.slug,
+        page: props.collections.current_page,
+        per_page: params.per_page,
+      })
+    );
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
   }
 };
 
@@ -161,10 +127,8 @@ if (usePage().props.flash.successMessage) {
     <Head title="Collections" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Category Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb />
-
         <div>
           <Link
             as="button"
@@ -180,6 +144,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <Link
+          as="button"
           :href="route('admin.collections.create')"
           :data="{
             per_page: params.per_page,
@@ -189,7 +154,6 @@ if (usePage().props.flash.successMessage) {
           <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
           Add Collection</Link
         >
-        <!-- Search Input Form -->
         <div class="flex items-center">
           <form class="w-[350px] relative">
             <input
@@ -330,7 +294,6 @@ if (usePage().props.flash.successMessage) {
         <tbody v-if="collections.data.length">
           <Tr v-for="collection in collections.data" :key="collection.id">
             <BodyTh>{{ collection.id }}</BodyTh>
-
             <Td>{{ collection.title }}</Td>
             <Td>{{ collection.description }}</Td>
             <Td>{{ collection.created_at }}</Td>
@@ -363,7 +326,7 @@ if (usePage().props.flash.successMessage) {
       <NotAvaliableData v-if="!collections.data.length" />
 
       <!-- Pagination -->
-      <pagination class="mt-6" :links="collections.links" />
+      <Pagination class="mt-6" :links="collections.links" />
     </div>
   </AdminDashboardLayout>
 </template>

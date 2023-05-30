@@ -18,7 +18,7 @@ class AdminBrandController extends Controller
     {
         $brands=Brand::search(request("search"))
                      ->query(function (Builder $builder) {
-                         $builder->with("products:id,brand_id,name");
+                         $builder->with("products:id,brand_id");
                      })
                      ->orderBy(request("sort", "id"), request("direction", "desc"))
                      ->paginate(request("per_page", 10))
