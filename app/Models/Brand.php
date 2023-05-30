@@ -29,15 +29,14 @@ class Brand extends Model
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('name')
-            ->saveSlugsTo('slug');
+                          ->generateSlugsFrom('name')
+                          ->saveSlugsTo('slug');
     }
 
     public function getRouteKeyName()
     {
         return 'slug';
     }
-
 
     /**
     *     @return array<string>
@@ -46,6 +45,7 @@ class Brand extends Model
     {
         return [
             'name' => $this->name,
+            'description' => $this->description,
         ];
     }
 
@@ -59,7 +59,6 @@ class Brand extends Model
         );
     }
 
-
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Brand, never>
     */
@@ -70,6 +69,15 @@ class Brand extends Model
         );
     }
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Brand, never>
+    */
+    protected function deletedAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => date("j-F-Y", strtotime($value)),
+        );
+    }
 
     /**
     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Product>
@@ -78,7 +86,6 @@ class Brand extends Model
     {
         return $this->hasMany(Product::class);
     }
-
 
     public static function deleteImage(Brand $brand): void
     {

@@ -17,13 +17,12 @@ class AdminBrandController extends Controller
     public function index(): Response|ResponseFactory
     {
         $brands=Brand::search(request("search"))
-                      ->query(function (Builder $builder) {
-                          $builder->with("products:id,brand_id,name");
-                      })
-                      ->orderBy(request("sort", "id"), request("direction", "desc"))
-                      ->paginate(request("per_page", 10))
-                      ->appends(request()->all());
-
+                     ->query(function (Builder $builder) {
+                         $builder->with("products:id,brand_id,name");
+                     })
+                     ->orderBy(request("sort", "id"), request("direction", "desc"))
+                     ->paginate(request("per_page", 10))
+                     ->appends(request()->all());
 
         return inertia("Admin/Brands/Index", compact("brands"));
     }
@@ -66,17 +65,17 @@ class AdminBrandController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashBrands=Brand::search(request("search"))
-                                ->onlyTrashed()
-                                ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                ->paginate(request("per_page", 10))
-                                ->appends(request()->all());
+                          ->onlyTrashed()
+                          ->orderBy(request("sort", "id"), request("direction", "desc"))
+                          ->paginate(request("per_page", 10))
+                          ->appends(request()->all());
 
         return inertia("Admin/Brands/Trash", compact("trashBrands"));
     }
 
     public function restore(Request $request, int $id): RedirectResponse
     {
-        $brand = Brand::onlyTrashed()->where("id", $id)->first();
+        $brand = Brand::onlyTrashed()->findOrFail($id);
 
         $brand->restore();
 
@@ -85,7 +84,7 @@ class AdminBrandController extends Controller
 
     public function forceDelete(Request $request, int $id): RedirectResponse
     {
-        $brand = Brand::onlyTrashed()->where("id", $id)->first();
+        $brand = Brand::onlyTrashed()->findOrFail($id);
 
         Brand::deleteImage($brand);
 

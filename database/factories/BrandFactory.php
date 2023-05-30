@@ -21,7 +21,7 @@ class BrandFactory extends Factory
             "slug"=>fake()->unique()->slug(),
             "description"=>fake()->paragraph(20),
             "image"=>fake()->imageUrl(),
-            "created_at"=>fake()->dateTimeBetween("-9 months", now()),
+            "created_at"=>fake()->dateTimeBetween("-5 months", now()),
         ];
     }
 }

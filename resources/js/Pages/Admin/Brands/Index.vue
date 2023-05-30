@@ -9,10 +9,8 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Brands/Breadcrumb.vue";
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, Head } from "@inertiajs/vue3";
 import { reactive, watch, inject } from "vue";
-import { router } from "@inertiajs/vue3";
-import { usePage } from "@inertiajs/vue3";
+import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
   brands: Object,
@@ -34,9 +32,9 @@ const handleSearchBox = () => {
 
 watch(
   () => params.search,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/brands",
+      route("admin.brands.index"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -44,7 +42,6 @@ watch(
         direction: params.direction,
       },
       {
-        replace: true,
         preserveState: true,
       }
     );
@@ -53,9 +50,9 @@ watch(
 
 watch(
   () => params.per_page,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/brands",
+      route("admin.brands.index"),
       {
         search: params.search,
         page: params.page,
@@ -64,7 +61,6 @@ watch(
         direction: params.direction,
       },
       {
-        replace: true,
         preserveState: true,
       }
     );
@@ -76,7 +72,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/brands",
+    route("admin.brands.index"),
     {
       search: params.search,
       page: params.page,
@@ -84,7 +80,7 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    { preserveState: true }
   );
 };
 
@@ -105,7 +101,7 @@ const handleDelete = async (brand) => {
       router.delete(
         route("admin.brands.destroy", {
           brand: brand.slug,
-          page: props.brands.current_page,
+          page: params.current_page,
           per_page: params.per_page,
         })
       );
@@ -133,7 +129,7 @@ const handleDelete = async (brand) => {
       router.delete(
         route("admin.brands.destroy", {
           brand: brand.slug,
-          page: props.brands.current_page,
+          page: params.current_page,
           per_page: params.per_page,
         })
       );
@@ -160,7 +156,6 @@ if (usePage().props.flash.successMessage) {
     <Head title="Brands" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Category Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb />
 
@@ -179,6 +174,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <Link
+          as="button"
           :href="route('admin.brands.create')"
           :data="{
             per_page: params.per_page,
@@ -186,9 +182,8 @@ if (usePage().props.flash.successMessage) {
           class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700"
         >
           <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
-          Add Brand</Link
-        >
-        <!-- Search Input Form -->
+          Add Brand
+        </Link>
         <div class="flex items-center">
           <form class="w-[350px] relative">
             <input
@@ -274,28 +269,53 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh @click="updateSorting('created_at')">
-            Created At
+          <HeaderTh @click="updateSorting('description')">
+            Description
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
               :class="{
                 'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'created_at',
+                  params.direction === 'asc' && params.sort === 'description',
                 'visually-hidden':
                   params.direction !== '' &&
                   params.direction !== 'asc' &&
-                  params.sort === 'created_at',
+                  params.sort === 'description',
               }"
             ></i>
             <i
               class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
               :class="{
                 'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'created_at',
+                  params.direction === 'desc' && params.sort === 'description',
                 'visually-hidden':
                   params.direction !== '' &&
                   params.direction !== 'desc' &&
-                  params.sort === 'created_at',
+                  params.sort === 'description',
+              }"
+            ></i>
+          </HeaderTh>
+          <HeaderTh @click="updateSorting('created_at')">
+            Created At
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'description',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'description',
+              }"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'description',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'description',
               }"
             ></i>
           </HeaderTh>
@@ -313,6 +333,10 @@ if (usePage().props.flash.successMessage) {
               />
             </Td>
             <Td>{{ brand.name }}</Td>
+            <Td>
+              <span v-html="brand.description" class="line-clamp-1 w-[500px]">
+              </span>
+            </Td>
             <Td>{{ brand.created_at }}</Td>
             <Td>
               <Link
@@ -334,22 +358,14 @@ if (usePage().props.flash.successMessage) {
                 <i class="fa-solid fa-xmark"></i>
                 Delete
               </button>
-              <button
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1 mr-3"
-              >
-                <i class="fa-solid fa-eye"></i>
-                Details
-              </button>
             </Td>
           </Tr>
         </tbody>
       </TableContainer>
 
-      <!-- Not Avaliable Data -->
       <NotAvaliableData v-if="!brands.data.length" />
 
-      <!-- Pagination -->
-      <pagination class="mt-6" :links="brands.links" />
+      <Pagination class="mt-6" :links="brands.links" />
     </div>
   </AdminDashboardLayout>
 </template>
