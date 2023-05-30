@@ -28,12 +28,10 @@ defineProps({
   thisYearMonthlyOrderData: Object,
   lastYearMonthlyOrderLables: Object,
   lastYearMonthlyOrderData: Object,
-
   thisYearMonthlyUserRegisterLables: Object,
   thisYearMonthlyUserRegisterData: Object,
   lastYearMonthlyUserRegisterLables: Object,
   lastYearMonthlyUserRegisterData: Object,
-
   thisYearMonthlyVendorRegisterLables: Object,
   thisYearMonthlyVendorRegisterData: Object,
   lastYearMonthlyVendorRegisterLables: Object,
