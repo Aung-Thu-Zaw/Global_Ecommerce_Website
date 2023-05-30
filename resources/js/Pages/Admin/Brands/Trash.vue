@@ -42,6 +42,7 @@ watch(
         direction: params.direction,
       },
       {
+        replace: true,
         preserveState: true,
       }
     );
@@ -61,6 +62,7 @@ watch(
         direction: params.direction,
       },
       {
+        replace: true,
         preserveState: true,
       }
     );
@@ -80,7 +82,7 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { preserveState: true }
+    { replace: true, preserveState: true }
   );
 };
 
@@ -100,7 +102,7 @@ const handleRestore = async (trashBrandId) => {
     router.post(
       route("admin.brands.restore", {
         id: trashBrandId,
-        page: params.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -130,7 +132,7 @@ const handleDelete = async (trashBrandId) => {
     router.delete(
       route("admin.brands.forceDelete", {
         id: trashBrandId,
-        page: props.trashBrands.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -159,7 +161,7 @@ const handlePermanentlyDelete = async () => {
   if (result.isConfirmed) {
     router.get(
       route("admin.brands.permanentlyDelete", {
-        page: props.trashBrands.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );

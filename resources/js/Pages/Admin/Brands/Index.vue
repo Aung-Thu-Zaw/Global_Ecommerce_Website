@@ -42,6 +42,7 @@ watch(
         direction: params.direction,
       },
       {
+        replace: true,
         preserveState: true,
       }
     );
@@ -61,6 +62,7 @@ watch(
         direction: params.direction,
       },
       {
+        replace: true,
         preserveState: true,
       }
     );
@@ -80,7 +82,7 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { preserveState: true }
+    { replace: true, preserveState: true }
   );
 };
 
@@ -101,7 +103,7 @@ const handleDelete = async (brand) => {
       router.delete(
         route("admin.brands.destroy", {
           brand: brand.slug,
-          page: params.current_page,
+          page: params.page,
           per_page: params.per_page,
         })
       );
@@ -129,7 +131,7 @@ const handleDelete = async (brand) => {
       router.delete(
         route("admin.brands.destroy", {
           brand: brand.slug,
-          page: params.current_page,
+          page: params.page,
           per_page: params.per_page,
         })
       );

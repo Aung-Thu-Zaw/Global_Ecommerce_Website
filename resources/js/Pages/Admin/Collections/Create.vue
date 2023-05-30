@@ -35,6 +35,7 @@ const submit = () => {
       per_page: props.per_page,
     }),
     {
+      replace: true,
       preserveState: true,
       onFinish: () => {
         processing.value = false;

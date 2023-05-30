@@ -106,7 +106,7 @@ const handleRestore = async (trashCollectionId) => {
     router.post(
       route("admin.collections.restore", {
         id: trashCollectionId,
-        page: params.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -136,7 +136,7 @@ const handleDelete = async (trashCollectionId) => {
     router.delete(
       route("admin.collections.forceDelete", {
         id: trashCollectionId,
-        page: params.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -165,7 +165,7 @@ const handlePermanentlyDelete = async () => {
   if (result.isConfirmed) {
     router.get(
       route("admin.collections.permanentlyDelete", {
-        page: params.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );

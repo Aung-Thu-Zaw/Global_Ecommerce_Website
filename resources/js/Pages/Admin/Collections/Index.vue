@@ -42,6 +42,7 @@ watch(
         direction: params.direction,
       },
       {
+        replace: true,
         preserveState: true,
       }
     );
@@ -61,6 +62,7 @@ watch(
         direction: params.direction,
       },
       {
+        replace: true,
         preserveState: true,
       }
     );
@@ -80,7 +82,7 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { preserveState: true }
+    { replace: true, preserveState: true }
   );
 };
 
@@ -101,7 +103,7 @@ const handleDelete = async (collection) => {
     router.delete(
       route("admin.collections.destroy", {
         collection: collection.slug,
-        page: props.collections.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -302,7 +304,7 @@ if (usePage().props.flash.successMessage) {
                 as="button"
                 :href="route('admin.collections.edit', collection.slug)"
                 :data="{
-                  page: props.collections.current_page,
+                  page: params.page,
                   per_page: params.per_page,
                 }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
