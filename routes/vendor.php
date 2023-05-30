@@ -8,8 +8,8 @@ use App\Http\Controllers\Vendor\VendorProductBannerController;
 use App\Http\Controllers\Vendor\VendorProductController;
 use Illuminate\Support\Facades\Route;
 
-Route::get("vendor/register", [VendorAuthController::class,"register"])->name("vendor.register");
-Route::get("vendor/login", [VendorAuthController::class,"login"])->name("vendor.login");
+Route::get("vendor/register", [VendorAuthController::class,"register"])->middleware("guest")->name("vendor.register");
+Route::get("vendor/login", [VendorAuthController::class,"login"])->middleware("guest")->name("vendor.login");
 
 Route::middleware(["auth","user.role:vendor"])
         ->prefix("vendor")

@@ -212,7 +212,12 @@ class Product extends Model
         }
     }
 
-    public function scopeFilterBy($query, array $filterBy): void
+    /**
+    * @param array<string> $filterBy
+    * @param Builder<Product> $query
+    */
+
+    public function scopeFilterBy(Builder $query, array $filterBy): void
     {
         $query->when(
             $filterBy["search"]??null,
@@ -265,4 +270,6 @@ class Product extends Model
         //     });
         // });
     }
+
+
 }

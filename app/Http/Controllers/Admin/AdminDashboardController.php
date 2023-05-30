@@ -13,7 +13,6 @@ class AdminDashboardController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-
         $lastMonthStart = Carbon::now()->subMonth()->startOfMonth();
         $lastMonthEnd = Carbon::now()->subMonth()->endOfMonth();
 
