@@ -16,9 +16,9 @@ class AdminProductBannerController extends Controller
     public function index(): Response|ResponseFactory
     {
         $productBanners=ProductBanner::search(request("search"))
-                                       ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                       ->paginate(request("per_page", 10))
-                                       ->appends(request()->all());
+                                     ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                     ->paginate(request("per_page", 10))
+                                     ->appends(request()->all());
 
         return inertia("Admin/Banners/Product-Banners/Index", compact("productBanners"));
     }
@@ -61,18 +61,17 @@ class AdminProductBannerController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashProductBanners=ProductBanner::search(request("search"))
-                                            ->onlyTrashed()
-
-                                            ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                            ->paginate(request("per_page", 10))
-                                            ->appends(request()->all());
+                                          ->onlyTrashed()
+                                          ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                          ->paginate(request("per_page", 10))
+                                          ->appends(request()->all());
 
         return inertia("Admin/Banners/Product-Banners/Trash", compact("trashProductBanners"));
     }
 
     public function restore(Request $request, int $id): RedirectResponse
     {
-        $productBanner = ProductBanner::onlyTrashed()->where("id", $id)->first();
+        $productBanner = ProductBanner::onlyTrashed()->findOrFail($id);
 
         $productBanner->restore();
 
@@ -81,7 +80,7 @@ class AdminProductBannerController extends Controller
 
     public function forceDelete(Request $request, int $id): RedirectResponse
     {
-        $productBanner = ProductBanner::onlyTrashed()->where("id", $id)->first();
+        $productBanner = ProductBanner::onlyTrashed()->findOrFail($id);
 
         ProductBanner::deleteImage($productBanner);
 

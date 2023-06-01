@@ -11,10 +11,8 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Banners/Breadcrumb.vue";
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, Head } from "@inertiajs/vue3";
 import { reactive, watch, inject } from "vue";
-import { router } from "@inertiajs/vue3";
-import { usePage } from "@inertiajs/vue3";
+import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
   productBanners: Object,
@@ -38,9 +36,9 @@ const handleSearchBox = () => {
 
 watch(
   () => params.search,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/product-banners",
+      route("admin.product-banners.index"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -57,9 +55,9 @@ watch(
 
 watch(
   () => params.per_page,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/product-banners",
+      route("admin.product-banners.index"),
       {
         search: params.search,
         page: params.page,
@@ -80,7 +78,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/product-banners",
+    route("admin.product-banners.index"),
     {
       search: params.search,
       page: params.page,
@@ -92,7 +90,6 @@ const updateSorting = (sort = "id") => {
   );
 };
 
-// Handel Product Banner Show
 const handleShow = async (hideProductBannerId) => {
   const result = await swal({
     icon: "info",
@@ -109,7 +106,7 @@ const handleShow = async (hideProductBannerId) => {
     router.post(
       route("admin.product-banners.show", {
         id: hideProductBannerId,
-        page: props.productBanners.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -131,7 +128,6 @@ const handleShow = async (hideProductBannerId) => {
   }
 };
 
-// Handel Product Banner Hide
 const handleHide = async (showProductBannerId) => {
   const result = await swal({
     icon: "info",
@@ -148,7 +144,7 @@ const handleHide = async (showProductBannerId) => {
     router.post(
       route("admin.product-banners.hide", {
         id: showProductBannerId,
-        page: props.productBanners.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -178,7 +174,7 @@ const handleDelete = async (productBannerId) => {
     router.delete(
       route("admin.product-banners.destroy", {
         product_banner: productBannerId,
-        page: props.productBanners.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -204,7 +200,6 @@ if (usePage().props.flash.successMessage) {
     <Head title="Product Banners" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Category Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
           <li aria-current="page">
@@ -244,6 +239,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <Link
+          as="button"
           :href="route('admin.product-banners.create')"
           :data="{
             per_page: params.per_page,
@@ -253,7 +249,6 @@ if (usePage().props.flash.successMessage) {
           <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
           Add Product Banner</Link
         >
-        <!-- Search Input Form -->
         <div class="flex items-center">
           <form class="w-[350px] relative">
             <input
@@ -314,31 +309,7 @@ if (usePage().props.flash.successMessage) {
             ></i>
           </HeaderTh>
           <HeaderTh> Image </HeaderTh>
-          <HeaderTh @click="updateSorting('title')">
-            Title
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'title',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'title',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'title',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'title',
-              }"
-            ></i>
-          </HeaderTh>
+
           <HeaderTh @click="updateSorting('url')">
             URL
             <i
@@ -430,7 +401,6 @@ if (usePage().props.flash.successMessage) {
                 alt=""
               />
             </Td>
-            <Td>{{ productBanner.title }}</Td>
             <Td>{{ productBanner.url }}</Td>
             <Td>
               <ActiveStatus v-if="productBanner.status == 'show'">
@@ -462,7 +432,7 @@ if (usePage().props.flash.successMessage) {
                 as="button"
                 :href="route('admin.product-banners.edit', productBanner.id)"
                 :data="{
-                  page: props.productBanners.current_page,
+                  page: params.page,
                   per_page: params.per_page,
                 }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
@@ -482,11 +452,9 @@ if (usePage().props.flash.successMessage) {
         </tbody>
       </TableContainer>
 
-      <!-- Not Avaliable Data -->
       <NotAvaliableData v-if="!productBanners.data.length" />
 
-      <!-- Pagination -->
-      <pagination class="mt-6" :links="productBanners.links" />
+      <Pagination class="mt-6" :links="productBanners.links" />
     </div>
   </AdminDashboardLayout>
 </template>

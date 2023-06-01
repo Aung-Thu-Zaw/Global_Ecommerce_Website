@@ -11,10 +11,8 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Banners/Breadcrumb.vue";
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, Head } from "@inertiajs/vue3";
 import { reactive, watch, inject } from "vue";
-import { router } from "@inertiajs/vue3";
-import { usePage } from "@inertiajs/vue3";
+import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
   sliderBanners: Object,
@@ -36,9 +34,9 @@ const handleSearchBox = () => {
 
 watch(
   () => params.search,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/slider-banners",
+      route("admin.slider-banners.index"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -55,9 +53,9 @@ watch(
 
 watch(
   () => params.per_page,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/slider-banners",
+      route("admin.slider-banners.index"),
       {
         search: params.search,
         page: params.page,
@@ -78,7 +76,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/slider-banners",
+    route("admin.slider-banners.index"),
     {
       search: params.search,
       page: params.page,
@@ -90,7 +88,6 @@ const updateSorting = (sort = "id") => {
   );
 };
 
-// Handel Slider Banner Show
 const handleShow = async (hideSliderBannerId) => {
   const result = await swal({
     icon: "info",
@@ -107,7 +104,7 @@ const handleShow = async (hideSliderBannerId) => {
     router.post(
       route("admin.slider-banners.show", {
         id: hideSliderBannerId,
-        page: props.sliderBanners.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -146,7 +143,7 @@ const handleHide = async (showSliderBannerId) => {
     router.post(
       route("admin.slider-banners.hide", {
         id: showSliderBannerId,
-        page: props.sliderBanners.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -176,7 +173,7 @@ const handleDelete = async (sliderBannerId) => {
     router.delete(
       route("admin.slider-banners.destroy", {
         slider_banner: sliderBannerId,
-        page: props.sliderBanners.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -202,7 +199,6 @@ if (usePage().props.flash.successMessage) {
     <Head title="Slider Banners" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Category Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
           <li aria-current="page">
@@ -243,6 +239,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <Link
+          as="button"
           :href="route('admin.slider-banners.create')"
           :data="{
             per_page: params.per_page,
@@ -252,7 +249,6 @@ if (usePage().props.flash.successMessage) {
           <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
           Add slider banner</Link
         >
-        <!-- Search Input Form -->
         <div class="flex items-center">
           <form class="w-[350px] relative">
             <input
@@ -432,7 +428,7 @@ if (usePage().props.flash.successMessage) {
                 as="button"
                 :href="route('admin.slider-banners.edit', sliderBanner.id)"
                 :data="{
-                  page: props.sliderBanners.current_page,
+                  page: params.page,
                   per_page: params.per_page,
                 }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
@@ -452,11 +448,9 @@ if (usePage().props.flash.successMessage) {
         </tbody>
       </TableContainer>
 
-      <!-- Not Avaliable Data -->
       <NotAvaliableData v-if="!sliderBanners.data.length" />
 
-      <!-- Pagination -->
-      <pagination class="mt-6" :links="sliderBanners.links" />
+      <Pagination class="mt-6" :links="sliderBanners.links" />
     </div>
   </AdminDashboardLayout>
 </template>

@@ -22,7 +22,6 @@ class ProductBanner extends Model
     {
         return [
             'url' => $this->url,
-            'status' => $this->status,
         ];
     }
 
@@ -30,6 +29,16 @@ class ProductBanner extends Model
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductBanner, never>
     */
     protected function createdAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => date("j-F-Y", strtotime($value)),
+        );
+    }
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductBanner, never>
+    */
+    protected function deletedAt(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => date("j-F-Y", strtotime($value)),

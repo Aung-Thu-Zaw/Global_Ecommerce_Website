@@ -27,4 +27,15 @@ class SliderBannerRequest extends FormRequest
             "url"=>["required","string","url"]
         ];
     }
+
+    /**
+    *     @return array<string>
+    */
+    public function messages(): array
+    {
+        return [
+            "url.required" => "Slider banner url is required.",
+            "url.url" => "Slider banner url wrong format.",
+        ];
+    }
 }

@@ -14,11 +14,11 @@ class SliderBannerSeeder extends Seeder
      */
     public function run()
     {
-        SliderBanner::factory()->create(["image"=>"slider-1.jpg","status"=>"show"]);
-        SliderBanner::factory()->create(["image"=>"slider-2.jpg","status"=>"show"]);
-        SliderBanner::factory()->create(["image"=>"slider-3.jpg","status"=>"show"]);
-        SliderBanner::factory()->create(["image"=>"slider-4.jpg","status"=>"show"]);
-        SliderBanner::factory()->create(["image"=>"slider-5.jpg","status"=>"show"]);
-        SliderBanner::factory()->create(["image"=>"slider-6.jpg","status"=>"show"]);
+        SliderBanner::create(["image"=>"slider-1.jpg","url"=>"https://www.example.com","status"=>"show"]);
+        SliderBanner::create(["image"=>"slider-2.jpg","url"=>"https://www.example.com","status"=>"show"]);
+        SliderBanner::create(["image"=>"slider-3.jpg","url"=>"https://www.example.com","status"=>"show"]);
+        SliderBanner::create(["image"=>"slider-4.jpg","url"=>"https://www.example.com","status"=>"show"]);
+        SliderBanner::create(["image"=>"slider-5.jpg","url"=>"https://www.example.com","status"=>"show"]);
+        SliderBanner::create(["image"=>"slider-6.jpg","url"=>"https://www.example.com","status"=>"show"]);
     }
 }

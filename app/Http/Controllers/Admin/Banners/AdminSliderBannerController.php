@@ -16,10 +16,9 @@ class AdminSliderBannerController extends Controller
     public function index(): Response|ResponseFactory
     {
         $sliderBanners=SliderBanner::search(request("search"))
-                                     ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                     ->paginate(request("per_page", 10))
-                                     ->appends(request()->all());
-
+                                   ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                   ->paginate(request("per_page", 10))
+                                   ->appends(request()->all());
 
         return inertia("Admin/Banners/Slider-Banners/Index", compact("sliderBanners"));
     }
@@ -62,17 +61,17 @@ class AdminSliderBannerController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashSliderBanners=SliderBanner::search(request("search"))
-                                          ->onlyTrashed()
-                                          ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                          ->paginate(request("per_page", 10))
-                                          ->appends(request()->all());
+                                        ->onlyTrashed()
+                                        ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                        ->paginate(request("per_page", 10))
+                                        ->appends(request()->all());
 
         return inertia("Admin/Banners/Slider-Banners/Trash", compact("trashSliderBanners"));
     }
 
     public function restore(Request $request, int $id): RedirectResponse
     {
-        $sliderBanner = SliderBanner::onlyTrashed()->where("id", $id)->first();
+        $sliderBanner = SliderBanner::onlyTrashed()->findOrFail($id);
 
         $sliderBanner->restore();
 
@@ -81,7 +80,7 @@ class AdminSliderBannerController extends Controller
 
     public function forceDelete(Request $request, int $id): RedirectResponse
     {
-        $sliderBanner = SliderBanner::onlyTrashed()->where("id", $id)->first();
+        $sliderBanner = SliderBanner::onlyTrashed()->findOrFail($id);
 
         SliderBanner::deleteImage($sliderBanner);
 

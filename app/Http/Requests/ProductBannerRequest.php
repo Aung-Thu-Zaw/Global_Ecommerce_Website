@@ -29,4 +29,15 @@ class ProductBannerRequest extends FormRequest
             "url"=>["required","string","url"],
         ];
     }
+
+    /**
+    *     @return array<string>
+    */
+    public function messages(): array
+    {
+        return [
+            "url.required" => "Product banner url is required.",
+            "url.url" => "Product banner url wrong format.",
+        ];
+    }
 }

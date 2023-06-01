@@ -16,6 +16,9 @@ class DatabaseSeeder extends Seeder
         $this->call(
             [
             SeoSettingSeeder::class,
+            SliderBannerSeeder::class,
+            CampaignBannerSeeder::class,
+            ProductBannerSeeder::class,
             UserSeeder::class,
             CouponSeeder::class,
             BrandSeeder::class,
@@ -25,9 +28,7 @@ class DatabaseSeeder extends Seeder
 
 
 
-            SliderBannerSeeder::class,
-            CampaignBannerSeeder::class,
-            ProductBannerSeeder::class,
+
             CategorySeeder::class,
             CollectionSeeder::class,
             ProductSeeder::class,

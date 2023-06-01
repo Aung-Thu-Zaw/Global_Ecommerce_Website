@@ -17,9 +17,9 @@ class AdminCampaignBannerController extends Controller
     public function index(): Response|ResponseFactory
     {
         $campaignBanners=CampaignBanner::search(request("search"))
-                                         ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                         ->paginate(request("per_page", 10))
-                                         ->appends(request()->all());
+                                       ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                       ->paginate(request("per_page", 10))
+                                       ->appends(request()->all());
 
 
         return inertia("Admin/Banners/Campaign-Banners/Index", compact("campaignBanners"));
@@ -63,17 +63,17 @@ class AdminCampaignBannerController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashCampaignBanners=CampaignBanner::search(request("search"))
-                                              ->onlyTrashed()
-                                              ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                              ->paginate(request("per_page", 10))
-                                              ->appends(request()->all());
+                                            ->onlyTrashed()
+                                            ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                            ->paginate(request("per_page", 10))
+                                            ->appends(request()->all());
 
         return inertia("Admin/Banners/Campaign-Banners/Trash", compact("trashCampaignBanners"));
     }
 
     public function restore(Request $request, int $id): RedirectResponse
     {
-        $campaignBanner = CampaignBanner::onlyTrashed()->where("id", $id)->first();
+        $campaignBanner = CampaignBanner::onlyTrashed()->findOrFail($id);
 
         $campaignBanner->restore();
 
@@ -82,7 +82,7 @@ class AdminCampaignBannerController extends Controller
 
     public function forceDelete(Request $request, int $id): RedirectResponse
     {
-        $campaignBanner = CampaignBanner::onlyTrashed()->where("id", $id)->first();
+        $campaignBanner = CampaignBanner::onlyTrashed()->findOrFail($id);
 
         CampaignBanner::deleteImage($campaignBanner);
 

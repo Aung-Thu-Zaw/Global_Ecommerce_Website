@@ -24,7 +24,6 @@ class CampaignBanner extends Model
     {
         return [
             'url' => $this->url,
-            'status' => $this->status,
         ];
     }
 
@@ -33,6 +32,16 @@ class CampaignBanner extends Model
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<CampaignBanner, never>
     */
     protected function createdAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => date("j-F-Y", strtotime($value)),
+        );
+    }
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<CampaignBanner, never>
+    */
+    protected function deletedAt(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => date("j-F-Y", strtotime($value)),

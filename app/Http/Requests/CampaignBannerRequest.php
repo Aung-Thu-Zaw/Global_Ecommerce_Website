@@ -28,4 +28,19 @@ class CampaignBannerRequest extends FormRequest
             "url"=>["required","string","url"],
         ];
     }
+
+    /**
+    *     @return array<string>
+    */
+    public function messages(): array
+    {
+        return [
+            "url.required" => "Campaign banner url is required.",
+            "url.url" => "Campaign banner url wrong format.",
+        ];
+    }
+
+
+
+
 }

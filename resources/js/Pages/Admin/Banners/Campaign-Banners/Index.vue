@@ -11,12 +11,9 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Banners/Breadcrumb.vue";
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, Head } from "@inertiajs/vue3";
 import { reactive, watch, inject } from "vue";
-import { router } from "@inertiajs/vue3";
-import { usePage } from "@inertiajs/vue3";
+import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
-// Data From Controller
 const props = defineProps({
   campaignBanners: Object,
 });
@@ -26,7 +23,6 @@ const handleSearchBox = () => {
   params.search = "";
 };
 
-// Handle Url Query Params
 const params = reactive({
   search: null,
   page: props.campaignBanners.current_page
@@ -39,12 +35,11 @@ const params = reactive({
   direction: "desc",
 });
 
-// Watch Search Input Form
 watch(
   () => params.search,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/campaign-banners",
+      route("admin.campaign-banners.index"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -62,9 +57,9 @@ watch(
 // Watch Perpage Dropdown
 watch(
   () => params.per_page,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/campaign-banners",
+      route("admin.campaign-banners.index"),
       {
         search: params.search,
         page: params.page,
@@ -80,13 +75,12 @@ watch(
   }
 );
 
-// Handle Sorting With Column Arrow
 const updateSorting = (sort = "id") => {
   params.sort = sort;
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/campaign-banners",
+    route("admin.campaign-banners.index"),
     {
       search: params.search,
       page: params.page,
@@ -98,7 +92,6 @@ const updateSorting = (sort = "id") => {
   );
 };
 
-// Handel Campaign Banner Show
 const handleShow = async (hideCampaignBannerId) => {
   const result = await swal({
     icon: "info",
@@ -115,7 +108,7 @@ const handleShow = async (hideCampaignBannerId) => {
     router.post(
       route("admin.campaign-banners.show", {
         id: hideCampaignBannerId,
-        page: props.campaignBanners.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -128,7 +121,6 @@ const handleShow = async (hideCampaignBannerId) => {
   }
 };
 
-// Handel Campaign Banner Hide
 const handleHide = async (showCampaignBannerId) => {
   const result = await swal({
     icon: "info",
@@ -145,7 +137,7 @@ const handleHide = async (showCampaignBannerId) => {
     router.post(
       route("admin.campaign-banners.hide", {
         id: showCampaignBannerId,
-        page: props.campaignBanners.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -158,7 +150,6 @@ const handleHide = async (showCampaignBannerId) => {
   }
 };
 
-// Handle Delete Banner
 const handleDelete = async (campaignBannerId) => {
   const result = await swal({
     icon: "warning",
@@ -176,7 +167,7 @@ const handleDelete = async (campaignBannerId) => {
     router.delete(
       route("admin.campaign-banners.destroy", {
         campaign_banner: campaignBannerId,
-        page: props.campaignBanners.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -189,15 +180,12 @@ const handleDelete = async (campaignBannerId) => {
   }
 };
 
-// Success Alert
 if (usePage().props.flash.successMessage) {
   swal({
     icon: "success",
     title: usePage().props.flash.successMessage,
   });
 }
-
-
 </script>
 
 <template>
@@ -205,7 +193,6 @@ if (usePage().props.flash.successMessage) {
     <Head title="Campaign Banners" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
           <li aria-current="page">
@@ -244,9 +231,9 @@ if (usePage().props.flash.successMessage) {
         </div>
       </div>
 
-      <!-- Add Banner Button -->
       <div class="mb-5 flex items-center justify-between">
         <Link
+          as="button"
           :href="route('admin.campaign-banners.create')"
           :data="{
             per_page: params.per_page,
@@ -257,7 +244,6 @@ if (usePage().props.flash.successMessage) {
           Add Campaign Banner</Link
         >
         <div class="flex items-center">
-          <!-- Search Form -->
           <form class="w-[350px] relative">
             <input
               type="text"
@@ -273,7 +259,6 @@ if (usePage().props.flash.successMessage) {
             ></i>
           </form>
 
-          <!-- PrePage Dropdown  -->
           <div class="ml-5">
             <select
               class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -291,9 +276,7 @@ if (usePage().props.flash.successMessage) {
         </div>
       </div>
 
-      <!-- Banner Table Start -->
       <TableContainer>
-        <!-- Table Headers -->
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
@@ -399,7 +382,6 @@ if (usePage().props.flash.successMessage) {
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
-        <!-- Table Body -->
         <tbody v-if="campaignBanners.data.length">
           <Tr
             v-for="campaignBanner in campaignBanners.data"
@@ -444,7 +426,7 @@ if (usePage().props.flash.successMessage) {
                 as="button"
                 :href="route('admin.campaign-banners.edit', campaignBanner.id)"
                 :data="{
-                  page: props.campaignBanners.current_page,
+                  page: params.page,
                   per_page: params.per_page,
                 }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
@@ -463,13 +445,10 @@ if (usePage().props.flash.successMessage) {
           </Tr>
         </tbody>
       </TableContainer>
-      <!-- Banner Table End -->
 
-      <!-- Not Avaliable Data -->
       <NotAvaliableData v-if="!campaignBanners.data.length" />
 
-      <!-- Pagination -->
-      <pagination class="mt-6" :links="campaignBanners.links" />
+      <Pagination class="mt-6" :links="campaignBanners.links" />
     </div>
   </AdminDashboardLayout>
 </template>
