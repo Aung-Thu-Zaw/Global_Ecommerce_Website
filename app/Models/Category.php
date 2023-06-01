@@ -21,7 +21,6 @@ class Category extends Model
     use Searchable;
     use HasSlug;
 
-
     /**
     * @var string[]
     */
@@ -36,12 +35,10 @@ class Category extends Model
             ->saveSlugsTo('slug');
     }
 
-
     public function getRouteKeyName()
     {
         return 'slug';
     }
-
 
     /**
     *     @return array<string>
@@ -50,10 +47,8 @@ class Category extends Model
     {
         return [
             'name' => $this->name,
-            'status' => $this->status,
         ];
     }
-
 
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Category, never>
@@ -74,12 +69,20 @@ class Category extends Model
         );
     }
 
-
-
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Category, never>
     */
     protected function createdAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => date("j-F-Y", strtotime($value)),
+        );
+    }
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Category, never>
+    */
+    protected function deletedAt(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => date("j-F-Y", strtotime($value)),

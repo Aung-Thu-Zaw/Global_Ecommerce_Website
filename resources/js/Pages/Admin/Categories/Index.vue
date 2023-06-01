@@ -11,12 +11,9 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Categories/Breadcrumb.vue";
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, Head } from "@inertiajs/vue3";
 import { reactive, watch, inject } from "vue";
-import { router } from "@inertiajs/vue3";
-import { usePage } from "@inertiajs/vue3";
+import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
-// Data come from controller
 const props = defineProps({
   categories: Object,
 });
@@ -27,7 +24,6 @@ const handleSearchBox = () => {
   params.search = "";
 };
 
-// Handle Url Query Params
 const params = reactive({
   search: null,
   page: props.categories.current_page ? props.categories.current_page : 1,
@@ -36,12 +32,11 @@ const params = reactive({
   direction: "desc",
 });
 
-// Watch Search Input Form
 watch(
   () => params.search,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/categories",
+      route("admin.categories.index"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -56,12 +51,11 @@ watch(
   }
 );
 
-// Watch Perpage Dropdown
 watch(
   () => params.per_page,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/categories",
+      route("admin.categories.index"),
       {
         search: params.search,
         page: params.page,
@@ -77,13 +71,12 @@ watch(
   }
 );
 
-// Handle Sorting With Column Arrow
 const updateSorting = (sort = "id") => {
   params.sort = sort;
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/categories",
+    route("admin.categories.index"),
     {
       search: params.search,
       page: params.page,
@@ -113,7 +106,7 @@ const handleDelete = async (category) => {
       router.delete(
         route("admin.categories.destroy", {
           category: category.slug,
-          page: props.categories.current_page,
+          page: params.page,
           per_page: params.per_page,
         })
       );
@@ -141,7 +134,7 @@ const handleDelete = async (category) => {
       router.delete(
         route("admin.categories.destroy", {
           category: category.slug,
-          page: props.categories.current_page,
+          page: params.page,
           per_page: params.per_page,
         })
       );
@@ -168,7 +161,6 @@ if (usePage().props.flash.successMessage) {
     <Head title="Categories" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Category Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb />
 
@@ -187,6 +179,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <Link
+          as="button"
           :href="route('admin.categories.create')"
           :data="{
             per_page: params.per_page,
@@ -196,7 +189,6 @@ if (usePage().props.flash.successMessage) {
           <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
           Add Category</Link
         >
-        <!-- Search Input Form -->
         <div class="flex items-center">
           <form class="w-[350px] relative">
             <input
@@ -384,7 +376,7 @@ if (usePage().props.flash.successMessage) {
       <NotAvaliableData v-if="!categories.data.length" />
 
       <!-- Pagination -->
-      <pagination class="mt-6" :links="categories.links" />
+      <Pagination class="mt-6" :links="categories.links" />
     </div>
   </AdminDashboardLayout>
 </template>

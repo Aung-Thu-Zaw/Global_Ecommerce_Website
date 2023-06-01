@@ -22,7 +22,6 @@ class CategoryFactory extends Factory
             "image"=>fake()->imageUrl(),
             "status"=>"show",
             "created_at"=>fake()->dateTimeBetween("-9 months", now()),
-            // "deleted_at"=>fake()->dateTimeBetween("-4 months", now())
         ];
     }
 }

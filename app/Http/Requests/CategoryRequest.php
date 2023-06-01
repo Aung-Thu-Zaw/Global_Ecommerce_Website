@@ -37,4 +37,19 @@ class CategoryRequest extends FormRequest
 
         return $rules;
     }
+
+
+    /**
+    *     @return array<string>
+    */
+    public function messages(): array
+    {
+        return [
+            "parent_id.exists" => "Parent category does not exist.",
+            "name.required" => "Category name is required.",
+            "name.unique" => "Category is already exists.",
+            "description.required" => "Category status is required.",
+            "status.required" => "Category status is required.",
+        ];
+    }
 }

@@ -23,8 +23,7 @@ class AdminCategoryController extends Controller
                             ->orderBy(request("sort", "id"), request("direction", "desc"))
                             ->paginate(request("per_page", 10))
                             ->appends(request()->all());
-
-
+                            
         return inertia("Admin/Categories/Index", compact("categories"));
     }
 
@@ -32,7 +31,7 @@ class AdminCategoryController extends Controller
     {
         $per_page=request("per_page");
 
-        $categories=Category::all();
+        $categories=Category::select("id", "parent_id", "name")->get();
 
         return inertia("Admin/Categories/Create", compact("per_page", "categories"));
     }
@@ -48,7 +47,7 @@ class AdminCategoryController extends Controller
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
-        $categories=Category::all();
+        $categories=Category::select("id", "parent_id", "name")->get();
 
         return inertia("Admin/Categories/Edit", compact("category", "paginate", "categories"));
     }
@@ -70,17 +69,17 @@ class AdminCategoryController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashCategories=Category::search(request("search"))
-                                ->onlyTrashed()
-                                ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                ->paginate(request("per_page", 10))
-                                ->appends(request()->all());
+                                 ->onlyTrashed()
+                                 ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                 ->paginate(request("per_page", 10))
+                                 ->appends(request()->all());
 
         return inertia("Admin/Categories/Trash", compact("trashCategories"));
     }
 
     public function restore(Request $request, int $id): RedirectResponse
     {
-        $category = Category::onlyTrashed()->where("id", $id)->first();
+        $category = Category::onlyTrashed()->findOrFail($id);
 
         $category->restore();
 
@@ -89,7 +88,7 @@ class AdminCategoryController extends Controller
 
     public function forceDelete(Request $request, int $id): RedirectResponse
     {
-        $category = Category::onlyTrashed()->where("id", $id)->first();
+        $category = Category::onlyTrashed()->findOrFail($id);
 
         Category::deleteImage($category);
 

@@ -8,14 +8,12 @@ import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
 import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
-import SearchForm from "@/Components/Form/SearchForm.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Categories/Breadcrumb.vue";
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, Head } from "@inertiajs/vue3";
 import { inject, reactive, watch } from "vue";
-import { router } from "@inertiajs/vue3";
-import { usePage } from "@inertiajs/vue3";
+import { router, usePage, Link, Head } from "@inertiajs/vue3";
+import {} from "@inertiajs/vue3";
 
 const props = defineProps({
   trashCategories: Object,
@@ -41,9 +39,9 @@ const handleSearchBox = () => {
 
 watch(
   () => params.search,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/categories/trash",
+      route("admin.categories.trash"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -60,9 +58,9 @@ watch(
 
 watch(
   () => params.per_page,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/categories/trash",
+      route("admin.categories.trash"),
       {
         search: params.search,
         page: params.page,
@@ -83,7 +81,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/categories/trash",
+    route("admin.categories.trash"),
     {
       search: params.search,
       page: params.page,
@@ -111,7 +109,7 @@ const handleRestore = async (trashCategoryId) => {
     router.post(
       route("admin.categories.restore", {
         id: trashCategoryId,
-        page: props.trashCategories.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -141,7 +139,7 @@ const handleDelete = async (trashCategoryId) => {
     router.delete(
       route("admin.categories.forceDelete", {
         id: trashCategoryId,
-        page: props.trashCategories.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -170,7 +168,7 @@ const handlePermanentlyDelete = async () => {
   if (result.isConfirmed) {
     router.get(
       route("admin.categories.permanentlyDelete", {
-        page: props.trashCategories.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -189,8 +187,6 @@ const handlePermanentlyDelete = async () => {
     <Head title="Trash Categories" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Breadcrumb  -->
-
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
           <li aria-current="page">
@@ -227,7 +223,6 @@ const handlePermanentlyDelete = async () => {
         </div>
       </div>
 
-      <!-- Search Input Form -->
       <div class="flex items-center justify-end mb-5">
         <form class="w-[350px] relative">
           <input
@@ -259,7 +254,6 @@ const handlePermanentlyDelete = async () => {
         </div>
       </div>
 
-      <!-- Auto delete description and button  -->
       <p class="text-left text-sm font-bold mb-2 text-warning-600">
         Categories in the Trash will be automatically deleted after 60 days.
         <button
@@ -348,28 +342,28 @@ const handlePermanentlyDelete = async () => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh @click="updateSorting('created_at')">
-            Created At
+          <HeaderTh @click="updateSorting('deleted_at')">
+            Deleted At
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
               :class="{
                 'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'created_at',
+                  params.direction === 'asc' && params.sort === 'deleted_at',
                 'visually-hidden':
                   params.direction !== '' &&
                   params.direction !== 'asc' &&
-                  params.sort === 'created_at',
+                  params.sort === 'deleted_at',
               }"
             ></i>
             <i
               class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
               :class="{
                 'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'created_at',
+                  params.direction === 'desc' && params.sort === 'deleted_at',
                 'visually-hidden':
                   params.direction !== '' &&
                   params.direction !== 'desc' &&
-                  params.sort === 'created_at',
+                  params.sort === 'deleted_at',
               }"
             ></i>
           </HeaderTh>
@@ -398,7 +392,7 @@ const handlePermanentlyDelete = async () => {
                 {{ trashCategory.status }}
               </InactiveStatus>
             </Td>
-            <Td>{{ trashCategory.created_at }}</Td>
+            <Td>{{ trashCategory.deleted_at }}</Td>
             <Td>
               <button
                 @click="handleRestore(trashCategory.id)"
@@ -419,11 +413,9 @@ const handlePermanentlyDelete = async () => {
         </tbody>
       </TableContainer>
 
-      <!-- Not Avaliable Data -->
       <NotAvaliableData v-if="!trashCategories.data.length" />
 
-      <!-- Pagination -->
-      <pagination class="mt-6" :links="trashCategories.links" />
+      <Pagination class="mt-6" :links="trashCategories.links" />
     </div>
   </AdminDashboardLayout>
 </template>
