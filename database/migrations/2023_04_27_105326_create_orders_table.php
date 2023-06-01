@@ -36,7 +36,6 @@ return new class () extends Migration {
             $table->date('return_approved_date')->nullable();
             $table->date('return_refunded_date')->nullable();
             $table->timestamps();
-            $table->softDeletes();
 
         });
     }

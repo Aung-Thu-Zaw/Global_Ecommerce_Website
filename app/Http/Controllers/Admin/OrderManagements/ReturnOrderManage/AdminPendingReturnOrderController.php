@@ -15,10 +15,10 @@ class AdminPendingReturnOrderController extends Controller
     public function index(): Response|ResponseFactory
     {
         $pendingReturnOrders=Order::search(request("search"))
-                             ->where("return_status", "pending")
-                             ->orderBy(request("sort", "id"), request("direction", "desc"))
-                             ->paginate(request("per_page", 10))
-                             ->appends(request()->all());
+                                  ->where("return_status", "pending")
+                                  ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                  ->paginate(request("per_page", 10))
+                                  ->appends(request()->all());
 
         return inertia("Admin/OrderManagements/ReturnOrderManage/PendingReturnOrders/Index", compact("pendingReturnOrders"));
     }
@@ -36,7 +36,7 @@ class AdminPendingReturnOrderController extends Controller
 
     public function update(int $id): RedirectResponse
     {
-        $order=Order::with(["deliveryInformation","orderItems.product.shop"])->where("id", $id)->first();
+        $order=Order::with(["deliveryInformation","orderItems.product.shop"])->findOrFail($id);
 
         $order->update([
             "return_status"=>"approved",

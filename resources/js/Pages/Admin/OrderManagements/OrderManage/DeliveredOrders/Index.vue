@@ -119,18 +119,6 @@ const updateSorting = (sort = "id") => {
             </div>
           </li>
         </Breadcrumb>
-
-        <!-- <div>
-          <Link
-            as="button"
-            :href="route('admin.vendors.inactive.trash')"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
-          >
-            <i class="fa-solid fa-trash"></i>
-
-            Trash
-          </Link>
-        </div> -->
       </div>
 
       <div class="flex items-center justify-end mb-5">

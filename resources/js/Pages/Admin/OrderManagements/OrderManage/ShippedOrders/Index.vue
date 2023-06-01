@@ -83,65 +83,6 @@ const updateSorting = (sort = "id") => {
     { replace: true, preserveState: true }
   );
 };
-
-// const handleActive = async (inactiveVendorId) => {
-//   const result = await swal({
-//     icon: "info",
-//     title: "Are you sure you want to active this vendor?",
-//     showCancelButton: true,
-//     confirmButtonText: "Yes, active!",
-//     confirmButtonColor: "#027e00",
-//     timer: 20000,
-//     timerProgressBar: true,
-//     reverseButtons: true,
-//   });
-
-//   if (result.isConfirmed) {
-//     router.post(
-//       route("admin.vendors.inactive.update", {
-//         id: inactiveVendorId,
-//         page: props.inactiveVendors.current_page,
-//         per_page: params.per_page,
-//       })
-//     );
-//     setTimeout(() => {
-//       swal({
-//         icon: "success",
-//         title: usePage().props.flash.successMessage,
-//       });
-//     }, 500);
-//   }
-// };
-
-// const handleDelete = async (inactiveVendorId) => {
-//   const result = await swal({
-//     icon: "warning",
-//     title: "Are you sure you want to move it to the trash?",
-//     text: "You will be able to revert this action!",
-//     showCancelButton: true,
-//     confirmButtonText: "Yes, remove it!",
-//     confirmButtonColor: "#ef4444",
-//     timer: 20000,
-//     timerProgressBar: true,
-//     reverseButtons: true,
-//   });
-
-//   if (result.isConfirmed) {
-//     router.delete(
-//       route("admin.vendors.inactive.destroy", {
-//         id: inactiveVendorId,
-//         page: props.inactiveVendors.current_page,
-//         per_page: params.per_page,
-//       })
-//     );
-//     setTimeout(() => {
-//       swal({
-//         icon: "success",
-//         title: usePage().props.flash.successMessage,
-//       });
-//     }, 500);
-//   }
-// };
 </script>
 
 
@@ -174,18 +115,6 @@ const updateSorting = (sort = "id") => {
             </div>
           </li>
         </Breadcrumb>
-
-        <!-- <div>
-          <Link
-            as="button"
-            :href="route('admin.vendors.inactive.trash')"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
-          >
-            <i class="fa-solid fa-trash"></i>
-
-            Trash
-          </Link>
-        </div> -->
       </div>
 
       <div class="flex items-center justify-end mb-5">
