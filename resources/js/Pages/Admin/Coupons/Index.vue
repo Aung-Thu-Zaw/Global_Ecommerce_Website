@@ -9,10 +9,8 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Coupons/Breadcrumb.vue";
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, Head } from "@inertiajs/vue3";
 import { reactive, watch, inject } from "vue";
-import { router } from "@inertiajs/vue3";
-import { usePage } from "@inertiajs/vue3";
+import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
   coupons: Object,
@@ -34,9 +32,9 @@ const handleSearchBox = () => {
 
 watch(
   () => params.search,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/coupons",
+      route("admin.coupons.index"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -53,9 +51,9 @@ watch(
 
 watch(
   () => params.per_page,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/coupons",
+      route("admin.coupons.index"),
       {
         search: params.search,
         page: params.page,
@@ -76,7 +74,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/coupons",
+    route("admin.coupons.index"),
     {
       search: params.search,
       page: params.page,
@@ -105,7 +103,7 @@ const handleDelete = async (coupon) => {
     router.delete(
       route("admin.coupons.destroy", {
         coupon: coupon.id,
-        page: props.coupons.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -131,7 +129,6 @@ if (usePage().props.flash.successMessage) {
     <Head title="Coupons" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Category Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb />
 
@@ -150,6 +147,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <Link
+          as="button"
           :href="route('admin.coupons.create')"
           :data="{
             per_page: params.per_page,
@@ -159,7 +157,6 @@ if (usePage().props.flash.successMessage) {
           <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
           Add Coupon</Link
         >
-        <!-- Search Input Form -->
         <div class="flex items-center">
           <form class="w-[350px] relative">
             <input
@@ -347,31 +344,7 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh @click="updateSorting('uses_count')">
-            Total Used
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'uses_count',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'uses_count',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'uses_count',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'uses_count',
-              }"
-            ></i>
-          </HeaderTh>
+          <HeaderTh> Total Used </HeaderTh>
           <HeaderTh @click="updateSorting('created_at')">
             Created At
             <i
@@ -423,7 +396,7 @@ if (usePage().props.flash.successMessage) {
                 as="button"
                 :href="route('admin.coupons.edit', coupon.id)"
                 :data="{
-                  page: props.coupons.current_page,
+                  page: params.page,
                   per_page: params.per_page,
                 }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
@@ -443,11 +416,9 @@ if (usePage().props.flash.successMessage) {
         </tbody>
       </TableContainer>
 
-      <!-- Not Avaliable Data -->
       <NotAvaliableData v-if="!coupons.data.length" />
 
-      <!-- Pagination -->
-      <pagination class="mt-6" :links="coupons.links" />
+      <Pagination class="mt-6" :links="coupons.links" />
     </div>
   </AdminDashboardLayout>
 </template>

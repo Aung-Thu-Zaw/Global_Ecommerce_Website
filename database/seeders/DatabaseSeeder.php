@@ -17,18 +17,25 @@ class DatabaseSeeder extends Seeder
             [
             SeoSettingSeeder::class,
             UserSeeder::class,
+            CouponSeeder::class,
+            BrandSeeder::class,
+
+
+
+
+
+
             SliderBannerSeeder::class,
             CampaignBannerSeeder::class,
             ProductBannerSeeder::class,
             CategorySeeder::class,
-            BrandSeeder::class,
             CollectionSeeder::class,
             ProductSeeder::class,
             ImageSeeder::class,
             CountrySeeder::class,
             RegionSeeder::class,
             CitySeeder::class,
-            TownshipSeeder::class
+            TownshipSeeder::class,
             ]
         );
     }

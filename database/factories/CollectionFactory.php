@@ -21,7 +21,6 @@ class CollectionFactory extends Factory
             "slug"=>fake()->unique()->slug(),
             "description"=>fake()->unique()->sentence(),
             "created_at"=>fake()->dateTimeBetween("-9 months", now()),
-            "created_at"=>fake()->dateTimeBetween("-9 months", now()),
         ];
     }
 }

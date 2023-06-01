@@ -38,6 +38,16 @@ class Coupon extends Model
     }
 
     /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Coupon, never>
+    */
+    protected function deletedAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => date("j-F-Y", strtotime($value)),
+        );
+    }
+
+    /**
     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<User>
     */
     public function users(): BelongsToMany

@@ -15,10 +15,9 @@ class AdminCouponController extends Controller
     public function index(): Response|ResponseFactory
     {
         $coupons=Coupon::search(request("search"))
-                      ->orderBy(request("sort", "id"), request("direction", "desc"))
-                      ->paginate(request("per_page", 10))
-                      ->appends(request()->all());
-
+                       ->orderBy(request("sort", "id"), request("direction", "desc"))
+                       ->paginate(request("per_page", 10))
+                       ->appends(request()->all());
 
         return inertia("Admin/Coupons/Index", compact("coupons"));
     }
@@ -32,7 +31,6 @@ class AdminCouponController extends Controller
 
     public function store(CouponRequest $request): RedirectResponse
     {
-
         Coupon::create($request->validated());
 
         return to_route("admin.coupons.index", "per_page=$request->per_page")->with("success", "Coupon has been successfully created.");
@@ -62,17 +60,17 @@ class AdminCouponController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashCoupons=Coupon::search(request("search"))
-                                ->onlyTrashed()
-                                ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                ->paginate(request("per_page", 10))
-                                ->appends(request()->all());
+                            ->onlyTrashed()
+                            ->orderBy(request("sort", "id"), request("direction", "desc"))
+                            ->paginate(request("per_page", 10))
+                            ->appends(request()->all());
 
         return inertia("Admin/Coupons/Trash", compact("trashCoupons"));
     }
 
     public function restore(Request $request, int $id): RedirectResponse
     {
-        $coupon =Coupon::onlyTrashed()->where("id", $id)->first();
+        $coupon =Coupon::onlyTrashed()->findOrFail($id);
 
         $coupon->restore();
 
@@ -81,7 +79,7 @@ class AdminCouponController extends Controller
 
     public function forceDelete(Request $request, int $id): RedirectResponse
     {
-        $coupon = Coupon::onlyTrashed()->where("id", $id)->first();
+        $coupon = Coupon::onlyTrashed()->findOrFail($id);
 
         $coupon->forceDelete();
 
