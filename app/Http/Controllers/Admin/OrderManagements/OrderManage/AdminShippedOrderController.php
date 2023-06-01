@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin\OrderManagements\OrderManage;
 
 use App\Http\Controllers\Controller;
 use App\Mail\OrderDeliveredMail;
-use Illuminate\Http\Request;
 use App\Models\DeliveryInformation;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -29,13 +28,15 @@ class AdminShippedOrderController extends Controller
 
     public function show(int $id): Response|ResponseFactory
     {
+        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+
         $shippedOrderDetail=Order::findOrFail($id);
 
         $deliveryInformation=DeliveryInformation::where("user_id", $shippedOrderDetail->user_id)->first();
 
         $orderItems=OrderItem::with("product.shop")->where("order_id", $shippedOrderDetail->id)->get();
 
-        return inertia("Admin/OrderManagements/OrderManage/ShippedOrders/Detail", compact("shippedOrderDetail", "deliveryInformation", "orderItems"));
+        return inertia("Admin/OrderManagements/OrderManage/ShippedOrders/Detail", compact("paginate", "shippedOrderDetail", "deliveryInformation", "orderItems"));
     }
 
     public function update(int $id): RedirectResponse

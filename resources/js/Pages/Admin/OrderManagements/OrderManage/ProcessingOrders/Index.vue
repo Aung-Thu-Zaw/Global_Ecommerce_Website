@@ -1,6 +1,5 @@
 <script setup>
 import Breadcrumb from "@/Components/Breadcrumbs/OrderManage/Breadcrumb.vue";
-import SearchForm from "@/Components/Form/SearchForm.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import ProcessingStatus from "@/Components/Table/ProcessingStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
@@ -11,14 +10,12 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, usePage, Head } from "@inertiajs/vue3";
-import { computed, inject, reactive, ref, watch } from "vue";
-import { router } from "@inertiajs/vue3";
+import { Link, Head, router } from "@inertiajs/vue3";
+import { reactive, watch } from "vue";
 const props = defineProps({
   processingOrders: Object,
 });
 
-const swal = inject("$swal");
 const params = reactive({
   search: null,
   page: props.processingOrders.current_page
@@ -36,9 +33,9 @@ const handleSearchBox = () => {
 
 watch(
   () => params.search,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/order-manage/processing-orders",
+      route("admin.orders.processing.index"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -55,9 +52,9 @@ watch(
 
 watch(
   () => params.per_page,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/order-manage/processing-orders",
+      route("admin.orders.processing.index"),
       {
         search: params.search,
         page: params.page,
@@ -78,7 +75,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/order-manage/processing-orders",
+    route("admin.orders.processing.index"),
     {
       search: params.search,
       page: params.page,
@@ -156,7 +153,6 @@ const updateSorting = (sort = "id") => {
     <Head title="Processing Orders" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Vendor Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
           <li aria-current="page">
@@ -195,7 +191,6 @@ const updateSorting = (sort = "id") => {
         </div> -->
       </div>
 
-      <!-- Search Input Form -->
       <div class="flex items-center justify-end mb-5">
         <form class="w-[350px] relative">
           <input
@@ -332,7 +327,7 @@ const updateSorting = (sort = "id") => {
           </HeaderTh>
           <HeaderTh> Order Status </HeaderTh>
           <HeaderTh @click="updateSorting('order_date')">
-           Order Date
+            Order Date
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
               :class="{
@@ -395,11 +390,9 @@ const updateSorting = (sort = "id") => {
         </tbody>
       </TableContainer>
 
-      <!-- Not Avaliable Data -->
       <NotAvaliableData v-if="!processingOrders.data.length" />
 
-      <!-- Pagination -->
-      <pagination class="mt-6" :links="processingOrders.links" />
+      <Pagination class="mt-6" :links="processingOrders.links" />
     </div>
   </AdminDashboardLayout>
 </template>

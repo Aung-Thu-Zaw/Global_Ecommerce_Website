@@ -1,6 +1,5 @@
 <script setup>
 import Breadcrumb from "@/Components/Breadcrumbs/OrderManage/Breadcrumb.vue";
-import SearchForm from "@/Components/Form/SearchForm.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import PendingStatus from "@/Components/Table/PendingStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
@@ -11,14 +10,13 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, usePage, Head } from "@inertiajs/vue3";
-import { computed, inject, reactive, ref, watch } from "vue";
-import { router } from "@inertiajs/vue3";
+import { Link, Head, router } from "@inertiajs/vue3";
+import { reactive, watch } from "vue";
+
 const props = defineProps({
   pendingOrders: Object,
 });
 
-const swal = inject("$swal");
 const params = reactive({
   search: null,
   page: props.pendingOrders.current_page ? props.pendingOrders.current_page : 1,
@@ -32,9 +30,9 @@ const handleSearchBox = () => {
 
 watch(
   () => params.search,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/order-manage/pending-orders",
+      route("admin.orders.pending.index"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -51,9 +49,9 @@ watch(
 
 watch(
   () => params.per_page,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/order-manage/pending-orders",
+      route("admin.orders.pending.index"),
       {
         search: params.search,
         page: params.page,
@@ -74,7 +72,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/order-manage/pending-orders",
+    route("admin.orders.pending.index"),
     {
       search: params.search,
       page: params.page,
@@ -191,7 +189,6 @@ const updateSorting = (sort = "id") => {
         </div> -->
       </div>
 
-      <!-- Search Input Form -->
       <div class="flex items-center justify-end mb-5">
         <form class="w-[350px] relative">
           <input
@@ -386,11 +383,9 @@ const updateSorting = (sort = "id") => {
         </tbody>
       </TableContainer>
 
-      <!-- Not Avaliable Data -->
       <NotAvaliableData v-if="!pendingOrders.data.length" />
 
-      <!-- Pagination -->
-      <pagination class="mt-6" :links="pendingOrders.links" />
+      <Pagination class="mt-6" :links="pendingOrders.links" />
     </div>
   </AdminDashboardLayout>
 </template>

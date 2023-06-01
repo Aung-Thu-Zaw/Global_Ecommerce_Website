@@ -20,6 +20,16 @@ class Order extends Model
     protected $guarded=[];
 
     /**
+    *     @return array<string>
+    */
+    public function toSearchableArray(): array
+    {
+        return [
+            'invoice_no' => $this->invoice_no,
+        ];
+    }
+
+    /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Order, never>
     */
     protected function createdAt(): Attribute

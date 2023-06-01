@@ -36,7 +36,7 @@ defineProps({
           :href="route('collections.show', collection.slug)"
         >
           <div
-            v-if="collection.products.image"
+            v-if="collection.products"
             class="flex items-center justify-between"
           >
             <div
