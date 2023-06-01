@@ -69,6 +69,7 @@ const submit = () => {
 
         <nav v-if="socialMedia" class="flex lg:ml-auto space-x-2">
           <a
+            v-if="socialMedia.youtube"
             class="px-3 py-2 inline-block text-center text-gray-500 bg-white shadow-sm border border-gray-200 rounded-md hover:text-red-600"
             :href="socialMedia.youtube"
             target="_blank"
@@ -77,6 +78,7 @@ const submit = () => {
             <i class="w-4 fab fa-youtube"></i>
           </a>
           <a
+            v-if="socialMedia.facebook"
             class="px-3 py-2 inline-block text-center text-gray-500 bg-white shadow-sm border border-gray-200 rounded-md hover:text-blue-600"
             :href="socialMedia.facebook"
             target="_blank"
@@ -85,6 +87,7 @@ const submit = () => {
             <i class="fab fa-facebook-square"></i>
           </a>
           <a
+            v-if="socialMedia.twitter"
             class="px-3 py-2 inline-block text-center text-gray-500 bg-white shadow-sm border border-gray-200 rounded-md hover:text-sky-600"
             :href="socialMedia.twitter"
             target="_blank"
@@ -93,6 +96,7 @@ const submit = () => {
             <i class="fab fa-twitter"></i>
           </a>
           <a
+            v-if="socialMedia.instagram"
             class="px-3 py-2 inline-block text-center text-gray-500 bg-white shadow-sm border border-gray-200 rounded-md hover:text-pink-600"
             :href="socialMedia.instagram"
             target="_blank"
@@ -100,7 +104,8 @@ const submit = () => {
             <span class="sr-only">Instagram</span>
             <i class="fab fa-instagram"></i>
           </a>
-          <!-- <a
+          <a
+            v-if="socialMedia.reddit"
             class="px-3 py-2 inline-block text-center text-gray-500 bg-white shadow-sm border border-gray-200 rounded-md hover:text-orange-500"
             :href="socialMedia.reddit"
             target="_blank"
@@ -109,6 +114,7 @@ const submit = () => {
             <i class="fab fa-reddit"></i>
           </a>
           <a
+            v-if="socialMedia.linked_in"
             class="px-3 py-2 inline-block text-center text-gray-500 bg-white shadow-sm border border-gray-200 rounded-md hover:text-primary-600"
             :href="socialMedia.linked_in"
             target="_blank"
@@ -117,13 +123,14 @@ const submit = () => {
             <i class="fab fa-linkedin"></i>
           </a>
           <a
+            v-if="socialMedia.blog"
             class="px-4 font-bold py-2 inline-block text-center text-gray-500 bg-white shadow-sm border border-gray-200 rounded-md hover:text-warning-600"
             :href="socialMedia.blog"
             target="_blank"
           >
             <span class="sr-only">Blog</span>
             B
-          </a> -->
+          </a>
         </nav>
       </div>
     </div>

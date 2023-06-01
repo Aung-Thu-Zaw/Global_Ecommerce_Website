@@ -68,7 +68,7 @@ class HomeController extends Controller
                                ->paginate(25);
 
 
-        $socialMedia=WebsiteSetting::select("id", "facebook", "twitter", "instagram", "youtube")->first();
+        $socialMedia=WebsiteSetting::select("id", "facebook", "twitter", "instagram", "youtube", "reddit", "linked_in", "blog")->first();
 
 
         return inertia('Ecommerce/Home/Index', compact(

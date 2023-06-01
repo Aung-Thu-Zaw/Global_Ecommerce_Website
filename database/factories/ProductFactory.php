@@ -17,17 +17,17 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            "brand_id"=>fake()->numberBetween(1, 70),
-            "collection_id"=>fake()->numberBetween(1, 35),
+            "brand_id"=>fake()->numberBetween(1, 50),
+            "collection_id"=>fake()->numberBetween(1, 30),
             "category_id"=>fake()->numberBetween(1, 69),
-            "user_id"=>fake()->numberBetween(4, 204),
+            "user_id"=>fake()->numberBetween(3, 103),
             "name"=>fake()->unique()->sentence(),
             "slug"=>fake()->unique()->slug(),
             "image"=>fake()->imageUrl(),
             "code"=>fake()->numberBetween(100, 999),
             "qty"=>fake()->numberBetween(10, 100),
-            "price"=>fake()->numberBetween(10, 1500),
-            "discount"=>fake()->numberBetween(5, 1000),
+            "price"=>fake()->numberBetween(100, 1500),
+            "discount"=>fake()->numberBetween(50, 500),
             "description"=>fake()->paragraph(20),
             "hot_deal"=>fake()->randomElement([true,false]),
             "featured"=>fake()->randomElement([true,false]),

@@ -20,6 +20,7 @@ class CampaignBannerFactory extends Factory
             "image"=>fake()->imageUrl(),
             "url"=>fake()->url(),
             "status"=>"hide",
+            "created_at"=>fake()->dateTimeBetween("-5 months", now()),
         ];
     }
 }

@@ -35,7 +35,10 @@ defineProps({
           class="group border py-4 bg-slate-50 hover:shadow-lg hover:bg-slate-100 transition-all rounded-md"
           :href="route('collections.show', collection.slug)"
         >
-          <div class="flex items-center justify-between">
+          <div
+            v-if="collection.products.image"
+            class="flex items-center justify-between"
+          >
             <div
               class="flex items-center justify-center w-16 h-16 mx-auto mb-2 rounded-md border overflow-hidden"
             >
@@ -81,9 +84,7 @@ defineProps({
         </p>
       </div>
     </div>
-    <!-- container //end -->
   </section>
-  <!-- SECTION-ICONMENU //END -->
 </template>
 
 
