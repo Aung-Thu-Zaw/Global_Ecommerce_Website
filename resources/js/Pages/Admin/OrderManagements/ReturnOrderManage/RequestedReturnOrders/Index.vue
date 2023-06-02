@@ -1,7 +1,7 @@
 <script setup>
 import Breadcrumb from "@/Components/Breadcrumbs/ReturnOrderManage/Breadcrumb.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import PendingStatus from "@/Components/Table/PendingStatus.vue";
+import RequestedStatus from "@/Components/Table/RequestedStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -14,16 +14,16 @@ import { Link, Head, router } from "@inertiajs/vue3";
 import { reactive, watch } from "vue";
 
 const props = defineProps({
-  pendingReturnOrders: Object,
+  requestedReturnOrders: Object,
 });
 
 const params = reactive({
   search: null,
-  page: props.pendingReturnOrders.current_page
-    ? props.pendingReturnOrders.current_page
+  page: props.requestedReturnOrders.current_page
+    ? props.requestedReturnOrders.current_page
     : 1,
-  per_page: props.pendingReturnOrders.per_page
-    ? props.pendingReturnOrders.per_page
+  per_page: props.requestedReturnOrders.per_page
+    ? props.requestedReturnOrders.per_page
     : 10,
   sort: "id",
   direction: "desc",
@@ -37,7 +37,7 @@ watch(
   () => params.search,
   () => {
     router.get(
-      route("admin.return-orders.pending.index"),
+      route("admin.return-orders.requested.index"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -56,7 +56,7 @@ watch(
   () => params.per_page,
   () => {
     router.get(
-      route("admin.return-orders.pending.index"),
+      route("admin.return-orders.requested.index"),
       {
         search: params.search,
         page: params.page,
@@ -77,7 +77,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    route("admin.return-orders.pending.index"),
+    route("admin.return-orders.requested.index"),
     {
       search: params.search,
       page: params.page,
@@ -93,7 +93,7 @@ const updateSorting = (sort = "id") => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Pending Return Orders" />
+    <Head title="Requested Return Orders" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -285,33 +285,33 @@ const updateSorting = (sort = "id") => {
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="pendingReturnOrders.data.length">
+        <tbody v-if="requestedReturnOrders.data.length">
           <Tr
-            v-for="pendingReturnOrder in pendingReturnOrders.data"
-            :key="pendingReturnOrder.id"
+            v-for="requestedReturnOrder in requestedReturnOrders.data"
+            :key="requestedReturnOrder.id"
           >
-            <BodyTh>{{ pendingReturnOrder.id }}</BodyTh>
-            <Td>{{ pendingReturnOrder.invoice_no }}</Td>
-            <Td class="capitalize">{{ pendingReturnOrder.payment_type }}</Td>
-            <Td>$ {{ pendingReturnOrder.total_amount }}</Td>
+            <BodyTh>{{ requestedReturnOrder.id }}</BodyTh>
+            <Td>{{ requestedReturnOrder.invoice_no }}</Td>
+            <Td class="capitalize">{{ requestedReturnOrder.payment_type }}</Td>
+            <Td>$ {{ requestedReturnOrder.total_amount }}</Td>
             <Td>
-              <PendingStatus>
-                {{ pendingReturnOrder.return_status }}
-              </PendingStatus>
+              <RequestedStatus>
+                {{ requestedReturnOrder.return_status }}
+              </RequestedStatus>
             </Td>
-            <Td>{{ pendingReturnOrder.return_date }}</Td>
+            <Td>{{ requestedReturnOrder.return_date }}</Td>
 
             <Td>
               <Link
                 as="button"
                 :href="
                   route(
-                    'admin.return-orders.pending.show',
-                    pendingReturnOrder.id
+                    'admin.return-orders.requested.show',
+                    requestedReturnOrder.id
                   )
                 "
                 :data="{
-                  page: props.pendingReturnOrders.current_page,
+                  page: props.requestedReturnOrders.current_page,
                   per_page: params.per_page,
                 }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
@@ -324,9 +324,9 @@ const updateSorting = (sort = "id") => {
         </tbody>
       </TableContainer>
 
-      <NotAvaliableData v-if="!pendingReturnOrders.data.length" />
+      <NotAvaliableData v-if="!requestedReturnOrders.data.length" />
 
-      <Pagination class="mt-6" :links="pendingReturnOrders.links" />
+      <Pagination class="mt-6" :links="requestedReturnOrders.links" />
     </div>
   </AdminDashboardLayout>
 </template>

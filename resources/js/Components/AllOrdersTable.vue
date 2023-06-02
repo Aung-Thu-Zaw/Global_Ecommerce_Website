@@ -86,7 +86,7 @@ const handleDownload = async (orderId) => {
             v-if="
               order.return_reason &&
               order.return_date &&
-              order.return_status === 'pending'
+              order.return_status === 'requested'
             "
             class="text-red-600 text-sm bg-red-200 px-3 py-1 rounded-full"
           >

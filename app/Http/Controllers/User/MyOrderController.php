@@ -93,14 +93,14 @@ class MyOrderController extends Controller
         $order->update([
             "return_date"=>now()->format("Y-m-d"),
             "return_reason"=>$request->return_reason,
-            "return_status"=>"pending",
+            "return_status"=>"requested",
         ]);
 
         $order->orderItems()->each(function ($orderItem) use ($request) {
             $orderItem->update([
                     "return_date"=>now()->format("Y-m-d"),
                     "return_reason"=>$request->return_reason,
-                    "return_status"=>"pending",
+                    "return_status"=>"requested",
                 ]);
         });
 

@@ -1,7 +1,8 @@
 <script setup>
 import Breadcrumb from "@/Components/Breadcrumbs/ReturnOrderManage/Breadcrumb.vue";
-import PendingStatus from "@/Components/Table/PendingStatus.vue";
+import RequestedStatus from "@/Components/Table/RequestedStatus.vue";
 import ConfirmedStatus from "@/Components/Table/ConfirmedStatus.vue";
+import PendingStatus from "@/Components/Table/PendingStatus.vue";
 import ProcessingStatus from "@/Components/Table/ProcessingStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
@@ -14,7 +15,7 @@ import "vue3-toastify/dist/index.css";
 const props = defineProps({
   paginate: Object,
   deliveryInformation: Object,
-  pendingReturnOrderDetail: Object,
+  requestedReturnOrderDetail: Object,
   orderItems: Object,
 });
 
@@ -35,7 +36,7 @@ const handleConfirm = async (id) => {
   if (result.isConfirmed) {
     processing.value = true;
     router.post(
-      route("admin.return-orders.pending.update", id),
+      route("admin.return-orders.requested.update", id),
       {},
       {
         onFinish: () => {
@@ -57,7 +58,7 @@ const handleConfirm = async (id) => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Details Pending Return Order" />
+    <Head title="Details Requested Return Order" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -108,7 +109,7 @@ const handleConfirm = async (id) => {
         <div>
           <Link
             as="button"
-            :href="route('admin.return-orders.pending.index')"
+            :href="route('admin.return-orders.requested.index')"
             :data="{
               page: props.paginate.page,
               per_page: props.paginate.per_page,
@@ -250,7 +251,7 @@ const handleConfirm = async (id) => {
             Order Details
           </h1>
           <div
-            v-if="deliveryInformation && pendingReturnOrderDetail"
+            v-if="deliveryInformation && requestedReturnOrderDetail"
             class="my-5"
           >
             <div
@@ -288,7 +289,7 @@ const handleConfirm = async (id) => {
                     Invoice No
                   </span>
                   <span class="w-full text-orange-600 block">
-                    {{ pendingReturnOrderDetail.invoice_no }}
+                    {{ requestedReturnOrderDetail.invoice_no }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -298,7 +299,7 @@ const handleConfirm = async (id) => {
                     Order No
                   </span>
                   <span class="w-full text-orange-600 block">
-                    {{ pendingReturnOrderDetail.order_no }}
+                    {{ requestedReturnOrderDetail.order_no }}
                   </span>
                 </div>
                 <div
@@ -310,7 +311,7 @@ const handleConfirm = async (id) => {
                     Currency
                   </span>
                   <span class="w-full block uppercase">
-                    {{ pendingReturnOrderDetail.currency }}
+                    {{ requestedReturnOrderDetail.currency }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -320,7 +321,7 @@ const handleConfirm = async (id) => {
                     Payment Type
                   </span>
                   <span class="w-full block capitalize">
-                    {{ pendingReturnOrderDetail.payment_type }}
+                    {{ requestedReturnOrderDetail.payment_type }}
                   </span>
                 </div>
                 <div
@@ -332,7 +333,7 @@ const handleConfirm = async (id) => {
                     Total Amount
                   </span>
                   <span class="w-full block">
-                    $ {{ pendingReturnOrderDetail.total_amount }}
+                    $ {{ requestedReturnOrderDetail.total_amount }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -342,7 +343,7 @@ const handleConfirm = async (id) => {
                     Transaction Id
                   </span>
                   <span class="w-full block">
-                    {{ pendingReturnOrderDetail.transaction_id }}
+                    {{ requestedReturnOrderDetail.transaction_id }}
                   </span>
                 </div>
                 <div
@@ -354,7 +355,7 @@ const handleConfirm = async (id) => {
                     Order Date
                   </span>
                   <span class="w-full block">
-                    {{ pendingReturnOrderDetail.order_date }}
+                    {{ requestedReturnOrderDetail.order_date }}
                   </span>
                 </div>
                 <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -365,23 +366,25 @@ const handleConfirm = async (id) => {
                   </span>
                   <span class="w-full block">
                     <PendingStatus
-                      v-if="pendingReturnOrderDetail.order_status === 'pending'"
+                      v-if="
+                        requestedReturnOrderDetail.order_status === 'pending'
+                      "
                     >
-                      {{ pendingReturnOrderDetail.order_status }}
+                      {{ requestedReturnOrderDetail.order_status }}
                     </PendingStatus>
                     <ConfirmedStatus
                       v-if="
-                        pendingReturnOrderDetail.order_status === 'confirmed'
+                        requestedReturnOrderDetail.order_status === 'confirmed'
                       "
                     >
-                      {{ pendingReturnOrderDetail.order_status }}
+                      {{ requestedReturnOrderDetail.order_status }}
                     </ConfirmedStatus>
                     <ProcessingStatus
                       v-if="
-                        pendingReturnOrderDetail.order_status === 'processing'
+                        requestedReturnOrderDetail.order_status === 'processing'
                       "
                     >
-                      {{ pendingReturnOrderDetail.order_status }}
+                      {{ requestedReturnOrderDetail.order_status }}
                     </ProcessingStatus>
                   </span>
                 </div>
@@ -395,7 +398,7 @@ const handleConfirm = async (id) => {
         <h1 class="font-bold text-slate-700 text-2xl border-b-4 px-10 py-3">
           Return Order Request Details
         </h1>
-        <div v-if="pendingReturnOrderDetail.return_reason" class="my-5">
+        <div v-if="requestedReturnOrderDetail.return_reason" class="my-5">
           <div
             class="w-full text-sm text-left text-gray-500 border overflow-hidden shadow rounded-md"
           >
@@ -407,7 +410,7 @@ const handleConfirm = async (id) => {
                   Return Reason
                 </span>
                 <span class="w-full block">
-                  {{ pendingReturnOrderDetail.return_reason }}
+                  {{ requestedReturnOrderDetail.return_reason }}
                 </span>
               </div>
             </div>
@@ -419,7 +422,7 @@ const handleConfirm = async (id) => {
                   Return Request Date
                 </span>
                 <span class="w-full block">
-                  {{ pendingReturnOrderDetail.return_date }}
+                  {{ requestedReturnOrderDetail.return_date }}
                 </span>
               </div>
             </div>
@@ -431,20 +434,22 @@ const handleConfirm = async (id) => {
                   Return Status
                 </span>
                 <span
-                  v-if="pendingReturnOrderDetail.return_status === 'pending'"
+                  v-if="
+                    requestedReturnOrderDetail.return_status === 'requested'
+                  "
                   class="w-full block"
                 >
-                  <PendingStatus>
-                    {{ pendingReturnOrderDetail.return_status }}
-                  </PendingStatus>
+                  <RequestedStatus>
+                    {{ requestedReturnOrderDetail.return_status }}
+                  </RequestedStatus>
                 </span>
               </div>
             </div>
           </div>
         </div>
         <button
-          @click="handleConfirm(pendingReturnOrderDetail.id)"
-          v-if="pendingReturnOrderDetail.return_status === 'pending'"
+          @click="handleConfirm(requestedReturnOrderDetail.id)"
+          v-if="requestedReturnOrderDetail.return_status === 'requested'"
           class="bg-green-600 py-3 w-full rounded-sm font-bold text-white hover:bg-green-700 transition-all shadow"
         >
           <svg

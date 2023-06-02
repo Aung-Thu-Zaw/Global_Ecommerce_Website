@@ -414,15 +414,15 @@
               class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
             >
               <Link
-                :href="route('admin.return-orders.pending.index')"
+                :href="route('admin.return-orders.requested.index')"
                 class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
                 :class="{
                   'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/return-order-manage/pending-return'
+                    '/admin/return-order-manage/requested-return'
                   ),
                 }"
               >
-                Pending Return
+                Requested Return
               </Link>
               <Link
                 :href="route('admin.return-orders.approved.index')"
@@ -744,7 +744,7 @@ export default {
     returnOrderManage() {
       if (
         this.$page.url.startsWith(
-          "/admin/return-order-manage/pending-return"
+          "/admin/return-order-manage/requested-return"
         ) ||
         this.$page.url.startsWith(
           "/admin/return-order-manage/approved-return"

@@ -23,7 +23,7 @@ use App\Http\Controllers\Admin\OrderManagements\OrderManage\AdminPendingOrderCon
 use App\Http\Controllers\Admin\OrderManagements\OrderManage\AdminProcessingOrderController;
 use App\Http\Controllers\Admin\OrderManagements\OrderManage\AdminShippedOrderController;
 use App\Http\Controllers\Admin\OrderManagements\ReturnOrderManage\AdminApprovedReturnOrderController;
-use App\Http\Controllers\Admin\OrderManagements\ReturnOrderManage\AdminPendingReturnOrderController;
+use App\Http\Controllers\Admin\OrderManagements\ReturnOrderManage\AdminRequestedReturnOrderController;
 use App\Http\Controllers\Admin\OrderManagements\ReturnOrderManage\AdminRefundedReturnOrderController;
 use App\Http\Controllers\Admin\ShippingArea\AdminCityController;
 use App\Http\Controllers\Admin\ShippingArea\AdminCountryController;
@@ -283,9 +283,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                      Route::get("/details/{id}", "show")->name("show");
                  });
 
-           Route::controller(AdminPendingReturnOrderController::class)
-                ->prefix("/return-order-manage/pending-return")
-                ->name("return-orders.pending.")
+           Route::controller(AdminRequestedReturnOrderController::class)
+                ->prefix("/return-order-manage/requested-return")
+                ->name("return-orders.requested.")
                 ->group(function () {
                     Route::get("/", "index")->name("index");
                     Route::get("/details/{id}", "show")->name("show");

@@ -3,6 +3,9 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link, router } from "@inertiajs/vue3";
 import PendingStatus from "@/Components/Table/PendingStatus.vue";
 import ConfirmedStatus from "@/Components/Table/ConfirmedStatus.vue";
+import RequestedStatus from "@/Components/Table/RequestedStatus.vue";
+import ApprovedStatus from "@/Components/Table/ApprovedStatus.vue";
+import RefundedStatus from "@/Components/Table/RefundedStatus.vue";
 import ProcessingStatus from "@/Components/Table/ProcessingStatus.vue";
 import DeliveredStatus from "@/Components/Table/DeliveredStatus.vue";
 import ShippedStatus from "@/Components/Table/ShippedStatus.vue";
@@ -82,39 +85,34 @@ const handleDownload = async (orderId) => {
           </DeliveredStatus>
         </Td>
         <Td>
-          <span
+          <RequestedStatus
             v-if="
               order.return_reason &&
               order.return_date &&
-              order.return_status === 'pending'
+              order.return_status === 'requested'
             "
-            class="text-red-600 text-sm bg-red-200 px-3 py-1 rounded-full"
           >
-            <i class="fa-solid fa-rotate-right animate-spin"></i>
-            Requested
-          </span>
-          <span
+            {{ order.return_status }}
+          </RequestedStatus>
+          <ApprovedStatus
             v-else-if="
               order.return_reason &&
               order.return_date &&
               order.return_status === 'approved'
             "
-            class="text-green-600 text-sm bg-green-200 px-3 py-1 rounded-full"
           >
-            <i class="fa-solid fa-rotate-right animate-spin"></i>
-            Approved
-          </span>
-          <span
+            {{ order.return_status }}
+          </ApprovedStatus>
+
+          <RefundedStatus
             v-else-if="
               order.return_reason &&
               order.return_date &&
               order.return_status === 'refunded'
             "
-            class="text-slate-600 text-sm bg-slate-200 px-3 py-1 rounded-full"
           >
-            <i class="fa-solid fa-rotate-right animate-spin"></i>
-            Refunded
-          </span>
+            {{ order.return_status }}
+          </RefundedStatus>
         </Td>
         <Td>{{ order.order_date }}</Td>
 

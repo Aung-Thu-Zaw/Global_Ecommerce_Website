@@ -10,31 +10,31 @@ use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
-class AdminPendingReturnOrderController extends Controller
+class AdminRequestedReturnOrderController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $pendingReturnOrders=Order::search(request("search"))
-                                  ->where("return_status", "pending")
+        $requestedReturnOrders=Order::search(request("search"))
+                                  ->where("return_status", "requested")
                                   ->where("payment_type", "card")
                                   ->orderBy(request("sort", "id"), request("direction", "desc"))
                                   ->paginate(request("per_page", 10))
                                   ->appends(request()->all());
 
-        return inertia("Admin/OrderManagements/ReturnOrderManage/PendingReturnOrders/Index", compact("pendingReturnOrders"));
+        return inertia("Admin/OrderManagements/ReturnOrderManage/RequestedReturnOrders/Index", compact("requestedReturnOrders"));
     }
 
     public function show(int $id): Response|ResponseFactory
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
-        $pendingReturnOrderDetail=Order::findOrFail($id);
+        $requestedReturnOrderDetail=Order::findOrFail($id);
 
-        $deliveryInformation=DeliveryInformation::where("user_id", $pendingReturnOrderDetail->user_id)->first();
+        $deliveryInformation=DeliveryInformation::where("user_id", $requestedReturnOrderDetail->user_id)->first();
 
-        $orderItems=OrderItem::with("product.shop")->where("order_id", $pendingReturnOrderDetail->id)->get();
+        $orderItems=OrderItem::with("product.shop")->where("order_id", $requestedReturnOrderDetail->id)->get();
 
-        return inertia("Admin/OrderManagements/ReturnOrderManage/PendingReturnOrders/Detail", compact("paginate", "pendingReturnOrderDetail", "deliveryInformation", "orderItems"));
+        return inertia("Admin/OrderManagements/ReturnOrderManage/RequestedReturnOrders/Detail", compact("paginate", "requestedReturnOrderDetail", "deliveryInformation", "orderItems"));
     }
 
     public function update(int $id): RedirectResponse
