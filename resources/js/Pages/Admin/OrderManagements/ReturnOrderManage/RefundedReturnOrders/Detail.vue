@@ -1,24 +1,15 @@
 <script setup>
 import Breadcrumb from "@/Components/Breadcrumbs/ReturnOrderManage/Breadcrumb.vue";
-import SearchForm from "@/Components/Form/SearchForm.vue";
-import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import ConfirmedStatus from "@/Components/Table/ConfirmedStatus.vue";
 import RefundedStatus from "@/Components/Table/RefundedStatus.vue";
 import ProcessingStatus from "@/Components/Table/ProcessingStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
-import HeaderTh from "@/Components/Table/HeaderTh.vue";
-import BodyTh from "@/Components/Table/BodyTh.vue";
-import TableHeader from "@/Components/Table/TableHeader.vue";
-import TableContainer from "@/Components/Table/TableContainer.vue";
-import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, usePage, Head } from "@inertiajs/vue3";
-import { computed, inject, reactive, ref, watch } from "vue";
-import { router } from "@inertiajs/vue3";
-import { toast } from "vue3-toastify";
-import "vue3-toastify/dist/index.css";
+import { Head } from "@inertiajs/vue3";
+
 const props = defineProps({
+  paginate: Object,
   deliveryInformation: Object,
   refundedReturnOrderDetail: Object,
   orderItems: Object,
@@ -31,7 +22,6 @@ const props = defineProps({
     <Head title="Details Refunded Return Order" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Vendor Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
           <li aria-current="page">
@@ -77,6 +67,20 @@ const props = defineProps({
             </div>
           </li>
         </Breadcrumb>
+        <div>
+          <Link
+            as="button"
+            :href="route('admin.return-orders.refunded.index')"
+            :data="{
+              page: props.paginate.page,
+              per_page: props.paginate.per_page,
+            }"
+            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+          >
+            <i class="fa-solid fa-arrow-left"></i>
+            Go Back
+          </Link>
+        </div>
       </div>
 
       <div class="grid grid-cols-2 gap-3 my-5">

@@ -16,6 +16,7 @@ class AdminPendingReturnOrderController extends Controller
     {
         $pendingReturnOrders=Order::search(request("search"))
                                   ->where("return_status", "pending")
+                                  ->where("payment_type", "card")
                                   ->orderBy(request("sort", "id"), request("direction", "desc"))
                                   ->paginate(request("per_page", 10))
                                   ->appends(request()->all());
@@ -25,13 +26,15 @@ class AdminPendingReturnOrderController extends Controller
 
     public function show(int $id): Response|ResponseFactory
     {
+        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+
         $pendingReturnOrderDetail=Order::findOrFail($id);
 
         $deliveryInformation=DeliveryInformation::where("user_id", $pendingReturnOrderDetail->user_id)->first();
 
         $orderItems=OrderItem::with("product.shop")->where("order_id", $pendingReturnOrderDetail->id)->get();
 
-        return inertia("Admin/OrderManagements/ReturnOrderManage/PendingReturnOrders/Detail", compact("pendingReturnOrderDetail", "deliveryInformation", "orderItems"));
+        return inertia("Admin/OrderManagements/ReturnOrderManage/PendingReturnOrders/Detail", compact("paginate", "pendingReturnOrderDetail", "deliveryInformation", "orderItems"));
     }
 
     public function update(int $id): RedirectResponse

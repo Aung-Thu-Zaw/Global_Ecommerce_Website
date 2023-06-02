@@ -20,6 +20,7 @@ class AdminApprovedReturnOrderController extends Controller
     {
         $approvedReturnOrders=Order::search(request("search"))
                                    ->where("return_status", "approved")
+                                   ->where("payment_type", "card")
                                    ->orderBy(request("sort", "id"), request("direction", "desc"))
                                    ->paginate(request("per_page", 10))
                                    ->appends(request()->all());
@@ -29,13 +30,15 @@ class AdminApprovedReturnOrderController extends Controller
 
     public function show(int $id): Response|ResponseFactory
     {
+        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+
         $approvedReturnOrderDetail=Order::findOrFail($id);
 
         $deliveryInformation=DeliveryInformation::where("user_id", $approvedReturnOrderDetail->user_id)->first();
 
         $orderItems=OrderItem::with("product.shop")->where("order_id", $approvedReturnOrderDetail->id)->get();
 
-        return inertia("Admin/OrderManagements/ReturnOrderManage/ApprovedReturnOrders/Detail", compact("approvedReturnOrderDetail", "deliveryInformation", "orderItems"));
+        return inertia("Admin/OrderManagements/ReturnOrderManage/ApprovedReturnOrders/Detail", compact("paginate", "approvedReturnOrderDetail", "deliveryInformation", "orderItems"));
     }
 
     public function update(int $id): RedirectResponse

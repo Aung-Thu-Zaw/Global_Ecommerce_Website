@@ -15,6 +15,7 @@ class AdminRefundedReturnOrderController extends Controller
     {
         $refundedReturnOrders=Order::search(request("search"))
                                    ->where("return_status", "refunded")
+                                   ->where("payment_type", "card")
                                    ->orderBy(request("sort", "id"), request("direction", "desc"))
                                    ->paginate(request("per_page", 10))
                                    ->appends(request()->all());
@@ -24,13 +25,15 @@ class AdminRefundedReturnOrderController extends Controller
 
     public function show(int $id): Response|ResponseFactory
     {
+        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+
         $refundedReturnOrderDetail=Order::findOrFail($id);
 
         $deliveryInformation=DeliveryInformation::where("user_id", $refundedReturnOrderDetail->user_id)->first();
 
         $orderItems=OrderItem::with("product.shop")->where("order_id", $refundedReturnOrderDetail->id)->get();
 
-        return inertia("Admin/OrderManagements/ReturnOrderManage/RefundedReturnOrders/Detail", compact("refundedReturnOrderDetail", "deliveryInformation", "orderItems"));
+        return inertia("Admin/OrderManagements/ReturnOrderManage/RefundedReturnOrders/Detail", compact("paginate", "refundedReturnOrderDetail", "deliveryInformation", "orderItems"));
     }
 
 }
