@@ -17,6 +17,8 @@ use App\Http\Controllers\Admin\SiteSettings\AdminWebsiteSettingController;
 use App\Http\Controllers\Admin\Banners\AdminSliderBannerController;
 use App\Http\Controllers\Admin\Managements\UserManage\AdminRegisterUserController;
 use App\Http\Controllers\Admin\Managements\UserManage\AdminRegisterVendorController;
+use App\Http\Controllers\Admin\OrderManagements\CancelOrderManage\AdminApprovedCancelOrderController;
+use App\Http\Controllers\Admin\OrderManagements\CancelOrderManage\AdminRequestedCancelOrderController;
 use App\Http\Controllers\Admin\OrderManagements\OrderManage\AdminConfirmedOrderController;
 use App\Http\Controllers\Admin\OrderManagements\OrderManage\AdminDeliveredOrderController;
 use App\Http\Controllers\Admin\OrderManagements\OrderManage\AdminPendingOrderController;
@@ -304,6 +306,24 @@ Route::middleware(["auth","verified","user.role:admin"])
            Route::controller(AdminRefundedReturnOrderController::class)
                 ->prefix("/return-order-manage/refunded-return")
                 ->name("return-orders.refunded.")
+                ->group(function () {
+                    Route::get("/", "index")->name("index");
+                    Route::get("/details/{id}", "show")->name("show");
+                    Route::post("/{id}", "update")->name("update");
+                });
+
+           Route::controller(AdminRequestedCancelOrderController::class)
+           ->prefix("/cancel-order-manage/requested-cancel")
+           ->name("cancel-orders.requested.")
+           ->group(function () {
+               Route::get("/", "index")->name("index");
+               Route::get("/details/{id}", "show")->name("show");
+               Route::post("/{id}", "update")->name("update");
+           });
+
+           Route::controller(AdminApprovedCancelOrderController::class)
+                ->prefix("/cancel-order-manage/approved-cancel")
+                ->name("cancel-orders.approved.")
                 ->group(function () {
                     Route::get("/", "index")->name("index");
                     Route::get("/details/{id}", "show")->name("show");

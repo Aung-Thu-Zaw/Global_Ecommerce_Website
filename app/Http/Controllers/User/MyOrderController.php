@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ReturnOrderRequest;
+use App\Http\Requests\ReturnOrCancelOrderRequest;
 use App\Models\DeliveryInformation;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -22,6 +22,9 @@ class MyOrderController extends Controller
                      ->whereNull("return_reason")
                      ->whereNull("return_date")
                      ->whereNull("return_status")
+                     ->whereNull("cancel_reason")
+                     ->whereNull("cancel_date")
+                     ->whereNull("cancel_status")
                      ->orderBy("id", "desc")
                      ->get();
 
@@ -30,6 +33,9 @@ class MyOrderController extends Controller
                           ->whereNull("return_reason")
                           ->whereNull("return_date")
                           ->whereNull("return_status")
+                          ->whereNull("cancel_reason")
+                          ->whereNull("cancel_date")
+                          ->whereNull("cancel_status")
                           ->orderBy("id", "desc")
                           ->get();
 
@@ -41,6 +47,9 @@ class MyOrderController extends Controller
                                 ->whereNull("return_reason")
                                 ->whereNull("return_date")
                                 ->whereNull("return_status")
+                                ->whereNull("cancel_reason")
+                                ->whereNull("cancel_date")
+                                ->whereNull("cancel_status")
                                 ->orderBy("id", "desc")
                                 ->get();
 
@@ -49,6 +58,9 @@ class MyOrderController extends Controller
                              ->whereNull("return_reason")
                              ->whereNull("return_date")
                              ->whereNull("return_status")
+                             ->whereNull("cancel_reason")
+                             ->whereNull("cancel_date")
+                             ->whereNull("cancel_status")
                              ->orderBy("id", "desc")
                              ->get();
 
@@ -86,7 +98,7 @@ class MyOrderController extends Controller
         ));
     }
 
-    public function return(ReturnOrderRequest $request, int $order_id): RedirectResponse
+    public function return(ReturnOrCancelOrderRequest $request, int $order_id): RedirectResponse
     {
         $order=Order::find($order_id);
 
@@ -105,6 +117,27 @@ class MyOrderController extends Controller
         });
 
         return to_route("return-orders.index", "tab=all-return-orders")->with("success", "Return request successfully.");
+    }
+
+    public function cancel(ReturnOrCancelOrderRequest $request, int $order_id): RedirectResponse
+    {
+        $order=Order::find($order_id);
+
+        $order->update([
+            "cancel_date"=>now()->format("Y-m-d"),
+            "cancel_reason"=>$request->cancel_reason,
+            "cancel_status"=>"requested",
+        ]);
+
+        $order->orderItems()->each(function ($orderItem) use ($request) {
+            $orderItem->update([
+                    "cancel_date"=>now()->format("Y-m-d"),
+                    "cancel_reason"=>$request->cancel_reason,
+                    "cancel_status"=>"requested",
+                ]);
+        });
+
+        return to_route("cancel-orders.index", "tab=all-cancel-orders")->with("success", "Cancel request successfully.");
     }
 
     public function downloadInvoice(int $order_id): HttpResponse

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Ecommerce;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
-use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -22,7 +21,7 @@ class ReturnOrderAndItemController extends Controller
         $requestedReturnOrders=Order::where("user_id", auth()->user()->id)
                      ->whereNotNull("return_reason")
                      ->whereNotNull("return_date")
-                     ->where("return_status", "pending")
+                     ->where("return_status", "requested")
                      ->orderBy("id", "desc")
                      ->get();
 

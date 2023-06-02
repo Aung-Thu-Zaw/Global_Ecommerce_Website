@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Ecommerce\CancelOrderAndItemController;
 use App\Http\Controllers\Ecommerce\CartController;
 use App\Http\Controllers\Ecommerce\CartItemController;
 use App\Http\Controllers\Ecommerce\CollectionController;
@@ -168,6 +169,7 @@ Route::middleware(["auth","verified"])->group(function () {
                 Route::get('/', "index")->name("index");
                 Route::get('/{order_id}', "show")->name("show");
                 Route::post('/{order_id}/return', "return")->name("return");
+                Route::post('/{order_id}/cancel', "cancel")->name("cancel");
                 Route::get('/invoice/{order_id}/download', "downloadInvoice")->name("download.invoice");
             });
 
@@ -176,9 +178,19 @@ Route::middleware(["auth","verified"])->group(function () {
             ->name("return-orders.")
             ->group(function () {
                 Route::get('/', "index")->name("index");
-                Route::get('/{order_id}', "show")->name("show");
-                Route::post('/{order_id}/return', "return")->name("return");
-                Route::get('/invoice/{order_id}/download', "downloadInvoice")->name("download.invoice");
+                // Route::get('/{order_id}', "show")->name("show");
+                // Route::post('/{order_id}/return', "return")->name("return");
+                // Route::get('/invoice/{order_id}/download', "downloadInvoice")->name("download.invoice");
+            });
+
+    Route::controller(CancelOrderAndItemController::class)
+            ->prefix("/cancel-orders")
+            ->name("cancel-orders.")
+            ->group(function () {
+                Route::get('/', "index")->name("index");
+                // Route::get('/{order_id}', "show")->name("show");
+                // Route::post('/{order_id}/cancel', "cancel")->name("cancel");
+                // Route::get('/invoice/{order_id}/download', "downloadInvoice")->name("download.invoice");
             });
 
     Route::get("followed-shops", [FollowedShopController::class,"index"])->name("user.shop.followed");

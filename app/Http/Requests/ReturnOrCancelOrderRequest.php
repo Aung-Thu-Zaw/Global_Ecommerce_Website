@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ReturnOrderRequest extends FormRequest
+class ReturnOrCancelOrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,8 @@ class ReturnOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            "return_reason"=>["required","string"],
+            "return_reason"=>["nullable","string"],
+            "cancel_reason"=>["nullable","string"],
         ];
     }
 }

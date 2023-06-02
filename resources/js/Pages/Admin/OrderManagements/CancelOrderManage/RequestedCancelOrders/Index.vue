@@ -1,7 +1,7 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/ReturnOrderManage/Breadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/CancelOrderManage/Breadcrumb.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import ApprovedStatus from "@/Components/Table/ApprovedStatus.vue";
+import RequestedStatus from "@/Components/Table/RequestedStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -14,16 +14,16 @@ import { Link, Head, router } from "@inertiajs/vue3";
 import { reactive, watch } from "vue";
 
 const props = defineProps({
-  approvedReturnOrders: Object,
+  requestedCancelOrders: Object,
 });
 
 const params = reactive({
   search: null,
-  page: props.approvedReturnOrders.current_page
-    ? props.approvedReturnOrders.current_page
+  page: props.requestedCancelOrders.current_page
+    ? props.requestedCancelOrders.current_page
     : 1,
-  per_page: props.approvedReturnOrders.per_page
-    ? props.approvedReturnOrders.per_page
+  per_page: props.requestedCancelOrders.per_page
+    ? props.requestedCancelOrders.per_page
     : 10,
   sort: "id",
   direction: "desc",
@@ -37,7 +37,7 @@ watch(
   () => params.search,
   () => {
     router.get(
-      route("admin.return-orders.approved.index"),
+      route("admin.cancel-orders.requested.index"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -56,7 +56,7 @@ watch(
   () => params.per_page,
   () => {
     router.get(
-      route("admin.return-orders.approved.index"),
+      route("admin.cancel-orders.requested.index"),
       {
         search: params.search,
         page: params.page,
@@ -77,7 +77,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    route("admin.return-orders.approved.index"),
+    route("admin.cancel-orders.requested.index"),
     {
       search: params.search,
       page: params.page,
@@ -93,7 +93,7 @@ const updateSorting = (sort = "id") => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Approved Return Orders" />
+    <Head title="Requested Cancel Orders" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -115,7 +115,7 @@ const updateSorting = (sort = "id") => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Approved Return</span
+                >Requested Cancel</span
               >
             </div>
           </li>
@@ -256,62 +256,62 @@ const updateSorting = (sort = "id") => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Return Status </HeaderTh>
-          <HeaderTh @click="updateSorting('order_date')">
-            Return Date
+          <HeaderTh> Cancel Status </HeaderTh>
+          <HeaderTh @click="updateSorting('cancel_date')">
+            Cancel Date
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
               :class="{
                 'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'order_date',
+                  params.direction === 'asc' && params.sort === 'cancel_date',
                 'visually-hidden':
                   params.direction !== '' &&
                   params.direction !== 'asc' &&
-                  params.sort === 'order_date',
+                  params.sort === 'cancel_date',
               }"
             ></i>
             <i
               class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
               :class="{
                 'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'order_date',
+                  params.direction === 'desc' && params.sort === 'cancel_date',
                 'visually-hidden':
                   params.direction !== '' &&
                   params.direction !== 'desc' &&
-                  params.sort === 'order_date',
+                  params.sort === 'cancel_date',
               }"
             ></i>
           </HeaderTh>
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="approvedReturnOrders.data.length">
+        <tbody v-if="requestedCancelOrders.data.length">
           <Tr
-            v-for="approvedReturnOrder in approvedReturnOrders.data"
-            :key="approvedReturnOrder.id"
+            v-for="requestedCancelOrder in requestedCancelOrders.data"
+            :key="requestedCancelOrder.id"
           >
-            <BodyTh>{{ approvedReturnOrder.id }}</BodyTh>
-            <Td>{{ approvedReturnOrder.invoice_no }}</Td>
-            <Td class="capitalize">{{ approvedReturnOrder.payment_type }}</Td>
-            <Td>$ {{ approvedReturnOrder.total_amount }}</Td>
+            <BodyTh>{{ requestedCancelOrder.id }}</BodyTh>
+            <Td>{{ requestedCancelOrder.invoice_no }}</Td>
+            <Td class="capitalize">{{ requestedCancelOrder.payment_type }}</Td>
+            <Td>$ {{ requestedCancelOrder.total_amount }}</Td>
             <Td>
-              <ApprovedStatus>
-                {{ approvedReturnOrder.return_status }}
-              </ApprovedStatus>
+              <RequestedStatus>
+                {{ requestedCancelOrder.return_status }}
+              </RequestedStatus>
             </Td>
-            <Td>{{ approvedReturnOrder.return_date }}</Td>
+            <Td>{{ requestedCancelOrder.return_date }}</Td>
 
             <Td>
               <Link
                 as="button"
                 :href="
                   route(
-                    'admin.return-orders.approved.show',
-                    approvedReturnOrder.id
+                    'admin.cancel-orders.requested.show',
+                    requestedCancelOrder.id
                   )
                 "
                 :data="{
-                  page: props.approvedReturnOrders.current_page,
+                  page: props.requestedCancelOrders.current_page,
                   per_page: params.per_page,
                 }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
@@ -324,9 +324,9 @@ const updateSorting = (sort = "id") => {
         </tbody>
       </TableContainer>
 
-      <NotAvaliableData v-if="!approvedReturnOrders.data.length" />
+      <NotAvaliableData v-if="!requestedCancelOrders.data.length" />
 
-      <Pagination class="mt-6" :links="approvedReturnOrders.links" />
+      <Pagination class="mt-6" :links="requestedCancelOrders.links" />
     </div>
   </AdminDashboardLayout>
 </template>

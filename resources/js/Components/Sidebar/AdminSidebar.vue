@@ -449,6 +449,55 @@
             </ul>
           </li>
         </ul>
+        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <li class="items-center cursor-pointer">
+            <div
+              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+              @click="cancelOrderManageIsHidden = !cancelOrderManageIsHidden"
+            >
+              <span>
+                <i class="fa-solid fa-xmark mr-2 text-sm"></i>
+                Cancel Order Manage
+              </span>
+              <i
+                v-if="cancelOrderManageIsHidden"
+                class="fa-solid fa-chevron-right"
+              ></i>
+              <i
+                v-if="!cancelOrderManageIsHidden"
+                class="fa-solid fa-chevron-down"
+              ></i>
+            </div>
+
+            <ul
+              v-if="!cancelOrderManageIsHidden || cancelOrderManage"
+              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+            >
+              <Link
+                :href="route('admin.cancel-orders.requested.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/cancel-order-manage/requested-cancel'
+                  ),
+                }"
+              >
+                Requested Cancel
+              </Link>
+              <Link
+                :href="route('admin.cancel-orders.approved.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/cancel-order-manage/approved-cancel'
+                  ),
+                }"
+              >
+                Approved Cancel
+              </Link>
+            </ul>
+          </li>
+        </ul>
 
         <hr class="my-4 md:min-w-full" />
 
@@ -702,7 +751,7 @@ export default {
       userManageIsHidden: true,
       orderManageIsHidden: true,
       returnOrderManageIsHidden: true,
-      returnOrderIsHidden: true,
+      cancelOrderManageIsHidden: true,
     };
   },
   methods: {
@@ -752,6 +801,16 @@ export default {
         this.$page.url.startsWith("/admin/return-order-manage/refunded-return")
       ) {
         return (this.returnOrderManageIsHidden = false);
+      }
+    },
+    cancelOrderManage() {
+      if (
+        this.$page.url.startsWith(
+          "/admin/cancel-order-manage/requested-cancel"
+        ) ||
+        this.$page.url.startsWith("/admin/cancel-order-manage/approved-cancel")
+      ) {
+        return (this.cancelOrderManageIsHidden = false);
       }
     },
 

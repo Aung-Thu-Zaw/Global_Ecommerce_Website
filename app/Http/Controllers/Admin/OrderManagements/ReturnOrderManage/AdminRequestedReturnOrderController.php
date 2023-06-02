@@ -55,6 +55,6 @@ class AdminRequestedReturnOrderController extends Controller
 
         // Mail::to($order->deliveryInformation->email)->send(new OrderDeliveredMail($order));
 
-        return to_route("admin.return-orders.approved.index")->with("success", "Order is approved.");
+        return to_route("admin.return-orders.approved.index")->with("success", "Order return is approved.");
     }
 }

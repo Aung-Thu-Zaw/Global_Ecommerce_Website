@@ -69,7 +69,7 @@ class AdminApprovedReturnOrderController extends Controller
             });
 
             // Mail::to($order->deliveryInformation->email)->send(new OrderDeliveredMail($order));
-            return to_route("admin.return-orders.refunded.index")->with("success", "Order is refunded.");
+            return to_route("admin.return-orders.refunded.index")->with("success", "Order return is refunded.");
 
         } catch (Exception $e) {
             return back()->with("error", $e->getMessage());

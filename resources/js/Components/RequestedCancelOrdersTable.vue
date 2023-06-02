@@ -20,7 +20,7 @@ import ToReceiveOrdersTable from "@/Components/ToReceiveOrdersTable.vue";
 import ReceivedOrdersTable from "@/Components/ReceivedOrdersTable.vue";
 
 const props = defineProps({
-  orders: Object,
+  requestedCancelOrders: Object,
 });
 
 const swal = inject("$swal");
@@ -53,13 +53,13 @@ const handleDownload = async (orderId) => {
       <HeaderTh> Payment </HeaderTh>
       <HeaderTh> Amount </HeaderTh>
       <HeaderTh> Order Status </HeaderTh>
-      <HeaderTh> Return Or Cancel </HeaderTh>
+      <HeaderTh> Cancel Status </HeaderTh>
       <HeaderTh> Order Date </HeaderTh>
       <HeaderTh> Actions </HeaderTh>
     </TableHeader>
 
-    <tbody v-if="orders.length">
-      <Tr v-for="order in orders" :key="order.id">
+    <tbody v-if="requestedCancelOrders.length">
+      <Tr v-for="order in requestedCancelOrders" :key="order.id">
         <BodyTh>{{ order.id }}</BodyTh>
         <Td>{{ order.invoice_no }}</Td>
         <Td class="capitalize">{{ order.payment_type }}</Td>
@@ -81,20 +81,17 @@ const handleDownload = async (orderId) => {
             {{ order.order_status }}
           </DeliveredStatus>
         </Td>
-        <Td v-if="order.payment_type === 'card'">
+        <Td>
           <span
-            class="text-slate-600 text-sm bg-slate-200 px-3 py-1 rounded-full"
+            v-if="
+              order.cancel_reason &&
+              order.cancel_date &&
+              order.cancel_status === 'requested'
+            "
+            class="text-red-600 text-sm bg-red-200 px-3 py-1 rounded-full"
           >
-            <i class="fa-solid fa-circle text-[.6rem] animate-pulse"></i>
-            No Return Requested
-          </span>
-        </Td>
-        <Td v-if="order.payment_type === 'cash on delivery'">
-          <span
-            class="text-slate-600 text-sm bg-slate-200 px-3 py-1 rounded-full"
-          >
-            <i class="fa-solid fa-circle text-[.6rem] animate-pulse"></i>
-            No Cancel Requested
+            <i class="fa-solid fa-rotate-right animate-spin"></i>
+            {{ order.cancel_status }}
           </span>
         </Td>
         <Td>{{ order.order_date }}</Td>
@@ -119,9 +116,10 @@ const handleDownload = async (orderId) => {
       </Tr>
     </tbody>
   </TableContainer>
-  <div v-if="!orders.length" class="p-5 w-full bg-gray-100">
+
+  <div v-if="!requestedCancelOrders.length" class="p-5 w-full bg-gray-100">
     <p class="text-center text-sm uppercase text-slate-500 font-bold">
-      There is no orders.
+      There is no requested return orders.
     </p>
   </div>
 </template>

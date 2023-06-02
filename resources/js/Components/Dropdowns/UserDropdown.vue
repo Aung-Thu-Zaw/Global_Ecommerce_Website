@@ -79,6 +79,16 @@
       </Link>
 
       <Link
+        :href="route('cancel-orders.index')"
+        :data="{ tab: 'requested-cancel-orders' }"
+        as="button"
+        class="text-left text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"
+      >
+        <i class="fa-solid fa-xmark mr-3"></i>
+        Cancel Orders & Items
+      </Link>
+
+      <Link
         :href="route('watchlist.index')"
         class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"
       >

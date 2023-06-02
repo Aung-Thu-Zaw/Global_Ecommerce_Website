@@ -20,39 +20,26 @@ const props = defineProps({
   shops: Object,
 });
 
+const swal = inject("$swal");
+
 const isReturnFormOpened = ref(false);
-const isCancelFormOpened = ref(false);
 
 const form = useForm({
   return_reason: "",
-  cancel_reason: "",
   captcha_token: null,
 });
 
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
-const handleOrder = async () => {
+const handleReturnOrder = async () => {
   await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("handle_order");
-  form.return_reason ? handleReturn() : handleCancel();
+  form.captcha_token = await executeRecaptcha("return_order");
+  submit();
 };
 
-const handleReturn = () => {
+const submit = () => {
   form.post(route("my-orders.return", props.order.id), {
     onFinish: () => {
       isReturnFormOpened.value = false;
-      if (usePage().props.flash.successMessage) {
-        toast.success(usePage().props.flash.successMessage, {
-          autoClose: 2000,
-        });
-      }
-    },
-  });
-};
-
-const handleCancel = () => {
-  form.post(route("my-orders.cancel", props.order.id), {
-    onFinish: () => {
-      isCancelFormOpened.value = false;
       if (usePage().props.flash.successMessage) {
         toast.success(usePage().props.flash.successMessage, {
           autoClose: 2000,
@@ -90,6 +77,7 @@ const handleCancel = () => {
         </div>
       </div>
 
+      <!-- Stepper  -->
       <Stepper :order="order" />
 
       <div class="grid grid-cols-2 gap-3 my-5">
@@ -384,93 +372,44 @@ const handleCancel = () => {
         </div>
       </article>
 
-      <div
-        v-if="order.payment_type === 'card'"
-        class="w-full flex flex-col items-center"
+      <button
+        v-if="
+          order.order_status !== 'shipped' &&
+          order.order_status !== 'delivered' &&
+          !order.return_reason
+        "
+        @click="isReturnFormOpened = !isReturnFormOpened"
+        class="bg-red-600 font-bold text-md py-3 px-5 text-white rounded-md hover:bg-red-700 transition-all ml-auto"
       >
-        <button
-          v-if="
-            order.order_status !== 'shipped' &&
-            order.order_status !== 'delivered' &&
-            !order.return_reason
-          "
-          @click="isReturnFormOpened = !isReturnFormOpened"
-          class="bg-red-600 font-bold text-md py-3 px-5 text-white rounded-md hover:bg-red-700 transition-all ml-auto"
-        >
-          <span v-if="!isReturnFormOpened">
-            <i class="fa-solid fa-rotate-left mr-3"></i>
-            Return The Whole Order
-          </span>
-          <span v-else>
-            <i class="fa-solid fa-xmark mr-3"></i>
-            Close
-          </span>
-        </button>
+        <span v-if="!isReturnFormOpened">
+          <i class="fa-solid fa-rotate-left mr-3"></i>
+          Return The Whole Order
+        </span>
+        <span v-else>
+          <i class="fa-solid fa-xmark mr-3"></i>
+          Close
+        </span>
+      </button>
 
-        <div v-if="isReturnFormOpened" class="w-full my-5">
-          <form
-            @submit.prevent="handleReturnOrder"
-            class="flex flex-col items-center"
-          >
-            <textarea
-              cols="30"
-              rows="10"
-              placeholder="Please, write reason why do you want to return this order."
-              class="w-full h-[200px] border-2 border-slate-400 focus:border-slate-400 focus:ring-0 rounded-md"
-              v-model="form.return_reason"
-            ></textarea>
-            <button
-              class="px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-md ml-auto my-3"
-            >
-              <i class="fa-solid fa-paper-plane mr-2"></i>
-              Submit
-            </button>
-          </form>
-        </div>
-      </div>
-      <div
-        v-if="order.payment_type === 'cash on delivery'"
-        class="w-full flex flex-col items-center"
-      >
-        <button
-          v-if="
-            order.order_status !== 'shipped' &&
-            order.order_status !== 'delivered' &&
-            !order.cancel_reason
-          "
-          @click="isCancelFormOpened = !isCancelFormOpened"
-          class="bg-red-600 font-bold text-md py-3 px-5 text-white rounded-md hover:bg-red-700 transition-all ml-auto"
+      <div v-if="isReturnFormOpened" class="w-full my-5">
+        <form
+          @submit.prevent="handleReturnOrder"
+          class="flex flex-col items-center"
         >
-          <span v-if="!isCancelFormOpened">
-            <i class="fa-solid fa-rotate-left mr-3"></i>
-            Cancel The Whole Order
-          </span>
-          <span v-else>
-            <i class="fa-solid fa-xmark mr-3"></i>
-            Close
-          </span>
-        </button>
-
-        <div v-if="isCancelFormOpened" class="w-full my-5">
-          <form
-            @submit.prevent="handleCancelOrder"
-            class="flex flex-col items-center"
+          <textarea
+            cols="30"
+            rows="10"
+            placeholder="Please, write reason why do you want to return this order."
+            class="w-full h-[200px] border-2 border-slate-400 focus:border-slate-400 focus:ring-0 rounded-md"
+            v-model="form.return_reason"
+          ></textarea>
+          <button
+            class="px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-md ml-auto my-3"
           >
-            <textarea
-              cols="30"
-              rows="10"
-              placeholder="Please, write reason why do you want to cancel this order."
-              class="w-full h-[200px] border-2 border-slate-400 focus:border-slate-400 focus:ring-0 rounded-md"
-              v-model="form.cancel_reason"
-            ></textarea>
-            <button
-              class="px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-md ml-auto my-3"
-            >
-              <i class="fa-solid fa-paper-plane mr-2"></i>
-              Submit
-            </button>
-          </form>
-        </div>
+            <i class="fa-solid fa-paper-plane mr-2"></i>
+            Submit
+          </button>
+        </form>
       </div>
     </div>
   </AppLayout>

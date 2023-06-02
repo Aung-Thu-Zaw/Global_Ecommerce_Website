@@ -257,28 +257,28 @@ const updateSorting = (sort = "id") => {
             ></i>
           </HeaderTh>
           <HeaderTh> Return Status </HeaderTh>
-          <HeaderTh @click="updateSorting('order_date')">
+          <HeaderTh @click="updateSorting('return_date')">
             Return Date
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
               :class="{
                 'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'order_date',
+                  params.direction === 'asc' && params.sort === 'return_date',
                 'visually-hidden':
                   params.direction !== '' &&
                   params.direction !== 'asc' &&
-                  params.sort === 'order_date',
+                  params.sort === 'return_date',
               }"
             ></i>
             <i
               class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
               :class="{
                 'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'order_date',
+                  params.direction === 'desc' && params.sort === 'return_date',
                 'visually-hidden':
                   params.direction !== '' &&
                   params.direction !== 'desc' &&
-                  params.sort === 'order_date',
+                  params.sort === 'return_date',
               }"
             ></i>
           </HeaderTh>
