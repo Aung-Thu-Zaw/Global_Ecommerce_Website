@@ -1,14 +1,7 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { computed, inject, reactive, ref } from "vue";
-import Home from "./Partials/Home.vue";
-import AllProducts from "./Partials/AllProducts.vue";
-import ShopRating from "./Partials/ShopRating.vue";
-import ProductRating from "./Partials/ProductRating.vue";
-import { usePage, router, Link, Head } from "@inertiajs/vue3";
-import { toast } from "vue3-toastify";
-import "vue3-toastify/dist/index.css";
-import Pagination from "@/Components/Pagination.vue";
+import { Head } from "@inertiajs/vue3";
+import Pagination from "@/Components/Paginations/Pagination.vue";
 
 const props = defineProps({
   vendorShops: Object,
@@ -61,7 +54,6 @@ const props = defineProps({
           </Link>
         </div>
 
-        <!-- Pagination -->
         <Pagination class="my-6" :links="vendorShops.links" />
       </div>
     </section>

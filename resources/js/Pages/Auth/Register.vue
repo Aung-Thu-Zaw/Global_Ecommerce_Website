@@ -1,14 +1,14 @@
 <script setup>
 import { useReCaptcha } from "vue-recaptcha-v3";
-import FormContainer from "@/Components/Form/FormContainer.vue";
+import FormContainer from "@/Components/Forms/FormContainer.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import InputError from "@/Components/Form/InputError.vue";
-import InputLabel from "@/Components/Form/InputLabel.vue";
-import InputContainer from "@/Components/Form/InputContainer.vue";
-import TextInput from "@/Components/Form/TextInput.vue";
+import InputError from "@/Components/Forms/InputError.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
+import InputContainer from "@/Components/Forms/InputContainer.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
-import FormButton from "@/Components/Form/FormButton.vue";
-import SocialiteAuth from "@/Components/Form/SocialiteAuth.vue";
+import FormButton from "@/Components/Buttons/FormButton.vue";
+import SocialiteAuth from "@/Components/Forms/SocialiteAuth.vue";
 import datepicker from "vue3-datepicker";
 import { computed, ref } from "vue";
 

@@ -117,7 +117,6 @@ const loadMoreCollection = () => {
       <p v-else class="my-5 text-slate-600 text-center">
         You have reached the end of the page.
       </p>
-      <!-- container //end -->
     </section>
   </AppLayout>
 </template>

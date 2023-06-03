@@ -1,6 +1,5 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/OrderManage/Breadcrumb.vue";
-import SearchForm from "@/Components/Form/SearchForm.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/OrderManageBreadcrumb.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import PendingStatus from "@/Components/Table/PendingStatus.vue";
 import ConfirmedStatus from "@/Components/Table/ConfirmedStatus.vue";
@@ -13,7 +12,7 @@ import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
 import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
-import Pagination from "@/Components/Pagination.vue";
+import Pagination from "@/Components/Paginations/Pagination.vue";
 import VendorDashboardLayout from "@/Layouts/VendorDashboardLayout.vue";
 import { Link, usePage, Head } from "@inertiajs/vue3";
 import { computed, inject, reactive, ref, watch } from "vue";

@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import ShoppingCartItem from "@/Components/ShoppingCartItem.vue";
+import ShoppingCartItem from "@/Components/Items/ShoppingCartItem.vue";
 import { Link, router, usePage, Head } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
 import { toast } from "vue3-toastify";
@@ -114,7 +114,6 @@ const removeCoupon = () => {
                 </span>
               </div>
 
-              <!-- item-cart -->
               <div v-for="item in cartItems" :key="item.id">
                 <div v-if="item.shop_id == shop.id">
                   <ShoppingCartItem :item="item" />

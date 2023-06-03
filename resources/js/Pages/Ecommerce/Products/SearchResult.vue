@@ -2,12 +2,11 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ProductCard from "@/Components/Cards/ProductCard.vue";
 import ProductCardList from "@/Components/Cards/ProductCardList.vue";
-import { onMounted, reactive, ref, watch } from "vue";
-import { usePage, router, useForm, Link } from "@inertiajs/vue3";
-import EcommerceFilterSidebarForSearchResult from "@/Components/Sidebar/EcommerceFilterSidebarForSearchResult.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/Home/Breadcrumb.vue";
-import { useReCaptcha } from "vue-recaptcha-v3";
-import Pagination from "@/Components/Pagination.vue";
+import { reactive, ref, watch } from "vue";
+import { usePage, router, Link } from "@inertiajs/vue3";
+import EcommerceFilterSidebarForSearchResult from "@/Components/Sidebars/EcommerceFilterSidebarForSearchResult.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
+import Pagination from "@/Components/Paginations/Pagination.vue";
 
 const props = defineProps({
   categories: Object,
@@ -320,7 +319,6 @@ const handleRemoveBrand = () => {
                   We're sorry. We cannot find any matches for your search term.
                 </p>
               </div>
-              <!-- Pagination -->
               <Pagination class="mt-6" :links="products.links" />
             </div>
 
@@ -346,7 +344,6 @@ const handleRemoveBrand = () => {
                 </p>
               </div>
 
-              <!-- Pagination -->
               <Pagination class="mt-6" :links="products.links" />
             </div>
           </main>

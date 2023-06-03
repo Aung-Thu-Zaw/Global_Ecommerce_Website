@@ -1,13 +1,10 @@
 <script setup>
-import AppLayout from "@/Layouts/AppLayout.vue";
 import ProductCard from "@/Components/Cards/ProductCard.vue";
 import ProductCardList from "@/Components/Cards/ProductCardList.vue";
-import { onMounted, reactive, ref, watch } from "vue";
-import { usePage, router, useForm, Link } from "@inertiajs/vue3";
-import EcommerceFilterSidebarForShop from "@/Components/Sidebar/EcommerceFilterSidebarForShop.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/Home/Breadcrumb.vue";
-import { useReCaptcha } from "vue-recaptcha-v3";
-import Pagination from "@/Components/Pagination.vue";
+import { reactive, ref, watch } from "vue";
+import { usePage, router, Link } from "@inertiajs/vue3";
+import EcommerceFilterSidebarForShop from "@/Components/Sidebars/EcommerceFilterSidebarForShop.vue";
+import Pagination from "@/Components/Paginations/Pagination.vue";
 
 const props = defineProps({
   vendorProducts: Object,
@@ -139,9 +136,6 @@ const handleRemoveBrand = () => {
               <span class="text-blue-600">"{{ params.search }}"</span>
             </p>
 
-
-
-
             <div class="flex items-center ml-auto">
               <div class="w-[220px] flex items-center justify-between">
                 <span class="">Sort By : </span>
@@ -217,7 +211,6 @@ const handleRemoveBrand = () => {
               </div>
             </div>
           </div>
-          
 
           <div class="my-3 w-full">
             <span
@@ -332,12 +325,8 @@ const handleRemoveBrand = () => {
               </p>
             </div>
 
-            <!-- Pagination -->
             <Pagination class="mt-6" :links="vendorProducts.links" />
           </div>
-
-
-
         </main>
       </div>
     </div>

@@ -1,5 +1,5 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/CancelOrderManage/Breadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/CancelOrderManageBreadcrumb.vue";
 import ConfirmedStatus from "@/Components/Table/ConfirmedStatus.vue";
 import ApprovedStatus from "@/Components/Table/ApprovedStatus.vue";
 import ProcessingStatus from "@/Components/Table/ProcessingStatus.vue";

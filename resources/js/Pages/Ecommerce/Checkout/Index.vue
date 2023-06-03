@@ -1,9 +1,9 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import DeliveryInformationForm from "@/Components/DeliveryInformationForm.vue";
-import CheckoutShoppingCartItem from "@/Components/CheckoutShoppingCartItem.vue";
+import DeliveryInformationForm from "@/Components/Forms/DeliveryInformationForm.vue";
+import CheckoutShoppingCartItem from "@/Components/Items/CheckoutShoppingCartItem.vue";
 import { computed, ref } from "vue";
-import { Link, router, useForm, Head } from "@inertiajs/vue3";
+import { useForm, Head } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 
 const props = defineProps({

@@ -1,13 +1,13 @@
 <script setup>
 import { useReCaptcha } from "vue-recaptcha-v3";
-import SocialiteAuth from "@/Components/Form/SocialiteAuth.vue";
-import FormButton from "@/Components/Form/FormButton.vue";
-import Checkbox from "@/Components/Form/Checkbox.vue";
-import FormContainer from "@/Components/Form/FormContainer.vue";
+import SocialiteAuth from "@/Components/Forms/SocialiteAuth.vue";
+import FormButton from "@/Components/Buttons/FormButton.vue";
+import Checkbox from "@/Components/Forms/Checkbox.vue";
+import FormContainer from "@/Components/Forms/FormContainer.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import InputError from "@/Components/Form/InputError.vue";
-import InputLabel from "@/Components/Form/InputLabel.vue";
-import TextInput from "@/Components/Form/TextInput.vue";
+import InputError from "@/Components/Forms/InputError.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 
 defineProps({

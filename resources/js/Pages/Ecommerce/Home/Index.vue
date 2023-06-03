@@ -69,7 +69,7 @@ if (usePage().props.flash.successMessage) {
       <WhyChooseUsSection />
 
       <!-- Subscribe NewsLetter Section -->
-      <SubscribeNewsLetterSection :socialMedia="socialMedia"/>
+      <SubscribeNewsLetterSection :socialMedia="socialMedia" />
     </div>
   </AppLayout>
 </template>

@@ -1,8 +1,6 @@
-
 <script setup>
-import { loadStripe } from "@stripe/stripe-js";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { router,Head } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 </script>
 
 

@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { computed, inject, reactive, ref } from "vue";
+import { computed, inject, reactive } from "vue";
 import Home from "./Partials/Home.vue";
 import AllProducts from "./Partials/AllProducts.vue";
 import ShopRating from "./Partials/ShopRating.vue";

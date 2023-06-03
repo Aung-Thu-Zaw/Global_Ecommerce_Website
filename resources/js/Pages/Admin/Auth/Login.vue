@@ -1,6 +1,6 @@
 <script setup>
 import { useReCaptcha } from "vue-recaptcha-v3";
-import FormButton from "@/Components/Form/FormButton.vue";
+import FormButton from "@/Components/Buttons/FormButton.vue;
 import Checkbox from "@/Components/Form/Checkbox.vue";
 import FormContainer from "@/Components/Form/FormContainer.vue";
 import GuestLayout from "@/Layouts/GuestLayout.vue";

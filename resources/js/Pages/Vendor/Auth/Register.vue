@@ -1,14 +1,13 @@
 <script setup>
 import { useReCaptcha } from "vue-recaptcha-v3";
-import FormContainer from "@/Components/Form/FormContainer.vue";
+import FormContainer from "@/Components/Forms/FormContainer.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import InputError from "@/Components/Form/InputError.vue";
-import InputLabel from "@/Components/Form/InputLabel.vue";
-import TextInput from "@/Components/Form/TextInput.vue";
+import InputError from "@/Components/Forms/InputError.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
-import FormButton from "@/Components/Form/FormButton.vue";
+import FormButton from "@/Components/Buttons/FormButton.vue";
 
-// Form input data
 const form = useForm({
   company_name: "",
   shop_name: "",
@@ -24,7 +23,6 @@ const form = useForm({
   captcha_token: null,
 });
 
-// Register with recaptcha v3 token
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 const recaptcha = async () => {
   await recaptchaLoaded();

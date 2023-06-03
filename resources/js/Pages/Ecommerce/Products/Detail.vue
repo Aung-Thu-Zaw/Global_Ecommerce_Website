@@ -1,10 +1,10 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/Home/Breadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
 import Information from "@/Components/Information.vue";
 import ShopInformationCard from "@/Components/Cards/ShopInformationCard.vue";
 import { computed, reactive, ref } from "vue";
-import { Link, router, usePage, Head } from "@inertiajs/vue3";
+import { router, usePage, Head } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import ProductCard from "@/Components/Cards/ProductCard.vue";

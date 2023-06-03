@@ -1,5 +1,6 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/ReturnOrderManage/Breadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/ReturnOrderManageBreadcrumb.vue";
+import SearchForm from "@/Components/Forms/SearchForm.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import RefundedStatus from "@/Components/Table/RefundedStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
@@ -8,15 +9,16 @@ import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
 import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
-import Pagination from "@/Components/Pagination.vue";
+import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, Head, router } from "@inertiajs/vue3";
-import { reactive, watch } from "vue";
-
+import { Link, usePage, Head } from "@inertiajs/vue3";
+import { computed, inject, reactive, ref, watch } from "vue";
+import { router } from "@inertiajs/vue3";
 const props = defineProps({
   refundedReturnOrders: Object,
 });
 
+const swal = inject("$swal");
 const params = reactive({
   search: null,
   page: props.refundedReturnOrders.current_page
@@ -28,16 +30,15 @@ const params = reactive({
   sort: "id",
   direction: "desc",
 });
-
 const handleSearchBox = () => {
   params.search = "";
 };
 
 watch(
   () => params.search,
-  () => {
+  (current, previous) => {
     router.get(
-      route("admin.return-orders.approved.index"),
+      "/admin/return-order-manage/refunded-return",
       {
         search: params.search,
         per_page: params.per_page,
@@ -54,9 +55,9 @@ watch(
 
 watch(
   () => params.per_page,
-  () => {
+  (current, previous) => {
     router.get(
-      route("admin.return-orders.refunded.index"),
+      "/admin/return-order-manage/refunded-return",
       {
         search: params.search,
         page: params.page,
@@ -77,7 +78,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    route("admin.return-orders.approved.index"),
+    "/admin/return-order-manage/refunded-return",
     {
       search: params.search,
       page: params.page,
@@ -88,6 +89,65 @@ const updateSorting = (sort = "id") => {
     { replace: true, preserveState: true }
   );
 };
+
+// const handleActive = async (inactiveVendorId) => {
+//   const result = await swal({
+//     icon: "info",
+//     title: "Are you sure you want to active this vendor?",
+//     showCancelButton: true,
+//     confirmButtonText: "Yes, active!",
+//     confirmButtonColor: "#027e00",
+//     timer: 20000,
+//     timerProgressBar: true,
+//     reverseButtons: true,
+//   });
+
+//   if (result.isConfirmed) {
+//     router.post(
+//       route("admin.vendors.inactive.update", {
+//         id: inactiveVendorId,
+//         page: props.inactiveVendors.current_page,
+//         per_page: params.per_page,
+//       })
+//     );
+//     setTimeout(() => {
+//       swal({
+//         icon: "success",
+//         title: usePage().props.flash.successMessage,
+//       });
+//     }, 500);
+//   }
+// };
+
+// const handleDelete = async (inactiveVendorId) => {
+//   const result = await swal({
+//     icon: "warning",
+//     title: "Are you sure you want to move it to the trash?",
+//     text: "You will be able to revert this action!",
+//     showCancelButton: true,
+//     confirmButtonText: "Yes, remove it!",
+//     confirmButtonColor: "#ef4444",
+//     timer: 20000,
+//     timerProgressBar: true,
+//     reverseButtons: true,
+//   });
+
+//   if (result.isConfirmed) {
+//     router.delete(
+//       route("admin.vendors.inactive.destroy", {
+//         id: inactiveVendorId,
+//         page: props.inactiveVendors.current_page,
+//         per_page: params.per_page,
+//       })
+//     );
+//     setTimeout(() => {
+//       swal({
+//         icon: "success",
+//         title: usePage().props.flash.successMessage,
+//       });
+//     }, 500);
+//   }
+// };
 </script>
 
 
@@ -96,6 +156,7 @@ const updateSorting = (sort = "id") => {
     <Head title="Refunded Return Orders" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
+      <!-- Vendor Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
           <li aria-current="page">
@@ -120,8 +181,21 @@ const updateSorting = (sort = "id") => {
             </div>
           </li>
         </Breadcrumb>
+
+        <!-- <div>
+          <Link
+            as="button"
+            :href="route('admin.vendors.inactive.trash')"
+            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
+          >
+            <i class="fa-solid fa-trash"></i>
+
+            Trash
+          </Link>
+        </div> -->
       </div>
 
+      <!-- Search Input Form -->
       <div class="flex items-center justify-end mb-5">
         <form class="w-[350px] relative">
           <input
@@ -324,9 +398,11 @@ const updateSorting = (sort = "id") => {
         </tbody>
       </TableContainer>
 
+      <!-- Not Avaliable Data -->
       <NotAvaliableData v-if="!refundedReturnOrders.data.length" />
 
-      <Pagination class="mt-6" :links="refundedReturnOrders.links" />
+      <!-- Pagination -->
+      <pagination class="mt-6" :links="refundedReturnOrders.links" />
     </div>
   </AdminDashboardLayout>
 </template>
