@@ -1,14 +1,14 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/OrderManage/Breadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/OrderManageBreadcrumb.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import ConfirmedStatus from "@/Components/Table/ConfirmedStatus.vue";
+import ConfirmedStatus from "@/Components/Status/ConfirmedStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
 import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
-import Pagination from "@/Components/Pagination.vue";
+import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { reactive, watch } from "vue";
 import { router, Link, Head } from "@inertiajs/vue3";

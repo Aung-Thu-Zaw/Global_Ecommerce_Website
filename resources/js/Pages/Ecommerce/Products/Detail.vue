@@ -95,13 +95,11 @@ const saveToWatchlist = () => {
     {
       preserveScroll: true,
       onSuccess: () => {
-        // Success flash message
         if (usePage().props.flash.successMessage) {
           toast.success(usePage().props.flash.successMessage, {
             autoClose: 2000,
           });
         }
-        // Info flash message
         if (usePage().props.flash.infoMessage) {
           toast.info(usePage().props.flash.infoMessage, {
             autoClose: 2000,

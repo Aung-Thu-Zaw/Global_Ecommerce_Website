@@ -39,7 +39,7 @@
     </style>
 </head>
 
-<body class="font-sans antialiased">
+<body class="font-sans antialiased w-full min-h-screen h-full bg-white border text-dark">
     @inertia
 </body>
 

@@ -12,7 +12,6 @@
       </div>
     </div>
     <div class="block w-full overflow-x-auto">
-      <!-- Projects table -->
       <table class="items-center w-full bg-transparent border-collapse">
         <thead class="thead-light">
           <tr>

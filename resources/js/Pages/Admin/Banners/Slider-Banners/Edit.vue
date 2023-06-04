@@ -2,10 +2,10 @@
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link, useForm, Head } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
-import InputError from "@/Components/Form/InputError.vue";
-import InputLabel from "@/Components/Form/InputLabel.vue";
-import TextInput from "@/Components/Form/TextInput.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/Banners/Breadcrumb.vue";
+import InputError from "@/Components/Forms/InputError.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/BannerBreadcrumb.vue";
 import { ref } from "vue";
 
 const props = defineProps({
@@ -54,7 +54,7 @@ const submit = () => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Edit Slider" />
+    <Head title="Edit Slider Banner" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
@@ -154,9 +154,9 @@ const submit = () => {
               @change="getPreviewPhotoPath($event.target.files[0])"
             />
 
-            <!-- <span class="text-xs text-gray-500">
-              SVG, PNG, JPG, JPEG, WEBP or GIF (MAX. 800x400px)
-            </span> -->
+            <span class="text-xs text-gray-500">
+              SVG, PNG, JPG, JPEG, WEBP or GIF
+            </span>
 
             <InputError class="mt-2" :message="form.errors.image" />
           </div>

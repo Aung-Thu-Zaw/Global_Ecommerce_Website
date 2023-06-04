@@ -1,6 +1,6 @@
 <script setup>
 import { router } from "@inertiajs/vue3";
-import ShopReplyEditForm from "@/Components/Form/ShopReplyEditForm.vue";
+import ShopReplyEditForm from "@/Components/Forms/ShopReplyEditForm.vue";
 import { ref } from "vue";
 
 const props = defineProps({ paginateShopReview: Object });

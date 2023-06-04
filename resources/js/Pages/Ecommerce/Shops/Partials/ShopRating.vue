@@ -1,9 +1,11 @@
 <script setup>
 import ShopReviewCard from "@/Components/Cards/ShopReviewCard.vue";
 import ShopReplyCard from "@/Components/Cards/ShopReplyCard.vue";
-import ShopReviewForm from "@/Components/Form/ShopReviewForm.vue";
+import ShopReviewForm from "@/Components/Forms/ShopReviewForm.vue";
 import { computed } from "vue";
-import Pagination from "@/Components/Pagination.vue";
+import Pagination from "@/Components/Paginations/Pagination.vue";
+import TotalAverageRatingStarWithProgressBar from "@/Components/RatingStars/TotalAverageRatingStarWithProgressBar.vue";
+import TotalReviewAvgStars from "@/Components/RatingStars/TotalReviewAvgStars.vue";
 
 const props = defineProps({
   paginateShopReviews: Object,
@@ -20,22 +22,22 @@ const oneStarRating = computed(() => {
   return ((totalRatings.length / props.shopReviews.length) * 100).toFixed(0);
 });
 
-const twoStarRating = computed(() => {
+const twoStarsRating = computed(() => {
   const totalRatings = props.shopReviews.filter((review) => review.rating == 2);
   return ((totalRatings.length / props.shopReviews.length) * 100).toFixed(0);
 });
 
-const threeStarRating = computed(() => {
+const threeStarsRating = computed(() => {
   const totalRatings = props.shopReviews.filter((review) => review.rating == 3);
   return ((totalRatings.length / props.shopReviews.length) * 100).toFixed(0);
 });
 
-const fourStarRating = computed(() => {
+const fourStarsRating = computed(() => {
   const totalRatings = props.shopReviews.filter((review) => review.rating == 4);
   return ((totalRatings.length / props.shopReviews.length) * 100).toFixed(0);
 });
 
-const fiveStarRating = computed(() => {
+const fiveStarsRating = computed(() => {
   const totalRatings = props.shopReviews.filter((review) => review.rating == 5);
   return ((totalRatings.length / props.shopReviews.length) * 100).toFixed(0);
 });
@@ -55,164 +57,20 @@ const fiveStarRating = computed(() => {
 
         <div class="w-full">
           <div class="flex items-center justify-center">
-            <div class="flex items-center mb-3">
-              <svg
-                aria-hidden="true"
-                class="w-5 h-5"
-                :class="{
-                  'text-yellow-400': reviewAvg >= 1,
-                  'text-gray-300': reviewAvg < 1,
-                }"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                ></path>
-              </svg>
-              <svg
-                aria-hidden="true"
-                class="w-5 h-5"
-                :class="{
-                  'text-yellow-400': reviewAvg >= 2,
-                  'text-gray-300': reviewAvg < 2 || reviewAvg >= 3,
-                }"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                ></path>
-              </svg>
-              <svg
-                aria-hidden="true"
-                class="w-5 h-5"
-                :class="{
-                  'text-yellow-400': reviewAvg >= 3,
-                  'text-gray-300': reviewAvg < 3 || reviewAvg >= 4,
-                }"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                ></path>
-              </svg>
-              <svg
-                aria-hidden="true"
-                class="w-5 h-5"
-                :class="{
-                  'text-yellow-400': reviewAvg >= 4,
-                  'text-gray-300': reviewAvg < 4 || reviewAvg >= 5,
-                }"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                ></path>
-              </svg>
-              <svg
-                aria-hidden="true"
-                class="w-5 h-5"
-                :class="{
-                  'text-yellow-400': reviewAvg >= 5,
-                  'text-gray-300': reviewAvg < 5,
-                }"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                ></path>
-              </svg>
-              <p
-                class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400"
-              >
-                {{ reviewAvg }} out of 5
-              </p>
-            </div>
+            <TotalReviewAvgStars :reviewAvg="reviewAvg" />
           </div>
 
           <p class="text-sm text-slate-400">
             Based on {{ shopReviews.length }} customer ratings
           </p>
 
-          <div class="flex items-center mt-4 justify-center">
-            <span class="text-sm font-medium text-blue-600 dark:text-blue-500"
-              >5 star</span
-            >
-            <div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-              <div
-                class="h-5 bg-yellow-400 rounded"
-                :style="{ width: `${fiveStarRating}%` }"
-              ></div>
-            </div>
-            <span class="text-sm font-medium text-blue-600 dark:text-blue-500"
-              >{{ fiveStarRating }}%</span
-            >
-          </div>
-          <div class="flex items-center mt-4 justify-center">
-            <span class="text-sm font-medium text-blue-600 dark:text-blue-500"
-              >4 star</span
-            >
-            <div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-              <div
-                class="h-5 bg-yellow-400 rounded"
-                :style="{ width: `${fourStarRating}%` }"
-              ></div>
-            </div>
-            <span class="text-sm font-medium text-blue-600 dark:text-blue-500"
-              >{{ fourStarRating }}%</span
-            >
-          </div>
-          <div class="flex items-center mt-4 justify-center">
-            <span class="text-sm font-medium text-blue-600 dark:text-blue-500"
-              >3 star</span
-            >
-            <div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-              <div
-                class="h-5 bg-yellow-400 rounded"
-                :style="{ width: `${threeStarRating}%` }"
-              ></div>
-            </div>
-            <span class="text-sm font-medium text-blue-600 dark:text-blue-500"
-              >{{ threeStarRating }}%</span
-            >
-          </div>
-          <div class="flex items-center mt-4 justify-center">
-            <span class="text-sm font-medium text-blue-600 dark:text-blue-500"
-              >2 star</span
-            >
-            <div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-              <div
-                class="h-5 bg-yellow-400 rounded"
-                :style="{ width: `${twoStarRating}%` }"
-              ></div>
-            </div>
-            <span class="text-sm font-medium text-blue-600 dark:text-blue-500"
-              >{{ twoStarRating }}%</span
-            >
-          </div>
-          <div class="flex items-center mt-4 justify-center">
-            <span class="text-sm font-medium text-blue-600 dark:text-blue-500"
-              >1 star</span
-            >
-            <div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-              <div
-                class="h-5 bg-yellow-400 rounded"
-                :style="{ width: `${oneStarRating}%` }"
-              ></div>
-            </div>
-            <span class="text-sm font-medium text-blue-600 dark:text-blue-500"
-              >{{ oneStarRating }}%</span
-            >
-          </div>
+          <TotalAverageRatingStarWithProgressBar
+            :oneStarRating="oneStarRating"
+            :twoStarsRating="twoStarsRating"
+            :threeStarsRating="threeStarsRating"
+            :fourStarsRating="fourStarsRating"
+            :fiveStarsRating="fiveStarsRating"
+          />
         </div>
       </div>
 

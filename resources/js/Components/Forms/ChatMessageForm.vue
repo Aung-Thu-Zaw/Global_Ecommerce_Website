@@ -1,13 +1,12 @@
 <script setup>
 import { useForm, usePage } from "@inertiajs/vue3";
-import { computed, onBeforeMount, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useReCaptcha } from "vue-recaptcha-v3";
 
 const props = defineProps({
   conversation: Object,
 });
 
-// Handle Mulit Preview Photo
 const multiPreviewFiles = ref([]);
 const getMultiPreviewPhotoPath = (paths) => {
   paths.forEach((path) => {
@@ -20,7 +19,6 @@ const handleMultiplePhotoChange = (files) => {
   getMultiPreviewPhotoPath(paths);
 };
 
-// Handle Multipreview Photo Remove
 const removeImage = (index) => {
   multiPreviewFiles.value.splice(index, 1);
 

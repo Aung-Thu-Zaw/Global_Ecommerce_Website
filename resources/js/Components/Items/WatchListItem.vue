@@ -1,5 +1,5 @@
 <script setup>
-import { computed, inject, ref } from "vue";
+import { inject } from "vue";
 import { Link, router, usePage } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -25,7 +25,6 @@ const addToCart = () => {
     {
       preserveScroll: true,
       onSuccess: () => {
-        // Success flash message
         toast.success(usePage().props.flash.successMessage, {
           autoClose: 2000,
         });

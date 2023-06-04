@@ -228,7 +228,6 @@ const isVisibleChatbox = ref(false);
     </div>
   </div>
 
-  <!-- ChatBox  -->
   <div v-if="isVisibleChatbox">
     <ChatBox @isVisible="isVisibleChatbox = false" />
   </div>

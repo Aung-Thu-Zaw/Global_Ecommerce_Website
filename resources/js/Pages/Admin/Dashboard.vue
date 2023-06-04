@@ -1,10 +1,10 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import AdminHeaderStats from "@/Components/Headers/AdminHeaderStats.vue";
-import MonthlyOrderCardBarChart from "@/Components/Cards/MonthlyOrderCardBarChart.vue";
-import MonthlySalesCardLineChart from "@/Components/Cards/MonthlySalesCardLineChart.vue";
-import MonthlyRegisterUserCardLineChart from "@/Components/Cards/MonthlyRegisterUserCardLineChart.vue";
-import MonthlyRegisterVendorCardLineChart from "@/Components/Cards/MonthlyRegisterVendorCardLineChart.vue";
+import MonthlyOrderCardBarChart from "@/Components/Charts/MonthlyOrderCardBarChart.vue";
+import MonthlySalesCardLineChart from "@/Components/Charts/MonthlySalesCardLineChart.vue";
+import MonthlyRegisterUserCardLineChart from "@/Components/Charts/MonthlyRegisterUserCardLineChart.vue";
+import MonthlyRegisterVendorCardLineChart from "@/Components/Charts/MonthlyRegisterVendorCardLineChart.vue";
 import CardPageVisits from "@/Components/Cards/CardPageVisits.vue";
 import CardSocialTraffic from "@/Components/Cards/CardSocialTraffic.vue";
 import { toast } from "vue3-toastify";

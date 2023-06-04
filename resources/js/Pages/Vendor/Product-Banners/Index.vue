@@ -1,6 +1,6 @@
 <script setup>
-import ActiveStatus from "@/Components/Table/ActiveStatus.vue";
-import InactiveStatus from "@/Components/Table/InactiveStatus.vue";
+import ActiveStatus from "@/Components/Status/ActiveStatus.vue";
+import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
@@ -11,10 +11,8 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/BannerBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import VendorDashboardLayout from "@/Layouts/VendorDashboardLayout.vue";
-import { Link, Head } from "@inertiajs/vue3";
+import { Link, Head, router, usePage } from "@inertiajs/vue3";
 import { reactive, watch, inject } from "vue";
-import { router } from "@inertiajs/vue3";
-import { usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
   vendorProductBanners: Object,
@@ -40,9 +38,9 @@ const handleSearchBox = () => {
 
 watch(
   () => params.search,
-  (current, previous) => {
+  () => {
     router.get(
-      "/vendor/product-banners",
+      route("vendor.product-banners.index"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -59,9 +57,9 @@ watch(
 
 watch(
   () => params.per_page,
-  (current, previous) => {
+  () => {
     router.get(
-      "/vendor/product-banners",
+      route("vendor.product-banners.index"),
       {
         search: params.search,
         page: params.page,
@@ -82,7 +80,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/vendor/product-banners",
+    route("vendor.product-banners.index"),
     {
       search: params.search,
       page: params.page,
@@ -94,7 +92,6 @@ const updateSorting = (sort = "id") => {
   );
 };
 
-// Handel Product Banner Show
 const handleShow = async (hideProductBannerId) => {
   const result = await swal({
     icon: "info",
@@ -111,7 +108,7 @@ const handleShow = async (hideProductBannerId) => {
     router.post(
       route("vendor.product-banners.show", {
         id: hideProductBannerId,
-        page: props.vendorProductBanners.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -133,7 +130,6 @@ const handleShow = async (hideProductBannerId) => {
   }
 };
 
-// Handel Product Banner Hide
 const handleHide = async (showProductBannerId) => {
   const result = await swal({
     icon: "info",
@@ -150,7 +146,7 @@ const handleHide = async (showProductBannerId) => {
     router.post(
       route("vendor.product-banners.hide", {
         id: showProductBannerId,
-        page: props.vendorProductBanners.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -180,7 +176,7 @@ const handleDelete = async (productBannerId) => {
     router.delete(
       route("vendor.product-banners.destroy", {
         vendor_product_banner: productBannerId,
-        page: props.vendorProductBanners.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -206,7 +202,6 @@ if (usePage().props.flash.successMessage) {
     <Head title="Product Banners" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Category Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
           <li aria-current="page">
@@ -255,7 +250,6 @@ if (usePage().props.flash.successMessage) {
           <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
           Add Product Banner</Link
         >
-        <!-- Search Input Form -->
         <div class="flex items-center">
           <form class="w-[350px] relative">
             <input
@@ -441,7 +435,7 @@ if (usePage().props.flash.successMessage) {
                   route('vendor.product-banners.edit', vendorProductBanner.id)
                 "
                 :data="{
-                  page: props.vendorProductBanners.current_page,
+                  page: params.page,
                   per_page: params.per_page,
                 }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
@@ -461,11 +455,9 @@ if (usePage().props.flash.successMessage) {
         </tbody>
       </TableContainer>
 
-      <!-- Not Avaliable Data -->
       <NotAvaliableData v-if="!vendorProductBanners.data.length" />
 
-      <!-- Pagination -->
-      <pagination class="mt-6" :links="vendorProductBanners.links" />
+      <Pagination class="mt-6" :links="vendorProductBanners.links" />
     </div>
   </VendorDashboardLayout>
 </template>

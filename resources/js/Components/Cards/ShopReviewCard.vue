@@ -1,9 +1,9 @@
 <script setup>
-import ShopReviewReplyForm from "@/Components/Form/ShopReviewReplyForm.vue";
-import ShopReviewEditForm from "@/Components/Form/ShopReviewEditForm.vue";
-import { computed, ref } from "vue";
+import ShopReviewReplyForm from "@/Components/Forms/ShopReviewReplyForm.vue";
+import ShopReviewEditForm from "@/Components/Forms/ShopReviewEditForm.vue";
+import ProductRatingStar from "@/Components/RatingStars/ProductRatingStar.vue";
+import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
-import ProductRatingStar from "@/Components/ProductRatingStar.vue";
 
 const isShopReplyFormVisible = ref(false);
 const isEditShopReviewFormVisible = ref(false);

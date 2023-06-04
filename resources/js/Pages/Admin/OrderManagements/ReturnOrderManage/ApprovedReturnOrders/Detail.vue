@@ -58,7 +58,6 @@ const handleConfirm = async (id) => {
     <Head title="Details Approved Return Order" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Vendor Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
           <li aria-current="page">

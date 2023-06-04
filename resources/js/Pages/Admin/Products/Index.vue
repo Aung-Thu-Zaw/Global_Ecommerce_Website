@@ -1,7 +1,7 @@
 <script setup>
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import ActiveStatus from "@/Components/Table/ActiveStatus.vue";
-import InactiveStatus from "@/Components/Table/InactiveStatus.vue";
+import ActiveStatus from "@/Components/Status/ActiveStatus.vue";
+import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";

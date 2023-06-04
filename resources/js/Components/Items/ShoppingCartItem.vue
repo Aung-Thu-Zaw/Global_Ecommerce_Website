@@ -197,7 +197,6 @@ const removeItem = async (item) => {
     </div>
 
     <div class="">
-      <!-- selection -->
       <div class="w-auto relative">
         <div>
           <span

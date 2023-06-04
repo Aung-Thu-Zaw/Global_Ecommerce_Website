@@ -403,10 +403,8 @@ const handlePermanentlyDelete = async () => {
         </tbody>
       </TableContainer>
 
-      <!-- Not Avaliable Data -->
       <NotAvaliableData v-if="!trashBrands.data.length" />
 
-      <!-- Pagination -->
       <Pagination class="mt-6" :links="trashBrands.links" />
     </div>
   </AdminDashboardLayout>

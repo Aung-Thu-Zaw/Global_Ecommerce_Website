@@ -1,3 +1,8 @@
+<script setup>
+import AdminDashboardNavbar from "@/Components/Navbars/AdminDashboardNavbar.vue";
+import AdminSidebar from "@/Components/Sidebars/AdminSidebar.vue";
+</script>
+
 <template>
   <div class="font-roboto">
     <AdminSidebar />
@@ -7,8 +12,4 @@
     </div>
   </div>
 </template>
-<script setup>
-import AdminDashboardNavbar from "@/Components/Navbars/AdminDashboardNavbar.vue";
-import AdminSidebar from "@/Components/Sidebar/AdminSidebar.vue";
 
-</script>

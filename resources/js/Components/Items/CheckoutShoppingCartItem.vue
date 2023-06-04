@@ -1,20 +1,10 @@
 <script setup >
-import { computed, inject, ref, watch } from "vue";
-import { Link, router, usePage } from "@inertiajs/vue3";
-import { toast } from "vue3-toastify";
-import "vue3-toastify/dist/index.css";
+import { computed, ref, watch } from "vue";
+import { Link, router } from "@inertiajs/vue3";
 
 const props = defineProps({ item: Object });
 
-const swal = inject("$swal");
 const quantity = ref(props.item.qty);
-
-const increment = () =>
-  quantity.value >= props.item.product.qty
-    ? (quantity.value = props.item.product.qty)
-    : quantity.value++;
-
-const decrement = () => (quantity.value <= 1 ? 1 : quantity.value--);
 
 watch(
   () => quantity.value,
@@ -35,72 +25,6 @@ const totalDiscountPrice = computed(
   () => quantity.value * props.item.product.discount
 );
 const totalPrice = computed(() => quantity.value * props.item.product.price);
-
-const moveToWatchlist = async (item) => {
-  const result = await swal({
-    icon: "warning",
-    title: `Move To Watchlist`,
-    text: `Item(s) will be moved to watchlist and removed from cart.`,
-    showCancelButton: true,
-    confirmButtonText: "Yes, move it!",
-    confirmButtonColor: "#ef4444",
-    timer: 20000,
-    timerProgressBar: true,
-    reverseButtons: true,
-  });
-
-  if (result.isConfirmed) {
-    router.post(
-      route("watchlist.store", {
-        user_id: usePage().props.auth.user.id,
-        product_id: props.item.product.id,
-        shop_id: props.item.product.shop.id,
-      }),
-      {},
-      {
-        preserveScroll: true,
-        onSuccess: () => {
-          router.post(route("cart-items.destroy", props.item.id));
-          // Success flash message
-          if (usePage().props.flash.successMessage) {
-            toast.success(usePage().props.flash.successMessage, {
-              autoClose: 2000,
-            });
-          }
-        },
-      }
-    );
-  }
-};
-
-const removeItem = async (item) => {
-  const result = await swal({
-    icon: "warning",
-    title: `Remove From Shopping Cart`,
-    text: `Are you sure you want to remove this item(s)?`,
-    showCancelButton: true,
-    confirmButtonText: "Yes, remove it!",
-    confirmButtonColor: "#ef4444",
-    timer: 20000,
-    timerProgressBar: true,
-    reverseButtons: true,
-  });
-
-  if (result.isConfirmed) {
-    router.delete(
-      route("cart-items.destroy", item),
-      {},
-      {
-        preserveScroll: true,
-        onSuccess: () => {
-          toast.success(usePage().props.flash.successMessage, {
-            autoClose: 2000,
-          });
-        },
-      }
-    );
-  }
-};
 </script>
 
 <template>

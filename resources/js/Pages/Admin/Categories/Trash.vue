@@ -1,7 +1,5 @@
 <script setup>
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import ActiveStatus from "@/Components/Table/ActiveStatus.vue";
-import InactiveStatus from "@/Components/Table/InactiveStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -13,7 +11,6 @@ import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { inject, reactive, watch } from "vue";
 import { router, usePage, Link, Head } from "@inertiajs/vue3";
-import {} from "@inertiajs/vue3";
 
 const props = defineProps({
   trashCategories: Object,
@@ -317,31 +314,6 @@ const handlePermanentlyDelete = async () => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh @click="updateSorting('status')">
-            Status
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'status',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'status',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'status',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'status',
-              }"
-            ></i>
-          </HeaderTh>
           <HeaderTh @click="updateSorting('deleted_at')">
             Deleted At
             <i
@@ -384,14 +356,6 @@ const handlePermanentlyDelete = async () => {
               />
             </Td>
             <Td>{{ trashCategory.name }}</Td>
-            <Td>
-              <ActiveStatus v-if="trashCategory.status == 'show'">
-                {{ trashCategory.status }}
-              </ActiveStatus>
-              <InactiveStatus v-if="trashCategory.status == 'hide'">
-                {{ trashCategory.status }}
-              </InactiveStatus>
-            </Td>
             <Td>{{ trashCategory.deleted_at }}</Td>
             <Td>
               <button

@@ -1,20 +1,17 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/VendorManage/Breadcrumb.vue";
-import SearchForm from "@/Components/Form/SearchForm.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/VendorManageBreadcrumb.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import ActiveStatus from "@/Components/Table/ActiveStatus.vue";
+import ActiveStatus from "@/Components/Status/ActiveStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
 import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
-import Pagination from "@/Components/Pagination.vue";
+import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, Head } from "@inertiajs/vue3";
 import { reactive, watch, inject } from "vue";
-import { router } from "@inertiajs/vue3";
-import { usePage } from "@inertiajs/vue3";
+import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
   activeVendors: Object,
@@ -34,9 +31,9 @@ const handleSearchBox = () => {
 
 watch(
   () => params.search,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/vendor-manage/active-vendors",
+      route("admin.vendors.active.index"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -53,9 +50,9 @@ watch(
 
 watch(
   () => params.per_page,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/vendor-manage/active-vendors",
+      route("admin.vendors.active.index"),
       {
         search: params.search,
         page: params.page,
@@ -76,7 +73,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/vendor-manage/active-vendors",
+    route("admin.vendors.active.index"),
     {
       search: params.search,
       page: params.page,
@@ -106,7 +103,7 @@ const handleInactive = async (activeVendorId) => {
     router.post(
       route("admin.vendors.active.update", {
         id: activeVendorId,
-        page: props.activeVendors.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -125,7 +122,6 @@ const handleInactive = async (activeVendorId) => {
     <Head title="Active Vendors" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Vendor Breadcrumb -->
       <Breadcrumb>
         <li aria-current="page">
           <div class="flex items-center">
@@ -149,7 +145,6 @@ const handleInactive = async (activeVendorId) => {
         </li>
       </Breadcrumb>
 
-      <!-- Search Input Form -->
       <div class="flex items-center justify-end mb-5">
         <form class="w-[350px] relative">
           <input
@@ -182,7 +177,6 @@ const handleInactive = async (activeVendorId) => {
         </div>
       </div>
 
-      <!-- Table  -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -310,7 +304,7 @@ const handleInactive = async (activeVendorId) => {
                 as="button"
                 :href="route('admin.vendors.active.show', activeVendor.id)"
                 :data="{
-                  page: props.activeVendors.current_page,
+                  page: params.page,
                   per_page: params.per_page,
                 }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700"
@@ -323,11 +317,9 @@ const handleInactive = async (activeVendorId) => {
         </tbody>
       </TableContainer>
 
-      <!-- Not Avaliable Data -->
       <NotAvaliableData v-if="!activeVendors.data.length" />
 
-      <!-- Pagination -->
-      <pagination class="mt-6" :links="activeVendors.links" />
+      <Pagination class="mt-6" :links="activeVendors.links" />
     </div>
   </AdminDashboardLayout>
 </template>

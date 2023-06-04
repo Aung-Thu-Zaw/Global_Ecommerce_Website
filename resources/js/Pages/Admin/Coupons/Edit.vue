@@ -2,10 +2,10 @@
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link, useForm, Head } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
-import InputError from "@/Components/Form/InputError.vue";
-import InputLabel from "@/Components/Form/InputLabel.vue";
-import TextInput from "@/Components/Form/TextInput.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/Coupons/Breadcrumb.vue";
+import InputError from "@/Components/Forms/InputError.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/CouponBreadcrumb.vue";
 import { computed, ref } from "vue";
 import datepicker from "vue3-datepicker";
 

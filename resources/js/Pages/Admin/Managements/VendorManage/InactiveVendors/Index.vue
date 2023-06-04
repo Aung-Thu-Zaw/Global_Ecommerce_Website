@@ -1,19 +1,19 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/VendorManage/Breadcrumb.vue";
-import SearchForm from "@/Components/Form/SearchForm.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/VendorManageBreadcrumb.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import InactiveStatus from "@/Components/Table/InactiveStatus.vue";
+import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
 import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
-import Pagination from "@/Components/Pagination.vue";
+import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link, usePage, Head } from "@inertiajs/vue3";
-import { computed, inject, reactive, ref, watch } from "vue";
+import { inject, reactive, watch } from "vue";
 import { router } from "@inertiajs/vue3";
+
 const props = defineProps({
   inactiveVendors: Object,
 });
@@ -30,15 +30,16 @@ const params = reactive({
   sort: "id",
   direction: "desc",
 });
+
 const handleSearchBox = () => {
   params.search = "";
 };
 
 watch(
   () => params.search,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/vendor-manage/inactive-vendors",
+      route("admin.vendors.inactive.index"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -55,9 +56,9 @@ watch(
 
 watch(
   () => params.per_page,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/vendor-manage/inactive-vendors",
+      route("admin.vendors.inactive.index"),
       {
         search: params.search,
         page: params.page,
@@ -78,7 +79,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/vendor-manage/inactive-vendors",
+    route("admin.vendors.inactive.index"),
     {
       search: params.search,
       page: params.page,
@@ -106,7 +107,7 @@ const handleActive = async (inactiveVendorId) => {
     router.post(
       route("admin.vendors.inactive.update", {
         id: inactiveVendorId,
-        page: props.inactiveVendors.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -136,7 +137,7 @@ const handleDelete = async (inactiveVendorId) => {
     router.delete(
       route("admin.vendors.inactive.destroy", {
         id: inactiveVendorId,
-        page: props.inactiveVendors.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -156,7 +157,6 @@ const handleDelete = async (inactiveVendorId) => {
     <Head title="Inactive Vendors" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Vendor Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
           <li aria-current="page">
@@ -195,7 +195,6 @@ const handleDelete = async (inactiveVendorId) => {
         </div>
       </div>
 
-      <!-- Search Input Form -->
       <div class="flex items-center justify-end mb-5">
         <form class="w-[350px] relative">
           <input
@@ -366,7 +365,7 @@ const handleDelete = async (inactiveVendorId) => {
                 as="button"
                 :href="route('admin.vendors.inactive.show', inactiveVendor.id)"
                 :data="{
-                  page: props.inactiveVendors.current_page,
+                  page: params.page,
                   per_page: params.per_page,
                 }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
@@ -379,11 +378,9 @@ const handleDelete = async (inactiveVendorId) => {
         </tbody>
       </TableContainer>
 
-      <!-- Not Avaliable Data -->
       <NotAvaliableData v-if="!inactiveVendors.data.length" />
 
-      <!-- Pagination -->
-      <pagination class="mt-6" :links="inactiveVendors.links" />
+      <Pagination class="mt-6" :links="inactiveVendors.links" />
     </div>
   </AdminDashboardLayout>
 </template>

@@ -1,5 +1,4 @@
 <script setup>
-import { ref } from "vue";
 import { useForm, usePage } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 

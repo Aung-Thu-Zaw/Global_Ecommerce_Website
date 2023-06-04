@@ -8,7 +8,6 @@ defineProps({
 </script>
 
 <template>
-  <!--  MAIN SECTION  -->
   <section class="pt-5">
     <div class="container max-w-screen-xl mx-auto px-4">
       <article class="p-4 bg-white border border-gray-200 shadow-sm rounded-md">
@@ -48,7 +47,6 @@ defineProps({
                 </svg>
               </button>
 
-              <!-- Dropdown menu -->
               <div
                 :id="'dropdownHover' + category.id"
                 class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-md p-5 md:w-[500px] lg:w-[920px] h-[400px] dark:bg-gray-700 overflow-auto"
@@ -92,12 +90,9 @@ defineProps({
             <SliderBanner :sliderBanners="sliderBanners" />
           </main>
         </div>
-        <!-- grid.// -->
       </article>
     </div>
-    <!-- container //end -->
   </section>
-  <!--  MAIN SECTION END -->
 </template>
 
 

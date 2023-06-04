@@ -1,5 +1,5 @@
 <script setup>
-import { useForm, router, usePage } from "@inertiajs/vue3";
+import { useForm, usePage } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 
 const props = defineProps({ product: Object });

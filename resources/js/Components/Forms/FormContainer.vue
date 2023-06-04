@@ -20,7 +20,6 @@
       alt=""
       class="hidden md:block w-1/2"
     />
-    <!-- Form Start -->
     <div class="flex flex-col items-center bg-white w-full md:px-5 md:w-1/2">
       <slot />
     </div>

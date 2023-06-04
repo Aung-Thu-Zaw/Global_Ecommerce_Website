@@ -3,8 +3,7 @@ import QuestionCard from "@/Components/Cards/QuestionCard.vue";
 import AnswerCard from "@/Components/Cards/AnswerCard.vue";
 import { useForm, usePage, Link } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
-import Pagination from "@/Components/Pagination.vue";
-import { ref } from "vue";
+import Pagination from "@/Components/Paginations/Pagination.vue";
 
 const props = defineProps({
   product: Object,
@@ -63,7 +62,7 @@ const submit = () => {
 
         <!-- Pagination -->
         <div class="my-5">
-          <pagination :links="productQuestions.links" />
+          <Pagination :links="productQuestions.links" />
         </div>
       </div>
       <div v-else class="px-5 w-full">

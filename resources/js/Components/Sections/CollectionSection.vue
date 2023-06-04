@@ -8,7 +8,6 @@ defineProps({
 
 
 <template>
-  <!-- SECTION-ICONMENU -->
   <section class="pt-10">
     <div class="container max-w-screen-xl mx-auto px-4">
       <div

@@ -4,6 +4,7 @@ const props = defineProps({
   specificShopProducts: Object,
 });
 </script>
+
 <template>
   <aside
     v-if="specificShopProducts.length"

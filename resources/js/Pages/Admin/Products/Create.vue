@@ -2,15 +2,14 @@
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link, useForm, Head } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
-import InputError from "@/Components/Form/InputError.vue";
-import InputLabel from "@/Components/Form/InputLabel.vue";
-import TextInput from "@/Components/Form/TextInput.vue";
-import FormButton from "@/Components/Buttons/FormButton.vue;
+import InputError from "@/Components/Forms/InputError.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import FormButton from "@/Components/Buttons/FormButton.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ProductBreadcrumb.vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { computed, ref } from "vue";
 
-// Datas From Controller
 const props = defineProps({
   per_page: String,
   brands: Object,
@@ -19,7 +18,6 @@ const props = defineProps({
   vendors: Object,
 });
 
-// Product Create Form Data
 const form = useForm({
   name: "",
   sizes: [],
@@ -44,13 +42,11 @@ const form = useForm({
 
 const editor = ClassicEditor;
 
-// Handle Single Preview Photo
 const previewPhoto = ref("");
 const getPreviewPhotoPath = (path) => {
   previewPhoto.value.src = URL.createObjectURL(path);
 };
 
-// Handle Mulit Preview Photo
 const multiPreviewPhotos = ref([]);
 const getMultiPreviewPhotoPath = (paths) => {
   paths.forEach((path) => {
@@ -63,7 +59,6 @@ const handleMultiplePhotoChange = (files) => {
   getMultiPreviewPhotoPath(paths);
 };
 
-// Handle Multipreview Photo Remove
 const removeImage = (index) => {
   multiPreviewPhotos.value.splice(index, 1);
 
@@ -71,7 +66,6 @@ const removeImage = (index) => {
   form.multi_image.splice(index, 1);
 };
 
-// Handle Create and Remvoe Dynamic Size Tags
 const size = ref("");
 const createSize = (e) => {
   if (e.key === ",") {
@@ -87,7 +81,6 @@ const removeSize = (removeSize) => {
   });
 };
 
-// Handle Create and Remvoe Dynamic Color Tags
 const color = ref("");
 const createColor = (e) => {
   if (e.key === ",") {
@@ -104,7 +97,6 @@ const removeColor = (removeColor) => {
   });
 };
 
-// Handle Create Product
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 const handleCreateProduct = async () => {
   await recaptchaLoaded();
@@ -129,7 +121,6 @@ const submit = () => {
     <Head title="Create Product" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
-        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -154,9 +145,9 @@ const submit = () => {
           </li>
         </Breadcrumb>
 
-        <!-- Go Back Button -->
         <div>
           <Link
+            as="button"
             :href="route('admin.products.index')"
             :data="{
               per_page: props.per_page,
@@ -171,7 +162,6 @@ const submit = () => {
 
       <div class="border shadow-md p-10">
         <div class="">
-          <!-- Create Product Form -->
           <form @submit.prevent="handleCreateProduct" class="">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
               <div class="py-6">

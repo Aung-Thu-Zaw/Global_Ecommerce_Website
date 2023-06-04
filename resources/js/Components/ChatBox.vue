@@ -1,10 +1,9 @@
 <script setup>
-import { useForm, usePage } from "@inertiajs/vue3";
+import { usePage } from "@inertiajs/vue3";
 import MessageBox from "@/Components/MessageBox.vue";
 import ConversationCardForCustomer from "@/Components/Cards/ConversationCardForCustomer.vue";
 import ConversationCardForVendor from "@/Components/Cards/ConversationCardForVendor.vue";
-import { computed, ref, watch } from "vue";
-import { useReCaptcha } from "vue-recaptcha-v3";
+import { computed, ref } from "vue";
 
 const props = defineProps({
   conversation: Object,

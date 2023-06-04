@@ -1,21 +1,18 @@
 
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/VendorManage/Breadcrumb.vue";
-import SearchForm from "@/Components/Form/SearchForm.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/VendorManageBreadcrumb.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import InactiveStatus from "@/Components/Table/InactiveStatus.vue";
+import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
 import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
-import Pagination from "@/Components/Pagination.vue";
+import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, Head } from "@inertiajs/vue3";
 import { inject, reactive, watch } from "vue";
-import { router } from "@inertiajs/vue3";
-import { usePage } from "@inertiajs/vue3";
+import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
   inactiveTrashVendors: Object,
@@ -46,9 +43,9 @@ const handleSearchBox = () => {
 
 watch(
   () => params.search,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/managements/inactive-vendors/trash",
+      route("admin.vendors.inactive.trash"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -65,9 +62,9 @@ watch(
 
 watch(
   () => params.per_page,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/managements/inactive-vendors/trash",
+      route("admin.vendors.inactive.trash"),
       {
         search: params.search,
         page: params.page,
@@ -88,7 +85,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/managements/inactive-vendors/trash",
+    route("admin.vendors.inactive.trash"),
     {
       search: params.search,
       page: params.page,
@@ -116,7 +113,7 @@ const handleRestore = async (inactiveVendorId) => {
     router.post(
       route("admin.vendors.inactive.restore", {
         id: inactiveVendorId,
-        page: props.inactiveTrashVendors.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -146,7 +143,7 @@ const handleDelete = async (inactiveVendorId) => {
     router.delete(
       route("admin.vendors.inactive.forceDelete", {
         id: inactiveVendorId,
-        page: props.inactiveTrashVendors.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -175,7 +172,7 @@ const handlePermanentlyDelete = async () => {
   if (result.isConfirmed) {
     router.get(
       route("admin.vendors.inactive.permanentlyDelete", {
-        page: props.inactiveTrashVendors.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );

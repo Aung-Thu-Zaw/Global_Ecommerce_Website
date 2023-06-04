@@ -5,7 +5,6 @@ defineProps({
 </script>
 
 <template>
-  <!-- For Vendor  -->
   <div class="border-2 rounded-md shadow-md cursor-pointer">
     <div class="py-3 flex items-start px-3">
       <img

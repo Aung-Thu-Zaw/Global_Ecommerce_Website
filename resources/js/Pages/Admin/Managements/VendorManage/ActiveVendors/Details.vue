@@ -1,10 +1,10 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/VendorManage/Breadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/VendorManageBreadcrumb.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import InputContainer from "@/Components/Form/InputContainer.vue";
-import InputError from "@/Components/Form/InputError.vue";
-import InputLabel from "@/Components/Form/InputLabel.vue";
-import TextInput from "@/Components/Form/TextInput.vue";
+import InputContainer from "@/Components/Forms/InputContainer.vue";
+import InputError from "@/Components/Forms/InputError.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -28,7 +28,6 @@ const form = useForm({
     <Head :title="activeVendor.name + ' Details'" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Vendor Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
           <li aria-current="page">

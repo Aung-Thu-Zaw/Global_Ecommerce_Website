@@ -6,7 +6,6 @@ import { Link } from "@inertiajs/vue3";
   <nav class="relative shadow-sm bg-secondary-200">
     <div class="container max-w-screen-xl mx-auto px-4">
       <div class="hidden lg:flex flex-1 items-center py-1">
-        <!-- Category -->
         <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
           <ul
             class="flex flex-col p-2 mt-4 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:border-0 md:dark:bg-gray-900 font-bold"
@@ -99,7 +98,6 @@ import { Link } from "@inertiajs/vue3";
                 data-dropdown-trigger="hover"
                 class="flex items-center justify-between w-full pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-gray-400 dark:hover:text-white dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
               >
-                <!-- <i class="fa-solid fa-shop mr-2"></i> -->
                 Our Seller Shops
                 <svg
                   class="w-5 h-5 ml-1"

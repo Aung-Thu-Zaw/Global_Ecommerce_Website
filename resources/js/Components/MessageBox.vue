@@ -1,6 +1,6 @@
 
 <script setup>
-import ChatMessageForm from "@/Components/Form/ChatMessageForm.vue";
+import ChatMessageForm from "@/Components/Forms/ChatMessageForm.vue";
 
 import { onMounted, onUpdated, ref } from "vue";
 

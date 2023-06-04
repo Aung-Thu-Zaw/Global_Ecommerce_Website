@@ -1,6 +1,3 @@
-<script setup>
-</script>
-
 <template>
   <button
     type="submit"

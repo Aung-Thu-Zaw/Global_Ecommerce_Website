@@ -1,9 +1,11 @@
+<script setup>
+import CardStats from "@/Components/Cards/CardStats.vue";
+</script>
+
 <template>
-  <!-- Header -->
   <div class="relative bg-cyan-700 md:pt-32 pb-32 pt-12">
     <div class="px-4 md:px-10 mx-auto w-full">
       <div>
-        <!-- Card stats -->
         <div class="flex flex-wrap">
           <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
             <CardStats
@@ -59,12 +61,3 @@
   </div>
 </template>
 
-<script>
-import CardStats from "@/Components/Cards/CardStats.vue";
-
-export default {
-  components: {
-    CardStats,
-  },
-};
-</script>

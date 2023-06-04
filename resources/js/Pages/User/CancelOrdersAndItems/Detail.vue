@@ -1,14 +1,14 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, useForm, usePage } from "@inertiajs/vue3";
-import OrderCartItem from "@/Components/OrderCartItem.vue";
-import Stepper from "@/Components/Stepper.vue";
+import OrderCartItem from "@/Components/Items/OrderCartItem.vue";
+import Stepper from "@/Components/Steppers/OrderStepper.vue";
 import { inject, ref } from "vue";
-import PendingStatus from "@/Components/Table/PendingStatus.vue";
-import ConfirmedStatus from "@/Components/Table/ConfirmedStatus.vue";
-import ProcessingStatus from "@/Components/Table/ProcessingStatus.vue";
-import ShippedStatus from "@/Components/Table/ShippedStatus.vue";
-import DeliveredStatus from "@/Components/Table/DeliveredStatus.vue";
+import PendingStatus from "@/Components/Status/PendingStatus.vue";
+import ConfirmedStatus from "@/Components/Status/ConfirmedStatus.vue";
+import ProcessingStatus from "@/Components/Status/ProcessingStatus.vue";
+import ShippedStatus from "@/Components/Status/ShippedStatus.vue";
+import DeliveredStatus from "@/Components/Status/DeliveredStatus.vue";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -19,8 +19,6 @@ const props = defineProps({
   deliveryInformation: Object,
   shops: Object,
 });
-
-const swal = inject("$swal");
 
 const isReturnFormOpened = ref(false);
 

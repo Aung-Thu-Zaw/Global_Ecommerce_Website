@@ -1,7 +1,7 @@
 <script setup>
-import AnswerForm from "@/Components/Form/AnswerForm.vue";
-import QuestionEditForm from "@/Components/Form/QuestionEditForm.vue";
-import { router, usePage } from "@inertiajs/vue3";
+import AnswerForm from "@/Components/Forms/AnswerForm.vue";
+import QuestionEditForm from "@/Components/Forms/QuestionEditForm.vue";
+import { router } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 const props = defineProps({
@@ -69,7 +69,6 @@ const handleDeleteQuestion = () => {
           </button>
         </div>
 
-        <!-- Dropdown menu -->
         <div
           :id="'dropdownDot' + question.id"
           class="z-40 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"

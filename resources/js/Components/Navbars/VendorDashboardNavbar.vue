@@ -1,5 +1,9 @@
+<script setup>
+import { Link } from "@inertiajs/vue3";
+import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
+</script>
+
 <template>
-  <!-- Navbar -->
   <nav
     class="absolute top-0 left-0 w-full z-3 md:flex-row md:flex-nowrap md:justify-start flex items-center p-4 bg-cyan-700"
   >
@@ -50,22 +54,11 @@
           />
         </div>
       </form>
-      <!-- User -->
       <ul class="flex-col md:flex-row list-none items-center hidden md:flex">
         <UserDropdown />
       </ul>
     </div>
   </nav>
-  <!-- End Navbar -->
 </template>
 
-<script>
-import { Link } from "@inertiajs/vue3";
-import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
 
-export default {
-  components: {
-    UserDropdown,
-  },
-};
-</script>

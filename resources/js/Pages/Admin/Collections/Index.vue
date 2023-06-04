@@ -324,10 +324,8 @@ if (usePage().props.flash.successMessage) {
         </tbody>
       </TableContainer>
 
-      <!-- Not Avaliable Data -->
       <NotAvaliableData v-if="!collections.data.length" />
 
-      <!-- Pagination -->
       <Pagination class="mt-6" :links="collections.links" />
     </div>
   </AdminDashboardLayout>

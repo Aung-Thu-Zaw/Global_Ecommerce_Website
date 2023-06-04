@@ -1,6 +1,6 @@
 <script setup>
-import AnswerEditForm from "@/Components/Form/AnswerEditForm.vue";
-import { router, usePage } from "@inertiajs/vue3";
+import AnswerEditForm from "@/Components/Forms/AnswerEditForm.vue";
+import { router } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 const props = defineProps({

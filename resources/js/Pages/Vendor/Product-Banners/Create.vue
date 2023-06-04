@@ -2,19 +2,16 @@
 import VendorDashboardLayout from "@/Layouts/VendorDashboardLayout.vue";
 import { Link, useForm, Head, usePage } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
-import InputError from "@/Components/Form/InputError.vue";
-import InputLabel from "@/Components/Form/InputLabel.vue";
-import TextInput from "@/Components/Form/TextInput.vue";
-import FormButton from "@/Components/Buttons/FormButton.vue;
+import InputError from "@/Components/Forms/InputError.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import FormButton from "@/Components/Buttons/FormButton.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/BannerBreadcrumb.vue";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { ref } from "vue";
 
 const props = defineProps({
   per_page: String,
 });
-
-const editor = ClassicEditor;
 
 const previewPhoto = ref("");
 const getPreviewPhotoPath = (path) => {
@@ -51,8 +48,6 @@ const submit = () => {
   <VendorDashboardLayout>
     <Head title="Create Product Banner" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Breadcrumb start -->
-
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
           <li aria-current="page">
@@ -151,7 +146,7 @@ const submit = () => {
             />
 
             <span class="text-xs text-gray-500">
-              SVG, PNG, JPG, JPEG, WEBP or GIF (MAX. 800x400px)
+              SVG, PNG, JPG, JPEG, WEBP or GIF
             </span>
 
             <InputError class="mt-2" :message="form.errors.image" />

@@ -3,7 +3,6 @@
 import ProductCard from "@/Components/Cards/ProductCard.vue";
 import { Link } from "@inertiajs/vue3";
 
-
 defineProps({
   hotDealProducts: Object,
 });

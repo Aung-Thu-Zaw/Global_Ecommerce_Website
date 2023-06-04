@@ -2,10 +2,10 @@
 <script setup>
 import ProductReplyCard from "@/Components/Cards/ProductReplyCard.vue";
 import ProductReviewCard from "@/Components/Cards/ProductReviewCard.vue";
-import ProductReviewForm from "@/Components/Form/ProductReviewForm.vue";
+import ProductReviewForm from "@/Components/Forms/ProductReviewForm.vue";
 import { Link } from "@inertiajs/vue3";
-import Pagination from "@/Components/Pagination.vue";
-import { computed, onMounted, ref } from "vue";
+import Pagination from "@/Components/Paginations/Pagination.vue";
+import { computed } from "vue";
 
 const props = defineProps({
   product: Object,

@@ -1,7 +1,7 @@
 <script setup>
-import InputError from "@/Components/Form/InputError.vue";
-import InputLabel from "@/Components/Form/InputLabel.vue";
-import TextInput from "@/Components/Form/TextInput.vue";
+import InputError from "@/Components/Forms/InputError.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
 import { useForm, usePage } from "@inertiajs/vue3";
 import { computed } from "vue";
 import { useReCaptcha } from "vue-recaptcha-v3";

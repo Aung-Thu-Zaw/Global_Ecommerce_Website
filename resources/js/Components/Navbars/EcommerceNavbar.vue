@@ -1,7 +1,7 @@
 <script setup>
 import { Link, router, useForm, usePage } from "@inertiajs/vue3";
-import { computed, reactive, watch } from "vue";
-import UserDropdown from "../Dropdowns/UserDropdown.vue";
+import { computed, reactive } from "vue";
+import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -88,17 +88,7 @@ const handleSearch = () => {
           BECOME A VENDOR
         </Link>
         <span>|</span>
-        <!-- <a
-          class="text-sm font-bold px-3 py-2 hover:text-gray-300"
-          href="#"
-          data-te-toggle="tooltip"
-          data-te-placement="bottom"
-          title="Become a seller is for those who wants to sell a variety of products."
-        >
-          <i class="fa-solid fa-shop"></i>
-          BECOME A SELLER
-        </a>
-        <span>|</span> -->
+
         <div
           class="text-sm font-bold px-3 py-2 hover:text-gray-300"
           data-dropdown-toggle="dropdownSearch"
@@ -200,24 +190,19 @@ const handleSearch = () => {
           </div>
         </div>
       </nav>
-      <!-- menu //end -->
     </div>
-    <!-- container //end -->
   </nav>
   <header class="bg-white shadow-sm border border-b">
     <div class="container max-w-screen-xl mx-auto px-4">
       <div class="py-3 md:flex items-center">
         <div class="flex items-center flex-shrink-0 mb-4 md:mb-0">
-          <!-- brand -->
           <Link
             :href="route('home')"
             class="mr-20 md:mr-3 lg:mr-24 pr-4 text-xl text-slate-600 font-bold"
           >
             Global E-commerce
           </Link>
-          <!-- brand //end -->
 
-          <!-- mobile-only -->
           <div class="md:hidden ml-auto">
             <button
               type="button"
@@ -227,7 +212,6 @@ const handleSearch = () => {
               <i class="fa fa-bars fa-lg"></i>
             </button>
           </div>
-          <!-- mobile-only //end  -->
         </div>
 
         <div class="w-full flex flex-nowrap items-center md:w-1/2">
@@ -267,7 +251,6 @@ const handleSearch = () => {
           </Link>
         </nav>
 
-        <!-- Actions -->
         <nav v-else class="hidden md:flex justify-end flex-1 items-center">
           <div class="flex items-center space-x-2 ml-auto">
             <Link
@@ -290,10 +273,8 @@ const handleSearch = () => {
             </Link>
           </div>
         </nav>
-        <!-- Actions .//end -->
       </div>
     </div>
-    <!-- container.// -->
   </header>
 </template>
 

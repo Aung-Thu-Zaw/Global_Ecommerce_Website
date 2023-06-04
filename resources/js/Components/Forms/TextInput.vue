@@ -1,5 +1,5 @@
 <script setup>
-import InputContainer from "@/Components/Form/InputContainer.vue";
+import InputContainer from "@/Components/Forms/InputContainer.vue";
 import { onMounted, ref } from "vue";
 
 defineProps(["modelValue", "placeholder", "type", "required"]);

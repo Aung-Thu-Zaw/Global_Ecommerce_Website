@@ -5,7 +5,6 @@ import ProductCard from "@/Components/Cards/ProductCard.vue";
 defineProps({ newProducts: Object });
 </script>
 
-
 <template>
   <section class="py-10">
     <div class="container max-w-screen-xl mx-auto px-4">

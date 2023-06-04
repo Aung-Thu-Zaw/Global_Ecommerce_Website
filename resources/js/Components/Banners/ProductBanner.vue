@@ -1,9 +1,10 @@
-
 <script setup>
 defineProps({
   productBanners: Object,
 });
 </script>
+
+
 <template>
   <section class="container mx-auto">
     <div class="flex items-center justify-center flex-wrap">

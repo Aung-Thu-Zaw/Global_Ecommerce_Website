@@ -1,16 +1,17 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/VendorManage/Breadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/VendorManageBreadcrumb.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import InputContainer from "@/Components/Form/InputContainer.vue";
-import InputError from "@/Components/Form/InputError.vue";
-import InputLabel from "@/Components/Form/InputLabel.vue";
-import TextInput from "@/Components/Form/TextInput.vue";
+import InputContainer from "@/Components/Forms/InputContainer.vue";
+import InputError from "@/Components/Forms/InputError.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
   paginate: Object,
   inactiveVendor: Object,
 });
+
 const form = useForm({
   company_name: props.inactiveVendor.company_name,
   shop_name: props.inactiveVendor.shop_name,
@@ -28,8 +29,6 @@ const form = useForm({
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
-        <!-- Breadcrumb -->
-
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">

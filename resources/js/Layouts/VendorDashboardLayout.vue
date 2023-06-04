@@ -1,3 +1,8 @@
+<script setup>
+import VendorDashboardNavbar from "@/Components/Navbars/VendorDashboardNavbar.vue";
+import VendorSidebar from "@/Components/Sidebars/VendorSidebar.vue";
+</script>
+
 <template>
   <div class="font-roboto">
     <VendorSidebar />
@@ -7,10 +12,7 @@
     </div>
   </div>
 </template>
-<script setup>
-import VendorDashboardNavbar from "@/Components/Navbars/VendorDashboardNavbar.vue";
-import VendorSidebar from "@/Components/Sidebar/VendorSidebar.vue";
-</script>
+
 
 
 

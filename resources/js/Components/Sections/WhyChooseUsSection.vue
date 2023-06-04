@@ -1,5 +1,4 @@
 <template>
-  <!-- SECTION-FEATURES -->
   <section class="bg-white py-12">
     <div class="container max-w-screen-xl mx-auto px-4">
       <h2 class="text-3xl font-bold mb-8">Why choose us</h2>
@@ -9,7 +8,7 @@
           <figure class="flex mb-4">
             <div class="flex-shrink-0 mr-3">
               <span
-                class="block w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center"
+                class="w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center"
               >
                 <i class="fa fa-money-bill text-2xl"></i>
               </span>
@@ -26,7 +25,7 @@
           <figure class="flex mb-4">
             <div class="flex-shrink-0 mr-3">
               <span
-                class="block w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center"
+                class="w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center"
               >
                 <i class="fa fa-star text-2xl"></i>
               </span>
@@ -43,7 +42,7 @@
           <figure class="flex mb-4">
             <div class="flex-shrink-0 mr-3">
               <span
-                class="block w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center"
+                class="w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center"
               >
                 <i class="fa fa-plane text-2xl"></i>
               </span>
@@ -60,7 +59,7 @@
           <figure class="flex mb-4">
             <div class="flex-shrink-0 mr-3">
               <span
-                class="block w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center"
+                class="w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center"
               >
                 <i class="fa fa-users text-2xl"></i>
               </span>
@@ -77,7 +76,7 @@
           <figure class="flex mb-4">
             <div class="flex-shrink-0 mr-3">
               <span
-                class="block w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center"
+                class="w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center"
               >
                 <i class="fa fa-thumbs-up text-2xl"></i>
               </span>
@@ -94,7 +93,7 @@
           <figure class="flex mb-4">
             <div class="flex-shrink-0 mr-3">
               <span
-                class="block w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center"
+                class="w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center"
               >
                 <i class="fa fa-box text-2xl"></i>
               </span>
@@ -108,16 +107,6 @@
           </figure>
         </div>
       </div>
-      <!-- grid .// -->
     </div>
-    <!-- container .// -->
   </section>
-  <!-- SECTION-FEATURES //END -->
 </template>
-
-<script>
-export default {};
-</script>
-
-<style>
-</style>

@@ -1,9 +1,10 @@
-
 <script setup>
 defineProps({
   campaignBanner: Object,
 });
 </script>
+
+
 <template>
   <section class="container mx-auto my-3 p-5">
     <div class="h-[200px] flex items-center justify-center">
