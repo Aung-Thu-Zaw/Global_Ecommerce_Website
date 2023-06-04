@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class CategoryRequest extends FormRequest
+class BlogCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,14 +25,14 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         $rules= [
-            "parent_id"=>["nullable",Rule::exists("categories", "id")],
-            "name"=>["required","string","max:255",Rule::unique("categories", "name")],
+            "parent_id"=>["nullable",Rule::exists("blog_categories", "id")],
+            "name"=>["required","string","max:255",Rule::unique("blog_categories", "name")],
             "status"=>["required","string",Rule::in(["show","hide"])]
         ];
 
         if (in_array($this->method(), ['POST','PUT', 'PATCH'])) {
-            $category = $this->route()->parameter('category');
-            $rules["name"]=["required","string","max:255",Rule::unique("categories", "name")->ignore($category)];
+            $blog_category = $this->route()->parameter('blog_category');
+            $rules["name"]=["required","string","max:255",Rule::unique("blog_categories", "name")->ignore($blog_category)];
         }
 
         return $rules;

@@ -90,7 +90,7 @@ const handleSearch = () => {
         <span>|</span>
 
         <div
-          class="text-sm font-bold px-3 py-2 hover:text-gray-300"
+          class="text-sm font-bold px-3 py-2 hover:text-gray-300 cursor-pointer"
           data-dropdown-toggle="dropdownSearch"
           data-dropdown-placement="bottom"
           data-te-toggle="tooltip"

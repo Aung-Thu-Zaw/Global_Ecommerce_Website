@@ -690,6 +690,47 @@
             </Link>
           </li>
         </ul> -->
+
+        <hr class="my-4 md:min-w-full" />
+
+        <!-- Blog Management Area -->
+        <h6
+          class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
+        >
+          Blog Managements
+        </h6>
+
+        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <li class="items-center">
+            <Link
+              :href="route('admin.blogs.categories.index')"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url === '/admin/blogs/categories',
+                'text-slate-700 hover:text-slate-500':
+                  $page.url !== '/admin/blogs/categories',
+              }"
+            >
+              <i class="fa-regular fa-rectangle-list mr-2 text-sm"></i>
+              Blog Categories
+            </Link>
+            <Link
+              :href="route('admin.blogs.posts.index')"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url === '/admin/blogs/posts',
+                'text-slate-700 hover:text-slate-500':
+                  $page.url !== '/admin/blogs/posts',
+              }"
+            >
+              <i class="fa-solid fa-newspaper mr-2 text-sm"></i>
+              Blog Posts
+            </Link>
+          </li>
+        </ul>
+
         <hr class="my-4 md:min-w-full" />
 
         <!-- Site Settings -->

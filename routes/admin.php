@@ -15,6 +15,8 @@ use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\SiteSettings\AdminSeoSettingController;
 use App\Http\Controllers\Admin\SiteSettings\AdminWebsiteSettingController;
 use App\Http\Controllers\Admin\Banners\AdminSliderBannerController;
+use App\Http\Controllers\Admin\BlogManagements\AdminBlogCategoryController;
+use App\Http\Controllers\Admin\BlogManagements\AdminBlogPostController;
 use App\Http\Controllers\Admin\Managements\UserManage\AdminRegisterUserController;
 use App\Http\Controllers\Admin\Managements\UserManage\AdminRegisterVendorController;
 use App\Http\Controllers\Admin\OrderManagements\CancelOrderManage\AdminApprovedCancelOrderController;
@@ -369,6 +371,39 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::get("/", "index")->name("index");
                     Route::get("/details/{id}", "show")->name("show");
                     Route::post("/{id}", "update")->name("update");
+                });
+
+           Route::controller(AdminBlogCategoryController::class)
+                ->prefix("/blogs/categories")
+                ->name("blogs.categories.")
+                ->group(function () {
+                    Route::get("/", "index")->name("index");
+                    Route::get("/create", "create")->name("create");
+                    Route::post("/", "store")->name("store");
+                    Route::get("/{blog_category}/edit", "edit")->name("edit");
+                    Route::post("/{blog_category}", "update")->name("update");
+                    Route::delete("/{blog_category}", "destroy")->name("destroy");
+                    Route::get("/trash", "trash")->name("trash");
+                    Route::post("/{id}/restore", "restore")->name("restore");
+                    Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
+                });
+
+           Route::controller(AdminBlogPostController::class)
+                ->prefix("/blogs/posts")
+                ->name("blogs.posts.")
+                ->group(function () {
+                    Route::get("/", "index")->name("index");
+                    Route::get("/create", "create")->name("create");
+                    Route::post("/", "store")->name("store");
+                    Route::get("/{blog_post}/edit", "edit")->name("edit");
+                    Route::post("/{blog_post}", "update")->name("update");
+                    Route::delete("/{blog_post}", "destroy")->name("destroy");
+                    Route::get("/trash", "trash")->name("trash");
+                    Route::post("/{id}/restore", "restore")->name("restore");
+                    Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
+
                 });
 
            Route::controller(AdminWebsiteSettingController::class)

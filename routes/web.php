@@ -63,8 +63,8 @@ Route::get('/collections', [CollectionController::class,"index"])->name("collect
 
 Route::get('/collections/{collection}/products', [CollectionController::class,"show"])->name("collections.show");
 
-Route::middleware(["auth","verified"])->group(function () {
 
+Route::middleware(["auth","verified"])->group(function () {
 
     Route::post("/product/track-interaction", [UserProductInteractionController::class,"store"])->name("product.track-interaction");
 

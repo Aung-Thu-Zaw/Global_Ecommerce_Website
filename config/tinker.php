@@ -17,6 +17,7 @@ return [
         App\Console\Commands\PermanentlyAutoDeleteBrandCommand::class,
         App\Console\Commands\PermanentlyAutoDeleteCampaignBannerCommand::class,
         App\Console\Commands\PermanentlyAutoDeleteCategoryCommand::class,
+        App\Console\Commands\PermanentlyAutoDeleteBlogCategoryCommand::class,
         App\Console\Commands\PermanentlyAutoDeleteProductBannerCommand::class,
         App\Console\Commands\PermanentlyAutoDeleteVendorProductBannerCommand::class,
         App\Console\Commands\PermanentlyAutoDeleteSliderBannerCommand::class,
