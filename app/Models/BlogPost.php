@@ -70,7 +70,7 @@ class BlogPost extends Model
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date("F j, Y", strtotime($value)),
         );
     }
 
@@ -90,6 +90,14 @@ class BlogPost extends Model
     public function blogCategory(): BelongsTo
     {
         return $this->belongsTo(BlogCategory::class);
+    }
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,BlogPost>
+    */
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(User::class, "author_id");
     }
 
     public static function deleteImage(BlogPost $blogPost): void

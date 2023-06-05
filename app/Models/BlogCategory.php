@@ -9,6 +9,7 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class BlogCategory extends Model
 {
@@ -74,6 +75,14 @@ class BlogCategory extends Model
         return Attribute::make(
             get: fn ($value) => date("j-F-Y", strtotime($value)),
         );
+    }
+
+        /**
+    * @return \Illuminate\Database\Eloquent\Relations\HasMany<BlogPost>
+    */
+    public function blogPosts(): HasMany
+    {
+        return $this->hasMany(BlogPost::class);
     }
 
         /**

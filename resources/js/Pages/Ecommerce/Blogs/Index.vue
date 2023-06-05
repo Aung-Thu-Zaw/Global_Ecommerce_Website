@@ -5,8 +5,12 @@ import "vue3-toastify/dist/index.css";
 import { usePage, Head, Link } from "@inertiajs/vue3";
 import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
 import BlogCard from "@/Components/Cards/BlogCard.vue";
+import Pagination from "@/Components/Paginations/Pagination.vue";
 
-defineProps({});
+defineProps({
+  blogCategories: Object,
+  blogPosts: Object,
+});
 
 if (usePage().props.flash.successMessage) {
   toast.success(usePage().props.flash.successMessage, {
@@ -48,103 +52,40 @@ if (usePage().props.flash.successMessage) {
         </div>
 
         <div class="flex items-start space-x-3">
-          <div class="w-[300px]">
+          <div v-if="blogCategories.length" class="w-[300px]">
             <ul
               class="h-auto space-y-3 text-center text-md font-bold text-slate-700"
             >
               <li
-                class="py-3 rounded-sm bg-gray-100 hover:bg-gray-200 transition-all border border-slate-300 shadow hover:animate-bounce"
+                v-for="blogCategory in blogCategories"
+                :key="blogCategory.id"
+                class="py-3 rounded-sm bg-gray-100 hover:bg-gray-200 transition-all border border-slate-300 shadow hover:animate-bounce px-4"
               >
-                <Link href="#">
-                  Beauty And Fashion
+                <Link href="#" class="flex items-center justify-between">
+                  {{ blogCategory.name }}
                   <span
-                    class="text-[.8rem] px-2 ml-3 py-1 rounded-full border-2 border-slate-400"
+                    class="text-[.8rem] ml-3 w-6 h-6 rounded-full border-2 border-slate-400 flex items-center justify-center"
                   >
-                    3
-                  </span>
-                </Link>
-              </li>
-              <li
-                class="py-3 rounded-sm bg-gray-100 hover:bg-gray-200 transition-all border border-slate-300 shadow hover:animate-bounce"
-              >
-                <Link href="#">
-                  Beauty And Fashion
-                  <span
-                    class="text-[.8rem] px-2 ml-3 py-1 rounded-full border-2 border-slate-400"
-                  >
-                    3
-                  </span>
-                </Link>
-              </li>
-              <li
-                class="py-3 rounded-sm bg-gray-100 hover:bg-gray-200 transition-all border border-slate-300 shadow hover:animate-bounce"
-              >
-                <Link href="#">
-                  Beauty And Fashion
-                  <span
-                    class="text-[.8rem] px-2 ml-3 py-1 rounded-full border-2 border-slate-400"
-                  >
-                    3
-                  </span>
-                </Link>
-              </li>
-              <li
-                class="py-3 rounded-sm bg-gray-100 hover:bg-gray-200 transition-all border border-slate-300 shadow hover:animate-bounce"
-              >
-                <Link href="#">
-                  Beauty And Fashion
-                  <span
-                    class="text-[.8rem] px-2 ml-3 py-1 rounded-full border-2 border-slate-400"
-                  >
-                    3
-                  </span>
-                </Link>
-              </li>
-              <li
-                class="py-3 rounded-sm bg-gray-100 hover:bg-gray-200 transition-all border border-slate-300 shadow hover:animate-bounce"
-              >
-                <Link href="#">
-                  Beauty And Fashion
-                  <span
-                    class="text-[.8rem] px-2 ml-3 py-1 rounded-full border-2 border-slate-400"
-                  >
-                    3
-                  </span>
-                </Link>
-              </li>
-              <li
-                class="py-3 rounded-sm bg-gray-100 hover:bg-gray-200 transition-all border border-slate-300 shadow hover:animate-bounce"
-              >
-                <Link href="#">
-                  Beauty And Fashion
-                  <span
-                    class="text-[.8rem] px-2 ml-3 py-1 rounded-full border-2 border-slate-400"
-                  >
-                    3
-                  </span>
-                </Link>
-              </li>
-              <li
-                class="py-3 rounded-sm bg-gray-100 hover:bg-gray-200 transition-all border border-slate-300 shadow hover:animate-bounce"
-              >
-                <Link href="#">
-                  Beauty And Fashion
-                  <span
-                    class="text-[.8rem] px-2 ml-3 py-1 rounded-full border-2 border-slate-400"
-                  >
-                    3
+                    <span>
+                      {{
+                        blogCategory.blog_posts
+                          ? blogCategory.blog_posts.length
+                          : 0
+                      }}
+                    </span>
                   </span>
                 </Link>
               </li>
             </ul>
           </div>
           <div class="w-full">
-            <div class="grid grid-cols-4 gap-5">
-              <BlogCard />
-              <BlogCard />
-              <BlogCard />
-              <BlogCard />
+            <div v-if="blogPosts.data.length" class="grid grid-cols-4 gap-5">
+              <div v-for="blogPost in blogPosts.data" :key="blogPost.id">
+                <BlogCard :post="blogPost" />
+              </div>
             </div>
+
+            <Pagination class="mt-6" :links="blogPosts.links" />
           </div>
         </div>
       </div>

@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
                 CitySeeder::class,
                 TownshipSeeder::class,
                 BlogCategorySeeder::class,
+                BlogPostSeeder::class,
             ]
         );
     }

@@ -1,37 +1,35 @@
 <script setup>
+defineProps({
+  post: Object,
+});
 </script>
 
 <template>
   <div
-    class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+    class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 h-[420px]"
   >
-    <a href="#">
-      <img
-        class="rounded-t-lg"
-        src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80"
-      />
-    </a>
+    <img
+      class="rounded-t-lg"
+      src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80"
+    />
     <div class="p-5">
       <div class="flex items-center justify-between mb-3">
         <span class="font-bold text-slate-400 text-[.7rem]">
           <i class="fa-solid fa-user mr-2"></i>
-          Aung Thu Zaw
+          {{ post.author.name }}
         </span>
         <span class="font-bold text-slate-400 text-[.7rem]">
           <i class="fa-solid fa-clock mr-2"></i>
-          Feb 16, 2023
+          {{ post.created_at }}
         </span>
       </div>
-      <a href="#">
-        <h5
-          class="mb-2 text-lg font-bold tracking-tight text-gray-700 dark:text-white line-clamp-3"
-        >
-          Noteworthy technology acquisitions 2021
-        </h5>
-      </a>
-      <p class="mb-3 font-normal text-[.8rem] text-gray-500 line-clamp-4">
-        Here are the biggest enterprise technology acquisitions of 2021 so far,
-        in reverse chronological order.
+      <h5
+        class="mb-2 text-lg font-bold tracking-tight text-gray-700 dark:text-white line-clamp-2"
+      >
+        {{ post.title }}
+      </h5>
+      <p class="mb-3 font-normal text-[.8rem] text-gray-500 line-clamp-3">
+        {{ post.description }}
       </p>
       <div class="w-full flex items-center justify-end">
         <a
