@@ -11,7 +11,6 @@ use App\Models\Category;
 use App\Models\Collection;
 use App\Models\Image;
 use App\Models\Product;
-use App\Models\SubCategory;
 use App\Models\User;
 use App\Services\ProductImageUploadService;
 use App\Services\ProductMultiImageUploadService;

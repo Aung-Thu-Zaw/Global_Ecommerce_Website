@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\BlogCategoryRequest;
 use App\Models\BlogCategory;
-use App\Models\Category;
 use App\Services\BlogCategoryImageUploadService;
 use Illuminate\Database\Eloquent\Builder;
 use Inertia\Response;

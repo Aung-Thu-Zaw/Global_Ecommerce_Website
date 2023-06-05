@@ -31,7 +31,7 @@ class BlogPost extends Model
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('name')
+            ->generateSlugsFrom('title')
             ->saveSlugsTo('slug');
     }
 
@@ -75,10 +75,27 @@ class BlogPost extends Model
     }
 
     /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogPost, never>
+    */
+    protected function deletedAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => date("j-F-Y", strtotime($value)),
+        );
+    }
+
+    /**
     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<BlogCategory,BlogPost>
     */
     public function blogCategory(): BelongsTo
     {
         return $this->belongsTo(BlogCategory::class);
+    }
+
+    public static function deleteImage(BlogPost $blogPost): void
+    {
+        if (!empty($blogPost->image) && file_exists(storage_path("app/public/blog-posts/".pathinfo($blogPost->image, PATHINFO_BASENAME)))) {
+            unlink(storage_path("app/public/blog-posts/".pathinfo($blogPost->image, PATHINFO_BASENAME)));
+        }
     }
 }

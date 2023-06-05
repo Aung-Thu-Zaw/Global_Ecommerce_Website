@@ -1,18 +1,21 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, useForm, Head } from "@inertiajs/vue3";
+import { Link, useForm, Head, usePage } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/BlogCategoryBreadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/BlogPostBreadcrumb.vue";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { ref } from "vue";
 
 const props = defineProps({
-  per_page: String,
+  paginate: Array,
+  blogPost: Object,
   blogCategories: Object,
 });
 
+const editor = ClassicEditor;
 const processing = ref(false);
 
 const previewPhoto = ref("");
@@ -21,25 +24,31 @@ const getPreviewPhotoPath = (path) => {
 };
 
 const form = useForm({
-  parent_id: "",
-  name: "",
-  status: "",
-  image: "",
+  blog_category_id: props.blogPost.blog_category_id,
+  author_id:
+    usePage().props.auth.user && usePage().props.auth.user.role === "admin"
+      ? usePage().props.auth.user.id
+      : null,
+  title: props.blogPost.title,
+  description: props.blogPost.description,
+  image: props.blogPost.image,
   captcha_token: null,
 });
 
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
-const handleBlogCreateCatrgory = async () => {
+const handleEditBlogPost = async () => {
   await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("create_blog_category");
+  form.captcha_token = await executeRecaptcha("edit_blog_post");
   submit();
 };
 
 const submit = () => {
   processing.value = true;
   form.post(
-    route("admin.blogs.categories.store", {
-      per_page: props.per_page,
+    route("admin.blogs.posts.update", {
+      blog_post: props.blogPost.slug,
+      page: props.paginate.page,
+      per_page: props.paginate.per_page,
     }),
     {
       replace: true,
@@ -54,7 +63,7 @@ const submit = () => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Create Blog Category" />
+    <Head title="Edit Blog Post" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
@@ -75,7 +84,7 @@ const submit = () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Create</span
+                >Edit</span
               >
             </div>
           </li>
@@ -84,9 +93,10 @@ const submit = () => {
         <div>
           <Link
             as="button"
-            :href="route('admin.blogs.categories.index')"
+            :href="route('admin.blogs.posts.index')"
             :data="{
-              per_page: props.per_page,
+              page: props.paginate.page,
+              per_page: props.paginate.per_page,
             }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
@@ -100,64 +110,59 @@ const submit = () => {
         <div class="mb-6">
           <img
             ref="previewPhoto"
-            src="https://media.istockphoto.com/id/1357365823/vector/default-image-icon-vector-missing-picture-page-for-website-design-or-mobile-app-no-photo.jpg?s=612x612&w=0&k=20&c=PM_optEhHBTZkuJQLlCjLz-v3zzxp-1mpNQZsdjrbns="
+            :src="form.image"
             alt=""
             class="w-[100px] h-[100px] object-cover rounded-full shadow-md my-3 ring-2 ring-slate-300"
           />
         </div>
-        <form @submit.prevent="handleBlogCreateCatrgory">
+
+        <form @submit.prevent="handleEditBlogPost">
           <div class="mb-6">
-            <InputLabel for="name" value="Blog Category Name *" />
+            <InputLabel for="title" value="Blog Post Title *" />
 
             <TextInput
-              id="name"
+              id="title"
               type="text"
               class="mt-1 block w-full"
-              v-model="form.name"
+              v-model="form.title"
               required
-              placeholder="Enter Category Name"
+              placeholder="Enter Blog Post Title"
             />
 
-            <InputError class="mt-2" :message="form.errors.name" />
+            <InputError class="mt-2" :message="form.errors.title" />
           </div>
 
           <div class="mb-6">
-            <InputLabel for="parent_category" value="Parent Blog Category" />
+            <InputLabel for="description" value="Blog Post Description *" />
+
+            <ckeditor :editor="editor" v-model="form.description"></ckeditor>
+
+            <InputError class="mt-2" :message="form.errors.description" />
+          </div>
+
+          <div class="mb-6">
+            <InputLabel for="blog_category" value="Blog Category *" />
 
             <select
               class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-              v-model="form.parent_id"
+              v-model="form.blog_category_id"
             >
-              <option value="" selected disabled>Select Parent Category</option>
+              <option value="" selected disabled>Select Blog Category</option>
               <option
-                v-for="category in blogCategories"
-                :key="category"
-                :value="category.id"
+                v-for="blogCategory in blogCategories"
+                :key="blogCategory"
+                :value="blogCategory.id"
+                :selected="blogCategory.id === form.blog_category_id"
               >
-                {{ category.name }}
+                {{ blogCategory.name }}
               </option>
             </select>
 
-            <InputError class="mt-2" :message="form.errors.parent_id" />
+            <InputError class="mt-2" :message="form.errors.blog_category_id" />
           </div>
 
           <div class="mb-6">
-            <InputLabel for="status" value="Status *" />
-
-            <select
-              class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-              v-model="form.status"
-            >
-              <option value="" selected disabled>Select Status</option>
-              <option value="show">Show</option>
-              <option value="hide">Hide</option>
-            </select>
-
-            <InputError class="mt-2" :message="form.errors.status" />
-          </div>
-
-          <div class="mb-6">
-            <InputLabel for="image" value="Image" />
+            <InputLabel for="image" value="Image *" />
 
             <input
               class="relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-neutral-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out file:-mx-3 file:-my-1.5 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-1.5 file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[margin-inline-end:0.75rem] file:[border-inline-end-width:1px] hover:file:bg-neutral-200 focus:border-primary focus:bg-white focus:text-neutral-700 focus:shadow-[0_0_0_1px] focus:shadow-primary focus:outline-none dark:bg-transparent dark:text-neutral-200 dark:focus:bg-transparent"
@@ -196,7 +201,7 @@ const submit = () => {
                   fill="currentColor"
                 />
               </svg>
-              {{ processing ? "Processing..." : "Save" }}
+              {{ processing ? "Processing..." : "Update" }}
             </button>
           </div>
         </form>
@@ -205,4 +210,18 @@ const submit = () => {
   </AdminDashboardLayout>
 </template>
 
+<style>
+.ck-editor__editable_inline {
+  min-height: 250px;
+  border-radius: 200px;
+}
+
+:root {
+  --ck-border-radius: 0.375rem;
+  --ck-color-focus-border: rgb(209 213 219);
+  --ck-font-size-base: 0.7rem;
+  --ck-color-shadow-drop: none;
+  --ck-color-shadow-inner: none;
+}
+</style>
 
