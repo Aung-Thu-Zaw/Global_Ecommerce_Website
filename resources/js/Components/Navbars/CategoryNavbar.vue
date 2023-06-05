@@ -224,7 +224,7 @@ import { Link } from "@inertiajs/vue3";
         <!-- Our Blogs  -->
 
         <Link
-          href="#"
+          :href="route('blogs.index')"
           class="font-bold text-sm text-gray-700 hover:text-blue-700 transition-all ml-3"
         >
           <i class="fa-solid fa-newspaper mr-2"></i>

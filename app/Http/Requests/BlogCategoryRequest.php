@@ -25,7 +25,6 @@ class BlogCategoryRequest extends FormRequest
     public function rules()
     {
         $rules= [
-            "parent_id"=>["nullable",Rule::exists("blog_categories", "id")],
             "name"=>["required","string","max:255",Rule::unique("blog_categories", "name")],
             "status"=>["required","string",Rule::in(["show","hide"])]
         ];
@@ -45,7 +44,6 @@ class BlogCategoryRequest extends FormRequest
     public function messages(): array
     {
         return [
-            "parent_id.exists" => "Parent category does not exist.",
             "name.required" => "Category name is required.",
             "name.unique" => "Category is already exists.",
             "status.required" => "Category status is required.",

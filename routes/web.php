@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Ecommerce\BlogController;
 use App\Http\Controllers\Ecommerce\CancelOrderAndItemController;
 use App\Http\Controllers\Ecommerce\CartController;
 use App\Http\Controllers\Ecommerce\CartItemController;
@@ -63,6 +64,8 @@ Route::get('/collections', [CollectionController::class,"index"])->name("collect
 
 Route::get('/collections/{collection}/products', [CollectionController::class,"show"])->name("collections.show");
 
+
+Route::get("/blogs", [BlogController::class,"index"])->name("blogs.index");
 
 Route::middleware(["auth","verified"])->group(function () {
 

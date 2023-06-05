@@ -10,7 +10,6 @@ import { ref } from "vue";
 
 const props = defineProps({
   per_page: String,
-  blogCategories: Object,
 });
 
 const processing = ref(false);
@@ -21,7 +20,6 @@ const getPreviewPhotoPath = (path) => {
 };
 
 const form = useForm({
-  parent_id: "",
   name: "",
   status: "",
   image: "",
@@ -119,26 +117,6 @@ const submit = () => {
             />
 
             <InputError class="mt-2" :message="form.errors.name" />
-          </div>
-
-          <div class="mb-6">
-            <InputLabel for="parent_category" value="Parent Blog Category" />
-
-            <select
-              class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-              v-model="form.parent_id"
-            >
-              <option value="" selected disabled>Select Parent Category</option>
-              <option
-                v-for="category in blogCategories"
-                :key="category"
-                :value="category.id"
-              >
-                {{ category.name }}
-              </option>
-            </select>
-
-            <InputError class="mt-2" :message="form.errors.parent_id" />
           </div>
 
           <div class="mb-6">

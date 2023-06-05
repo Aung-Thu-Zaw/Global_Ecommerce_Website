@@ -14,7 +14,6 @@ return new class () extends Migration {
     {
         Schema::create('blog_categories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("parent_id")->nullable()->references("id")->on("blog_categories")->cascadeOnDelete();
             $table->string("name")->unique();
             $table->string("slug")->unique();
             $table->string("image")->nullable();

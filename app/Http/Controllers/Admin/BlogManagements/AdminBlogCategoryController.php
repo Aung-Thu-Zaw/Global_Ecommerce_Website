@@ -17,9 +17,6 @@ class AdminBlogCategoryController extends Controller
     public function index(): Response|ResponseFactory
     {
         $blogCategories=BlogCategory::search(request("search"))
-                                    ->query(function (Builder $builder) {
-                                        $builder->with("children");
-                                    })
                                     ->orderBy(request("sort", "id"), request("direction", "desc"))
                                     ->paginate(request("per_page", 10))
                                     ->appends(request()->all());
@@ -31,9 +28,7 @@ class AdminBlogCategoryController extends Controller
     {
         $per_page=request("per_page");
 
-        $blogCategories=BlogCategory::select("id", "parent_id", "name")->get();
-
-        return inertia("Admin/BlogManagements/BlogCategories/Create", compact("per_page", "blogCategories"));
+        return inertia("Admin/BlogManagements/BlogCategories/Create", compact("per_page"));
     }
 
     public function store(BlogCategoryRequest $request, BlogCategoryImageUploadService $blogCategoryImageUploadService): RedirectResponse
@@ -47,9 +42,7 @@ class AdminBlogCategoryController extends Controller
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
-        $blogCategories=BlogCategory::select("id", "parent_id", "name")->get();
-
-        return inertia("Admin/BlogManagements/BlogCategories/Edit", compact("blogCategory", "paginate", "blogCategories"));
+        return inertia("Admin/BlogManagements/BlogCategories/Edit", compact("blogCategory", "paginate"));
     }
 
     public function update(BlogCategoryRequest $request, BlogCategory $blogCategory, BlogCategoryImageUploadService $blogCategoryImageUploadService): RedirectResponse

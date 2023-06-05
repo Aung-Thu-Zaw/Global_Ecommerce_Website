@@ -91,62 +91,32 @@ const updateSorting = (sort = "id") => {
 };
 
 const handleDelete = async (blogCategory) => {
-  if (blogCategory.children.length > 0) {
-    const result = await swal({
-      icon: "error",
-      title:
-        "You can't delete this blog category because this blog category have children blog category?",
-      text: "If you click 'Delete, whatever!' button children blog category will be automatically deleted.You will be able to restore this blog category in the trash!",
-      showCancelButton: true,
-      confirmButtonText: "Delete, whatever!",
-      confirmButtonColor: "#ef4444",
-      timer: 20000,
-      timerProgressBar: true,
-      reverseButtons: true,
-    });
-    if (result.isConfirmed) {
-      router.delete(
-        route("admin.blogs.categories.destroy", {
-          blog_category: blogCategory.slug,
-          page: params.page,
-          per_page: params.per_page,
-        })
-      );
-      setTimeout(() => {
-        swal({
-          icon: "success",
-          title: usePage().props.flash.successMessage,
-        });
-      }, 500);
-    }
-  } else {
-    const result = await swal({
-      icon: "warning",
-      title: "Are you sure you want to delete this blog category?",
-      text: "You will be able to restore this blog category in the trash!",
-      showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      confirmButtonColor: "#ef4444",
-      timer: 20000,
-      timerProgressBar: true,
-      reverseButtons: true,
-    });
+  const result = await swal({
+    icon: "warning",
+    title: "Are you sure you want to delete this blog category?",
+    text: "You will be able to restore this blog category in the trash!",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it!",
+    confirmButtonColor: "#ef4444",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
 
-    if (result.isConfirmed) {
-      router.delete(
-        route("admin.blogs.categories.destroy", {
-          blog_category: blogCategory.slug,
-          page: params.page,
-          per_page: params.per_page,
-        })
-      );
-      setTimeout(() => {
-        swal({
-          icon: "success",
-          title: usePage().props.flash.successMessage,
-        });
-      }, 500);
-    }
+  if (result.isConfirmed) {
+    router.delete(
+      route("admin.blogs.categories.destroy", {
+        blog_category: blogCategory.slug,
+        page: params.page,
+        per_page: params.per_page,
+      })
+    );
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
   }
 };
 

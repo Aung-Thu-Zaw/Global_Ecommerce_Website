@@ -8,24 +8,19 @@ use Laravel\Scout\Searchable;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class BlogCategory extends Model
 {
     use HasFactory;
     use Searchable;
     use SoftDeletes;
-    use CascadeSoftDeletes;
     use HasSlug;
 
 
     /**
     * @var string[]
     */
-    protected array $cascadeDeletes = ['children'];
     protected $guarded=[];
 
     public function getSlugOptions(): SlugOptions
@@ -91,21 +86,6 @@ class BlogCategory extends Model
         );
     }
 
-    /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<BlogCategory,BlogCategory>
-    */
-    public function parent(): BelongsTo
-    {
-        return $this->belongsTo(BlogCategory::class, 'parent_id');
-    }
-
-    /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasMany<BlogCategory>
-    */
-    public function children(): HasMany
-    {
-        return $this->hasMany(BlogCategory::class, 'parent_id')->with('children');
-    }
 
     public static function deleteImage(BlogCategory $blogCategory): void
     {
