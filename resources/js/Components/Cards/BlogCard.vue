@@ -1,4 +1,6 @@
 <script setup>
+import { Link } from "@inertiajs/vue3";
+
 defineProps({
   post: Object,
 });
@@ -6,11 +8,11 @@ defineProps({
 
 <template>
   <div
-    class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 h-[420px]"
+    class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 h-[450px]"
   >
     <img
       class="rounded-t-lg"
-      src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80"
+      :src="post.image"
     />
     <div class="p-5">
       <div class="flex items-center justify-between mb-3">
@@ -32,8 +34,8 @@ defineProps({
         {{ post.description }}
       </p>
       <div class="w-full flex items-center justify-end">
-        <a
-          href="#"
+        <Link
+          :href="route('blogs.show', post.slug)"
           class="inline-flex items-center text-sm font-medium text-center text-slate-700 hover:text-blue-700 rounded-lg hover:animate-bounce"
         >
           Read more
@@ -50,7 +52,7 @@ defineProps({
               clip-rule="evenodd"
             ></path>
           </svg>
-        </a>
+        </Link>
       </div>
     </div>
   </div>

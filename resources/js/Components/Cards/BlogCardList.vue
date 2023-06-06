@@ -1,4 +1,6 @@
 <script setup>
+import { Link } from "@inertiajs/vue3";
+
 defineProps({
   post: Object,
 });
@@ -10,7 +12,7 @@ defineProps({
   >
     <img
       class="h-[250px] w-[250px] object-cover object-center"
-      src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80"
+      :src="post.image"
       alt=""
     />
 
@@ -39,8 +41,8 @@ defineProps({
         </p>
       </div>
       <div class="w-full flex items-center justify-end mt-10 px-10">
-        <a
-          href="#"
+        <Link
+          :href="route('blogs.show', post.slug)"
           class="inline-flex items-center text-sm font-medium text-center text-slate-700 hover:text-blue-700 rounded-lg hover:animate-bounce"
         >
           Read more
@@ -57,7 +59,7 @@ defineProps({
               clip-rule="evenodd"
             ></path>
           </svg>
-        </a>
+        </Link>
       </div>
     </div>
   </div>

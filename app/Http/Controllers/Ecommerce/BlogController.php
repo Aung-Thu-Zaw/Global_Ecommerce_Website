@@ -24,4 +24,13 @@ class BlogController extends Controller
 
         return inertia("Ecommerce/Blogs/Index", compact("blogCategories", "blogPosts"));
     }
+
+    public function show(BlogPost $blogPost): Response|ResponseFactory
+    {
+        $blogCategories=BlogCategory::with("blogPosts")->where("status", "show")->get();
+
+        $blogPost->load("author:id,name");
+
+        return inertia("Ecommerce/Blogs/Detail", compact('blogPost', 'blogCategories'));
+    }
 }

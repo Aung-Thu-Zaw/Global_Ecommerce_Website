@@ -67,6 +67,8 @@ Route::get('/collections/{collection}/products', [CollectionController::class,"s
 
 Route::get("/blogs", [BlogController::class,"index"])->name("blogs.index");
 
+Route::get("/blogs/{blog_post}", [BlogController::class,"show"])->name("blogs.show");
+
 Route::middleware(["auth","verified"])->group(function () {
 
     Route::post("/product/track-interaction", [UserProductInteractionController::class,"store"])->name("product.track-interaction");

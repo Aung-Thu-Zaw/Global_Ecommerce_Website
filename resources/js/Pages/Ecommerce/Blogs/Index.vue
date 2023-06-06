@@ -124,7 +124,7 @@ if (usePage().props.flash.successMessage) {
         </div>
 
         <div class="flex items-start space-x-3">
-          <div v-if="blogCategories.length" class="w-[300px]">
+          <div v-if="blogCategories.length" class="w-[400px]">
             <ul
               class="h-auto space-y-3 text-center text-md font-bold text-slate-700"
             >
