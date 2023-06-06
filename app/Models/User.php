@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,6 +26,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use Searchable;
     use Follower;
     use Followable;
+    use HasRoles;
 
 
     protected $guarded=[];

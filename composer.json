@@ -19,6 +19,7 @@
         "laravel/tinker": "^2.8",
         "laravolt/avatar": "^4.1",
         "overtrue/laravel-follow": "^5.1",
+        "spatie/laravel-permission": "^5.10",
         "spatie/laravel-sluggable": "^3.4",
         "stripe/stripe-php": "^10.12",
         "tightenco/ziggy": "^1.0"
