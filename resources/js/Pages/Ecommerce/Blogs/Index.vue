@@ -15,14 +15,14 @@ defineProps({
 });
 
 const params = reactive({
-  search_blog: usePage().props.ziggy.query.search,
+  search_blog: usePage().props.ziggy.query.search_blog,
   sort: "id",
   direction: usePage().props.ziggy.query.direction
     ? usePage().props.ziggy.query.direction
     : "desc",
 
   page: usePage().props.ziggy.query.page,
-  category: usePage().props.ziggy.query.category,
+  blog_category: usePage().props.ziggy.query.blog_category,
   view: usePage().props.ziggy.query.view
     ? usePage().props.ziggy.query.view
     : "grid",
@@ -38,7 +38,7 @@ watch(
         sort: params.sort,
         direction: params.direction,
         page: params.page,
-        category: params.category,
+        blog_category: params.blog_category,
         view: params.view,
       },
       {
@@ -59,7 +59,7 @@ watch(
         sort: params.sort,
         direction: params.direction,
         page: params.page,
-        category: params.category,
+        blog_category: params.blog_category,
         view: params.view,
       },
       {
@@ -72,6 +72,16 @@ watch(
 
 const handleSearchBox = () => {
   params.search_blog = "";
+};
+
+const handleRemoveBlogCategory = () => {
+  router.get(route("blogs.index"), {
+    search_blog: params.search_blog,
+    sort: params.sort,
+    direction: params.direction,
+    page: params.page,
+    view: params.view,
+  });
 };
 
 if (usePage().props.flash.successMessage) {
@@ -121,12 +131,30 @@ if (usePage().props.flash.successMessage) {
               <li
                 v-for="blogCategory in blogCategories"
                 :key="blogCategory.id"
-                class="py-3 rounded-sm bg-gray-100 hover:bg-gray-200 transition-all border border-slate-300 shadow hover:animate-bounce px-4"
+                class="py-3 rounded-sm transition-all border border-slate-300 shadow px-4"
+                :class="{
+                  'bg-blue-600 text-white hover:bg-blue-700':
+                    $page.props.ziggy.query.blog_category === blogCategory.slug,
+
+                  'bg-gray-100 hover:bg-gray-200':
+                    $page.props.ziggy.query.blog_category !== blogCategory.slug,
+                }"
               >
-                <Link href="#" class="flex items-center justify-between">
+                <Link
+                  :href="route('blogs.index')"
+                  :data="{
+                    search_blog: $page.props.ziggy.query.search_blog,
+                    blog_category: blogCategory.slug,
+                    sort: $page.props.ziggy.query.sort,
+                    direction: $page.props.ziggy.query.direction,
+                    page: $page.props.ziggy.query.page,
+                    view: $page.props.ziggy.query.view,
+                  }"
+                  class="flex items-center justify-between"
+                >
                   {{ blogCategory.name }}
                   <span
-                    class="text-[.8rem] ml-3 w-6 h-6 rounded-full border-2 border-slate-400 flex items-center justify-center"
+                    class="text-[.8rem] ml-3 w-6 h-6 rounded-full border-2 border-slate-300 flex items-center justify-center"
                   >
                     <span>
                       {{
@@ -195,7 +223,7 @@ if (usePage().props.flash.successMessage) {
                       :href="route('blogs.index')"
                       :data="{
                         search_blog: $page.props.ziggy.query.search_blog,
-                        category: $page.props.ziggy.query.category,
+                        blog_category: $page.props.ziggy.query.blog_category,
                         sort: $page.props.ziggy.query.sort,
                         direction: $page.props.ziggy.query.direction,
                         page: $page.props.ziggy.query.page,
@@ -214,7 +242,7 @@ if (usePage().props.flash.successMessage) {
                       :href="route('blogs.index')"
                       :data="{
                         search_blog: $page.props.ziggy.query.search_blog,
-                        category: $page.props.ziggy.query.category,
+                        blog_category: $page.props.ziggy.query.blog_category,
                         sort: $page.props.ziggy.query.sort,
                         direction: $page.props.ziggy.query.direction,
                         page: $page.props.ziggy.query.page,
@@ -232,6 +260,27 @@ if (usePage().props.flash.successMessage) {
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div class="my-3 w-full">
+              <span
+                v-if="$page.props.ziggy.query.blog_category"
+                class="font-bold text-slate-600 text-lg mr-3"
+                >Filtered By :</span
+              >
+
+              <span
+                v-if="$page.props.ziggy.query.blog_category"
+                class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow capitalize"
+              >
+                Category : {{ $page.props.ziggy.query.blog_category }}
+
+                <i
+                  @click="handleRemoveBlogCategory"
+                  class="fa-solid fa-xmark font-bold hover:text-red-600 cursor-pointer"
+                >
+                </i>
+              </span>
             </div>
 
             <div v-if="$page.props.ziggy.query.view === 'list'" class="w-full">

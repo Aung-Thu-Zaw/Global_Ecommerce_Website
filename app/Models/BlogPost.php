@@ -12,6 +12,7 @@ use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Scout\Attributes\SearchUsingFullText;
+use Illuminate\Database\Eloquent\Builder;
 
 class BlogPost extends Model
 {
@@ -105,5 +106,33 @@ class BlogPost extends Model
         if (!empty($blogPost->image) && file_exists(storage_path("app/public/blog-posts/".pathinfo($blogPost->image, PATHINFO_BASENAME)))) {
             unlink(storage_path("app/public/blog-posts/".pathinfo($blogPost->image, PATHINFO_BASENAME)));
         }
+    }
+
+        /**
+    * @param array<string> $filterBy
+    * @param Builder<Product> $query
+    */
+
+    public function scopeFilterBy(Builder $query, array $filterBy): void
+    {
+        $query->when(
+            $filterBy["search_blog"]??null,
+            function ($query, $search) {
+                $query->where(
+                    function ($query) use ($search) {
+                        $query->where("title", "LIKE", "%".$search."%")
+                              ->orWhere("description", "LIKE", "%".$search."%");
+                    }
+                );
+            }
+        );
+
+        $query->when($filterBy["blog_category"]?? null, function ($query, $categorySlug) {
+            $query->whereHas("blogCategory", function ($query) use ($categorySlug) {
+                $query->where("slug", $categorySlug);
+            });
+        });
+
+
     }
 }
