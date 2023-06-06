@@ -2,15 +2,77 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-import { usePage, Head, Link } from "@inertiajs/vue3";
+import { usePage, Head, Link, router } from "@inertiajs/vue3";
 import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
 import BlogCard from "@/Components/Cards/BlogCard.vue";
+import BlogCardList from "@/Components/Cards/BlogCardList.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
+import { reactive, watch } from "vue";
 
 defineProps({
   blogCategories: Object,
   blogPosts: Object,
 });
+
+const params = reactive({
+  search_blog: usePage().props.ziggy.query.search,
+  sort: "id",
+  direction: usePage().props.ziggy.query.direction
+    ? usePage().props.ziggy.query.direction
+    : "desc",
+
+  page: usePage().props.ziggy.query.page,
+  category: usePage().props.ziggy.query.category,
+  view: usePage().props.ziggy.query.view
+    ? usePage().props.ziggy.query.view
+    : "grid",
+});
+
+watch(
+  () => params.search_blog,
+  () => {
+    router.get(
+      route("blogs.index"),
+      {
+        search_blog: params.search_blog,
+        sort: params.sort,
+        direction: params.direction,
+        page: params.page,
+        category: params.category,
+        view: params.view,
+      },
+      {
+        replace: true,
+        preserveState: true,
+      }
+    );
+  }
+);
+
+watch(
+  () => params.direction,
+  () => {
+    router.get(
+      route("blogs.index"),
+      {
+        search_blog: params.search_blog,
+        sort: params.sort,
+        direction: params.direction,
+        page: params.page,
+        category: params.category,
+        view: params.view,
+      },
+      {
+        replace: true,
+        preserveState: true,
+      }
+    );
+  }
+);
+
+const handleSearchBox = () => {
+  params.search_blog = "";
+};
 
 if (usePage().props.flash.successMessage) {
   toast.success(usePage().props.flash.successMessage, {
@@ -79,9 +141,115 @@ if (usePage().props.flash.successMessage) {
             </ul>
           </div>
           <div class="w-full">
-            <div v-if="blogPosts.data.length" class="grid grid-cols-4 gap-5">
-              <div v-for="blogPost in blogPosts.data" :key="blogPost.id">
-                <BlogCard :post="blogPost" />
+            <div
+              class="text-sm font-bold text-slate-600 px-5 py-3 border-t border-b flex items-center justify-between mb-5"
+            >
+              <div
+                class="border-2 border-slate-400 rounded-sm shadow w-[300px] flex items-center justify-between py-1"
+              >
+                <input
+                  type="text"
+                  placeholder="Search Blogs"
+                  class="text-sm w-full focus:ring-0 border-none bg-gray-50"
+                  v-model="params.search_blog"
+                />
+                <span v-if="params.search_blog" class="mx-3 cursor-pointer">
+                  <i
+                    @click="handleSearchBox"
+                    class="fa-solid fa-xmark hover:text-xl hover:text-slate-700 transition-all"
+                  ></i>
+                </span>
+              </div>
+
+              <p v-if="params.search_blog" class="ml-5">
+                {{ blogPosts.data.length }} post found for result
+                <span class="text-blue-600">"{{ params.search_blog }}"</span>
+              </p>
+
+              <div class="flex items-center ml-auto">
+                <div class="w-[220px] flex items-center justify-between">
+                  <span class="">Sort By : </span>
+                  <select
+                    id="countries"
+                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[150px] p-2.5 text-slate-700"
+                    v-model="params.direction"
+                  >
+                    <option
+                      value="desc"
+                      :selected="
+                        params.direction === 'desc' || params.direction === null
+                      "
+                    >
+                      Latest Post
+                    </option>
+                    <option value="asc" :selected="params.direction === 'asc'">
+                      Newest Post
+                    </option>
+                  </select>
+                </div>
+
+                <div class="flex items-center ml-3">
+                  <span class="mr-2">View : </span>
+                  <div class="flex items-center justify-between">
+                    <Link
+                      :href="route('blogs.index')"
+                      :data="{
+                        search_blog: $page.props.ziggy.query.search_blog,
+                        category: $page.props.ziggy.query.category,
+                        sort: $page.props.ziggy.query.sort,
+                        direction: $page.props.ziggy.query.direction,
+                        page: $page.props.ziggy.query.page,
+                        view: 'grid',
+                      }"
+                      class="px-2 py-1 rounded-md cursor-pointer hover:bg-gray-300 transition-none"
+                      :class="{
+                        'bg-gray-400 text-white':
+                          $page.props.ziggy.query.view === 'grid',
+                        'bg-gray-200': $page.props.ziggy.query.view !== 'grid',
+                      }"
+                    >
+                      <i class="fa-solid fa-grip"></i>
+                    </Link>
+                    <Link
+                      :href="route('blogs.index')"
+                      :data="{
+                        search_blog: $page.props.ziggy.query.search_blog,
+                        category: $page.props.ziggy.query.category,
+                        sort: $page.props.ziggy.query.sort,
+                        direction: $page.props.ziggy.query.direction,
+                        page: $page.props.ziggy.query.page,
+                        view: 'list',
+                      }"
+                      class="ml-3 px-2 py-1 rounded-md cursor-pointer hover:bg-gray-300 transition-none"
+                      :class="{
+                        'bg-gray-400 text-white':
+                          $page.props.ziggy.query.view === 'list',
+                        'bg-gray-200': $page.props.ziggy.query.view !== 'list',
+                      }"
+                    >
+                      <i class="fa-solid fa-list"></i>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div v-if="$page.props.ziggy.query.view === 'list'" class="w-full">
+              <div v-if="blogPosts.data.length" class="w-full">
+                <div
+                  v-for="blogPost in blogPosts.data"
+                  :key="blogPost.id"
+                  class="w-full"
+                >
+                  <BlogCardList :post="blogPost" />
+                </div>
+              </div>
+            </div>
+            <div v-else>
+              <div v-if="blogPosts.data.length" class="grid grid-cols-4 gap-5">
+                <div v-for="blogPost in blogPosts.data" :key="blogPost.id">
+                  <BlogCard :post="blogPost" />
+                </div>
               </div>
             </div>
 
