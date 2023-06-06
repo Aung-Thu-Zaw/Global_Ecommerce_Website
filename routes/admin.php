@@ -33,6 +33,8 @@ use App\Http\Controllers\Admin\ShippingArea\AdminCityController;
 use App\Http\Controllers\Admin\ShippingArea\AdminCountryController;
 use App\Http\Controllers\Admin\ShippingArea\AdminRegionController;
 use App\Http\Controllers\Admin\ShippingArea\AdminTownshipController;
+use App\Http\Controllers\Admin\AuthorityManagements\RolesAndPermissions\AdminRoleController;
+use App\Http\Controllers\Admin\AuthorityManagements\RolesAndPermissions\AdminPermissionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/admin/login", [AdminAuthController::class,"login"])->middleware("guest")->name("admin.login");
@@ -371,6 +373,38 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::get("/", "index")->name("index");
                     Route::get("/details/{id}", "show")->name("show");
                     Route::post("/{id}", "update")->name("update");
+                });
+
+           Route::controller(AdminRoleController::class)
+                ->prefix("/roles-and-permissions/roles")
+                ->name("roles.")
+                ->group(function () {
+                    Route::get("/", "index")->name("index");
+                    Route::get("/create", "create")->name("create");
+                    Route::post("/", "store")->name("store");
+                    Route::get("/{role}/edit", "edit")->name("edit");
+                    Route::post("/{role}", "update")->name("update");
+                    Route::delete("/{role}", "destroy")->name("destroy");
+                    Route::get("/trash", "trash")->name("trash");
+                    Route::post("/{id}/restore", "restore")->name("restore");
+                    Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
+                });
+
+           Route::controller(AdminPermissionController::class)
+                ->prefix("/roles-and-permissions/permissions")
+                ->name("permissions.")
+                ->group(function () {
+                    Route::get("/", "index")->name("index");
+                    Route::get("/create", "create")->name("create");
+                    Route::post("/", "store")->name("store");
+                    Route::get("/{permission}/edit", "edit")->name("edit");
+                    Route::post("/{permission}", "update")->name("update");
+                    Route::delete("/{permission}", "destroy")->name("destroy");
+                    Route::get("/trash", "trash")->name("trash");
+                    Route::post("/{id}/restore", "restore")->name("restore");
+                    Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
                 });
 
            Route::controller(AdminBlogCategoryController::class)

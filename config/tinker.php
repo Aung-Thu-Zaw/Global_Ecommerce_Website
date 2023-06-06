@@ -29,6 +29,8 @@ return [
         App\Console\Commands\PermanentlyAutoDeleteRegionCommand::class,
         App\Console\Commands\PermanentlyAutoDeleteCityCommand::class,
         App\Console\Commands\PermanentlyAutoDeleteTownshipCommand::class,
+        App\Console\Commands\PermanentlyAutoDeleteRoleCommand::class,
+        App\Console\Commands\PermanentlyAutoDeletePermissionCommand::class,
 
     ],
 

@@ -32,6 +32,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('township:delete')->daily();
         $schedule->command('blog_category:delete')->daily();
         $schedule->command('blog_post:delete')->daily();
+        $schedule->command('role:delete')->daily();
+        $schedule->command('permission:delete')->daily();
     }
 
     /**

@@ -110,7 +110,7 @@ class BlogPost extends Model
 
         /**
     * @param array<string> $filterBy
-    * @param Builder<Product> $query
+    * @param Builder<BlogPost> $query
     */
 
     public function scopeFilterBy(Builder $query, array $filterBy): void

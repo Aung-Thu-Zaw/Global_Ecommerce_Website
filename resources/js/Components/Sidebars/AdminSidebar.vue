@@ -505,7 +505,7 @@
         <h6
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
-          Managements
+          User Managements
         </h6>
 
         <!-- Vendor Manage -->
@@ -604,6 +604,69 @@
                 }"
               >
                 Register Vendors
+              </Link>
+            </ul>
+          </li>
+        </ul>
+
+        <hr class="my-4 md:min-w-full" />
+
+        <!-- Authorization Management Area -->
+        <h6
+          class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
+        >
+          Authority Managements
+        </h6>
+
+        <!-- Role Manage -->
+        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <li class="items-center cursor-pointer">
+            <div
+              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+              @click="
+                roleAndPermissionManageIsHidden =
+                  !roleAndPermissionManageIsHidden
+              "
+            >
+              <span>
+                <i class="fa-solid fa-user-lock mr-2 text-sm"></i>
+                Roles & Permissions
+              </span>
+              <i
+                v-if="roleAndPermissionManageIsHidden"
+                class="fa-solid fa-chevron-right"
+              ></i>
+              <i
+                v-if="!roleAndPermissionManageIsHidden"
+                class="fa-solid fa-chevron-down"
+              ></i>
+            </div>
+
+            <ul
+              v-if="!roleAndPermissionManageIsHidden || roleAndPermissionManage"
+              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+            >
+              <Link
+                :href="route('admin.roles.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/roles-and-permissions/roles'
+                  ),
+                }"
+              >
+                Roles
+              </Link>
+              <Link
+                :href="route('admin.permissions.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/roles-and-permissions/permissions'
+                  ),
+                }"
+              >
+                Permissions
               </Link>
             </ul>
           </li>
@@ -793,6 +856,7 @@ export default {
       orderManageIsHidden: true,
       returnOrderManageIsHidden: true,
       cancelOrderManageIsHidden: true,
+      roleAndPermissionManageIsHidden: true,
     };
   },
   methods: {
@@ -880,6 +944,14 @@ export default {
         this.$page.url.startsWith("/admin/townships")
       ) {
         return (this.shippingAreaIsHidden = false);
+      }
+    },
+    roleAndPermissionManage() {
+      if (
+        this.$page.url.startsWith("/admin/roles-and-permissions/roles") ||
+        this.$page.url.startsWith("/admin/roles-and-permissions/permissions")
+      ) {
+        return (this.roleAndPermissionManageIsHidden = false);
       }
     },
   },
