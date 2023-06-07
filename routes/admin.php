@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\Banners\AdminProductBannerController;
 use App\Http\Controllers\Admin\Managements\VendorManage\AdminActiveVendorController;
 use App\Http\Controllers\Admin\Managements\VendorManage\AdminInactiveVendorController;
 use App\Http\Controllers\Admin\AdminProductController;
+use App\Http\Controllers\Admin\AuthorityManagements\AdminRoleInPermissionController;
 use App\Http\Controllers\Admin\SiteSettings\AdminSeoSettingController;
 use App\Http\Controllers\Admin\SiteSettings\AdminWebsiteSettingController;
 use App\Http\Controllers\Admin\Banners\AdminSliderBannerController;
@@ -401,6 +402,22 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::get("/{permission}/edit", "edit")->name("edit");
                     Route::post("/{permission}", "update")->name("update");
                     Route::delete("/{permission}", "destroy")->name("destroy");
+                    Route::get("/trash", "trash")->name("trash");
+                    Route::post("/{id}/restore", "restore")->name("restore");
+                    Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
+                });
+
+           Route::controller(AdminRoleInPermissionController::class)
+                ->prefix("/role-in-permissions")
+                ->name("role-in-permissions.")
+                ->group(function () {
+                    Route::get("/", "index")->name("index");
+                    Route::get("/create", "create")->name("create");
+                    Route::post("/", "store")->name("store");
+                    Route::get("/{id}/edit", "edit")->name("edit");
+                    Route::post("/{id}", "update")->name("update");
+                    Route::delete("/{id}", "destroy")->name("destroy");
                     Route::get("/trash", "trash")->name("trash");
                     Route::post("/{id}/restore", "restore")->name("restore");
                     Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");

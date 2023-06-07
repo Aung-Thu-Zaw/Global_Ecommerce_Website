@@ -629,7 +629,7 @@
               "
             >
               <span>
-                <i class="fa-solid fa-user-lock mr-2 text-sm"></i>
+                <i class="fa-solid fa-user-shield mr-2 text-sm"></i>
                 Roles & Permissions
               </span>
               <i
@@ -669,6 +669,26 @@
                 Permissions
               </Link>
             </ul>
+          </li>
+        </ul>
+
+        <ul>
+          <li class="items-center">
+            <Link
+              :href="route('admin.role-in-permissions.index')"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                  '/admin/role-in-permissions'
+                ),
+                'text-slate-700 hover:text-slate-500': !$page.url.startsWith(
+                  '/admin/role-in-permissions'
+                ),
+              }"
+            >
+              <i class="fa-solid fa-user-lock mr-2 text-sm"></i>
+              Role In Permissions
+            </Link>
           </li>
         </ul>
 

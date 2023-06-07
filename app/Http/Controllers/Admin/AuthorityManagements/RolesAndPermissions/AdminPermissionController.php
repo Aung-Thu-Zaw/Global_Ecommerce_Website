@@ -19,14 +19,14 @@ class AdminPermissionController extends Controller
                          ->paginate(request("per_page", 10))
                          ->appends(request()->all());
 
-        return inertia("Admin/AuthorityManagements/Permissions/Index", compact("permissions"));
+        return inertia("Admin/AuthorityManagements/RolesAndPermissions/Permissions/Index", compact("permissions"));
     }
 
     public function create(): Response|ResponseFactory
     {
         $per_page=request("per_page");
 
-        return inertia("Admin/AuthorityManagements/Permissions/Create", compact("per_page"));
+        return inertia("Admin/AuthorityManagements/RolesAndPermissions/Permissions/Create", compact("per_page"));
     }
 
     public function store(PermissionRequest $request): RedirectResponse
@@ -40,7 +40,7 @@ class AdminPermissionController extends Controller
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
-        return inertia("Admin/AuthorityManagements/Permissions/Edit", compact("permission", "paginate"));
+        return inertia("Admin/AuthorityManagements/RolesAndPermissions/Permissions/Edit", compact("permission", "paginate"));
     }
 
     public function update(PermissionRequest $request, Permission $permission): RedirectResponse
@@ -65,7 +65,7 @@ class AdminPermissionController extends Controller
                           ->paginate(request("per_page", 10))
                           ->appends(request()->all());
 
-        return inertia("Admin/AuthorityManagements/Permissions/Trash", compact("trashPermissions"));
+        return inertia("Admin/AuthorityManagements/RolesAndPermissions/Permissions/Trash", compact("trashPermissions"));
     }
 
     public function restore(Request $request, int $id): RedirectResponse

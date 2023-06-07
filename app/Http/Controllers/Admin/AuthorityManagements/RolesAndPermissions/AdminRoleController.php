@@ -19,14 +19,14 @@ class AdminRoleController extends Controller
                      ->paginate(request("per_page", 10))
                      ->appends(request()->all());
 
-        return inertia("Admin/AuthorityManagements/Roles/Index", compact("roles"));
+        return inertia("Admin/AuthorityManagements/RolesAndPermissions/Roles/Index", compact("roles"));
     }
 
     public function create(): Response|ResponseFactory
     {
         $per_page=request("per_page");
 
-        return inertia("Admin/AuthorityManagements/Roles/Create", compact("per_page"));
+        return inertia("Admin/AuthorityManagements/RolesAndPermissions/Roles/Create", compact("per_page"));
     }
 
     public function store(RoleRequest $request): RedirectResponse
@@ -40,7 +40,7 @@ class AdminRoleController extends Controller
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
-        return inertia("Admin/AuthorityManagements/Roles/Edit", compact("role", "paginate"));
+        return inertia("Admin/AuthorityManagements/RolesAndPermissions/Roles/Edit", compact("role", "paginate"));
     }
 
     public function update(RoleRequest $request, Role $role): RedirectResponse
@@ -65,7 +65,7 @@ class AdminRoleController extends Controller
                           ->paginate(request("per_page", 10))
                           ->appends(request()->all());
 
-        return inertia("Admin/AuthorityManagements/Roles/Trash", compact("trashRoles"));
+        return inertia("Admin/AuthorityManagements/RolesAndPermissions/Roles/Trash", compact("trashRoles"));
     }
 
     public function restore(Request $request, int $id): RedirectResponse
