@@ -36,6 +36,7 @@ use App\Http\Controllers\Admin\ShippingArea\AdminRegionController;
 use App\Http\Controllers\Admin\ShippingArea\AdminTownshipController;
 use App\Http\Controllers\Admin\AuthorityManagements\RolesAndPermissions\AdminRoleController;
 use App\Http\Controllers\Admin\AuthorityManagements\RolesAndPermissions\AdminPermissionController;
+use App\Http\Controllers\Admin\Managements\AdminManage\AdminManageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/admin/login", [AdminAuthController::class,"login"])->middleware("guest")->name("admin.login");
@@ -333,6 +334,22 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::get("/", "index")->name("index");
                     Route::get("/details/{id}", "show")->name("show");
                     Route::post("/{id}", "update")->name("update");
+                });
+
+           Route::controller(AdminManageController::class)
+                ->prefix("/admin-manage")
+                ->name("admin-manage.")
+                ->group(function () {
+                    Route::get("/", "index")->name("index");
+                    Route::get("/create", "create")->name("create");
+                    Route::post("/", "store")->name("store");
+                    Route::get("/{user}/edit", "edit")->name("edit");
+                    Route::post("/{user}", "update")->name("update");
+                    Route::delete("/{user}", "destroy")->name("destroy");
+                    Route::get("/trash", "trash")->name("trash");
+                    Route::post("/{id}/restore", "restore")->name("restore");
+                    Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
                 });
 
            Route::controller(AdminInactiveVendorController::class)

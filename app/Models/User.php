@@ -16,6 +16,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 use Overtrue\LaravelFollow\Traits\Follower;
 use Overtrue\LaravelFollow\Traits\Followable;
+use Spatie\Permission\Models\Role;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -27,7 +28,6 @@ class User extends Authenticatable implements MustVerifyEmail
     use Follower;
     use Followable;
     use HasRoles;
-
 
     protected $guarded=[];
 
@@ -49,6 +49,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'name' => $this->name,
             'email' => $this->email,
+            'phone'=>$this->phone,
         ];
     }
 
@@ -59,7 +60,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function password(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => bcrypt($value)
+            set: fn ($value) => bcrypt($value),
         );
     }
 
@@ -80,6 +81,16 @@ class User extends Authenticatable implements MustVerifyEmail
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<User, never>
     */
     protected function createdAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => date("j-F-Y", strtotime($value)),
+        );
+    }
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<User, never>
+    */
+    protected function deletedAt(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => date("j-F-Y", strtotime($value)),
