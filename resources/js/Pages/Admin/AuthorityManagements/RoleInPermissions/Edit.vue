@@ -1,28 +1,34 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, useForm, Head, usePage } from "@inertiajs/vue3";
+import { Link, useForm, Head } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
-import TextInput from "@/Components/Forms/TextInput.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/RoleInPermissionBreadcrumb.vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 const props = defineProps({
-  paginate: Array,
-  permission: Object,
+  per_page: String,
+  role: Object,
+  permissions: Object,
+  permissionGroups: Object,
 });
 
 const processing = ref(false);
+const roleName = ref(props.role.name);
+
+const formatPermissions = computed(() =>
+  props.role.permissions.map((permission) => permission.id)
+);
 
 const form = useForm({
-  name: props.permission.name,
-  group: props.permission.group,
+  role_id: props.role.id,
+  permission_id: [...formatPermissions.value],
   captcha_token: null,
 });
 
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
-const handleEditPermission = async () => {
+const handleEditRoleInPermissions = async () => {
   await recaptchaLoaded();
   form.captcha_token = await executeRecaptcha("edit_role_in_permissions");
   submit();
@@ -31,7 +37,8 @@ const handleEditPermission = async () => {
 const submit = () => {
   processing.value = true;
   form.post(
-    route("admin.permissions.update", props.permission.id, {
+    route("admin.role-in-permissions.update", {
+      role: props.role.id,
       per_page: props.per_page,
     }),
     {
@@ -47,31 +54,10 @@ const submit = () => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Edit Permission" />
+    <Head title="Edit Role In Permissions" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
-          <li aria-current="page">
-            <div class="flex items-center">
-              <svg
-                aria-hidden="true"
-                class="w-6 h-6 text-gray-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <span
-                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Permissions</span
-              >
-            </div>
-          </li>
           <li aria-current="page">
             <div class="flex items-center">
               <svg
@@ -98,10 +84,9 @@ const submit = () => {
         <div>
           <Link
             as="button"
-            :href="route('admin.permissions.index')"
+            :href="route('admin.role-in-permissions.index')"
             :data="{
-              page: paginate.page,
-              per_page: paginate.per_page,
+              per_page: props.per_page,
             }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
@@ -112,114 +97,86 @@ const submit = () => {
       </div>
 
       <div class="border shadow-md p-10">
-        <form @submit.prevent="handleEditPermission">
+        <form @submit.prevent="handleEditRoleInPermissions">
           <div class="mb-6">
-            <InputLabel for="name" value="Permission Name *" />
+            <InputLabel for="role" value="Role *" />
 
-            <TextInput
-              id="name"
-              type="text"
-              class="mt-1 block w-full"
-              v-model="form.name"
-              required
-              placeholder="Enter Permission Name"
-            />
+            <div
+              class="flex items-center justify-between border border-gray-300 w-full rounded-md px-2 py-1"
+            >
+              <input
+                id="name"
+                type="text"
+                class="mt-1 block w-full p-2 border-transparent outline-none focus:border-transparent focus:ring-0 placeholder:text-gray-400 placeholder:text-sm"
+                v-model="roleName"
+                disabled
+              />
+            </div>
 
-            <InputError class="mt-2" :message="form.errors.name" />
+            <InputError class="mt-2" :message="form.errors.role_id" />
           </div>
 
+          {{ form.permission_id }}
+
+          <hr class="mb-6" />
+
           <div class="mb-6">
-            <InputLabel for="group" value="Group" />
+            <InputLabel for="name" value="Permissions *" />
 
-            <select
-              class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-              v-model="form.group"
+            <div
+              class="border w-full h-[600px] rounded-sm shadow px-10 py-5 overflow-auto scrollbar"
             >
-              <option value="" selected disabled>Select Group</option>
-              <option value="brand" :selected="form.group == 'brand'">
-                Brand
-              </option>
-              <option value="collection" :selected="form.group == 'collection'">
-                Collection
-              </option>
-              <option value="category" :selected="form.group == 'category'">
-                Category
-              </option>
-              <option value="product" :selected="form.group == 'product'">
-                Product
-              </option>
-              <option value="coupon" :selected="form.group == 'coupon'">
-                Coupon
-              </option>
-              <option value="banner" :selected="form.group == 'banner'">
-                Banner
-              </option>
-              <option
-                value="shipping-area"
-                :selected="form.group == 'shipping-area'"
-              >
-                Shipping Area
-              </option>
-              <option
-                value="order-manage"
-                :selected="form.group == 'order-manage'"
-              >
-                Order Manage
-              </option>
-              <option
-                value="return-order-manage"
-                :selected="form.group == 'return-order-manage'"
-              >
-                Return Order Manage
-              </option>
-              <option
-                value="cancel-order-manage"
-                :selected="form.group == 'cancel-order-manage'"
-              >
-                Cancel Order Manage
-              </option>
-              <option
-                value="vendor-manage"
-                :selected="form.group == 'vendor-manage'"
-              >
-                Vendor Manage
-              </option>
-              <option
-                value="user-manage"
-                :selected="form.group == 'user-manage'"
-              >
-                User Manage
-              </option>
-              <option
-                value="role-and-permission"
-                :selected="form.group == 'role-and-permission'"
-              >
-                Role And Permission
-              </option>
-              <option
-                value="blog-category"
-                :selected="form.group == 'blog-category'"
-              >
-                Blog Category
-              </option>
-              <option value="blog-post" :selected="form.group == 'blog-post'">
-                Blog Post
-              </option>
-              <option
-                value="website-setting"
-                :selected="form.group == 'website-setting'"
-              >
-                Website Setting
-              </option>
-              <option
-                value="seo-setting"
-                :selected="form.group == 'seo-setting'"
-              >
-                Seo Setting
-              </option>
-            </select>
+              <div class="flex items-center mb-5 border-b pb-3">
+                <div class="w-1/2">
+                  <span class="font-bold text-xl text-slate-600">Groups</span>
+                </div>
+                <div class="w-1/2 flex items-center justify-between">
+                  <span class="font-bold text-xl text-slate-600"
+                    >Select Permissions</span
+                  >
+                </div>
+              </div>
 
-            <InputError class="mt-2" :message="form.errors.group" />
+              <div
+                v-for="permissionGroup in permissionGroups"
+                :key="permissionGroup.id"
+                class="flex items-start mb-5"
+              >
+                <div class="w-1/2">
+                  <div class="flex items-center">
+                    <h3 class="ml-2 text-md font-bold text-gray-600 capitalize">
+                      {{ permissionGroup.group }}
+                    </h3>
+                  </div>
+                </div>
+
+                <div class="w-1/2">
+                  <div v-for="permission in permissions" :key="permission.id">
+                    <div
+                      v-if="permission.group === permissionGroup.group"
+                      class="flex items-center"
+                    >
+                      <input
+                        :id="'permission-checkbox' + permission.id"
+                        type="checkbox"
+                        :value="permission.id"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
+                        v-model="form.permission_id"
+                      />
+
+                      <label
+                        :for="'permission-checkbox' + permission.id"
+                        class="ml-2 text-sm font-medium text-gray-700 capitalize"
+                      >
+                        {{ permission.name }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <InputError class="mt-2" :message="form.errors.permission_id" />
           </div>
 
           <div class="mb-6">
@@ -254,3 +211,22 @@ const submit = () => {
 </template>
 
 
+<style>
+.scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #999 #f0f0f0;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #999;
+  border-radius: 3px;
+}
+</style>

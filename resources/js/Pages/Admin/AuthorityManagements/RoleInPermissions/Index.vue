@@ -90,11 +90,10 @@ const updateSorting = (sort = "id") => {
   );
 };
 
-const handleDelete = async (permission) => {
+const handleDelete = async (role) => {
   const result = await swal({
     icon: "warning",
-    title: "Are you sure you want to delete this role?",
-    text: "You will be able to restore this role in the trash!",
+    title: "Are you sure you want to delete this role in permissions?",
     showCancelButton: true,
     confirmButtonText: "Yes, delete it!",
     confirmButtonColor: "#ef4444",
@@ -106,7 +105,7 @@ const handleDelete = async (permission) => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.role-in-permissions.destroy", {
-        permission: permission.id,
+        role: role.id,
         page: params.page,
         per_page: params.per_page,
       })
@@ -135,18 +134,6 @@ if (usePage().props.flash.successMessage) {
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb />
-
-        <div>
-          <Link
-            as="button"
-            :href="route('admin.role-in-permissions.trash')"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
-          >
-            <i class="fa-solid fa-trash"></i>
-
-            Trash
-          </Link>
-        </div>
       </div>
 
       <div class="mb-5 flex items-center justify-between">
@@ -285,9 +272,18 @@ if (usePage().props.flash.successMessage) {
             <Td v-if="roleWithPermissions.permissions.length">{{
               roleWithPermissions.name
             }}</Td>
-            <Td v-if="roleWithPermissions.permissions.length">{{
-              roleWithPermissions.permissions
-            }}</Td>
+            <Td
+              v-if="roleWithPermissions.permissions.length"
+              class="max-w-[900px] flex items-center"
+            >
+              <span
+                v-for="permission in roleWithPermissions.permissions"
+                :key="permission.id"
+                class="bg-blue-700 text-white rounded-full px-3 py-1 mr-3 my-2"
+              >
+                {{ permission.name }}
+              </span>
+            </Td>
             <Td v-if="roleWithPermissions.permissions.length">{{
               roleWithPermissions.created_at
             }}</Td>

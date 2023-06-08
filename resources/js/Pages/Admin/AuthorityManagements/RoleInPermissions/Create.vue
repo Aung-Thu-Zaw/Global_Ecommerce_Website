@@ -4,22 +4,27 @@ import { Link, useForm, Head } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
-import TextInput from "@/Components/Forms/TextInput.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/RoleInPermissionBreadcrumb.vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 const props = defineProps({
   per_page: String,
   roles: Object,
+  permissions: Object,
+  permissionGroups: Object,
 });
 
 const processing = ref(false);
 
 const form = useForm({
-  name: "",
-  permissions: [],
+  role_id: "",
+  permission_id: [],
   captcha_token: null,
 });
+
+const filterRoles = computed(() =>
+  props.roles.filter((role) => !role.permissions.length)
+);
 
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 const handleCreateRoleInPermissions = async () => {
@@ -96,30 +101,91 @@ const submit = () => {
 
             <select
               class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-              v-model="form.name"
+              v-model="form.role_id"
             >
               <option value="" selected disabled>Select Role</option>
-              <option v-for="role in roles" :key="role.id" :value="role.name">
+              <option
+                v-for="role in filterRoles"
+                :key="role.id"
+                :value="role.id"
+              >
                 {{ role.name }}
               </option>
             </select>
 
-            <InputError class="mt-2" :message="form.errors.name" />
+            <InputError class="mt-2" :message="form.errors.role_id" />
           </div>
+
+          <hr class="mb-6" />
 
           <div class="mb-6">
             <InputLabel for="name" value="Permissions *" />
 
-            <!-- <TextInput
-              id="name"
-              type="text"
-              class="mt-1 block w-full"
-              v-model="form.name"
-              required
-              placeholder="Enter Permission Name"
-            />
+            <div
+              class="border w-full h-[600px] rounded-sm shadow px-10 py-5 overflow-auto scrollbar"
+            >
+              <div class="flex items-center mb-5 border-b pb-3">
+                <div class="w-1/2">
+                  <span class="font-bold text-xl text-slate-600">Groups</span>
+                </div>
+                <div class="w-1/2 flex items-center justify-between">
+                  <span class="font-bold text-xl text-slate-600"
+                    >Select Permissions</span
+                  >
+                  <!-- <span
+                    @click="isChecked = !isChecked"
+                    class="text-white rounded-sm text-sm font-bold shadow px-2 py-1 cursor-pointer"
+                    :class="{
+                      'bg-red-600 hover:bg-red-700': isChecked === true,
+                      'bg-blue-600 hover:bg-blue-700': isChecked === false,
+                    }"
+                  >
+                    <span v-if="!isChecked"> Select All </span>
+                    <span v-else> Remove All </span>
+                  </span> -->
+                </div>
+              </div>
 
-            <InputError class="mt-2" :message="form.errors.name" /> -->
+              <div
+                v-for="permissionGroup in permissionGroups"
+                :key="permissionGroup.id"
+                class="flex items-start mb-5"
+              >
+                <div class="w-1/2">
+                  <div class="flex items-center">
+                    <h3 class="ml-2 text-md font-bold text-gray-600 capitalize">
+                      {{ permissionGroup.group }}
+                    </h3>
+                  </div>
+                </div>
+
+                <div class="w-1/2">
+                  <div v-for="permission in permissions" :key="permission.id">
+                    <div
+                      v-if="permission.group === permissionGroup.group"
+                      class="flex items-center"
+                    >
+                      <input
+                        :id="'permission-checkbox' + permission.id"
+                        type="checkbox"
+                        :value="permission.id"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
+                        v-model="form.permission_id"
+                      />
+
+                      <label
+                        :for="'permission-checkbox' + permission.id"
+                        class="ml-2 text-sm font-medium text-gray-700 capitalize"
+                      >
+                        {{ permission.name }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <InputError class="mt-2" :message="form.errors.permission_id" />
           </div>
 
           <div class="mb-6">
@@ -154,3 +220,22 @@ const submit = () => {
 </template>
 
 
+<style>
+.scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #999 #f0f0f0;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #999;
+  border-radius: 3px;
+}
+</style>

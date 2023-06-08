@@ -415,13 +415,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::get("/", "index")->name("index");
                     Route::get("/create", "create")->name("create");
                     Route::post("/", "store")->name("store");
-                    Route::get("/{id}/edit", "edit")->name("edit");
-                    Route::post("/{id}", "update")->name("update");
-                    Route::delete("/{id}", "destroy")->name("destroy");
-                    Route::get("/trash", "trash")->name("trash");
-                    Route::post("/{id}/restore", "restore")->name("restore");
-                    Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
+                    Route::get("/{role}/edit", "edit")->name("edit");
+                    Route::post("/{role}", "update")->name("update");
+                    Route::delete("/{role}", "destroy")->name("destroy");
                 });
 
            Route::controller(AdminBlogCategoryController::class)

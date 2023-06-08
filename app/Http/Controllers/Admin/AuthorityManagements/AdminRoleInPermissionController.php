@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Admin\AuthorityManagements;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RoleInPermissionRequest;
 use Illuminate\Database\Eloquent\Builder;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -29,78 +32,55 @@ class AdminRoleInPermissionController extends Controller
     {
         $per_page=request("per_page");
 
-        $roles=Role::all();
+        $roles=Role::with("permissions")->get();
 
-        $permissions=Permission::all();
+        $permissionGroups = DB::table('permissions')->select('group')->groupBy('group')->get();
 
-        return inertia("Admin/AuthorityManagements/RoleInPermissions/Create", compact("per_page", "roles", "permissions"));
+        $permissions=Permission::get();
+
+        return inertia("Admin/AuthorityManagements/RoleInPermissions/Create", compact("per_page", "roles", "permissions", "permissionGroups"));
     }
 
-    // public function store(PermissionRequest $request): RedirectResponse
-    // {
-    //     Permission::create($request->validated());
+    public function store(RoleInPermissionRequest $request): RedirectResponse
+    {
+        foreach($request->permission_id as $key => $value) {
+            DB::table('role_has_permissions')->insert([
+                "role_id"=>$request->role_id,
+                "permission_id"=>$value
+            ]);
+        }
 
-    //     return to_route("admin.permissions.index", "per_page=$request->per_page")->with("success", "Permission has been successfully created.");
-    // }
+        return to_route("admin.role-in-permissions.index", "per_page=$request->per_page")->with("success", "Permission has been successfully created.");
+    }
 
-    // public function edit(Permission $permission): Response|ResponseFactory
-    // {
-    //     $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+    public function edit(Role $role): Response|ResponseFactory
+    {
+        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
-    //     return inertia("Admin/AuthorityManagements/RoleInPermissions/Edit", compact("permission", "paginate"));
-    // }
+        $permissionGroups = DB::table('permissions')->select('group')->groupBy('group')->get();
 
-    // public function update(PermissionRequest $request, Permission $permission): RedirectResponse
-    // {
-    //     $permission->update($request->validated());
+        $permissions=Permission::get();
 
-    //     return to_route("admin.permissions.index", "page=$request->page&per_page=$request->per_page")->with("success", "Permission has been successfully updated.");
-    // }
+        $role->load("permissions");
 
-    // public function destroy(Request $request, Permission $permission): RedirectResponse
-    // {
-    //     $permission->delete();
+        return inertia("Admin/AuthorityManagements/RoleInPermissions/Edit", compact("paginate", "permissions", "permissionGroups", "role"));
+    }
 
-    //     return to_route("admin.permissions.index", "page=$request->page&per_page=$request->per_page")->with("success", "Permission has been successfully deleted.");
-    // }
+    public function update(RoleInPermissionRequest $request, Role $role): RedirectResponse
+    {
+        $role->permissions()->detach();
 
-    // public function trash(): Response|ResponseFactory
-    // {
-    //     $trashPermissions=Permission::search(request("search"))
-    //                       ->onlyTrashed()
-    //                       ->orderBy(request("sort", "id"), request("direction", "desc"))
-    //                       ->paginate(request("per_page", 10))
-    //                       ->appends(request()->all());
+        foreach($request->permission_id as $key => $value) {
+            $role->permissions()->attach(["permission_id"=>$value]);
+        }
 
-    //     return inertia("Admin/AuthorityManagements/RoleInPermissions/Trash", compact("trashPermissions"));
-    // }
+        return to_route("admin.role-in-permissions.index", "page=$request->page&per_page=$request->per_page")->with("success", "Permission has been successfully updated.");
+    }
 
-    // public function restore(Request $request, int $id): RedirectResponse
-    // {
-    //     $permission = Permission::onlyTrashed()->findOrFail($id);
+    public function destroy(Request $request, Role $role): RedirectResponse
+    {
+        $role->permissions()->detach();
 
-    //     $permission->restore();
-
-    //     return to_route('admin.permissions.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Permission has been successfully restored.");
-    // }
-
-    // public function forceDelete(Request $request, int $id): RedirectResponse
-    // {
-    //     $permission = Permission::onlyTrashed()->findOrFail($id);
-
-    //     $permission->forceDelete();
-
-    //     return to_route('admin.permissions.trash', "page=$request->page&per_page=$request->per_page")->with("success", "The permission has been permanently deleted");
-    // }
-
-    // public function permanentlyDelete(Request $request): RedirectResponse
-    // {
-    //     $permissions = Permission::onlyTrashed()->get();
-
-    //     $permissions->each(function ($permission) {
-    //         $permission->forceDelete();
-    //     });
-
-    //     return to_route('admin.permissions.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Permissions have been successfully deleted.");
-    // }
+        return to_route("admin.role-in-permissions.index", "page=$request->page&per_page=$request->per_page")->with("success", "Permission has been successfully deleted.");
+    }
 }
