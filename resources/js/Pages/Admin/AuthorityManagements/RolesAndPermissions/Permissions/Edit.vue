@@ -197,6 +197,12 @@ const submit = () => {
                 Role And Permission
               </option>
               <option
+                value="role-in-permissions"
+                :selected="form.group == 'role-in-permissions'"
+              >
+                Role In Permissions
+              </option>
+              <option
                 value="blog-category"
                 :selected="form.group == 'blog-category'"
               >

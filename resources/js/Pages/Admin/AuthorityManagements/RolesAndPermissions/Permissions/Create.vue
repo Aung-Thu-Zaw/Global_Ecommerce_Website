@@ -147,6 +147,7 @@ const submit = () => {
               <option value="vendor-manage">Vendor Manage</option>
               <option value="user-manage">User Manage</option>
               <option value="role-and-permission">Role And Permission</option>
+              <option value="role-in-permission">Role In Permissions</option>
               <option value="blog-category">Blog Category</option>
               <option value="blog-post">Blog Post</option>
               <option value="website-setting">Website Setting</option>

@@ -88,7 +88,16 @@
           </li>
 
           <!-- Brand Section -->
-          <li class="items-center">
+          <li
+            v-if="
+              $page.props.auth.user.roles.length
+                ? $page.props.auth.user.roles[0].permissions.some(
+                    (permission) => permission.name === 'brand.menu'
+                  )
+                : null
+            "
+            class="items-center"
+          >
             <Link
               :href="route('admin.brands.index')"
               class="text-xs uppercase py-3 font-bold block"
@@ -105,7 +114,16 @@
           </li>
 
           <!-- Collection Section -->
-          <li class="items-center">
+          <li
+            v-if="
+              $page.props.auth.user.roles.length
+                ? $page.props.auth.user.roles[0].permissions.some(
+                    (permission) => permission.name === 'collection.menu'
+                  )
+                : null
+            "
+            class="items-center"
+          >
             <Link
               :href="route('admin.collections.index')"
               class="text-xs uppercase py-3 font-bold block"
@@ -122,7 +140,16 @@
           </li>
 
           <!-- Category Section -->
-          <li class="items-center">
+          <li
+            v-if="
+              $page.props.auth.user.roles.length
+                ? $page.props.auth.user.roles[0].permissions.some(
+                    (permission) => permission.name === 'category.menu'
+                  )
+                : null
+            "
+            class="items-center"
+          >
             <Link
               :href="route('admin.categories.index')"
               class="text-xs uppercase py-3 font-bold block"
@@ -139,7 +166,16 @@
           </li>
 
           <!-- Product Section -->
-          <li class="items-center">
+          <li
+            v-if="
+              $page.props.auth.user.roles.length
+                ? $page.props.auth.user.roles[0].permissions.some(
+                    (permission) => permission.name === 'product.menu'
+                  )
+                : null
+            "
+            class="items-center"
+          >
             <Link
               :href="route('admin.products.index')"
               class="text-xs uppercase py-3 font-bold block"
@@ -156,7 +192,16 @@
           </li>
 
           <!-- Coupon Section -->
-          <li class="items-center">
+          <li
+            v-if="
+              $page.props.auth.user.roles.length
+                ? $page.props.auth.user.roles[0].permissions.some(
+                    (permission) => permission.name === 'coupon.menu'
+                  )
+                : null
+            "
+            class="items-center"
+          >
             <Link
               :href="route('admin.coupons.index')"
               class="text-xs uppercase py-3 font-bold block"
@@ -172,8 +217,18 @@
             </Link>
           </li>
         </ul>
+
         <!-- Banner Section -->
-        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+        <ul
+          v-if="
+            $page.props.auth.user.roles.length
+              ? $page.props.auth.user.roles[0].permissions.some(
+                  (permission) => permission.name === 'banner.menu'
+                )
+              : null
+          "
+          class="md:flex-col md:min-w-full flex flex-col list-none"
+        >
           <li class="items-center cursor-pointer">
             <div
               class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
@@ -229,7 +284,16 @@
         </ul>
 
         <!-- Shipping Areas Section -->
-        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+        <ul
+          v-if="
+            $page.props.auth.user.roles.length
+              ? $page.props.auth.user.roles[0].permissions.some(
+                  (permission) => permission.name === 'shipping-area.menu'
+                )
+              : null
+          "
+          class="md:flex-col md:min-w-full flex flex-col list-none"
+        >
           <li class="items-center cursor-pointer">
             <div
               class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
@@ -307,7 +371,16 @@
         </h6>
 
         <!-- Order Manage -->
-        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+        <ul
+          v-if="
+            $page.props.auth.user.roles.length
+              ? $page.props.auth.user.roles[0].permissions.some(
+                  (permission) => permission.name === 'order-manage.menu'
+                )
+              : null
+          "
+          class="md:flex-col md:min-w-full flex flex-col list-none"
+        >
           <li class="items-center cursor-pointer">
             <div
               class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
@@ -389,7 +462,18 @@
             </ul>
           </li>
         </ul>
-        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+
+        <!-- Return Order Manage -->
+        <ul
+          v-if="
+            $page.props.auth.user.roles.length
+              ? $page.props.auth.user.roles[0].permissions.some(
+                  (permission) => permission.name === 'return-order-manage.menu'
+                )
+              : null
+          "
+          class="md:flex-col md:min-w-full flex flex-col list-none"
+        >
           <li class="items-center cursor-pointer">
             <div
               class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
@@ -449,7 +533,18 @@
             </ul>
           </li>
         </ul>
-        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+
+        <!-- Cancel Order Manage -->
+        <ul
+          v-if="
+            $page.props.auth.user.roles.length
+              ? $page.props.auth.user.roles[0].permissions.some(
+                  (permission) => permission.name === 'cancel-order-manage.menu'
+                )
+              : null
+          "
+          class="md:flex-col md:min-w-full flex flex-col list-none"
+        >
           <li class="items-center cursor-pointer">
             <div
               class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
@@ -509,7 +604,16 @@
         </h6>
 
         <!-- Vendor Manage -->
-        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+        <ul
+          v-if="
+            $page.props.auth.user.roles.length
+              ? $page.props.auth.user.roles[0].permissions.some(
+                  (permission) => permission.name === 'vendor-manage.menu'
+                )
+              : null
+          "
+          class="md:flex-col md:min-w-full flex flex-col list-none"
+        >
           <li class="items-center cursor-pointer">
             <div
               class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
@@ -559,7 +663,16 @@
           </li>
         </ul>
         <!-- User Manage -->
-        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+        <ul
+          v-if="
+            $page.props.auth.user.roles.length
+              ? $page.props.auth.user.roles[0].permissions.some(
+                  (permission) => permission.name === 'user-manage.menu'
+                )
+              : null
+          "
+          class="md:flex-col md:min-w-full flex flex-col list-none"
+        >
           <li class="items-center cursor-pointer">
             <div
               class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
@@ -608,8 +721,16 @@
             </ul>
           </li>
         </ul>
-
-        <ul>
+        <!-- Admin Manage -->
+        <ul
+          v-if="
+            $page.props.auth.user.roles.length
+              ? $page.props.auth.user.roles[0].permissions.some(
+                  (permission) => permission.name === 'admin-manage.menu'
+                )
+              : null
+          "
+        >
           <li class="items-center">
             <Link
               :href="route('admin.admin-manage.index')"
@@ -638,8 +759,17 @@
           Authority Managements
         </h6>
 
-        <!-- Role Manage -->
-        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+        <!-- Role And Permission Manage -->
+        <ul
+          v-if="
+            $page.props.auth.user.roles.length
+              ? $page.props.auth.user.roles[0].permissions.some(
+                  (permission) => permission.name === 'role-and-permission.menu'
+                )
+              : null
+          "
+          class="md:flex-col md:min-w-full flex flex-col list-none"
+        >
           <li class="items-center cursor-pointer">
             <div
               class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
@@ -692,7 +822,16 @@
           </li>
         </ul>
 
-        <ul>
+        <!-- Role In Permission Manage -->
+        <ul
+          v-if="
+            $page.props.auth.user.roles.length
+              ? $page.props.auth.user.roles[0].permissions.some(
+                  (permission) => permission.name === 'role-in-permissions.menu'
+                )
+              : null
+          "
+        >
           <li class="items-center">
             <Link
               :href="route('admin.role-in-permissions.index')"
@@ -804,7 +943,16 @@
         </h6>
 
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
-          <li class="items-center">
+          <li
+            v-if="
+              $page.props.auth.user.roles.length
+                ? $page.props.auth.user.roles[0].permissions.some(
+                    (permission) => permission.name === 'blog-category.menu'
+                  )
+                : null
+            "
+            class="items-center"
+          >
             <Link
               :href="route('admin.blogs.categories.index')"
               class="text-xs uppercase py-3 font-bold block"
@@ -818,6 +966,17 @@
               <i class="fa-regular fa-rectangle-list mr-2 text-sm"></i>
               Blog Categories
             </Link>
+          </li>
+          <li
+            class="items-center"
+            v-if="
+              $page.props.auth.user.roles.length
+                ? $page.props.auth.user.roles[0].permissions.some(
+                    (permission) => permission.name === 'blog-post.menu'
+                  )
+                : null
+            "
+          >
             <Link
               :href="route('admin.blogs.posts.index')"
               class="text-xs uppercase py-3 font-bold block"
@@ -844,7 +1003,16 @@
         </h6>
 
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
-          <li class="items-center">
+          <li
+            v-if="
+              $page.props.auth.user.roles.length
+                ? $page.props.auth.user.roles[0].permissions.some(
+                    (permission) => permission.name === 'website-setting.menu'
+                  )
+                : null
+            "
+            class="items-center"
+          >
             <Link
               :href="route('admin.website-settings.edit')"
               class="text-xs uppercase py-3 font-bold block"
@@ -858,6 +1026,17 @@
               <i class="fa-solid fa-gear mr-2 text-sm"></i>
               Website Settings
             </Link>
+          </li>
+          <li
+            v-if="
+              $page.props.auth.user.roles.length
+                ? $page.props.auth.user.roles[0].permissions.some(
+                    (permission) => permission.name === 'seo-setting.menu'
+                  )
+                : null
+            "
+            class="items-center"
+          >
             <Link
               :href="route('admin.seo-settings.edit')"
               class="text-xs uppercase py-3 font-bold block"

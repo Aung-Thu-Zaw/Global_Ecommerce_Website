@@ -43,7 +43,7 @@ const form = useForm({
   birthday: formatDate,
   gender: props.user.gender,
   about: props.user.about,
-  assign_role: props.user.roles[0].id,
+  assign_role: props.user.roles.length ? props.user.roles[0].id : null,
   role: props.user.role,
   status: props.user.status,
   captcha_token: null,

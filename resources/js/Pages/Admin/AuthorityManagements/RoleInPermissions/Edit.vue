@@ -116,7 +116,6 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.role_id" />
           </div>
 
-          {{ form.permission_id }}
 
           <hr class="mb-6" />
 
