@@ -11,7 +11,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/CategoryBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject } from "vue";
+import { reactive, watch, inject, computed } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -23,6 +23,38 @@ const swal = inject("$swal");
 const handleSearchBox = () => {
   params.search = "";
 };
+
+const categoryAdd = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "category.add"
+      )
+    : false;
+});
+
+const categoryEdit = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "category.edit"
+      )
+    : false;
+});
+
+const categoryDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "category.delete"
+      )
+    : false;
+});
+
+const categoryTrashList = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "category.trash.list"
+      )
+    : false;
+});
 
 const params = reactive({
   search: null,
@@ -164,7 +196,7 @@ if (usePage().props.flash.successMessage) {
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb />
 
-        <div>
+        <div v-if="categoryTrashList">
           <Link
             as="button"
             :href="route('admin.categories.trash')"
@@ -179,6 +211,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <Link
+          v-if="categoryAdd"
           as="button"
           :href="route('admin.categories.create')"
           :data="{
@@ -189,7 +222,7 @@ if (usePage().props.flash.successMessage) {
           <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
           Add Category</Link
         >
-        <div class="flex items-center">
+        <div class="flex items-center ml-auto">
           <form class="w-[350px] relative">
             <input
               type="text"
@@ -324,7 +357,7 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="categoryEdit || categoryDelete"> Action </HeaderTh>
         </TableHeader>
 
         <tbody v-if="categories.data.length">
@@ -347,8 +380,9 @@ if (usePage().props.flash.successMessage) {
               </InactiveStatus>
             </Td>
             <Td>{{ category.created_at }}</Td>
-            <Td>
+            <Td v-if="categoryEdit || categoryDelete">
               <Link
+                v-if="categoryEdit"
                 as="button"
                 :href="route('admin.categories.edit', category.slug)"
                 :data="{
@@ -361,6 +395,7 @@ if (usePage().props.flash.successMessage) {
                 Edit
               </Link>
               <button
+                v-if="categoryDelete"
                 @click="handleDelete(category)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >

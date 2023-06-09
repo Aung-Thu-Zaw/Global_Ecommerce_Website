@@ -47,7 +47,7 @@ class CategoryRequest extends FormRequest
         return [
             "parent_id.exists" => "Parent category does not exist.",
             "name.required" => "Category name is required.",
-            "name.unique" => "Category is already exists.",
+            "name.unique" => "Category name is already exists.",
             "status.required" => "Category status is required.",
         ];
     }
