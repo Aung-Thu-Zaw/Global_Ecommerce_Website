@@ -68,11 +68,14 @@ class AdminRoleInPermissionController extends Controller
 
     public function update(RoleInPermissionRequest $request, Role $role): RedirectResponse
     {
+
         $role->permissions()->detach();
 
         foreach($request->permission_id as $key => $value) {
             $role->permissions()->attach(["permission_id"=>$value]);
         }
+
+        auth()->user()->syncPermissions($role->permissions);
 
         return to_route("admin.role-in-permissions.index", "page=$request->page&per_page=$request->per_page")->with("success", "Permission has been successfully updated.");
     }

@@ -53,7 +53,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                 ->name("brands.")
                 ->group(function () {
                     Route::get("/", "index")->name("index");
-                    Route::get("/create", "create")->name("create");
+                    Route::get("/create", "create")->middleware('permission:brand.add')->name("create");
                     Route::post("/", "store")->name("store");
                     Route::get("/{brand}/edit", "edit")->name("edit");
                     Route::post("/{brand}", "update")->name("update");

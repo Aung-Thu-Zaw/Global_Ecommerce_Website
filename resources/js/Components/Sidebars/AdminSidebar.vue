@@ -866,8 +866,6 @@
           </li>
         </ul>
 
-        {{ $page.props.auth.user.permissions }}
-
         <hr class="my-4 md:min-w-full" />
 
         <!-- Site Settings -->
