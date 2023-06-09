@@ -88,16 +88,7 @@
           </li>
 
           <!-- Brand Section -->
-          <li
-            v-if="
-              $page.props.auth.user.roles.length
-                ? $page.props.auth.user.roles[0].permissions.some(
-                    (permission) => permission.name === 'brand.menu'
-                  )
-                : null
-            "
-            class="items-center"
-          >
+          <li v-if="brandMenu" class="items-center">
             <Link
               :href="route('admin.brands.index')"
               class="text-xs uppercase py-3 font-bold block"
@@ -114,16 +105,7 @@
           </li>
 
           <!-- Collection Section -->
-          <li
-            v-if="
-              $page.props.auth.user.roles.length
-                ? $page.props.auth.user.roles[0].permissions.some(
-                    (permission) => permission.name === 'collection.menu'
-                  )
-                : null
-            "
-            class="items-center"
-          >
+          <li v-if="collectionMenu" class="items-center">
             <Link
               :href="route('admin.collections.index')"
               class="text-xs uppercase py-3 font-bold block"
@@ -140,16 +122,7 @@
           </li>
 
           <!-- Category Section -->
-          <li
-            v-if="
-              $page.props.auth.user.roles.length
-                ? $page.props.auth.user.roles[0].permissions.some(
-                    (permission) => permission.name === 'category.menu'
-                  )
-                : null
-            "
-            class="items-center"
-          >
+          <li v-if="categoryMenu" class="items-center">
             <Link
               :href="route('admin.categories.index')"
               class="text-xs uppercase py-3 font-bold block"
@@ -166,16 +139,7 @@
           </li>
 
           <!-- Product Section -->
-          <li
-            v-if="
-              $page.props.auth.user.roles.length
-                ? $page.props.auth.user.roles[0].permissions.some(
-                    (permission) => permission.name === 'product.menu'
-                  )
-                : null
-            "
-            class="items-center"
-          >
+          <li v-if="productMenu" class="items-center">
             <Link
               :href="route('admin.products.index')"
               class="text-xs uppercase py-3 font-bold block"
@@ -192,16 +156,7 @@
           </li>
 
           <!-- Coupon Section -->
-          <li
-            v-if="
-              $page.props.auth.user.roles.length
-                ? $page.props.auth.user.roles[0].permissions.some(
-                    (permission) => permission.name === 'coupon.menu'
-                  )
-                : null
-            "
-            class="items-center"
-          >
+          <li v-if="couponMenu" class="items-center">
             <Link
               :href="route('admin.coupons.index')"
               class="text-xs uppercase py-3 font-bold block"
@@ -220,13 +175,7 @@
 
         <!-- Banner Section -->
         <ul
-          v-if="
-            $page.props.auth.user.roles.length
-              ? $page.props.auth.user.roles[0].permissions.some(
-                  (permission) => permission.name === 'banner.menu'
-                )
-              : null
-          "
+          v-if="bannerMenu"
           class="md:flex-col md:min-w-full flex flex-col list-none"
         >
           <li class="items-center cursor-pointer">
@@ -285,13 +234,7 @@
 
         <!-- Shipping Areas Section -->
         <ul
-          v-if="
-            $page.props.auth.user.roles.length
-              ? $page.props.auth.user.roles[0].permissions.some(
-                  (permission) => permission.name === 'shipping-area.menu'
-                )
-              : null
-          "
+          v-if="shippingAreaMenu"
           class="md:flex-col md:min-w-full flex flex-col list-none"
         >
           <li class="items-center cursor-pointer">
@@ -372,13 +315,7 @@
 
         <!-- Order Manage -->
         <ul
-          v-if="
-            $page.props.auth.user.roles.length
-              ? $page.props.auth.user.roles[0].permissions.some(
-                  (permission) => permission.name === 'order-manage.menu'
-                )
-              : null
-          "
+          v-if="orderManageMenu"
           class="md:flex-col md:min-w-full flex flex-col list-none"
         >
           <li class="items-center cursor-pointer">
@@ -465,13 +402,7 @@
 
         <!-- Return Order Manage -->
         <ul
-          v-if="
-            $page.props.auth.user.roles.length
-              ? $page.props.auth.user.roles[0].permissions.some(
-                  (permission) => permission.name === 'return-order-manage.menu'
-                )
-              : null
-          "
+          v-if="returnOrderManageMenu"
           class="md:flex-col md:min-w-full flex flex-col list-none"
         >
           <li class="items-center cursor-pointer">
@@ -536,13 +467,7 @@
 
         <!-- Cancel Order Manage -->
         <ul
-          v-if="
-            $page.props.auth.user.roles.length
-              ? $page.props.auth.user.roles[0].permissions.some(
-                  (permission) => permission.name === 'cancel-order-manage.menu'
-                )
-              : null
-          "
+          v-if="cancelOrderManageMenu"
           class="md:flex-col md:min-w-full flex flex-col list-none"
         >
           <li class="items-center cursor-pointer">
@@ -605,13 +530,7 @@
 
         <!-- Vendor Manage -->
         <ul
-          v-if="
-            $page.props.auth.user.roles.length
-              ? $page.props.auth.user.roles[0].permissions.some(
-                  (permission) => permission.name === 'vendor-manage.menu'
-                )
-              : null
-          "
+          v-if="vendorManageMenu"
           class="md:flex-col md:min-w-full flex flex-col list-none"
         >
           <li class="items-center cursor-pointer">
@@ -664,13 +583,7 @@
         </ul>
         <!-- User Manage -->
         <ul
-          v-if="
-            $page.props.auth.user.roles.length
-              ? $page.props.auth.user.roles[0].permissions.some(
-                  (permission) => permission.name === 'user-manage.menu'
-                )
-              : null
-          "
+          v-if="userManageMenu"
           class="md:flex-col md:min-w-full flex flex-col list-none"
         >
           <li class="items-center cursor-pointer">
@@ -722,15 +635,7 @@
           </li>
         </ul>
         <!-- Admin Manage -->
-        <ul
-          v-if="
-            $page.props.auth.user.roles.length
-              ? $page.props.auth.user.roles[0].permissions.some(
-                  (permission) => permission.name === 'admin-manage.menu'
-                )
-              : null
-          "
-        >
+        <ul v-if="adminManageMenu">
           <li class="items-center">
             <Link
               :href="route('admin.admin-manage.index')"
@@ -761,13 +666,7 @@
 
         <!-- Role And Permission Manage -->
         <ul
-          v-if="
-            $page.props.auth.user.roles.length
-              ? $page.props.auth.user.roles[0].permissions.some(
-                  (permission) => permission.name === 'role-and-permission.menu'
-                )
-              : null
-          "
+          v-if="roleAndPermissionMenu"
           class="md:flex-col md:min-w-full flex flex-col list-none"
         >
           <li class="items-center cursor-pointer">
@@ -823,15 +722,7 @@
         </ul>
 
         <!-- Role In Permission Manage -->
-        <ul
-          v-if="
-            $page.props.auth.user.roles.length
-              ? $page.props.auth.user.roles[0].permissions.some(
-                  (permission) => permission.name === 'role-in-permissions.menu'
-                )
-              : null
-          "
-        >
+        <ul v-if="roleInPermissionsMenu">
           <li class="items-center">
             <Link
               :href="route('admin.role-in-permissions.index')"
@@ -943,16 +834,7 @@
         </h6>
 
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
-          <li
-            v-if="
-              $page.props.auth.user.roles.length
-                ? $page.props.auth.user.roles[0].permissions.some(
-                    (permission) => permission.name === 'blog-category.menu'
-                  )
-                : null
-            "
-            class="items-center"
-          >
+          <li v-if="blogCategoryMenu" class="items-center">
             <Link
               :href="route('admin.blogs.categories.index')"
               class="text-xs uppercase py-3 font-bold block"
@@ -967,16 +849,7 @@
               Blog Categories
             </Link>
           </li>
-          <li
-            class="items-center"
-            v-if="
-              $page.props.auth.user.roles.length
-                ? $page.props.auth.user.roles[0].permissions.some(
-                    (permission) => permission.name === 'blog-post.menu'
-                  )
-                : null
-            "
-          >
+          <li class="items-center" v-if="blogPostMenu">
             <Link
               :href="route('admin.blogs.posts.index')"
               class="text-xs uppercase py-3 font-bold block"
@@ -1003,16 +876,7 @@
         </h6>
 
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
-          <li
-            v-if="
-              $page.props.auth.user.roles.length
-                ? $page.props.auth.user.roles[0].permissions.some(
-                    (permission) => permission.name === 'website-setting.menu'
-                  )
-                : null
-            "
-            class="items-center"
-          >
+          <li v-if="websiteSettingMenu" class="items-center">
             <Link
               :href="route('admin.website-settings.edit')"
               class="text-xs uppercase py-3 font-bold block"
@@ -1027,16 +891,7 @@
               Website Settings
             </Link>
           </li>
-          <li
-            v-if="
-              $page.props.auth.user.roles.length
-                ? $page.props.auth.user.roles[0].permissions.some(
-                    (permission) => permission.name === 'seo-setting.menu'
-                  )
-                : null
-            "
-            class="items-center"
-          >
+          <li v-if="seoSettingMenu" class="items-center">
             <Link
               :href="route('admin.seo-settings.edit')"
               class="text-xs uppercase py-3 font-bold block"
@@ -1172,6 +1027,158 @@ export default {
       ) {
         return (this.roleAndPermissionManageIsHidden = false);
       }
+    },
+
+    brandMenu() {
+      return this.$page.props.auth.user.roles.length
+        ? this.$page.props.auth.user.roles[0].permissions.some(
+            (permission) => permission.name === "banner.menu"
+          )
+        : false;
+    },
+
+    collectionMenu() {
+      return this.$page.props.auth.user.roles.length
+        ? this.$page.props.auth.user.roles[0].permissions.some(
+            (permission) => permission.name === "collection.menu"
+          )
+        : false;
+    },
+
+    categoryMenu() {
+      return this.$page.props.auth.user.roles.length
+        ? this.$page.props.auth.user.roles[0].permissions.some(
+            (permission) => permission.name === "category.menu"
+          )
+        : false;
+    },
+
+    productMenu() {
+      return this.$page.props.auth.user.roles.length
+        ? this.$page.props.auth.user.roles[0].permissions.some(
+            (permission) => permission.name === "product.menu"
+          )
+        : false;
+    },
+
+    couponMenu() {
+      return this.$page.props.auth.user.roles.length
+        ? this.$page.props.auth.user.roles[0].permissions.some(
+            (permission) => permission.name === "coupon.menu"
+          )
+        : false;
+    },
+
+    bannerMenu() {
+      return this.$page.props.auth.user.roles.length
+        ? this.$page.props.auth.user.roles[0].permissions.some(
+            (permission) => permission.name === "banner.menu"
+          )
+        : false;
+    },
+
+    shippingAreaMenu() {
+      return this.$page.props.auth.user.roles.length
+        ? this.$page.props.auth.user.roles[0].permissions.some(
+            (permission) => permission.name === "shipping-area.menu"
+          )
+        : false;
+    },
+
+    orderManageMenu() {
+      return this.$page.props.auth.user.roles.length
+        ? this.$page.props.auth.user.roles[0].permissions.some(
+            (permission) => permission.name === "order-manage.menu"
+          )
+        : false;
+    },
+
+    returnOrderManageMenu() {
+      return this.$page.props.auth.user.roles.length
+        ? this.$page.props.auth.user.roles[0].permissions.some(
+            (permission) => permission.name === "return-order-manage.menu"
+          )
+        : false;
+    },
+
+    cancelOrderManageMenu() {
+      return this.$page.props.auth.user.roles.length
+        ? this.$page.props.auth.user.roles[0].permissions.some(
+            (permission) => permission.name === "cancel-order-manage.menu"
+          )
+        : false;
+    },
+
+    vendorManageMenu() {
+      return this.$page.props.auth.user.roles.length
+        ? this.$page.props.auth.user.roles[0].permissions.some(
+            (permission) => permission.name === "vendor-manage.menu"
+          )
+        : false;
+    },
+
+    userManageMenu() {
+      return this.$page.props.auth.user.roles.length
+        ? this.$page.props.auth.user.roles[0].permissions.some(
+            (permission) => permission.name === "user-manage.menu"
+          )
+        : false;
+    },
+
+    adminManageMenu() {
+      return this.$page.props.auth.user.roles.length
+        ? this.$page.props.auth.user.roles[0].permissions.some(
+            (permission) => permission.name === "admin-manage.menu"
+          )
+        : false;
+    },
+
+    roleAndPermissionMenu() {
+      return this.$page.props.auth.user.roles.length
+        ? this.$page.props.auth.user.roles[0].permissions.some(
+            (permission) => permission.name === "role-and-permission.menu"
+          )
+        : false;
+    },
+
+    roleInPermissionsMenu() {
+      return this.$page.props.auth.user.roles.length
+        ? this.$page.props.auth.user.roles[0].permissions.some(
+            (permission) => permission.name === "role-in-permissions.menu"
+          )
+        : false;
+    },
+
+    blogCategoryMenu() {
+      return this.$page.props.auth.user.roles.length
+        ? this.$page.props.auth.user.roles[0].permissions.some(
+            (permission) => permission.name === "blog-category.menu"
+          )
+        : false;
+    },
+
+    blogPostMenu() {
+      return this.$page.props.auth.user.roles.length
+        ? this.$page.props.auth.user.roles[0].permissions.some(
+            (permission) => permission.name === "blog-post.menu"
+          )
+        : false;
+    },
+
+    websiteSettingMenu() {
+      return this.$page.props.auth.user.roles.length
+        ? this.$page.props.auth.user.roles[0].permissions.some(
+            (permission) => permission.name === "website-setting.menu"
+          )
+        : false;
+    },
+
+    seoSettingMenu() {
+      return this.$page.props.auth.user.roles.length
+        ? this.$page.props.auth.user.roles[0].permissions.some(
+            (permission) => permission.name === "seo-setting.menu"
+          )
+        : false;
     },
   },
   components: {

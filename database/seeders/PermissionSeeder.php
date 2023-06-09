@@ -16,7 +16,6 @@ class PermissionSeeder extends Seeder
     public function run()
     {
         Permission::create(["name"=>"brand.menu","group"=>"brand"]);
-        Permission::create(["name"=>"brand.list","group"=>"brand"]);
         Permission::create(["name"=>"brand.add","group"=>"brand"]);
         Permission::create(["name"=>"brand.edit","group"=>"brand"]);
         Permission::create(["name"=>"brand.delete","group"=>"brand"]);
@@ -25,7 +24,6 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"brand.delete.trash","group"=>"brand"]);
 
         Permission::create(["name"=>"collection.menu","group"=>"collection"]);
-        Permission::create(["name"=>"collection.list","group"=>"collection"]);
         Permission::create(["name"=>"collection.add","group"=>"collection"]);
         Permission::create(["name"=>"collection.edit","group"=>"collection"]);
         Permission::create(["name"=>"collection.delete","group"=>"collection"]);
@@ -34,7 +32,6 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"collection.delete.trash","group"=>"collection"]);
 
         Permission::create(["name"=>"category.menu","group"=>"category"]);
-        Permission::create(["name"=>"category.list","group"=>"category"]);
         Permission::create(["name"=>"category.add","group"=>"category"]);
         Permission::create(["name"=>"category.edit","group"=>"category"]);
         Permission::create(["name"=>"category.delete","group"=>"category"]);
@@ -43,7 +40,6 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"category.delete.trash","group"=>"category"]);
 
         Permission::create(["name"=>"product.menu","group"=>"product"]);
-        Permission::create(["name"=>"product.list","group"=>"product"]);
         Permission::create(["name"=>"product.add","group"=>"product"]);
         Permission::create(["name"=>"product.edit","group"=>"product"]);
         Permission::create(["name"=>"product.delete","group"=>"product"]);
@@ -52,7 +48,6 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"product.delete.trash","group"=>"product"]);
 
         Permission::create(["name"=>"coupon.menu","group"=>"coupon"]);
-        Permission::create(["name"=>"coupon.list","group"=>"coupon"]);
         Permission::create(["name"=>"coupon.add","group"=>"coupon"]);
         Permission::create(["name"=>"coupon.edit","group"=>"coupon"]);
         Permission::create(["name"=>"coupon.delete","group"=>"coupon"]);
@@ -61,7 +56,6 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"coupon.delete.trash","group"=>"coupon"]);
 
         Permission::create(["name"=>"banner.menu","group"=>"banner"]);
-        Permission::create(["name"=>"banner.list","group"=>"banner"]);
         Permission::create(["name"=>"banner.add","group"=>"banner"]);
         Permission::create(["name"=>"banner.edit","group"=>"banner"]);
         Permission::create(["name"=>"banner.delete","group"=>"banner"]);
@@ -70,7 +64,6 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"banner.delete.trash","group"=>"banner"]);
 
         Permission::create(["name"=>"shipping-area.menu","group"=>"shipping-area"]);
-        Permission::create(["name"=>"shipping-area.list","group"=>"shipping-area"]);
         Permission::create(["name"=>"shipping-area.add","group"=>"shipping-area"]);
         Permission::create(["name"=>"shipping-area.edit","group"=>"shipping-area"]);
         Permission::create(["name"=>"shipping-area.delete","group"=>"shipping-area"]);
@@ -79,7 +72,6 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"shipping-area.delete.trash","group"=>"shipping-area"]);
 
         Permission::create(["name"=>"order-manage.menu","group"=>"order-manage"]);
-        Permission::create(["name"=>"order-manage.list","group"=>"order-manage"]);
         Permission::create(["name"=>"order-manage.add","group"=>"order-manage"]);
         Permission::create(["name"=>"order-manage.edit","group"=>"order-manage"]);
         Permission::create(["name"=>"order-manage.delete","group"=>"order-manage"]);
@@ -88,7 +80,6 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"order-manage.delete.trash","group"=>"order-manage"]);
 
         Permission::create(["name"=>"return-order-manage.menu","group"=>"return-order-manage"]);
-        Permission::create(["name"=>"return-order-manage.list","group"=>"return-order-manage"]);
         Permission::create(["name"=>"return-order-manage.add","group"=>"return-order-manage"]);
         Permission::create(["name"=>"return-order-manage.edit","group"=>"return-order-manage"]);
         Permission::create(["name"=>"return-order-manage.delete","group"=>"return-order-manage"]);
@@ -97,7 +88,6 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"return-order-manage.delete.trash","group"=>"return-order-manage"]);
 
         Permission::create(["name"=>"cancel-order-manage.menu","group"=>"cancel-order-manage"]);
-        Permission::create(["name"=>"cancel-order-manage.list","group"=>"cancel-order-manage"]);
         Permission::create(["name"=>"cancel-order-manage.add","group"=>"cancel-order-manage"]);
         Permission::create(["name"=>"cancel-order-manage.edit","group"=>"cancel-order-manage"]);
         Permission::create(["name"=>"cancel-order-manage.delete","group"=>"cancel-order-manage"]);
@@ -106,7 +96,6 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"cancel-order-manage.delete.trash","group"=>"cancel-order-manage"]);
 
         Permission::create(["name"=>"vendor-manage.menu","group"=>"vendor-manage"]);
-        Permission::create(["name"=>"vendor-manage.list","group"=>"vendor-manage"]);
         Permission::create(["name"=>"vendor-manage.add","group"=>"vendor-manage"]);
         Permission::create(["name"=>"vendor-manage.edit","group"=>"vendor-manage"]);
         Permission::create(["name"=>"vendor-manage.delete","group"=>"vendor-manage"]);
@@ -115,7 +104,6 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"vendor-manage.delete.trash","group"=>"vendor-manage"]);
 
         Permission::create(["name"=>"user-manage.menu","group"=>"user-manage"]);
-        Permission::create(["name"=>"user-manage.list","group"=>"user-manage"]);
         Permission::create(["name"=>"user-manage.add","group"=>"user-manage"]);
         Permission::create(["name"=>"user-manage.edit","group"=>"user-manage"]);
         Permission::create(["name"=>"user-manage.delete","group"=>"user-manage"]);
@@ -123,8 +111,15 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"user-manage.trash.restore","group"=>"user-manage"]);
         Permission::create(["name"=>"user-manage.delete.trash","group"=>"user-manage"]);
 
+        Permission::create(["name"=>"admin-manage.menu","group"=>"admin-manage"]);
+        Permission::create(["name"=>"admin-manage.add","group"=>"admin-manage"]);
+        Permission::create(["name"=>"admin-manage.edit","group"=>"admin-manage"]);
+        Permission::create(["name"=>"admin-manage.delete","group"=>"admin-manage"]);
+        Permission::create(["name"=>"admin-manage.trash.list","group"=>"admin-manage"]);
+        Permission::create(["name"=>"admin-manage.trash.restore","group"=>"admin-manage"]);
+        Permission::create(["name"=>"admin-manage.delete.trash","group"=>"admin-manage"]);
+
         Permission::create(["name"=>"role-and-permission.menu","group"=>"role-and-permission"]);
-        Permission::create(["name"=>"role-and-permission.list","group"=>"role-and-permission"]);
         Permission::create(["name"=>"role-and-permission.add","group"=>"role-and-permission"]);
         Permission::create(["name"=>"role-and-permission.edit","group"=>"role-and-permission"]);
         Permission::create(["name"=>"role-and-permission.delete","group"=>"role-and-permission"]);
@@ -133,7 +128,6 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"role-and-permission.delete.trash","group"=>"role-and-permission"]);
 
         Permission::create(["name"=>"role-in-permissions.menu","group"=>"role-in-permissions"]);
-        Permission::create(["name"=>"role-in-permissions.list","group"=>"role-in-permissions"]);
         Permission::create(["name"=>"role-in-permissions.add","group"=>"role-in-permissions"]);
         Permission::create(["name"=>"role-in-permissions.edit","group"=>"role-in-permissions"]);
         Permission::create(["name"=>"role-in-permissions.delete","group"=>"role-in-permissions"]);
@@ -142,7 +136,6 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"role-in-permissions.delete.trash","group"=>"role-in-permissions"]);
 
         Permission::create(["name"=>"blog-category.menu","group"=>"blog-category"]);
-        Permission::create(["name"=>"blog-category.list","group"=>"blog-category"]);
         Permission::create(["name"=>"blog-category.add","group"=>"blog-category"]);
         Permission::create(["name"=>"blog-category.edit","group"=>"blog-category"]);
         Permission::create(["name"=>"blog-category.delete","group"=>"blog-category"]);
@@ -151,7 +144,6 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"blog-category.delete.trash","group"=>"blog-category"]);
 
         Permission::create(["name"=>"blog-post.menu","group"=>"blog-post"]);
-        Permission::create(["name"=>"blog-post.list","group"=>"blog-post"]);
         Permission::create(["name"=>"blog-post.add","group"=>"blog-post"]);
         Permission::create(["name"=>"blog-post.edit","group"=>"blog-post"]);
         Permission::create(["name"=>"blog-post.delete","group"=>"blog-post"]);
@@ -160,7 +152,6 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"blog-post.delete.trash","group"=>"blog-post"]);
 
         Permission::create(["name"=>"website-setting.menu","group"=>"website-setting"]);
-        Permission::create(["name"=>"website-setting.list","group"=>"website-setting"]);
         Permission::create(["name"=>"website-setting.add","group"=>"website-setting"]);
         Permission::create(["name"=>"website-setting.edit","group"=>"website-setting"]);
         Permission::create(["name"=>"website-setting.delete","group"=>"website-setting"]);
@@ -169,7 +160,6 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"website-setting.delete.trash","group"=>"website-setting"]);
 
         Permission::create(["name"=>"seo-setting.menu","group"=>"seo-setting"]);
-        Permission::create(["name"=>"seo-setting.list","group"=>"seo-setting"]);
         Permission::create(["name"=>"seo-setting.add","group"=>"seo-setting"]);
         Permission::create(["name"=>"seo-setting.edit","group"=>"seo-setting"]);
         Permission::create(["name"=>"seo-setting.delete","group"=>"seo-setting"]);

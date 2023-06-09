@@ -396,7 +396,7 @@ const handlePermanentlyDelete = async () => {
               <img
                 :src="trashAdmin.avatar"
                 alt=""
-                class="h-[50px] object-cover"
+                class="h-[50px] w-[50px] ring-2 ring-slate-300 object-cover rounded-full"
               />
             </Td>
             <Td>{{ trashAdmin.name }}</Td>

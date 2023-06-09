@@ -336,7 +336,11 @@ if (usePage().props.flash.successMessage) {
           <Tr v-for="admin in admins.data" :key="admin.id">
             <BodyTh>{{ admin.id }}</BodyTh>
             <Td>
-              <img :src="admin.avatar" alt="" class="h-[50px] object-cover" />
+              <img
+                :src="admin.avatar"
+                alt=""
+                class="h-[50px] w-[50px] ring-2 ring-slate-300 object-cover rounded-full"
+              />
             </Td>
             <Td>{{ admin.name }}</Td>
             <Td>{{ admin.email }}</Td>

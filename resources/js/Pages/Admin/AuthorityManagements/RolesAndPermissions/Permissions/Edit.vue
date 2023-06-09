@@ -191,6 +191,12 @@ const submit = () => {
                 User Manage
               </option>
               <option
+                value="admin-manage"
+                :selected="form.group == 'admin-manage'"
+              >
+                Admin Manage
+              </option>
+              <option
                 value="role-and-permission"
                 :selected="form.group == 'role-and-permission'"
               >
