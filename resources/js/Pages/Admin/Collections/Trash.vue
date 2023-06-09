@@ -9,7 +9,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/CollectionBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { inject, reactive, watch } from "vue";
+import { inject, reactive, watch, computed } from "vue";
 import { router, usePage, Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -17,6 +17,22 @@ const props = defineProps({
 });
 
 const swal = inject("$swal");
+
+const collectionTrashRestore = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "collection.trash.restore"
+      )
+    : false;
+});
+
+const collectionTrashDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "collection.trash.delete"
+      )
+    : false;
+});
 
 const params = reactive({
   search: null,
@@ -252,7 +268,10 @@ const handlePermanentlyDelete = async () => {
         </div>
       </div>
 
-      <p class="text-left text-sm font-bold mb-2 text-warning-600">
+      <p
+        v-if="collectionTrashDelete"
+        class="text-left text-sm font-bold mb-2 text-warning-600"
+      >
         Collections in the Trash will be automatically deleted after 60 days.
         <button
           @click="handlePermanentlyDelete"
@@ -364,7 +383,9 @@ const handlePermanentlyDelete = async () => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="collectionTrashRestore || collectionTrashDelete">
+            Action
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="trashCollections.data.length">
@@ -376,8 +397,9 @@ const handlePermanentlyDelete = async () => {
             <Td>{{ trashCollection.title }}</Td>
             <Td>{{ trashCollection.description }}</Td>
             <Td>{{ trashCollection.deleted_at }}</Td>
-            <Td>
+            <Td v-if="collectionTrashRestore || collectionTrashDelete">
               <button
+                v-if="collectionTrashRestore"
                 @click="handleRestore(trashCollection.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
@@ -385,6 +407,7 @@ const handlePermanentlyDelete = async () => {
                 Restore
               </button>
               <button
+                v-if="collectionTrashDelete"
                 @click="handleDelete(trashCollection.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >

@@ -1,6 +1,6 @@
 <template>
   <div class="relative overflow-x-auto shadow-md overflow-auto scrollbar">
-    <table class="text-sm text-left text-gray-500 border-2 w-[1603px]">
+    <table class="text-sm text-left text-gray-500 border-2 w-[1600px]">
       <slot />
     </table>
   </div>

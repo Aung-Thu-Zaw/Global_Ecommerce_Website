@@ -9,7 +9,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/CollectionBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject } from "vue";
+import { reactive, watch, inject, computed } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -17,6 +17,38 @@ const props = defineProps({
 });
 
 const swal = inject("$swal");
+
+const collectionAdd = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "collection.add"
+      )
+    : false;
+});
+
+const collectionEdit = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "collection.edit"
+      )
+    : false;
+});
+
+const collectionDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "collection.delete"
+      )
+    : false;
+});
+
+const collectionTrashList = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "collection.trash.list"
+      )
+    : false;
+});
 
 const params = reactive({
   search: null,
@@ -131,7 +163,7 @@ if (usePage().props.flash.successMessage) {
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb />
-        <div>
+        <div v-if="collectionTrashList">
           <Link
             as="button"
             :href="route('admin.collections.trash')"
@@ -146,6 +178,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <Link
+          v-if="collectionAdd"
           as="button"
           :href="route('admin.collections.create')"
           :data="{
@@ -156,7 +189,7 @@ if (usePage().props.flash.successMessage) {
           <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
           Add Collection</Link
         >
-        <div class="flex items-center">
+        <div class="flex items-center ml-auto">
           <form class="w-[350px] relative">
             <input
               type="text"
@@ -290,7 +323,9 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="collectionEdit || collectionDelete">
+            Action
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="collections.data.length">
@@ -299,8 +334,9 @@ if (usePage().props.flash.successMessage) {
             <Td>{{ collection.title }}</Td>
             <Td>{{ collection.description }}</Td>
             <Td>{{ collection.created_at }}</Td>
-            <Td>
+            <Td v-if="collectionEdit || collectionDelete">
               <Link
+                v-if="collectionEdit"
                 as="button"
                 :href="route('admin.collections.edit', collection.slug)"
                 :data="{
@@ -313,6 +349,7 @@ if (usePage().props.flash.successMessage) {
                 Edit
               </Link>
               <button
+                v-if="collectionDelete"
                 @click="handleDelete(collection)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >

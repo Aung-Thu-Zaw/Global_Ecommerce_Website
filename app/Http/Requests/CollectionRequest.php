@@ -44,6 +44,7 @@ class CollectionRequest extends FormRequest
     {
         return [
             "title.required" => "Collection title is required.",
+            "title.unique" => "Collection title is already exists.",
             "description.required" => "Collection description is required.",
         ];
     }
