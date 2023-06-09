@@ -26,6 +26,18 @@ const filterRoles = computed(() =>
   props.roles.filter((role) => !role.permissions.length)
 );
 
+const allPermissionsSelected = computed(() => {
+  return form.permission_id.length === props.permissions.length;
+});
+
+const selectAllPermissions = () => {
+  if (allPermissionsSelected.value) {
+    form.permission_id = [];
+  } else {
+    form.permission_id = props.permissions.map((permission) => permission.id);
+  }
+};
+
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 const handleCreateRoleInPermissions = async () => {
   await recaptchaLoaded();
@@ -132,17 +144,18 @@ const submit = () => {
                   <span class="font-bold text-xl text-slate-600"
                     >Select Permissions</span
                   >
-                  <!-- <span
-                    @click="isChecked = !isChecked"
+
+                  <span
+                    @click="selectAllPermissions"
                     class="text-white rounded-sm text-sm font-bold shadow px-2 py-1 cursor-pointer"
                     :class="{
-                      'bg-red-600 hover:bg-red-700': isChecked === true,
-                      'bg-blue-600 hover:bg-blue-700': isChecked === false,
+                      'bg-red-600 hover:bg-red-700': allPermissionsSelected,
+                      'bg-blue-600 hover:bg-blue-700': !allPermissionsSelected,
                     }"
                   >
-                    <span v-if="!isChecked"> Select All </span>
-                    <span v-else> Remove All </span>
-                  </span> -->
+                    <span v-if="!allPermissionsSelected">Select All</span>
+                    <span v-else>Remove All</span>
+                  </span>
                 </div>
               </div>
 

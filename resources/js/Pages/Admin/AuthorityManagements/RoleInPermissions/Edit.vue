@@ -21,6 +21,18 @@ const formatPermissions = computed(() =>
   props.role.permissions.map((permission) => permission.id)
 );
 
+const allPermissionsSelected = computed(() => {
+  return form.permission_id.length === props.permissions.length;
+});
+
+const selectAllPermissions = () => {
+  if (allPermissionsSelected.value) {
+    form.permission_id = [];
+  } else {
+    form.permission_id = props.permissions.map((permission) => permission.id);
+  }
+};
+
 const form = useForm({
   role_id: props.role.id,
   permission_id: [...formatPermissions.value],
@@ -116,9 +128,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.role_id" />
           </div>
 
-
           <hr class="mb-6" />
-
           <div class="mb-6">
             <InputLabel for="name" value="Permissions *" />
 
@@ -133,6 +143,18 @@ const submit = () => {
                   <span class="font-bold text-xl text-slate-600"
                     >Select Permissions</span
                   >
+
+                  <span
+                    @click="selectAllPermissions"
+                    class="text-white rounded-sm text-sm font-bold shadow px-2 py-1 cursor-pointer"
+                    :class="{
+                      'bg-red-600 hover:bg-red-700': allPermissionsSelected,
+                      'bg-blue-600 hover:bg-blue-700': !allPermissionsSelected,
+                    }"
+                  >
+                    <span v-if="!allPermissionsSelected">Select All</span>
+                    <span v-else>Remove All</span>
+                  </span>
                 </div>
               </div>
 
