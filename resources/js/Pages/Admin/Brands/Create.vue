@@ -178,6 +178,7 @@ const submit = () => {
     </div>
   </AdminDashboardLayout>
 </template>
+
 <style>
 .ck-editor__editable_inline {
   min-height: 250px;

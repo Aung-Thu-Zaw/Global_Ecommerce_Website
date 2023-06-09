@@ -23,16 +23,16 @@ defineProps({
               :class="{ 'bg-blue-700 text-white': link.active }"
               :href="link.url"
               :data="{ tab: $page.props.ziggy.query.tab }"
-              v-html="link.label"
             >
+              <span v-html="link.label"></span>
             </Link>
             <Link
               v-else
               class="mr-1 mb-1 px-4 py-3 text-sm leading-4 border rounded hover:bg-white hover:text-indigo-500 hover:border-indigo-500 focus:border-indigo-500 focus:text-indigo-500"
               :class="{ 'bg-blue-700 text-white': link.active }"
               :href="link.url"
-              v-html="link.label"
             >
+              <span v-html="link.label"></span>
             </Link>
           </div>
         </template>
@@ -40,4 +40,6 @@ defineProps({
     </div>
   </div>
 </template>
+
+
 

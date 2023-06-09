@@ -44,6 +44,7 @@ class BrandRequest extends FormRequest
     {
         return [
             "name.required" => "Brand name is required.",
+            "name.unique" => "Brand name is already exists.",
             "description.required" => "Brand description is required.",
         ];
     }

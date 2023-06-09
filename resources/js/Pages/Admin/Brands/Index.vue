@@ -9,7 +9,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/BrandBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject } from "vue";
+import { reactive, watch, inject, computed } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -17,6 +17,38 @@ const props = defineProps({
 });
 
 const swal = inject("$swal");
+
+const brandAdd = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "brand.add"
+      )
+    : false;
+});
+
+const brandEdit = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "brand.edit"
+      )
+    : false;
+});
+
+const brandDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "brand.delete"
+      )
+    : false;
+});
+
+const brandTrashList = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "brand.trash.list"
+      )
+    : false;
+});
 
 const params = reactive({
   search: null,
@@ -161,7 +193,7 @@ if (usePage().props.flash.successMessage) {
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb />
 
-        <div>
+        <div v-if="brandTrashList">
           <Link
             as="button"
             :href="route('admin.brands.trash')"
@@ -176,6 +208,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <Link
+          v-if="brandAdd"
           as="button"
           :href="route('admin.brands.create')"
           :data="{
@@ -186,7 +219,7 @@ if (usePage().props.flash.successMessage) {
           <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
           Add Brand
         </Link>
-        <div class="flex items-center">
+        <div class="flex items-center ml-auto">
           <form class="w-[350px] relative">
             <input
               type="text"
@@ -302,26 +335,26 @@ if (usePage().props.flash.successMessage) {
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
               :class="{
                 'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'description',
+                  params.direction === 'asc' && params.sort === 'created_at',
                 'visually-hidden':
                   params.direction !== '' &&
                   params.direction !== 'asc' &&
-                  params.sort === 'description',
+                  params.sort === 'created_at',
               }"
             ></i>
             <i
               class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
               :class="{
                 'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'description',
+                  params.direction === 'desc' && params.sort === 'created_at',
                 'visually-hidden':
                   params.direction !== '' &&
                   params.direction !== 'desc' &&
-                  params.sort === 'description',
+                  params.sort === 'created_at',
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="brandEdit || brandDelete"> Action </HeaderTh>
         </TableHeader>
 
         <tbody v-if="brands.data.length">
@@ -340,8 +373,9 @@ if (usePage().props.flash.successMessage) {
               </span>
             </Td>
             <Td>{{ brand.created_at }}</Td>
-            <Td>
+            <Td v-if="brandEdit || brandDelete">
               <Link
+                v-if="brandEdit"
                 as="button"
                 :href="route('admin.brands.edit', brand.slug)"
                 :data="{
@@ -354,6 +388,7 @@ if (usePage().props.flash.successMessage) {
                 Edit
               </Link>
               <button
+                v-if="brandDelete"
                 @click="handleDelete(brand)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
