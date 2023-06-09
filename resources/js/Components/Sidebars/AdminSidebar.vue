@@ -304,10 +304,18 @@
           </li>
         </ul>
 
-        <hr class="my-4 md:min-w-full" />
+        <hr
+          v-if="
+            orderManageMenu || returnOrderManageMenu || cancelOrderManageMenu
+          "
+          class="my-4 md:min-w-full"
+        />
 
         <!-- Order Management Area -->
         <h6
+          v-if="
+            orderManageMenu || returnOrderManageMenu || cancelOrderManageMenu
+          "
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
           Order Managements
@@ -519,10 +527,14 @@
           </li>
         </ul>
 
-        <hr class="my-4 md:min-w-full" />
+        <hr
+          v-if="vendorManageMenu || userManageMenu || adminManageMenu"
+          class="my-4 md:min-w-full"
+        />
 
         <!-- Management Area -->
         <h6
+          v-if="vendorManageMenu || userManageMenu || adminManageMenu"
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
           User Managements
@@ -655,10 +667,14 @@
           </li>
         </ul>
 
-        <hr class="my-4 md:min-w-full" />
+        <hr
+          v-if="roleAndPermissionMenu || roleInPermissionsMenu"
+          class="my-4 md:min-w-full"
+        />
 
         <!-- Authorization Management Area -->
         <h6
+          v-if="roleAndPermissionMenu || roleInPermissionsMenu"
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
           Authority Managements
@@ -824,10 +840,14 @@
           </li>
         </ul> -->
 
-        <hr class="my-4 md:min-w-full" />
+        <hr
+          v-if="blogCategoryMenu || blogPostMenu"
+          class="my-4 md:min-w-full"
+        />
 
         <!-- Blog Management Area -->
         <h6
+          v-if="blogCategoryMenu || blogPostMenu"
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
           Blog Managements
@@ -866,10 +886,14 @@
           </li>
         </ul>
 
-        <hr class="my-4 md:min-w-full" />
+        <hr
+          v-if="websiteSettingMenu || seoSettingMenu"
+          class="my-4 md:min-w-full"
+        />
 
         <!-- Site Settings -->
         <h6
+          v-if="websiteSettingMenu || seoSettingMenu"
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
           Site Settings

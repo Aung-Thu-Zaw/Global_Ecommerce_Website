@@ -329,6 +329,24 @@ const status = (last_activity) => {
                 <i class="fa-solid fa-eye"></i>
                 Details
               </Link> -->
+              <button
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 my-1 mr-3"
+              >
+                <i class="fa-solid fa-eye"></i>
+                Edit
+              </button>
+              <button
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 my-1 mr-3"
+              >
+                <i class="fa-solid fa-eye"></i>
+                Delete
+              </button>
+              <button
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1 mr-3"
+              >
+                <i class="fa-solid fa-eye"></i>
+                Details
+              </button>
             </Td>
           </Tr>
         </tbody>
