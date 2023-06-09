@@ -28,7 +28,6 @@ class SeoSettingRequest extends FormRequest
             "meta_author"=>["nullable","string"],
             "meta_keyword"=>["nullable","string"],
             "meta_description"=>["nullable","string"],
-
         ];
     }
 }

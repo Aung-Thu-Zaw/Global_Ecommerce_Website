@@ -485,7 +485,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                 ->prefix("/website-settings")
                 ->name("website-settings.")
                 ->group(function () {
-                    Route::get("/", "edit")->middleware('permission:website-setting.edit')->name("edit");
+                    Route::get("/", "edit")->middleware('permission:website-setting.menu')->name("edit");
                     Route::post("/{website_setting}", "update")->middleware('permission:website-setting.edit')->name("update");
                 });
 
@@ -493,7 +493,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                 ->prefix("/seo-settings")
                 ->name("seo-settings.")
                 ->group(function () {
-                    Route::get("/", "edit")->middleware('permission:seo-setting.edit')->name("edit");
+                    Route::get("/", "edit")->middleware('permission:seo-setting.menu')->name("edit");
                     Route::post("/{seo_setting}", "update")->middleware('permission:seo-setting.edit')->name("update");
                 });
        });

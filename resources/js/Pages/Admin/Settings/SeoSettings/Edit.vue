@@ -8,13 +8,21 @@ import TextInput from "@/Components/Forms/TextInput.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/SeoSettingBreadcrumb.vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 const props = defineProps({
   seoSetting: Object,
 });
 
 const processing = ref(false);
+
+const seoSettingEdit = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "seo-setting.edit"
+      )
+    : false;
+});
 
 const form = useForm({
   meta_title: props.seoSetting ? props.seoSetting.meta_title : "",
@@ -121,7 +129,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.meta_description" />
           </div>
 
-          <div class="mb-6">
+          <div v-if="seoSettingEdit" class="mb-6">
             <button
               class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"
             >

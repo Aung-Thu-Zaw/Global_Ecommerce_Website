@@ -35,7 +35,6 @@ class WebsiteSettingRequest extends FormRequest
             "youtube"=>["nullable","url"],
             "reddit"=>["nullable","url"],
             "linked_in"=>["nullable","url"],
-            "blog"=>["nullable","url"],
         ];
     }
 
@@ -45,15 +44,15 @@ class WebsiteSettingRequest extends FormRequest
     public function messages(): array
     {
         return [
-            "phone.numeric" => "Phone must be number.",
-            "support_phone.numeric" => "Support Phone must be number.",
+            "phone.numeric" => "Phone must be numeric.",
+            "support_phone.numeric" => "Support Phone must be numeric.",
+            "email.email" => "Email wrong format.",
             "facebook.url" => "Facebook url wrong format.",
             "twitter.url" => "Twitter url wrong format.",
             "instagram.url" => "Instagram url wrong format.",
             "youtube.url" => "Youtube url wrong format.",
             "reddit.url" => "Reddit url wrong format.",
             "linked_in.url" => "Linked In url wrong format.",
-            "blog.url" => "Blog url wrong format.",
         ];
     }
 }
