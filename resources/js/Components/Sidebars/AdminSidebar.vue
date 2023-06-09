@@ -866,6 +866,8 @@
           </li>
         </ul>
 
+        {{ $page.props.auth.user.permissions }}
+
         <hr class="my-4 md:min-w-full" />
 
         <!-- Site Settings -->
@@ -1030,152 +1032,152 @@ export default {
     },
 
     brandMenu() {
-      return this.$page.props.auth.user.roles.length
-        ? this.$page.props.auth.user.roles[0].permissions.some(
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "brand.menu"
           )
         : false;
     },
 
     collectionMenu() {
-      return this.$page.props.auth.user.roles.length
-        ? this.$page.props.auth.user.roles[0].permissions.some(
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "collection.menu"
           )
         : false;
     },
 
     categoryMenu() {
-      return this.$page.props.auth.user.roles.length
-        ? this.$page.props.auth.user.roles[0].permissions.some(
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "category.menu"
           )
         : false;
     },
 
     productMenu() {
-      return this.$page.props.auth.user.roles.length
-        ? this.$page.props.auth.user.roles[0].permissions.some(
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "product.menu"
           )
         : false;
     },
 
     couponMenu() {
-      return this.$page.props.auth.user.roles.length
-        ? this.$page.props.auth.user.roles[0].permissions.some(
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "coupon.menu"
           )
         : false;
     },
 
     bannerMenu() {
-      return this.$page.props.auth.user.roles.length
-        ? this.$page.props.auth.user.roles[0].permissions.some(
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "banner.menu"
           )
         : false;
     },
 
     shippingAreaMenu() {
-      return this.$page.props.auth.user.roles.length
-        ? this.$page.props.auth.user.roles[0].permissions.some(
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "shipping-area.menu"
           )
         : false;
     },
 
     orderManageMenu() {
-      return this.$page.props.auth.user.roles.length
-        ? this.$page.props.auth.user.roles[0].permissions.some(
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "order-manage.menu"
           )
         : false;
     },
 
     returnOrderManageMenu() {
-      return this.$page.props.auth.user.roles.length
-        ? this.$page.props.auth.user.roles[0].permissions.some(
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "return-order-manage.menu"
           )
         : false;
     },
 
     cancelOrderManageMenu() {
-      return this.$page.props.auth.user.roles.length
-        ? this.$page.props.auth.user.roles[0].permissions.some(
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "cancel-order-manage.menu"
           )
         : false;
     },
 
     vendorManageMenu() {
-      return this.$page.props.auth.user.roles.length
-        ? this.$page.props.auth.user.roles[0].permissions.some(
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "vendor-manage.menu"
           )
         : false;
     },
 
     userManageMenu() {
-      return this.$page.props.auth.user.roles.length
-        ? this.$page.props.auth.user.roles[0].permissions.some(
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "user-manage.menu"
           )
         : false;
     },
 
     adminManageMenu() {
-      return this.$page.props.auth.user.roles.length
-        ? this.$page.props.auth.user.roles[0].permissions.some(
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "admin-manage.menu"
           )
         : false;
     },
 
     roleAndPermissionMenu() {
-      return this.$page.props.auth.user.roles.length
-        ? this.$page.props.auth.user.roles[0].permissions.some(
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "role-and-permission.menu"
           )
         : false;
     },
 
     roleInPermissionsMenu() {
-      return this.$page.props.auth.user.roles.length
-        ? this.$page.props.auth.user.roles[0].permissions.some(
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "role-in-permissions.menu"
           )
         : false;
     },
 
     blogCategoryMenu() {
-      return this.$page.props.auth.user.roles.length
-        ? this.$page.props.auth.user.roles[0].permissions.some(
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "blog-category.menu"
           )
         : false;
     },
 
     blogPostMenu() {
-      return this.$page.props.auth.user.roles.length
-        ? this.$page.props.auth.user.roles[0].permissions.some(
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "blog-post.menu"
           )
         : false;
     },
 
     websiteSettingMenu() {
-      return this.$page.props.auth.user.roles.length
-        ? this.$page.props.auth.user.roles[0].permissions.some(
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "website-setting.menu"
           )
         : false;
     },
 
     seoSettingMenu() {
-      return this.$page.props.auth.user.roles.length
-        ? this.$page.props.auth.user.roles[0].permissions.some(
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "seo-setting.menu"
           )
         : false;
