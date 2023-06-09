@@ -1032,7 +1032,7 @@ export default {
     brandMenu() {
       return this.$page.props.auth.user.roles.length
         ? this.$page.props.auth.user.roles[0].permissions.some(
-            (permission) => permission.name === "banner.menu"
+            (permission) => permission.name === "brand.menu"
           )
         : false;
     },

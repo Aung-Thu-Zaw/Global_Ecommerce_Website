@@ -45,6 +45,10 @@ class AdminManageController extends Controller
 
         $user->assignRole($request->assign_role);
 
+        $role=Role::with("permissions")->where("id", $request->assign_role)->first();
+
+        $user->syncPermissions($role->permissions);
+
         return to_route("admin.admin-manage.index", "per_page=$request->per_page")->with("success", "Admin has been successfully created.");
     }
 
@@ -65,7 +69,13 @@ class AdminManageController extends Controller
 
         if ($request->assign_role) {
             $user->roles()->detach();
+            $user->permissions()->detach();
+
             $user->assignRole($request->assign_role);
+
+            $role=Role::with("permissions")->where("id", $request->assign_role)->first();
+
+            $user->syncPermissions($role->permissions);
         }
 
         return to_route("admin.admin-manage.index", "page=$request->page&per_page=$request->per_page")->with("success", "Admin has been successfully updated.");
