@@ -111,9 +111,8 @@ const form = useForm({
               id="name"
               type="text"
               class="mt-1 block w-full"
-              v-model="form.name"
+              v-model="inactiveVendor.name"
               disabled
-              placeholder="Enter Your Fullname"
             >
               <template v-slot:icon>
                 <span>
@@ -121,8 +120,6 @@ const form = useForm({
                 </span>
               </template>
             </TextInput>
-
-            <InputError class="mt-2" :message="form.errors.name" />
           </div>
           <div class="grid gap-6 mb-6 md:grid-cols-2">
             <div>
@@ -132,9 +129,8 @@ const form = useForm({
                 id="companyName"
                 type="text"
                 class="mt-1 block w-full"
-                v-model="form.company_name"
+                v-model="inactiveVendor.company_name"
                 disabled
-                placeholder="Enter Company Name"
               >
                 <template v-slot:icon>
                   <span>
@@ -142,8 +138,6 @@ const form = useForm({
                   </span>
                 </template>
               </TextInput>
-
-              <InputError class="mt-2" :message="form.errors.company_name" />
             </div>
 
             <div>
@@ -153,9 +147,8 @@ const form = useForm({
                 id="shopName"
                 type="text"
                 class="mt-1 block w-full"
-                v-model="form.shop_name"
+                v-model="inactiveVendor.shop_name"
                 disabled
-                placeholder="Enter Shop Name"
               >
                 <template v-slot:icon>
                   <span>
@@ -163,8 +156,6 @@ const form = useForm({
                   </span>
                 </template>
               </TextInput>
-
-              <InputError class="mt-2" :message="form.errors.shop_name" />
             </div>
 
             <div>
@@ -174,9 +165,8 @@ const form = useForm({
                 id="email"
                 type="email"
                 class="mt-1 block w-full"
-                v-model="form.email"
+                v-model="inactiveVendor.email"
                 disabled
-                placeholder="Enter Your Email Address"
               >
                 <template v-slot:icon>
                   <span>
@@ -184,8 +174,6 @@ const form = useForm({
                   </span>
                 </template>
               </TextInput>
-
-              <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
             <div>
@@ -195,9 +183,8 @@ const form = useForm({
                 id="email"
                 type="text"
                 class="mt-1 block w-full"
-                v-model="form.phone"
+                v-model="inactiveVendor.phone"
                 disabled
-                placeholder="Enter Your Phone Number"
               >
                 <template v-slot:icon>
                   <span>
@@ -205,8 +192,6 @@ const form = useForm({
                   </span>
                 </template>
               </TextInput>
-
-              <InputError class="mt-2" :message="form.errors.phone" />
             </div>
           </div>
           <div class="mb-6">
@@ -219,11 +204,9 @@ const form = useForm({
                 rows="10"
                 disabled
                 class="p-2 w-full border-transparent outline-none focus:border-transparent focus:ring-0 placeholder:text-gray-400 placeholder:text-sm h-[500px]"
-                v-model="form.about"
+                v-model="inactiveVendor.about"
               ></textarea>
             </InputContainer>
-
-            <InputError class="mt-2" :message="form.errors.about" />
           </div>
         </form>
       </div>

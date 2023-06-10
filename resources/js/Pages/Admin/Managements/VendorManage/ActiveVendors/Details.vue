@@ -11,16 +11,6 @@ const props = defineProps({
   paginate: Object,
   activeVendor: Object,
 });
-
-const form = useForm({
-  company_name: props.activeVendor.company_name,
-  shop_name: props.activeVendor.shop_name,
-  name: props.activeVendor.name,
-  email: props.activeVendor.email,
-  phone: props.activeVendor.phone,
-  about: props.activeVendor.about,
-  captcha_token: null,
-});
 </script>
 
 <template>
@@ -106,15 +96,14 @@ const form = useForm({
 
         <form>
           <div class="mb-6">
-            <InputLabel for="name" value="Name *" />
+            <InputLabel for="name" value="Name" />
 
             <TextInput
               id="name"
               type="text"
               class="mt-1 block w-full"
-              v-model="form.name"
+              v-model="activeVendor.name"
               disabled
-              placeholder="Enter Your Fullname"
             >
               <template v-slot:icon>
                 <span>
@@ -122,20 +111,17 @@ const form = useForm({
                 </span>
               </template>
             </TextInput>
-
-            <InputError class="mt-2" :message="form.errors.name" />
           </div>
           <div class="grid gap-6 mb-6 md:grid-cols-2">
             <div>
-              <InputLabel for="companyName" value="Company Name *" />
+              <InputLabel for="companyName" value="Company Name" />
 
               <TextInput
                 id="companyName"
                 type="text"
                 class="mt-1 block w-full"
-                v-model="form.company_name"
+                v-model="activeVendor.company_name"
                 disabled
-                placeholder="Enter Company Name"
               >
                 <template v-slot:icon>
                   <span>
@@ -143,20 +129,17 @@ const form = useForm({
                   </span>
                 </template>
               </TextInput>
-
-              <InputError class="mt-2" :message="form.errors.company_name" />
             </div>
 
             <div>
-              <InputLabel for="shopName" value="Shop Name *" />
+              <InputLabel for="shopName" value="Shop Name" />
 
               <TextInput
                 id="shopName"
                 type="text"
                 class="mt-1 block w-full"
-                v-model="form.shop_name"
+                v-model="activeVendor.shop_name"
                 disabled
-                placeholder="Enter Shop Name"
               >
                 <template v-slot:icon>
                   <span>
@@ -164,20 +147,17 @@ const form = useForm({
                   </span>
                 </template>
               </TextInput>
-
-              <InputError class="mt-2" :message="form.errors.shop_name" />
             </div>
 
             <div>
-              <InputLabel for="email" value="Email *" />
+              <InputLabel for="email" value="Email" />
 
               <TextInput
                 id="email"
                 type="email"
                 class="mt-1 block w-full"
-                v-model="form.email"
+                v-model="activeVendor.email"
                 disabled
-                placeholder="Enter Your Email Address"
               >
                 <template v-slot:icon>
                   <span>
@@ -185,20 +165,17 @@ const form = useForm({
                   </span>
                 </template>
               </TextInput>
-
-              <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
             <div>
-              <InputLabel for="phone" value="Phone *" />
+              <InputLabel for="phone" value="Phone" />
 
               <TextInput
                 id="email"
                 type="text"
                 class="mt-1 block w-full"
-                v-model="form.phone"
+                v-model="activeVendor.phone"
                 disabled
-                placeholder="Enter Your Phone Number"
               >
                 <template v-slot:icon>
                   <span>
@@ -206,12 +183,10 @@ const form = useForm({
                   </span>
                 </template>
               </TextInput>
-
-              <InputError class="mt-2" :message="form.errors.phone" />
             </div>
           </div>
           <div class="mb-6">
-            <InputLabel for="about" value="About *" />
+            <InputLabel for="about" value="About" />
 
             <InputContainer>
               <textarea
@@ -220,11 +195,9 @@ const form = useForm({
                 rows="10"
                 disabled
                 class="p-2 w-full border-transparent outline-none focus:border-transparent focus:ring-0 placeholder:text-gray-400 placeholder:text-sm"
-                v-model="form.about"
+                v-model="activeVendor.about"
               ></textarea>
             </InputContainer>
-
-            <InputError class="mt-2" :message="form.errors.about" />
           </div>
         </form>
       </div>
