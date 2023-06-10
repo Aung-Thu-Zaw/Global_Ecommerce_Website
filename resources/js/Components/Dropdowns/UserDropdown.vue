@@ -16,16 +16,26 @@
             :src="$page.props.auth.user.avatar"
           />
         </span>
+
         <span
-          class="font-bold ml-2 text-slate-600"
+          v-if="
+            $page.url.startsWith('/admin') || $page.url.startsWith('/vendor')
+          "
+          class="font-bold ml-2"
           :class="{
             'text-slate-600 md:text-white':
-              $page.url == '/admin/dashboard' ||
-              $page.url == '/vendor/dashboard' ||
-              $page.url == '/seller/dashboard',
+              $page.url === '/admin/dashboard' ||
+              $page.url === '/vendor/dashboard',
+
+            'text-white':
+              $page.url !== '/admin/dashboard' ||
+              $page.url !== '/vendor/dashboard',
           }"
-          >{{ $page.props.auth.user.name }}</span
-        >
+          >{{ $page.props.auth.user.name }}
+        </span>
+        <span v-else class="font-bold ml-2 text-slate-600"
+          >{{ $page.props.auth.user.name }}
+        </span>
       </div>
     </a>
     <div

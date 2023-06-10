@@ -9,7 +9,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/CouponBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { inject, reactive, watch } from "vue";
+import { inject, reactive, watch, computed } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -17,6 +17,22 @@ const props = defineProps({
 });
 
 const swal = inject("$swal");
+
+const couponTrashRestore = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "coupon.trash.restore"
+      )
+    : false;
+});
+
+const couponTrashDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "coupon.trash.delete"
+      )
+    : false;
+});
 
 const params = reactive({
   search: null,
@@ -248,7 +264,10 @@ const handlePermanentlyDelete = async () => {
         </div>
       </div>
 
-      <p class="text-left text-sm font-bold mb-2 text-warning-600">
+      <p
+        v-if="couponTrashDelete"
+        class="text-left text-sm font-bold mb-2 text-warning-600"
+      >
         Coupons in the Trash will be automatically deleted after 60 days.
         <button
           @click="handlePermanentlyDelete"
@@ -439,7 +458,9 @@ const handlePermanentlyDelete = async () => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="couponTrashRestore || couponTrashDelete">
+            Action
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="trashCoupons.data.length">
@@ -453,8 +474,9 @@ const handlePermanentlyDelete = async () => {
             <Td>{{ trashCoupon.max_uses }}</Td>
             <Td>{{ trashCoupon.uses_count ? trashCoupon.uses_count : 0 }}</Td>
             <Td>{{ trashCoupon.deleted_at }}</Td>
-            <Td>
+            <Td v-if="couponTrashRestore || couponTrashDelete">
               <button
+                v-if="couponTrashRestore"
                 @click="handleRestore(trashCoupon.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
@@ -462,6 +484,7 @@ const handlePermanentlyDelete = async () => {
                 Restore
               </button>
               <button
+                v-if="couponTrashDelete"
                 @click="handleDelete(trashCoupon.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >

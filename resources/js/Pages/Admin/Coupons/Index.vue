@@ -9,7 +9,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/CouponBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject } from "vue";
+import { reactive, watch, inject, computed } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -17,6 +17,38 @@ const props = defineProps({
 });
 
 const swal = inject("$swal");
+
+const couponAdd = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "coupon.add"
+      )
+    : false;
+});
+
+const couponEdit = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "coupon.edit"
+      )
+    : false;
+});
+
+const couponDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "coupon.delete"
+      )
+    : false;
+});
+
+const couponTrashList = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "coupon.trash.list"
+      )
+    : false;
+});
 
 const params = reactive({
   search: null,
@@ -132,7 +164,7 @@ if (usePage().props.flash.successMessage) {
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb />
 
-        <div>
+        <div v-if="couponTrashList">
           <Link
             as="button"
             :href="route('admin.coupons.trash')"
@@ -147,6 +179,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <Link
+          v-if="couponAdd"
           as="button"
           :href="route('admin.coupons.create')"
           :data="{
@@ -370,7 +403,7 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="couponEdit || couponDelete"> Action </HeaderTh>
         </TableHeader>
 
         <tbody v-if="coupons.data.length">
@@ -391,8 +424,9 @@ if (usePage().props.flash.successMessage) {
             <Td>{{ coupon.max_uses }}</Td>
             <Td>{{ coupon.uses_count ? coupon.uses_count : 0 }}</Td>
             <Td>{{ coupon.created_at }}</Td>
-            <Td>
+            <Td v-if="couponEdit || couponDelete">
               <Link
+                v-if="couponEdit"
                 as="button"
                 :href="route('admin.coupons.edit', coupon.id)"
                 :data="{
@@ -405,6 +439,7 @@ if (usePage().props.flash.successMessage) {
                 Edit
               </Link>
               <button
+                v-if="couponDelete"
                 @click="handleDelete(coupon)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >

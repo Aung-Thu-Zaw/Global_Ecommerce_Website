@@ -246,7 +246,7 @@ const submit = () => {
                   fill="currentColor"
                 />
               </svg>
-              {{ processing ? "Processing..." : "Save" }}
+              {{ processing ? "Processing..." : "Update" }}
             </button>
           </div>
         </form>

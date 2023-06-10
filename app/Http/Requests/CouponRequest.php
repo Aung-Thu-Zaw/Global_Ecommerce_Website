@@ -50,7 +50,7 @@ class CouponRequest extends FormRequest
     {
         return [
             "code.required" => "Coupon code is required.",
-            "code.unique" => "Coupon code is already exist.",
+            "code.unique" => "Coupon code is already exists.",
             "discount_type.required" => "Coupon discount type is required.",
             "discount_amount.required" => "Coupon discount amount is required.",
             "discount_amount.numeric" => "Coupon discount amount must be number.",
