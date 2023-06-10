@@ -11,10 +11,18 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link, Head, router } from "@inertiajs/vue3";
-import { reactive, watch } from "vue";
+import { reactive, watch, computed } from "vue";
 
 const props = defineProps({
   deliveredOrders: Object,
+});
+
+const orderManageDetail = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "order-manage.detail"
+      )
+    : false;
 });
 
 const params = reactive({
@@ -28,6 +36,7 @@ const params = reactive({
   sort: "id",
   direction: "desc",
 });
+
 const handleSearchBox = () => {
   params.search = "";
 };
@@ -281,7 +290,7 @@ const updateSorting = (sort = "id") => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="orderManageDetail"> Action </HeaderTh>
         </TableHeader>
 
         <tbody v-if="deliveredOrders.data.length">
@@ -300,8 +309,9 @@ const updateSorting = (sort = "id") => {
             </Td>
             <Td>{{ deliveredOrder.order_date }}</Td>
 
-            <Td>
+            <Td v-if="orderManageDetail">
               <Link
+                v-if="orderManageDetail"
                 as="button"
                 :href="route('admin.orders.delivered.show', deliveredOrder.id)"
                 :data="{

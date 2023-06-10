@@ -254,7 +254,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:order-manage.menu')->name("index");
                     Route::get("/details/{id}", "show")->middleware('permission:order-manage.detail')->name("show");
-                    Route::post("/{id}", "update")->middleware('permission:order-manage.edit')->name("update");
+                    Route::post("/{id}", "update")->middleware('permission:order-manage.control')->name("update");
                 });
 
            Route::controller(AdminConfirmedOrderController::class)
@@ -263,7 +263,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:order-manage.menu')->name("index");
                     Route::get("/details/{id}", "show")->middleware('permission:order-manage.detail')->name("show");
-                    Route::post("/{id}", "update")->middleware('permission:order-manage.edit')->name("update");
+                    Route::post("/{id}", "update")->middleware('permission:order-manage.control')->name("update");
                 });
 
            Route::controller(AdminProcessingOrderController::class)
@@ -272,7 +272,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:order-manage.menu')->name("index");
                     Route::get("/details/{id}", "show")->middleware('permission:order-manage.detail')->name("show");
-                    Route::post("/{id}", "update")->middleware('permission:order-manage.edit')->name("update");
+                    Route::post("/{id}", "update")->middleware('permission:order-manage.control')->name("update");
                 });
 
            Route::controller(AdminShippedOrderController::class)
@@ -281,7 +281,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:order-manage.menu')->name("index");
                     Route::get("/details/{id}", "show")->middleware('permission:order-manage.detail')->name("show");
-                    Route::post("/{id}", "update")->middleware('permission:order-manage.edit')->name("update");
+                    Route::post("/{id}", "update")->middleware('permission:order-manage.control')->name("update");
                 });
 
            Route::controller(AdminDeliveredOrderController::class)
@@ -299,7 +299,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:return-order-manage.menu')->name("index");
                     Route::get("/details/{id}", "show")->middleware('permission:return-order-manage.detail')->name("show");
-                    Route::post("/{id}", "update")->middleware('permission:return-order-manage.edit')->name("update");
+                    Route::post("/{id}", "update")->middleware('permission:return-order-manage.control')->name("update");
                 });
 
            Route::controller(AdminApprovedReturnOrderController::class)
@@ -308,7 +308,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:return-order-manage.menu')->name("index");
                     Route::get("/details/{id}", "show")->middleware('permission:return-order-manage.detail')->name("show");
-                    Route::post("/{id}", "update")->middleware('permission:return-order-manage.edit')->name("update");
+                    Route::post("/{id}", "update")->middleware('permission:return-order-manage.control')->name("update");
                 });
 
            Route::controller(AdminRefundedReturnOrderController::class)
@@ -325,7 +325,7 @@ Route::middleware(["auth","verified","user.role:admin"])
            ->group(function () {
                Route::get("/", "index")->middleware('permission:cancel-order-manage.menu')->name("index");
                Route::get("/details/{id}", "show")->middleware('permission:cancel-order-manage.detail')->name("show");
-               Route::post("/{id}", "update")->middleware('permission:cancel-order-manage.edit')->name("update");
+               Route::post("/{id}", "update")->middleware('permission:cancel-order-manage.control')->name("update");
            });
 
            Route::controller(AdminApprovedCancelOrderController::class)

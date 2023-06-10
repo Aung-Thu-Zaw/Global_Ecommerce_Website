@@ -6,7 +6,7 @@ import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link, usePage, Head, router } from "@inertiajs/vue3";
-import { inject, ref } from "vue";
+import { inject, ref, computed } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
@@ -19,6 +19,14 @@ const props = defineProps({
 
 const processing = ref(false);
 const swal = inject("$swal");
+
+const orderManageControl = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "order-manage.control"
+      )
+    : false;
+});
 
 const handleProcessing = async (id) => {
   const result = await swal({
@@ -131,7 +139,10 @@ const handleProcessing = async (id) => {
           />
           <button
             @click="handleProcessing(confirmedOrderDetail.id)"
-            v-if="confirmedOrderDetail.order_status === 'confirmed'"
+            v-if="
+              confirmedOrderDetail.order_status === 'confirmed' &&
+              orderManageControl
+            "
             class="bg-orange-600 py-3 w-full rounded-sm font-bold text-white hover:bg-orange-700 transition-all shadow"
           >
             <svg

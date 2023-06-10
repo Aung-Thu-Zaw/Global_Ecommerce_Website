@@ -76,15 +76,15 @@ class PermissionSeeder extends Seeder
 
         Permission::create(["name"=>"order-manage.menu","group"=>"order-manage"]);
         Permission::create(["name"=>"order-manage.detail","group"=>"order-manage"]);
-        Permission::create(["name"=>"order-manage.edit","group"=>"order-manage"]);
+        Permission::create(["name"=>"order-manage.control","group"=>"order-manage"]);
 
         Permission::create(["name"=>"return-order-manage.menu","group"=>"return-order-manage"]);
         Permission::create(["name"=>"return-order-manage.detail","group"=>"return-order-manage"]);
-        Permission::create(["name"=>"return-order-manage.edit","group"=>"return-order-manage"]);
+        Permission::create(["name"=>"return-order-manage.control","group"=>"return-order-manage"]);
 
         Permission::create(["name"=>"cancel-order-manage.menu","group"=>"cancel-order-manage"]);
         Permission::create(["name"=>"cancel-order-manage.detail","group"=>"cancel-order-manage"]);
-        Permission::create(["name"=>"cancel-order-manage.edit","group"=>"cancel-order-manage"]);
+        Permission::create(["name"=>"cancel-order-manage.control","group"=>"cancel-order-manage"]);
 
         Permission::create(["name"=>"vendor-manage.menu","group"=>"vendor-manage"]);
         Permission::create(["name"=>"vendor-manage.detail","group"=>"vendor-manage"]);
