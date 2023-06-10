@@ -9,7 +9,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/RoleInPermissionBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject } from "vue";
+import { reactive, watch, inject, computed } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -21,6 +21,30 @@ const swal = inject("$swal");
 const handleSearchBox = () => {
   params.search = "";
 };
+
+const roleInPermissionsAdd = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "role-in-permissions.add"
+      )
+    : false;
+});
+
+const roleInPermissionsEdit = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "role-in-permissions.edit"
+      )
+    : false;
+});
+
+const roleInPermissionsDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "role-in-permissions.delete"
+      )
+    : false;
+});
 
 const params = reactive({
   search: null,
@@ -138,6 +162,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <Link
+          v-if="roleInPermissionsAdd"
           as="button"
           :href="route('admin.role-in-permissions.create')"
           :data="{
@@ -258,7 +283,9 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="roleInPermissionsEdit || roleInPermissionsDelete">
+            Action
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="rolesWithPermissions.data.length">
@@ -274,7 +301,7 @@ if (usePage().props.flash.successMessage) {
             }}</Td>
             <Td
               v-if="roleWithPermissions.permissions.length"
-              class="max-w-[900px] flex items-center"
+              class="w-[1000px] flex items-start"
             >
               <span
                 v-for="permission in roleWithPermissions.permissions"
@@ -287,8 +314,14 @@ if (usePage().props.flash.successMessage) {
             <Td v-if="roleWithPermissions.permissions.length">{{
               roleWithPermissions.created_at
             }}</Td>
-            <Td v-if="roleWithPermissions.permissions.length">
+            <Td
+              v-if="
+                roleWithPermissions.permissions.length &&
+                (roleInPermissionsEdit || roleInPermissionsDelete)
+              "
+            >
               <Link
+                v-if="roleInPermissionsEdit"
                 as="button"
                 :href="
                   route(
@@ -306,6 +339,7 @@ if (usePage().props.flash.successMessage) {
                 Edit
               </Link>
               <button
+                v-if="roleInPermissionsDelete"
                 @click="handleDelete(roleWithPermissions)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >

@@ -50,7 +50,7 @@ class AdminRoleInPermissionController extends Controller
             ]);
         }
 
-        return to_route("admin.role-in-permissions.index", "per_page=$request->per_page")->with("success", "Permission has been successfully created.");
+        return to_route("admin.role-in-permissions.index", "per_page=$request->per_page")->with("success", "Role in permissions has been successfully created.");
     }
 
     public function edit(Role $role): Response|ResponseFactory
@@ -75,15 +75,17 @@ class AdminRoleInPermissionController extends Controller
             $role->permissions()->attach(["permission_id"=>$value]);
         }
 
-        auth()->user()->syncPermissions($role->permissions);
+        $role->users->each(function ($user) use ($role) {
+            $user->syncPermissions($role->permissions);
+        });
 
-        return to_route("admin.role-in-permissions.index", "page=$request->page&per_page=$request->per_page")->with("success", "Permission has been successfully updated.");
+        return to_route("admin.role-in-permissions.index", "page=$request->page&per_page=$request->per_page")->with("success", "Role in permissions has been successfully updated.");
     }
 
     public function destroy(Request $request, Role $role): RedirectResponse
     {
         $role->permissions()->detach();
 
-        return to_route("admin.role-in-permissions.index", "page=$request->page&per_page=$request->per_page")->with("success", "Permission has been successfully deleted.");
+        return to_route("admin.role-in-permissions.index", "page=$request->page&per_page=$request->per_page")->with("success", "Role in permissions has been successfully deleted.");
     }
 }

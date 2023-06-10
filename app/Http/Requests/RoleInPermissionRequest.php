@@ -29,4 +29,17 @@ class RoleInPermissionRequest extends FormRequest
             "permission_id"=>["required","array",Rule::exists("permissions", "id")]
         ];
     }
+
+     /**
+    *     @return array<string>
+    */
+    public function messages(): array
+    {
+        return [
+            "role_id.required" => "Role is required.",
+            "role_id.exists" => "Role does not exist.",
+            "permission_id.required" => "Permission is required.",
+            "permission_id.exists" => "Permission does not exist.",
+        ];
+    }
 }

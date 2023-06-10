@@ -129,6 +129,7 @@ const submit = () => {
           </div>
 
           <hr class="mb-6" />
+          
           <div class="mb-6">
             <InputLabel for="name" value="Permissions *" />
 

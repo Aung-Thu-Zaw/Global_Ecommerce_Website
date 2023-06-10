@@ -64,7 +64,7 @@ const submit = () => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Create Permission" />
+    <Head title="Create Role In Permissions" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
