@@ -122,15 +122,6 @@ const submit = () => {
             <span class="sr-only">Linked In</span>
             <i class="fab fa-linkedin"></i>
           </a>
-          <a
-            v-if="socialMedia.blog"
-            class="px-4 font-bold py-2 inline-block text-center text-gray-500 bg-white shadow-sm border border-gray-200 rounded-md hover:text-warning-600"
-            :href="socialMedia.blog"
-            target="_blank"
-          >
-            <span class="sr-only">Blog</span>
-            B
-          </a>
         </nav>
       </div>
     </div>

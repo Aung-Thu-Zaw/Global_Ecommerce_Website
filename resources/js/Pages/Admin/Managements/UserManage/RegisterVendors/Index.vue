@@ -9,12 +9,14 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject } from "vue";
-import { router, Head } from "@inertiajs/vue3";
+import { reactive, watch, inject, computed } from "vue";
+import { router, Head, Link, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
   vendors: Object,
 });
+
+const swal = inject("$swal");
 
 const params = reactive({
   search: null,
@@ -22,6 +24,30 @@ const params = reactive({
   per_page: props.vendors.per_page ? props.vendors.per_page : 10,
   sort: "id",
   direction: "desc",
+});
+
+const vendorManageDetail = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "vendor-manage.detail"
+      )
+    : false;
+});
+
+const vendorManageDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "vendor-manage.delete"
+      )
+    : false;
+});
+
+const vendorManageTrashList = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "vendor-manage.trash.list"
+      )
+    : false;
 });
 
 const handleSearchBox = () => {
@@ -84,16 +110,44 @@ const updateSorting = (sort = "id") => {
   );
 };
 
-const swal = inject("$swal");
+const handleDelete = async (admin) => {
+  const result = await swal({
+    icon: "warning",
+    title: "Are you sure you want to delete this vendor?",
+    text: "You will be able to restore this vendor in the trash!",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it!",
+    confirmButtonColor: "#ef4444",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.delete(
+      route("admin.vendors.register.destroy", {
+        user: admin.id,
+        page: params.page,
+        per_page: params.per_page,
+      })
+    );
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
 
 const currentTime = new Date();
-const threshold = 1000 * 60 * 5; //5minutes in millseconds
+const threshold = 1000 * 60 * 3; //3minutes in millseconds
 
 const status = (last_activity) => {
   const lastActivity = new Date(last_activity);
   const timeDifference = currentTime.getTime() - lastActivity.getTime();
 
-  return timeDifference < threshold ? "Online" : "Offline";
+  return timeDifference < threshold ? "online" : "offline";
 };
 </script>
 
@@ -102,28 +156,42 @@ const status = (last_activity) => {
     <Head title="All Register Vendors" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <Breadcrumb>
-        <li aria-current="page">
-          <div class="flex items-center">
-            <svg
-              aria-hidden="true"
-              class="w-6 h-6 text-gray-400"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
-            <span class="ml-1 font-medium text-gray-500 md:ml-2"
-              >All Register Vendors</span
-            >
-          </div>
-        </li>
-      </Breadcrumb>
+      <div class="flex items-center justify-between mb-10">
+        <Breadcrumb>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span class="ml-1 font-medium text-gray-500 md:ml-2"
+                >All Register Vendors</span
+              >
+            </div>
+          </li>
+        </Breadcrumb>
+
+        <div v-if="vendorManageTrashList">
+          <Link
+            as="button"
+            :href="route('admin.vendors.register.trash')"
+            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
+          >
+            <i class="fa-solid fa-trash"></i>
+
+            Trash
+          </Link>
+        </div>
+      </div>
 
       <div class="flex items-center justify-end mb-5">
         <form class="w-[350px] relative">
@@ -262,91 +330,67 @@ const status = (last_activity) => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="vendorManageDelete || vendorManageDetail">
+            Action
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="vendors.data.length">
-          <Tr v-for="vendor in vendors.data" :key="vendor.id">
-            <BodyTh>{{ vendor.id }}</BodyTh>
+          <Tr v-for="user in vendors.data" :key="user.id">
+            <BodyTh>{{ user.id }}</BodyTh>
             <Td>
-              <img :src="vendor.avatar" alt="" class="h-[50px] object-cover" />
+              <img
+                :src="user.avatar"
+                alt=""
+                class="h-[50px] w-[50px] ring-2 ring-slate-300 object-cover rounded-full"
+              />
             </Td>
-            <Td>{{ vendor.name }}</Td>
-            <Td>{{ vendor.email }}</Td>
+            <Td>{{ user.name }}</Td>
+            <Td>{{ user.email }}</Td>
             <Td>
               <span
-                class="capitalize bg-sky-200 text-sky-500 px-3 py-1 font-bold text-sm rounded-md"
+                class="capitalize bg-sky-200 text-sky-500 px-3 py-1 font-bold text-sm rounded-full"
               >
-                {{ vendor.role }}
+                {{ user.role }}
               </span>
             </Td>
             <Td>
               <span
-                class="capitalize px-3 py-1 font-bold text-sm rounded-md"
+                class="capitalize px-3 py-1 font-bold text-sm rounded-full"
                 :class="{
                   'bg-green-200 text-green-500':
-                    status(vendor.last_activity) == 'Online',
+                    status(user.last_activity) == 'online',
                   'bg-red-200 text-red-500':
-                    status(vendor.last_activity) == 'Offline',
+                    status(user.last_activity) == 'offline',
                 }"
               >
                 <i class="fa-solid fa-circle animate-pulse text-[.6rem]"></i>
-                {{ status(vendor.last_activity) }}
+                {{ status(user.last_activity) }}
               </span>
             </Td>
-            <Td>{{ vendor.created_at }}</Td>
-            <Td>
-              <!-- <button
-                @click="handleInactive(vendor.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-amber-600 text-white hover:bg-amber-700 mr-3"
-              >
-                <i class="fa-solid fa-ban"></i>
-                Restrict
-              </button>
+            <Td>{{ user.created_at }}</Td>
+            <Td v-if="vendorManageDelete || vendorManageDetail">
               <button
-                @click="handleInactive(vendor.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-green-600 text-white hover:bg-green-700 mr-3"
-              >
-                <i class="fa-solid fa-flag-checkered"></i>
-                Free
-              </button>
-              <button
-                @click="handleInactive(vendor.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3"
+                v-if="vendorManageDelete"
+                @click="handleDelete(user)"
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>
                 Delete
               </button>
               <Link
+                v-if="vendorManageDetail"
                 as="button"
-                :href="route('admin.vendors.active.show', vendor.id)"
+                :href="route('admin.vendors.register.show', user.id)"
                 :data="{
-                  page: props.vendors.current_page,
+                  page: params.page,
                   per_page: params.per_page,
                 }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700"
               >
                 <i class="fa-solid fa-eye"></i>
                 Details
-              </Link> -->
-              <button
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 my-1 mr-3"
-              >
-                <i class="fa-solid fa-eye"></i>
-                Edit
-              </button>
-              <button
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 my-1 mr-3"
-              >
-                <i class="fa-solid fa-eye"></i>
-                Delete
-              </button>
-              <button
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1 mr-3"
-              >
-                <i class="fa-solid fa-eye"></i>
-                Details
-              </button>
+              </Link>
             </Td>
           </Tr>
         </tbody>

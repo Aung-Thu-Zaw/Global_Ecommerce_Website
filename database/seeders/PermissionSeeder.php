@@ -96,8 +96,6 @@ class PermissionSeeder extends Seeder
 
         Permission::create(["name"=>"user-manage.menu","group"=>"user-manage"]);
         Permission::create(["name"=>"user-manage.detail","group"=>"user-manage"]);
-        Permission::create(["name"=>"user-manage.add","group"=>"user-manage"]);
-        Permission::create(["name"=>"user-manage.edit","group"=>"user-manage"]);
         Permission::create(["name"=>"user-manage.delete","group"=>"user-manage"]);
         Permission::create(["name"=>"user-manage.trash.list","group"=>"user-manage"]);
         Permission::create(["name"=>"user-manage.trash.restore","group"=>"user-manage"]);

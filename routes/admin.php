@@ -364,8 +364,12 @@ Route::middleware(["auth","verified","user.role:admin"])
                 ->name("users.register.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:user-manage.menu')->name("index");
-                    Route::get("/details/{id}", "show")->middleware('permission:user-manage.detail')->name("show");
-                    Route::post("/{id}", "update")->middleware('permission:user-manage.edit')->name("update");
+                    Route::get("/details/{user}", "show")->middleware('permission:user-manage.detail')->name("show");
+                    Route::delete("/{user}", "destroy")->middleware('permission:user-manage.delete')->name("destroy");
+                    Route::get("/trash", "trash")->middleware('permission:user-manage.trash.list')->name("trash");
+                    Route::post("/{id}/restore", "restore")->middleware('permission:user-manage.trash.restore')->name("restore");
+                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:user-manage.trash.delete')->name("forceDelete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:user-manage.trash.delete')->name("permanentlyDelete");
                 });
 
            Route::controller(AdminRegisterVendorController::class)
@@ -373,8 +377,12 @@ Route::middleware(["auth","verified","user.role:admin"])
                 ->name("vendors.register.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:user-manage.menu')->name("index");
-                    Route::get("/details/{id}", "show")->middleware('permission:user-manage.detail')->name("show");
-                    Route::post("/{id}", "update")->middleware('permission:user-manage.edit')->name("update");
+                    Route::get("/details/{user}", "show")->middleware('permission:user-manage.detail')->name("show");
+                    Route::delete("/{user}", "destroy")->middleware('permission:user-manage.delete')->name("destroy");
+                    Route::get("/trash", "trash")->middleware('permission:user-manage.trash.list')->name("trash");
+                    Route::post("/{id}/restore", "restore")->middleware('permission:user-manage.trash.restore')->name("restore");
+                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:user-manage.trash.delete')->name("forceDelete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:user-manage.trash.delete')->name("permanentlyDelete");
                 });
 
            Route::controller(AdminManageController::class)

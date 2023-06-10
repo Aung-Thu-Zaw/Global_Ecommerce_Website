@@ -1,5 +1,4 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/UserManageBreadcrumb.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
@@ -7,47 +6,40 @@ import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
 import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/UserManageBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject, computed } from "vue";
-import { router, Head, Link, usePage } from "@inertiajs/vue3";
+import { inject, reactive, watch, computed } from "vue";
+import { router, usePage, Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
-  users: Object,
+  trashVendors: Object,
 });
 
 const swal = inject("$swal");
 
+const vendorManageTrashRestore = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "vendor-manage.trash.restore"
+      )
+    : false;
+});
+
+const vendorManageTrashDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "vendor-manage.trash.delete"
+      )
+    : false;
+});
+
 const params = reactive({
   search: null,
-  page: props.users.current_page ? props.users.current_page : 1,
-  per_page: props.users.per_page ? props.users.per_page : 10,
+  page: props.trashVendors.current_page ? props.trashVendors.current_page : 1,
+  per_page: props.trashVendors.per_page ? props.trashVendors.per_page : 10,
   sort: "id",
   direction: "desc",
-});
-
-const userManageDetail = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "user-manage.detail"
-      )
-    : false;
-});
-
-const userManageDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "user-manage.delete"
-      )
-    : false;
-});
-
-const userManageTrashList = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "user-manage.trash.list"
-      )
-    : false;
 });
 
 const handleSearchBox = () => {
@@ -58,7 +50,7 @@ watch(
   () => params.search,
   () => {
     router.get(
-      route("admin.users.register.index"),
+      route("admin.vendors.register.trash"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -77,7 +69,7 @@ watch(
   () => params.per_page,
   () => {
     router.get(
-      route("admin.users.register.index"),
+      route("admin.vendors.register.trash"),
       {
         search: params.search,
         page: params.page,
@@ -98,7 +90,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    route("admin.users.register.index"),
+    route("admin.vendors.register.trash"),
     {
       search: params.search,
       page: params.page,
@@ -110,23 +102,22 @@ const updateSorting = (sort = "id") => {
   );
 };
 
-const handleDelete = async (admin) => {
+const handleRestore = async (trashAdminId) => {
   const result = await swal({
-    icon: "warning",
-    title: "Are you sure you want to delete this user?",
-    text: "You will be able to restore this user in the trash!",
+    icon: "info",
+    title: "Are you sure you want to restore this vendor?",
     showCancelButton: true,
-    confirmButtonText: "Yes, delete it!",
-    confirmButtonColor: "#ef4444",
+    confirmButtonText: "Yes, restore",
+    confirmButtonColor: "#4d9be9",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
   });
 
   if (result.isConfirmed) {
-    router.delete(
-      route("admin.users.register.destroy", {
-        user: admin.id,
+    router.post(
+      route("admin.vendors.register.restore", {
+        id: trashAdminId,
         page: params.page,
         per_page: params.per_page,
       })
@@ -140,20 +131,69 @@ const handleDelete = async (admin) => {
   }
 };
 
-const currentTime = new Date();
-const threshold = 1000 * 60 * 3; //3minutes in millseconds
+const handleDelete = async (trashAdminId) => {
+  const result = await swal({
+    icon: "warning",
+    title: "Are you sure you want to delete it from the trash?",
+    text: "Vendor in the trash will be permanetly deleted! You can't get it back.",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it !",
+    confirmButtonColor: "#ef4444",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
 
-const status = (last_activity) => {
-  const lastActivity = new Date(last_activity);
-  const timeDifference = currentTime.getTime() - lastActivity.getTime();
+  if (result.isConfirmed) {
+    router.delete(
+      route("admin.vendors.register.forceDelete", {
+        id: trashAdminId,
+        page: params.page,
+        per_page: params.per_page,
+      })
+    );
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
 
-  return timeDifference < threshold ? "online" : "offline";
+const handlePermanentlyDelete = async () => {
+  const result = await swal({
+    icon: "warning",
+    title: "Are you sure you want to delete it from the trash?",
+    text: "All vendors in the trash will be permanetly deleted! You can't get it back.",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it !",
+    confirmButtonColor: "#ef4444",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.get(
+      route("admin.vendors.register.permanentlyDelete", {
+        page: params.page,
+        per_page: params.per_page,
+      })
+    );
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
 };
 </script>
 
 <template>
   <AdminDashboardLayout>
-    <Head title="All Register Users" />
+    <Head title="Trash Register Vendors" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -174,21 +214,40 @@ const status = (last_activity) => {
                 ></path>
               </svg>
               <span class="ml-1 font-medium text-gray-500 md:ml-2"
-                >All Register Users</span
+                >All Register Vendors</span
+              >
+            </div>
+          </li>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span
+                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                >Trash</span
               >
             </div>
           </li>
         </Breadcrumb>
 
-        <div v-if="userManageTrashList">
+        <div>
           <Link
-            as="button"
-            :href="route('admin.users.register.trash')"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
+            :href="route('admin.vendors.register.index')"
+            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
-            <i class="fa-solid fa-trash"></i>
-
-            Trash
+            <i class="fa-solid fa-arrow-left"></i>
+            Go Back
           </Link>
         </div>
       </div>
@@ -208,7 +267,6 @@ const status = (last_activity) => {
             @click="handleSearchBox"
           ></i>
         </form>
-
         <div class="ml-5">
           <select
             class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -224,6 +282,19 @@ const status = (last_activity) => {
           </select>
         </div>
       </div>
+
+      <p
+        v-if="vendorManageTrashDelete"
+        class="text-left text-sm font-bold mb-2 text-warning-600"
+      >
+        Vendors in the Trash will be automatically deleted after 60 days.
+        <button
+          @click="handlePermanentlyDelete"
+          class="text-primary-500 rounded-md px-2 py-1 hover:bg-primary-200 hover:text-primary-600 transition-all hover:animate-bounce"
+        >
+          Empty the trash now
+        </button>
+      </p>
 
       <TableContainer>
         <TableHeader>
@@ -304,102 +375,84 @@ const status = (last_activity) => {
             ></i>
           </HeaderTh>
           <HeaderTh> Role </HeaderTh>
-          <HeaderTh> Status </HeaderTh>
-          <HeaderTh @click="updateSorting('created_at')">
+          <HeaderTh @click="updateSorting('deleted_at')">
             Created At
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
               :class="{
                 'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'created_at',
+                  params.direction === 'asc' && params.sort === 'deleted_at',
                 'visually-hidden':
                   params.direction !== '' &&
                   params.direction !== 'asc' &&
-                  params.sort === 'created_at',
+                  params.sort === 'deleted_at',
               }"
             ></i>
             <i
               class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
               :class="{
                 'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'created_at',
+                  params.direction === 'desc' && params.sort === 'deleted_at',
                 'visually-hidden':
                   params.direction !== '' &&
                   params.direction !== 'desc' &&
-                  params.sort === 'created_at',
+                  params.sort === 'deleted_at',
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh v-if="userManageDelete || userManageDetail">
+          <HeaderTh v-if="vendorManageTrashRestore || vendorManageTrashDelete">
             Action
           </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="users.data.length">
-          <Tr v-for="user in users.data" :key="user.id">
-            <BodyTh>{{ user.id }}</BodyTh>
+        <tbody v-if="trashVendors.data.length">
+          <Tr v-for="trashUser in trashVendors.data" :key="trashUser.id">
+            <BodyTh>{{ trashUser.id }}</BodyTh>
             <Td>
               <img
-                :src="user.avatar"
+                :src="trashUser.avatar"
                 alt=""
                 class="h-[50px] w-[50px] ring-2 ring-slate-300 object-cover rounded-full"
               />
             </Td>
-            <Td>{{ user.name }}</Td>
-            <Td>{{ user.email }}</Td>
+            <Td>{{ trashUser.name }}</Td>
+            <Td>{{ trashUser.email }}</Td>
             <Td>
               <span
                 class="capitalize bg-sky-200 text-sky-500 px-3 py-1 font-bold text-sm rounded-full"
               >
-                {{ user.role }}
+                {{ trashUser.role }}
               </span>
             </Td>
-            <Td>
-              <span
-                class="capitalize px-3 py-1 font-bold text-sm rounded-full"
-                :class="{
-                  'bg-green-200 text-green-500':
-                    status(user.last_activity) == 'online',
-                  'bg-red-200 text-red-500':
-                    status(user.last_activity) == 'offline',
-                }"
-              >
-                <i class="fa-solid fa-circle animate-pulse text-[.6rem]"></i>
-                {{ status(user.last_activity) }}
-              </span>
-            </Td>
-            <Td>{{ user.created_at }}</Td>
-            <Td v-if="userManageDelete || userManageDetail">
+
+            <Td>{{ trashUser.deleted_at }}</Td>
+            <Td v-if="vendorManageTrashRestore || vendorManageTrashDelete">
               <button
-                v-if="userManageDelete"
-                @click="handleDelete(user)"
+                v-if="vendorManageTrashRestore"
+                @click="handleRestore(trashUser.id)"
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
+              >
+                <i class="fa-solid fa-recycle"></i>
+                Restore
+              </button>
+              <button
+                v-if="vendorManageTrashDelete"
+                @click="handleDelete(trashUser.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
-                <i class="fa-solid fa-xmark"></i>
-                Delete
+                <i class="fa-solid fa-trash"></i>
+                Delete Forever
               </button>
-              <Link
-                v-if="userManageDetail"
-                as="button"
-                :href="route('admin.users.register.show', user.id)"
-                :data="{
-                  page: params.page,
-                  per_page: params.per_page,
-                }"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700"
-              >
-                <i class="fa-solid fa-eye"></i>
-                Details
-              </Link>
             </Td>
           </Tr>
         </tbody>
       </TableContainer>
 
-      <NotAvaliableData v-if="!users.data.length" />
+      <NotAvaliableData v-if="!trashVendors.data.length" />
 
-      <Pagination class="mt-6" :links="users.links" />
+      <Pagination class="mt-6" :links="trashVendors.links" />
     </div>
   </AdminDashboardLayout>
 </template>
+
 
