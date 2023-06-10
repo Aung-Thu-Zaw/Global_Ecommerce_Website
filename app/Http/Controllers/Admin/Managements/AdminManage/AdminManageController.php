@@ -30,6 +30,15 @@ class AdminManageController extends Controller
         return inertia("Admin/Managements/AdminManage/Index", compact("admins"));
     }
 
+    public function show(User $user): Response|ResponseFactory
+    {
+        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+
+        $user->load("roles");
+
+        return inertia("Admin/Managements/AdminManage/Details", compact("user", "paginate"));
+    }
+
     public function create(): Response|ResponseFactory
     {
         $per_page=request("per_page");

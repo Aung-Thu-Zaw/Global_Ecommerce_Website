@@ -444,13 +444,19 @@ if (usePage().props.flash.successMessage) {
                 <i class="fa-solid fa-xmark"></i>
                 Delete
               </button>
-              <button
+              <Link
                 v-if="adminManageDetail"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1 mr-3"
+                as="button"
+                :href="route('admin.admin-manage.show', admin.id)"
+                :data="{
+                  page: params.page,
+                  per_page: params.per_page,
+                }"
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700"
               >
                 <i class="fa-solid fa-eye"></i>
                 Details
-              </button>
+              </Link>
             </Td>
           </Tr>
         </tbody>

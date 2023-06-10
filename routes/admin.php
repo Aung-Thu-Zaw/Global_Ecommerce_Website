@@ -382,6 +382,7 @@ Route::middleware(["auth","verified","user.role:admin"])
            ->name("admin-manage.")
            ->group(function () {
                Route::get("/", "index")->middleware('permission:admin-manage.menu')->name("index");
+               Route::get("/details/{user}", "show")->middleware('permission:admin-manage.detail')->name("show");
                Route::get("/create", "create")->middleware('permission:admin-manage.add')->name("create");
                Route::post("/", "store")->middleware('permission:admin-manage.add')->name("store");
                Route::get("/{user}/edit", "edit")->middleware('permission:admin-manage.edit')->name("edit");
