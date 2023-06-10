@@ -9,7 +9,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/RoleAndPermissionBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { inject, reactive, watch } from "vue";
+import { inject, reactive, watch, computed } from "vue";
 import { router, usePage, Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -33,6 +33,22 @@ const params = reactive({
 const handleSearchBox = () => {
   params.search = "";
 };
+
+const roleAndPermissionTrashRestore = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "role-and-permission.trash.restore"
+      )
+    : false;
+});
+
+const roleAndPermissionTrashDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "role-and-permission.trash.delete"
+      )
+    : false;
+});
 
 watch(
   () => params.search,
@@ -272,7 +288,10 @@ const handlePermanentlyDelete = async () => {
         </div>
       </div>
 
-      <p class="text-left text-sm font-bold mb-2 text-warning-600">
+      <p
+        v-if="roleAndPermissionTrashDelete"
+        class="text-left text-sm font-bold mb-2 text-warning-600"
+      >
         Permissions in the Trash will be automatically deleted after 60 days.
         <button
           @click="handlePermanentlyDelete"
@@ -384,7 +403,11 @@ const handlePermanentlyDelete = async () => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh
+            v-if="roleAndPermissionTrashRestore || roleAndPermissionTrashDelete"
+          >
+            Action
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="trashPermissions.data.length">
@@ -396,8 +419,13 @@ const handlePermanentlyDelete = async () => {
             <Td>{{ trashPermission.name }}</Td>
             <Td class="capitalize">{{ trashPermission.group }}</Td>
             <Td>{{ trashPermission.deleted_at }}</Td>
-            <Td>
+            <Td
+              v-if="
+                roleAndPermissionTrashRestore || roleAndPermissionTrashDelete
+              "
+            >
               <button
+                v-if="roleAndPermissionTrashRestore"
                 @click="handleRestore(trashPermission.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
@@ -405,6 +433,7 @@ const handlePermanentlyDelete = async () => {
                 Restore
               </button>
               <button
+                v-if="roleAndPermissionTrashDelete"
                 @click="handleDelete(trashPermission.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >

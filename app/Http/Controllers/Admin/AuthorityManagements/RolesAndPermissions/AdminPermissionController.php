@@ -15,9 +15,9 @@ class AdminPermissionController extends Controller
     public function index(): Response|ResponseFactory
     {
         $permissions=Permission::search(request("search"))
-                         ->orderBy(request("sort", "id"), request("direction", "desc"))
-                         ->paginate(request("per_page", 10))
-                         ->appends(request()->all());
+                               ->orderBy(request("sort", "id"), request("direction", "desc"))
+                               ->paginate(request("per_page", 10))
+                               ->appends(request()->all());
 
         return inertia("Admin/AuthorityManagements/RolesAndPermissions/Permissions/Index", compact("permissions"));
     }
@@ -60,10 +60,10 @@ class AdminPermissionController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashPermissions=Permission::search(request("search"))
-                          ->onlyTrashed()
-                          ->orderBy(request("sort", "id"), request("direction", "desc"))
-                          ->paginate(request("per_page", 10))
-                          ->appends(request()->all());
+                                    ->onlyTrashed()
+                                    ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                    ->paginate(request("per_page", 10))
+                                    ->appends(request()->all());
 
         return inertia("Admin/AuthorityManagements/RolesAndPermissions/Permissions/Trash", compact("trashPermissions"));
     }

@@ -127,7 +127,7 @@ const submit = () => {
           </div>
 
           <div class="mb-6">
-            <InputLabel for="group" value="Group" />
+            <InputLabel for="group" value="Group *" />
 
             <select
               class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -148,7 +148,7 @@ const submit = () => {
               <option value="user-manage">User Manage</option>
               <option value="admin-manage">Admin Manage</option>
               <option value="role-and-permission">Role And Permission</option>
-              <option value="role-in-permission">Role In Permissions</option>
+              <option value="role-in-permissions">Role In Permissions</option>
               <option value="blog-category">Blog Category</option>
               <option value="blog-post">Blog Post</option>
               <option value="website-setting">Website Setting</option>

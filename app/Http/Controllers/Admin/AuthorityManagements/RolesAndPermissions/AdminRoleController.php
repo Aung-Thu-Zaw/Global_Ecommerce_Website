@@ -15,9 +15,9 @@ class AdminRoleController extends Controller
     public function index(): Response|ResponseFactory
     {
         $roles=Role::search(request("search"))
-                     ->orderBy(request("sort", "id"), request("direction", "desc"))
-                     ->paginate(request("per_page", 10))
-                     ->appends(request()->all());
+                   ->orderBy(request("sort", "id"), request("direction", "desc"))
+                   ->paginate(request("per_page", 10))
+                   ->appends(request()->all());
 
         return inertia("Admin/AuthorityManagements/RolesAndPermissions/Roles/Index", compact("roles"));
     }
@@ -60,10 +60,10 @@ class AdminRoleController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashRoles=Role::search(request("search"))
-                          ->onlyTrashed()
-                          ->orderBy(request("sort", "id"), request("direction", "desc"))
-                          ->paginate(request("per_page", 10))
-                          ->appends(request()->all());
+                        ->onlyTrashed()
+                        ->orderBy(request("sort", "id"), request("direction", "desc"))
+                        ->paginate(request("per_page", 10))
+                        ->appends(request()->all());
 
         return inertia("Admin/AuthorityManagements/RolesAndPermissions/Roles/Trash", compact("trashRoles"));
     }

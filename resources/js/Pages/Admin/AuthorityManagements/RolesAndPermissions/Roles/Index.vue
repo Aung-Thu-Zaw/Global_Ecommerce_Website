@@ -9,7 +9,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/RoleAndPermissionBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject } from "vue";
+import { reactive, watch, inject, computed } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -21,6 +21,38 @@ const swal = inject("$swal");
 const handleSearchBox = () => {
   params.search = "";
 };
+
+const roleAndPermissionAdd = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "role-and-permission.add"
+      )
+    : false;
+});
+
+const roleAndPermissionEdit = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "role-and-permission.edit"
+      )
+    : false;
+});
+
+const roleAndPermissionDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "role-and-permission.delete"
+      )
+    : false;
+});
+
+const roleAndPermissionTrashList = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "role-and-permission.trash.list"
+      )
+    : false;
+});
 
 const params = reactive({
   search: null,
@@ -154,7 +186,7 @@ if (usePage().props.flash.successMessage) {
           </li>
         </Breadcrumb>
 
-        <div>
+        <div v-if="roleAndPermissionTrashList">
           <Link
             as="button"
             :href="route('admin.roles.trash')"
@@ -169,6 +201,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <Link
+          v-if="roleAndPermissionAdd"
           as="button"
           :href="route('admin.roles.create')"
           :data="{
@@ -288,7 +321,9 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="roleAndPermissionEdit || roleAndPermissionDelete">
+            Action
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="roles.data.length">
@@ -296,8 +331,9 @@ if (usePage().props.flash.successMessage) {
             <BodyTh>{{ role.id }}</BodyTh>
             <Td>{{ role.name }}</Td>
             <Td>{{ role.created_at }}</Td>
-            <Td>
+            <Td v-if="roleAndPermissionEdit || roleAndPermissionDelete">
               <Link
+                v-if="roleAndPermissionEdit"
                 as="button"
                 :href="route('admin.roles.edit', role.id)"
                 :data="{
@@ -310,6 +346,7 @@ if (usePage().props.flash.successMessage) {
                 Edit
               </Link>
               <button
+                v-if="roleAndPermissionDelete"
                 @click="handleDelete(role)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
