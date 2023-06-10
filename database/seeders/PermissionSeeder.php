@@ -88,8 +88,7 @@ class PermissionSeeder extends Seeder
 
         Permission::create(["name"=>"vendor-manage.menu","group"=>"vendor-manage"]);
         Permission::create(["name"=>"vendor-manage.detail","group"=>"vendor-manage"]);
-        Permission::create(["name"=>"vendor-manage.add","group"=>"vendor-manage"]);
-        Permission::create(["name"=>"vendor-manage.edit","group"=>"vendor-manage"]);
+        Permission::create(["name"=>"vendor-manage.control","group"=>"vendor-manage"]);
         Permission::create(["name"=>"vendor-manage.delete","group"=>"vendor-manage"]);
         Permission::create(["name"=>"vendor-manage.trash.list","group"=>"vendor-manage"]);
         Permission::create(["name"=>"vendor-manage.trash.restore","group"=>"vendor-manage"]);

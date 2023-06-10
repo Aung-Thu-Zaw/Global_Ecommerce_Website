@@ -342,7 +342,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:vendor-manage.menu')->name("index");
                     Route::get("/details/{id}", "show")->middleware('permission:vendor-manage.detail')->name("show");
-                    Route::post("/{id}", "update")->middleware('permission:vendor-manage.edit')->name("update");
+                    Route::post("/{id}", "update")->middleware('permission:vendor-manage.control')->name("update");
                     Route::delete("/{id}", "destroy")->middleware('permission:vendor-manage.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:vendor-manage.trash.list')->name("trash");
                     Route::post("/{id}/restore", "restore")->middleware('permission:vendor-manage.trash.restore')->name("restore");
@@ -356,7 +356,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:vendor-manage.menu')->name("index");
                     Route::get("/details/{id}", "show")->middleware('permission:vendor-manage.detail')->name("show");
-                    Route::post("/{id}", "update")->middleware('permission:vendor-manage.edit')->name("update");
+                    Route::post("/{id}", "update")->middleware('permission:vendor-manage.control')->name("update");
                 });
 
            Route::controller(AdminRegisterUserController::class)

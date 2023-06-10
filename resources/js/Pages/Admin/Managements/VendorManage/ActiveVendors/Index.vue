@@ -10,7 +10,7 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject } from "vue";
+import { reactive, watch, inject, computed } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -23,6 +23,22 @@ const params = reactive({
   per_page: props.activeVendors.per_page ? props.activeVendors.per_page : 10,
   sort: "id",
   direction: "desc",
+});
+
+const vendorManageControl = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "vendor-manage.control"
+      )
+    : false;
+});
+
+const vendorManageDetail = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "vendor-manage.detail"
+      )
+    : false;
 });
 
 const handleSearchBox = () => {
@@ -280,7 +296,9 @@ const handleInactive = async (activeVendorId) => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="vendorManageControl || vendorManageDetail">
+            Action
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="activeVendors.data.length">
@@ -292,8 +310,9 @@ const handleInactive = async (activeVendorId) => {
               <ActiveStatus> {{ activeVendor.status }} </ActiveStatus>
             </Td>
             <Td>{{ activeVendor.created_at }}</Td>
-            <Td>
+            <Td v-if="vendorManageControl || vendorManageDetail">
               <button
+                v-if="vendorManageControl"
                 @click="handleInactive(activeVendor.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3"
               >
@@ -301,6 +320,7 @@ const handleInactive = async (activeVendorId) => {
                 Inactive
               </button>
               <Link
+                v-if="vendorManageDetail"
                 as="button"
                 :href="route('admin.vendors.active.show', activeVendor.id)"
                 :data="{

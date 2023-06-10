@@ -10,15 +10,47 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, usePage, Head } from "@inertiajs/vue3";
-import { inject, reactive, watch } from "vue";
-import { router } from "@inertiajs/vue3";
+import { Link, usePage, Head, router } from "@inertiajs/vue3";
+import { inject, reactive, watch, computed } from "vue";
 
 const props = defineProps({
   inactiveVendors: Object,
 });
 
 const swal = inject("$swal");
+
+const vendorManageControl = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "vendor-manage.control"
+      )
+    : false;
+});
+
+const vendorManageDetail = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "vendor-manage.detail"
+      )
+    : false;
+});
+
+const vendorManageDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "vendor-manage.delete"
+      )
+    : false;
+});
+
+const vendorManageTrashList = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "vendor-manage.trash.list"
+      )
+    : false;
+});
+
 const params = reactive({
   search: null,
   page: props.inactiveVendors.current_page
@@ -182,7 +214,7 @@ const handleDelete = async (inactiveVendorId) => {
           </li>
         </Breadcrumb>
 
-        <div>
+        <div v-if="vendorManageTrashList">
           <Link
             as="button"
             :href="route('admin.vendors.inactive.trash')"
@@ -330,7 +362,13 @@ const handleDelete = async (inactiveVendorId) => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh
+            v-if="
+              vendorManageControl || vendorManageDelete || vendorManageDetail
+            "
+          >
+            Action
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="inactiveVendors.data.length">
@@ -345,8 +383,13 @@ const handleDelete = async (inactiveVendorId) => {
               <InactiveStatus> {{ inactiveVendor.status }} </InactiveStatus>
             </Td>
             <Td>{{ inactiveVendor.created_at }}</Td>
-            <Td>
+            <Td
+              v-if="
+                vendorManageControl || vendorManageDelete || vendorManageDetail
+              "
+            >
               <button
+                v-if="vendorManageControl"
                 @click="handleActive(inactiveVendor.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-green-600 text-white hover:bg-green-700 mr-3 my-1"
               >
@@ -355,6 +398,7 @@ const handleDelete = async (inactiveVendorId) => {
               </button>
 
               <button
+                v-if="vendorManageDelete"
                 @click="handleDelete(inactiveVendor.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
@@ -362,6 +406,7 @@ const handleDelete = async (inactiveVendorId) => {
                 Remove
               </button>
               <Link
+                v-if="vendorManageDetail"
                 as="button"
                 :href="route('admin.vendors.inactive.show', inactiveVendor.id)"
                 :data="{

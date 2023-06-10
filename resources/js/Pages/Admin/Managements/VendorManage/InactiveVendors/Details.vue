@@ -76,6 +76,7 @@ const form = useForm({
 
         <div>
           <Link
+            as="button"
             :href="route('admin.vendors.inactive.index')"
             :data="{
               page: props.paginate.page,
@@ -111,7 +112,7 @@ const form = useForm({
               type="text"
               class="mt-1 block w-full"
               v-model="form.name"
-              required
+              disabled
               placeholder="Enter Your Fullname"
             >
               <template v-slot:icon>
@@ -132,7 +133,7 @@ const form = useForm({
                 type="text"
                 class="mt-1 block w-full"
                 v-model="form.company_name"
-                required
+                disabled
                 placeholder="Enter Company Name"
               >
                 <template v-slot:icon>
@@ -153,7 +154,7 @@ const form = useForm({
                 type="text"
                 class="mt-1 block w-full"
                 v-model="form.shop_name"
-                required
+                disabled
                 placeholder="Enter Shop Name"
               >
                 <template v-slot:icon>
@@ -174,7 +175,7 @@ const form = useForm({
                 type="email"
                 class="mt-1 block w-full"
                 v-model="form.email"
-                required
+                disabled
                 placeholder="Enter Your Email Address"
               >
                 <template v-slot:icon>
@@ -195,7 +196,7 @@ const form = useForm({
                 type="text"
                 class="mt-1 block w-full"
                 v-model="form.phone"
-                required
+                disabled
                 placeholder="Enter Your Phone Number"
               >
                 <template v-slot:icon>
@@ -216,6 +217,7 @@ const form = useForm({
                 id="about"
                 cols="30"
                 rows="10"
+                disabled
                 class="p-2 w-full border-transparent outline-none focus:border-transparent focus:ring-0 placeholder:text-gray-400 placeholder:text-sm h-[500px]"
                 v-model="form.about"
               ></textarea>

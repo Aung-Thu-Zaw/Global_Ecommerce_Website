@@ -1,4 +1,3 @@
-
 <script setup>
 import Breadcrumb from "@/Components/Breadcrumbs/VendorManageBreadcrumb.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
@@ -11,7 +10,7 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { inject, reactive, watch } from "vue";
+import { inject, reactive, watch, computed } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -19,6 +18,22 @@ const props = defineProps({
 });
 
 const swal = inject("$swal");
+
+const vendorManageTrashRestore = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "vendor-manage.trash.restore"
+      )
+    : false;
+});
+
+const vendorManageTrashDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "vendor-manage.trash.delete"
+      )
+    : false;
+});
 
 const params = reactive({
   search: null,
@@ -102,8 +117,8 @@ const handleRestore = async (inactiveVendorId) => {
     icon: "info",
     title: "Are you sure you want to restore this vendor?",
     showCancelButton: true,
-    confirmButtonText: "Yes, restore!",
-    confirmButtonColor: "#027e00",
+    confirmButtonText: "Yes, restore",
+    confirmButtonColor: "#4d9be9",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -191,7 +206,6 @@ const handlePermanentlyDelete = async () => {
     <Head title="Trash Inactive Vendors" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Vendor Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb>
           <li aria-current="page">
@@ -240,6 +254,7 @@ const handlePermanentlyDelete = async () => {
 
         <div>
           <Link
+            as="button"
             :href="route('admin.vendors.inactive.index')"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
@@ -249,7 +264,6 @@ const handlePermanentlyDelete = async () => {
         </div>
       </div>
 
-      <!-- Search Input Form -->
       <div class="flex items-center justify-end mb-5">
         <form class="w-[350px] relative">
           <input
@@ -282,8 +296,10 @@ const handlePermanentlyDelete = async () => {
         </div>
       </div>
 
-      <!-- Auto delete description and button  -->
-      <p class="text-left text-sm font-bold mb-2 text-warning-600">
+      <p
+        v-if="vendorManageTrashDelete"
+        class="text-left text-sm font-bold mb-2 text-warning-600"
+      >
         Inactive Vendors in the Trash will be automatically deleted after 60
         days.
         <button
@@ -372,32 +388,34 @@ const handlePermanentlyDelete = async () => {
             ></i>
           </HeaderTh>
           <HeaderTh> Status </HeaderTh>
-          <HeaderTh @click="updateSorting('created_at')">
-            Created At
+          <HeaderTh @click="updateSorting('deleted_at')">
+            Deleted At
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
               :class="{
                 'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'created_at',
+                  params.direction === 'asc' && params.sort === 'deleted_at',
                 'visually-hidden':
                   params.direction !== '' &&
                   params.direction !== 'asc' &&
-                  params.sort === 'created_at',
+                  params.sort === 'deleted_at',
               }"
             ></i>
             <i
               class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
               :class="{
                 'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'created_at',
+                  params.direction === 'desc' && params.sort === 'deleted_at',
                 'visually-hidden':
                   params.direction !== '' &&
                   params.direction !== 'desc' &&
-                  params.sort === 'created_at',
+                  params.sort === 'deleted_at',
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="vendorManageTrashRestore || vendorManageTrashDelete">
+            Action
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="inactiveTrashVendors.data.length">
@@ -413,9 +431,10 @@ const handlePermanentlyDelete = async () => {
                 {{ inactiveTrashVendor.status }}
               </InactiveStatus>
             </Td>
-            <Td>{{ inactiveTrashVendor.created_at }}</Td>
-            <Td>
+            <Td>{{ inactiveTrashVendor.deleted_at }}</Td>
+            <Td v-if="vendorManageTrashRestore || vendorManageTrashDelete">
               <button
+                v-if="vendorManageTrashRestore"
                 @click="handleRestore(inactiveTrashVendor.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
@@ -423,6 +442,7 @@ const handlePermanentlyDelete = async () => {
                 Restore
               </button>
               <button
+                v-if="vendorManageTrashDelete"
                 @click="handleDelete(inactiveTrashVendor.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
