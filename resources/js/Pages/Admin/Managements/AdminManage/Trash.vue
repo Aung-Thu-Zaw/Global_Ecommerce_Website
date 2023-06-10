@@ -9,7 +9,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/AdminManageBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { inject, reactive, watch } from "vue";
+import { inject, reactive, watch, computed } from "vue";
 import { router, usePage, Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -17,6 +17,22 @@ const props = defineProps({
 });
 
 const swal = inject("$swal");
+
+const adminManageTrashRestore = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "admin-manage.trash.restore"
+      )
+    : false;
+});
+
+const adminManageTrashDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "admin-manage.trash.delete"
+      )
+    : false;
+});
 
 const params = reactive({
   search: null,
@@ -247,7 +263,10 @@ const handlePermanentlyDelete = async () => {
         </div>
       </div>
 
-      <p class="text-left text-sm font-bold mb-2 text-warning-600">
+      <p
+        v-if="adminManageTrashDelete"
+        class="text-left text-sm font-bold mb-2 text-warning-600"
+      >
         Admin users in the Trash will be automatically deleted after 60 days.
         <button
           @click="handlePermanentlyDelete"
@@ -386,7 +405,9 @@ const handlePermanentlyDelete = async () => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="adminManageTrashRestore || adminManageTrashDelete">
+            Action
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="trashAdmins.data.length">
@@ -405,21 +426,22 @@ const handlePermanentlyDelete = async () => {
             <Td>
               <span
                 v-if="trashAdmin.roles.length"
-                class="capitalize bg-sky-200 text-sky-500 px-3 py-1 font-bold text-sm rounded-md"
+                class="capitalize bg-sky-200 text-sky-500 px-3 py-1 font-bold text-sm rounded-full"
               >
                 {{ trashAdmin.roles[0].name }}
               </span>
               <span
                 v-else
-                class="capitalize bg-slate-200 text-slate-500 px-3 py-1 font-bold text-sm rounded-md"
+                class="capitalize bg-slate-200 text-slate-500 px-3 py-1 font-bold text-sm rounded-full"
               >
                 No Role
               </span>
             </Td>
             <Td>{{ trashAdmin.deleted_at }}</Td>
 
-            <Td>
+            <Td v-if="adminManageTrashRestore || adminManageTrashDelete">
               <button
+                v-if="adminManageTrashRestore"
                 @click="handleRestore(trashAdmin.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
@@ -427,6 +449,7 @@ const handlePermanentlyDelete = async () => {
                 Restore
               </button>
               <button
+                v-if="adminManageTrashDelete"
                 @click="handleDelete(trashAdmin.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >

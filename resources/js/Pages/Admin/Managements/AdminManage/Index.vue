@@ -9,7 +9,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/AdminManageBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject } from "vue";
+import { reactive, watch, inject, computed } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -21,6 +21,46 @@ const swal = inject("$swal");
 const handleSearchBox = () => {
   params.search = "";
 };
+
+const adminManageAdd = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "admin-manage.add"
+      )
+    : false;
+});
+
+const adminManageEdit = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "admin-manage.edit"
+      )
+    : false;
+});
+
+const adminManageDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "admin-manage.delete"
+      )
+    : false;
+});
+
+const adminManageDetail = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "admin-manage.detail"
+      )
+    : false;
+});
+
+const adminManageTrashList = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "admin-manage.trash.list"
+      )
+    : false;
+});
 
 const params = reactive({
   search: null,
@@ -142,7 +182,7 @@ if (usePage().props.flash.successMessage) {
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb />
 
-        <div>
+        <div v-if="adminManageTrashList">
           <Link
             as="button"
             :href="route('admin.admin-manage.trash')"
@@ -157,6 +197,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <Link
+          v-if="adminManageAdd"
           as="button"
           :href="route('admin.admin-manage.create')"
           :data="{
@@ -329,7 +370,9 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="adminManageEdit || adminManageDelete">
+            Action
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="admins.data.length">
@@ -348,20 +391,20 @@ if (usePage().props.flash.successMessage) {
             <Td>
               <span
                 v-if="admin.roles.length"
-                class="capitalize bg-sky-200 text-sky-500 px-3 py-1 font-bold text-sm rounded-md"
+                class="capitalize bg-sky-200 text-sky-500 px-3 py-1 font-bold text-sm rounded-full"
               >
                 {{ admin.roles[0].name }}
               </span>
               <span
                 v-else
-                class="capitalize bg-slate-200 text-slate-500 px-3 py-1 font-bold text-sm rounded-md"
+                class="capitalize bg-slate-200 text-slate-500 px-3 py-1 font-bold text-sm rounded-full"
               >
                 No Role
               </span>
             </Td>
             <Td>
               <span
-                class="capitalize px-3 py-1 font-bold text-sm rounded-md"
+                class="capitalize px-3 py-1 font-bold text-sm rounded-full"
                 :class="{
                   'bg-green-200 text-green-500':
                     status(admin.last_activity) == 'active',
@@ -375,8 +418,11 @@ if (usePage().props.flash.successMessage) {
             </Td>
             <Td>{{ admin.created_at }}</Td>
 
-            <Td>
+            <Td
+              v-if="adminManageEdit || adminManageDelete || adminManageDetail"
+            >
               <Link
+                v-if="adminManageEdit"
                 as="button"
                 :href="route('admin.admin-manage.edit', admin.id)"
                 :data="{
@@ -389,6 +435,7 @@ if (usePage().props.flash.successMessage) {
                 Edit
               </Link>
               <button
+                v-if="adminManageDelete"
                 @click="handleDelete(admin)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
@@ -396,6 +443,7 @@ if (usePage().props.flash.successMessage) {
                 Delete
               </button>
               <button
+                v-if="adminManageDetail"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1 mr-3"
               >
                 <i class="fa-solid fa-eye"></i>

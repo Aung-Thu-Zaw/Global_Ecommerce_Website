@@ -336,23 +336,6 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::get("/details/{id}", "show")->middleware('permission:cancel-order-manage.detail')->name("show");
                 });
 
-           Route::controller(AdminManageController::class)
-                ->prefix("/admin-manage")
-                ->name("admin-manage.")
-                ->group(function () {
-                    Route::get("/", "index")->middleware('permission:admin-manage.menu')->name("index");
-                    Route::get("/create", "create")->middleware('permission:admin-manage.add')->name("create");
-                    Route::post("/", "store")->middleware('permission:admin-manage.add')->name("store");
-                    Route::get("/{user}/edit", "edit")->middleware('permission:admin-manage.edit')->name("edit");
-                    Route::post("/{user}", "update")->middleware('permission:admin-manage.edit')->name("update");
-                    Route::delete("/{user}", "destroy")->middleware('permission:admin-manage.delete')->name("destroy");
-                    Route::get("/trash", "trash")->middleware('permission:admin-manage.trash.list')->name("trash");
-                    Route::post("/{id}/restore", "restore")->middleware('permission:admin-manage.trash.restore')->name("restore");
-                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:admin-manage.trash.delete')->name("forceDelete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:admin-manage.trash.delete')->name("permanentlyDelete");
-                });
-
-
            Route::controller(AdminInactiveVendorController::class)
                 ->prefix("/vendor-manage/inactive-vendors")
                 ->name("vendors.inactive.")
@@ -376,14 +359,6 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{id}", "update")->middleware('permission:vendor-manage.edit')->name("update");
                 });
 
-
-
-
-
-
-
-
-
            Route::controller(AdminRegisterUserController::class)
                 ->prefix("/user-manage/register-users")
                 ->name("users.register.")
@@ -402,8 +377,21 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{id}", "update")->middleware('permission:user-manage.edit')->name("update");
                 });
 
-
-
+           Route::controller(AdminManageController::class)
+           ->prefix("/admin-manage")
+           ->name("admin-manage.")
+           ->group(function () {
+               Route::get("/", "index")->middleware('permission:admin-manage.menu')->name("index");
+               Route::get("/create", "create")->middleware('permission:admin-manage.add')->name("create");
+               Route::post("/", "store")->middleware('permission:admin-manage.add')->name("store");
+               Route::get("/{user}/edit", "edit")->middleware('permission:admin-manage.edit')->name("edit");
+               Route::post("/{user}", "update")->middleware('permission:admin-manage.edit')->name("update");
+               Route::delete("/{user}", "destroy")->middleware('permission:admin-manage.delete')->name("destroy");
+               Route::get("/trash", "trash")->middleware('permission:admin-manage.trash.list')->name("trash");
+               Route::post("/{id}/restore", "restore")->middleware('permission:admin-manage.trash.restore')->name("restore");
+               Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:admin-manage.trash.delete')->name("forceDelete");
+               Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:admin-manage.trash.delete')->name("permanentlyDelete");
+           });
 
            Route::controller(AdminRoleController::class)
                 ->prefix("/roles-and-permissions/roles")

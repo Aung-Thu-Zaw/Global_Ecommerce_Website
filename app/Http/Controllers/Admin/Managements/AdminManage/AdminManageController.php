@@ -18,14 +18,14 @@ class AdminManageController extends Controller
     public function index(): Response|ResponseFactory
     {
         $admins=User::search(request("search"))
-        ->query(function (Builder $builder) {
-            $builder->with("roles");
-        })
-                              ->where("role", "admin")
-                              ->where("status", "active")
-                              ->orderBy(request("sort", "id"), request("direction", "desc"))
-                              ->paginate(request("per_page", 10))
-                              ->appends(request()->all());
+                    ->query(function (Builder $builder) {
+                        $builder->with("roles");
+                    })
+                    ->where("role", "admin")
+                    ->where("status", "active")
+                    ->orderBy(request("sort", "id"), request("direction", "desc"))
+                    ->paginate(request("per_page", 10))
+                    ->appends(request()->all());
 
         return inertia("Admin/Managements/AdminManage/Index", compact("admins"));
     }
@@ -69,6 +69,7 @@ class AdminManageController extends Controller
 
         if ($request->assign_role) {
             $user->roles()->detach();
+
             $user->permissions()->detach();
 
             $user->assignRole($request->assign_role);
@@ -91,14 +92,13 @@ class AdminManageController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashAdmins=User::search(request("search"))
-
-        ->query(function (Builder $builder) {
-            $builder->with("roles");
-        })
-                          ->onlyTrashed()
-                          ->orderBy(request("sort", "id"), request("direction", "desc"))
-                          ->paginate(request("per_page", 10))
-                          ->appends(request()->all());
+                         ->query(function (Builder $builder) {
+                             $builder->with("roles");
+                         })
+                         ->onlyTrashed()
+                         ->orderBy(request("sort", "id"), request("direction", "desc"))
+                         ->paginate(request("per_page", 10))
+                         ->appends(request()->all());
 
         return inertia("Admin/Managements/AdminManage/Trash", compact("trashAdmins"));
     }
@@ -126,7 +126,9 @@ class AdminManageController extends Controller
         $admins = User::onlyTrashed()->get();
 
         $admins->each(function ($admin) {
+
             User::deleteUserAvatar($admin);
+
             $admin->forceDelete();
         });
 
