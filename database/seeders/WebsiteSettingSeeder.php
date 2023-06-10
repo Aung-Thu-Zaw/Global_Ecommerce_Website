@@ -28,7 +28,6 @@ class WebsiteSettingSeeder extends Seeder
           "instagram"=>"https://www.example.com",
           "reddit"=>"https://www.example.com",
           "linked_in"=>"https://www.example.com",
-          "blog"=>"https://www.example.com",
         ]);
     }
 }

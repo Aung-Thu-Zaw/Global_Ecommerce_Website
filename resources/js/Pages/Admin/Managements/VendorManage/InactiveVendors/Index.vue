@@ -227,7 +227,7 @@ const handleDelete = async (inactiveVendorId) => {
         </div>
       </div>
 
-      <div class="flex items-center justify-end mb-5">
+      <div class="flex items-center justify-end mb-5 ml-auto">
         <form class="w-[350px] relative">
           <input
             type="text"

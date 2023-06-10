@@ -208,7 +208,7 @@ if (usePage().props.flash.successMessage) {
           <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
           Add Admin</Link
         >
-        <div class="flex items-center">
+        <div class="flex items-center ml-auto">
           <form class="w-[350px] relative">
             <input
               type="text"
@@ -370,7 +370,9 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh v-if="adminManageEdit || adminManageDelete">
+          <HeaderTh
+            v-if="adminManageEdit || adminManageDelete || adminManageDetail"
+          >
             Action
           </HeaderTh>
         </TableHeader>
@@ -391,20 +393,20 @@ if (usePage().props.flash.successMessage) {
             <Td>
               <span
                 v-if="admin.roles.length"
-                class="capitalize bg-sky-200 text-sky-500 px-3 py-1 font-bold text-sm rounded-full"
+                class="capitalize bg-sky-200 text-sky-500 px-3 py-1 font-bold text-sm rounded-md"
               >
                 {{ admin.roles[0].name }}
               </span>
               <span
                 v-else
-                class="capitalize bg-slate-200 text-slate-500 px-3 py-1 font-bold text-sm rounded-full"
+                class="capitalize bg-slate-200 text-slate-500 px-3 py-1 font-bold text-sm rounded-md"
               >
                 No Role
               </span>
             </Td>
             <Td>
               <span
-                class="capitalize px-3 py-1 font-bold text-sm rounded-full"
+                class="capitalize px-3 py-1 font-bold text-sm rounded-md"
                 :class="{
                   'bg-green-200 text-green-500':
                     status(admin.last_activity) == 'active',
