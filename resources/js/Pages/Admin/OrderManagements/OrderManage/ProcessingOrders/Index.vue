@@ -10,7 +10,7 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, Head, router } from "@inertiajs/vue3";
+import { Link, Head, router,usePage } from "@inertiajs/vue3";
 import { reactive, watch, computed } from "vue";
 
 const props = defineProps({
