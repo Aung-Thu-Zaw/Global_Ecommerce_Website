@@ -44,9 +44,9 @@ class BlogCategoryRequest extends FormRequest
     public function messages(): array
     {
         return [
-            "name.required" => "Category name is required.",
-            "name.unique" => "Category is already exists.",
-            "status.required" => "Category status is required.",
+            "name.required" => "Blog category name is required.",
+            "name.unique" => "Blog category name is already exists.",
+            "status.required" => "Blog category status is required.",
         ];
     }
 }

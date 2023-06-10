@@ -35,7 +35,7 @@ const form = useForm({
 });
 
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
-const handleBlogPostCreate = async () => {
+const handleCreateBlogPost = async () => {
   await recaptchaLoaded();
   form.captcha_token = await executeRecaptcha("create_blog_post");
   submit();
@@ -111,7 +111,7 @@ const submit = () => {
             class="w-[100px] h-[100px] object-cover rounded-full shadow-md my-3 ring-2 ring-slate-300"
           />
         </div>
-        <form @submit.prevent="handleBlogPostCreate">
+        <form @submit.prevent="handleCreateBlogPost">
           <div class="mb-6">
             <InputLabel for="title" value="Blog Post Title *" />
 

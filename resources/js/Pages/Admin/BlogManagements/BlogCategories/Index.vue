@@ -11,7 +11,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/BlogCategoryBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject } from "vue";
+import { reactive, watch, inject, computed } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -23,6 +23,38 @@ const swal = inject("$swal");
 const handleSearchBox = () => {
   params.search = "";
 };
+
+const blogCategoryAdd = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "blog-category.add"
+      )
+    : false;
+});
+
+const blogCategoryEdit = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "blog-category.edit"
+      )
+    : false;
+});
+
+const blogCategoryDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "blog-category.delete"
+      )
+    : false;
+});
+
+const blogCategoryTrashList = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "blog-category.trash.list"
+      )
+    : false;
+});
 
 const params = reactive({
   search: null,
@@ -136,7 +168,7 @@ if (usePage().props.flash.successMessage) {
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb />
 
-        <div>
+        <div v-if="blogCategoryTrashList">
           <Link
             as="button"
             :href="route('admin.blogs.categories.trash')"
@@ -151,6 +183,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <Link
+          v-if="blogCategoryAdd"
           as="button"
           :href="route('admin.blogs.categories.create')"
           :data="{
@@ -161,7 +194,7 @@ if (usePage().props.flash.successMessage) {
           <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
           Add Blog Category</Link
         >
-        <div class="flex items-center">
+        <div class="flex items-center ml-auto">
           <form class="w-[350px] relative">
             <input
               type="text"
@@ -296,7 +329,9 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="blogCategoryEdit || blogCategoryDelete">
+            Action
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="blogCategories.data.length">
@@ -322,8 +357,9 @@ if (usePage().props.flash.successMessage) {
               </InactiveStatus>
             </Td>
             <Td>{{ blogCategory.created_at }}</Td>
-            <Td>
+            <Td v-if="blogCategoryEdit || blogCategoryDelete">
               <Link
+                v-if="blogCategoryEdit"
                 as="button"
                 :href="route('admin.blogs.categories.edit', blogCategory.slug)"
                 :data="{
@@ -336,6 +372,7 @@ if (usePage().props.flash.successMessage) {
                 Edit
               </Link>
               <button
+                v-if="blogCategoryDelete"
                 @click="handleDelete(blogCategory)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >

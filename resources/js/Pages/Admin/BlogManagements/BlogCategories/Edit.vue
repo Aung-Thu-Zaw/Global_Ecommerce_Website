@@ -28,7 +28,7 @@ const form = useForm({
 });
 
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
-const handleEditCatrgory = async () => {
+const handleEditBlogCatrgory = async () => {
   await recaptchaLoaded();
   form.captcha_token = await executeRecaptcha("edit_blog_category");
   submit();
@@ -107,7 +107,7 @@ const submit = () => {
             class="w-[100px] h-[100px] object-cover rounded-full shadow-md my-3 ring-2 ring-slate-300"
           />
         </div>
-        <form @submit.prevent="handleEditCatrgory">
+        <form @submit.prevent="handleEditBlogCatrgory">
           <div class="mb-6">
             <InputLabel for="name" value="Blog Category Name *" />
 

@@ -9,7 +9,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/BlogPostBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject } from "vue";
+import { reactive, watch, inject,computed } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -17,6 +17,38 @@ const props = defineProps({
 });
 
 const swal = inject("$swal");
+
+const blogPostAdd = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "blog-post.add"
+      )
+    : false;
+});
+
+const blogPostEdit = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "blog-post.edit"
+      )
+    : false;
+});
+
+const blogPostDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "blog-post.delete"
+      )
+    : false;
+});
+
+const blogPostTrashList = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "blog-post.trash.list"
+      )
+    : false;
+});
 
 const handleSearchBox = () => {
   params.search = "";
@@ -132,7 +164,7 @@ if (usePage().props.flash.successMessage) {
       <div class="flex items-center justify-between mb-10">
         <Breadcrumb />
 
-        <div>
+        <div v-if="blogPostTrashList">
           <Link
             as="button"
             :href="route('admin.blogs.posts.trash')"
@@ -147,6 +179,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <Link
+          v-if="blogPostAdd"
           as="button"
           :href="route('admin.blogs.posts.create')"
           :data="{
@@ -292,7 +325,7 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="blogPostEdit || blogPostDelete"> Action </HeaderTh>
         </TableHeader>
 
         <tbody v-if="blogPosts.data.length">
@@ -316,8 +349,9 @@ if (usePage().props.flash.successMessage) {
               </span>
             </Td>
             <Td>{{ blogPost.created_at }}</Td>
-            <Td>
+            <Td v-if="blogPostEdit || blogPostDelete">
               <Link
+                v-if="blogPostEdit"
                 as="button"
                 :href="route('admin.blogs.posts.edit', blogPost.slug)"
                 :data="{
@@ -330,6 +364,7 @@ if (usePage().props.flash.successMessage) {
                 Edit
               </Link>
               <button
+                v-if="blogPostDelete"
                 @click="handleDelete(blogPost)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >

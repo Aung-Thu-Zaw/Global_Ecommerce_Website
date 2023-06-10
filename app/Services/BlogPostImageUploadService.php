@@ -21,7 +21,7 @@ class BlogPostImageUploadService
 
         $extension=$file->extension();
 
-        $finalName= Str::slug($request->name, '-')."."."$extension";
+        $finalName= Str::slug($request->title, '-')."."."$extension";
 
         $file->move(storage_path("app/public/blog-posts/"), $finalName);
 
@@ -42,7 +42,7 @@ class BlogPostImageUploadService
             /** @var \Illuminate\Http\UploadedFile $file */
 
             $extension=$file->extension();
-            $finalName= Str::slug($request->name, '-')."."."$extension";
+            $finalName= Str::slug($request->title, '-')."."."$extension";
 
             $file->move(storage_path("app/public/blog-posts/"), $finalName);
 
