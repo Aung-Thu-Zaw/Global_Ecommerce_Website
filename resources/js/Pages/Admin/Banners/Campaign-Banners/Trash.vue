@@ -9,7 +9,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/BannerBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { inject, reactive, watch } from "vue";
+import { inject, reactive, watch, computed } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -21,6 +21,22 @@ const swal = inject("$swal");
 const handleSearchBox = () => {
   params.search = "";
 };
+
+const bannerTrashRestore = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "banner.trash.restore"
+      )
+    : false;
+});
+
+const bannerTrashDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "banner.trash.delete"
+      )
+    : false;
+});
 
 const params = reactive({
   search: null,
@@ -36,7 +52,7 @@ const params = reactive({
 
 watch(
   () => params.search,
-  (current, previous) => {
+  () => {
     router.get(
       route("admin.campaign-banners.trash"),
       {
@@ -55,7 +71,7 @@ watch(
 
 watch(
   () => params.per_page,
-  (current, previous) => {
+  () => {
     router.get(
       route("admin.campaign-banners.trash"),
       {
@@ -274,7 +290,10 @@ const handlePermanentlyDelete = async () => {
         </div>
       </div>
 
-      <p class="text-left text-sm font-bold mb-2 text-warning-600">
+      <p
+        v-if="bannerTrashDelete"
+        class="text-left text-sm font-bold mb-2 text-warning-600"
+      >
         Campaign Banners in the Trash will be automatically deleted after 60
         days.
         <button
@@ -363,7 +382,9 @@ const handlePermanentlyDelete = async () => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="bannerTrashRestore || bannerTrashDelete">
+            Action
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="trashCampaignBanners.data.length">
@@ -381,8 +402,9 @@ const handlePermanentlyDelete = async () => {
             </Td>
             <Td>{{ trashCampaignBanner.url }}</Td>
             <Td>{{ trashCampaignBanner.deleted_at }}</Td>
-            <Td>
+            <Td v-if="bannerTrashRestore || bannerTrashDelete">
               <button
+                v-if="bannerTrashRestore"
                 @click="handleRestore(trashCampaignBanner.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
@@ -390,6 +412,7 @@ const handlePermanentlyDelete = async () => {
                 Restore
               </button>
               <button
+                v-if="bannerTrashDelete"
                 @click="handleDelete(trashCampaignBanner.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >

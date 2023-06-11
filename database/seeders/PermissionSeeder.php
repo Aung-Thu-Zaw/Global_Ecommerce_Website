@@ -63,8 +63,7 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"banner.trash.list","group"=>"banner"]);
         Permission::create(["name"=>"banner.trash.restore","group"=>"banner"]);
         Permission::create(["name"=>"banner.trash.delete","group"=>"banner"]);
-        Permission::create(["name"=>"banner.show","group"=>"banner"]);
-        Permission::create(["name"=>"banner.hide","group"=>"banner"]);
+        Permission::create(["name"=>"banner.control","group"=>"banner"]);
 
         Permission::create(["name"=>"shipping-area.menu","group"=>"shipping-area"]);
         Permission::create(["name"=>"shipping-area.add","group"=>"shipping-area"]);

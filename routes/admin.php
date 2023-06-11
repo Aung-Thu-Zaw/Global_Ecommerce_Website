@@ -144,8 +144,8 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{id}/restore", "restore")->middleware('permission:banner.trash.restore')->name("restore");
                     Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:banner.trash.delete')->name("forceDelete");
                     Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:banner.trash.delete')->name("permanentlyDelete");
-                    Route::post("/{id}/show", "handleShow")->middleware('permission:banner.show')->name("show");
-                    Route::post("/{id}/hide", "handleHide")->middleware('permission:banner.hide')->name("hide");
+                    Route::post("/{id}/show", "handleShow")->middleware('permission:banner.control')->name("show");
+                    Route::post("/{id}/hide", "handleHide")->middleware('permission:banner.control')->name("hide");
                 });
 
            Route::controller(AdminProductBannerController::class)
@@ -162,8 +162,8 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{id}/restore", "restore")->middleware('permission:banner.trash.restore')->name("restore");
                     Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:banner.trash.delete')->name("forceDelete");
                     Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:banner.trash.delete')->name("permanentlyDelete");
-                    Route::post("/{id}/show", "handleShow")->middleware('permission:banner.show')->name("show");
-                    Route::post("/{id}/hide", "handleHide")->middleware('permission:banner.hide')->name("hide");
+                    Route::post("/{id}/show", "handleShow")->middleware('permission:banner.control')->name("show");
+                    Route::post("/{id}/hide", "handleHide")->middleware('permission:banner.control')->name("hide");
                 });
 
            Route::controller(AdminCampaignBannerController::class)
@@ -180,8 +180,8 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{id}/restore", "restore")->middleware('permission:banner.trash.restore')->name("restore");
                     Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:banner.trash.delete')->name("forceDelete");
                     Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:banner.trash.delete')->name("permanentlyDelete");
-                    Route::post("/{id}/show", "handleShow")->middleware('permission:banner.show')->name("show");
-                    Route::post("/{id}/hide", "handleHide")->middleware('permission:banner.hide')->name("hide");
+                    Route::post("/{id}/show", "handleShow")->middleware('permission:banner.control')->name("show");
+                    Route::post("/{id}/hide", "handleHide")->middleware('permission:banner.control')->name("hide");
                 });
 
            Route::controller(AdminCountryController::class)

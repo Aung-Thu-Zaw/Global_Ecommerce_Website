@@ -11,7 +11,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/BannerBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject } from "vue";
+import { reactive, watch, inject, computed } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -19,6 +19,46 @@ const props = defineProps({
 });
 
 const swal = inject("$swal");
+
+const bannerAdd = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "banner.add"
+      )
+    : false;
+});
+
+const bannerControl = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "banner.control"
+      )
+    : false;
+});
+
+const bannerEdit = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "banner.edit"
+      )
+    : false;
+});
+
+const bannerDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "banner.delete"
+      )
+    : false;
+});
+
+const bannerTrashList = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "banner.trash.list"
+      )
+    : false;
+});
 
 const params = reactive({
   search: null,
@@ -223,7 +263,7 @@ if (usePage().props.flash.successMessage) {
           </li>
         </Breadcrumb>
 
-        <div>
+        <div v-if="bannerTrashList">
           <Link
             as="button"
             :href="route('admin.slider-banners.trash')"
@@ -238,6 +278,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <Link
+          v-if="bannerAdd"
           as="button"
           :href="route('admin.slider-banners.create')"
           :data="{
@@ -383,7 +424,9 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="bannerEdit || bannerDelete || bannerControl">
+            Action
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="sliderBanners.data.length">
@@ -406,9 +449,9 @@ if (usePage().props.flash.successMessage) {
               </InactiveStatus>
             </Td>
             <Td>{{ sliderBanner.created_at }}</Td>
-            <Td>
+            <Td v-if="bannerEdit || bannerDelete || bannerControl">
               <button
-                v-if="sliderBanner.status == 'hide'"
+                v-if="sliderBanner.status == 'hide' && bannerControl"
                 @click="handleShow(sliderBanner.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-emerald-600 text-white hover:bg-emerald-700 mr-3 my-1"
               >
@@ -416,7 +459,7 @@ if (usePage().props.flash.successMessage) {
                 Show
               </button>
               <button
-                v-if="sliderBanner.status == 'show'"
+                v-if="sliderBanner.status == 'show' && bannerControl"
                 @click="handleHide(sliderBanner.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-orange-600 text-white hover:bg-orange-700 mr-3 my-1"
               >
@@ -424,6 +467,7 @@ if (usePage().props.flash.successMessage) {
                 Hide
               </button>
               <Link
+                v-if="bannerEdit"
                 as="button"
                 :href="route('admin.slider-banners.edit', sliderBanner.id)"
                 :data="{
@@ -436,6 +480,7 @@ if (usePage().props.flash.successMessage) {
                 Edit
               </Link>
               <button
+                v-if="bannerDelete"
                 @click="handleDelete(sliderBanner.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
