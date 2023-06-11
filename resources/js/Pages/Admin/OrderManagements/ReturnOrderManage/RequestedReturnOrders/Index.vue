@@ -10,11 +10,19 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Pagination from "@/Components/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, Head, router } from "@inertiajs/vue3";
-import { reactive, watch } from "vue";
+import { Link, Head, router, usePage } from "@inertiajs/vue3";
+import { reactive, watch, computed } from "vue";
 
 const props = defineProps({
   requestedReturnOrders: Object,
+});
+
+const returnOrderManageDetail = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "return-order-manage.detail"
+      )
+    : false;
 });
 
 const params = reactive({
@@ -282,7 +290,7 @@ const updateSorting = (sort = "id") => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="returnOrderManageDetail"> Action </HeaderTh>
         </TableHeader>
 
         <tbody v-if="requestedReturnOrders.data.length">
@@ -301,8 +309,9 @@ const updateSorting = (sort = "id") => {
             </Td>
             <Td>{{ requestedReturnOrder.return_date }}</Td>
 
-            <Td>
+            <Td v-if="returnOrderManageDetail">
               <Link
+                v-if="returnOrderManageDetail"
                 as="button"
                 :href="
                   route(

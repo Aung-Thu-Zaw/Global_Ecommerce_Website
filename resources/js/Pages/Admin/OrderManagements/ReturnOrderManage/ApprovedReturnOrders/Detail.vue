@@ -17,12 +17,21 @@ import { computed, inject, reactive, ref, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+
 const props = defineProps({
   deliveryInformation: Object,
   approvedReturnOrderDetail: Object,
   orderItems: Object,
 });
 const swal = inject("$swal");
+
+const returnOrderManageControl = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "return-order-manage.control"
+      )
+    : false;
+});
 const handleConfirm = async (id) => {
   const result = await swal({
     icon: "info",
@@ -442,7 +451,10 @@ const handleConfirm = async (id) => {
         </div>
         <button
           @click="handleConfirm(approvedReturnOrderDetail.id)"
-          v-if="approvedReturnOrderDetail.return_status === 'approved'"
+          v-if="
+            approvedReturnOrderDetail.return_status === 'approved' &&
+            returnOrderManageControl
+          "
           class="bg-slate-600 py-3 w-full rounded-sm font-bold text-white hover:bg-slate-700 transition-all shadow"
         >
           Refund Return
