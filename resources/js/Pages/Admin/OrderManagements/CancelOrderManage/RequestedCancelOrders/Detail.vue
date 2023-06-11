@@ -8,7 +8,7 @@ import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { usePage, Head, router, Link } from "@inertiajs/vue3";
-import { inject, ref } from "vue";
+import { inject, ref, computed } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
@@ -21,6 +21,14 @@ const props = defineProps({
 
 const processing = ref(false);
 const swal = inject("$swal");
+
+const cancelOrderManageControl = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "cancel-order-manage.control"
+      )
+    : false;
+});
 
 const handleConfirm = async (id) => {
   const result = await swal({
@@ -449,7 +457,10 @@ const handleConfirm = async (id) => {
         </div>
         <button
           @click="handleConfirm(requestedCancelOrderDetail.id)"
-          v-if="requestedCancelOrderDetail.cancel_status === 'requested'"
+          v-if="
+            requestedCancelOrderDetail.cancel_status === 'requested' &&
+            cancelOrderManageControl
+          "
           class="bg-green-600 py-3 w-full rounded-sm font-bold text-white hover:bg-green-700 transition-all shadow"
         >
           <svg

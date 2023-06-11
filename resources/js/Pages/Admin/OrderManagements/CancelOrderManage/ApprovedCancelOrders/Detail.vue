@@ -7,6 +7,7 @@ import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Head, Link } from "@inertiajs/vue3";
+import { computed } from "vue";
 
 const props = defineProps({
   paginate: Object,

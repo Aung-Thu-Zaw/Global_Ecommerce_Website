@@ -11,7 +11,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link, Head, router } from "@inertiajs/vue3";
-import { reactive, watch } from "vue";
+import { reactive, watch, computed } from "vue";
 
 const props = defineProps({
   requestedCancelOrders: Object,
@@ -27,6 +27,14 @@ const params = reactive({
     : 10,
   sort: "id",
   direction: "desc",
+});
+
+const cancelOrderManageDetail = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "cancel-order-manage.detail"
+      )
+    : false;
 });
 
 const handleSearchBox = () => {
@@ -282,7 +290,7 @@ const updateSorting = (sort = "id") => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="cancelOrderManageDetail"> Action </HeaderTh>
         </TableHeader>
 
         <tbody v-if="requestedCancelOrders.data.length">
@@ -301,8 +309,9 @@ const updateSorting = (sort = "id") => {
             </Td>
             <Td>{{ requestedCancelOrder.return_date }}</Td>
 
-            <Td>
+            <Td v-if="cancelOrderManageDetail">
               <Link
+                v-if="cancelOrderManageDetail"
                 as="button"
                 :href="
                   route(
