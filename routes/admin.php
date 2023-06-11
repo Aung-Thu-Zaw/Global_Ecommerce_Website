@@ -101,7 +101,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                 ->name("products.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:product.menu')->name("index");
-                    Route::get("/details/{user}", "show")->middleware('permission:product.detail')->name("show");
+                    Route::get("/details/{product}", "show")->middleware('permission:product.detail')->name("show");
                     Route::get("/create", "create")->middleware('permission:product.add')->name("create");
                     Route::post("/", "store")->middleware('permission:product.add')->name("store");
                     Route::get("/{product}/edit", "edit")->middleware('permission:product.edit')->name("edit");

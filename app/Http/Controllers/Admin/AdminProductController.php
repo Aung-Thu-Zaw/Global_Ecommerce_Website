@@ -35,6 +35,8 @@ class AdminProductController extends Controller
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
+        $product->load("brand:id,name", "shop:id,shop_name", "images");
+
         return inertia("Admin/Products/Details", compact("product", "paginate"));
     }
 

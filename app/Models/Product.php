@@ -11,6 +11,7 @@ use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Laravel\Scout\Searchable;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -136,6 +137,14 @@ class Product extends Model
         return $this->belongsTo(User::class, "user_id");
     }
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Collection,Product>
+    */
+    public function collection(): BelongsTo
+    {
+        return $this->belongsTo(Collection::class);
+    }
+
 
     /**
     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Color>
@@ -144,7 +153,6 @@ class Product extends Model
     {
         return $this->belongsToMany(Color::class, 'product_color');
     }
-
 
     /**
     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Size>
