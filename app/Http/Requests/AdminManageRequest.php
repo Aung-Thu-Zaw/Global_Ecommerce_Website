@@ -49,4 +49,19 @@ class AdminManageRequest extends FormRequest
 
         return $rules;
     }
+
+    /**
+    *     @return array<string>
+    */
+    public function messages(): array
+    {
+        return [
+            "name.required" => "Name is required.",
+            "email.required" => "Email is required.",
+            "email.email" => "Email format is wrong.",
+            "email.unique" => "Email is already exists.",
+            "password.required"=>"Password is required."
+
+        ];
+    }
 }

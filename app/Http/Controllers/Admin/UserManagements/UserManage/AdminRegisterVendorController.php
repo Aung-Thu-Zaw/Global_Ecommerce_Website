@@ -1,51 +1,51 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Managements\UserManage;
+namespace App\Http\Controllers\Admin\UserManagements\UserManage;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
+use Illuminate\Http\RedirectResponse;
 
-class AdminRegisterUserController extends Controller
+class AdminRegisterVendorController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $users=User::search(request("search"))
-                    ->where("role", "user")
+        $vendors=User::search(request("search"))
+                    ->where("role", "vendor")
                     ->orderBy(request("sort", "id"), request("direction", "desc"))
                     ->paginate(request("per_page", 10))
                     ->appends(request()->all());
 
-        return inertia("Admin/Managements/UserManage/RegisterUsers/Index", compact("users"));
+        return inertia("Admin/UserManagements/UserManage/RegisterVendors/Index", compact("vendors"));
     }
 
     public function show(User $user): Response|ResponseFactory
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
-        return inertia("Admin/Managements/UserManage/RegisterUsers/Details", compact("user", "paginate"));
+        return inertia("Admin/UserManagements/UserManage/RegisterVendors/Details", compact("user", "paginate"));
     }
 
     public function destroy(Request $request, User $user): RedirectResponse
     {
         $user->delete();
 
-        return to_route("admin.users.register.index", "page=$request->page&per_page=$request->per_page")->with("success", "User has been successfully deleted.");
+        return to_route("admin.vendors.register.index", "page=$request->page&per_page=$request->per_page")->with("success", "Vendor has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
     {
-        $trashUsers=User::search(request("search"))
+        $trashVendors=User::search(request("search"))
                          ->onlyTrashed()
-                         ->where("role", "user")
+                         ->where("role", "vendor")
                          ->orderBy(request("sort", "id"), request("direction", "desc"))
                          ->paginate(request("per_page", 10))
                          ->appends(request()->all());
 
-        return inertia("Admin/Managements/UserManage/RegisterUsers/Trash", compact("trashUsers"));
+        return inertia("Admin/UserManagements/UserManage/RegisterVendors/Trash", compact("trashVendors"));
     }
 
     public function restore(Request $request, int $id): RedirectResponse
@@ -54,7 +54,7 @@ class AdminRegisterUserController extends Controller
 
         $user->restore();
 
-        return to_route('admin.users.register.trash', "page=$request->page&per_page=$request->per_page")->with("success", "User has been successfully restored.");
+        return to_route('admin.vendors.register.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Vendor has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $id): RedirectResponse
@@ -63,7 +63,7 @@ class AdminRegisterUserController extends Controller
 
         $user->forceDelete();
 
-        return to_route('admin.users.register.trash', "page=$request->page&per_page=$request->per_page")->with("success", "The user has been permanently deleted");
+        return to_route('admin.vendors.register.trash', "page=$request->page&per_page=$request->per_page")->with("success", "The vendor has been permanently deleted");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -77,6 +77,6 @@ class AdminRegisterUserController extends Controller
             $user->forceDelete();
         });
 
-        return to_route('admin.users.register.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Users have been successfully deleted.");
+        return to_route('admin.vendors.register.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Vendors have been successfully deleted.");
     }
 }

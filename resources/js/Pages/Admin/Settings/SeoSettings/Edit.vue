@@ -6,9 +6,9 @@ import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/SeoSettingBreadcrumb.vue";
+import { computed, ref } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-import { computed, ref } from "vue";
 
 const props = defineProps({
   seoSetting: Object,

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Managements\VendorManage;
+namespace App\Http\Controllers\Admin\UserManagements\VendorManage;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -20,7 +20,7 @@ class AdminInactiveVendorController extends Controller
                               ->paginate(request("per_page", 10))
                               ->appends(request()->all());
 
-        return inertia("Admin/Managements/VendorManage/InactiveVendors/Index", compact("inactiveVendors"));
+        return inertia("Admin/UserManagements/VendorManage/InactiveVendors/Index", compact("inactiveVendors"));
     }
 
     public function show(int $id): Response|ResponseFactory
@@ -29,7 +29,7 @@ class AdminInactiveVendorController extends Controller
 
         $inactiveVendor=User::find($id);
 
-        return inertia("Admin/Managements/VendorManage/InactiveVendors/Details", compact("inactiveVendor", "paginate"));
+        return inertia("Admin/UserManagements/VendorManage/InactiveVendors/Details", compact("inactiveVendor", "paginate"));
     }
 
     public function update(Request $request, int $id): RedirectResponse
@@ -60,7 +60,7 @@ class AdminInactiveVendorController extends Controller
                                    ->paginate(request("per_page", 10))
                                    ->appends(request()->all());
 
-        return inertia("Admin/Managements/VendorManage/InactiveVendors/Trash", compact("inactiveTrashVendors"));
+        return inertia("Admin/UserManagements/VendorManage/InactiveVendors/Trash", compact("inactiveTrashVendors"));
     }
 
     public function restore(Request $request, int $id): RedirectResponse

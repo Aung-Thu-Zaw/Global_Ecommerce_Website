@@ -100,8 +100,11 @@ class AdminBlogPostController extends Controller
         $blogPosts = BlogPost::onlyTrashed()->get();
 
         $blogPosts->each(function ($blogPost) {
+
             BlogPost::deleteImage($blogPost);
+
             $blogPost->forceDelete();
+
         });
 
         return to_route('admin.blogs.posts.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Posts have been successfully deleted.");

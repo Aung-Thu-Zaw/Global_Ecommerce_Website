@@ -91,7 +91,9 @@ class AdminRoleController extends Controller
         $roles = Role::onlyTrashed()->get();
 
         $roles->each(function ($role) {
+
             $role->forceDelete();
+
         });
 
         return to_route('admin.roles.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Roles have been successfully deleted.");

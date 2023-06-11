@@ -31,6 +31,13 @@ class AdminProductController extends Controller
         return inertia("Admin/Products/Index", compact("products"));
     }
 
+    public function show(Product $product): Response|ResponseFactory
+    {
+        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+
+        return inertia("Admin/Products/Details", compact("product", "paginate"));
+    }
+
     public function create(): Response|ResponseFactory
     {
         $per_page=request("per_page");
@@ -58,8 +65,6 @@ class AdminProductController extends Controller
 
         return to_route("admin.products.index", "per_page=$request->per_page")->with("success", "Product has been successfully created.");
     }
-
-
 
     public function edit(Product $product): Response|ResponseFactory
     {

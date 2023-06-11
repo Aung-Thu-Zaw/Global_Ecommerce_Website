@@ -35,7 +35,6 @@ class Collection extends Model
         return 'slug';
     }
 
-
     /**
     *     @return array<string>
     */

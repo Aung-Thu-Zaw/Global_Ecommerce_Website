@@ -97,8 +97,11 @@ class AdminCollectionController extends Controller
         $collections = Collection::onlyTrashed()->get();
 
         $collections->each(function ($collection) {
+
             Collection::deleteImage($collection);
+
             $collection->forceDelete();
+
         });
 
         return to_route('admin.collections.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Collections have been successfully deleted.");

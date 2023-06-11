@@ -23,7 +23,7 @@ class AdminCategoryController extends Controller
                             ->orderBy(request("sort", "id"), request("direction", "desc"))
                             ->paginate(request("per_page", 10))
                             ->appends(request()->all());
-                            
+
         return inertia("Admin/Categories/Index", compact("categories"));
     }
 
@@ -102,8 +102,11 @@ class AdminCategoryController extends Controller
         $categories = Category::onlyTrashed()->get();
 
         $categories->each(function ($category) {
+
             Category::deleteImage($category);
+
             $category->forceDelete();
+
         });
 
         return to_route('admin.categories.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Categories have been successfully deleted.");

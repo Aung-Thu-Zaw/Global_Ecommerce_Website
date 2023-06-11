@@ -98,8 +98,11 @@ class AdminBrandController extends Controller
         $brands = Brand::onlyTrashed()->get();
 
         $brands->each(function ($brand) {
+
             Brand::deleteImage($brand);
+
             $brand->forceDelete();
+
         });
 
         return to_route('admin.brands.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Brands have been successfully deleted.");

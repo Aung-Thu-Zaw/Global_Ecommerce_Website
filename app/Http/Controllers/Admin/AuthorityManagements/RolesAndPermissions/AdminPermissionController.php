@@ -91,7 +91,9 @@ class AdminPermissionController extends Controller
         $permissions = Permission::onlyTrashed()->get();
 
         $permissions->each(function ($permission) {
+
             $permission->forceDelete();
+
         });
 
         return to_route('admin.permissions.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Permissions have been successfully deleted.");

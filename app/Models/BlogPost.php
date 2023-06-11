@@ -22,7 +22,6 @@ class BlogPost extends Model
     use CascadeSoftDeletes;
     use HasSlug;
 
-
     /**
     * @var string[]
     */
@@ -32,8 +31,8 @@ class BlogPost extends Model
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('title')
-            ->saveSlugsTo('slug');
+                          ->generateSlugsFrom('title')
+                          ->saveSlugsTo('slug');
     }
 
     public function getRouteKeyName()
@@ -53,7 +52,6 @@ class BlogPost extends Model
         ];
     }
 
-
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogPost, never>
     */
@@ -63,7 +61,6 @@ class BlogPost extends Model
             set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/blog-posts/$value"),
         );
     }
-
 
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogPost, never>
@@ -108,7 +105,7 @@ class BlogPost extends Model
         }
     }
 
-        /**
+    /**
     * @param array<string> $filterBy
     * @param Builder<BlogPost> $query
     */
@@ -132,7 +129,5 @@ class BlogPost extends Model
                 $query->where("slug", $categorySlug);
             });
         });
-
-
     }
 }

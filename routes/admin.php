@@ -9,8 +9,8 @@ use App\Http\Controllers\Admin\AdminCouponController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\MultiImageController;
 use App\Http\Controllers\Admin\Banners\AdminProductBannerController;
-use App\Http\Controllers\Admin\Managements\VendorManage\AdminActiveVendorController;
-use App\Http\Controllers\Admin\Managements\VendorManage\AdminInactiveVendorController;
+use App\Http\Controllers\Admin\UserManagements\VendorManage\AdminActiveVendorController;
+use App\Http\Controllers\Admin\UserManagements\VendorManage\AdminInactiveVendorController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AuthorityManagements\AdminRoleInPermissionController;
 use App\Http\Controllers\Admin\SiteSettings\AdminSeoSettingController;
@@ -18,8 +18,8 @@ use App\Http\Controllers\Admin\SiteSettings\AdminWebsiteSettingController;
 use App\Http\Controllers\Admin\Banners\AdminSliderBannerController;
 use App\Http\Controllers\Admin\BlogManagements\AdminBlogCategoryController;
 use App\Http\Controllers\Admin\BlogManagements\AdminBlogPostController;
-use App\Http\Controllers\Admin\Managements\UserManage\AdminRegisterUserController;
-use App\Http\Controllers\Admin\Managements\UserManage\AdminRegisterVendorController;
+use App\Http\Controllers\Admin\UserManagements\UserManage\AdminRegisterUserController;
+use App\Http\Controllers\Admin\UserManagements\UserManage\AdminRegisterVendorController;
 use App\Http\Controllers\Admin\OrderManagements\CancelOrderManage\AdminApprovedCancelOrderController;
 use App\Http\Controllers\Admin\OrderManagements\CancelOrderManage\AdminRequestedCancelOrderController;
 use App\Http\Controllers\Admin\OrderManagements\OrderManage\AdminConfirmedOrderController;
@@ -36,7 +36,7 @@ use App\Http\Controllers\Admin\ShippingArea\AdminRegionController;
 use App\Http\Controllers\Admin\ShippingArea\AdminTownshipController;
 use App\Http\Controllers\Admin\AuthorityManagements\RolesAndPermissions\AdminRoleController;
 use App\Http\Controllers\Admin\AuthorityManagements\RolesAndPermissions\AdminPermissionController;
-use App\Http\Controllers\Admin\Managements\AdminManage\AdminManageController;
+use App\Http\Controllers\Admin\UserManagements\AdminManage\AdminManageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/admin/login", [AdminAuthController::class,"login"])->middleware("guest")->name("admin.login");
@@ -100,8 +100,8 @@ Route::middleware(["auth","verified","user.role:admin"])
                 ->prefix("/products")
                 ->name("products.")
                 ->group(function () {
-                    // Route::get("/", "show")->name("show");
                     Route::get("/", "index")->middleware('permission:product.menu')->name("index");
+                    Route::get("/details/{user}", "show")->middleware('permission:product.detail')->name("show");
                     Route::get("/create", "create")->middleware('permission:product.add')->name("create");
                     Route::post("/", "store")->middleware('permission:product.add')->name("store");
                     Route::get("/{product}/edit", "edit")->middleware('permission:product.edit')->name("edit");
@@ -386,21 +386,21 @@ Route::middleware(["auth","verified","user.role:admin"])
                 });
 
            Route::controller(AdminManageController::class)
-           ->prefix("/admin-manage")
-           ->name("admin-manage.")
-           ->group(function () {
-               Route::get("/", "index")->middleware('permission:admin-manage.menu')->name("index");
-               Route::get("/details/{user}", "show")->middleware('permission:admin-manage.detail')->name("show");
-               Route::get("/create", "create")->middleware('permission:admin-manage.add')->name("create");
-               Route::post("/", "store")->middleware('permission:admin-manage.add')->name("store");
-               Route::get("/{user}/edit", "edit")->middleware('permission:admin-manage.edit')->name("edit");
-               Route::post("/{user}", "update")->middleware('permission:admin-manage.edit')->name("update");
-               Route::delete("/{user}", "destroy")->middleware('permission:admin-manage.delete')->name("destroy");
-               Route::get("/trash", "trash")->middleware('permission:admin-manage.trash.list')->name("trash");
-               Route::post("/{id}/restore", "restore")->middleware('permission:admin-manage.trash.restore')->name("restore");
-               Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:admin-manage.trash.delete')->name("forceDelete");
-               Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:admin-manage.trash.delete')->name("permanentlyDelete");
-           });
+                ->prefix("/admin-manage")
+                ->name("admin-manage.")
+                ->group(function () {
+                    Route::get("/", "index")->middleware('permission:admin-manage.menu')->name("index");
+                    Route::get("/details/{user}", "show")->middleware('permission:admin-manage.detail')->name("show");
+                    Route::get("/create", "create")->middleware('permission:admin-manage.add')->name("create");
+                    Route::post("/", "store")->middleware('permission:admin-manage.add')->name("store");
+                    Route::get("/{user}/edit", "edit")->middleware('permission:admin-manage.edit')->name("edit");
+                    Route::post("/{user}", "update")->middleware('permission:admin-manage.edit')->name("update");
+                    Route::delete("/{user}", "destroy")->middleware('permission:admin-manage.delete')->name("destroy");
+                    Route::get("/trash", "trash")->middleware('permission:admin-manage.trash.list')->name("trash");
+                    Route::post("/{id}/restore", "restore")->middleware('permission:admin-manage.trash.restore')->name("restore");
+                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:admin-manage.trash.delete')->name("forceDelete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:admin-manage.trash.delete')->name("permanentlyDelete");
+                });
 
            Route::controller(AdminRoleController::class)
                 ->prefix("/roles-and-permissions/roles")

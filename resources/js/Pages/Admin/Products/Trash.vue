@@ -1,7 +1,5 @@
 <script setup>
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import ActiveStatus from "@/Components/Status/ActiveStatus.vue";
-import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -11,12 +9,9 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ProductBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, Head } from "@inertiajs/vue3";
-import { inject, reactive, watch } from "vue";
-import { router } from "@inertiajs/vue3";
-import { usePage } from "@inertiajs/vue3";
+import { Link, Head, router, usePage } from "@inertiajs/vue3";
+import { inject, reactive, watch, computed } from "vue";
 
-// Data From Controller
 const props = defineProps({
   trashProducts: Object,
 });
@@ -26,7 +21,22 @@ const handleSearchBox = () => {
   params.search = "";
 };
 
-// Handle Url Query Params
+const productTrashRestore = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "product.trash.restore"
+      )
+    : false;
+});
+
+const productTrashDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "product.trash.delete"
+      )
+    : false;
+});
+
 const params = reactive({
   search: null,
   page: props.trashProducts.current_page ? props.trashProducts.current_page : 1,
@@ -35,12 +45,11 @@ const params = reactive({
   direction: "desc",
 });
 
-// Watch Search Form
 watch(
   () => params.search,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/products/trash",
+      route("admin.products.trash"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -55,12 +64,11 @@ watch(
   }
 );
 
-// Watch Perpage Dropdown
 watch(
   () => params.per_page,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/products/trash",
+      route("admin.products.trash"),
       {
         search: params.search,
         page: params.page,
@@ -76,13 +84,12 @@ watch(
   }
 );
 
-// Handle Sorting With Column Arrow
 const updateSorting = (sort = "id") => {
   params.sort = sort;
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/products/trash",
+    route("admin.products.trash"),
     {
       search: params.search,
       page: params.page,
@@ -94,7 +101,6 @@ const updateSorting = (sort = "id") => {
   );
 };
 
-// Handle Product Restore
 const handleRestore = async (trashProductId) => {
   const result = await swal({
     icon: "info",
@@ -111,7 +117,7 @@ const handleRestore = async (trashProductId) => {
     router.post(
       route("admin.products.restore", {
         id: trashProductId,
-        page: props.trashProducts.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -124,7 +130,6 @@ const handleRestore = async (trashProductId) => {
   }
 };
 
-// Handle Product Delete
 const handleDelete = async (trashProductId) => {
   const result = await swal({
     icon: "warning",
@@ -142,7 +147,7 @@ const handleDelete = async (trashProductId) => {
     router.delete(
       route("admin.products.forceDelete", {
         id: trashProductId,
-        page: props.trashProducts.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -171,7 +176,7 @@ const handlePermanentlyDelete = async () => {
   if (result.isConfirmed) {
     router.get(
       route("admin.products.permanentlyDelete", {
-        page: props.trashProducts.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -191,7 +196,6 @@ const handlePermanentlyDelete = async () => {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
-        <!-- Breadcrumb  -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -216,7 +220,6 @@ const handlePermanentlyDelete = async () => {
           </li>
         </Breadcrumb>
 
-        <!-- Go Back Button -->
         <div>
           <Link
             :href="route('admin.products.index')"
@@ -229,7 +232,6 @@ const handlePermanentlyDelete = async () => {
       </div>
 
       <div class="flex items-center justify-end mb-5">
-        <!-- Search Form -->
         <form class="w-[350px] relative">
           <input
             type="text"
@@ -244,7 +246,6 @@ const handlePermanentlyDelete = async () => {
             @click="handleSearchBox"
           ></i>
         </form>
-        <!-- PerPage Dropdown -->
         <div class="ml-5">
           <select
             class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -261,8 +262,10 @@ const handlePermanentlyDelete = async () => {
         </div>
       </div>
 
-      <!-- Auto delete description and button  -->
-      <p class="text-left text-sm font-bold mb-2 text-warning-600">
+      <p
+        v-if="productTrashDelete"
+        class="text-left text-sm font-bold mb-2 text-warning-600"
+      >
         Products in the Trash will be automatically deleted after 60 days.
         <button
           @click="handlePermanentlyDelete"
@@ -272,9 +275,7 @@ const handlePermanentlyDelete = async () => {
         </button>
       </p>
 
-      <!-- Trash Product Table -->
       <TableContainer>
-        <!-- Table Header -->
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
@@ -403,31 +404,6 @@ const handlePermanentlyDelete = async () => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh @click="updateSorting('status')">
-            Status
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'status',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'status',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'status',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'status',
-              }"
-            ></i>
-          </HeaderTh>
           <HeaderTh @click="updateSorting('created_at')">
             Created At
             <i
@@ -453,10 +429,11 @@ const handlePermanentlyDelete = async () => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="productTrashRestore || productTrashDelete">
+            Action
+          </HeaderTh>
         </TableHeader>
 
-        <!-- Table Body  -->
         <tbody v-if="trashProducts.data.length">
           <Tr v-for="trashProduct in trashProducts.data" :key="trashProduct.id">
             <BodyTh>{{ trashProduct.id }}</BodyTh>
@@ -473,7 +450,7 @@ const handlePermanentlyDelete = async () => {
             <Td>
               <span
                 v-if="trashProduct.discount"
-                class="bg-green-200 text-green-600 py-1 px-3 rounded-md"
+                class="bg-green-200 text-green-600 py-1 px-3 rounded-full"
               >
                 {{
                   (
@@ -485,22 +462,16 @@ const handlePermanentlyDelete = async () => {
               </span>
               <span
                 v-if="!trashProduct.discount"
-                class="bg-blue-200 text-blue-600 py-1 px-3 rounded-md"
+                class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full"
               >
                 No Discount
               </span>
             </Td>
-            <Td>
-              <ActiveStatus v-if="trashProduct.status == 'active'">
-                {{ trashProduct.status }}
-              </ActiveStatus>
-              <InactiveStatus v-if="trashProduct.status == 'inactive'">
-                {{ trashProduct.status }}
-              </InactiveStatus>
-            </Td>
+
             <Td>{{ trashProduct.created_at }}</Td>
-            <Td>
+            <Td v-if="productTrashRestore || productTrashDelete">
               <button
+                v-if="productTrashRestore"
                 @click="handleRestore(trashProduct.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
@@ -508,6 +479,7 @@ const handlePermanentlyDelete = async () => {
                 Restore
               </button>
               <button
+                v-if="productTrashDelete"
                 @click="handleDelete(trashProduct.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
@@ -519,11 +491,9 @@ const handlePermanentlyDelete = async () => {
         </tbody>
       </TableContainer>
 
-      <!-- Not Avaliable Data -->
       <NotAvaliableData v-if="!trashProducts.data.length" />
 
-      <!-- Pagination -->
-      <pagination class="mt-6" :links="trashProducts.links" />
+      <Pagination class="mt-6" :links="trashProducts.links" />
     </div>
   </AdminDashboardLayout>
 </template>

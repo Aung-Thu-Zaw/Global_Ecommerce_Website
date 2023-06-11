@@ -12,27 +12,16 @@ class WebsiteSetting extends Model
 
     protected $guarded=[];
 
-
-
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<WebsiteSetting, never>
     */
     protected function logo(): Attribute
     {
         return Attribute::make(
-            set: function ($value) {
-                if ($value && str_starts_with($value, "http")) {
-                    return $value;
-                } elseif ($value) {
-                    return asset("storage/website-settings/$value");
-                } else {
-                    return null;
-                }
-            },
+            set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/website-settings/$value"),
             get:fn ($value) => $value ?? "https://media.istockphoto.com/id/1357365823/vector/default-image-icon-vector-missing-picture-page-for-website-design-or-mobile-app-no-photo.jpg?s=612x612&w=0&k=20&c=PM_optEhHBTZkuJQLlCjLz-v3zzxp-1mpNQZsdjrbns="
         );
     }
-
 
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<WebsiteSetting, never>
@@ -40,15 +29,7 @@ class WebsiteSetting extends Model
     protected function favicon(): Attribute
     {
         return Attribute::make(
-            set: function ($value) {
-                if ($value && str_starts_with($value, "http")) {
-                    return $value;
-                } elseif ($value) {
-                    return asset("storage/website-settings/$value");
-                } else {
-                    return null;
-                }
-            },
+            set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/website-settings/$value"),
             get:fn ($value) => $value ?? "https://media.istockphoto.com/id/1357365823/vector/default-image-icon-vector-missing-picture-page-for-website-design-or-mobile-app-no-photo.jpg?s=612x612&w=0&k=20&c=PM_optEhHBTZkuJQLlCjLz-v3zzxp-1mpNQZsdjrbns="
         );
     }

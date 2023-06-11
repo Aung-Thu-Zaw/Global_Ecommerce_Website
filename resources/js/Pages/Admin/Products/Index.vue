@@ -1,7 +1,5 @@
 <script setup>
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import ActiveStatus from "@/Components/Status/ActiveStatus.vue";
-import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -11,12 +9,9 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ProductBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, Head } from "@inertiajs/vue3";
-import { reactive, watch, inject } from "vue";
-import { router } from "@inertiajs/vue3";
-import { usePage } from "@inertiajs/vue3";
+import { Link, Head, router, usePage } from "@inertiajs/vue3";
+import { reactive, watch, inject, computed } from "vue";
 
-// Data From Controller
 const props = defineProps({
   products: Object,
 });
@@ -27,7 +22,46 @@ const handleSearchBox = () => {
   params.search = "";
 };
 
-// Handle Url Query Params
+const productAdd = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "product.add"
+      )
+    : false;
+});
+
+const productDetail = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "product.detail"
+      )
+    : false;
+});
+
+const productEdit = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "product.edit"
+      )
+    : false;
+});
+
+const productDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "product.delete"
+      )
+    : false;
+});
+
+const productTrashList = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "product.trash.list"
+      )
+    : false;
+});
+
 const params = reactive({
   search: null,
   page: props.products.current_page ? props.products.current_page : 1,
@@ -36,12 +70,11 @@ const params = reactive({
   direction: "desc",
 });
 
-// Watch Search Form
 watch(
   () => params.search,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/products",
+      route("admin.products.index"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -56,12 +89,11 @@ watch(
   }
 );
 
-// Watch Perpage Dropdown
 watch(
   () => params.per_page,
-  (current, previous) => {
+  () => {
     router.get(
-      "/admin/products",
+      route("admin.products.index"),
       {
         search: params.search,
         page: params.page,
@@ -77,13 +109,12 @@ watch(
   }
 );
 
-// Handle Sorting With Column Arrow
 const updateSorting = (sort = "id") => {
   params.sort = sort;
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/products",
+    route("admin.products.index"),
     {
       search: params.search,
       page: params.page,
@@ -95,7 +126,6 @@ const updateSorting = (sort = "id") => {
   );
 };
 
-// Handle Product Delete
 const handleDelete = async (productSlug) => {
   const result = await swal({
     icon: "warning",
@@ -113,7 +143,7 @@ const handleDelete = async (productSlug) => {
     router.delete(
       route("admin.products.destroy", {
         product: productSlug,
-        page: props.products.current_page,
+        page: params.page,
         per_page: params.per_page,
       })
     );
@@ -126,7 +156,6 @@ const handleDelete = async (productSlug) => {
   }
 };
 
-// Successful Message
 if (usePage().props.flash.successMessage) {
   swal({
     icon: "success",
@@ -142,11 +171,9 @@ if (usePage().props.flash.successMessage) {
     <Head title="Products" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
-        <!-- Breadcrumb  -->
         <Breadcrumb />
 
-        <!-- Trash Button -->
-        <div>
+        <div v-if="productTrashList">
           <Link
             as="button"
             :href="route('admin.products.trash')"
@@ -160,8 +187,8 @@ if (usePage().props.flash.successMessage) {
       </div>
 
       <div class="mb-5 flex items-center justify-between">
-        <!-- Add Proudct Button -->
         <Link
+          v-if="productAdd"
           as="button"
           :href="route('admin.products.create')"
           :data="{
@@ -172,7 +199,6 @@ if (usePage().props.flash.successMessage) {
           <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
           Add Product</Link
         >
-        <!-- Search Form -->
         <div class="flex items-center">
           <form class="w-[350px] relative">
             <input
@@ -189,7 +215,6 @@ if (usePage().props.flash.successMessage) {
             ></i>
           </form>
 
-          <!-- PerPage Dropdown  -->
           <div class="ml-5">
             <select
               class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -207,9 +232,7 @@ if (usePage().props.flash.successMessage) {
         </div>
       </div>
 
-      <!-- Product Table -->
       <TableContainer>
-        <!-- Table Header  -->
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
@@ -313,31 +336,7 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh @click="updateSorting('status')">
-            Status
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'status',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'status',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'status',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'status',
-              }"
-            ></i>
-          </HeaderTh>
+
           <HeaderTh @click="updateSorting('created_at')">
             Created At
             <i
@@ -363,10 +362,11 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh v-if="productEdit || productDelete || productDetail">
+            Action
+          </HeaderTh>
         </TableHeader>
 
-        <!-- Table Body -->
         <tbody v-if="products.data.length">
           <Tr v-for="product in products.data" :key="product.id">
             <BodyTh>{{ product.id }}</BodyTh>
@@ -382,7 +382,7 @@ if (usePage().props.flash.successMessage) {
             <Td>
               <span
                 v-if="product.discount"
-                class="bg-green-200 text-green-600 py-1 px-3 rounded-md"
+                class="bg-green-200 text-green-600 py-1 px-3 rounded-full"
               >
                 {{
                   (
@@ -393,26 +393,19 @@ if (usePage().props.flash.successMessage) {
               </span>
               <span
                 v-if="!product.discount"
-                class="bg-blue-200 text-blue-600 py-1 px-3 rounded-md"
+                class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full"
               >
                 No Discount
               </span>
             </Td>
-            <Td>
-              <ActiveStatus v-if="product.status == 'active'">
-                {{ product.status }}
-              </ActiveStatus>
-              <InactiveStatus v-if="product.status == 'inactive'">
-                {{ product.status }}
-              </InactiveStatus>
-            </Td>
             <Td>{{ product.created_at }}</Td>
-            <Td>
+            <Td v-if="productEdit || productDelete || productDetail">
               <Link
+                v-if="productEdit"
                 as="button"
                 :href="route('admin.products.edit', product.slug)"
                 :data="{
-                  page: props.products.current_page,
+                  page: params.page,
                   per_page: params.per_page,
                 }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
@@ -421,40 +414,34 @@ if (usePage().props.flash.successMessage) {
                 Edit
               </Link>
               <button
+                v-if="productDelete"
                 @click="handleDelete(product.slug)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>
                 Delete
               </button>
-              <!-- <Link
+              <Link
+                v-if="productDetail"
                 as="button"
                 :href="route('admin.products.show', product.slug)"
                 :data="{
-                  page: props.products.current_page,
+                  page: params.page,
                   per_page: params.per_page,
                 }"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-emerald-600 text-white hover:bg-emerald-700 my-1"
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
               >
                 <i class="fa-solid fa-eye"></i>
                 Details
-              </Link> -->
-              <button
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1 mr-3"
-              >
-                <i class="fa-solid fa-eye"></i>
-                Details
-              </button>
+              </Link>
             </Td>
           </Tr>
         </tbody>
       </TableContainer>
 
-      <!-- Not Avaliable Data -->
       <NotAvaliableData v-if="!products.data.length" />
 
-      <!-- Pagination -->
-      <pagination class="mt-6" :links="products.links" />
+      <Pagination class="mt-6" :links="products.links" />
     </div>
   </AdminDashboardLayout>
 </template>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Managements\AdminManage;
+namespace App\Http\Controllers\Admin\UserManagements\AdminManage;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminManageRequest;
@@ -27,7 +27,7 @@ class AdminManageController extends Controller
                     ->paginate(request("per_page", 10))
                     ->appends(request()->all());
 
-        return inertia("Admin/Managements/AdminManage/Index", compact("admins"));
+        return inertia("Admin/UserManagements/AdminManage/Index", compact("admins"));
     }
 
     public function show(User $user): Response|ResponseFactory
@@ -36,7 +36,7 @@ class AdminManageController extends Controller
 
         $user->load("roles");
 
-        return inertia("Admin/Managements/AdminManage/Details", compact("user", "paginate"));
+        return inertia("Admin/UserManagements/AdminManage/Details", compact("user", "paginate"));
     }
 
     public function create(): Response|ResponseFactory
@@ -45,7 +45,7 @@ class AdminManageController extends Controller
 
         $roles=Role::all();
 
-        return inertia("Admin/Managements/AdminManage/Create", compact("per_page", "roles"));
+        return inertia("Admin/UserManagements/AdminManage/Create", compact("per_page", "roles"));
     }
 
     public function store(AdminManageRequest $request, AdminUserAvatarUploadService $adminUserAvatarUploadService): RedirectResponse
@@ -69,7 +69,7 @@ class AdminManageController extends Controller
 
         $user->load("roles");
 
-        return inertia("Admin/Managements/AdminManage/Edit", compact("user", "roles", "paginate"));
+        return inertia("Admin/UserManagements/AdminManage/Edit", compact("user", "roles", "paginate"));
     }
 
     public function update(AdminManageRequest $request, User $user, AdminUserAvatarUploadService $adminUserAvatarUploadService): RedirectResponse
@@ -109,7 +109,7 @@ class AdminManageController extends Controller
                          ->paginate(request("per_page", 10))
                          ->appends(request()->all());
 
-        return inertia("Admin/Managements/AdminManage/Trash", compact("trashAdmins"));
+        return inertia("Admin/UserManagements/AdminManage/Trash", compact("trashAdmins"));
     }
 
     public function restore(Request $request, int $id): RedirectResponse

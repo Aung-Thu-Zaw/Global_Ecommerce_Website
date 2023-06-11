@@ -18,7 +18,6 @@ class BlogCategory extends Model
     use SoftDeletes;
     use HasSlug;
 
-
     /**
     * @var string[]
     */
@@ -27,8 +26,8 @@ class BlogCategory extends Model
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('name')
-            ->saveSlugsTo('slug');
+                          ->generateSlugsFrom('name')
+                          ->saveSlugsTo('slug');
     }
 
     public function getRouteKeyName()
@@ -45,7 +44,6 @@ class BlogCategory extends Model
             'name' => $this->name,
         ];
     }
-
 
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogCategory, never>
@@ -66,7 +64,6 @@ class BlogCategory extends Model
         );
     }
 
-
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogCategory, never>
     */
@@ -77,7 +74,7 @@ class BlogCategory extends Model
         );
     }
 
-        /**
+    /**
     * @return \Illuminate\Database\Eloquent\Relations\HasMany<BlogPost>
     */
     public function blogPosts(): HasMany
@@ -85,7 +82,7 @@ class BlogCategory extends Model
         return $this->hasMany(BlogPost::class);
     }
 
-        /**
+    /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogCategory, never>
     */
     protected function deletedAt(): Attribute
@@ -94,7 +91,6 @@ class BlogCategory extends Model
             get: fn ($value) => date("j-F-Y", strtotime($value)),
         );
     }
-
 
     public static function deleteImage(BlogCategory $blogCategory): void
     {

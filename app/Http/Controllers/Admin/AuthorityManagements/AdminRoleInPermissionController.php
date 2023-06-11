@@ -44,10 +44,14 @@ class AdminRoleInPermissionController extends Controller
     public function store(RoleInPermissionRequest $request): RedirectResponse
     {
         foreach($request->permission_id as $key => $value) {
+
             DB::table('role_has_permissions')->insert([
+
                 "role_id"=>$request->role_id,
                 "permission_id"=>$value
+
             ]);
+
         }
 
         return to_route("admin.role-in-permissions.index", "per_page=$request->per_page")->with("success", "Role in permissions has been successfully created.");

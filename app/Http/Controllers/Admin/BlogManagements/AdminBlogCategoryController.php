@@ -94,8 +94,11 @@ class AdminBlogCategoryController extends Controller
         $blogCategories = BlogCategory::onlyTrashed()->get();
 
         $blogCategories->each(function ($blogCategory) {
+
             BlogCategory::deleteImage($blogCategory);
+
             $blogCategory->forceDelete();
+
         });
 
         return to_route('admin.blogs.categories.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Blog categories have been successfully deleted.");
