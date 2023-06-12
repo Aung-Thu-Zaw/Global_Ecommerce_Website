@@ -60,7 +60,7 @@ if (usePage().props.flash.successMessage) {
       :percentageChangeForSales="percentageChangeForSales"
     />
     <div class="px-4 md:px-10 mx-auto w-full -m-24">
-      <div class="relative z-10">
+      <div class="relative z-1">
         <div class="flex flex-wrap">
           <div class="w-full xl:w-6/12 mb-12 xl:mb-0 px-4">
             <MonthlyRegisterUserCardLineChart

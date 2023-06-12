@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Mail\OrderPlacedMail;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\User;
+use App\Notifications\OrderPlacedNotification;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -87,8 +89,17 @@ class StripeController extends Controller
 
         $placedOrder=Order::with(["deliveryInformation","orderItems.product.shop"])->where("id", $order->id)->first();
 
+        $admins=User::where("role", "admin")->get();
 
-        Mail::to($placedOrder->deliveryInformation->email)->send(new OrderPlacedMail($placedOrder));
+
+        $admins->each(function ($admin) use ($order) {
+
+            $admin->notify(new OrderPlacedNotification($order));
+        });
+
+
+
+        // Mail::to($placedOrder->deliveryInformation->email)->send(new OrderPlacedMail($placedOrder));
 
         if (session("coupon")) {
             session()->forget("coupon");

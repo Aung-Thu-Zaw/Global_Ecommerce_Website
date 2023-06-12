@@ -39,7 +39,7 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'recaptcha_site_key' => config('services.google_recaptcha.site_key'),
             'auth' => [
-                'user' => User::with(["cart","permissions"])->where("id", $request->user()->id ?? null)->first(),
+                'user' => User::with(["cart","permissions","notifications"])->where("id", $request->user()->id ?? null)->first(),
             ],
             'parentCategory'=>Category::with("children")->whereNull("parent_id")->get(),
             'vendors'=>User::where([["role","vendor"],["status","active"]])->limit(30)->get(),
