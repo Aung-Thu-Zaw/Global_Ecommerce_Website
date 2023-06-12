@@ -27,6 +27,12 @@ class AdminPendingOrderController extends Controller
 
     public function show(int $id): Response|ResponseFactory
     {
+        if(request()->noti_id) {
+            $notification=auth()->user()->notifications()->where("id", request()->noti_id)->first();
+
+            $notification->update(['read_at' => now()]);
+        }
+
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
         $pendingOrderDetail=Order::findOrFail($id);

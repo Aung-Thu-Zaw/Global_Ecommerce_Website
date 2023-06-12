@@ -2,29 +2,36 @@
 import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
 import { Link, usePage } from "@inertiajs/vue3";
 import { computed, onMounted, ref, watch } from "vue";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import "dayjs/locale/en";
+
+dayjs.extend(relativeTime);
+dayjs.locale("en");
 
 const notifications = ref([]);
+
+const totalUnreadNotification = computed(() =>
+  notifications.value.filter((notification) => !notification.read_at)
+);
 
 onMounted(() => {
   notifications.value = usePage().props.auth.user.notifications;
 
   Echo.private(`App.Models.User.${usePage().props.auth.user.id}`).notification(
     (notification) => {
-      formatedNotifications.value.push(notification);
+      notifications.value.push({
+        id: notification.id,
+        type: notification.type,
+        data: {
+          message: notification.message,
+          order_id: notification.order_id,
+          order_no: notification.order_no,
+        },
+      });
     }
   );
 });
-
-const formatedNotifications = ref([]);
-
-watch(
-  () => notifications.value,
-  () => {
-    formatedNotifications.value = notifications.value.map(
-      (notification) => notification.data
-    );
-  }
-);
 </script>
 
 <template>
@@ -68,14 +75,14 @@ watch(
         >
           <i
             class="fa-solid fa-bell"
-            :class="{ 'ml-5': formatedNotifications.length }"
+            :class="{ 'ml-5': totalUnreadNotification.length }"
           ></i>
           <span
-            v-if="formatedNotifications.length !== 0"
+            v-if="totalUnreadNotification.length !== 0"
             class="relative -top-4 -right-0 flex items-center justify-center bg-red-600 rounded-full h-5 w-5 p-2"
           >
             <span class="text-[.7rem] font-bold text-white">
-              {{ formatedNotifications.length }}
+              {{ totalUnreadNotification.length }}
             </span>
           </span>
         </button>
@@ -92,17 +99,19 @@ watch(
             Notifications
           </div>
           <div
-            v-for="(notification, index) in formatedNotifications"
-            :key="index"
-            class="divide-y divide-gray-100 dark:divide-gray-700"
+            v-for="notification in notifications"
+            :key="notification.id"
+            class="divide-y divide-gray-300 dark:divide-gray-700"
           >
             <Link
               :href="
                 route('admin.orders.pending.show', {
-                  id: notification.order_id,
+                  id: notification.data.order_id,
+                  noti_id: notification.id,
                 })
               "
               class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
+              :class="{ 'bg-gray-50': notification.read_at }"
             >
               <div
                 class="flex-shrink-0 bg-blue-300 text-blue-700 ring-2 ring-blue-400 w-10 h-10 rounded-full flex items-center justify-center p-3 font-bold"
@@ -110,24 +119,46 @@ watch(
                 <i class="fa-solid fa-cart-plus"></i>
               </div>
               <div class="w-full pl-3">
-                <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400">
-                  {{ notification.message }}
+                <div
+                  class="text-sm mb-1.5"
+                  :class="{
+                    'text-gray-600': !notification.read_at,
+                    'text-gray-500': notification.read_at,
+                  }"
+                >
+                  {{ notification.data.message }}
 
-                  <span class="font-bold text-blue-600 text-sm"
-                    >Order No : {{ notification.order_no }}</span
+                  <span
+                    class="font-bold text-sm"
+                    :class="{
+                      'text-slate-600': !notification.read_at,
+                      'text-gray-500': notification.read_at,
+                    }"
+                    >Order No : {{ notification.data.order_no }}</span
                   >
                 </div>
-                <div class="text-xs text-blue-600 dark:text-blue-500">
-                  <!-- {{ notification.created_at }} -->2323232
+                <div
+                  class="text-xs font-bold dark:text-blue-500"
+                  :class="{
+                    'text-blue-500': !notification.read_at,
+                    'text-gray-500': notification.read_at,
+                  }"
+                >
+                  <i
+                    v-if="!notification.read_at"
+                    class="fa-solid fa-circle animate-pulse text-[.6rem]"
+                  ></i>
+                  {{
+                    notification.created_at
+                      ? dayjs(notification.created_at).fromNow()
+                      : ""
+                  }}
                 </div>
               </div>
             </Link>
           </div>
 
-          <div
-            class="w-full text-center py-3"
-            v-if="!formatedNotifications.length"
-          >
+          <div class="w-full text-center py-3" v-if="!notifications.length">
             <span class="text-sm text-slate-500 font-bold">
               <i class="fa-solid fa-bell" />
               There is no notifications
