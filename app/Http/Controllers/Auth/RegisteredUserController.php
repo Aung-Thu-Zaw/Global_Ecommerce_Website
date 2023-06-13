@@ -37,10 +37,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-
-        $admins=User::where("role", "admin")->get();
-        Notification::send($admins, new RegisteredUserNotification($user));
-
         return to_route(User::find(auth()->id())->getRedirectRouteName())->with("success", "Account is created successfully");
     }
 }
