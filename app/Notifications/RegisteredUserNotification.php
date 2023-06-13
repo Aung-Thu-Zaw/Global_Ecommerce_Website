@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Models\Order;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -10,7 +10,7 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class OrderPlacedNotification extends Notification implements ShouldBroadcast
+class RegisteredUserNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;
 
@@ -19,8 +19,7 @@ class OrderPlacedNotification extends Notification implements ShouldBroadcast
      *
      * @return void
      */
-
-    public function __construct(protected Order $order)
+    public function __construct(protected User $user)
     {
         //
     }
@@ -50,7 +49,7 @@ class OrderPlacedNotification extends Notification implements ShouldBroadcast
                     ->line('Thank you for using our application!');
     }
 
-    /**
+     /**
      * Get the array representation of the notification.
      *
      * @param  mixed  $notifiable
@@ -59,9 +58,8 @@ class OrderPlacedNotification extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-            "message" => "New Order Placed From Customer.",
-            "order_id"=>$this->order->id,
-            "order_no"=>$this->order->order_no
+            "message" => "New User Registered.",
+            // "user"=>$this->user,
         ];
     }
 
@@ -75,11 +73,8 @@ class OrderPlacedNotification extends Notification implements ShouldBroadcast
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" => "New Order Placed From Customer.",
-            "order_id"=>$this->order->id,
-            "order_no"=>$this->order->order_no
+            "message" => "New User Registered.",
+            // "user"=>$this->user,
         ]);
     }
-
-
 }

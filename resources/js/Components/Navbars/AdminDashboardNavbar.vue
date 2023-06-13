@@ -20,6 +20,8 @@ onMounted(() => {
 
   Echo.private(`App.Models.User.${usePage().props.auth.user.id}`).notification(
     (notification) => {
+      console.log(notification);
+      console.log("hello");
       notifications.value.push({
         id: notification.id,
         type: notification.type,
@@ -47,6 +49,8 @@ onMounted(() => {
       >
         Admin Dashboard
       </Link>
+
+      {{ notifications }}
 
       <form
         class="md:flex hidden flex-row flex-wrap items-center lg:ml-auto mr-3"
@@ -98,7 +102,10 @@ onMounted(() => {
           >
             Notifications
           </div>
-          <div
+
+          {{ notifications }}
+
+          <!-- <div
             v-for="notification in notifications"
             :key="notification.id"
             class="divide-y divide-gray-300 dark:divide-gray-700"
@@ -156,7 +163,7 @@ onMounted(() => {
                 </div>
               </div>
             </Link>
-          </div>
+          </div> -->
 
           <div class="w-full text-center py-3" v-if="!notifications.length">
             <span class="text-sm text-slate-500 font-bold">

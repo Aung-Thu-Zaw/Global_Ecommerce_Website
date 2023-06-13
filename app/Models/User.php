@@ -203,12 +203,6 @@ class User extends Authenticatable implements MustVerifyEmail
         }
     }
 
-    /**
-* Send the queued email verification notification.
-*
-* @param  string  $token
-* @return void
-*/
     public function sendEmailVerificationNotification()
     {
         $this->notify(new VerifyEmailQueued());

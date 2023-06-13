@@ -4,7 +4,6 @@ namespace App\Actions;
 
 use App\Models\User;
 use Laravolt\Avatar\Avatar;
-use Illuminate\Auth\Events\Registered;
 
 class CreateUserAction
 {
@@ -40,8 +39,6 @@ class CreateUserAction
         $avatar=new Avatar();
 
         $avatar->create($user->name)->setBackground($colors[$randomColor])->setBorder(0, "background")->save(storage_path("app/public/avatars/default-avatar-$user->id.png"));
-
-        event(new Registered($user));
 
         return $user;
     }

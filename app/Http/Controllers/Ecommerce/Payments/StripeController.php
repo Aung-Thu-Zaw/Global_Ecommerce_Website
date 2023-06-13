@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Stripe\Charge;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
@@ -89,13 +90,9 @@ class StripeController extends Controller
 
         $placedOrder=Order::with(["deliveryInformation","orderItems.product.shop"])->where("id", $order->id)->first();
 
+
         $admins=User::where("role", "admin")->get();
-
-
-        $admins->each(function ($admin) use ($order) {
-
-            $admin->notify(new OrderPlacedNotification($order));
-        });
+        Notification::send($admins, new OrderPlacedNotification($order));
 
 
 
