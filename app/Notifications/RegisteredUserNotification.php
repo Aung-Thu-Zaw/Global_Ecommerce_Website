@@ -59,7 +59,8 @@ class RegisteredUserNotification extends Notification implements ShouldBroadcast
     {
         return [
             "message" => "New User Registered.",
-            // "user"=>$this->user,
+            "user_id"=>$this->user->id,
+            "user_email"=>$this->user->email,
         ];
     }
 
@@ -74,7 +75,8 @@ class RegisteredUserNotification extends Notification implements ShouldBroadcast
     {
         return new BroadcastMessage([
             "message" => "New User Registered.",
-            // "user"=>$this->user,
+            "user_id"=>$this->user->id,
+            "user_email"=>$this->user->email,
         ]);
     }
 }
