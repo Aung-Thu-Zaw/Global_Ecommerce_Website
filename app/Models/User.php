@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\VerifyEmailQueued;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -200,6 +201,17 @@ class User extends Authenticatable implements MustVerifyEmail
         if (!empty($user->avatar) && file_exists(storage_path("app/public/avatars/".pathinfo($user->avatar, PATHINFO_BASENAME)))) {
             unlink(storage_path("app/public/avatars/".pathinfo($user->avatar, PATHINFO_BASENAME)));
         }
+    }
+
+    /**
+* Send the queued email verification notification.
+*
+* @param  string  $token
+* @return void
+*/
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new VerifyEmailQueued());
     }
 
 }
