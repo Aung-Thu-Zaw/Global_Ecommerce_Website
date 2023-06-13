@@ -58,9 +58,8 @@ class RegisteredUserNotification extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-            "message" => "New User Registered.",
-            "user_id"=>$this->user->id,
-            "user_email"=>$this->user->email,
+            "message" =>$this->user->role==='vendor' ? "New Vendor Registered." : "New User Registered.",
+            "user"=>$this->user
         ];
     }
 
@@ -74,9 +73,8 @@ class RegisteredUserNotification extends Notification implements ShouldBroadcast
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" => "New User Registered.",
-            "user_id"=>$this->user->id,
-            "user_email"=>$this->user->email,
+            "message" =>$this->user->role==='vendor' ? "New Vendor Registered." : "New User Registered.",
+            "user"=>$this->user
         ]);
     }
 }

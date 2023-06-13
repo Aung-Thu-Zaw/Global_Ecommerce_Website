@@ -1,13 +1,10 @@
 <script setup>
 import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
+import RegisteredVendorNotificationCard from "@/Components/Cards/RegisteredVendorNotificationCard.vue";
+import RegisteredUserNotificationCard from "@/Components/Cards/RegisteredUserNotificationCard.vue";
+import OrderPlacedNotificationCard from "@/Components/Cards/OrderPlacedNotificationCard.vue";
 import { Link, usePage } from "@inertiajs/vue3";
-import { computed, onMounted, ref, watch } from "vue";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import "dayjs/locale/en";
-
-dayjs.extend(relativeTime);
-dayjs.locale("en");
+import { computed, onMounted, ref } from "vue";
 
 const notifications = ref([]);
 
@@ -20,15 +17,28 @@ onMounted(() => {
 
   Echo.private(`App.Models.User.${usePage().props.auth.user.id}`).notification(
     (notification) => {
-      notifications.value.push({
-        id: notification.id,
-        type: notification.type,
-        data: {
-          message: notification.message,
-          order_id: notification.order_id,
-          order_no: notification.order_no,
-        },
-      });
+      if (notification.type === "App\\Notifications\\OrderPlacedNotification") {
+        notifications.value.push({
+          id: notification.id,
+          type: notification.type,
+          data: {
+            message: notification.message,
+            order_id: notification.order_id,
+            order_no: notification.order_no,
+          },
+        });
+      } else if (
+        notification.type === "App\\Notifications\\RegisteredUserNotification"
+      ) {
+        notifications.value.push({
+          id: notification.id,
+          type: notification.type,
+          data: {
+            message: notification.message,
+            user: notification.user,
+          },
+        });
+      }
     }
   );
 });
@@ -104,127 +114,15 @@ onMounted(() => {
             :key="notification.id"
             class="divide-y divide-gray-300 dark:divide-gray-700"
           >
-            <Link
-              v-if="
-                notification.type ===
-                'App\\Notifications\\OrderPlacedNotification'
-              "
-              :href="
-                route('admin.orders.pending.show', {
-                  id: notification.data.order_id,
-                  noti_id: notification.id,
-                })
-              "
-              class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
-              :class="{ 'bg-gray-50': notification.read_at }"
-            >
-              <div
-                class="flex-shrink-0 bg-blue-300 text-blue-700 ring-2 ring-blue-400 w-10 h-10 rounded-full flex items-center justify-center p-3 font-bold"
-              >
-                <i class="fa-solid fa-cart-plus"></i>
-              </div>
-              <div class="w-full pl-3">
-                <div
-                  class="text-sm mb-1.5"
-                  :class="{
-                    'text-gray-600': !notification.read_at,
-                    'text-gray-500': notification.read_at,
-                  }"
-                >
-                  {{ notification.data.message }}
-
-                  <span
-                    class="font-bold text-sm"
-                    :class="{
-                      'text-slate-600': !notification.read_at,
-                      'text-gray-500': notification.read_at,
-                    }"
-                    >Order No : {{ notification.data.order_no }}</span
-                  >
-                </div>
-                <div
-                  class="text-xs font-bold dark:text-blue-500"
-                  :class="{
-                    'text-blue-500': !notification.read_at,
-                    'text-gray-500': notification.read_at,
-                  }"
-                >
-                  <i
-                    v-if="!notification.read_at"
-                    class="fa-solid fa-circle animate-pulse text-[.6rem]"
-                  ></i>
-                  {{
-                    notification.created_at
-                      ? dayjs(notification.created_at).fromNow()
-                      : ""
-                  }}
-                </div>
-              </div>
-            </Link>
-
-            <Link
-              v-else-if="
-                notification.type ===
-                'App\\Notifications\\RegisteredUserNotification'
-              "
-              :href="
-                route('admin.users.register.show', {
-                  user: notification.data.user_id,
-                  noti_id: notification.id,
-                })
-              "
-              class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
-              :class="{ 'bg-gray-50': notification.read_at }"
-            >
-              <div
-                class="flex-shrink-0 bg-yellow-300 text-yellow-700 ring-2 ring-yellow-400 w-10 h-10 rounded-full flex items-center justify-center p-3 font-bold"
-              >
-                <i class="fa-solid fa-user"></i>
-              </div>
-              <div class="w-full pl-3">
-                <div
-                  class="text-sm mb-1.5"
-                  :class="{
-                    'text-gray-600': !notification.read_at,
-                    'text-gray-500': notification.read_at,
-                  }"
-                >
-                  {{ notification.data.message }}
-
-                  <span
-                    class="font-bold text-sm"
-                    :class="{
-                      'text-slate-600': !notification.read_at,
-                      'text-gray-500': notification.read_at,
-                    }"
-                    >User Email : {{ notification.data.user_email }}</span
-                  >
-                </div>
-                <div
-                  class="text-xs font-bold dark:text-blue-500"
-                  :class="{
-                    'text-yellow-500': !notification.read_at,
-                    'text-gray-500': notification.read_at,
-                  }"
-                >
-                  <i
-                    v-if="!notification.read_at"
-                    class="fa-solid fa-circle animate-pulse text-[.6rem]"
-                  ></i>
-                  {{
-                    notification.created_at
-                      ? dayjs(notification.created_at).fromNow()
-                      : ""
-                  }}
-                </div>
-              </div>
-            </Link>
+            <RegisteredVendorNotificationCard :notification="notification" />
+            <RegisteredUserNotificationCard :notification="notification" />
+            <OrderPlacedNotificationCard :notification="notification" />
           </div>
 
           <div class="w-full text-center py-3" v-if="!notifications.length">
             <span class="text-sm text-slate-500 font-bold">
               <i class="fa-solid fa-bell" />
-              There is no notifications
+              There are no notifications
             </span>
           </div>
         </div>
