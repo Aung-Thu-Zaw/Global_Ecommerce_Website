@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Registered;
 
 use App\Models\User;
 use Illuminate\Bus\Queueable;
@@ -33,20 +33,6 @@ class RegisteredUserNotification extends Notification implements ShouldBroadcast
     public function via($notifiable)
     {
         return ['database', 'broadcast'];
-    }
-
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
-    {
-        return (new MailMessage())
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
     }
 
      /**

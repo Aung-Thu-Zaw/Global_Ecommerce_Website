@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Listeners\Registered;
 
 use App\Models\User;
-use App\Notifications\RegisteredUserNotification;
+use App\Notifications\Registered\RegisteredUserEmailNotification;
+use App\Notifications\Registered\RegisteredVendorEmailNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Notification;
 
-class SendNewUserRegisteredNotificationForAdminDashboard
+class SendNewUserRegisteredEmailNotificationForAdmin implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -29,6 +30,11 @@ class SendNewUserRegisteredNotificationForAdminDashboard
     public function handle($event)
     {
         $admins=User::where("role", "admin")->get();
-        Notification::send($admins, new RegisteredUserNotification($event->user));
+
+        $event->user->role==="vendor" ?
+            Notification::send($admins, new RegisteredVendorEmailNotification($event->user)) :
+            Notification::send($admins, new RegisteredUserEmailNotification($event->user));
+
+
     }
 }

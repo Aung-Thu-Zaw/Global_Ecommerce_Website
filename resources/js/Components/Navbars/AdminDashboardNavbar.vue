@@ -28,7 +28,8 @@ onMounted(() => {
           },
         });
       } else if (
-        notification.type === "App\\Notifications\\RegisteredUserNotification"
+        notification.type ===
+        "App\\Notifications\\Registered\\RegisteredUserNotification"
       ) {
         notifications.value.push({
           id: notification.id,

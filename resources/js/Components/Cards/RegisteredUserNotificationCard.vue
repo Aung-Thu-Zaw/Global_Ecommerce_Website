@@ -15,7 +15,8 @@ defineProps({
 <template>
   <Link
     v-if="
-      notification.type === 'App\\Notifications\\RegisteredUserNotification' &&
+      notification.type ===
+        'App\\Notifications\\Registered\\RegisteredUserNotification' &&
       notification.data.user &&
       notification.data.user.role === 'user'
     "
