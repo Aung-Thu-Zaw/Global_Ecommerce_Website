@@ -92,8 +92,8 @@
                         Best regards,
 
                     </p>
-                    <p class="text-sm font-bold text-slate-600">
-                        <a href="#" class="text-blue-600 underline">Global Ecommerce</a>
+                    <p class="text-sm font-bold text-blue-600">
+                        Global E-commerce
                     </p>
                 </div>
 
