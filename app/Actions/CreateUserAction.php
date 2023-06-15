@@ -50,7 +50,7 @@ class CreateUserAction
 
         $avatar=new Avatar();
 
-        $avatar->create($user->name)->setBackground($colors[$randomColor])->setBorder(0, "background")->save(storage_path("app/public/avatars/default-avatar-$user->id.png"));
+        $avatar->create($user["name"])->setBackground($colors[$randomColor])->setBorder(0, "background")->save(storage_path("app/public/avatars/default-avatar-$user->id.png"));
 
         return $user;
     }

@@ -46,7 +46,7 @@ if (usePage().props.flash.successMessage) {
 
 <template>
   <GuestLayout>
-    <Head title="Vendor Dashboard Login" />
+    <Head title="Seller Dashboard Login" />
 
     <FormContainer>
       <div
@@ -57,7 +57,7 @@ if (usePage().props.flash.successMessage) {
       </div>
       <form @submit.prevent="recaptcha" class="w-full">
         <h1 class="text-center text-2xl text-dark mb-5 font-bold">
-          Vendor Dashboard Login
+          Seller Dashboard Login
         </h1>
 
         <!-- Email Input -->

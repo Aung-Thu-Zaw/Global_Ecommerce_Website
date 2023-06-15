@@ -40,7 +40,7 @@ const submit = () => {
 
 <template>
   <AppLayout>
-    <Head title="Vendor Register" />
+    <Head title="Seller Register" />
     <div class="mt-48 mb-10 flex items-center justify-center w-full px-5">
       <FormContainer>
         <form @submit.prevent="recaptcha" class="w-full">
