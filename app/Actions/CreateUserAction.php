@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Models\User;
 use Laravolt\Avatar\Avatar;
+use Illuminate\Support\Str;
 
 class CreateUserAction
 {
@@ -12,9 +13,20 @@ class CreateUserAction
     */
     public function execute(array $userData): User
     {
-        unset($userData["captcha_token"]);
-
-        $user = User::create($userData);
+        $user = User::create([
+            'uuid'=>Str::uuid(),
+            'name' =>$userData["name"],
+            'company_name'=>$userData["company_name"]??null,
+            'shop_name'=>$userData["shop_name"]??null,
+            'email' =>$userData["email"],
+            'phone'=>$userData["phone"]??null,
+            'password' =>$userData["password"],
+            'gender'=>$userData["gender"],
+            'birthday'=>$userData["birthday"]?? null,
+            'role'=>$userData["role"],
+            'status'=>$userData["status"],
+            'offical'=>false,
+        ]);
 
         $colors=[
             "#f44336",

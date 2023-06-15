@@ -41,7 +41,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get("/admin/login", [AdminAuthController::class,"login"])->middleware("guest")->name("admin.login");
 
-Route::middleware(["auth","verified","user.role:admin"])
+Route::middleware(["admin","verified","user.role:admin"])
        ->prefix("admin")
        ->name("admin.")
        ->group(function () {

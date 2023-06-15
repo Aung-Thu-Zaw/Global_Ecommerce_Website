@@ -80,12 +80,9 @@ const handleSearch = () => {
         <Link
           class="text-sm font-bold px-3 py-2 hover:text-gray-300"
           :href="route('vendor.register')"
-          data-te-toggle="tooltip"
-          data-te-placement="bottom"
-          title="Become a vendor is for those who have their own products and company."
         >
           <i class="fa-solid fa-store"></i>
-          BECOME A VENDOR
+          BECOME A SELLER
         </Link>
         <span>|</span>
 

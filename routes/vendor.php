@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 Route::get("vendor/register", [VendorAuthController::class,"register"])->middleware("guest")->name("vendor.register");
 Route::get("vendor/login", [VendorAuthController::class,"login"])->middleware("guest")->name("vendor.login");
 
-Route::middleware(["auth","user.role:vendor"])
+Route::middleware(["vendor","user.role:vendor"])
         ->prefix("vendor")
         ->name("vendor.")
         ->group(function () {

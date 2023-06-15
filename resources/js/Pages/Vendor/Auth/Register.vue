@@ -45,7 +45,7 @@ const submit = () => {
       <FormContainer>
         <form @submit.prevent="recaptcha" class="w-full">
           <h1 class="text-center text-2xl text-dark mb-5 font-bold">
-            BECOME A VENDOR
+            BECOME A SELLER
           </h1>
 
           <!-- Hidden Input Fields  -->
@@ -55,13 +55,12 @@ const submit = () => {
 
           <!-- Company Name Input -->
           <div class="mb-3">
-            <InputLabel for="companyName" value="Company Name *" />
+            <InputLabel for="companyName" value="Company Name" />
 
             <TextInput
               id="companyName"
               type="text"
               v-model="form.company_name"
-              required
               placeholder="Enter Company Name"
             >
               <template v-slot:icon>
@@ -217,7 +216,7 @@ const submit = () => {
           />
 
           <p class="text-center text-sm">
-            Already have an vendor account?
+            Already has a seller account?
             <Link
               :href="route('vendor.login')"
               class="text-blue-600 font-bold hover:cursor-pointer hover:underline"
