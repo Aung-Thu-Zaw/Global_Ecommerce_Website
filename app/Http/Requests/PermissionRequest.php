@@ -35,8 +35,9 @@ class PermissionRequest extends FormRequest
     public function messages(): array
     {
         return [
-            "name.required" => "Role name is required.",
-            "group.required" => "Role group is required.",
+            "name.required" =>  "The name field is required.",
+            "name.string" =>  "The name must be a string.",
+
         ];
     }
 }

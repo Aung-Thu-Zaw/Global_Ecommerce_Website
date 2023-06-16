@@ -28,4 +28,15 @@ class ReturnOrCancelOrderRequest extends FormRequest
             "cancel_reason"=>["nullable","string"],
         ];
     }
+
+    /**
+    *     @return array<string>
+    */
+    public function messages(): array
+    {
+        return [
+            "return_reason.string" => "The return reason must be a string.",
+            "cancel_reason.string" => "The cancel reason must be a string.",
+        ];
+    }
 }

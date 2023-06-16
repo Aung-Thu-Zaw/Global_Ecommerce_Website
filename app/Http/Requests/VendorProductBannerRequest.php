@@ -26,7 +26,21 @@ class VendorProductBannerRequest extends FormRequest
     {
         return [
             "user_id"=>["required","numeric",Rule::exists("users", "id")],
-            "url"=>["required","string","url"],
+            "url"=>["required","url"],
+        ];
+    }
+
+        /**
+    *     @return array<string>
+    */
+    public function messages(): array
+    {
+        return [
+            "user_id.required" =>  "The user id is required.",
+            "user_id.numeric" =>  "The user id must be a number.",
+            "user_id.exists" =>  "The selected user id is invalid.",
+            "url.required" =>  "The url is required.",
+            "url.url" => "The url must be a valid URL.",
         ];
     }
 }

@@ -34,7 +34,8 @@ class RoleRequest extends FormRequest
     public function messages(): array
     {
         return [
-            "name.required" => "Role name is required.",
+            "name.required" => "The name field is required.",
+            "name.string" => "The name must be a string.",
         ];
     }
 }

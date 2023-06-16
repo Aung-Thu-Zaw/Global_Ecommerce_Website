@@ -24,8 +24,8 @@ class WebsiteSettingRequest extends FormRequest
     public function rules()
     {
         return [
-            "phone"=>["nullable","numeric"],
-            "support_phone"=>["nullable","numeric"],
+            "phone"=>["nullable","string"],
+            "support_phone"=>["nullable","string"],
             "email"=>["nullable","email"],
             "company_address"=>["nullable","string"],
             "copyright"=>["nullable","string"],
@@ -44,15 +44,17 @@ class WebsiteSettingRequest extends FormRequest
     public function messages(): array
     {
         return [
-            "phone.numeric" => "Phone must be numeric.",
-            "support_phone.numeric" => "Support Phone must be numeric.",
-            "email.email" => "Email wrong format.",
-            "facebook.url" => "Facebook url wrong format.",
-            "twitter.url" => "Twitter url wrong format.",
-            "instagram.url" => "Instagram url wrong format.",
-            "youtube.url" => "Youtube url wrong format.",
-            "reddit.url" => "Reddit url wrong format.",
-            "linked_in.url" => "Linked In url wrong format.",
+            "phone.string" => "The phone must be a string.",
+            "support_phone.string" => "The support phone must be a string.",
+            "email.email" =>  "The email address must be a valid email address.",
+            "company_address.string" => "The company address must be a string.",
+            "copyright.string" => "The copyright must be a string.",
+            "facebook.url" => "The facebook must be a valid URL.",
+            "twitter.url" => "The twitter must be a valid URL.",
+            "instagram.url" => "The instagram must be a valid URL.",
+            "youtube.url" => "The youtube must be a valid URL.",
+            "reddit.url" => "The reddit must be a valid URL.",
+            "linked_in.url" => "The linked in must be a valid URL.",
         ];
     }
 }

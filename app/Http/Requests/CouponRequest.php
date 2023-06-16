@@ -49,19 +49,21 @@ class CouponRequest extends FormRequest
     public function messages(): array
     {
         return [
-            "code.required" => "Coupon code is required.",
-            "code.unique" => "Coupon code is already exists.",
-            "discount_type.required" => "Coupon discount type is required.",
-            "discount_amount.required" => "Coupon discount amount is required.",
-            "discount_amount.numeric" => "Coupon discount amount must be number.",
-            "min_spend.required" => "Coupon minimun spend is required.",
-            "min_spend.numeric" => "Coupon minimun spend must be numeric.",
-            "start_date.required" => "Coupon start date is required.",
-            "start_date.date" => "Coupon start date must be date format.",
-            "end_date.required" => "Coupon end date is required.",
-            "end_date.date" => "Coupon end date is must be date format.",
-            "max_uses.required" => "Coupon max usage is required.",
-            "max_uses.numeric" => "Coupon max usage must be numeric.",
+            "code.required" => "The code field is required.",
+            "code.string" => "The code must be a string.",
+            "code.unique" =>'The code has already been taken.',
+            "discount_type.required" => "The discount type field is required.",
+            "discount_type.in"=>"The selected discount type is invalid.",
+            "discount_amount.required" => "The discount amount field is required.",
+            "discount_amount.numeric" => "The discount amount must be a number.",
+            "min_spend.required" => "The min spend field is required.",
+            "min_spend.numeric" => "The min spend must be a number.",
+            "start_date.required" => "The start date field is required.",
+            "start_date.date" => "The start date is not a valid date.",
+            "end_date.required" => "The end date field is required.",
+            "end_date.date" => "The end date is not a valid date.",
+            "max_uses.required" => "The max uses field is required.",
+            "max_uses.numeric" => "The max uses must be a number.",
         ];
     }
 }

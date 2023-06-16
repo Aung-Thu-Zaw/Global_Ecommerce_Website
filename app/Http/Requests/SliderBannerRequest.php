@@ -24,7 +24,7 @@ class SliderBannerRequest extends FormRequest
     public function rules()
     {
         return [
-            "url"=>["required","string","url"]
+            "url"=>["required","url"]
         ];
     }
 
@@ -34,8 +34,8 @@ class SliderBannerRequest extends FormRequest
     public function messages(): array
     {
         return [
-            "url.required" => "Slider banner url is required.",
-            "url.url" => "Slider banner url wrong format.",
+            "url.required" =>  "The url is required.",
+            "url.url" => "The url must be a valid URL.",
         ];
     }
 }

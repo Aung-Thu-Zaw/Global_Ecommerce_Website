@@ -26,8 +26,8 @@ class BlogPostRequest extends FormRequest
     {
 
         $rules= [
-            "blog_category_id"=>["required",Rule::exists("blog_categories", "id")],
-            "author_id"=>["required",Rule::exists("users", "id")],
+            "blog_category_id"=>["required","numeric",Rule::exists("blog_categories", "id")],
+            "author_id"=>["required","numeric",Rule::exists("users", "id")],
             "title"=>["required","string","max:255",Rule::unique("blog_posts", "title")],
             "description"=>["required","string"]
         ];
@@ -46,11 +46,18 @@ class BlogPostRequest extends FormRequest
     public function messages(): array
     {
         return [
-            "blog_category_id.required" => "Blog category is required.",
-            "blog_category_id.exists" => "Blog category does not exist.",
-            "title.required" => "Blog title is required.",
-            "title.unique" => "Blog title is already exists.",
-            "description.required" => "Blog description is required.",
+            "blog_category_id.required" =>  "The blog category id is required.",
+            "blog_category_id.numeric" =>  "The blog category id must be a number.",
+            "blog_category_id.exists" =>  "The selected blog category id is invalid.",
+            "author_id.required" =>  "The author id is required.",
+            "author_id.numeric" =>  "The author id must be a number.",
+            "author_id.exists" =>  "The selected author id is invalid.",
+            "title.required" =>  "The title field is required.",
+            "title.string" =>  "The title must be a string.",
+            "title.max" => "The title must not be greater than 255 characters.",
+            "title.unique" =>'The title has already been taken.',
+            "description.required" =>  "The description field is required.",
+            "description.string" =>  "The description must be a string.",
         ];
     }
 }

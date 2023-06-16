@@ -43,9 +43,11 @@ class CollectionRequest extends FormRequest
     public function messages(): array
     {
         return [
-            "title.required" => "Collection title is required.",
-            "title.unique" => "Collection title is already exists.",
-            "description.required" => "Collection description is required.",
+            "title.required" => "The title field is required.",
+            "title.string" => "The title must be a string.",
+            "title.unique" =>'The title has already been taken.',
+            "description.required" => "The description field is required.",
+            "description.string" => "The description must be a string.",
         ];
     }
 }

@@ -43,9 +43,11 @@ class BrandRequest extends FormRequest
     public function messages(): array
     {
         return [
-            "name.required" => "Brand name is required.",
-            "name.unique" => "Brand name is already exists.",
-            "description.required" => "Brand description is required.",
+            "name.required" =>  "The name field is required.",
+            "name.string" =>  "The name must be a string.",
+            "name.unique" =>'The name has already been taken.',
+            "description.required" =>  "The description field is required.",
+            "description.string" =>  "The description must be a string.",
         ];
     }
 }

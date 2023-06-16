@@ -30,4 +30,21 @@ class ProductAnswerRequest extends FormRequest
             "answer_text"=>["required","string"],
         ];
     }
+
+    /**
+    *     @return array<string>
+    */
+    public function messages(): array
+    {
+        return [
+            "product_question_id.required" =>  "The product question id is required.",
+            "product_question_id.numeric" =>  "The product question id must be a number.",
+            "product_question_id.exists" =>  "The selected product question id is invalid.",
+            "user_id.required" =>  "The user id is required.",
+            "user_id.numeric" =>  "The user id must be a number.",
+            "user_id.exists" =>  "The selected user id is invalid.",
+            "answer_text.required" =>  "The answer text is required.",
+            "answer_text.string" =>  "The answer text must be a string.",
+        ];
+    }
 }

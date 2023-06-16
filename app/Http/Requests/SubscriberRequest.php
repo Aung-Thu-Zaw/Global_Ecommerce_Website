@@ -25,7 +25,21 @@ class SubscriberRequest extends FormRequest
     public function rules()
     {
         return [
-            "email"=>["required","email",Rule::unique("subscribers", "email")]
+            "email"=>["required","email","string",Rule::unique("subscribers", "email")]
         ];
     }
+
+        /**
+    *     @return array<string>
+    */
+    public function messages(): array
+    {
+        return [
+            "email.required" => "The email address field is required.",
+            "email.string" => "The email address must be a string.",
+            "email.email" =>  "The email address must be a valid email address.",
+            "email.unique"=>"The email has already been taken."
+        ];
+    }
+
 }

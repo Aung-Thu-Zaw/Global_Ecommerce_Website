@@ -36,10 +36,12 @@ class RoleInPermissionRequest extends FormRequest
     public function messages(): array
     {
         return [
-            "role_id.required" => "Role is required.",
-            "role_id.exists" => "Role does not exist.",
-            "permission_id.required" => "Permission is required.",
-            "permission_id.exists" => "Permission does not exist.",
+            "role_id.required" =>  "The role id is required.",
+            "role_id.numeric" =>  "The role id must be a number.",
+            "role_id.exists" =>  "The selected role id is invalid.",
+            "permission_id.required" =>  "The permission id is required.",
+            "permission_id.array" =>  "The permission id must be an array.",
+            "permission_id.exists" =>  "The selected permission id is invalid.",
         ];
     }
 }

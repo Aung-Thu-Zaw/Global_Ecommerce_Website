@@ -38,17 +38,20 @@ class CategoryRequest extends FormRequest
         return $rules;
     }
 
-
     /**
     *     @return array<string>
     */
     public function messages(): array
     {
         return [
-            "parent_id.exists" => "Parent category does not exist.",
-            "name.required" => "Category name is required.",
-            "name.unique" => "Category name is already exists.",
-            "status.required" => "Category status is required.",
+            "parent_id.exists" =>  "The selected parent id is invalid.",
+            "name.required" => "The name field is required.",
+            "name.string" => "The name must be a string.",
+            "name.max" => "The name must not be greater than 255 characters.",
+            "name.unique" =>'The name has already been taken.',
+            "status.required" => "The status field is required.",
+            "status.string" => "The status must be a string.",
+            "status.in"=>"The selected status is invalid.",
         ];
     }
 }
