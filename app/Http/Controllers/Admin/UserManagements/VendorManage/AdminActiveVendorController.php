@@ -35,10 +35,29 @@ class AdminActiveVendorController extends Controller
 
     public function update(Request $request, int $id): RedirectResponse
     {
+
         $activeVendor=User::find($id);
 
-        $activeVendor->update(["status"=>'inactive']);
+        $message="";
 
-        return to_route('admin.vendors.active.index', "page=$request->page&per_page=$request->per_page")->with("success", "Vendor has been successfully inactivated");
+
+        if($request->status==="inactive") {
+
+            $activeVendor->update(["status"=>'inactive']);
+            $message="Vendor has been successfully inactivated";
+        } elseif ($request->offical==1) {
+
+
+            $activeVendor->update(["offical"=>true]);
+            $message= "Vendor has been successfully set offical";
+        } elseif ($request->offical==0) {
+
+            $activeVendor->update(["offical"=>false]);
+            $message= "Vendor has been successfully set unoffical";
+        }
+
+        return to_route('admin.vendors.active.index', "page=$request->page&per_page=$request->per_page")->with("success", $message);
+
+
     }
 }

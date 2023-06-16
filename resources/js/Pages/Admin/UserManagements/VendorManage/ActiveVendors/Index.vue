@@ -121,6 +121,41 @@ const handleInactive = async (activeVendorId) => {
         id: activeVendorId,
         page: params.page,
         per_page: params.per_page,
+        status: "inactive",
+      })
+    );
+    setTimeout(() => {
+      swal({
+        icon: "success",
+        title: usePage().props.flash.successMessage,
+      });
+    }, 500);
+  }
+};
+
+const handleOffical = async (activeVendor) => {
+  const result = await swal({
+    icon: "info",
+    title: `Are you sure you want to set ${
+      activeVendor.offical ? "unoffical" : "offical"
+    } this vendor?`,
+    showCancelButton: true,
+    confirmButtonText: `Yes, ${
+      activeVendor.offical ? "unoffical" : "offical"
+    }!`,
+    confirmButtonColor: "#027e00",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.post(
+      route("admin.vendors.active.update", {
+        id: activeVendor.id,
+        page: params.page,
+        per_page: params.per_page,
+        offical: activeVendor.offical ? false : true,
       })
     );
     setTimeout(() => {
@@ -220,28 +255,28 @@ const handleInactive = async (activeVendorId) => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh @click="updateSorting('name')">
-            Username
+          <HeaderTh @click="updateSorting('shop_name')">
+            Shop Name
             <i
               class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
               :class="{
                 'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'name',
+                  params.direction === 'asc' && params.sort === 'shop_name',
                 'visually-hidden':
                   params.direction !== '' &&
                   params.direction !== 'asc' &&
-                  params.sort === 'name',
+                  params.sort === 'shop_name',
               }"
             ></i>
             <i
               class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
               :class="{
                 'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'name',
+                  params.direction === 'desc' && params.sort === 'shop_name',
                 'visually-hidden':
                   params.direction !== '' &&
                   params.direction !== 'desc' &&
-                  params.sort === 'name',
+                  params.sort === 'shop_name',
               }"
             ></i>
           </HeaderTh>
@@ -304,7 +339,14 @@ const handleInactive = async (activeVendorId) => {
         <tbody v-if="activeVendors.data.length">
           <Tr v-for="activeVendor in activeVendors.data" :key="activeVendor.id">
             <BodyTh>{{ activeVendor.id }}</BodyTh>
-            <Td>{{ activeVendor.name }}</Td>
+            <Td class="flex items-center"
+              >{{ activeVendor.shop_name }}
+
+              <i
+                v-if="activeVendor.offical"
+                class="fas fa-check arrow-icon ml-1 bg-green-500 p-1 rounded-full text-white"
+              ></i>
+            </Td>
             <Td>{{ activeVendor.email }}</Td>
             <Td>
               <ActiveStatus> {{ activeVendor.status }} </ActiveStatus>
@@ -313,12 +355,28 @@ const handleInactive = async (activeVendorId) => {
             <Td v-if="vendorManageControl || vendorManageDetail">
               <button
                 v-if="vendorManageControl"
+                @click="handleOffical(activeVendor)"
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md mr-3"
+                :class="{
+                  'bg-slate-600 text-white hover:bg-slate-700 ':
+                    !activeVendor.offical,
+                  'bg-emerald-600 text-white hover:bg-emerald-700 ':
+                    activeVendor.offical,
+                }"
+              >
+                <i class="fa-solid fa-award"></i>
+
+                {{ activeVendor.offical ? "Unoffical" : "Offical" }}
+              </button>
+              <button
+                v-if="vendorManageControl"
                 @click="handleInactive(activeVendor.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3"
               >
                 <i class="fa-solid fa-xmark"></i>
                 Inactive
               </button>
+
               <Link
                 v-if="vendorManageDetail"
                 as="button"
