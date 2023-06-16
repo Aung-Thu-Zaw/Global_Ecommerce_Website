@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 use Overtrue\LaravelFollow\Traits\Follower;
@@ -62,7 +63,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function password(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => bcrypt($value),
+            set: fn ($value) => Hash::needsRehash($value) ? bcrypt($value) : $value,
         );
     }
 
