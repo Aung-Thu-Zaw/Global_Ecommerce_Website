@@ -53,6 +53,7 @@ const submit = () => {
             Login With Global Ecommerce Account
           </h1>
 
+          <!-- Email Input -->
           <div class="mb-3">
             <InputLabel for="email" value="Email *" />
 
@@ -75,6 +76,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.email" />
           </div>
 
+          <!-- Password Input -->
           <div class="mb-3">
             <InputLabel for="password" value="Password *" />
 
@@ -97,6 +99,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.password" />
           </div>
 
+          <!-- Remember Me -->
           <div class="flex items-center justify-between mb-5">
             <div>
               <label class="flex items-center">
@@ -116,6 +119,7 @@ const submit = () => {
             </div>
           </div>
 
+          <!-- Submit Button -->
           <div class="mb-3">
             <FormButton
               :class="{ 'opacity-25': form.processing }"

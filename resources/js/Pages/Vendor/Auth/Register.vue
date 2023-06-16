@@ -220,8 +220,9 @@ const submit = () => {
             <Link
               :href="route('vendor.login')"
               class="text-blue-600 font-bold hover:cursor-pointer hover:underline"
-              >Login</Link
             >
+              Login
+            </Link>
           </p>
         </form>
       </FormContainer>

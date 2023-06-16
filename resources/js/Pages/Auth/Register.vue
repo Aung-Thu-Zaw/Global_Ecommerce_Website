@@ -59,6 +59,7 @@ const submit = () => {
             Create Global Ecommerce Account
           </h1>
 
+          <!-- Name Input -->
           <div class="mb-3">
             <InputLabel for="name" value="Name *" />
 
@@ -81,6 +82,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.name" />
           </div>
 
+          <!-- Email Input -->
           <div class="mb-3">
             <InputLabel for="email" value="Email *" />
 
@@ -102,6 +104,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.email" />
           </div>
 
+          <!-- Password Input -->
           <div class="mb-3">
             <InputLabel for="password" value="Password *" />
 
@@ -123,6 +126,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.password" />
           </div>
 
+          <!-- Comfirmation Password Input -->
           <div class="mb-3">
             <InputLabel
               for="password_confirmation"
@@ -150,6 +154,7 @@ const submit = () => {
             />
           </div>
 
+          <!-- Gender Selectbox -->
           <div class="mb-3">
             <InputLabel for="gender" value="Gender *" />
 
@@ -166,6 +171,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.gender" />
           </div>
 
+          <!-- Birthday Selectbox -->
           <div class="mb-3">
             <InputLabel for="birthday" value="Birthday *" />
 
@@ -181,6 +187,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.birthday" />
           </div>
 
+          <!-- Submit Button -->
           <div class="mb-3">
             <FormButton> Sign Up </FormButton>
           </div>
