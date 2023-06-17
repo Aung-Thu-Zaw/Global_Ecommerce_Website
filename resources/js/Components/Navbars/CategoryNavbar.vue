@@ -125,7 +125,7 @@ import { Link } from "@inertiajs/vue3";
                 >
                   <li v-for="vendor in $page.props.vendors" :key="vendor.id">
                     <Link
-                      :href="route('shop.show', vendor.id)"
+                      :href="route('shop.show', vendor.uuid)"
                       :data="{ tab: 'home' }"
                       class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
@@ -156,7 +156,7 @@ import { Link } from "@inertiajs/vue3";
           </ul>
         </div>
 
-        <!-- Our Brands -->
+        <!-- Brands with us -->
         <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
           <ul
             class="flex flex-col p-2 mt-4 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:border-0 md:dark:bg-gray-900 font-bold"
@@ -170,7 +170,7 @@ import { Link } from "@inertiajs/vue3";
                 class="flex items-center justify-between w-full pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-gray-400 dark:hover:text-white dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
               >
                 <i class="fa-solid fa-tags mr-2"></i>
-                Our Brands
+                Brands With Us
                 <svg
                   class="w-5 h-5 ml-1"
                   aria-hidden="true"
@@ -194,21 +194,17 @@ import { Link } from "@inertiajs/vue3";
                   class="h-full py-2 overflow-y-auto text-gray-700 dark:text-gray-200 scrollbar"
                   aria-labelledby="dropdownBrandsButton"
                 >
-                  <li v-for="vendor in $page.props.vendors" :key="vendor.id">
+                  <li v-for="brand in $page.props.brands" :key="brand.id">
                     <Link
-                      :href="route('shop.show', vendor.id)"
+                      :href="route('shop.show', brand.id)"
                       :data="{ tab: 'home' }"
                       class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
                       <img
                         class="w-6 h-6 mr-2 rounded-full"
-                        :src="vendor.avatar"
-                        alt="Jese image"
+                        :src="brand.image"
                       />
-                      {{ vendor.shop_name }}
-                      <span class="text-green-400 rounded-xl">
-                        <i class="fa-solid fa-circle-check ml-2"></i>
-                      </span>
+                      {{ brand.name }}
                     </Link>
                   </li>
                 </ul>
