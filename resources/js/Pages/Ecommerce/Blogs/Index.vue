@@ -1,7 +1,5 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { toast } from "vue3-toastify";
-import "vue3-toastify/dist/index.css";
 import { usePage, Head, Link, router } from "@inertiajs/vue3";
 import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
 import BlogCard from "@/Components/Cards/BlogCard.vue";
@@ -13,6 +11,10 @@ defineProps({
   blogCategories: Object,
   blogPosts: Object,
 });
+
+const handleSearchBox = () => {
+  params.search_blog = "";
+};
 
 const params = reactive({
   search_blog: usePage().props.ziggy.query.search_blog,
@@ -70,10 +72,6 @@ watch(
   }
 );
 
-const handleSearchBox = () => {
-  params.search_blog = "";
-};
-
 const handleRemoveBlogCategory = () => {
   router.get(route("blogs.index"), {
     search_blog: params.search_blog,
@@ -83,12 +81,6 @@ const handleRemoveBlogCategory = () => {
     view: params.view,
   });
 };
-
-if (usePage().props.flash.successMessage) {
-  toast.success(usePage().props.flash.successMessage, {
-    autoClose: 2000,
-  });
-}
 </script>
 
 <template>

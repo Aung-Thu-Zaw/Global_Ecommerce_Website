@@ -34,6 +34,11 @@ defineProps({
       <div class="w-full flex items-center justify-end">
         <Link
           :href="route('blogs.show', post.slug)"
+          :data="{
+            sort: $page.props.ziggy.query.sort,
+            direction: $page.props.ziggy.query.direction,
+            view: $page.props.ziggy.query.view,
+          }"
           class="inline-flex items-center text-sm font-medium text-center text-slate-700 hover:text-blue-700 rounded-lg hover:animate-bounce"
         >
           Read more

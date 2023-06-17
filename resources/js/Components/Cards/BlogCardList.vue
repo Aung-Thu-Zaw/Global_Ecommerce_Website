@@ -17,9 +17,7 @@ defineProps({
     />
 
     <div class="flex flex-col items-center justify-between w-full h-full">
-      <div
-        class="flex flex-col justify-between p-4 leading-normal w-full h-full"
-      >
+      <div class="flex flex-col p-4 leading-normal w-full h-[200px]">
         <div class="flex items-center justify-between mb-3">
           <span class="font-bold text-slate-400 text-[.7rem]">
             <i class="fa-solid fa-user mr-2"></i>
@@ -31,18 +29,26 @@ defineProps({
           </span>
         </div>
 
-        <h5
-          class="mb-2 text-lg font-bold tracking-tight text-gray-700 dark:text-white"
-        >
-          {{ post.title }}
-        </h5>
-        <p class="mb-3 font-normal text-[.8rem] text-gray-500 line-clamp-4">
-          {{ post.description }}
-        </p>
+        <div>
+          <h5
+            class="mb-2 text-lg font-bold tracking-tight text-gray-700 dark:text-white"
+          >
+            {{ post.title }}
+          </h5>
+          <p
+            v-html="post.description"
+            class="mb-3 font-normal text-[.8rem] text-gray-500 line-clamp-4"
+          ></p>
+        </div>
       </div>
-      <div class="w-full flex items-center justify-end mt-10 px-10">
+      <div class="w-full flex items-center justify-end px-10">
         <Link
           :href="route('blogs.show', post.slug)"
+          :data="{
+            sort: $page.props.ziggy.query.sort,
+            direction: $page.props.ziggy.query.direction,
+            view: $page.props.ziggy.query.view,
+          }"
           class="inline-flex items-center text-sm font-medium text-center text-slate-700 hover:text-blue-700 rounded-lg hover:animate-bounce"
         >
           Read more
