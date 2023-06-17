@@ -12,7 +12,7 @@
         >
           <img
             alt=""
-            class="w-full h-full object-cover rounded-full align-middle border-none shadow-lg ring-2 ring-blue-400"
+            class="w-full h-full object-cover rounded-full align-middle border-none shadow-lg ring-2 ring-slate-400"
             :src="$page.props.auth.user.avatar"
           />
         </span>

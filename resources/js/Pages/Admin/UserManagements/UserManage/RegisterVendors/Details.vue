@@ -11,19 +11,19 @@ const props = defineProps({
 });
 
 const currentTime = new Date();
-const threshold = 1000 * 60 * 3; //3minutes in millseconds
+const threshold = 1000 * 60 * 5; //5minutes in millseconds
 
 const status = (last_activity) => {
   const lastActivity = new Date(last_activity);
   const timeDifference = currentTime.getTime() - lastActivity.getTime();
 
-  return timeDifference < threshold ? "active" : "offline";
+  return timeDifference < threshold ? "online" : "offline";
 };
 </script>
 
 <template>
   <AdminDashboardLayout>
-    <Head :title="user.name + ' Details'" />
+    <Head :title="user.shop_name" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">

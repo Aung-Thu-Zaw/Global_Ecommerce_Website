@@ -159,8 +159,9 @@ const submit = () => {
             <InputLabel for="gender" value="Gender *" />
 
             <select
-              class="p-3 w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+              class="p-4 w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
               v-model="form.gender"
+              required
             >
               <option value="" selected disabled>Select Your Gender</option>
               <option value="male">Male</option>
@@ -173,7 +174,7 @@ const submit = () => {
 
           <!-- Birthday Selectbox -->
           <div class="mb-3">
-            <InputLabel for="birthday" value="Birthday *" />
+            <InputLabel for="birthday" value="Birthday" />
 
             <InputContainer>
               <i class="fa-solid fa-calendar text-gray-600"></i>

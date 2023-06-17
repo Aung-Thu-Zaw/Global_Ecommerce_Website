@@ -43,6 +43,17 @@ defineProps({
         }"
       >
         {{ notification.data.message }}
+        {{
+          notification.data.user.google_id
+            ? 'Registered with "google" auth.'
+            : ""
+        }}
+
+        {{
+          notification.data.user.facebook_id
+            ? 'Registered with "facebook" auth.'
+            : ""
+        }}
 
         <span
           class="font-bold text-sm"

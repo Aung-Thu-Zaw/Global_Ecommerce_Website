@@ -11,19 +11,19 @@ const props = defineProps({
 });
 
 const currentTime = new Date();
-const threshold = 1000 * 60 * 3; //3minutes in millseconds
+const threshold = 1000 * 60 * 5; //5minutes in millseconds
 
 const status = (last_activity) => {
   const lastActivity = new Date(last_activity);
   const timeDifference = currentTime.getTime() - lastActivity.getTime();
 
-  return timeDifference < threshold ? "active" : "offline";
+  return timeDifference < threshold ? "online" : "offline";
 };
 </script>
 
 <template>
   <AdminDashboardLayout>
-    <Head :title="user.name + ' Details'" />
+    <Head :title="user.name" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -96,22 +96,7 @@ const status = (last_activity) => {
           />
         </div>
 
-        <p class="text-lg text-slate-600 font-bold capitalize mb-5 text-center">
-          Account Status -
-          <span
-            v-if="user.status === 'active'"
-            class="bg-green-200 text-green-500 px-3 text-sm uppercase py-1 rounded-full"
-          >
-            {{ user.status }}
-          </span>
-          <span
-            v-else
-            class="bg-red-200 text-red-500 px-3 text-sm uppercase py-1 rounded-full"
-          >
-            {{ user.status }}
-          </span>
-        </p>
-        <p class="text-lg text-slate-600 font-bold capitalize mb-5 text-center">
+        <p class="text-lg font-bold capitalize mb-5 text-center">
           Online Status -
           <span
             class="px-3 py-1 font-bold uppercase text-sm rounded-full"

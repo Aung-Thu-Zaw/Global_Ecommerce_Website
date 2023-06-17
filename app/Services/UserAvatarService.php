@@ -55,7 +55,7 @@ class UserAvatarService
 
             User::deleteUserAvatar($user);
 
-            $file=$request->file("image");
+            $file=$request->file("avatar");
 
             /** @var \Illuminate\Http\UploadedFile $file */
 

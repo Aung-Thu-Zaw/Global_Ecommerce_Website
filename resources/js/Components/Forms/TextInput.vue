@@ -22,7 +22,7 @@ defineExpose({ focus: () => input.value.focus() });
     <slot name="icon" />
 
     <input
-      class="p-2 w-full border-transparent outline-none focus:border-transparent focus:ring-0 placeholder:text-gray-400 placeholder:text-sm"
+      class="p-2 w-full border-transparent bg-white outline-none focus:border-transparent focus:ring-0 placeholder:text-gray-400 placeholder:text-sm"
       :type="type"
       :placeholder="placeholder"
       :value="modelValue"

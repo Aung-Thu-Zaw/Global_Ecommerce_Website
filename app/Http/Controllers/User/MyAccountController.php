@@ -43,7 +43,7 @@ class MyAccountController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('my-account.edit');
+        return to_route('my-account.edit', 'tab=edit-profile')->with("success", "Profile updated successfully");
     }
 
 
