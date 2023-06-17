@@ -117,7 +117,7 @@ Route::middleware(["auth","verified"])->group(function () {
            ->name("shop.")
            ->group(function () {
                Route::get("/", "index")->name("index");
-               Route::get("/{shop_id}", "show")->name("show");
+               Route::get("/{shop_id:uuid}", "show")->name("show");
                Route::post("/{shop_id}/follow", "followShop")->name("follow");
                Route::post("/{shop_id}/unfollow", "unfollowShop")->name("unfollow");
            });

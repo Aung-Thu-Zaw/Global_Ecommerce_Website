@@ -59,7 +59,7 @@ class ProductController extends Controller
 
     public function show(Product $product): Response|ResponseFactory
     {
-        $product->load(["images","brand:id,name","colors","sizes","shop:id,shop_name,avatar","watchlists","cartItems"]);
+        $product->load(["images","brand:id,name","colors","sizes","shop:id,uuid,offical,shop_name,avatar","watchlists","cartItems"]);
 
         $specificShopProducts=Product::select("user_id", "image", "name", "slug", "price", "discount")
                                      ->where("user_id", $product->shop->id)

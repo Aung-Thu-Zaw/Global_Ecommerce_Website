@@ -135,7 +135,10 @@ import { Link } from "@inertiajs/vue3";
                         alt="Jese image"
                       />
                       {{ vendor.shop_name }}
-                      <span class="text-green-400 rounded-xl">
+                      <span
+                        v-if="vendor.offical"
+                        class="text-green-400 rounded-xl"
+                      >
                         <i class="fa-solid fa-circle-check ml-2"></i>
                       </span>
                     </Link>

@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, Link } from "@inertiajs/vue3";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 
 const props = defineProps({
@@ -34,7 +34,7 @@ const props = defineProps({
             v-for="vendorShop in vendorShops.data"
             :key="vendorShop.id"
             as="button"
-            :href="route('shop.show', vendorShop.id)"
+            :href="route('shop.show', vendorShop.uuid)"
             :data="{ tab: 'home' }"
             class="hover:shadow-lg border rounded-md p-3 flex flex-col items-center justify-center"
           >
@@ -46,7 +46,10 @@ const props = defineProps({
             <div class="my-3">
               <h1 class="font-bold text-slate-600 text-center">
                 {{ vendorShop.shop_name }}
-                <span class="text-green-400 rounded-xl">
+                <span
+                  v-if="vendorShop.offical"
+                  class="text-green-400 rounded-xl"
+                >
                   <i class="fa-solid fa-circle-check ml-2"></i>
                 </span>
               </h1>

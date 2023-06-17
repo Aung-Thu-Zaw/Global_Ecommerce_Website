@@ -27,9 +27,9 @@ class ShopController extends Controller
     }
 
 
-    public function show(int $shopId): Response|ResponseFactory
+    public function show(string $shopUUID): Response|ResponseFactory
     {
-        $shop=User::findOrFail($shopId);
+        $shop=User::where([["uuid", $shopUUID],["status","active"]])->first();
 
         $user=auth()->user();
 
@@ -37,13 +37,13 @@ class ShopController extends Controller
         $followers=$user->followers;
 
         $vendorProductBanners=VendorProductBanner::select("user_id", "image", "url")
-                                     ->where([["status", "show"],["user_id",$shopId]])
+                                     ->where([["status", "show"],["user_id",$shop->id]])
                                      ->orderBy("id", "desc")
                                      ->get();
 
-        $vendorRandomProducts=Product::select("id","image", "name", "slug", "price", "discount")
+        $vendorRandomProducts=Product::select("id", "image", "name", "slug", "price", "discount")
                                      ->with("productReviews:id,product_id,rating")
-                                     ->where([["status", "active"],["user_id",$shopId]])
+                                     ->where([["status", "active"],["user_id",$shop->id]])
                                      ->inRandomOrder()
                                      ->limit(20)
                                      ->get();
@@ -52,40 +52,40 @@ class ShopController extends Controller
         $vendorProducts=Product::with(["shop","watchlists","cartItems","images","productReviews:id,product_id,rating"])
                                ->filterBy(request(["search","category","brand","rating","price"]))
                                ->where("status", "active")
-                               ->where("user_id", $shopId)
+                               ->where("user_id", $shop->id)
                                ->orderBy(request("sort", "id"), request("direction", "desc"))
                                ->paginate(20)
                                ->appends(request()->all());
 
 
         $paginateProductReviews=ProductReview::with(["product.sizes","product.colors","product.brand","user.orders.orderItems","reply.user:id,shop_name,avatar"])
-                                     ->where("vendor_id", $shopId)
+                                     ->where("vendor_id", $shop->id)
                                      ->orderBy("id", "desc")
                                      ->paginate(5);
 
-        $productReviews=ProductReview::where("vendor_id", $shopId)->get();
+        $productReviews=ProductReview::where("vendor_id", $shop->id)->get();
 
-        $productReviewsAvg=ProductReview::where("vendor_id", $shopId)->avg("rating");
+        $productReviewsAvg=ProductReview::where("vendor_id", $shop->id)->avg("rating");
 
         $paginateShopReviews=ShopReview::with(["user:id,name,avatar","reply.user:id,shop_name,avatar"])
-                                     ->where("vendor_id", $shopId)
+                                     ->where("vendor_id", $shop->id)
                                      ->orderBy("id", "desc")
                                      ->paginate(5);
 
-        $shopReviews=ShopReview::where("vendor_id", $shopId)->get();
+        $shopReviews=ShopReview::where("vendor_id", $shop->id)->get();
 
-        $shopReviewsAvg=ShopReview::where("vendor_id", $shopId)->avg("rating");
+        $shopReviewsAvg=ShopReview::where("vendor_id", $shop->id)->avg("rating");
 
         $categories =  Category::join('products', 'categories.id', '=', 'products.category_id')
                                ->join('users', 'products.user_id', '=', 'users.id')
-                               ->where('users.id', $shopId)
+                               ->where('users.id', $shop->id)
                                ->distinct()
                                ->select('categories.*')
                                ->get();
 
         $brands =  Brand::join('products', 'brands.id', '=', 'products.brand_id')
                                ->join('users', 'products.user_id', '=', 'users.id')
-                               ->where('users.id', $shopId)
+                               ->where('users.id', $shop->id)
                                ->distinct()
                                ->select('brands.*')
                                ->get();
