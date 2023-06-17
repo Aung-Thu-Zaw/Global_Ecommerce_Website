@@ -8,12 +8,9 @@ defineProps({
 
 <template>
   <div
-    class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 h-[450px]"
+    class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 max-h-[450px]"
   >
-    <img
-      class="rounded-t-lg"
-      :src="post.image"
-    />
+    <img class="rounded-t-lg" :src="post.image" />
     <div class="p-5">
       <div class="flex items-center justify-between mb-3">
         <span class="font-bold text-slate-400 text-[.7rem]">
@@ -30,9 +27,10 @@ defineProps({
       >
         {{ post.title }}
       </h5>
-      <p class="mb-3 font-normal text-[.8rem] text-gray-500 line-clamp-3">
-        {{ post.description }}
-      </p>
+      <p
+        v-html="post.description"
+        class="mb-3 font-normal text-[.8rem] text-gray-500 line-clamp-3"
+      ></p>
       <div class="w-full flex items-center justify-end">
         <Link
           :href="route('blogs.show', post.slug)"

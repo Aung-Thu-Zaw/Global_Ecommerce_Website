@@ -71,7 +71,7 @@ defineProps({
               <li
                 v-for="blogCategory in blogCategories"
                 :key="blogCategory.id"
-                class="py-3 rounded-sm transition-all border border-slate-300 shadow px-4"
+                class="py-2 rounded-sm transition-all border border-slate-300 shadow px-4"
                 :class="{
                   'bg-blue-600 text-white hover:bg-blue-700':
                     $page.props.ziggy.query.blog_category === blogCategory.slug,
@@ -92,6 +92,10 @@ defineProps({
                   }"
                   class="flex items-center justify-between"
                 >
+                  <img
+                    :src="blogCategory.image"
+                    class="w-10 h-10 object-cover rounded-full ring-2 ring-slate-500"
+                  />
                   {{ blogCategory.name }}
                   <span
                     class="text-[.8rem] ml-3 w-6 h-6 rounded-full border-2 border-slate-300 flex items-center justify-center"
