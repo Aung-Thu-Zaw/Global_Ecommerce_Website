@@ -134,7 +134,9 @@ const saveToWatchlist = () => {
                 :alt="product.name"
               />
             </div>
-            <div class="space-x-2 overflow-auto text-center whitespace-nowrap">
+            <div
+              class="space-x-2 overflow-auto text-center whitespace-nowrap scrollbar"
+            >
               <div
                 v-for="(image, index) in images"
                 :key="image.id"
@@ -395,5 +397,24 @@ const saveToWatchlist = () => {
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   display: none;
+}
+
+.scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #999 #f0f0f0;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 10px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #999;
+  border-radius: 3px;
 }
 </style>

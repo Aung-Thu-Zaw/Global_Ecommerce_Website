@@ -1,7 +1,6 @@
 
 <script setup>
 import ChatMessageForm from "@/Components/Forms/ChatMessageForm.vue";
-
 import { onMounted, onUpdated, ref } from "vue";
 
 defineProps({
@@ -50,14 +49,25 @@ function scrollToBottom() {
     <img
       :src="conversation.vendor.avatar"
       alt=""
-      class="w-10 h-10 object-cover rounded-full ring-2 ring-blue-400 mr-3"
+      class="w-10 h-10 object-cover rounded-full ring-2 ring-slate-400 mr-3"
     />
-    <h1 class="text-left text-md font-semibold text-slate-700">
-      {{ conversation.vendor.shop_name }}
-      <span class="text-green-500 text-sm font-bold">
-        <i class="fa-solid fa-circle-check"></i>
-      </span>
-    </h1>
+    <div class="text-left text-md font-semibold text-slate-700">
+      <h1>
+        {{ conversation.vendor.shop_name }}
+        <span
+          v-if="conversation.vendor.offical"
+          class="text-green-500 text-sm font-bold"
+        >
+          <i class="fa-solid fa-circle-check"></i>
+        </span>
+      </h1>
+
+      <!-- <span class="animate-pulse text-[.7rem] text-green-500">
+        <i class="fa-solid fa-circle text-[.6rem]"></i>
+        Active
+      </span> -->
+      <span class="text-[.7rem] text-gray-400"> 5 minutes ago </span>
+    </div>
   </div>
   <div
     class="overflow-auto w-full h-[565px] py-5 chat-container"

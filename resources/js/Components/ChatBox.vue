@@ -15,7 +15,7 @@ const handleClose = () => {
   emit("isVisible");
 };
 
-const selected = ref(null);
+const selected = ref(props.conversation ? props.conversation.id : null);
 
 const selectedConversation = ref(null);
 const conversations = computed(() => usePage().props.conversations);
@@ -32,12 +32,12 @@ const handleSelectedConversation = (conversationId) => {
 
 <template>
   <div
-    class="fixed z-40 bottom-0 right-14 w-[900px] h-[700px] rounded-tl-md border-2 border-r-0 shadow-sm bg-gray-50 chat-box"
+    class="fixed  bottom-0 right-14 w-[900px] h-[700px] rounded-tl-md border-2 border-r-0 shadow-sm bg-gray-50 chat-box"
   >
     <div class="flex items-center h-full">
       <div class="w-1/2 h-full">
         <div
-          class="relative text-center flex items-center justify-center text-lg font-semibold text-slate-700 border-b py-[18px]"
+          class="relative text-center flex items-center justify-center text-lg font-semibold text-slate-700 border-b py-[22px]"
         >
           <span
             @click="handleClose"
@@ -73,7 +73,7 @@ const handleSelectedConversation = (conversationId) => {
                 :conversation="conversation"
                 @click="handleSelectedConversation(conversation.id)"
                 :class="{
-                  'bg-slate-300': selected === conversation.id,
+                  'bg-slate-200': selected === conversation.id,
                 }"
               />
             </div>
@@ -87,7 +87,7 @@ const handleSelectedConversation = (conversationId) => {
                 :conversation="conversation"
                 @click="handleSelectedConversation(conversation.id)"
                 :class="{
-                  'bg-slate-300': selected === conversation.id,
+                  'bg-slate-200': selected === conversation.id,
                 }"
               />
             </div>

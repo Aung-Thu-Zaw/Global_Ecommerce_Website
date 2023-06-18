@@ -20,7 +20,10 @@ defineProps({
             <span class="line-clamp-1">
               {{ conversation.vendor.shop_name }}
             </span>
-            <span class="text-green-500 text-[.7rem] font-bold">
+            <span
+              v-if="conversation.vendor.offical"
+              class="text-green-500 text-[.7rem] font-bold"
+            >
               <i class="fa-solid fa-circle-check"></i>
             </span>
           </h1>
