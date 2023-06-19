@@ -29,7 +29,7 @@ const isVisibleChatbox = ref(false);
         <div
           id="chat-box"
           role="tooltip"
-          class="absolute z-10 invisible inline-block p-2 text-sm font-medium text-white bg-gray-600 rounded-md shadow-lg border opacity-0 tooltip w-[100px]"
+          class="absolute invisible inline-block p-2 text-sm font-medium text-white bg-gray-600 rounded-md shadow-lg border opacity-0 tooltip w-[100px]"
         >
           Chat Box
           <div class="tooltip-arrow" data-popper-arrow></div>
@@ -48,7 +48,7 @@ const isVisibleChatbox = ref(false);
         <div
           id="request-feature"
           role="tooltip"
-          class="absolute z-10 invisible inline-block p-2 text-sm font-medium text-white bg-gray-600 rounded-md shadow-lg border opacity-0 tooltip w-[150px]"
+          class="absolute invisible inline-block p-2 text-sm font-medium text-white bg-gray-600 rounded-md shadow-lg border opacity-0 tooltip w-[150px]"
         >
           Request Features
           <div class="tooltip-arrow" data-popper-arrow></div>
@@ -66,7 +66,7 @@ const isVisibleChatbox = ref(false);
         <div
           id="feedbacks"
           role="tooltip"
-          class="absolute z-10 invisible inline-block p-2 text-sm font-medium text-white bg-gray-600 rounded-md shadow-lg border opacity-0 tooltip w-[100px]"
+          class="absolute invisible inline-block p-2 text-sm font-medium text-white bg-gray-600 rounded-md shadow-lg border opacity-0 tooltip w-[100px]"
         >
           Feedback
           <div class="tooltip-arrow" data-popper-arrow></div>
@@ -85,7 +85,7 @@ const isVisibleChatbox = ref(false);
         <div
           id="report-bugs"
           role="tooltip"
-          class="absolute z-10 invisible inline-block p-2 text-sm font-medium text-white bg-gray-600 rounded-md shadow-lg border opacity-0 tooltip w-[100px]"
+          class="absolute invisible inline-block p-2 text-sm font-medium text-white bg-gray-600 rounded-md shadow-lg border opacity-0 tooltip w-[100px]"
         >
           Report Bugs
           <div class="tooltip-arrow" data-popper-arrow></div>
@@ -105,7 +105,7 @@ const isVisibleChatbox = ref(false);
           data-popover
           id="share"
           role="tooltip"
-          class="absolute z-10 invisible inline-block p-2 text-sm font-medium text-dark bg-white rounded-md shadow-lg border opacity-0 tooltip w-[170px] text-left"
+          class="absolute invisible inline-block p-2 text-sm font-medium text-dark bg-white rounded-md shadow-lg border opacity-0 tooltip w-[170px] text-left"
         >
           <div class="px-3 font-bold py-1 text-blue-600">
             <a
@@ -120,7 +120,7 @@ const isVisibleChatbox = ref(false);
             <div
               id="facebook"
               role="tooltip"
-              class="absolute z-10 border invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+              class="absolute border invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
             >
               Share on facebook
               <div class="tooltip-arrow" data-popper-arrow></div>
@@ -139,7 +139,7 @@ const isVisibleChatbox = ref(false);
             <div
               id="twitter"
               role="tooltip"
-              class="absolute z-10 border invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+              class="absolute border invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
             >
               Share on twitter
               <div class="tooltip-arrow" data-popper-arrow></div>
@@ -159,7 +159,7 @@ const isVisibleChatbox = ref(false);
             <div
               id="linkedin"
               role="tooltip"
-              class="absolute z-10 border invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+              class="absolute border invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
             >
               Share on LinkedIn
               <div class="tooltip-arrow" data-popper-arrow></div>
@@ -179,7 +179,7 @@ const isVisibleChatbox = ref(false);
             <div
               id="reddit"
               role="tooltip"
-              class="absolute z-10 border invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+              class="absolute border invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
             >
               Share on reddit
               <div class="tooltip-arrow" data-popper-arrow></div>
@@ -198,7 +198,7 @@ const isVisibleChatbox = ref(false);
             <div
               id="telegram"
               role="tooltip"
-              class="absolute z-10 border invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+              class="absolute border invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
             >
               Share on telegram
               <div class="tooltip-arrow" data-popper-arrow></div>
@@ -217,7 +217,7 @@ const isVisibleChatbox = ref(false);
             <div
               id="whatsapp"
               role="tooltip"
-              class="absolute z-10 border invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+              class="absolute border invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
             >
               Share on whatsapp
               <div class="tooltip-arrow" data-popper-arrow></div>

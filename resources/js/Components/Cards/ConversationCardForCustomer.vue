@@ -1,6 +1,33 @@
 <script setup>
-defineProps({
+import { usePage } from "@inertiajs/vue3";
+import { computed } from "vue";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
+
+const props = defineProps({
   conversation: Object,
+});
+
+const lastMessage = computed(
+  () => props.conversation.messages[props.conversation.messages.length - 1]
+);
+
+const totalunseenMessages = computed(() =>
+  props.conversation.messages.filter(
+    (message) =>
+      !message.is_seen && message.user_id !== usePage().props.auth.user.id
+  )
+);
+
+const formattedTime = computed(() => {
+  const currentDate = new Date().getDate();
+  const createdDate = new Date(lastMessage.value.created_at).getDate();
+
+  return currentDate > createdDate
+    ? dayjs(lastMessage.value.created_at).format("DD-MMMM-YYYY")
+    : dayjs(lastMessage.value.created_at).fromNow();
 });
 </script>
 
@@ -10,9 +37,9 @@ defineProps({
       <img
         :src="conversation.vendor.avatar"
         alt=""
-        class="w-10 h-10 object-cover rounded-full ring-2 ring-blue-400 mr-3"
+        class="w-10 h-10 object-cover rounded-full ring-2 ring-slate-400"
       />
-      <div>
+      <div class="ml-3 w-full">
         <div class="flex items-start justify-between">
           <h1
             class="flex items-center text-left text-sm font-semibold text-slate-700 w-[100px]"
@@ -27,20 +54,67 @@ defineProps({
               <i class="fa-solid fa-circle-check"></i>
             </span>
           </h1>
-          <span class="text-[.7rem] text-slate-500"> 2 minutes ago </span>
+          <span class="text-[.7rem] text-slate-500">
+            {{ formattedTime }}
+          </span>
         </div>
         <div class="flex items-center justify-between">
-          <p class="text-[.7rem] line-clamp-1 text-slate-600 w-[90%]">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis
-            explicabo, facere, impedit ullam culpa numquam veritatis corrupti,
-            vel quos labore nulla. Dicta dolores, harum dolorem modi eius ullam
-            nesciunt reprehenderit?
+          <p
+            v-if="lastMessage.type === 'text'"
+            class="text-[.7rem] line-clamp-1 w-[90%]"
+            :class="{
+              'text-slate-400': lastMessage.is_seen,
+              'text-slate-600':
+                !lastMessage.is_seen ||
+                lastMessage.user_id === $page.props.auth.user.id,
+            }"
+          >
+            {{
+              lastMessage.user_id === $page.props.auth.user.id
+                ? "You : " + lastMessage.message
+                : lastMessage.message
+            }}
           </p>
-          <p class="w-[10%] flex items-center justify-center">
+          <p
+            v-if="lastMessage.type === 'image'"
+            class="text-[.7rem] line-clamp-1 w-[90%]"
+            :class="{
+              'text-slate-400': lastMessage.is_seen,
+              'text-slate-600':
+                !lastMessage.is_seen ||
+                lastMessage.user_id === $page.props.auth.user.id,
+            }"
+          >
+            {{
+              lastMessage.user_id === $page.props.auth.user.id
+                ? "You : Send a photo"
+                : "Send a photo"
+            }}
+          </p>
+          <p
+            v-if="lastMessage.type === 'video'"
+            class="text-[.7rem] line-clamp-1 w-[90%]"
+            :class="{
+              'text-slate-400': lastMessage.is_seen,
+              'text-slate-600':
+                !lastMessage.is_seen ||
+                lastMessage.user_id === $page.props.auth.user.id,
+            }"
+          >
+            {{
+              lastMessage.user_id === $page.props.auth.user.id
+                ? "You : Send a video"
+                : "Send a video"
+            }}
+          </p>
+          <p
+            v-if="totalunseenMessages.length"
+            class="w-[10%] flex items-center justify-center"
+          >
             <span
               class="text-[.6rem] rounded-full px-1.5 py-0.5 bg-blue-600 text-white flex items-center justify-center"
             >
-              2
+              {{ totalunseenMessages.length }}
             </span>
           </p>
         </div>

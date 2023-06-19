@@ -63,7 +63,7 @@ const handleCreateConversion = () => {
         </Link>
 
         <span
-          class="rounded-full flex items-center justify-center bg-green-200 text-sm text-green-600 font-bold px-3 py-1"
+          class="rounded-full flex items-center justify-center bg-green-200 text-[.8rem] text-green-600 font-bold px-3 py-1"
           >Verified
           <i
             class="fas fa-check arrow-icon ml-3 bg-green-500 p-1 rounded-full text-white"

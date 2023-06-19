@@ -1,9 +1,9 @@
 <script setup>
-import { usePage } from "@inertiajs/vue3";
+import { router, usePage } from "@inertiajs/vue3";
 import MessageBox from "@/Components/MessageBox.vue";
 import ConversationCardForCustomer from "@/Components/Cards/ConversationCardForCustomer.vue";
 import ConversationCardForVendor from "@/Components/Cards/ConversationCardForVendor.vue";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
 const props = defineProps({
   conversation: Object,
@@ -27,12 +27,19 @@ const handleSelectedConversation = (conversationId) => {
 
   selected.value = conversationId;
 };
+
+watch(
+  () => selected.value,
+  () => {
+    router.post(route("conversation.messages.seen", selected.value));
+  }
+);
 </script>
 
 
 <template>
   <div
-    class="fixed  bottom-0 right-14 w-[900px] h-[700px] rounded-tl-md border-2 border-r-0 shadow-sm bg-gray-50 chat-box"
+    class="fixed z-2 bottom-0 right-14 w-[900px] h-[700px] rounded-tl-md border-2 border-r-0 shadow-sm bg-gray-50 chat-box"
   >
     <div class="flex items-center h-full">
       <div class="w-1/2 h-full">

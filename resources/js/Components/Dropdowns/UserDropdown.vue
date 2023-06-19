@@ -60,7 +60,7 @@
           $page.props.auth.user?.role === 'vendor' ||
           $page.props.auth.user?.role === 'admin'
         "
-        :href="route('shop.show', $page.props.auth.user.id)"
+        :href="route('shop.show', $page.props.auth.user.uuid)"
         :data="{ tab: 'home' }"
         as="button"
         class="text-left text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"

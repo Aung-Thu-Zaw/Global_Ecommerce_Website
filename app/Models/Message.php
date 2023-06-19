@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Date;
 
 class Message extends Model
 {
@@ -32,17 +34,6 @@ class Message extends Model
         return Attribute::make(
             set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/message-files/videos/$value"),
         );
-    }
-
-    /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductQuestion, never>
-    */
-    protected function createdAt(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value))." ( ".Carbon::parse($value)->diffForHumans()." ) ",
-        );
-
     }
 
     /**

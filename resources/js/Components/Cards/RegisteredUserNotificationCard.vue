@@ -1,15 +1,20 @@
 <script setup>
+import { Link } from "@inertiajs/vue3";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import "dayjs/locale/en";
-import { Link } from "@inertiajs/vue3";
+import { computed } from "vue";
 
 dayjs.extend(relativeTime);
-dayjs.locale("en");
 
-defineProps({
+const props = defineProps({
   notification: Object,
 });
+
+const formattedTime = computed(() =>
+  props.notification.created_at
+    ? dayjs(props.notification.created_at).fromNow()
+    : ""
+);
 </script>
 
 <template>
@@ -75,11 +80,7 @@ defineProps({
           v-if="!notification.read_at"
           class="fa-solid fa-circle animate-pulse text-[.6rem]"
         ></i>
-        {{
-          notification.created_at
-            ? dayjs(notification.created_at).fromNow()
-            : ""
-        }}
+        {{ formattedTime }}
       </div>
     </div>
   </Link>

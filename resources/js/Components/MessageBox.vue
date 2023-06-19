@@ -1,9 +1,12 @@
-
 <script setup>
 import ChatMessageForm from "@/Components/Forms/ChatMessageForm.vue";
-import { onMounted, onUpdated, ref } from "vue";
+import { computed, onMounted, onUpdated, ref } from "vue";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 
-defineProps({
+dayjs.extend(relativeTime);
+
+const props = defineProps({
   conversation: Object,
 });
 
@@ -20,6 +23,19 @@ onUpdated(() => {
 function scrollToBottom() {
   msgScroll.value.scrollTop = msgScroll.value.scrollHeight;
 }
+
+const formattedMessages = computed(() => {
+  return props.conversation.messages.map((message) => {
+    const date = dayjs(message.created_at);
+    const relativeTimeString = date.fromNow();
+
+    return {
+      ...message,
+      created_at:
+        date.format("YYYY-MMMM-DD") + " " + "(" + relativeTimeString + ")",
+    };
+  });
+});
 </script>
 <template>
   <div
@@ -32,7 +48,7 @@ function scrollToBottom() {
     <img
       :src="conversation.customer.avatar"
       alt=""
-      class="w-10 h-10 object-cover rounded-full ring-2 ring-blue-400 mr-3"
+      class="w-10 h-10 object-cover rounded-full ring-2 ring-slate-400 mr-3"
     />
     <h1 class="text-left text-lg font-semibold text-slate-700">
       {{ conversation.customer.name }}
@@ -77,7 +93,7 @@ function scrollToBottom() {
       <!-- left text  -->
 
       <div
-        v-for="message in conversation.messages"
+        v-for="message in formattedMessages"
         :key="message.id"
         class="w-full"
       >
@@ -97,7 +113,7 @@ function scrollToBottom() {
                 </p>
                 <div
                   v-if="message.type === 'image'"
-                  class="h-[250px] border-2 border-slate-300 shadow-xl rounded-md overflow-hidden"
+                  class="h-[200px] border-2 border-slate-300 shadow-xl rounded-md overflow-hidden"
                 >
                   <img
                     :src="message.image_path"
@@ -107,7 +123,7 @@ function scrollToBottom() {
                 </div>
                 <div
                   v-if="message.type === 'video'"
-                  class="w-full h-[400px] max-w-full border border-gray-200 rounded-lg shadow-lg overflow-hidden"
+                  class="w-full h-[300px] max-w-full border border-gray-200 rounded-lg shadow-lg overflow-hidden"
                 >
                   <video
                     :src="message.video_path"
@@ -143,10 +159,33 @@ function scrollToBottom() {
               <div class="flex items-end justify-start mb-3 w-full">
                 <div class="pr-28">
                   <p
+                    v-if="message.type === 'text'"
                     class="p-3 border-2 border-slate-300 rounded-lg rounded-bl-none shadow-md w-auto"
                   >
                     {{ message.message }}
                   </p>
+                  <div
+                    v-if="message.type === 'image'"
+                    class="h-[200px] border-2 border-slate-300 shadow-xl rounded-md overflow-hidden"
+                  >
+                    <img
+                      :src="message.image_path"
+                      alt=""
+                      class="h-full object-cover"
+                    />
+                  </div>
+                  <div
+                    v-if="message.type === 'video'"
+                    class="w-full h-[300px] max-w-full border border-gray-200 rounded-lg shadow-lg overflow-hidden"
+                  >
+                    <video
+                      :src="message.video_path"
+                      autoplay
+                      muted
+                      controls
+                      class="w-full h-full"
+                    ></video>
+                  </div>
                 </div>
               </div>
             </div>

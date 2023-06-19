@@ -8,7 +8,7 @@ defineProps({
   <div id="default-carousel" class="relative" data-carousel="slide">
     <!-- Carousel wrapper -->
     <div
-      class="relative overflow-hidden rounded-lg h-[300px] md:h-[400px] border border-slate-200 shadow-sm"
+      class="relative -z-0 overflow-hidden rounded-lg h-[300px] md:h-[400px] border border-slate-200 shadow-sm"
     >
       <!-- Item -->
       <div
@@ -43,7 +43,7 @@ defineProps({
     <!-- Slider controls -->
     <button
       type="button"
-      class="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+      class="absolute top-0 left-0 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
       data-carousel-prev
     >
       <span
@@ -69,7 +69,7 @@ defineProps({
     </button>
     <button
       type="button"
-      class="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+      class="absolute top-0 right-0 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
       data-carousel-next
     >
       <span

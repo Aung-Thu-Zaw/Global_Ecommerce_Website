@@ -43,7 +43,10 @@ if (usePage().props.flash.successMessage) {
       </h2>
     </div>
 
-    <div class="mt-48 flex items-center justify-center">
+    <div
+      v-if="$page.props.auth.user.status !== 'active'"
+      class="mt-48 flex items-center justify-center"
+    >
       <Link
         :href="route('home')"
         as="button"
