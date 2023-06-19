@@ -94,7 +94,7 @@ class ProductController extends Controller
 
         $productReviewsAvg=ProductReview::where("product_id", $product->id)->avg("rating");
 
-        $conversation=Conversation::with(["messages.user:id,avatar","customer:id,name,avatar","vendor:id,shop_name,avatar,offical"])
+        $conversation=Conversation::with(["messages.user:id,avatar","customer:id,name,avatar,last_activity","vendor:id,shop_name,avatar,offical,last_activity"])
                                    ->where("customer_id", auth()->user() ? auth()->user()->id : null)
                                    ->Where("vendor_id", $product->user_id)
                                    ->first();

@@ -1,8 +1,34 @@
 <script setup>
 import ChatBox from "@/Components/ChatBox.vue";
-import { ref } from "vue";
+import { usePage } from "@inertiajs/vue3";
+import { computed, ref } from "vue";
 
 const isVisibleChatbox = ref(false);
+
+const totalMessages = computed(() => {
+  const totalUserConversations = usePage().props.conversations.filter(
+    (conversation) =>
+      conversation.customer_id === usePage().props.auth.user?.id ||
+      conversation.vendor_id === usePage().props.auth.user?.id
+  );
+
+  const totalConversationUnseenMessages = totalUserConversations.reduce(
+    (total, conversation) =>
+      total +
+      conversation.messages.reduce(
+        (unseenCount, conversationMessage) =>
+          unseenCount +
+          (conversationMessage.is_seen === 0 &&
+          usePage().props.auth.user.id !== conversationMessage.user_id
+            ? 1
+            : 0),
+        0
+      ),
+    0
+  );
+
+  return totalConversationUnseenMessages;
+});
 </script>
 
 <template>
@@ -21,9 +47,10 @@ const isVisibleChatbox = ref(false);
           <i class="fa-solid fa-message"></i>
 
           <div
+            v-if="totalMessages"
             class="absolute -top-1 -right-1 bg-red-600 w-4 h-4 rounded-full text-[.7rem] flex items-center justify-center"
           >
-            <span>2</span>
+            <span>{{ totalMessages }}</span>
           </div>
         </button>
         <div

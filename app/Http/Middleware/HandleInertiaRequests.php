@@ -6,6 +6,7 @@ use App\Models\Brand;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Conversation;
+use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -55,10 +56,11 @@ class HandleInertiaRequests extends Middleware
                                ->whatsApp()
                                ->getRawLinks(),
 
-            "conversations"=>Conversation::with(["messages.user:id,avatar","customer:id,name,avatar","vendor:id,shop_name,avatar"])
+            "conversations"=>Conversation::with(["messages.user:id,avatar","customer:id,name,avatar,last_activity","vendor:id,shop_name,avatar,offical,last_activity"])
                                          ->where("customer_id", auth()->user() ? auth()->user()->id : null)
                                          ->orWhere("vendor_id", auth()->user() ? auth()->user()->id : null)
                                          ->get(),
+
             'flash'=>[
                 'successMessage'=>session('success'),
                 'errorMessage'=>session('error'),

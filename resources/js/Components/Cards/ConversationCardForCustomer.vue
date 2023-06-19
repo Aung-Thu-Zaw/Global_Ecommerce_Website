@@ -22,12 +22,14 @@ const totalunseenMessages = computed(() =>
 );
 
 const formattedTime = computed(() => {
-  const currentDate = new Date().getDate();
-  const createdDate = new Date(lastMessage.value.created_at).getDate();
+  if (lastMessage.value) {
+    const currentDate = new Date().getDate();
+    const createdDate = new Date(lastMessage.value.created_at).getDate();
 
-  return currentDate > createdDate
-    ? dayjs(lastMessage.value.created_at).format("DD-MMMM-YYYY")
-    : dayjs(lastMessage.value.created_at).fromNow();
+    return currentDate > createdDate
+      ? dayjs(lastMessage.value.created_at).format("DD-MMMM-YYYY")
+      : dayjs(lastMessage.value.created_at).fromNow();
+  }
 });
 </script>
 
@@ -42,7 +44,8 @@ const formattedTime = computed(() => {
       <div class="ml-3 w-full">
         <div class="flex items-start justify-between">
           <h1
-            class="flex items-center text-left text-sm font-semibold text-slate-700 w-[100px]"
+            class="flex items-center text-left text-sm font-semibold text-slate-700"
+            :class="{ 'w-auto': !lastMessage, 'w-[100px]': lastMessage }"
           >
             <span class="line-clamp-1">
               {{ conversation.vendor.shop_name }}
@@ -58,7 +61,7 @@ const formattedTime = computed(() => {
             {{ formattedTime }}
           </span>
         </div>
-        <div class="flex items-center justify-between">
+        <div v-if="lastMessage" class="flex items-center justify-between">
           <p
             v-if="lastMessage.type === 'text'"
             class="text-[.7rem] line-clamp-1 w-[90%]"

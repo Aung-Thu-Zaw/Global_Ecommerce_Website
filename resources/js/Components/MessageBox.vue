@@ -36,6 +36,16 @@ const formattedMessages = computed(() => {
     };
   });
 });
+
+const currentTime = new Date();
+const threshold = 1000 * 60 * 3; //3minutes in millseconds
+
+const status = (last_activity) => {
+  const lastActivity = new Date(last_activity);
+  const timeDifference = currentTime.getTime() - lastActivity.getTime();
+
+  return timeDifference < threshold ? "online" : "offline";
+};
 </script>
 <template>
   <div
@@ -50,9 +60,25 @@ const formattedMessages = computed(() => {
       alt=""
       class="w-10 h-10 object-cover rounded-full ring-2 ring-slate-400 mr-3"
     />
-    <h1 class="text-left text-lg font-semibold text-slate-700">
-      {{ conversation.customer.name }}
-    </h1>
+    <div class="text-left text-md font-semibold text-slate-700">
+      <h1>
+        {{ conversation.customer.name }}
+      </h1>
+
+      <span
+        v-if="status(conversation.customer.last_activity) === 'online'"
+        class="animate-pulse text-[.7rem] text-green-500"
+      >
+        <i class="fa-solid fa-circle text-[.6rem]"></i>
+        Active
+      </span>
+      <span
+        v-else-if="status(conversation.customer.last_activity) === 'offline'"
+        class="text-[.7rem] text-gray-400"
+      >
+        {{ dayjs(conversation.customer.last_activity).fromNow() }}
+      </span>
+    </div>
   </div>
 
   <div
@@ -78,11 +104,19 @@ const formattedMessages = computed(() => {
         </span>
       </h1>
 
-      <!-- <span class="animate-pulse text-[.7rem] text-green-500">
+      <span
+        v-if="status(conversation.vendor.last_activity) === 'online'"
+        class="animate-pulse text-[.7rem] text-green-500"
+      >
         <i class="fa-solid fa-circle text-[.6rem]"></i>
         Active
-      </span> -->
-      <span class="text-[.7rem] text-gray-400"> 5 minutes ago </span>
+      </span>
+      <span
+        v-else-if="status(conversation.vendor.last_activity) === 'offline'"
+        class="text-[.7rem] text-gray-400"
+      >
+        {{ dayjs(conversation.vendor.last_activity).fromNow() }}
+      </span>
     </div>
   </div>
   <div
@@ -107,7 +141,7 @@ const formattedMessages = computed(() => {
               <div class="pl-28">
                 <p
                   v-if="message.type === 'text'"
-                  class="p-3 border-2 border-slate-300 rounded-lg rounded-br-none shadow-md w-auto"
+                  class="p-3 border-2 border-slate-300 rounded-xl rounded-br-none shadow-md w-auto"
                 >
                   {{ message.message }}
                 </p>
@@ -138,7 +172,7 @@ const formattedMessages = computed(() => {
             <img
               :src="message.user.avatar"
               alt=""
-              class="w-8 h-8 object-cover rounded-full ring-2 ring-blue-400 ml-3"
+              class="w-8 h-8 object-cover rounded-full ring-2 ring-slate-400 ml-3"
             />
           </div>
         </div>
@@ -153,14 +187,14 @@ const formattedMessages = computed(() => {
               <img
                 :src="message.user.avatar"
                 alt=""
-                class="w-8 h-8 object-cover rounded-full ring-2 ring-blue-400 mr-3"
+                class="w-8 h-8 object-cover rounded-full ring-2 ring-slate-400 mr-3"
               />
 
               <div class="flex items-end justify-start mb-3 w-full">
                 <div class="pr-28">
                   <p
                     v-if="message.type === 'text'"
-                    class="p-3 border-2 border-slate-300 rounded-lg rounded-bl-none shadow-md w-auto"
+                    class="p-3 border-2 border-slate-300 rounded-xl rounded-bl-none shadow-md w-auto"
                   >
                     {{ message.message }}
                   </p>

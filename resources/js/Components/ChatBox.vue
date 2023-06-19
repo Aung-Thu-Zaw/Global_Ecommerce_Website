@@ -39,7 +39,7 @@ watch(
 
 <template>
   <div
-    class="fixed z-2 bottom-0 right-14 w-[900px] h-[700px] rounded-tl-md border-2 border-r-0 shadow-sm bg-gray-50 chat-box"
+    class="fixed z-40 bottom-0 right-14 w-[900px] h-[700px] rounded-tl-md border-2 border-r-0 shadow-sm bg-gray-50 chat-box"
   >
     <div class="flex items-center h-full">
       <div class="w-1/2 h-full">
