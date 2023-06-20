@@ -74,7 +74,7 @@ Route::middleware(["auth","verified"])->group(function () {
     Route::post("/product/track-interaction", [UserProductInteractionController::class,"store"])->name("product.track-interaction");
 
     Route::post("/conversations", [ConversationController::class,"store"])->name("conversation.store");
-    Route::post("/conversations/{conversation}/messages/seen", [ConversationController::class,"seenMessage"])->name("conversation.messages.seen");
+    Route::post("/conversations/{conversation}/messages/seen", [ConversationController::class,"markMessageAsSeen"])->name("conversation.messages.seen");
     Route::post("/conversation/messages", [MessageController::class,"store"])->name("message.store");
 
     Route::controller(ProductReviewController::class)

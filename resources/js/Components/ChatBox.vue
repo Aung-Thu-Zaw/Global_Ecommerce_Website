@@ -3,7 +3,7 @@ import { router, usePage } from "@inertiajs/vue3";
 import MessageBox from "@/Components/MessageBox.vue";
 import ConversationCardForCustomer from "@/Components/Cards/ConversationCardForCustomer.vue";
 import ConversationCardForVendor from "@/Components/Cards/ConversationCardForVendor.vue";
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, onUpdated, ref, watch } from "vue";
 
 const props = defineProps({
   conversation: Object,
@@ -28,12 +28,32 @@ const handleSelectedConversation = (conversationId) => {
   selected.value = conversationId;
 };
 
+onUpdated(() => {
+  maskMessageAsSeen(selected.value);
+});
+
+const maskMessageAsSeen = (conversationId) => {
+  router.post(route("conversation.messages.seen", conversationId), {
+    user_id: usePage().props.auth.user?.id,
+  });
+};
+
 watch(
   () => selected.value,
   () => {
-    router.post(route("conversation.messages.seen", selected.value));
+    maskMessageAsSeen(selected.value);
   }
 );
+
+// onMounted(() => {
+//   Echo.private(`chat.message`)
+//     .listen("ChatMessage", (message) => {
+//       messages.value.push(message.message);
+//     })
+//     .listenForWhisper("typing", (e) => {
+//       console.log("Typing:", e);
+//     });
+// });
 </script>
 
 

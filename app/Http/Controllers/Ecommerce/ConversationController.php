@@ -27,10 +27,10 @@ class ConversationController extends Controller
     }
 
 
-    public function seenMessage(Conversation $conversation): RedirectResponse
+    public function markMessageAsSeen(Conversation $conversation): RedirectResponse
     {
 
-        $messages = Message::where('conversation_id', $conversation->id)->get();
+        $messages = Message::where('conversation_id', $conversation->id)->where("user_id", "!=", request()->user_id)->get();
 
         foreach ($messages as $message) {
             $message->update(["is_seen"=>true]);

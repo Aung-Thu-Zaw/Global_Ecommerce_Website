@@ -17,8 +17,6 @@ const messages = ref(
 );
 
 onMounted(() => {
-  const userId = usePage().props.auth.user.id;
-
   Echo.private(`chat.message`)
     .listen("ChatMessage", (message) => {
       messages.value.push(message.message);
