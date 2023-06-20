@@ -3,18 +3,19 @@
 namespace App\Http\Controllers\Ecommerce;
 
 use App\Actions\CreateMessageAction;
+use App\Events\ChatMessage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MessageRequest;
-use App\Models\Message;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 
 class MessageController extends Controller
 {
-    public function store(MessageRequest $request): RedirectResponse
+    public function store(MessageRequest $request): void
     {
-        (new CreateMessageAction())->handle($request);
+        $message= (new CreateMessageAction())->handle($request);
 
-        return back();
+        event(new ChatMessage($message->load("user:id,avatar")));
     }
 
 }

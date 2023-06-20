@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\ChatMessage;
+use App\Listeners\HandleChatMessage;
 use App\Listeners\RegisteredUserListener;
 use App\Listeners\Registered\SendNewUserRegisteredEmailNotificationForAdmin;
 use App\Listeners\Registered\SendNewUserRegisteredNotificationForAdminDashboard;

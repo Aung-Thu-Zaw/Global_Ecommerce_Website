@@ -3,6 +3,7 @@ import ChatMessageForm from "@/Components/Forms/ChatMessageForm.vue";
 import { computed, onMounted, onUpdated, ref } from "vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { usePage } from "@inertiajs/vue3";
 
 dayjs.extend(relativeTime);
 
@@ -11,8 +12,21 @@ const props = defineProps({
 });
 
 const msgScroll = ref(null);
+const messages = ref(
+  props.conversation.messages.length ? props.conversation.messages : []
+);
 
 onMounted(() => {
+  const userId = usePage().props.auth.user.id;
+
+  Echo.private(`chat.message`)
+    .listen("ChatMessage", (message) => {
+      messages.value.push(message.message);
+    })
+    .listenForWhisper("typing", (e) => {
+      console.log("Typing:", e);
+    });
+
   scrollToBottom();
 });
 
@@ -25,7 +39,7 @@ function scrollToBottom() {
 }
 
 const formattedMessages = computed(() => {
-  return props.conversation.messages.map((message) => {
+  return messages.value.map((message) => {
     const date = dayjs(message.created_at);
     const relativeTimeString = date.fromNow();
 
@@ -38,7 +52,7 @@ const formattedMessages = computed(() => {
 });
 
 const currentTime = new Date();
-const threshold = 1000 * 60 * 3; //3minutes in millseconds
+const threshold = 1000 * 60 * 3; // 3 minutes in milliseconds
 
 const status = (last_activity) => {
   const lastActivity = new Date(last_activity);
@@ -47,6 +61,8 @@ const status = (last_activity) => {
   return timeDifference < threshold ? "online" : "offline";
 };
 </script>
+
+
 <template>
   <div
     v-if="
