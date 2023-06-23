@@ -26,11 +26,13 @@ use App\Http\Controllers\Ecommerce\ShopController;
 use App\Http\Controllers\Ecommerce\ShopReviewController;
 use App\Http\Controllers\Ecommerce\ShopReviewReplyController;
 use App\Http\Controllers\Ecommerce\SubscriberController;
+use App\Http\Controllers\Ecommerce\SuggestionController;
 use App\Http\Controllers\Ecommerce\UserProductInteractionController;
 use App\Http\Controllers\User\MyAccountController;
 use App\Http\Controllers\Ecommerce\WatchlistController;
 use App\Http\Controllers\User\MyOrderController;
 use App\Http\Controllers\User\TrackMyOrderController;
+use App\Models\Suggestion;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -40,7 +42,7 @@ require __DIR__.'/vendor.php';
 
 Route::get('/', [HomeController::class,"index"])->name("home");
 // Route::get('/', function () {
-//     return view("mails.for-subscribers.subscriber-welcome-mail");
+//     return view("mails.for-users.thanks-for-request-features-mail");
 // });
 
 Route::controller(ProductController::class)
@@ -56,6 +58,7 @@ Route::controller(ProductController::class)
 
 
 Route::post('/subscribe', [SubscriberController::class, 'store'])->name("subscribe");
+Route::post('/suggestion', [SuggestionController::class, 'store'])->name("suggestion.store");
 
 
 Route::get("products", [SearchResultProductController::class,"index"])->name("product.search");

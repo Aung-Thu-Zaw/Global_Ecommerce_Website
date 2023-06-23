@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Ecommerce;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SubscriberRequest;
-use App\Mail\SubscriberMail;
+use App\Mail\ForTheSubmitters\ThankForSubscribeWebsiteMail;
 use App\Models\Subscriber;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Mail;
@@ -15,7 +15,7 @@ class SubscriberController extends Controller
     {
         $subscriber=Subscriber::create($request->validated());
 
-        Mail::to($subscriber->email)->queue(new SubscriberMail());
+        Mail::to($subscriber->email)->queue(new ThankForSubscribeWebsiteMail());
 
         return back()->with("success", "Thank you for subscribing to our newsletter.");
     }

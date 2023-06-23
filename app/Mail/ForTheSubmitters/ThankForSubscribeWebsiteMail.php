@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Mail;
+namespace App\Mail\ForTheSubmitters;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -10,7 +10,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Address;
 
-class SubscriberMail extends Mailable
+class ThankForSubscribeWebsiteMail extends Mailable
 {
     use Queueable;
     use SerializesModels;
@@ -46,17 +46,7 @@ class SubscriberMail extends Mailable
     public function content()
     {
         return new Content(
-            view: 'mails.for-subscribers.subscriber-welcome-mail',
+            view: 'mails.for-submitters.subscriber-welcome-mail',
         );
     }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array
-     */
-    // public function attachments()
-    // {
-    //     return [];
-    // }
 }
