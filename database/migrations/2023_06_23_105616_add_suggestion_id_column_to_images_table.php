@@ -12,11 +12,8 @@ return new class () extends Migration {
      */
     public function up()
     {
-        Schema::create('images', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId("product_id")->nullable()->constrained()->cascadeOnDelete();
-            $table->string("img_path");
-            $table->timestamps();
+        Schema::table('images', function (Blueprint $table) {
+            $table->foreignId("suggestion_id")->after("product_id")->nullable()->constrained()->cascadeOnDelete();
         });
     }
 
@@ -27,6 +24,8 @@ return new class () extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('images');
+        Schema::table('images', function (Blueprint $table) {
+            $table->dropConstrainedForeignId("suggestion_id");
+        });
     }
 };
