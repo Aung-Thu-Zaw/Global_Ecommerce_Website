@@ -1,7 +1,6 @@
 <script setup>
 import ChatBox from "@/Components/ChatBox.vue";
-import ReportBugModal from "@/Components/Modals/ReportBugModal.vue";
-import RequestFeatureModal from "@/Components/Modals/RequestFeatureModal.vue";
+import SuggestionModal from "@/Components/Modals/SuggestionModal.vue";
 import FeedbackModal from "@/Components/Modals/FeedbackModal.vue";
 import { usePage } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
@@ -68,10 +67,10 @@ const totalMessages = computed(() => {
 
       <div>
         <button
-          data-tooltip-target="request-feature"
+          data-tooltip-target="suggestion"
           data-tooltip-placement="left"
-          data-modal-target="request-feature-modal"
-          data-modal-toggle="request-feature-modal"
+          data-modal-target="suggestion-modal"
+          data-modal-toggle="suggestion-modal"
           class="mb-2 md:mb-0 text-white shadow-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm text-center w-8 h-8"
           type="button"
         >
@@ -79,11 +78,11 @@ const totalMessages = computed(() => {
         </button>
 
         <div
-          id="request-feature"
+          id="suggestion"
           role="tooltip"
           class="absolute invisible inline-block p-2 text-sm font-medium text-white bg-gray-600 rounded-md shadow-lg border opacity-0 tooltip w-[150px]"
         >
-          Request Features
+          Suggestions
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
       </div>
@@ -105,28 +104,6 @@ const totalMessages = computed(() => {
           class="absolute invisible inline-block p-2 text-sm font-medium text-white bg-gray-600 rounded-md shadow-lg border opacity-0 tooltip w-[200px]"
         >
           Feedback For Website
-          <div class="tooltip-arrow" data-popper-arrow></div>
-        </div>
-      </div>
-
-      <div>
-        <button
-          data-tooltip-target="report-bugs"
-          data-tooltip-placement="left"
-          data-modal-target="report-modal"
-          data-modal-toggle="report-modal"
-          class="mb-2 md:mb-0 text-white shadow-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm text-center w-8 h-8"
-          type="button"
-        >
-          <i class="fa-solid fa-bug"></i>
-        </button>
-
-        <div
-          id="report-bugs"
-          role="tooltip"
-          class="absolute invisible inline-block p-2 text-sm font-medium text-white bg-gray-600 rounded-md shadow-lg border opacity-0 tooltip w-[100px]"
-        >
-          Report Bugs
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
       </div>
@@ -273,7 +250,7 @@ const totalMessages = computed(() => {
 
   <!-- Request Feature Modal -->
   <div
-    id="request-feature-modal"
+    id="suggestion-modal"
     tabindex="-1"
     aria-hidden="true"
     class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
@@ -284,7 +261,7 @@ const totalMessages = computed(() => {
         <button
           type="button"
           class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-          data-modal-hide="request-feature-modal"
+          data-modal-hide="suggestion-modal"
         >
           <svg
             aria-hidden="true"
@@ -302,43 +279,7 @@ const totalMessages = computed(() => {
           <span class="sr-only">Close modal</span>
         </button>
 
-        <RequestFeatureModal />
-      </div>
-    </div>
-  </div>
-
-  <!-- Report Bug Modal -->
-  <div
-    id="report-modal"
-    tabindex="-1"
-    aria-hidden="true"
-    class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
-  >
-    <div class="relative w-full max-w-4xl max-h-full">
-      <!-- Modal content -->
-      <div class="relative bg-white rounded-lg shadow">
-        <button
-          type="button"
-          class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-          data-modal-hide="report-modal"
-        >
-          <svg
-            aria-hidden="true"
-            class="w-5 h-5"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-          <span class="sr-only">Close modal</span>
-        </button>
-
-        <ReportBugModal />
+        <SuggestionModal />
       </div>
     </div>
   </div>

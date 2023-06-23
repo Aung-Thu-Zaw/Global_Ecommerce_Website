@@ -2,6 +2,9 @@
 import { useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
 import { useReCaptcha } from "vue-recaptcha-v3";
+import InputError from "@/Components/Forms/InputError.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
 
 const processing = ref(false);
 
@@ -28,7 +31,7 @@ const form = useForm({
   email: "",
   description: "",
   multi_image: [],
-  type: "request_feature",
+  type: "",
   captcha_token: null,
 });
 
@@ -42,7 +45,6 @@ const handleSubmitRequestFeature = async () => {
 const submit = () => {
   processing.value = true;
   form.post(route("suggestion.store"), {
-    replace: true,
     preserveState: true,
     onFinish: () => {
       processing.value = false;
@@ -54,53 +56,54 @@ const submit = () => {
 
 <template>
   <div class="flex items-start justify-between">
-    <div
-      class="px-6 py-6 lg:px-8"
-      :class="{
-        'w-1/2': form.multi_image.length !== 0,
-        'w-full': form.multi_image.length === 0,
-      }"
-    >
+    <div class="px-6 py-6 lg:px-8 w-full">
       <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">
-        Request Features
+        Enter Your Suggestions
       </h3>
       <form @submit.prevent="handleSubmitRequestFeature" class="space-y-6">
         <div>
-          <label
-            for="email"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >Your email *</label
-          >
-          <input
+          <InputLabel for="type" value="Email *" />
+
+          <TextInput
+            id="name"
             type="email"
-            name="email"
-            id="email"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-0 focus:border-gray-300 block w-full p-3"
-            placeholder="Enter Your Email"
-            required
+            class="mt-1 block w-full"
             v-model="form.email"
+            required
+            placeholder="Enter Your Email"
           />
 
           <InputError class="mt-2" :message="form.errors.email" />
         </div>
+
+        <div class="mb-6">
+          <InputLabel for="type" value="Suggestion Type *" />
+
+          <select
+            class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+            v-model="form.type"
+          >
+            <option value="" selected disabled>Select Suggestion</option>
+            <option value="request_feature">Request Features</option>
+            <option value="report_bug">Report Bugs</option>
+          </select>
+
+          <InputError class="mt-2" :message="form.errors.type" />
+        </div>
+
         <div>
           <textarea
             cols="30"
             rows="10"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-0 focus:border-gray-300 block w-full p-2.5"
-            placeholder="What do you want to suggest a new feature, please write it down."
+            class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-0 focus:border-gray-300 block w-full p-2.5"
+            placeholder="We take your feedback seriously and even though we may not be able to response personally,consideration is given any submission.If you do wish give us any bugs or problem,please be sure to include any relevant informations. Eg. Order Detail or Product link"
             v-model="form.description"
           ></textarea>
-
           <InputError class="mt-2" :message="form.errors.description" />
         </div>
 
         <div class="mb-6">
-          <label
-            for="email"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >Add Image</label
-          >
+          <InputLabel for="type" value="Add Image" />
 
           <input
             class="relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-neutral-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out file:-mx-3 file:-my-1.5 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-1.5 file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[margin-inline-end:0.75rem] file:[border-inline-end-width:1px] hover:file:bg-neutral-200 focus:border-primary focus:bg-white focus:text-neutral-700 focus:shadow-[0_0_0_1px] focus:shadow-primary focus:outline-none dark:bg-transparent dark:text-neutral-200 dark:focus:bg-transparent"
@@ -149,24 +152,24 @@ const submit = () => {
 
     <div
       class="h-[500px] px-6 pb-6 pt-14"
-      :class="{ 'w-1/2': form.multi_image.length !== 0 }"
+      :class="{ 'w-[350px]': form.multi_image.length !== 0 }"
     >
       <div
-        class="w-full h-full overflow-auto scrollbar flex items-start flex-wrap"
+        class="w-[180px] h-full overflow-auto scrollbar flex items-center justify-center flex-wrap"
       >
         <div
           v-for="(multiPreviewPhoto, index) in multiPreviewPhotos"
           :key="index"
-          class="relative mr-5 w-[150px]"
+          class="relative w-[150px]"
         >
           <img
             :src="multiPreviewPhoto"
             alt=""
-            class="w-full h-full object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300"
+            class="w-full h-full object-cover rounded-sm shadow-md my-3 border-4 border-slate-300"
           />
           <span
             @click="removeImage(index)"
-            class="absolute top-0 -right-3 bg-slate-300 text-slate-600 w-5 h-5 flex items-center justify-center rounded-full hover:bg-slate-500 hover:text-slate-300 transition-all"
+            class="absolute top-1 -right-2 bg-slate-300 text-slate-600 w-5 h-5 flex items-center justify-center rounded-full hover:bg-slate-500 hover:text-slate-300 transition-all"
           >
             <i class="fas fa-xmark text-sm"></i>
           </span>

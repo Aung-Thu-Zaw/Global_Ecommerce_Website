@@ -42,6 +42,7 @@ class SuggestionRequest extends FormRequest
             "email.email" =>  "The email address must be a valid email address.",
             "description.required" => "The description field is required.",
             "description.string" => "The description must be a string.",
+            "type.required" => "The type field is required.",
             "type.in"=>"The selected type is invalid.",
         ];
     }
