@@ -3,9 +3,9 @@
 
 <template>
   <div class="flex items-start justify-between">
-    <div class="px-6 py-6 lg:px-8 w-1/2">
+    <div class="px-6 py-6 lg:px-8" :class="{ 'w-1/2': true, 'w-full': false }">
       <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">
-        Report Bugs
+        Request Features
       </h3>
       <form class="space-y-6" action="#">
         <div>
@@ -28,7 +28,7 @@
             cols="30"
             rows="10"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-0 focus:border-gray-300 block w-full p-2.5"
-            placeholder="We take your feedback seriously and even though we may not be able to response personally,consideration is given any submission.If you do wish give us any bugs or problem,please be sure to include any relevant informations. Eg. Order Detail or Product link"
+            placeholder="What do you want to suggest a new feature, please write it down."
           ></textarea>
         </div>
 
@@ -58,13 +58,13 @@
           type="submit"
           class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-3 text-center"
         >
-        <i class="fa-solid fa-paper-plane"></i>
+          <i class="fa-solid fa-paper-plane"></i>
           Submit
         </button>
       </form>
     </div>
 
-    <div class="w-1/2 h-[500px] px-6 pb-6 pt-14">
+    <div class="h-[500px] px-6 pb-6 pt-14" :class="{ 'w-1/2': true }">
       <div
         class="w-full h-full overflow-auto scrollbar flex items-start flex-wrap"
       >
