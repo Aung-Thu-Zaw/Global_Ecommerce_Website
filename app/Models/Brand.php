@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Scout\Searchable;
 use Spatie\Sluggable\HasSlug;
@@ -77,6 +78,14 @@ class Brand extends Model
         return Attribute::make(
             get: fn ($value) => date("j-F-Y", strtotime($value)),
         );
+    }
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Category,Brand>
+    */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
 
     /**

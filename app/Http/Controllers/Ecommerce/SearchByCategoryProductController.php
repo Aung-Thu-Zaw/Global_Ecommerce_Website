@@ -23,7 +23,7 @@ class SearchByCategoryProductController extends Controller
 
         $category->load("parent.parent.parent.parent.parent", "children");
 
-        $brands=Brand::all();
+        $brands=Brand::where("category_id", $category->id)->get();
 
         return inertia("Ecommerce/Products/SearchByCategory", compact("category", "brands", "products"));
 

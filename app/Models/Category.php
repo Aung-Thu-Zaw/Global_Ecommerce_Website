@@ -105,6 +105,14 @@ class Category extends Model
         return $this->hasMany(Category::class, 'parent_id')->with('children');
     }
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\HasMany<Brand>
+    */
+    public function brands(): HasMany
+    {
+        return $this->hasMany(Brand::class);
+    }
+
     public static function deleteImage(Category $category): void
     {
         if (!empty($category->image) && file_exists(storage_path("app/public/categories/".pathinfo($category->image, PATHINFO_BASENAME)))) {

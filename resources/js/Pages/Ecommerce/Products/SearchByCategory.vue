@@ -205,6 +205,8 @@ const handleRemoveBrand = () => {
               </div>
             </li>
           </Breadcrumb>
+
+          <!--  -->
         </div>
       </div>
       <div class="container max-w-screen-xl mx-auto px-4">
@@ -217,6 +219,10 @@ const handleRemoveBrand = () => {
             <div
               class="text-sm font-bold text-slate-600 px-5 py-3 border-t border-b flex items-center justify-between"
             >
+              <p v-if="category">
+                {{ products.data.length }} items found in
+                <span class="text-blue-600">"{{ category.name }}"</span>
+              </p>
               <div class="flex items-center ml-auto">
                 <div class="w-[220px] flex items-center justify-between">
                   <span class="">Sort By : </span>
