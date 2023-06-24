@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BrandRequest;
 use App\Models\Brand;
+use App\Models\Category;
 use App\Services\BrandImageUploadService;
 use Illuminate\Database\Eloquent\Builder;
 use Inertia\Response;
@@ -31,7 +32,9 @@ class AdminBrandController extends Controller
     {
         $per_page=request("per_page");
 
-        return inertia("Admin/Brands/Create", compact("per_page"));
+        $categories=Category::all();
+
+        return inertia("Admin/Brands/Create", compact("per_page", "categories"));
     }
 
     public function store(BrandRequest $request, BrandImageUploadService $brandImageUploadService): RedirectResponse
@@ -45,7 +48,9 @@ class AdminBrandController extends Controller
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
-        return inertia("Admin/Brands/Edit", compact("brand", "paginate"));
+        $categories=Category::all();
+
+        return inertia("Admin/Brands/Edit", compact("brand", "paginate", "categories"));
     }
 
     public function update(BrandRequest $request, Brand $brand, BrandImageUploadService $brandImageUploadService): RedirectResponse

@@ -12,6 +12,7 @@ import { ref } from "vue";
 const props = defineProps({
   paginate: Array,
   brand: Object,
+  categories: Object,
 });
 
 const editor = ClassicEditor;
@@ -26,6 +27,7 @@ const getPreviewPhotoPath = (path) => {
 const form = useForm({
   name: props.brand.name,
   image: props.brand.image,
+  category_id: props.brand.category_id,
   description: props.brand.description,
   captcha_token: null,
 });
@@ -131,6 +133,27 @@ const submit = () => {
             <ckeditor :editor="editor" v-model="form.description"></ckeditor>
 
             <InputError class="mt-2" :message="form.errors.description" />
+          </div>
+
+          <div class="mb-6">
+            <InputLabel for="category" value="Select Category" />
+
+            <select
+              class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+              v-model="form.category_id"
+            >
+              <option value="" selected disabled>Select Category</option>
+              <option
+                v-for="category in categories"
+                :key="category"
+                :value="category.id"
+                :selected="category.id === form.category_id"
+              >
+                {{ category.name }}
+              </option>
+            </select>
+
+            <InputError class="mt-2" :message="form.errors.category_id" />
           </div>
 
           <div class="mb-6">

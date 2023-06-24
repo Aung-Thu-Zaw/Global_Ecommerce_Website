@@ -17,6 +17,7 @@ class BrandFactory extends Factory
     public function definition()
     {
         return [
+            "category_id"=>fake()->numberBetween(1, 69),
             "name"=>fake()->unique()->company(),
             "slug"=>fake()->unique()->slug(),
             "description"=>fake()->paragraph(20),

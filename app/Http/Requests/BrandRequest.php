@@ -25,6 +25,7 @@ class BrandRequest extends FormRequest
     public function rules()
     {
         $rules= [
+            "category_id"=>["nullable",Rule::exists("categories", "id")],
             "name"=>["required","string",Rule::unique("brands", "name")],
             "description"=>["required","string"]
         ];
@@ -43,6 +44,7 @@ class BrandRequest extends FormRequest
     public function messages(): array
     {
         return [
+            "category_id.exists" =>  "The selected category id is invalid.",
             "name.required" =>  "The name field is required.",
             "name.string" =>  "The name must be a string.",
             "name.unique" =>'The name has already been taken.',
