@@ -15,8 +15,10 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
+        $superAdmin=Role::create(["name"=>"Super Admin"]);
+        $superAdmin->syncPermissions(\Spatie\Permission\Models\Permission::all());
+
         Role::create(["name"=>"CEO"]);
-        Role::create(["name"=>"Super Admin"]);
         Role::create(["name"=>"Admin"]);
         Role::create(["name"=>"Moderator"]);
         Role::create(["name"=>"Accountant"]);

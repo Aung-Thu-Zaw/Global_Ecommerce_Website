@@ -33,8 +33,8 @@ class DatabaseSeeder extends Seeder
                 TownshipSeeder::class,
                 BlogCategorySeeder::class,
                 BlogPostSeeder::class,
-                RoleSeeder::class,
                 PermissionSeeder::class,
+                RoleSeeder::class,
             ]
         );
     }

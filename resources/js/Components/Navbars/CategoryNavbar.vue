@@ -1,5 +1,17 @@
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import { Link, usePage } from "@inertiajs/vue3";
+import { reactive } from "vue";
+
+const params = reactive({
+  search: usePage().props.ziggy.query.search
+    ? usePage().props.ziggy.query.search
+    : "",
+  sort: "id",
+  direction: "desc",
+  view: usePage().props.ziggy.query.view
+    ? usePage().props.ziggy.query.view
+    : "grid",
+});
 </script>
 
 <template>
@@ -52,12 +64,17 @@ import { Link } from "@inertiajs/vue3";
                         alt=""
                         class="w-7 h-7 rounded-full object-cover mr-2 border-2 border-secondary-500"
                       />
-                      <a
-                        href="#"
+                      <Link
+                        :href="route('category.products', category.slug)"
+                        :data="{
+                          sort: params.sort,
+                          direction: params.direction,
+                          view: params.view,
+                        }"
                         class="hover:text-blue-600 hover:underline cursor-pointer text-[1.1rem] font-bold"
                       >
                         {{ category.name }}
-                      </a>
+                      </Link>
                     </li>
                     <li
                       v-for="childCategory in category.children"
@@ -71,11 +88,17 @@ import { Link } from "@inertiajs/vue3";
                       </span>
 
                       <span>
-                        <a
+                        <Link
+                          :href="route('category.products', childCategory.slug)"
+                          :data="{
+                            sort: params.sort,
+                            direction: params.direction,
+                            view: params.view,
+                          }"
                           class="font-medium text-sm hover:text-blue-600 hover:underline cursor-pointer"
                         >
                           {{ childCategory.name }}
-                        </a>
+                        </Link>
                       </span>
                     </li>
                   </ul>

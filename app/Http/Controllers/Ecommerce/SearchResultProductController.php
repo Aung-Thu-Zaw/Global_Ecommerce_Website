@@ -14,13 +14,6 @@ class SearchResultProductController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-
-
-
-
-
-
-
         $products=Product::with(["shop","watchlists","cartItems","images"])
                         ->filterBy(request(["search","category","brand","rating","price"]))
                         ->where("status", "active")

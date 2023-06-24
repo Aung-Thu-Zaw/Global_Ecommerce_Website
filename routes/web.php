@@ -21,6 +21,7 @@ use App\Http\Controllers\Ecommerce\ProductReviewController;
 use App\Http\Controllers\Ecommerce\ProductReviewReplyController;
 use App\Http\Controllers\Ecommerce\ReturnOrderAndItemController;
 use App\Http\Controllers\Ecommerce\ReviewController;
+use App\Http\Controllers\Ecommerce\SearchByCategoryProductController;
 use App\Http\Controllers\Ecommerce\SearchResultProductController;
 use App\Http\Controllers\Ecommerce\ShopController;
 use App\Http\Controllers\Ecommerce\ShopReviewController;
@@ -64,6 +65,8 @@ Route::post('/feedback', [WebsiteFeedbackController::class, 'store'])->name("fee
 
 
 Route::get("products", [SearchResultProductController::class,"index"])->name("product.search");
+
+Route::get("{category}/products", [SearchByCategoryProductController::class,"show"])->name("category.products");
 
 Route::get('/collections', [CollectionController::class,"index"])->name("collections.index");
 

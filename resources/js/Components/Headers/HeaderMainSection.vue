@@ -1,9 +1,19 @@
 <script setup>
 import SliderBanner from "@/Components/Banners/SliderBanner.vue";
+import { Link, usePage } from "@inertiajs/vue3";
+import { reactive } from "vue";
 
 defineProps({
   categories: Object,
   sliderBanners: Object,
+});
+
+const params = reactive({
+  sort: "id",
+  direction: "desc",
+  view: usePage().props.ziggy.query.view
+    ? usePage().props.ziggy.query.view
+    : "grid",
 });
 </script>
 
@@ -23,7 +33,13 @@ defineProps({
               >
                 <img :src="category.image" class="h-full object-cover" />
               </div>
-              <button
+              <Link
+                :href="route('category.products', category.slug)"
+                :data="{
+                  sort: params.sort,
+                  direction: params.direction,
+                  view: params.view,
+                }"
                 id="dropdownHoverButton"
                 :data-dropdown-toggle="'dropdownHover' + category.id"
                 data-dropdown-trigger="hover"
@@ -45,7 +61,7 @@ defineProps({
                     clip-rule="evenodd"
                   ></path>
                 </svg>
-              </button>
+              </Link>
 
               <div
                 :id="'dropdownHover' + category.id"
@@ -57,12 +73,19 @@ defineProps({
                     :key="secondChildCategory.id"
                     class="p-3 mb-3"
                   >
-                    <a
-                      href="#"
+                    <Link
+                      :href="
+                        route('category.products', secondChildCategory.slug)
+                      "
+                      :data="{
+                        sort: params.sort,
+                        direction: params.direction,
+                        view: params.view,
+                      }"
                       class="font-bold text-slate-700 hover:text-blue-500 hover:underline cursor-pointer"
                     >
                       {{ secondChildCategory.name }}
-                    </a>
+                    </Link>
 
                     <ul>
                       <li
@@ -73,12 +96,19 @@ defineProps({
                         <i
                           class="fa-solid fa-circle text-[.4rem] text-slate-600 mx-2"
                         ></i>
-                        <a
-                          href="#"
+                        <Link
+                          :href="
+                            route('category.products', thirdChildCategory.slug)
+                          "
+                          :data="{
+                            sort: params.sort,
+                            direction: params.direction,
+                            view: params.view,
+                          }"
                           class="text-[.8rem] font-bold text-slate-500 hover:text-blue-500 hover:underline cursor-pointer"
                         >
                           {{ thirdChildCategory.name }}
-                        </a>
+                        </Link>
                       </li>
                     </ul>
                   </div>
