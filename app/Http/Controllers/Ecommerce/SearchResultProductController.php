@@ -22,8 +22,18 @@ class SearchResultProductController extends Controller
                         ->appends(request()->all());
 
         $categories=Category::all();
+        $brands=null;
 
-        $brands=Brand::all();
+
+        if(request("category")) {
+            $category=Category::where("slug", request("category"))->first();
+
+            $brands=Brand::where("category_id", $category->id)->get();
+        } else {
+            $brands=Brand::all();
+        }
+
+
 
         return inertia("Ecommerce/Products/SearchResult", compact("categories", "brands", "products"));
 

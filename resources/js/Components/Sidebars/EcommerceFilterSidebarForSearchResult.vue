@@ -229,7 +229,7 @@ const handlePrice = () => {
         </button>
       </div>
 
-      <hr class="my-4" />
+      <hr v-if="brands.length" class="my-4" />
       <h3 class="font-semibold mb-2">Ratings</h3>
       <ul class="space-y-1">
         <li>
