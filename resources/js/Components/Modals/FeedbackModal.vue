@@ -1,27 +1,62 @@
 <script setup>
+import { useForm } from "@inertiajs/vue3";
+import { ref } from "vue";
+import { useReCaptcha } from "vue-recaptcha-v3";
+import InputError from "@/Components/Forms/InputError.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+
+const processing = ref(false);
+
+const form = useForm({
+  email: "",
+  feedback_text: "",
+  rating: 1,
+  captcha_token: null,
+});
+
+const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+const handleSubmitFeedback = async () => {
+  await recaptchaLoaded();
+  form.captcha_token = await executeRecaptcha("create_feedback");
+  submit();
+};
+
+const submit = () => {
+  processing.value = true;
+  form.post(route("feedback.store"), {
+    replace: true,
+    preserveState: true,
+    onFinish: () => {
+      processing.value = false;
+    },
+    onSuccess: () => {
+      form.reset();
+    },
+  });
+};
 </script>
 
 <template>
   <div class="flex items-start justify-between">
     <div class="px-6 py-6 lg:px-8 w-full">
       <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">
-        Feedback For Website
+        Write Feedback For Website
       </h3>
-      <form class="space-y-6" action="#">
+      <form @submit.prevent="handleSubmitFeedback" class="space-y-6">
         <div>
-          <label
-            for="email"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >Your email *</label
-          >
-          <input
-            type="email"
-            name="email"
+          <InputLabel for="type" value="Email *" />
+
+          <TextInput
             id="email"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-0 focus:border-gray-300 block w-full p-3"
-            placeholder="Enter Your Email"
+            type="email"
+            class="mt-1 block w-full"
+            v-model="form.email"
             required
+            placeholder="Enter Your Email"
           />
+
+          <InputError class="mt-2" :message="form.errors.email" />
         </div>
 
         <div>
@@ -56,6 +91,7 @@
                   value="1"
                   name="colored-radio"
                   class="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 focus:ring-yellow-400 focus:ring-2"
+                  v-model="form.rating"
                 />
               </span>
             </div>
@@ -98,6 +134,7 @@
                   value="2"
                   name="colored-radio"
                   class="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 focus:ring-yellow-400 focus:ring-2"
+                  v-model="form.rating"
                 />
               </span>
             </div>
@@ -152,6 +189,7 @@
                   value="3"
                   name="colored-radio"
                   class="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 focus:ring-yellow-400 focus:ring-2"
+                  v-model="form.rating"
                 />
               </span>
             </div>
@@ -218,6 +256,7 @@
                   value="4"
                   name="colored-radio"
                   class="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 focus:ring-yellow-400 focus:ring-2"
+                  v-model="form.rating"
                 />
               </span>
             </div>
@@ -296,9 +335,12 @@
                   value="5"
                   name="colored-radio"
                   class="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 focus:ring-yellow-400 focus:ring-2"
+                  v-model="form.rating"
                 />
               </span>
             </div>
+
+            <InputError class="mt-2" :message="form.errors.rating" />
           </div>
         </div>
 
@@ -306,17 +348,38 @@
           <textarea
             cols="30"
             rows="10"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-0 focus:border-gray-300 block w-full p-2.5"
+            class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-0 focus:border-gray-300 block w-full p-2.5"
             placeholder="We take your feedback seriously and even though we may not be able to response personally,consideration is given any submission.Thank for your feedback."
+            v-model="form.feedback_text"
           ></textarea>
+          <InputError class="mt-2" :message="form.errors.feedback_text" />
         </div>
 
         <button
-          type="submit"
           class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-3 text-center"
         >
-          <i class="fa-solid fa-paper-plane"></i>
-          Submit
+          <svg
+            v-if="processing"
+            aria-hidden="true"
+            role="status"
+            class="inline w-4 h-4 mr-3 text-white animate-spin"
+            viewBox="0 0 100 101"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+              fill="#E5E7EB"
+            />
+            <path
+              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+              fill="currentColor"
+            />
+          </svg>
+
+          <i v-else class="fa-solid fa-paper-plane"></i>
+
+          {{ processing ? "Processing..." : "Submit" }}
         </button>
       </form>
     </div>

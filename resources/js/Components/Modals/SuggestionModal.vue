@@ -92,7 +92,7 @@ const submit = () => {
               <InputLabel for="type" value="Email *" />
 
               <TextInput
-                id="name"
+                id="email"
                 type="email"
                 class="mt-1 block w-full"
                 v-model="form.email"
