@@ -16,7 +16,7 @@ return new class () extends Migration {
             $table->id();
             $table->foreignId("blog_category_id")->constrained()->cascadeOnDelete();
             $table->foreignId("author_id")->references("id")->on("users")->cascadeOnDelete();
-            $table->string("title")->unique();
+            $table->string("title");
             $table->string("slug")->unique();
             $table->string("image");
             $table->text("description")->fulltext();

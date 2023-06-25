@@ -114,11 +114,11 @@ class BlogPost extends Model
     {
         $query->when(
             $filterBy["search_blog"]??null,
-            function ($query, $search) {
+            function ($query, $search_blog) {
                 $query->where(
-                    function ($query) use ($search) {
-                        $query->where("title", "LIKE", "%".$search."%")
-                              ->orWhere("description", "LIKE", "%".$search."%");
+                    function ($query) use ($search_blog) {
+                        $query->where("title", "LIKE", "%".$search_blog."%")
+                              ->orWhere("description", "LIKE", "%".$search_blog."%");
                     }
                 );
             }

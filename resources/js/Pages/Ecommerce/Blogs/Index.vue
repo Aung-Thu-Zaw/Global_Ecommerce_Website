@@ -1,21 +1,23 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { usePage, Head, Link, router } from "@inertiajs/vue3";
 import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
 import BlogCard from "@/Components/Cards/BlogCard.vue";
+import BlogCategoryCard from "@/Components/Cards/BlogCategoryCard.vue";
 import BlogCardList from "@/Components/Cards/BlogCardList.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
+import { usePage, Head, Link, router } from "@inertiajs/vue3";
 import { reactive, watch } from "vue";
 
 defineProps({
-  blogCategories: Object,
-  blogPosts: Object,
+  blogCategories: Object, // data come from blog controller
+  blogPosts: Object, // data come from blog controller
 });
 
 const handleSearchBox = () => {
   params.search_blog = "";
 };
 
+// Query String Parameters
 const params = reactive({
   search_blog: usePage().props.ziggy.query.search_blog,
   sort: "id",
@@ -30,6 +32,7 @@ const params = reactive({
     : "grid",
 });
 
+// Watching Blog Search Input
 watch(
   () => params.search_blog,
   () => {
@@ -51,6 +54,7 @@ watch(
   }
 );
 
+// Watching Sorting Dropdown
 watch(
   () => params.direction,
   () => {
@@ -72,6 +76,7 @@ watch(
   }
 );
 
+// Remove Filter Tag
 const handleRemoveBlogCategory = () => {
   router.get(route("blogs.index"), {
     search_blog: params.search_blog,
@@ -89,6 +94,7 @@ const handleRemoveBlogCategory = () => {
 
     <div class="min-h-screen bg-gray-50 mt-40 w-full py-6">
       <div class="w-[1500px] mx-auto">
+        <!-- Breadcrumb  -->
         <div class="border-b py-3 mb-5">
           <Breadcrumb>
             <li aria-current="page">
@@ -106,8 +112,7 @@ const handleRemoveBlogCategory = () => {
                     clip-rule="evenodd"
                   ></path>
                 </svg>
-                <span
-                  class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2"
                   >Blogs</span
                 >
               </div>
@@ -116,58 +121,20 @@ const handleRemoveBlogCategory = () => {
         </div>
 
         <div class="flex items-start space-x-3">
+          <!-- Blog Category Cards  -->
           <div v-if="blogCategories.length" class="w-[400px]">
             <ul
               class="h-auto space-y-3 text-center text-md font-bold text-slate-700"
             >
-              <li
-                v-for="blogCategory in blogCategories"
-                :key="blogCategory.id"
-                class="py-2 rounded-sm transition-all border border-slate-300 shadow px-4"
-                :class="{
-                  'bg-blue-600 text-white hover:bg-blue-700':
-                    $page.props.ziggy.query.blog_category === blogCategory.slug,
-
-                  'bg-gray-100 hover:bg-gray-200':
-                    $page.props.ziggy.query.blog_category !== blogCategory.slug,
-                }"
-              >
-                <Link
-                  :href="route('blogs.index')"
-                  :data="{
-                    search_blog: $page.props.ziggy.query.search_blog,
-                    blog_category: blogCategory.slug,
-                    sort: $page.props.ziggy.query.sort,
-                    direction: $page.props.ziggy.query.direction,
-                    page: $page.props.ziggy.query.page,
-                    view: $page.props.ziggy.query.view,
-                  }"
-                  class="flex items-center justify-between"
-                >
-                  <img
-                    :src="blogCategory.image"
-                    class="w-10 h-10 object-cover rounded-full ring-2 ring-slate-500"
-                  />
-                  {{ blogCategory.name }}
-                  <span
-                    class="text-[.8rem] ml-3 w-6 h-6 rounded-full border-2 border-slate-300 flex items-center justify-center"
-                  >
-                    <span>
-                      {{
-                        blogCategory.blog_posts
-                          ? blogCategory.blog_posts.length
-                          : 0
-                      }}
-                    </span>
-                  </span>
-                </Link>
-              </li>
+              <BlogCategoryCard :blogCategories="blogCategories" />
             </ul>
           </div>
+
           <div class="w-full">
             <div
               class="text-sm font-bold text-slate-600 px-5 py-3 border-t border-b flex items-center justify-between mb-5"
             >
+              <!-- Search Blogs Input -->
               <div
                 class="border-2 border-slate-400 rounded-sm shadow w-[300px] flex items-center justify-between py-1"
               >
@@ -185,12 +152,14 @@ const handleRemoveBlogCategory = () => {
                 </span>
               </div>
 
+              <!-- Search Result Text -->
               <p v-if="params.search_blog" class="ml-5">
                 {{ blogPosts.data.length }} post found for result
                 <span class="text-blue-600">"{{ params.search_blog }}"</span>
               </p>
 
               <div class="flex items-center ml-auto">
+                <!-- Blog Sorting -->
                 <div class="w-[220px] flex items-center justify-between">
                   <span class="">Sort By : </span>
                   <select
@@ -212,6 +181,7 @@ const handleRemoveBlogCategory = () => {
                   </select>
                 </div>
 
+                <!-- Blog Card Views -->
                 <div class="flex items-center ml-3">
                   <span class="mr-2">View : </span>
                   <div class="flex items-center justify-between">
@@ -258,6 +228,7 @@ const handleRemoveBlogCategory = () => {
               </div>
             </div>
 
+            <!-- Filter tags -->
             <div class="my-3 w-full">
               <span
                 v-if="$page.props.ziggy.query.blog_category"
@@ -273,12 +244,13 @@ const handleRemoveBlogCategory = () => {
 
                 <i
                   @click="handleRemoveBlogCategory"
-                  class="fa-solid fa-xmark font-bold hover:text-red-600 cursor-pointer"
+                  class="fa-solid fa-xmark text-sm font-bold cursor-pointer hover:text-red-700 transition-all"
                 >
                 </i>
               </span>
             </div>
 
+            <!-- Blog Cards -->
             <div v-if="$page.props.ziggy.query.view === 'list'" class="w-full">
               <div v-if="blogPosts.data.length" class="w-full">
                 <div
@@ -298,6 +270,7 @@ const handleRemoveBlogCategory = () => {
               </div>
             </div>
 
+            <!-- Pagination -->
             <Pagination class="mt-6" :links="blogPosts.links" />
           </div>
         </div>

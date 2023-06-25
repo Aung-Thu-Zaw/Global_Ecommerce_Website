@@ -12,8 +12,7 @@ class BlogController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $blogCategories=BlogCategory::with("blogPosts")->where("status", "show")->get();
-
+        $blogCategories=BlogCategory::withCount("blogPosts")->where("status", "show")->get();
 
         $blogPosts=BlogPost::with("author:id,name")
                            ->filterBy(request(["search_blog","blog_category"]))
@@ -21,13 +20,12 @@ class BlogController extends Controller
                            ->paginate(20)
                            ->appends(request()->all());
 
-
         return inertia("Ecommerce/Blogs/Index", compact("blogCategories", "blogPosts"));
     }
 
     public function show(BlogPost $blogPost): Response|ResponseFactory
     {
-        $blogCategories=BlogCategory::with("blogPosts")->where("status", "show")->get();
+        $blogCategories=BlogCategory::withCount("blogPosts")->where("status", "show")->get();
 
         $blogPost->load("author:id,name");
 

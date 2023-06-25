@@ -7,7 +7,7 @@ defineProps({
 
 <template>
   <section class="container mx-auto my-3 p-5">
-    <div class="h-[200px] flex items-center justify-center">
+    <div class="h-[200px] w-full flex items-center justify-center">
       <a :href="campaignBanner.url" target="_blank" class="h-full">
         <img :src="campaignBanner.image" alt="" class="h-full object-cover" />
       </a>

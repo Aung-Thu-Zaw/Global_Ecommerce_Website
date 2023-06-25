@@ -1,6 +1,7 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
+import BlogCategoryCard from "@/Components/Cards/BlogCategoryCard.vue";
 import { Head, Link } from "@inertiajs/vue3";
 
 defineProps({
@@ -16,6 +17,7 @@ defineProps({
     <div class="min-h-screen bg-gray-50 mt-40 w-full py-6">
       <div class="container mx-auto">
         <div class="border-b py-3 mb-5">
+          <!-- Breadcrumb -->
           <Breadcrumb>
             <li aria-current="page">
               <Link
@@ -72,54 +74,16 @@ defineProps({
         </div>
 
         <div class="flex items-start space-x-3">
+          <!-- Blog Category Cards  -->
           <div v-if="blogCategories.length" class="w-[400px]">
             <ul
               class="h-auto space-y-3 text-center text-md font-bold text-slate-700"
             >
-              <li
-                v-for="blogCategory in blogCategories"
-                :key="blogCategory.id"
-                class="py-2 rounded-sm transition-all border border-slate-300 shadow px-4"
-                :class="{
-                  'bg-blue-600 text-white hover:bg-blue-700':
-                    $page.props.ziggy.query.blog_category === blogCategory.slug,
-
-                  'bg-gray-100 hover:bg-gray-200':
-                    $page.props.ziggy.query.blog_category !== blogCategory.slug,
-                }"
-              >
-                <Link
-                  :href="route('blogs.index')"
-                  :data="{
-                    search_blog: $page.props.ziggy.query.search_blog,
-                    blog_category: blogCategory.slug,
-                    sort: $page.props.ziggy.query.sort,
-                    direction: $page.props.ziggy.query.direction,
-                    page: $page.props.ziggy.query.page,
-                    view: $page.props.ziggy.query.view,
-                  }"
-                  class="flex items-center justify-between"
-                >
-                  <img
-                    :src="blogCategory.image"
-                    class="w-10 h-10 object-cover rounded-full ring-2 ring-slate-500"
-                  />
-                  {{ blogCategory.name }}
-                  <span
-                    class="text-[.8rem] ml-3 w-6 h-6 rounded-full border-2 border-slate-300 flex items-center justify-center"
-                  >
-                    <span>
-                      {{
-                        blogCategory.blog_posts
-                          ? blogCategory.blog_posts.length
-                          : 0
-                      }}
-                    </span>
-                  </span>
-                </Link>
-              </li>
+              <BlogCategoryCard :blogCategories="blogCategories" />
             </ul>
           </div>
+
+          <!-- Blogs Detail -->
           <div class="w-full pl-10">
             <img :src="blogPost.image" alt="" class="h-[400px] rounded-t-md" />
 

@@ -16,44 +16,44 @@ class BlogCategorySeeder extends Seeder
     public function run()
     {
         BlogCategory::factory()->create([
-            "name"=>"Apparel & Beauty",
-            "slug"=>"apparel-and-beauty",
-            "image"=>"apparel-and-beauty.jpeg",
+            "name"=>"Fashion",
+            "slug"=>"fashion",
+            "image"=>"fashion.webp",
         ]);
         BlogCategory::factory()->create([
-            "name"=>"Foods & Groceries",
-            "slug"=>"foods-and-groceries",
-            "image"=>"foods-and-groceries.jpg",
+            "name"=>"Foods",
+            "slug"=>"foods",
+            "image"=>"food.jpg",
         ]);
         BlogCategory::factory()->create([
-            "name"=>"Sport Accessories",
-            "slug"=>"sport-accessories",
-            "image"=>"sport-accessories.jpg",
+            "name"=>"Lifestyle",
+            "slug"=>"lifestyle",
+            "image"=>"lifestyle.jpg",
         ]);
         BlogCategory::factory()->create([
-            "name"=>"Electronic Devices",
-            "slug"=>"electronic-devices",
-            "image"=>"electronic-devices.jpg",
+            "name"=>"Sports",
+            "slug"=>"sports",
+            "image"=>"sports.jpg",
         ]);
         BlogCategory::factory()->create([
-            "name"=>"Electronic Accessories",
-            "slug"=>"electronic-accessories",
-            "image"=>"electronic-accessories.webp",
+            "name"=>"Technology",
+            "slug"=>"technology",
+            "image"=>"technology.jpg",
         ]);
         BlogCategory::factory()->create([
-            "name"=>"Home Appliances",
-            "slug"=>"home-appliances",
-            "image"=>"home-appliances.jpg",
+            "name"=>"Travel",
+            "slug"=>"travel",
+            "image"=>"travel.jpg",
         ]);
         BlogCategory::factory()->create([
-            "name"=>"Babies & Toys",
-            "slug"=>"babies-and-toys",
-            "image"=>"babies-and-toys.jpg",
+            "name"=>"Beauty & Health",
+            "slug"=>"beauty-and-health",
+            "image"=>"beauty-and-health.webp",
         ]);
         BlogCategory::factory()->create([
-            "name"=>"Pet Accessories",
-            "slug"=>"pet-accessories",
-            "image"=>"pet-accessories.webp",
+            "name"=>"Home Improvement",
+            "slug"=>"home-improvement",
+            "image"=>"home-improvement.jpg",
         ]);
     }
 }

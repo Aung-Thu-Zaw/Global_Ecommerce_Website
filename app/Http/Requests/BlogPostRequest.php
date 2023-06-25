@@ -28,14 +28,9 @@ class BlogPostRequest extends FormRequest
         $rules= [
             "blog_category_id"=>["required","numeric",Rule::exists("blog_categories", "id")],
             "author_id"=>["required","numeric",Rule::exists("users", "id")],
-            "title"=>["required","string","max:255",Rule::unique("blog_posts", "title")],
+            "title"=>["required","string","max:255"],
             "description"=>["required","string"]
         ];
-
-        if (in_array($this->method(), ['POST','PUT', 'PATCH'])) {
-            $blog_post = $this->route()->parameter('blog_post');
-            $rules["title"]=["required","string","max:255",Rule::unique("blog_posts", "title")->ignore($blog_post)];
-        }
 
         return $rules;
     }
@@ -55,7 +50,6 @@ class BlogPostRequest extends FormRequest
             "title.required" =>  "The title field is required.",
             "title.string" =>  "The title must be a string.",
             "title.max" => "The title must not be greater than 255 characters.",
-            "title.unique" =>'The title has already been taken.',
             "description.required" =>  "The description field is required.",
             "description.string" =>  "The description must be a string.",
         ];
