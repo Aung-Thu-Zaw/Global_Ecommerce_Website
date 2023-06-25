@@ -14,10 +14,6 @@ class CampaignBannerSeeder extends Seeder
      */
     public function run()
     {
-        CampaignBanner::factory(9)->create();
-        CampaignBanner::factory()->create([
-                "image"=>"campaign.jpg",
-                "status"=>"show",
-        ]);
+        CampaignBanner::factory()->create(["image"=>"campaign-banner-1.jpg"]);
     }
 }

@@ -14,11 +14,11 @@ class SliderBannerSeeder extends Seeder
      */
     public function run()
     {
-        SliderBanner::create(["image"=>"slider-1.jpg","url"=>"https://www.example.com","status"=>"show"]);
-        SliderBanner::create(["image"=>"slider-2.jpg","url"=>"https://www.example.com","status"=>"show"]);
-        SliderBanner::create(["image"=>"slider-3.jpg","url"=>"https://www.example.com","status"=>"show"]);
-        SliderBanner::create(["image"=>"slider-4.jpg","url"=>"https://www.example.com","status"=>"show"]);
-        SliderBanner::create(["image"=>"slider-5.jpg","url"=>"https://www.example.com","status"=>"show"]);
-        SliderBanner::create(["image"=>"slider-6.jpg","url"=>"https://www.example.com","status"=>"show"]);
+        SliderBanner::factory()->create(["image"=>"slider-banner-1.jpg"]);
+        SliderBanner::factory()->create(["image"=>"slider-banner-2.jpg"]);
+        SliderBanner::factory()->create(["image"=>"slider-banner-3.jpg"]);
+        SliderBanner::factory()->create(["image"=>"slider-banner-4.jpg"]);
+        SliderBanner::factory()->create(["image"=>"slider-banner-5.jpg"]);
+        SliderBanner::factory()->create(["image"=>"slider-banner-6.jpg"]);
     }
 }

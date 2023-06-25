@@ -29,7 +29,7 @@ const params = reactive({
               class="flex items-center hover:bg-blue-50 rounded-sm mb-3"
             >
               <div
-                class="flex items-center justify-center w-[40px] h-[40px] rounded-full bg-slate-100 mr-2 border-2 overflow-hidden"
+                class="flex items-center justify-center w-[40px] h-[40px] rounded-full bg-slate-100 mr-2 ring-2 ring-gray-400 shadow overflow-hidden"
               >
                 <img :src="category.image" class="h-full object-cover" />
               </div>
@@ -65,7 +65,7 @@ const params = reactive({
 
               <div
                 :id="'dropdownHover' + category.id"
-                class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-md p-5 md:w-[500px] lg:w-[920px] h-[400px] dark:bg-gray-700 overflow-auto"
+                class="z-50 hidden border-2 border-gray-300 bg-white divide-y divide-gray-100 rounded-lg shadow-md p-5 md:w-[500px] lg:w-[920px] h-[400px] scrollbar overflow-auto"
               >
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                   <div
@@ -73,19 +73,29 @@ const params = reactive({
                     :key="secondChildCategory.id"
                     class="p-3 mb-3"
                   >
-                    <Link
-                      :href="
-                        route('category.products', secondChildCategory.slug)
-                      "
-                      :data="{
-                        sort: params.sort,
-                        direction: params.direction,
-                        view: params.view,
-                      }"
-                      class="font-bold text-slate-700 hover:text-blue-500 hover:underline cursor-pointer"
-                    >
-                      {{ secondChildCategory.name }}
-                    </Link>
+                    <div class="flex items-center">
+                      <div
+                        class="flex items-center justify-center w-[40px] h-[40px] rounded-full bg-slate-100 mr-2 ring-2 ring-gray-400 shadow overflow-hidden"
+                      >
+                        <img
+                          :src="secondChildCategory.image"
+                          class="h-full object-cover"
+                        />
+                      </div>
+                      <Link
+                        :href="
+                          route('category.products', secondChildCategory.slug)
+                        "
+                        :data="{
+                          sort: params.sort,
+                          direction: params.direction,
+                          view: params.view,
+                        }"
+                        class="font-bold text-slate-700 hover:text-blue-500 hover:underline cursor-pointer"
+                      >
+                        {{ secondChildCategory.name }}
+                      </Link>
+                    </div>
 
                     <ul>
                       <li

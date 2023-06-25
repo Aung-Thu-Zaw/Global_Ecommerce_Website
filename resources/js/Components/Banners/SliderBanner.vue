@@ -8,7 +8,7 @@ defineProps({
   <div id="default-carousel" class="relative" data-carousel="slide">
     <!-- Carousel wrapper -->
     <div
-      class="relative -z-0 overflow-hidden rounded-lg h-[300px] md:h-[400px] border border-slate-200 shadow-sm"
+      class="relative -z-0 overflow-hidden rounded-lg h-[300px] md:h-[415px] border border-slate-200 shadow-sm"
     >
       <!-- Item -->
       <div

@@ -14,7 +14,8 @@ class ProductBannerSeeder extends Seeder
      */
     public function run()
     {
-        ProductBanner::factory(5)->create();
-        ProductBanner::factory(3)->create(["status"=>"show"]);
+        ProductBanner::factory()->create(["image"=>"product-banner-4.jpg"]);
+        ProductBanner::factory()->create(["image"=>"product-banner-5.jpg"]);
+        ProductBanner::factory()->create(["image"=>"product-banner-6.jpg"]);
     }
 }
