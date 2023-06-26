@@ -2,11 +2,11 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ProductCard from "@/Components/Cards/ProductCard.vue";
 import ProductCardList from "@/Components/Cards/ProductCardList.vue";
-import { reactive, ref, watch } from "vue";
-import { usePage, router, Link } from "@inertiajs/vue3";
 import EcommerceFilterSidebarForSearchResult from "@/Components/Sidebars/EcommerceFilterSidebarForSearchResult.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
+import { reactive, ref, watch } from "vue";
+import { usePage, router, Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
   categories: Object,
@@ -14,6 +14,7 @@ const props = defineProps({
   products: Object,
 });
 
+// Query String Parameters
 const params = reactive({
   search: usePage().props.ziggy.query.search,
   sort: "id",
@@ -31,9 +32,22 @@ const params = reactive({
     : "grid",
 });
 
+// Handle Filter Prices
+const price = ref(
+  usePage().props.ziggy.query.price ? usePage().props.ziggy.query.price : ""
+);
+
+const [minValue, maxValue] = price.value
+  .split("-")
+  .map((value) => parseInt(value));
+
+const minPrice = ref(minValue);
+const maxPrice = ref(maxValue);
+
+// Watching Sorting Select Box
 watch(
   () => params.direction,
-  (current, previous) => {
+  () => {
     router.get(route("product.search"), {
       search: params.search,
       sort: params.sort,
@@ -48,17 +62,7 @@ watch(
   }
 );
 
-const price = ref(
-  usePage().props.ziggy.query.price ? usePage().props.ziggy.query.price : ""
-);
-
-const [minValue, maxValue] = price.value
-  .split("-")
-  .map((value) => parseInt(value));
-
-const minPrice = ref(minValue);
-const maxPrice = ref(maxValue);
-
+// Remove Category Query String Parameter
 const handleRemoveCategory = () => {
   router.get(route("product.search"), {
     search: params.search,
@@ -72,6 +76,7 @@ const handleRemoveCategory = () => {
   });
 };
 
+// Remove Price Query String Parameter
 const handleRemovePrice = () => {
   router.get(route("product.search"), {
     search: params.search,
@@ -85,6 +90,7 @@ const handleRemovePrice = () => {
   });
 };
 
+// Remove Rating Query String Parameter
 const handleRemoveRating = () => {
   router.get(route("product.search"), {
     search: params.search,
@@ -98,6 +104,7 @@ const handleRemoveRating = () => {
   });
 };
 
+// Remove Brand Query String Parameter
 const handleRemoveBrand = () => {
   router.get(route("product.search"), {
     search: params.search,
@@ -112,11 +119,13 @@ const handleRemoveBrand = () => {
 };
 </script>
 
-
 <template>
   <AppLayout>
+    <Head title="Search Results" />
+
     <section class="container mt-40 mx-auto py-10">
       <div class="mb-5 px-4">
+        <!-- Breadcrumb -->
         <div class="border-b py-3">
           <Breadcrumb>
             <li aria-current="page">
@@ -145,6 +154,7 @@ const handleRemoveBrand = () => {
       </div>
       <div class="container max-w-screen-xl mx-auto px-4">
         <div class="flex flex-col md:flex-row -mx-4">
+          <!-- Ecommerce Filter Sidebar -->
           <EcommerceFilterSidebarForSearchResult
             :categories="categories"
             :brands="brands"
@@ -159,6 +169,7 @@ const handleRemoveBrand = () => {
               </p>
 
               <div class="flex items-center ml-auto">
+                <!-- Sorting Select Box -->
                 <div class="w-[220px] flex items-center justify-between">
                   <span class="">Sort By : </span>
                   <select
@@ -180,9 +191,11 @@ const handleRemoveBrand = () => {
                   </select>
                 </div>
 
+                <!-- Dynamic View -->
                 <div class="flex items-center ml-3">
                   <span class="mr-2">View : </span>
                   <div class="flex items-center justify-between">
+                    <!-- Grid View -->
                     <Link
                       :href="route('product.search')"
                       :data="{
@@ -205,6 +218,8 @@ const handleRemoveBrand = () => {
                     >
                       <i class="fa-solid fa-grip"></i>
                     </Link>
+
+                    <!-- List View -->
                     <Link
                       :href="route('product.search')"
                       :data="{
@@ -232,6 +247,7 @@ const handleRemoveBrand = () => {
               </div>
             </div>
 
+            <!-- Filter Tags -->
             <div class="my-3 w-full">
               <span
                 v-if="
@@ -244,6 +260,7 @@ const handleRemoveBrand = () => {
                 >Filtered By :</span
               >
 
+              <!-- Category Filter Tag -->
               <span
                 v-if="$page.props.ziggy.query.category"
                 class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow capitalize"
@@ -257,6 +274,7 @@ const handleRemoveBrand = () => {
                 </i>
               </span>
 
+              <!-- Brand Filter Tag -->
               <span v-if="$page.props.ziggy.query.brand">
                 <span
                   class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
@@ -271,6 +289,7 @@ const handleRemoveBrand = () => {
                 </span>
               </span>
 
+              <!-- Rating Filter Tag -->
               <span
                 v-if="$page.props.ziggy.query.rating"
                 class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
@@ -284,6 +303,7 @@ const handleRemoveBrand = () => {
                 </i>
               </span>
 
+              <!-- Price Filter Tag -->
               <span
                 v-if="$page.props.ziggy.query.price"
                 class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
@@ -298,6 +318,7 @@ const handleRemoveBrand = () => {
               </span>
             </div>
 
+            <!-- Products List View -->
             <div v-if="$page.props.ziggy.query.view === 'list'">
               <div
                 v-if="products.data.length"
@@ -322,6 +343,7 @@ const handleRemoveBrand = () => {
               <Pagination class="mt-6" :links="products.links" />
             </div>
 
+            <!-- Products Grid View -->
             <div v-if="$page.props.ziggy.query.view === 'grid'">
               <div
                 v-if="products.data.length"
@@ -344,6 +366,7 @@ const handleRemoveBrand = () => {
                 </p>
               </div>
 
+              <!-- Pagination -->
               <Pagination class="mt-6" :links="products.links" />
             </div>
           </main>

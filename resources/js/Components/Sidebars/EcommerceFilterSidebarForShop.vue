@@ -315,6 +315,7 @@ watch(
           </label>
         </li>
       </ul>
+
       <hr class="my-4" />
 
       <!-- Filter Price -->

@@ -31,16 +31,16 @@ const params = reactive({
 
 // Handle Search
 const handleSearch = () => {
-  router.get(
-    route("product.search"),
-    {
+  if (params.search === "") {
+    router.get(route("home"));
+  } else {
+    router.get(route("product.search"), {
       search: params.search,
       sort: params.sort,
       direction: params.direction,
       view: params.view,
-    },
-    {}
-  );
+    });
+  }
 };
 
 // Handle Order Tracking

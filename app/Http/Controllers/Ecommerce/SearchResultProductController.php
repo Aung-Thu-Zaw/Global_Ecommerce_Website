@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
-use Illuminate\Database\Eloquent\Builder;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -14,16 +13,17 @@ class SearchResultProductController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $products=Product::with(["shop","watchlists","cartItems","images"])
-                        ->filterBy(request(["search","category","brand","rating","price"]))
-                        ->where("status", "active")
-                        ->orderBy(request("sort", "id"), request("direction", "desc"))
-                        ->paginate(20)
-                        ->appends(request()->all());
+        $products=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
+                         ->with(["productReviews:id,product_id,rating","shop:id,offical","images"])
+                         ->filterBy(request(["search","category","brand","rating","price"]))
+                         ->whereStatus("active")
+                         ->orderBy(request("sort", "id"), request("direction", "desc"))
+                         ->paginate(20)
+                         ->appends(request()->all());
 
         $categories=Category::all();
-        $brands=null;
 
+        $brands=null;
 
         if(request("category")) {
             $category=Category::where("slug", request("category"))->first();
@@ -33,9 +33,6 @@ class SearchResultProductController extends Controller
             $brands=Brand::all();
         }
 
-
-
         return inertia("Ecommerce/Products/SearchResult", compact("categories", "brands", "products"));
-
     }
 }

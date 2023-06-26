@@ -52,7 +52,8 @@ class ShopController extends Controller
                                      ->limit(20)
                                      ->get();
 
-        $vendorProducts=Product::with(["shop","watchlists","cartItems","images","productReviews:id,product_id,rating"])
+        $vendorProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
+                               ->with(["productReviews:id,product_id,rating","shop:id,offical","images"])
                                ->filterBy(request(["search","category","brand","rating","price"]))
                                ->where("status", "active")
                                ->where("user_id", $shop->id)
