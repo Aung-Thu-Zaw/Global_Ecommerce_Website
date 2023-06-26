@@ -66,10 +66,9 @@ const props = defineProps({
           </div>
         </figcaption>
       </figure>
-
       <Link
         as="button"
-        :href="route('shop.show', { shop_id: productsFromShop[0].user_id })"
+        :href="route('shop.show', { shop_id: productsFromShop[0].shop.uuid })"
         :data="{ tab: 'home' }"
         class="bg-blue-600 text-white w-full font-bold py-2 rounded-sm shadow-md hover:bg-blue-700"
       >
