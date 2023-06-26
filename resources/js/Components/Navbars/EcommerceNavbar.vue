@@ -69,7 +69,7 @@ const handleSearch = () => {
 <template>
   <nav class="bg-blue-600 text-white">
     <div class="flex items-center justify-between px-10">
-      <span class="text-sm font-bold">100% SECURE ECOMMERCE WEBSITE</span>
+      <span class="text-sm font-bold">GLOBAL E-COMMERCE WEBSITE</span>
       <!-- menu -->
       <nav class="hidden lg:flex flex-1 items-center justify-end py-1">
         <a class="text-sm font-bold px-3 py-2 hover:text-gray-300" href="#">

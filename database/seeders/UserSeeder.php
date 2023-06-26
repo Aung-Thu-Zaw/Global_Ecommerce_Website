@@ -38,7 +38,7 @@ class UserSeeder extends Seeder
             "deleted_at"=>null
         ]);
 
-        User::factory(50)->create([
+        User::factory(60)->create([
             "role"=>"vendor",
             "status"=>"active",
             "about"=>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed pharetra nulla non tristique laoreet. Nunc convallis sapien et dignissim elementum. In eu faucibus turpis. Phasellus nec ligula vel neque pellentesque ultrices. Aenean vehicula magna a hendrerit scelerisque. Suspendisse sed lacus vulputate eros congue rhoncus. Aenean condimentum, odio nec volutpat volutpat, arcu ante tempus nisi, ut pulvinar ante justo sit amet nibh. Ut quis arcu quis quam mollis rutrum ac quis dui. Aliquam sit amet felis nulla. Duis viverra mi quis urna tincidunt auctor. Vivamus efficitur ligula et magna semper sagittis. In faucibus efficitur massa, id luctus urna pharetra nec.Nullam tincidunt vehicula quam, in venenatis tortor gravida sit amet. Donec consequat nisl et imperdiet lobortis. Aenean hendrerit vel mauris eu sollicitudin. Quisque placerat nisl in ante fringilla auctor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nulla in libero mauris. Nullam a tincidunt libero. Nullam ut nisi ac nunc rhoncus condimentum nec cursus libero. Pellentesque eget urna et quam accumsan faucibus id quis urna. Nam consectetur congue sem, ut venenatis tortor tincidunt ac. Vivamus eu felis ac dui elementum placerat ac eget tortor.

@@ -1,6 +1,6 @@
 <script setup>
 import { router, usePage } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import TotalAverageRatingStarForProduct from "@/Components/RatingStars/TotalAverageRatingStarForProduct.vue";
 
 const props = defineProps({
@@ -23,6 +23,26 @@ if (props.product.product_reviews) {
     2
   );
 }
+
+const formattedPrice = computed(() => {
+  const price = parseFloat(props.product.price);
+
+  if (Number.isInteger(price)) {
+    return price.toFixed(0);
+  } else {
+    return price.toFixed(2);
+  }
+});
+
+const formattedDiscount = computed(() => {
+  const discount = parseFloat(props.product.discount);
+
+  if (Number.isInteger(discount)) {
+    return discount.toFixed(0);
+  } else {
+    return discount.toFixed(2);
+  }
+});
 
 const handleTrackInteraction = () => {
   router.post(route("product.track-interaction"), {
@@ -57,7 +77,7 @@ const handleGoToProductDetailPage = (slug) => {
       >
         <img
           :src="product.image"
-          class="mx-auto h-full object-cover"
+          class="mx-auto h-full w-full object-cover"
           :alt="product.name"
         />
         <span
@@ -70,7 +90,8 @@ const handleGoToProductDetailPage = (slug) => {
 
       <div class="p-4 border-t border-t-gray-200">
         <!-- <span
-          class="px-3 rounded-sm py-1 font-bold uppercase text-[0.7rem] text-white bg-fuchsia-600"
+          v-if="product.shop.offical"
+          class="px-3 rounded-sm py-1 font-bold uppercase text-[0.6rem] text-white bg-fuchsia-600"
         >
           <i class="fas fa-crown"></i>
           Official
@@ -87,10 +108,10 @@ const handleGoToProductDetailPage = (slug) => {
         <div class="my-2">
           <div v-if="product.discount">
             <span class="font-semibold text-slate-600 block">
-              ${{ product.discount }}
+              ${{ formattedDiscount }}
             </span>
             <span class="text-[.8rem] text-secondary-600 line-through mr-5">
-              ${{ product.price }}
+              ${{ formattedPrice }}
             </span>
             <span
               v-if="product.discount"
@@ -106,7 +127,7 @@ const handleGoToProductDetailPage = (slug) => {
           </div>
           <div v-else>
             <span class="font-semibold text-slate-600 mr-3">
-              ${{ product.price }}
+              ${{ formattedPrice }}
             </span>
           </div>
         </div>
