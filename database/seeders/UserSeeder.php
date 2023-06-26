@@ -23,18 +23,19 @@ class UserSeeder extends Seeder
         ]);
 
         User::factory()->create([
-            "name"=>"Vendor",
-            "email"=>"vendor@gmail.com",
-            "password"=>"Password!",
-            "role"=>"vendor",
-            "deleted_at"=>null
-        ]);
-
-        User::factory()->create([
             "name"=>"User",
             "email"=>"user@gmail.com",
             "password"=>"Password!",
             "role"=>"user",
+            "deleted_at"=>null
+        ]);
+
+
+        User::factory()->create([
+            "name"=>"Vendor",
+            "email"=>"vendor@gmail.com",
+            "password"=>"Password!",
+            "role"=>"vendor",
             "deleted_at"=>null
         ]);
 

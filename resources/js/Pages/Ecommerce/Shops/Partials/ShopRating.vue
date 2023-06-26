@@ -14,8 +14,10 @@ const props = defineProps({
   shop: Object,
 });
 
+// Total Shop Review Avg
 const reviewAvg = computed(() => parseFloat(props.shopReviewsAvg).toFixed(2));
 
+// Filter Shop Rating Stars
 const oneStarRating = computed(() => {
   const totalRatings = props.shopReviews.filter((review) => review.rating == 1);
 

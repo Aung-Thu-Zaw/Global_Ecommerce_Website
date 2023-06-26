@@ -11,6 +11,7 @@ defineProps({
 
 <template>
   <section>
+    <!-- Vendor Product Banner -->
     <div class="w-full my-5">
       <div
         v-if="vendorProductBanners.length"
@@ -32,6 +33,7 @@ defineProps({
       </div>
     </div>
 
+    <!-- Random Display Products -->
     <div v-if="vendorRandomProducts.length" class="my-5">
       <h1 class="text-2xl text-slate-700 font-bold my-10">Just For You</h1>
 

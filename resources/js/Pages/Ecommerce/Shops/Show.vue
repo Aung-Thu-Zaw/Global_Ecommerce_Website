@@ -1,11 +1,11 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { computed, inject, reactive } from "vue";
 import Home from "./Partials/Home.vue";
 import AllProducts from "./Partials/AllProducts.vue";
 import ShopRating from "./Partials/ShopRating.vue";
 import ProductRating from "./Partials/ProductRating.vue";
 import { usePage, router, Link, Head } from "@inertiajs/vue3";
+import { computed, inject, reactive } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
@@ -26,6 +26,9 @@ const props = defineProps({
   shopReviewsAvg: Object,
 });
 
+const swal = inject("$swal");
+
+// Handle User is Online Or Offline
 const currentTime = new Date();
 const threshold = 1000 * 60 * 3; //3minutes in millseconds
 
@@ -36,12 +39,14 @@ const status = (last_activity) => {
   return timeDifference < threshold ? "active" : "offline";
 };
 
+// Filter Follower For Shop
 const filterFollowing = computed(() => {
   return props.followings.filter(
     (following) => following.followable_id === props.shop.id
   );
 });
 
+// Handle Follow Shop
 const handleFollow = () => {
   router.post(
     route("shop.follow", {
@@ -60,8 +65,7 @@ const handleFollow = () => {
   );
 };
 
-const swal = inject("$swal");
-
+// Handle UnFollow Shop
 const handleUnFollow = async () => {
   const result = await swal({
     icon: "warning",
@@ -84,6 +88,7 @@ const handleUnFollow = async () => {
   }
 };
 
+// Query String Parameters
 const params = reactive({
   search: usePage().props.ziggy.query.search
     ? usePage().props.ziggy.query.search
@@ -101,8 +106,9 @@ const params = reactive({
     : "grid",
 });
 
+// Handle Search Box
 const handleSearch = () => {
-  router.get(route("shop.show", props.shop.id), {
+  router.get(route("shop.show", props.shop.uuid), {
     search: params.search,
     sort: params.sort,
     direction: params.direction,
@@ -116,9 +122,10 @@ const handleSearch = () => {
   });
 };
 
+// Remove Query String Search
 const handelRemoveSearch = () => {
   params.search = "";
-  router.get(route("shop.show", props.shop.id), {
+  router.get(route("shop.show", props.shop.uuid), {
     sort: params.sort,
     direction: params.direction,
     page: params.page,
@@ -132,13 +139,13 @@ const handelRemoveSearch = () => {
 };
 </script>
 
-
 <template>
   <AppLayout>
     <Head :title="shop.shop_name" />
 
     <section class="pt-10 mt-44">
       <div class="container max-w-screen-xl mx-auto px-4">
+        <!-- Shop Profile -->
         <div
           class="shadow border rounded-sm p-5 mb-5 flex items-center justify-between"
         >
@@ -211,11 +218,12 @@ const handelRemoveSearch = () => {
             data-tabs-toggle="#myTabContent"
             role="tablist"
           >
+            <!-- Home Tag -->
             <li class="mr-2" role="presentation">
               <Link
-                :href="route('shop.show', shop.id)"
+                :href="route('shop.show', shop.uuid)"
                 :data="{ tab: 'home' }"
-                class="inline-flex p-4 rounded-t-lg active group"
+                class="inline-flex p-4 rounded-t-lg active group text-slate-600"
                 :class="{
                   'text-blue-600 border-b-2 border-blue-600':
                     $page.props.ziggy.query.tab === 'home' ||
@@ -226,11 +234,13 @@ const handelRemoveSearch = () => {
                 Home
               </Link>
             </li>
+
+            <!-- All Products Tag -->
             <li class="mr-2" role="presentation">
               <Link
-                :href="route('shop.show', shop.id)"
+                :href="route('shop.show', shop.uuid)"
                 :data="{ tab: 'all-products', view: 'grid' }"
-                class="inline-flex p-4 rounded-t-lg active group"
+                class="inline-flex p-4 rounded-t-lg active group text-slate-600"
                 :class="{
                   'text-blue-600 border-b-2 border-blue-600':
                     $page.props.ziggy.query.tab === 'all-products',
@@ -240,11 +250,13 @@ const handelRemoveSearch = () => {
                 All Products
               </Link>
             </li>
+
+            <!-- Shop Rating And Review Tag -->
             <li class="mr-2" role="presentation">
               <Link
-                :href="route('shop.show', shop.id)"
+                :href="route('shop.show', shop.uuid)"
                 :data="{ tab: 'ratings-and-reviews-for-shop' }"
-                class="inline-flex p-4 rounded-t-lg active group"
+                class="inline-flex p-4 rounded-t-lg active group text-slate-600"
                 :class="{
                   'text-blue-600 border-b-2 border-blue-600':
                     $page.props.ziggy.query.tab ===
@@ -255,11 +267,13 @@ const handelRemoveSearch = () => {
                 Ratings & Reviews For Shop
               </Link>
             </li>
+
+            <!-- Product Rating And Review Tag -->
             <li class="mr-2" role="presentation">
               <Link
-                :href="route('shop.show', shop.id)"
+                :href="route('shop.show', shop.uuid)"
                 :data="{ tab: 'ratings-and-reviews-for-products' }"
-                class="inline-flex p-4 rounded-t-lg active group"
+                class="inline-flex p-4 rounded-t-lg active group text-slate-600"
                 :class="{
                   'text-blue-600 border-b-2 border-blue-600':
                     $page.props.ziggy.query.tab ===
@@ -272,6 +286,7 @@ const handelRemoveSearch = () => {
             </li>
           </ul>
 
+          <!-- Search Box -->
           <div>
             <form @submit.prevent="handleSearch" class="flex items-center">
               <div
@@ -298,8 +313,10 @@ const handelRemoveSearch = () => {
           </div>
         </div>
 
+        <!-- Nav Tags Result -->
         <div id="myTabContet" class="w-full">
           <div class="w-full">
+            <!-- Home Tag -->
             <div
               v-if="
                 $page.props.ziggy.query.tab === 'home' ||
@@ -311,6 +328,8 @@ const handelRemoveSearch = () => {
                 :vendorRandomProducts="vendorRandomProducts"
               />
             </div>
+
+            <!-- All Products Tag -->
             <div v-else-if="$page.props.ziggy.query.tab === 'all-products'">
               <AllProducts
                 :vendorProducts="vendorProducts"
@@ -319,6 +338,8 @@ const handelRemoveSearch = () => {
                 :shop="shop"
               />
             </div>
+
+            <!-- Shop Rating And Review Tag -->
             <div
               v-else-if="
                 $page.props.ziggy.query.tab === 'ratings-and-reviews-for-shop'
@@ -331,6 +352,8 @@ const handelRemoveSearch = () => {
                 :shopReviewsAvg="shopReviewsAvg"
               />
             </div>
+
+            <!-- Product Rating And Review Tag -->
             <div
               v-else-if="
                 $page.props.ziggy.query.tab ===

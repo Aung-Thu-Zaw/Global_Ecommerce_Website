@@ -1,10 +1,10 @@
 <script setup>
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import { computed } from "vue";
-import ProductRatingStar from "@/Components/RatingStars/ProductRatingStar.vue";
 import { Link } from "@inertiajs/vue3";
 import TotalAverageRatingStarWithProgressBar from "@/Components/RatingStars/TotalAverageRatingStarWithProgressBar.vue";
 import TotalReviewAvgStars from "@/Components/RatingStars/TotalReviewAvgStars.vue";
+import ProductReviewerReviewCard from "@/Components/Cards/ProductReviewerReviewCard.vue";
 
 const props = defineProps({
   paginateProductReviews: Object,
@@ -12,10 +12,12 @@ const props = defineProps({
   productReviewsAvg: Object,
 });
 
+// Total Product Review Avg
 const reviewAvg = computed(() =>
   parseFloat(props.productReviewsAvg).toFixed(2)
 );
 
+// Filter Product Rating Stars
 const oneStarRating = computed(() => {
   const totalRatings = props.productReviews.filter(
     (review) => review.rating == 1
@@ -51,25 +53,11 @@ const fiveStarsRating = computed(() => {
   );
   return ((totalRatings.length / props.productReviews.length) * 100).toFixed(0);
 });
-
-const filterVerifiedPurchaser = computed(() => {
-  const orders = props.paginateProductReviews.data.filter(
-    (paginateProductReview) => {
-      paginateProductReview.user.orders.filter((order) => {
-        order.order_items.filter((orderItem) => {
-          orderItem.produt_id === props.paginateProductReviews.product_id &&
-            orderItem.vendor_id === props.paginateProductReviews.vendor_id;
-        });
-      });
-    }
-  );
-
-  return orders.length ? true : false;
-});
 </script>
 
 <template>
   <section class="container mx-auto py-10">
+    <!-- Product Avg Stars With Progress Bar -->
     <div v-if="productReviews.length" class="text-center mb-5 p-5">
       <div class="border shadow-md w-[350px] mx-auto px-3 py-5 mb-5 rounded-md">
         <h1 class="text-lg font-bold text-slate-600">
@@ -95,6 +83,7 @@ const filterVerifiedPurchaser = computed(() => {
       />
     </div>
 
+    <!-- Customer Product Review  -->
     <div v-if="paginateProductReviews.data.length" class="p-5">
       <h1 class="font-bold text-slate-600 text-xl my-3">
         Customer Product Reviews
@@ -105,9 +94,9 @@ const filterVerifiedPurchaser = computed(() => {
         <div
           v-for="productReview in paginateProductReviews.data"
           :key="productReview.id"
-          class="shadow border rounded-md p-5 flex flex-col items-start my-3 mb-10"
+          class="shadow border rounded-md p-5 flex flex-col items-start w-full my-3 mb-10"
         >
-          <div>
+          <div class="w-full">
             <!-- Product -->
             <div class="flex items-start">
               <img
@@ -165,86 +154,11 @@ const filterVerifiedPurchaser = computed(() => {
               </div>
             </div>
 
-            <!-- Card  -->
-            <div
-              class="shadow border rounded-md p-5 flex flex-col items-start my-3"
-            >
-              <div class="flex items-start">
-                <div class="flex flex-col items-center justify-center mr-5">
-                  <img
-                    :src="productReview.user.avatar"
-                    alt=""
-                    class="w-12 h-12 object-cover rounded-full mr-5 mb-3"
-                  />
-
-                  <ProductRatingStar :rating="productReview.rating" />
-                </div>
-
-                <div class="flex flex-col items-end">
-                  <div class="flex items-center justify-between w-full mb-1">
-                    <div class="flex flex-col">
-                      <h3 class="text-lg font-bold text-slate-700">
-                        {{ productReview.user.name }}
-                        <span
-                          v-if="filterVerifiedPurchaser"
-                          class="text-green-500 text-[.8rem] font-bold ml-3"
-                        >
-                          <i class="fa-solid fa-circle-check"></i>
-                          Verified Purchaser
-                        </span>
-                      </h3>
-                      <p class="text-[.8rem] text-slate-400 mb-2">
-                        Review From {{ productReview.user.name }}
-                      </p>
-                    </div>
-
-                    <span class="text-slate-600 text-sm font-bold">
-                      {{ productReview.updated_at }}
-                    </span>
-                  </div>
-                  <p class="w-full text-sm font-normal text-slate-900">
-                    {{ productReview.review_text }}
-                  </p>
-                </div>
-              </div>
-
-              <!-- Reply  -->
-
-              <div v-if="productReview.reply" class="w-[95%] ml-auto">
-                <hr class="mt-4" />
-
-                <div class="flex items-start justify-between my-3">
-                  <div class="flex items-center">
-                    <img
-                      :src="productReview.reply.user.avatar"
-                      alt=""
-                      class="w-10 h-10 object-cover rounded-full mr-5"
-                    />
-                    <div>
-                      <h4 class="text-lg font-bold text-slate-700">
-                        {{ productReview.reply.user.shop_name }}
-
-                        <span
-                          class="px-3 py-1 bg-green-200 text-green-600 rounded-xl text-[.7rem] ml-2"
-                        >
-                          <i class="fa-solid fa-circle-check"></i>
-                          Verified
-                        </span>
-                      </h4>
-                      <p class="text-[.8rem] text-slate-400">Reply From Shop</p>
-                    </div>
-                  </div>
-                  <div class="">
-                    <span class="text-slate-600 text-sm font-bold">
-                      {{ productReview.reply.updated_at }}
-                    </span>
-                  </div>
-                </div>
-                <p class="w-[92%] text-sm font-normal text-slate-900 ml-auto">
-                  {{ productReview.reply.reply_text }}
-                </p>
-              </div>
-            </div>
+            <!-- Product Reviewer Review  -->
+            <ProductReviewerReviewCard
+              :paginateProductReviews="paginateProductReviews"
+              :productReview="productReview"
+            />
           </div>
         </div>
 

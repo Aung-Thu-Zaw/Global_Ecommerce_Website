@@ -13,6 +13,7 @@ const props = defineProps({
   shop: Object,
 });
 
+// Query String Parameters
 const params = reactive({
   search: usePage().props.ziggy.query.search,
   sort: "id",
@@ -31,10 +32,83 @@ const params = reactive({
     : "grid",
 });
 
+// Handle Filter Prices
+const price = ref(
+  usePage().props.ziggy.query.price ? usePage().props.ziggy.query.price : ""
+);
+
+const [minValue, maxValue] = price.value
+  .split("-")
+  .map((value) => parseInt(value));
+
+const minPrice = ref(minValue);
+const maxPrice = ref(maxValue);
+
+// Remove Category Query String Parameter
+const handleRemoveCategory = () => {
+  router.get(route("shop.show", props.shop.uuid), {
+    search: params.search,
+    sort: params.sort,
+    direction: params.direction,
+    page: params.page,
+    brand: params.brand,
+    tab: params.tab,
+    rating: params.rating,
+    price: params.price,
+    view: params.view,
+  });
+};
+
+// Remove Price Query String Parameter
+const handleRemovePrice = () => {
+  router.get(route("shop.show", props.shop.uuid), {
+    search: params.search,
+    sort: params.sort,
+    direction: params.direction,
+    page: params.page,
+    tab: params.tab,
+    category: params.category,
+    brand: params.brand,
+    rating: params.rating,
+    view: params.view,
+  });
+};
+
+// Remove Rating Query String Parameter
+const handleRemoveRating = () => {
+  router.get(route("shop.show", props.shop.uuid), {
+    search: params.search,
+    sort: params.sort,
+    direction: params.direction,
+    page: params.page,
+    tab: params.tab,
+    category: params.category,
+    brand: params.brand,
+    price: params.price,
+    view: params.view,
+  });
+};
+
+// Remove Brand Query String Parameter
+const handleRemoveBrand = () => {
+  router.get(route("shop.show", props.shop.uuid), {
+    search: params.search,
+    sort: params.sort,
+    direction: params.direction,
+    page: params.page,
+    tab: params.tab,
+    category: params.category,
+    rating: params.rating,
+    price: params.price,
+    view: params.view,
+  });
+};
+
+// Watching Sorting Select Box
 watch(
   () => params.direction,
-  (current, previous) => {
-    router.get(route("shop.show", props.shop.id), {
+  () => {
+    router.get(route("shop.show", props.shop.uuid), {
       search: params.search,
       sort: params.sort,
       direction: params.direction,
@@ -48,73 +122,6 @@ watch(
     });
   }
 );
-
-const price = ref(
-  usePage().props.ziggy.query.price ? usePage().props.ziggy.query.price : ""
-);
-
-const [minValue, maxValue] = price.value
-  .split("-")
-  .map((value) => parseInt(value));
-
-const minPrice = ref(minValue);
-const maxPrice = ref(maxValue);
-
-const handleRemoveCategory = () => {
-  router.get(route("shop.show", props.shop.id), {
-    search: params.search,
-    sort: params.sort,
-    direction: params.direction,
-    page: params.page,
-    brand: params.brand,
-    tab: params.tab,
-    rating: params.rating,
-    price: params.price,
-    view: params.view,
-  });
-};
-
-const handleRemovePrice = () => {
-  router.get(route("shop.show", props.shop.id), {
-    search: params.search,
-    sort: params.sort,
-    direction: params.direction,
-    page: params.page,
-    tab: params.tab,
-    category: params.category,
-    brand: params.brand,
-    rating: params.rating,
-    view: params.view,
-  });
-};
-
-const handleRemoveRating = () => {
-  router.get(route("shop.show", props.shop.id), {
-    search: params.search,
-    sort: params.sort,
-    direction: params.direction,
-    page: params.page,
-    tab: params.tab,
-    category: params.category,
-    brand: params.brand,
-    price: params.price,
-    view: params.view,
-  });
-};
-
-const handleRemoveBrand = () => {
-  router.get(route("shop.show", props.shop.id), {
-    search: params.search,
-    sort: params.sort,
-    direction: params.direction,
-    page: params.page,
-    tab: params.tab,
-    category: params.category,
-    rating: params.rating,
-    price: params.price,
-    view: params.view,
-  });
-};
 </script>
 
 
@@ -122,6 +129,7 @@ const handleRemoveBrand = () => {
   <section class="container mx-auto py-10">
     <div class="container max-w-screen-xl mx-auto">
       <div class="flex flex-col md:flex-row -mx-4">
+        <!-- Filter Sidebar Card -->
         <EcommerceFilterSidebarForShop
           :categories="categories"
           :brands="brands"
@@ -136,6 +144,7 @@ const handleRemoveBrand = () => {
               <span class="text-blue-600">"{{ params.search }}"</span>
             </p>
 
+            <!-- Sorting Select Box -->
             <div class="flex items-center ml-auto">
               <div class="w-[220px] flex items-center justify-between">
                 <span class="">Sort By : </span>
@@ -158,11 +167,13 @@ const handleRemoveBrand = () => {
                 </select>
               </div>
 
+              <!-- Dynamic View -->
               <div class="flex items-center ml-3">
                 <span class="mr-2">View : </span>
                 <div class="flex items-center justify-between">
+                  <!-- Grid View -->
                   <Link
-                    :href="route('shop.show', shop.id)"
+                    :href="route('shop.show', shop.uuid)"
                     :data="{
                       search: $page.props.ziggy.query.search,
                       tab: $page.props.ziggy.query.tab,
@@ -184,8 +195,9 @@ const handleRemoveBrand = () => {
                   >
                     <i class="fa-solid fa-grip"></i>
                   </Link>
+                  <!-- List View -->
                   <Link
-                    :href="route('shop.show', shop.id)"
+                    :href="route('shop.show', shop.uuid)"
                     :data="{
                       search: $page.props.ziggy.query.search,
                       tab: $page.props.ziggy.query.tab,
@@ -212,6 +224,7 @@ const handleRemoveBrand = () => {
             </div>
           </div>
 
+          <!-- Filter Tags -->
           <div class="my-3 w-full">
             <span
               v-if="
@@ -224,6 +237,7 @@ const handleRemoveBrand = () => {
               >Filtered By :</span
             >
 
+            <!-- Category Filter Tag -->
             <span
               v-if="$page.props.ziggy.query.category"
               class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow capitalize"
@@ -237,6 +251,7 @@ const handleRemoveBrand = () => {
               </i>
             </span>
 
+            <!-- Brand Filter Tag -->
             <span v-if="$page.props.ziggy.query.brand">
               <span
                 class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
@@ -251,6 +266,7 @@ const handleRemoveBrand = () => {
               </span>
             </span>
 
+            <!-- Rating Filter Tag -->
             <span
               v-if="$page.props.ziggy.query.rating"
               class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
@@ -264,6 +280,7 @@ const handleRemoveBrand = () => {
               </i>
             </span>
 
+            <!-- Price Filter Tag -->
             <span
               v-if="$page.props.ziggy.query.price"
               class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
@@ -278,6 +295,7 @@ const handleRemoveBrand = () => {
             </span>
           </div>
 
+          <!-- Product Card List Display -->
           <div v-if="$page.props.ziggy.query.view === 'list'">
             <div
               v-if="vendorProducts.data.length"
@@ -303,6 +321,7 @@ const handleRemoveBrand = () => {
             <Pagination class="mt-6" :links="vendorProducts.links" />
           </div>
 
+          <!-- Product Card Grid Display -->
           <div v-if="$page.props.ziggy.query.view === 'grid'">
             <div
               v-if="vendorProducts.data.length"
@@ -325,6 +344,7 @@ const handleRemoveBrand = () => {
               </p>
             </div>
 
+            <!-- Pagination -->
             <Pagination class="mt-6" :links="vendorProducts.links" />
           </div>
         </main>
