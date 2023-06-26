@@ -6,12 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Jobs\Registered\SendNewUserRegisteredWithSocialiteEmailNotificationForAdmin;
 use App\Jobs\Registered\SendNewUserRegisteredWithSocialiteNotificationForAdminDashboard;
 use App\Models\User;
-use App\Notifications\Registered\RegisteredUserEmailNotification;
-use App\Notifications\Registered\RegisteredUserNotification;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\InvalidStateException;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Notification;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Illuminate\Support\Str;
 

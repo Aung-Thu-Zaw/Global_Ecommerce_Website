@@ -1,11 +1,12 @@
 <script setup>
+import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
 import { Link, router, useForm, usePage } from "@inertiajs/vue3";
 import { computed, reactive } from "vue";
-import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
+// Calculate Total Item
 const totalItems = computed(() => {
   if (usePage().props.totalCartItems) {
     return usePage().props.totalCartItems.cart_items.reduce(
@@ -16,6 +17,33 @@ const totalItems = computed(() => {
   return;
 });
 
+// Query String Parameter
+const params = reactive({
+  search: usePage().props.ziggy.query.search
+    ? usePage().props.ziggy.query.search
+    : "",
+  sort: "id",
+  direction: "desc",
+  view: usePage().props.ziggy.query.view
+    ? usePage().props.ziggy.query.view
+    : "grid",
+});
+
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("product.search"),
+    {
+      search: params.search,
+      sort: params.sort,
+      direction: params.direction,
+      view: params.view,
+    },
+    {}
+  );
+};
+
+// Handle Order Tracking
 const form = useForm({
   order_no: "",
 });
@@ -39,30 +67,6 @@ const submit = () => {
     },
   });
 };
-
-const params = reactive({
-  search: usePage().props.ziggy.query.search
-    ? usePage().props.ziggy.query.search
-    : "",
-  sort: "id",
-  direction: "desc",
-  view: usePage().props.ziggy.query.view
-    ? usePage().props.ziggy.query.view
-    : "grid",
-});
-
-const handleSearch = () => {
-  router.get(
-    route("product.search"),
-    {
-      search: params.search,
-      sort: params.sort,
-      direction: params.direction,
-      view: params.view,
-    },
-    {}
-  );
-};
 </script>
 
 
@@ -70,13 +74,15 @@ const handleSearch = () => {
   <nav class="bg-blue-600 text-white">
     <div class="flex items-center justify-between px-10">
       <span class="text-sm font-bold">GLOBAL E-COMMERCE WEBSITE</span>
-      <!-- menu -->
+      <!-- Menus -->
       <nav class="hidden lg:flex flex-1 items-center justify-end py-1">
         <a class="text-sm font-bold px-3 py-2 hover:text-gray-300" href="#">
           <i class="fa-solid fa-circle-info"></i>
           HELP CENTER
         </a>
+
         <span>|</span>
+
         <Link
           class="text-sm font-bold px-3 py-2 hover:text-gray-300"
           :href="route('vendor.register')"
@@ -84,8 +90,10 @@ const handleSearch = () => {
           <i class="fa-solid fa-store"></i>
           BECOME A SELLER
         </Link>
+
         <span>|</span>
 
+        <!-- Order Tracking -->
         <div
           class="text-sm font-bold px-3 py-2 hover:text-gray-300 cursor-pointer"
           data-dropdown-toggle="dropdownSearch"
@@ -123,7 +131,10 @@ const handleSearch = () => {
             </button>
           </form>
         </div>
+
         <span>|</span>
+
+        <!-- Languages Dropdown -->
         <div class="flex justify-center">
           <div>
             <div class="relative" data-te-dropdown-ref>
@@ -154,13 +165,13 @@ const handleSearch = () => {
                 </span>
               </a>
               <ul
-                class="absolute z-[1000] float-left m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg dark:bg-neutral-700 [&[data-te-dropdown-show]]:block"
+                class="absolute z-[1000] float-left m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg [&[data-te-dropdown-show]]:block"
                 aria-labelledby="dropdownMenuButton2"
                 data-te-dropdown-menu-ref
               >
                 <li>
                   <a
-                    class="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-neutral-600"
+                    class="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400"
                     href="#"
                     data-te-dropdown-item-ref
                     >English</a
@@ -168,7 +179,7 @@ const handleSearch = () => {
                 </li>
                 <li>
                   <a
-                    class="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-neutral-600"
+                    class="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400"
                     href="#"
                     data-te-dropdown-item-ref
                     >French</a
@@ -176,7 +187,7 @@ const handleSearch = () => {
                 </li>
                 <li>
                   <a
-                    class="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-neutral-600"
+                    class="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400"
                     href="#"
                     data-te-dropdown-item-ref
                     >Myanmar</a
@@ -189,6 +200,7 @@ const handleSearch = () => {
       </nav>
     </div>
   </nav>
+
   <header class="bg-white shadow-sm border border-b">
     <div class="container max-w-screen-xl mx-auto px-4">
       <div class="py-3 md:flex items-center">
@@ -231,6 +243,7 @@ const handleSearch = () => {
           v-if="$page.props.auth.user"
           class="hidden md:flex justify-end flex-1 items-center"
         >
+          <!-- User Profile Dropdown  -->
           <UserDropdown />
 
           <Link

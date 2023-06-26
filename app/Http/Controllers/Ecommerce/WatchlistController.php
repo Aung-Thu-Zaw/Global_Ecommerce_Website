@@ -9,7 +9,6 @@ use App\Models\User;
 use App\Models\UserProductInteraction;
 use App\Models\Watchlist;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\DB;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -17,9 +16,10 @@ class WatchlistController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-
         $watchlists=auth()->user()->watchlists;
+
         $shopIds=$watchlists->pluck("shop_id")->unique()->values();
+
         $shops = User::select("id", "shop_name")->whereIn('id', $shopIds)->get();
 
         $watchlists->load(["product.shop:id,shop_name","product.brand:id,name","product.sizes","product.colors"]);
@@ -29,22 +29,23 @@ class WatchlistController extends Controller
                                                   ->pluck('product_id')
                                                   ->toArray();
 
-        $recommendedProducts = Product::select("id", "image", "name", "slug", "price", "discount")
-                                      ->with("productReviews:id,product_id,rating")
-                                      ->where("status", "active")
+        $recommendedProducts = Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
+                                      ->with(["productReviews:id,product_id,rating","shop:id,offical"])
+                                      ->whereStatus("active")
                                       ->whereIn('id', $mostViewedProducts)
                                       ->inRandomOrder()
                                       ->limit(10)
                                       ->get();
-
 
         return inertia("User/MyWatchlist/Index", compact("shops", "watchlists", "recommendedProducts"));
     }
 
     public function store(WatchlistRequest $request): RedirectResponse
     {
-
-        $watchlist=Watchlist::where([["user_id",$request->user_id],["product_id",$request->product_id],["shop_id",$request->shop_id]])->first();
+        $watchlist=Watchlist::whereUserId($request->user_id)
+                            ->whereProductId($request->product_id)
+                            ->whereShopId($request->shop_id)
+                            ->first();
 
         if(!$watchlist) {
             Watchlist::create($request->validated());

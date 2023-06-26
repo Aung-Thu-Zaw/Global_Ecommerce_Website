@@ -2,6 +2,7 @@
 import { Link, usePage } from "@inertiajs/vue3";
 import { reactive } from "vue";
 
+// Query String Parameters
 const params = reactive({
   search: usePage().props.ziggy.query.search
     ? usePage().props.ziggy.query.search
@@ -20,14 +21,14 @@ const params = reactive({
       <div class="hidden lg:flex flex-1 items-center py-1">
         <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
           <ul
-            class="flex flex-col p-2 mt-4 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:border-0 md:dark:bg-gray-900 font-bold"
+            class="flex flex-col p-2 mt-4 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:border-0 font-bold"
           >
             <li class="relative">
               <button
                 id="dropdownNavbarLink"
                 data-dropdown-toggle="dropdownNavbar"
                 data-dropdown-trigger="hover"
-                class="flex items-center justify-between w-full pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-gray-400 dark:hover:text-white dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
+                class="flex items-center justify-between w-full pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto"
               >
                 <i class="fa-solid fa-list mr-2"></i>
                 Shop By Categories
@@ -51,7 +52,7 @@ const params = reactive({
                 class="hidden z-40 font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-md w-[900px] h-[700px] ml-10 overflow-auto"
               >
                 <div
-                  class="grid grid-cols-1 md:grid-cols-3 p-5 text-slate-700 overflow-auto"
+                  class="grid grid-cols-1 md:grid-cols-3 p-5 text-slate-700 overflow-auto scrollbar"
                 >
                   <ul
                     class="m-3"
@@ -111,7 +112,7 @@ const params = reactive({
         <!-- Vendor List  -->
         <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
           <ul
-            class="flex flex-col p-2 mt-4 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:border-0 md:dark:bg-gray-900 font-bold"
+            class="flex flex-col p-2 mt-4 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:border-0 font-bold"
           >
             <li class="relative">
               <button
@@ -119,7 +120,7 @@ const params = reactive({
                 data-dropdown-toggle="dropdownSellers"
                 data-dropdown-placement="bottom"
                 data-dropdown-trigger="hover"
-                class="flex items-center justify-between w-full pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-gray-400 dark:hover:text-white dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
+                class="flex items-center justify-between w-full pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto"
               >
                 <i class="fa-solid fa-shop mr-2"></i>
                 Our Seller Shops
@@ -140,17 +141,17 @@ const params = reactive({
               <!-- Dropdown menu -->
               <div
                 id="dropdownSellers"
-                class="z-40 hidden bg-white shadow-md w-[300px] h-[350px] dark:bg-gray-700"
+                class="z-40 hidden bg-white shadow-md w-[300px] h-[350px]"
               >
                 <ul
-                  class="h-full py-2 overflow-y-auto text-gray-700 dark:text-gray-200 scrollbar"
+                  class="h-full py-2 overflow-y-auto text-gray-700 scrollbar"
                   aria-labelledby="dropdownSellersButton"
                 >
                   <li v-for="vendor in $page.props.vendors" :key="vendor.id">
                     <Link
                       :href="route('shop.show', vendor.uuid)"
                       :data="{ tab: 'home' }"
-                      class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      class="flex items-center px-4 py-2 hover:bg-gray-100"
                     >
                       <img
                         class="w-6 h-6 mr-2 rounded-full"
@@ -169,7 +170,7 @@ const params = reactive({
                 </ul>
                 <Link
                   :href="route('shop.index')"
-                  class="flex items-center justify-center p-3 text-sm font-medium text-blue-600 border-2 border-gray-200 bg-white rounded-b-lg dark:border-gray-600 hover:bg-gray-100"
+                  class="flex items-center justify-center p-3 text-sm font-medium text-blue-600 border-2 border-gray-200 bg-white rounded-b-lg hover:bg-gray-100"
                 >
                   <i class="fas fa-eye mr-2"></i>
                   View More
@@ -182,7 +183,7 @@ const params = reactive({
         <!-- Brands with us -->
         <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
           <ul
-            class="flex flex-col p-2 mt-4 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:border-0 md:dark:bg-gray-900 font-bold"
+            class="flex flex-col p-2 mt-4 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:border-0 font-bold"
           >
             <li class="relative">
               <button
@@ -190,7 +191,7 @@ const params = reactive({
                 data-dropdown-toggle="dropdownBrands"
                 data-dropdown-placement="bottom"
                 data-dropdown-trigger="hover"
-                class="flex items-center justify-between w-full pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-gray-400 dark:hover:text-white dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
+                class="flex items-center justify-between w-full pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto"
               >
                 <i class="fa-solid fa-tags mr-2"></i>
                 Brands With Us
@@ -211,17 +212,17 @@ const params = reactive({
               <!-- Dropdown menu -->
               <div
                 id="dropdownBrands"
-                class="z-40 hidden bg-white shadow-md w-[300px] h-[350px] dark:bg-gray-700"
+                class="z-40 hidden bg-white shadow-md w-[300px] h-[350px]"
               >
                 <ul
-                  class="h-full py-2 overflow-y-auto text-gray-700 dark:text-gray-200 scrollbar"
+                  class="h-full py-2 overflow-y-auto text-gray-700 scrollbar"
                   aria-labelledby="dropdownBrandsButton"
                 >
                   <li v-for="brand in $page.props.brands" :key="brand.id">
                     <Link
                       :href="route('shop.show', brand.id)"
                       :data="{ tab: 'home' }"
-                      class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      class="flex items-center px-4 py-2 hover:bg-gray-100"
                     >
                       <img
                         class="w-6 h-6 mr-2 rounded-full"
@@ -233,7 +234,7 @@ const params = reactive({
                 </ul>
                 <Link
                   :href="route('shop.index')"
-                  class="flex items-center justify-center p-3 text-sm font-medium text-blue-600 border-2 border-gray-200 bg-white rounded-b-lg dark:border-gray-600 hover:bg-gray-100"
+                  class="flex items-center justify-center p-3 text-sm font-medium text-blue-600 border-2 border-gray-200 bg-white rounded-b-lg hover:bg-gray-100"
                 >
                   <i class="fas fa-eye mr-2"></i>
                   View More
@@ -244,7 +245,6 @@ const params = reactive({
         </div>
 
         <!-- Our Blogs  -->
-
         <Link
           :href="route('blogs.index')"
           :data="{
@@ -259,29 +259,3 @@ const params = reactive({
     </div>
   </nav>
 </template>
-
-
-
-<style>
-.chat-box {
-  box-shadow: -5px 0px 8px 0px #3737377f;
-}
-
-.scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: #999 #f0f0f0;
-}
-
-.scrollbar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.scrollbar::-webkit-scrollbar-track {
-  background-color: #f0f0f0;
-}
-
-.scrollbar::-webkit-scrollbar-thumb {
-  background-color: #999;
-  border-radius: 3px;
-}
-</style>
