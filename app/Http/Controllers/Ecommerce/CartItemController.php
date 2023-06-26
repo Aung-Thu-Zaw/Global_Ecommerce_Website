@@ -18,11 +18,17 @@ class CartItemController extends Controller
             ["user_id"=>auth()->user()->id]
         );
 
-        $cartItem=CartItem::where("product_id", $request->product_id)->where("color", $request->color)->where("size", $request->size)->first();
+        $cartItem=CartItem::whereProductId($request->product_id)
+                          ->whereColor($request->color)
+                          ->whereSize($request->size)
+                          ->first();
 
         if($cartItem) {
+
             $cartItem->update(["qty"=> $cartItem->qty + $request->qty]);
+
         } else {
+
             CartItem::create($request->validated()+["cart_id"=>$cart->id]);
         }
 
@@ -31,7 +37,10 @@ class CartItemController extends Controller
 
     public function update(Request $request, CartItem $cartItem): RedirectResponse
     {
-        $cartItem->update(["qty"=>$request->qty,"total_price"=>$request->total_price]);
+        $cartItem->update([
+            "qty"=>$request->qty,
+            "total_price"=>$request->total_price
+        ]);
 
         return back();
     }
