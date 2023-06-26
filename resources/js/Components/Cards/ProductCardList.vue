@@ -1,12 +1,13 @@
 <script setup>
-import { router, usePage } from "@inertiajs/vue3";
-import { ref } from "vue";
 import TotalAverageRatingStarForProduct from "@/Components/RatingStars/TotalAverageRatingStarForProduct.vue";
+import { router, usePage } from "@inertiajs/vue3";
+import { computed, ref } from "vue";
 
 const props = defineProps({
   product: Object,
 });
 
+// Handle Product Review Avg
 const averageRating = ref(null);
 
 if (props.product.product_reviews) {
@@ -24,6 +25,29 @@ if (props.product.product_reviews) {
   );
 }
 
+// Formatted Price
+const formattedPrice = computed(() => {
+  const price = parseFloat(props.product.price);
+
+  if (Number.isInteger(price)) {
+    return price.toFixed(0);
+  } else {
+    return price.toFixed(2);
+  }
+});
+
+// Formatted Discount
+const formattedDiscount = computed(() => {
+  const discount = parseFloat(props.product.discount);
+
+  if (Number.isInteger(discount)) {
+    return discount.toFixed(0);
+  } else {
+    return discount.toFixed(2);
+  }
+});
+
+// Handle Product Interaction Tracking
 const handleTrackInteraction = () => {
   router.post(route("product.track-interaction"), {
     user_id: usePage().props.auth.user?.id,
@@ -31,6 +55,7 @@ const handleTrackInteraction = () => {
   });
 };
 
+// Handle Go To Product Detail
 const handleGoToProductDetailPage = (slug) => {
   router.get(
     route("products.show", slug),
@@ -80,6 +105,13 @@ const handleGoToProductDetailPage = (slug) => {
       </div>
 
       <div class="w-full">
+        <span
+          v-if="product.shop.offical"
+          class="px-3 rounded-sm py-1 font-bold uppercase text-[0.6rem] text-white bg-fuchsia-600"
+        >
+          <i class="fas fa-crown"></i>
+          Official
+        </span>
         <h1 class="line-clamp-1 font-semibold text-slate-600 text-md mb-3">
           {{ product.name }}
         </h1>
@@ -87,15 +119,14 @@ const handleGoToProductDetailPage = (slug) => {
           {{ product.description }}
         </p>
 
-        
         <div class="flex items-start justify-between w-full">
           <div class="my-2">
             <div v-if="product.discount">
               <span class="font-semibold text-slate-600 block">
-                ${{ product.discount }}
+                ${{ formattedDiscount }}
               </span>
               <span class="text-[.8rem] text-secondary-600 line-through mr-5">
-                ${{ product.price }}
+                ${{ formattedPrice }}
               </span>
               <span
                 v-if="product.discount"
@@ -111,7 +142,7 @@ const handleGoToProductDetailPage = (slug) => {
             </div>
             <div v-else>
               <span class="font-semibold text-slate-600 mr-3">
-                ${{ product.price }}
+                ${{ formattedPrice }}
               </span>
             </div>
           </div>

@@ -1,12 +1,13 @@
 <script setup>
+import TotalAverageRatingStarForProduct from "@/Components/RatingStars/TotalAverageRatingStarForProduct.vue";
 import { router, usePage } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
-import TotalAverageRatingStarForProduct from "@/Components/RatingStars/TotalAverageRatingStarForProduct.vue";
 
 const props = defineProps({
   product: Object,
 });
 
+// Handle Product Review Avg
 const averageRating = ref(null);
 
 if (props.product.product_reviews) {
@@ -24,6 +25,7 @@ if (props.product.product_reviews) {
   );
 }
 
+// Formatted Price
 const formattedPrice = computed(() => {
   const price = parseFloat(props.product.price);
 
@@ -34,6 +36,7 @@ const formattedPrice = computed(() => {
   }
 });
 
+// Formatted Discount
 const formattedDiscount = computed(() => {
   const discount = parseFloat(props.product.discount);
 
@@ -44,6 +47,7 @@ const formattedDiscount = computed(() => {
   }
 });
 
+// Handle Product Interaction Tracking
 const handleTrackInteraction = () => {
   router.post(route("product.track-interaction"), {
     user_id: usePage().props.auth.user?.id,
@@ -51,6 +55,7 @@ const handleTrackInteraction = () => {
   });
 };
 
+// Handle Go To Product Detail
 const handleGoToProductDetailPage = (slug) => {
   router.get(
     route("products.show", slug),
