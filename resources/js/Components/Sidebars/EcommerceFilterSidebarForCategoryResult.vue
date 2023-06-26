@@ -1,11 +1,11 @@
 <script setup>
-import { Link, router, usePage } from "@inertiajs/vue3";
-import { onMounted, reactive, ref, watch } from "vue";
 import OneActiveStar from "@/Components/RatingStars/OneActiveStar.vue";
 import TwoActiveStars from "@/Components/RatingStars/TwoActiveStars.vue";
 import ThreeActiveStars from "@/Components/RatingStars/ThreeActiveStars.vue";
 import FourActiveStars from "@/Components/RatingStars/FourActiveStars.vue";
 import FiveActiveStars from "@/Components/RatingStars/FiveActiveStars.vue";
+import { Link, router, usePage } from "@inertiajs/vue3";
+import { onMounted, reactive, ref, watch } from "vue";
 
 const props = defineProps({
   category: Object,
@@ -13,11 +13,19 @@ const props = defineProps({
 });
 
 const isCategoryShowLess = ref(true);
+
 const isBrandShowLess = ref(true);
 
 const limitedCategories = ref([]);
+
 const limitedBrands = ref([]);
 
+onMounted(() => {
+  limitedCategories.value = props.category.children.slice(0, 10);
+  limitedBrands.value = props.brands.slice(0, 10);
+});
+
+// Filter Params Price
 const price = ref(
   usePage().props.ziggy.query.price ? usePage().props.ziggy.query.price : ""
 );
@@ -29,11 +37,22 @@ const [minValue, maxValue] = price.value
 const minPrice = ref(minValue);
 const maxPrice = ref(maxValue);
 
-onMounted(() => {
-  limitedCategories.value = props.category.children.slice(0, 10);
-  limitedBrands.value = props.brands.slice(0, 10);
-});
+// Handle Filter Price
+const handlePrice = () => {
+  params.price = `${minPrice.value}-${maxPrice.value}`;
+  router.get(route("category.products", props.category.slug), {
+    sort: params.sort,
+    direction: params.direction,
+    page: params.page,
+    tab: params.tab,
+    brand: params.brand,
+    rating: params.rating,
+    price: params.price,
+    view: params.view,
+  });
+};
 
+// Query String Parameters
 const params = reactive({
   sort: "id",
   direction: usePage().props.ziggy.query.direction
@@ -49,6 +68,7 @@ const params = reactive({
     : "grid",
 });
 
+// Watching Filter Rating
 watch(
   () => params.rating,
   () => {
@@ -64,6 +84,7 @@ watch(
   }
 );
 
+// Watching Filter Brand
 watch(
   () => params.brand,
   () => {
@@ -78,20 +99,6 @@ watch(
     });
   }
 );
-
-const handlePrice = () => {
-  params.price = `${minPrice.value}-${maxPrice.value}`;
-  router.get(route("category.products", props.category.slug), {
-    sort: params.sort,
-    direction: params.direction,
-    page: params.page,
-    tab: params.tab,
-    brand: params.brand,
-    rating: params.rating,
-    price: params.price,
-    view: params.view,
-  });
-};
 </script>
 
 <template>
@@ -99,6 +106,7 @@ const handlePrice = () => {
     <div
       class="hidden md:block px-6 py-4 border border-gray-200 bg-white rounded shadow-sm"
     >
+      <!-- Filter Categories -->
       <div v-if="category.children.length">
         <h3 class="font-semibold mb-2">Source By Category</h3>
 
@@ -168,6 +176,7 @@ const handlePrice = () => {
 
       <hr v-if="category.children.length > 0" class="my-4" />
 
+      <!-- Filter Brands -->
       <div v-if="brands.length">
         <h3 class="font-semibold mb-2">Brand</h3>
 
@@ -218,6 +227,8 @@ const handlePrice = () => {
       </div>
 
       <hr v-if="brands.length > 0" class="my-4" />
+
+      <!-- Filter Ratings -->
       <h3 class="font-semibold mb-2">Ratings</h3>
       <ul class="space-y-1">
         <li>
@@ -286,7 +297,10 @@ const handlePrice = () => {
           </label>
         </li>
       </ul>
+
       <hr class="my-4" />
+
+      <!-- Filter Price -->
       <h3 class="font-semibold mb-2">Price</h3>
       <ul class="space-y-1">
         <li>

@@ -2,11 +2,11 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ProductCard from "@/Components/Cards/ProductCard.vue";
 import ProductCardList from "@/Components/Cards/ProductCardList.vue";
-import { reactive, ref, watch } from "vue";
-import { usePage, router, Link } from "@inertiajs/vue3";
 import EcommerceFilterSidebarForCategoryResult from "@/Components/Sidebars/EcommerceFilterSidebarForCategoryResult.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
+import { reactive, ref, watch } from "vue";
+import { usePage, router, Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
   category: Object,
@@ -14,6 +14,7 @@ const props = defineProps({
   products: Object,
 });
 
+// Query String Parameters
 const params = reactive({
   sort: "id",
   direction: usePage().props.ziggy.query.direction
@@ -28,6 +29,7 @@ const params = reactive({
     : "grid",
 });
 
+// Watching Sorting Select Box
 watch(
   () => params.direction,
   () => {
@@ -43,6 +45,7 @@ watch(
   }
 );
 
+// Handle Filter Prices
 const price = ref(
   usePage().props.ziggy.query.price ? usePage().props.ziggy.query.price : ""
 );
@@ -54,6 +57,7 @@ const [minValue, maxValue] = price.value
 const minPrice = ref(minValue);
 const maxPrice = ref(maxValue);
 
+// Remove Price Query String Parameter
 const handleRemovePrice = () => {
   router.get(route("category.products", props.category.slug), {
     sort: params.sort,
@@ -65,6 +69,7 @@ const handleRemovePrice = () => {
   });
 };
 
+// Remove Rating Query String Parameter
 const handleRemoveRating = () => {
   router.get(route("category.products", props.category.slug), {
     sort: params.sort,
@@ -76,6 +81,7 @@ const handleRemoveRating = () => {
   });
 };
 
+// Remove Brand Query String Parameter
 const handleRemoveBrand = () => {
   router.get(route("category.products", props.category.slug), {
     sort: params.sort,
@@ -88,18 +94,33 @@ const handleRemoveBrand = () => {
 };
 </script>
 
-
 <template>
   <AppLayout>
+    <Head :title="'Search By Category : ' + category.name" />
+
     <section class="container mt-40 mx-auto py-10">
       <div class="mb-5 px-4">
         <div class="border-b py-3">
+          <!-- Breadcrumb -->
           <Breadcrumb>
             <li
               v-if="category.parent?.parent?.parent?.parent"
               aria-current="page"
             >
-              <div class="flex items-center">
+              <Link
+                :href="
+                  route(
+                    'category.products',
+                    category.parent.parent.parent.parent.slug
+                  )
+                "
+                :data="{
+                  sort: $page.props.ziggy.query.sort,
+                  direction: $page.props.ziggy.query.direction,
+                  view: params.view,
+                }"
+                class="flex items-center"
+              >
                 <svg
                   aria-hidden="true"
                   class="w-6 h-6 text-gray-400"
@@ -114,13 +135,23 @@ const handleRemoveBrand = () => {
                   ></path>
                 </svg>
                 <span
-                  class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                  class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-700 md:ml-2"
                   >{{ category.parent.parent.parent.parent.name }}</span
                 >
-              </div>
+              </Link>
             </li>
             <li v-if="category.parent?.parent?.parent" aria-current="page">
-              <div class="flex items-center">
+              <Link
+                :href="
+                  route('category.products', category.parent.parent.parent.slug)
+                "
+                :data="{
+                  sort: $page.props.ziggy.query.sort,
+                  direction: $page.props.ziggy.query.direction,
+                  view: params.view,
+                }"
+                class="flex items-center"
+              >
                 <svg
                   aria-hidden="true"
                   class="w-6 h-6 text-gray-400"
@@ -135,13 +166,21 @@ const handleRemoveBrand = () => {
                   ></path>
                 </svg>
                 <span
-                  class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                  class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-700 md:ml-2"
                   >{{ category.parent.parent.parent.name }}</span
                 >
-              </div>
+              </Link>
             </li>
             <li v-if="category.parent?.parent" aria-current="page">
-              <div class="flex items-center">
+              <Link
+                :href="route('category.products', category.parent.parent.slug)"
+                :data="{
+                  sort: $page.props.ziggy.query.sort,
+                  direction: $page.props.ziggy.query.direction,
+                  view: params.view,
+                }"
+                class="flex items-center"
+              >
                 <svg
                   aria-hidden="true"
                   class="w-6 h-6 text-gray-400"
@@ -156,13 +195,21 @@ const handleRemoveBrand = () => {
                   ></path>
                 </svg>
                 <span
-                  class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                  class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-700 md:ml-2"
                   >{{ category.parent.parent.name }}</span
                 >
-              </div>
+              </Link>
             </li>
             <li v-if="category.parent" aria-current="page">
-              <div class="flex items-center">
+              <Link
+                :href="route('category.products', category.parent.slug)"
+                :data="{
+                  sort: $page.props.ziggy.query.sort,
+                  direction: $page.props.ziggy.query.direction,
+                  view: params.view,
+                }"
+                class="flex items-center"
+              >
                 <svg
                   aria-hidden="true"
                   class="w-6 h-6 text-gray-400"
@@ -177,10 +224,10 @@ const handleRemoveBrand = () => {
                   ></path>
                 </svg>
                 <span
-                  class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                  class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-700 md:ml-2"
                   >{{ category.parent.name }}</span
                 >
-              </div>
+              </Link>
             </li>
 
             <li aria-current="page">
@@ -198,19 +245,17 @@ const handleRemoveBrand = () => {
                     clip-rule="evenodd"
                   ></path>
                 </svg>
-                <span
-                  class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                  >{{ category.name }}</span
-                >
+                <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">{{
+                  category.name
+                }}</span>
               </div>
             </li>
           </Breadcrumb>
-
-          <!--  -->
         </div>
       </div>
       <div class="container max-w-screen-xl mx-auto px-4">
         <div class="flex flex-col md:flex-row -mx-4">
+          <!-- Ecommerce Filter Sidebar -->
           <EcommerceFilterSidebarForCategoryResult
             :category="category"
             :brands="brands"
@@ -224,6 +269,7 @@ const handleRemoveBrand = () => {
                 <span class="text-blue-600">"{{ category.name }}"</span>
               </p>
               <div class="flex items-center ml-auto">
+                <!-- Sorting Select Box -->
                 <div class="w-[220px] flex items-center justify-between">
                   <span class="">Sort By : </span>
                   <select
@@ -245,9 +291,11 @@ const handleRemoveBrand = () => {
                   </select>
                 </div>
 
+                <!-- Dynamic View -->
                 <div class="flex items-center ml-3">
                   <span class="mr-2">View : </span>
                   <div class="flex items-center justify-between">
+                    <!-- Grid View -->
                     <Link
                       :href="route('category.products', category.slug)"
                       :data="{
@@ -268,6 +316,7 @@ const handleRemoveBrand = () => {
                     >
                       <i class="fa-solid fa-grip"></i>
                     </Link>
+                    <!-- List View -->
                     <Link
                       :href="route('category.products', category.slug)"
                       :data="{
@@ -293,6 +342,7 @@ const handleRemoveBrand = () => {
               </div>
             </div>
 
+            <!-- Filter Tags -->
             <div class="my-3 w-full">
               <span
                 v-if="
@@ -304,6 +354,7 @@ const handleRemoveBrand = () => {
                 >Filtered By :</span
               >
 
+              <!-- Brand Filter Tag -->
               <span v-if="$page.props.ziggy.query.brand">
                 <span
                   class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
@@ -318,6 +369,7 @@ const handleRemoveBrand = () => {
                 </span>
               </span>
 
+              <!-- Rating Filter Tag -->
               <span
                 v-if="$page.props.ziggy.query.rating"
                 class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
@@ -331,6 +383,7 @@ const handleRemoveBrand = () => {
                 </i>
               </span>
 
+              <!-- Price Filter Tag -->
               <span
                 v-if="$page.props.ziggy.query.price"
                 class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
@@ -345,6 +398,7 @@ const handleRemoveBrand = () => {
               </span>
             </div>
 
+            <!-- Products List View -->
             <div v-if="$page.props.ziggy.query.view === 'list'">
               <div
                 v-if="products.data.length"
@@ -369,6 +423,7 @@ const handleRemoveBrand = () => {
               <Pagination class="mt-6" :links="products.links" />
             </div>
 
+            <!-- Products Grid View -->
             <div v-if="$page.props.ziggy.query.view === 'grid'">
               <div
                 v-if="products.data.length"

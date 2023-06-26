@@ -49,7 +49,7 @@ const params = reactive({
               <!-- Dropdown menu -->
               <div
                 id="dropdownNavbar"
-                class="hidden z-40 font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-md w-[900px] h-[700px] ml-10 overflow-auto"
+                class="hidden z-40 font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-md w-[900px] h-[700px] ml-10 overflow-auto scrollbar"
               >
                 <div
                   class="grid grid-cols-1 md:grid-cols-3 p-5 text-slate-700 overflow-auto scrollbar"

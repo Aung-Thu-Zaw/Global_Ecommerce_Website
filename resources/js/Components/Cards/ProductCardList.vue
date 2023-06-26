@@ -115,7 +115,7 @@ const handleGoToProductDetailPage = (slug) => {
         <h1 class="line-clamp-1 font-semibold text-slate-600 text-md mb-3">
           {{ product.name }}
         </h1>
-        <p class="text-sm text-slate-500 line-clamp-6 mb-5">
+        <p class="text-sm text-slate-500 line-clamp-5 mb-5">
           {{ product.description }}
         </p>
 

@@ -13,7 +13,7 @@ class SearchResultProductController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $products=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
+        $products=Product::select("id", "user_id", "image", "name", "description", "slug", "price", "discount", "special_offer")
                          ->with(["productReviews:id,product_id,rating","shop:id,offical","images"])
                          ->filterBy(request(["search","category","brand","rating","price"]))
                          ->whereStatus("active")
