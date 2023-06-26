@@ -1,13 +1,13 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
 const props = defineProps({
-  specificShopProducts: Object,
+  productsFromShop: Object,
 });
 </script>
 
 <template>
   <aside
-    v-if="specificShopProducts.length"
+    v-if="productsFromShop.length"
     class="my-5 w-full lg:my-0 lg:w-1/4 px-2"
   >
     <article
@@ -16,7 +16,7 @@ const props = defineProps({
       <h3 class="mb-5 text-lg font-semibold capitalize">from the same store</h3>
 
       <figure
-        v-for="product in specificShopProducts"
+        v-for="product in productsFromShop"
         :key="product.id"
         class="flex flex-row mb-4 border p-3 shadow rounded-md"
       >
@@ -27,7 +27,7 @@ const props = defineProps({
           >
             <img
               :src="product.image"
-              class="h-full object-cover"
+              class="w-full h-full object-cover"
               :alt="product.name"
             />
           </Link>
@@ -69,7 +69,7 @@ const props = defineProps({
 
       <Link
         as="button"
-        :href="route('shop.show', { shop_id: specificShopProducts[0].user_id })"
+        :href="route('shop.show', { shop_id: productsFromShop[0].user_id })"
         :data="{ tab: 'home' }"
         class="bg-blue-600 text-white w-full font-bold py-2 rounded-sm shadow-md hover:bg-blue-700"
       >

@@ -8,7 +8,7 @@ const props = defineProps({
   productQuestions: Object,
   productReviews: Object,
   paginateProductReviews: Object,
-  specificShopProducts: Object,
+  productsFromShop: Object,
   product: Object,
   productReviewsAvg: String,
 });
@@ -32,7 +32,7 @@ const props = defineProps({
                     :href="route('products.show', product.slug)"
                     :data="{ tab: 'description' }"
                     preserve-scroll
-                    class="inline-flex p-4 rounded-t-lg active group"
+                    class="inline-flex p-4 rounded-t-lg active group text-slate-700"
                     :class="{
                       'text-blue-600 border-b-2 border-blue-600':
                         $page.props.ziggy.query.tab === 'description' ||
@@ -48,7 +48,7 @@ const props = defineProps({
                     :href="route('products.show', product.slug)"
                     :data="{ tab: 'delievery-and-services' }"
                     preserve-scroll
-                    class="inline-flex p-4 rounded-t-lg active group"
+                    class="inline-flex p-4 rounded-t-lg active group text-slate-700"
                     :class="{
                       'text-blue-600 border-b-2 border-blue-600':
                         $page.props.ziggy.query.tab ===
@@ -64,7 +64,7 @@ const props = defineProps({
                     :href="route('products.show', product.slug)"
                     :data="{ tab: 'available-payments' }"
                     preserve-scroll
-                    class="inline-flex p-4 rounded-t-lg active group"
+                    class="inline-flex p-4 rounded-t-lg active group text-slate-700"
                     :class="{
                       'text-blue-600 border-b-2 border-blue-600':
                         $page.props.ziggy.query.tab === 'available-payments',
@@ -80,7 +80,7 @@ const props = defineProps({
                     :href="route('products.show', product.slug)"
                     :data="{ tab: 'product-reviews' }"
                     preserve-scroll
-                    class="inline-flex p-4 rounded-t-lg active group"
+                    class="inline-flex p-4 rounded-t-lg active group text-slate-700"
                     :class="{
                       'text-blue-600 border-b-2 border-blue-600':
                         $page.props.ziggy.query.tab === 'product-reviews',
@@ -96,6 +96,7 @@ const props = defineProps({
               <div
                 class="w-full border border-gray-200 shadow-sm border-t-0 p-5 bg-white"
               >
+                <!-- Product Description -->
                 <div
                   v-if="
                     $page.props.ziggy.query.tab === 'description' ||
@@ -107,6 +108,8 @@ const props = defineProps({
                     class="text-sm text-gray-600 font-medium dark:text-gray-400"
                   ></p>
                 </div>
+
+                <!-- Service -->
                 <div
                   v-else-if="
                     $page.props.ziggy.query.tab === 'delievery-and-services'
@@ -116,6 +119,8 @@ const props = defineProps({
                     Services
                   </p>
                 </div>
+
+                <!-- Payments -->
                 <div
                   v-else-if="
                     $page.props.ziggy.query.tab === 'available-payments'
@@ -125,6 +130,8 @@ const props = defineProps({
                     Wavepay
                   </p>
                 </div>
+
+                <!-- Product Reviews -->
                 <div
                   v-else-if="$page.props.ziggy.query.tab === 'product-reviews'"
                 >
@@ -138,15 +145,18 @@ const props = defineProps({
               </div>
             </div>
           </div>
-          <div>
+
+          <!-- About Of Product Questions Section  -->
+          <section>
             <AskQuestionSection
               :product="product"
               :productQuestions="productQuestions"
             />
-          </div>
+          </section>
         </div>
 
-        <FromTheSameStore :specificShopProducts="specificShopProducts" />
+        <!-- Products From The Same Shop -->
+        <FromTheSameStore :productsFromShop="productsFromShop" />
       </div>
     </div>
   </section>

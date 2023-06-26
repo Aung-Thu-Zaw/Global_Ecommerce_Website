@@ -3,14 +3,14 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
 import Information from "@/Components/Information.vue";
 import ShopInformationCard from "@/Components/Cards/ShopInformationCard.vue";
+import RelatedProductSection from "@/Components/Sections/RelatedProductSection.vue";
 import { computed, reactive, ref } from "vue";
-import { router, usePage, Head } from "@inertiajs/vue3";
+import { router, usePage, Head, Link } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-import ProductCard from "@/Components/Cards/ProductCard.vue";
 
 const props = defineProps({
-  specificShopProducts: Object,
+  productsFromShop: Object,
   product: Object,
   relatedProducts: Object,
   productQuestions: Object,
@@ -20,10 +20,11 @@ const props = defineProps({
   conversation: Object,
 });
 
-const reviewAvg = computed(() =>
-  parseFloat(props.productReviewsAvg).toFixed(2)
-);
+const selectedColor = ref("");
 
+const selectedSize = ref("");
+
+// Handle Multiple Images And Select Active Image
 const images = reactive([props.product.image]);
 
 props.product.images.forEach((image) => images.push(image.img_path));
@@ -32,9 +33,8 @@ const activeImageIndex = ref(0);
 
 const activeImage = computed(() => images[activeImageIndex.value]);
 
+// Handle Product Quantity Increase And Decrease
 const quantity = ref(1);
-const selectedColor = ref("");
-const selectedSize = ref("");
 
 const increment = () =>
   quantity.value >= props.product.qty
@@ -42,14 +42,12 @@ const increment = () =>
     : quantity.value++;
 const decrement = () => (quantity.value <= 1 ? 1 : quantity.value--);
 
-const saved = computed(() => {
-  return props.product.watchlists.some(
-    (watchlist) => watchlist.product_id === props.product.id
-  )
-    ? true
-    : false;
-});
+// Calculate Total Product Reveiw Avg
+const reviewAvg = computed(() =>
+  parseFloat(props.productReviewsAvg).toFixed(2)
+);
 
+// Handle Product Add To Cart
 const addToCart = () => {
   if (props.product.qty !== 0) {
     router.post(
@@ -70,7 +68,6 @@ const addToCart = () => {
       {
         preserveScroll: true,
         onSuccess: () => {
-          // Success flash message
           toast.success(usePage().props.flash.successMessage, {
             autoClose: 2000,
           });
@@ -84,6 +81,7 @@ const addToCart = () => {
   }
 };
 
+// Handle Product Save To Watchlist
 const saveToWatchlist = () => {
   router.post(
     route("watchlist.store", {
@@ -109,15 +107,67 @@ const saveToWatchlist = () => {
     }
   );
 };
+
+// Check Product is Saved Or Not
+const saved = computed(() => {
+  return props.product.watchlists.some(
+    (watchlist) => watchlist.product_id === props.product.id
+  )
+    ? true
+    : false;
+});
 </script>
 
 
 <template>
   <AppLayout>
     <Head :title="product.name" />
+
     <section class="py-4 mt-44">
+      <!-- Breadcrumb -->
       <div class="container max-w-screen-xl mx-auto px-4">
-        <Breadcrumb />
+        <Breadcrumb>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">
+                Products
+              </span>
+            </div>
+          </li>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">
+                {{ product.name }}
+              </span>
+            </div>
+          </li>
+        </Breadcrumb>
       </div>
     </section>
 
@@ -125,6 +175,7 @@ const saveToWatchlist = () => {
       <div class="container max-w-screen-xl mx-auto px-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
           <aside>
+            <!-- Dynamic Display Active Image -->
             <div
               class="border border-gray-200 shadow-sm p-3 text-center rounded mb-5"
             >
@@ -134,6 +185,8 @@ const saveToWatchlist = () => {
                 :alt="product.name"
               />
             </div>
+
+            <!-- Multi Product Images -->
             <div
               class="space-x-2 overflow-auto text-center whitespace-nowrap scrollbar"
             >
@@ -151,10 +204,12 @@ const saveToWatchlist = () => {
             </div>
           </aside>
           <main>
+            <!-- Product  -->
             <h2 class="font-semibold text-2xl mb-4">
               {{ product.name }}
             </h2>
 
+            <!-- Average Product Review -->
             <div v-if="productReviewsAvg" class="flex items-center">
               <svg
                 aria-hidden="true"
@@ -197,6 +252,7 @@ const saveToWatchlist = () => {
               <p class="text-sm font-medium text-gray-600 ml-3">No Reviews</p>
             </div>
 
+            <!-- Current Total Product -->
             <div v-if="product.qty != 0" class="my-3">
               <span class="text-secondary-700 font-semibold text-sm mr-3"
                 >Total {{ product.qty }} Available</span
@@ -217,6 +273,7 @@ const saveToWatchlist = () => {
               >
             </div>
 
+            <!-- Product Brand -->
             <p class="text-gray-400 text-sm font-semibold">
               <i class="fa fa-award"></i>
               <span v-if="product.brand">
@@ -225,6 +282,7 @@ const saveToWatchlist = () => {
               <span v-else> Brand : No Brand </span>
             </p>
 
+            <!-- Product Price -->
             <div v-if="product.discount" class="my-3">
               <p class="font-semibold text-xl mb-1">${{ product.discount }}</p>
               <p class="font-normal text-sm mb-3">
@@ -309,6 +367,7 @@ const saveToWatchlist = () => {
               </div>
             </div>
 
+            <!-- Handle Quantity -->
             <div class="my-5">
               <span class="text-secondary-800 mr-5"> Quantity </span>
               <span
@@ -331,7 +390,7 @@ const saveToWatchlist = () => {
               </span>
             </div>
 
-            <!-- action buttons -->
+            <!-- Action Buttons -->
             <div class="flex flex-wrap gap-2 mb-5">
               <a
                 class="px-4 py-2 inline-block text-white bg-yellow-500 border border-transparent rounded-md hover:bg-yellow-600"
@@ -358,6 +417,7 @@ const saveToWatchlist = () => {
 
             <div class="w-[450px] border-2 border-slate-300"></div>
 
+            <!-- Product Shop Information -->
             <ShopInformationCard
               :product="product"
               :conversation="conversation"
@@ -367,28 +427,20 @@ const saveToWatchlist = () => {
       </div>
     </section>
 
+    <!-- Product Information -->
     <Information
       :product="product"
       :productQuestions="productQuestions"
       :productReviews="productReviews"
       :paginateProductReviews="paginateProductReviews"
-      :specificShopProducts="specificShopProducts"
+      :productsFromShop="productsFromShop"
       :productReviewsAvg="productReviewsAvg"
     />
 
-    <section v-if="relatedProducts.length" class="pt-10 pb-20 bg-white">
-      <div class="container max-w-screen-xl mx-auto px-4">
-        <h2 class="text-2xl font-semibold mb-8">Related products</h2>
-
-        <div
-          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
-        >
-          <div v-for="product in relatedProducts" :key="product.id">
-            <ProductCard :product="product"></ProductCard>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- Related Product Section -->
+    <div v-if="relatedProducts.length">
+      <RelatedProductSection :relatedProducts="relatedProducts" />
+    </div>
   </AppLayout>
 </template>
 
@@ -399,22 +451,7 @@ input::-webkit-inner-spin-button {
   display: none;
 }
 
-.scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: #999 #f0f0f0;
-}
-
 .scrollbar::-webkit-scrollbar {
-  width: 6px;
   height: 10px;
-}
-
-.scrollbar::-webkit-scrollbar-track {
-  background-color: #f0f0f0;
-}
-
-.scrollbar::-webkit-scrollbar-thumb {
-  background-color: #999;
-  border-radius: 3px;
 }
 </style>

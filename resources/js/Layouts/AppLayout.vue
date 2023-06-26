@@ -13,21 +13,6 @@ import { usePage } from "@inertiajs/vue3";
 onMounted(() => {
   initFlowbite();
 });
-
-watch(
-  () => usePage().props.flash.successMessage,
-  () => {
-    toast.success(usePage().props.flash.successMessage, {
-      autoClose: 2000,
-    });
-  }
-);
-
-if (usePage().props.flash.successMessage) {
-  toast.success(usePage().props.flash.successMessage, {
-    autoClose: 2000,
-  });
-}
 </script>
 
 

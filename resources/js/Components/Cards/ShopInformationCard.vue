@@ -1,7 +1,6 @@
-
 <script setup>
-import { Link, router, usePage } from "@inertiajs/vue3";
 import ChatBox from "@/Components/ChatBox.vue";
+import { Link, router, usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 const props = defineProps({
@@ -11,6 +10,7 @@ const props = defineProps({
 
 const isVisibleChatbox = ref(false);
 
+// Handle Create Conversation Between Customer and Vendor
 const handleCreateConversion = () => {
   router.post(
     route("conversation.store", {
@@ -39,6 +39,7 @@ const handleCreateConversion = () => {
       Sold By
     </div>
 
+    <!-- Offical Badage -->
     <span
       v-if="product.shop.offical"
       class="px-3 rounded-sm py-1 ml-5 font-bold uppercase text-[0.6rem] text-white bg-fuchsia-700"
@@ -72,6 +73,7 @@ const handleCreateConversion = () => {
       </div>
     </div>
 
+    <!-- Information -->
     <div
       class="border-t border-b h-[100px] flex items-center justify-center my-3"
     >
@@ -94,6 +96,8 @@ const handleCreateConversion = () => {
         <p class="text-2xl text-slate-800 w-full text-center mt-4">50%</p>
       </div>
     </div>
+
+    <!-- Action Buttons -->
     <div
       v-if="
         ($page.props.auth.user && $page.props.auth.user.id) !== product.user_id
@@ -116,6 +120,8 @@ const handleCreateConversion = () => {
         Chat Now
       </button>
     </div>
+
+    <!-- Only For Ownshop -->
     <div
       v-else
       class="flex items-center justify-center text-center my-3 px-5 py-3"
