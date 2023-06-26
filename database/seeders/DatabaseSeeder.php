@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
                 BlogPostSeeder::class,
                 PermissionSeeder::class,
                 RoleSeeder::class,
+                ProductReviewSeeder::class,
             ]
         );
     }

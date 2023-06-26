@@ -4,7 +4,6 @@ defineProps({
 });
 </script>
 
-
 <template>
   <section class="container mx-auto my-3 p-5">
     <div class="h-[200px] w-full flex items-center justify-center">

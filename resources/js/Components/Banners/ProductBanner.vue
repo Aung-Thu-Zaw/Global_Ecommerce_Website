@@ -4,7 +4,6 @@ defineProps({
 });
 </script>
 
-
 <template>
   <section class="container mx-auto">
     <div class="flex items-center justify-between flex-wrap">

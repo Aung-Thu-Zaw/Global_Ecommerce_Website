@@ -1,4 +1,3 @@
-
 <script setup>
 import ProductCard from "@/Components/Cards/ProductCard.vue";
 import { Link } from "@inertiajs/vue3";
@@ -6,13 +5,12 @@ import { Link } from "@inertiajs/vue3";
 defineProps({
   hotDealProducts: Object,
 });
-
 </script>
-
 
 <template>
   <section class="py-10">
     <div class="container max-w-screen-xl mx-auto px-4">
+      <!-- Title -->
       <div
         class="bg-orange-500 p-3 text-white lg:text-slate-600 lg:bg-transparent lg:p-0 mb-5 rounded-md flex items-center justify-between"
       >
@@ -28,13 +26,11 @@ defineProps({
       </div>
 
       <div
-        v-if="hotDealProducts"
+        v-if="hotDealProducts.length"
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
       >
-        <div
-          v-for="product in hotDealProducts"
-          :key="product.id"
-        >
+        <!-- Product Card -->
+        <div v-for="product in hotDealProducts" :key="product.id">
           <ProductCard :product="product"></ProductCard>
         </div>
       </div>

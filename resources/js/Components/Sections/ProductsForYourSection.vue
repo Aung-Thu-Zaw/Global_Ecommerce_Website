@@ -9,9 +9,12 @@ const props = defineProps({
 });
 
 const isLoading = ref(false);
+
 const products = ref(props.randomProducts.data);
+
 const url = usePage().url;
 
+// Handle Load More Button
 const loadMoreProduct = () => {
   if (props.randomProducts.next_page_url === null) {
     return;
@@ -37,6 +40,7 @@ const loadMoreProduct = () => {
 <template>
   <section class="py-10">
     <div class="container max-w-screen-xl mx-auto px-4">
+      <!-- Title -->
       <div
         class="bg-orange-500 p-3 text-white lg:text-slate-600 lg:bg-transparent lg:p-0 mb-5 rounded-md flex items-center justify-between"
       >
@@ -61,6 +65,7 @@ const loadMoreProduct = () => {
         v-if="props.randomProducts.next_page_url != null || products"
         class="my-5 flex items-center justify-center"
       >
+        <!-- Loading Animation -->
         <img
           v-if="isLoading"
           src="../../assets/images/loading.gif"
@@ -68,6 +73,7 @@ const loadMoreProduct = () => {
           alt=""
         />
 
+        <!-- Load More Button -->
         <button
           v-else
           @click="loadMoreProduct"

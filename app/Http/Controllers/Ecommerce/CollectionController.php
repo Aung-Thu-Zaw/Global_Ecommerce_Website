@@ -12,14 +12,18 @@ class CollectionController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $collections=Collection::with(["products:id,collection_id,image"])->paginate(20);
+        $collections=Collection::select("id", "title", "slug")
+                               ->with(["products:id,collection_id,image"])
+                               ->paginate(20);
 
         return inertia("Ecommerce/Collections/Index", compact("collections"));
     }
 
     public function show(Collection $collection): Response|ResponseFactory
     {
-        $products=Product::with(["shop","watchlists","cartItems"])
+        $products=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
+                         ->with(["productReviews:id,product_id,rating","shop:id,offical"])
+                         ->whereStatus("active")
                          ->where("collection_id", $collection->id)
                          ->paginate(20);
 

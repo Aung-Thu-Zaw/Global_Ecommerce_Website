@@ -87,16 +87,15 @@ const handleGoToProductDetailPage = (slug) => {
           Special Offer
         </span>
       </h3>
-
       <div class="p-4 border-t border-t-gray-200">
-        <!-- <span
+        <span
           v-if="product.shop.offical"
           class="px-3 rounded-sm py-1 font-bold uppercase text-[0.6rem] text-white bg-fuchsia-600"
         >
           <i class="fas fa-crown"></i>
           Official
-        </span> -->
-        <h6 class="text-md mt-2">
+        </span>
+        <h6 class="text-md mt-1">
           <h3
             @click="handleGoToProductDetailPage(product.slug)"
             class="text-gray-600 line-clamp-2 cursor-pointer"

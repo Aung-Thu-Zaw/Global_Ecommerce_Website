@@ -14,43 +14,34 @@ class ProductController extends Controller
 {
     public function newProducts(): Response|ResponseFactory
     {
-        $newProducts= Product::select("id", "image", "name", "slug", "price", "discount")
-                             ->with("productReviews:id,product_id,rating")
-                             ->where("status", "active")
-                             ->whereBetween('created_at', [now()->subDays(30), now()])
-                             ->orderBy("id", "desc")
-                             ->paginate(20);
+        $newProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
+                            ->with(["productReviews:id,product_id,rating","shop:id,offical"])
+                            ->whereStatus("active")
+                            ->whereBetween('created_at', [now()->subDays(30), now()])
+                            ->orderBy("id", "desc")
+                            ->paginate(20);
 
         return inertia("Ecommerce/Products/NewProducts", compact("newProducts"));
     }
 
     public function featuredProducts(): Response|ResponseFactory
     {
-        $featuredProducts=Product::select("id", "image", "name", "slug", "price", "discount")
-                                 ->with("productReviews:id,product_id,rating")
-                                 ->where([["status", "active"],["featured",1]])
+        $featuredProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
+                                 ->with(["productReviews:id,product_id,rating","shop:id,offical"])
+                                 ->whereStatus("active")
+                                 ->whereFeatured(1)
                                  ->orderBy("id", "desc")
                                  ->paginate(20);
 
         return inertia("Ecommerce/Products/FeaturedProducts", compact("featuredProducts"));
     }
 
-    public function specialOfferProducts(): Response|ResponseFactory
-    {
-        $specialOfferProducts=Product::select("id", "image", "name", "slug", "price", "discount")
-                                     ->with("productReviews:id,product_id,rating")
-                                     ->where([["status", "active"],["special_offer",1]])
-                                     ->orderBy("id", "desc")
-                                     ->paginate(20);
-
-        return inertia("Ecommerce/Products/SpecialOfferProducts", compact("specialOfferProducts"));
-    }
-
     public function hotDealProducts(): Response|ResponseFactory
     {
-        $hotDealProducts=Product::select("id", "image", "name", "slug", "price", "discount")
-                                     ->with("productReviews:id,product_id,rating")
-                                ->where([["status", "active"],["hot_deal",1]])
+        $hotDealProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
+                                ->with(["productReviews:id,product_id,rating","shop:id,offical"])
+                                ->whereStatus("active")
+                                ->whereHotDeal(1)
                                 ->orderBy("id", "desc")
                                 ->paginate(20);
 

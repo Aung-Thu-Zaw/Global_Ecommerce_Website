@@ -87,7 +87,7 @@ const handleGoToProductDetailPage = (slug) => {
           {{ product.description }}
         </p>
 
-
+        
         <div class="flex items-start justify-between w-full">
           <div class="my-2">
             <div v-if="product.discount">

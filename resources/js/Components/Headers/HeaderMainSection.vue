@@ -8,6 +8,7 @@ defineProps({
   sliderBanners: Object,
 });
 
+// Query String Parameters
 const params = reactive({
   sort: "id",
   direction: "desc",
@@ -28,6 +29,7 @@ const params = reactive({
               :key="category.id"
               class="flex items-center hover:bg-blue-50 rounded-sm mb-3"
             >
+              <!-- First Category -->
               <div
                 class="flex items-center justify-center w-[40px] h-[40px] rounded-full bg-slate-100 mr-2 ring-2 ring-gray-400 shadow overflow-hidden"
               >
@@ -63,6 +65,7 @@ const params = reactive({
                 </svg>
               </Link>
 
+              <!-- Second Category -->
               <div
                 :id="'dropdownHover' + category.id"
                 class="z-50 hidden border-2 border-gray-300 bg-white divide-y divide-gray-100 rounded-lg shadow-md p-5 md:w-[500px] lg:w-[920px] h-[400px] scrollbar overflow-auto"
@@ -126,6 +129,8 @@ const params = reactive({
               </div>
             </div>
           </aside>
+
+          <!-- Slider Banner -->
           <main class="md:w-3/4 flex-auto">
             <SliderBanner :sliderBanners="sliderBanners" />
           </main>

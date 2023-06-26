@@ -6,6 +6,7 @@ const props = defineProps({
   socialMedia: Object,
 });
 
+// Handle Form And Submit
 const form = useForm({
   email: "",
   captcha_token: null,
@@ -44,6 +45,7 @@ const submit = () => {
           </div>
         </div>
 
+        <!-- Subscribe Form Input -->
         <div class="flex flex-col items-center justify-center">
           <form @submit.prevent="handleSubscribe" class="flex w-80">
             <input
@@ -67,6 +69,7 @@ const submit = () => {
           </p>
         </div>
 
+        <!-- Social Media Icons -->
         <nav v-if="socialMedia" class="flex lg:ml-auto space-x-2">
           <a
             v-if="socialMedia.youtube"

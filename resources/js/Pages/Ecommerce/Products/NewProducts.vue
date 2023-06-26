@@ -4,12 +4,17 @@ import ProductCard from "@/Components/Cards/ProductCard.vue";
 import { ref } from "vue";
 import { usePage, router, Head } from "@inertiajs/vue3";
 
-const props = defineProps({ newProducts: Object });
+const props = defineProps({
+  newProducts: Object,
+});
 
 const isLoading = ref(false);
+
 const products = ref(props.newProducts.data);
+
 const url = usePage().url;
 
+// Handle Load More Button
 const loadMoreProduct = () => {
   if (props.newProducts.next_page_url === null) {
     return;
@@ -38,7 +43,9 @@ const loadMoreProduct = () => {
 <template>
   <AppLayout>
     <Head title="All New Products" />
+
     <section class="container mx-auto mt-40 py-10">
+      <!-- Title -->
       <div
         class="relative w-full h-[150px] mb-10 shadow-md rounded-md overflow-hidden border"
       >
@@ -52,6 +59,8 @@ const loadMoreProduct = () => {
           <p class="text-center uppercase">New Products</p>
         </div>
       </div>
+
+      <!-- Products -->
       <div
         v-if="products"
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
@@ -70,6 +79,7 @@ const loadMoreProduct = () => {
         v-if="props.newProducts.next_page_url != null"
         class="my-5 flex items-center justify-center"
       >
+        <!-- Loading Animation  -->
         <img
           v-if="isLoading"
           src="../../../assets/images/loading.gif"
@@ -77,6 +87,7 @@ const loadMoreProduct = () => {
           alt=""
         />
 
+        <!-- Load More Button  -->
         <button
           v-else
           @click="loadMoreProduct"

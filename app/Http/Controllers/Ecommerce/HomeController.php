@@ -25,51 +25,51 @@ class HomeController extends Controller
                                ->get();
 
         $sliderBanners=SliderBanner::select("id", "image", "url")
-                                   ->where("status", "show")
+                                   ->whereStatus("show")
                                    ->orderBy("id", "desc")
                                    ->limit(6)
                                    ->get();
 
         $campaignBanner=CampaignBanner::select("id", "image", "url")
-                                      ->where("status", "show")
+                                      ->whereStatus("show")
                                       ->first();
 
         $productBanners=ProductBanner::select("id", "image", "url")
-                                     ->where("status", "show")
+                                     ->whereStatus("show")
                                      ->orderBy("id", "desc")
                                      ->limit(3)
                                      ->get();
 
-        $newProducts=Product::select("id", "image", "name", "slug", "price", "discount")
-                               ->with("productReviews:id,product_id,rating")
-                            ->where("status", "active")
+        $newProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
+                            ->with(["productReviews:id,product_id,rating","shop:id,offical"])
+                            ->whereStatus("active")
                             ->orderBy("id", "desc")
                             ->limit(5)
                             ->get();
 
-        $hotDealProducts=Product::select("id", "image", "name", "slug", "price", "discount")
-                               ->with("productReviews:id,product_id,rating")
-                                ->where([["status", "active"],["hot_deal",1]])
+        $hotDealProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
+                                ->with(["productReviews:id,product_id,rating","shop:id,offical"])
+                                ->whereStatus("active")
+                                ->whereHotDeal(1)
                                 ->orderBy("id", "desc")
                                 ->limit(5)
                                 ->get();
 
-        $featuredProducts=Product::select("id", "image", "name", "slug", "price", "discount")
-                               ->with("productReviews:id,product_id,rating")
-                                 ->where([["status", "active"],["featured",1]])
+        $featuredProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
+                                 ->with(["productReviews:id,product_id,rating","shop:id,offical"])
+                                 ->whereStatus("active")
+                                 ->whereFeatured(1)
                                  ->orderBy("id", "desc")
                                  ->limit(5)
                                  ->get();
 
-        $randomProducts=Product::select("id", "image", "name", "slug", "price", "discount")
-                               ->with("productReviews:id,product_id,rating")
-                               ->where("status", "active")
+        $randomProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
+                               ->with(["productReviews:id,product_id,rating","shop:id,offical"])
+                               ->whereStatus("active")
                                ->inRandomOrder()
                                ->paginate(25);
 
-
         $socialMedia=WebsiteSetting::select("id", "facebook", "twitter", "instagram", "youtube", "reddit", "linked_in")->first();
-
 
         return inertia('Ecommerce/Home/Index', compact(
             "categories",
@@ -83,9 +83,5 @@ class HomeController extends Controller
             "randomProducts",
             "socialMedia"
         ));
-
-
     }
-
-
 }

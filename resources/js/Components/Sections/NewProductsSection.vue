@@ -1,15 +1,16 @@
-
 <script setup>
 import ProductCard from "@/Components/Cards/ProductCard.vue";
 import { Link } from "@inertiajs/vue3";
 
-defineProps({ newProducts: Object });
+defineProps({
+  newProducts: Object,
+});
 </script>
-
 
 <template>
   <section class="">
     <div class="container max-w-screen-xl mx-auto px-4">
+      <!-- Title -->
       <div
         class="bg-orange-500 p-3 text-white lg:text-slate-600 lg:bg-transparent lg:p-0 mb-5 rounded-md flex items-center justify-between"
       >
@@ -28,6 +29,7 @@ defineProps({ newProducts: Object });
         v-if="newProducts"
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
       >
+        <!-- Product Card -->
         <div v-for="product in newProducts" :key="product.id" class="h-auto">
           <ProductCard :product="product"></ProductCard>
         </div>

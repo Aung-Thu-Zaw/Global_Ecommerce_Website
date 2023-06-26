@@ -1,14 +1,20 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
+import CollectionCard from "@/Components/Cards/CollectionCard.vue";
 import { ref } from "vue";
-import { usePage, router, Link, Head } from "@inertiajs/vue3";
+import { usePage, router, Head } from "@inertiajs/vue3";
 
-const props = defineProps({ collections: Object });
+const props = defineProps({
+  collections: Object,
+});
 
 const isLoading = ref(false);
+
 const collections = ref(props.collections.data);
+
 const url = usePage().url;
 
+// Handle Load More Button
 const loadMoreCollection = () => {
   if (props.collections.next_page_url === null) {
     return;
@@ -33,61 +39,17 @@ const loadMoreCollection = () => {
 };
 </script>
 
-
 <template>
   <AppLayout>
     <Head title="All Collections" />
     <section class="pt-10 mt-44">
       <div class="container max-w-screen-xl mx-auto px-4">
+        <!-- Collections Card -->
         <nav
           v-if="collections"
           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3"
         >
-          <Link
-            v-for="collection in collections"
-            :key="collection.id"
-            class="group border py-4 bg-slate-50 hover:shadow-lg hover:bg-slate-100 transition-all rounded-md"
-            :href="route('collections.show', collection.slug)"
-          >
-            <div class="flex items-center justify-between">
-              <div
-                class="flex items-center justify-center w-16 h-16 mx-auto mb-2 rounded-md border overflow-hidden"
-              >
-                <img
-                  :src="collection.products[0].image"
-                  class="h-full object-cover"
-                />
-              </div>
-
-              <div
-                class="flex items-center justify-center w-16 h-16 mx-auto mb-2 rounded-md border overflow-hidden"
-              >
-                <img
-                  :src="collection.products[1].image"
-                  class="h-full object-cover"
-                />
-              </div>
-
-              <div
-                class="flex items-center justify-center w-16 h-16 mx-auto mb-2 rounded-md border overflow-hidden"
-              >
-                <img
-                  :src="collection.products[2].image"
-                  class="h-full object-cover"
-                />
-              </div>
-            </div>
-
-            <p
-              class="text-center text-gray-600 group-hover:text-blue-600 text-md font-bold"
-            >
-              {{ collection.title }}
-            </p>
-
-            <p class="text-sm text-center text-secondary-600 my-2">
-              {{ collection.products.length }} products
-            </p>
-          </Link>
+          <CollectionCard :collections="collections" />
         </nav>
         <div v-else>
           <p class="text-center text-xl font-bold text-red-600 animate-bounce">
@@ -99,6 +61,7 @@ const loadMoreCollection = () => {
         v-if="props.collections.next_page_url != null"
         class="my-5 flex items-center justify-center"
       >
+        <!-- Loading Animation  -->
         <img
           v-if="isLoading"
           src="../../../assets/images/loading.gif"
@@ -106,6 +69,7 @@ const loadMoreCollection = () => {
           alt=""
         />
 
+        <!-- Load More Button  -->
         <button
           v-else
           @click="loadMoreCollection"
