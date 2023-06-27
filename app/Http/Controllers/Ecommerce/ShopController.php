@@ -10,6 +10,7 @@ use App\Models\ProductReview;
 use App\Models\ShopReview;
 use App\Models\VendorProductBanner;
 use App\Models\User;
+use App\Notifications\FollowedShopNotification;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 use Inertia\ResponseFactory;
@@ -115,7 +116,11 @@ class ShopController extends Controller
     {
         $shop=User::find($shopId);
 
-        auth()->user()->follow($shop);
+        $user=auth()->user();
+
+        $user->follow($shop);
+
+        $shop->notify(new FollowedShopNotification($user));
 
         return back();
     }

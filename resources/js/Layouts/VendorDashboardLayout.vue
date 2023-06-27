@@ -1,6 +1,12 @@
 <script setup>
 import VendorDashboardNavbar from "@/Components/Navbars/VendorDashboardNavbar.vue";
 import VendorSidebar from "@/Components/Sidebars/VendorSidebar.vue";
+import { onMounted } from "vue";
+import { initFlowbite } from "flowbite";
+
+onMounted(() => {
+  initFlowbite();
+});
 </script>
 
 <template>
