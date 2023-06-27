@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Ecommerce;
+namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WatchlistRequest;
@@ -12,7 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
-class WatchlistController extends Controller
+class MyWatchlistController extends Controller
 {
     public function index(): Response|ResponseFactory
     {

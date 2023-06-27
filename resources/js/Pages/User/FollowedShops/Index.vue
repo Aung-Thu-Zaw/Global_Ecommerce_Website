@@ -1,10 +1,9 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import ProductCard from "@/Components/Cards/ProductCard.vue";
-import { Link, Head, router, usePage } from "@inertiajs/vue3";
+import RecommendedProductSection from "@/Components/Sections/RecommendedProductSection.vue";
+import JustForYouProductSection from "@/Components/Sections/JustForYouProductSection.vue";
+import { Link, Head, router } from "@inertiajs/vue3";
 import { inject } from "vue";
-import { toast } from "vue3-toastify";
-import "vue3-toastify/dist/index.css";
 
 const props = defineProps({
   followedShops: Object,
@@ -38,9 +37,10 @@ const handleUnfollowShop = async (shop_id) => {
   <AppLayout>
     <Head title="Followed Shops" />
     <section class="py-5 sm:py-7 mt-44">
+      <!-- Title -->
       <div class="container max-w-screen-xl mx-auto px-4">
         <h1 class="font-bold text-2xl text-slate-600 uppercase mb-5 self-start">
-          Followed Shops And Followers
+          Followed Shops
         </h1>
       </div>
     </section>
@@ -48,6 +48,7 @@ const handleUnfollowShop = async (shop_id) => {
     <section v-if="followedShops.length" class="py-5 min-h-[400px]">
       <div class="container max-w-screen-xl mx-auto px-4">
         <div class="flex flex-col items-center space-y-6">
+          <!-- Followed Shops -->
           <div
             v-for="followedShop in followedShops"
             :key="followedShop.id"
@@ -72,7 +73,6 @@ const handleUnfollowShop = async (shop_id) => {
                 </span>
               </h2>
             </div>
-
             <div class="flex items-center">
               <button
                 @click="handleUnfollowShop(followedShop.followable_id)"
@@ -82,7 +82,7 @@ const handleUnfollowShop = async (shop_id) => {
                 Following
               </button>
               <Link
-                :href="route('shop.show', followedShop.followable_id)"
+                :href="route('shop.show', followedShop.followable.uuid)"
                 class="bg-blue-500 text-sm font-bold px-5 rounded-sm shadow-sm text-white mx-2 py-3 hover:bg-blue-600"
               >
                 <i class="fa-solid fa-shop"></i>
@@ -107,35 +107,15 @@ const handleUnfollowShop = async (shop_id) => {
       </Link>
     </section>
 
-    <section v-if="recommendedProducts" class="pt-10 pb-20 bg-gray-100">
-      <div class="container max-w-screen-xl mx-auto px-4">
-        <h2 class="text-2xl font-semibold mb-8">Recommended products</h2>
+    <!-- Recommended Product Section -->
+    <div v-if="recommendedProducts">
+      <RecommendedProductSection :recommendedProducts="recommendedProducts" />
+    </div>
 
-        <div
-          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
-        >
-          <div v-for="product in recommendedProducts" :key="product.id">
-            <ProductCard :product="product"></ProductCard>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section
-      v-else-if="justForYouProducts.length"
-      class="pt-10 pb-20 bg-gray-100"
-    >
-      <div class="container max-w-screen-xl mx-auto px-4">
-        <h2 class="text-2xl font-semibold mb-8">Just For You</h2>
-
-        <div
-          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
-        >
-          <div v-for="product in justForYouProducts" :key="product.id">
-            <ProductCard :product="product"></ProductCard>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- Recommended Product Section -->
+    <div v-else-if="justForYouProducts">
+      <JustForYouProductSection :justForYouProducts="justForYouProducts" />
+    </div>
   </AppLayout>
 </template>
 

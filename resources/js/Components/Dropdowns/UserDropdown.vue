@@ -56,10 +56,7 @@
         My Account
       </Link>
       <Link
-        v-if="
-          $page.props.auth.user?.role === 'vendor' ||
-          $page.props.auth.user?.role === 'admin'
-        "
+        v-if="$page.props.auth.user?.role === 'vendor'"
         :href="route('shop.show', $page.props.auth.user.uuid)"
         :data="{ tab: 'home' }"
         as="button"

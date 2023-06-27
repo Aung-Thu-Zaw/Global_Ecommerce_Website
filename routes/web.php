@@ -10,7 +10,7 @@ use App\Http\Controllers\Ecommerce\ProductController;
 use App\Http\Controllers\Ecommerce\CheckoutController;
 use App\Http\Controllers\Ecommerce\ConversationController;
 use App\Http\Controllers\Ecommerce\DeliveryInformationController;
-use App\Http\Controllers\Ecommerce\FollowedShopController;
+use App\Http\Controllers\User\FollowedShopController;
 use App\Http\Controllers\Ecommerce\MessageController;
 use App\Http\Controllers\Ecommerce\Payments\PaymentController;
 use App\Http\Controllers\Ecommerce\Payments\CashOnDeliveryController;
@@ -30,7 +30,7 @@ use App\Http\Controllers\Ecommerce\SubscriberController;
 use App\Http\Controllers\Ecommerce\SuggestionController;
 use App\Http\Controllers\Ecommerce\UserProductInteractionController;
 use App\Http\Controllers\User\MyAccountController;
-use App\Http\Controllers\Ecommerce\WatchlistController;
+use App\Http\Controllers\User\MyWatchlistController;
 use App\Http\Controllers\Ecommerce\WebsiteFeedbackController;
 use App\Http\Controllers\User\MyOrderController;
 use App\Http\Controllers\User\TrackMyOrderController;
@@ -166,7 +166,7 @@ Route::middleware(["auth","verified"])->group(function () {
                Route::delete('/{cart_item}', "destroy")->name("destroy");
            });
 
-    Route::controller(WatchlistController::class)
+    Route::controller(MyWatchlistController::class)
            ->prefix("/watchlist")
            ->name("watchlist.")
            ->group(function () {

@@ -1,23 +1,10 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Head, Link, router } from "@inertiajs/vue3";
-import PendingStatus from "@/Components/Table/PendingStatus.vue";
-import ConfirmedStatus from "@/Components/Table/ConfirmedStatus.vue";
-import ProcessingStatus from "@/Components/Table/ProcessingStatus.vue";
-import DeliveredStatus from "@/Components/Table/DeliveredStatus.vue";
-import ShippedStatus from "@/Components/Table/ShippedStatus.vue";
-import Tr from "@/Components/Table/Tr.vue";
-import Td from "@/Components/Table/Td.vue";
-import HeaderTh from "@/Components/Table/HeaderTh.vue";
-import BodyTh from "@/Components/Table/BodyTh.vue";
-import TableHeader from "@/Components/Table/TableHeader.vue";
-import TableContainer from "@/Components/Table/TableContainer.vue";
-import { inject } from "vue";
-import axios from "axios";
-import AllOrdersTable from "@/Components/AllOrdersTable.vue";
-import ToPayOrdersTable from "@/Components/ToPayOrdersTable.vue";
-import ToReceiveOrdersTable from "@/Components/ToReceiveOrdersTable.vue";
-import ReceivedOrdersTable from "@/Components/ReceivedOrdersTable.vue";
+import AllOrdersTable from "@/Components/OrderTables/AllOrdersTable.vue";
+import ToPayOrdersTable from "@/Components/OrderTables/ToPayOrdersTable.vue";
+import ToReceiveOrdersTable from "@/Components/OrderTables/ToReceiveOrdersTable.vue";
+import ReceivedOrdersTable from "@/Components/OrderTables/ReceivedOrdersTable.vue";
+import { Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
   orders: Object,

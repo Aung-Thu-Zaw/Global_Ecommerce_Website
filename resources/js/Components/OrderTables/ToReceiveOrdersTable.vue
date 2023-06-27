@@ -1,11 +1,10 @@
 <script setup>
-import AppLayout from "@/Layouts/AppLayout.vue";
-import { Head, Link, router } from "@inertiajs/vue3";
-import PendingStatus from "@/Components/Table/PendingStatus.vue";
-import ConfirmedStatus from "@/Components/Table/ConfirmedStatus.vue";
-import ProcessingStatus from "@/Components/Table/ProcessingStatus.vue";
-import DeliveredStatus from "@/Components/Table/DeliveredStatus.vue";
-import ShippedStatus from "@/Components/Table/ShippedStatus.vue";
+import { Link } from "@inertiajs/vue3";
+import PendingStatus from "@/Components/Status/PendingStatus.vue";
+import ConfirmedStatus from "@/Components/Status/ConfirmedStatus.vue";
+import ProcessingStatus from "@/Components/Status/ProcessingStatus.vue";
+import DeliveredStatus from "@/Components/Status/DeliveredStatus.vue";
+import ShippedStatus from "@/Components/Status/ShippedStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -14,16 +13,22 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import { inject } from "vue";
 import axios from "axios";
-import AllOrdersTable from "@/Components/AllOrdersTable.vue";
-import ToPayOrdersTable from "@/Components/ToPayOrdersTable.vue";
-import ToReceiveOrdersTable from "@/Components/ToReceiveOrdersTable.vue";
-import ReceivedOrdersTable from "@/Components/ReceivedOrdersTable.vue";
 
 const props = defineProps({
   toReceiveOrders: Object,
 });
 
 const swal = inject("$swal");
+
+// Formatted Amount
+const formattedAmount = (amount) => {
+  const totalAmount = parseFloat(amount);
+  if (Number.isInteger(totalAmount)) {
+    return totalAmount.toFixed(0);
+  } else {
+    return totalAmount.toFixed(2);
+  }
+};
 
 const handleDownload = async (orderId) => {
   try {
@@ -63,7 +68,7 @@ const handleDownload = async (orderId) => {
         <BodyTh>{{ order.id }}</BodyTh>
         <Td>{{ order.invoice_no }}</Td>
         <Td class="capitalize">{{ order.payment_type }}</Td>
-        <Td>$ {{ order.total_amount }}</Td>
+        <Td>$ {{ formattedAmount(order.total_amount) }}</Td>
         <Td>
           <PendingStatus v-if="order.order_status === 'pending'">
             {{ order.order_status }}

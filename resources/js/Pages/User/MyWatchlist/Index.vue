@@ -1,7 +1,7 @@
 <script setup>
-import WatchListItem from "@/Components/WatchListItem.vue";
+import WatchListItem from "@/Components/Items/WatchListItem.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import ProductCard from "@/Components/Cards/ProductCard.vue";
+import RecommendedProductSection from "@/Components/Sections/RecommendedProductSection.vue";
 import { Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -16,6 +16,7 @@ const props = defineProps({
   <AppLayout>
     <Head title="My Watchlist" />
     <section class="py-5 sm:py-7 mt-44">
+      <!-- Title -->
       <div class="container max-w-screen-xl mx-auto px-4">
         <h1 class="font-bold text-2xl text-slate-600 uppercase mb-5 self-start">
           My Watchlist
@@ -41,7 +42,7 @@ const props = defineProps({
                 </span>
               </div>
 
-              <!-- item-cart -->
+              <!--  watchlist item-cart -->
               <div v-for="watchlist in watchlists" :key="watchlist.id">
                 <div v-if="watchlist.shop_id == shop.id">
                   <WatchListItem :watchlist="watchlist" />
@@ -70,20 +71,10 @@ const props = defineProps({
       </Link>
     </section>
 
-    <!-- SECTION-RECOMMENDED -->
-    <section v-if="recommendedProducts.length" class="pt-10 pb-20 bg-gray-100">
-      <div class="container max-w-screen-xl mx-auto px-4">
-        <h2 class="text-2xl font-semibold mb-8">Recommended products</h2>
-
-        <div
-          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
-        >
-          <div v-for="product in recommendedProducts" :key="product.id">
-            <ProductCard :product="product"></ProductCard>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- Recommended Product Section -->
+    <div v-if="recommendedProducts.length">
+      <RecommendedProductSection :recommendedProducts="recommendedProducts" />
+    </div>
   </AppLayout>
 </template>
 

@@ -27,7 +27,6 @@ class ShopController extends Controller
 
     public function show(string $shopUUID): Response|ResponseFactory
     {
-
         $user=auth()->user();
 
         $followings=$user->followings;

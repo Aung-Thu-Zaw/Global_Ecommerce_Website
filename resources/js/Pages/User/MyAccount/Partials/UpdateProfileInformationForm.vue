@@ -3,9 +3,9 @@ import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import FormButton from "@/Components/Buttons/FormButton.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
+import datepicker from "vue3-datepicker";
 import { Link, useForm, usePage } from "@inertiajs/vue3";
 import { computed, inject, ref } from "vue";
-import datepicker from "vue3-datepicker";
 
 const props = defineProps({
   mustVerifyEmail: Boolean,
@@ -13,9 +13,12 @@ const props = defineProps({
 });
 
 const user = usePage().props.auth.user;
+
 const loading = ref(false);
+
 const swal = inject("$swal");
 
+// Format Date
 const date = ref(user.birthday ? new Date(user.birthday) : "");
 
 const formatDate = computed(() => {
@@ -29,12 +32,14 @@ const formatDate = computed(() => {
   return "";
 });
 
+// Handle Select Photo Preview
 const previewPhoto = ref("");
 
 const getPreviewPhotoPath = (path) => {
   previewPhoto.value.src = URL.createObjectURL(path);
 };
 
+// Handle Account Update
 const form = useForm({
   name: user.name,
   email: user.email,

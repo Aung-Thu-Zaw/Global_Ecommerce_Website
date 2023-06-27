@@ -8,6 +8,7 @@ const props = defineProps({ watchlist: Object });
 
 const swal = inject("$swal");
 
+// Handle Watchlist Product Add To Cart
 const addToCart = () => {
   router.post(
     route("cart-items.store", {
@@ -33,6 +34,7 @@ const addToCart = () => {
   );
 };
 
+// Handle Remove Watchlist Product
 const removeWatchlistItem = async (item) => {
   const result = await swal({
     icon: "warning",
@@ -74,7 +76,7 @@ const removeWatchlistItem = async (item) => {
             <img
               :src="watchlist.product.image"
               :alt="watchlist.product.name"
-              class="h-full object-cover"
+              class="w-full h-full object-cover"
             />
           </div>
         </div>
@@ -161,6 +163,7 @@ const removeWatchlistItem = async (item) => {
       </div>
     </div>
 
+    <!-- Action Buttons -->
     <div class="flex-auto">
       <div class="float-right">
         <button
