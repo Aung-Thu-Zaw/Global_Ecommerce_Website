@@ -39,7 +39,7 @@
 
                 <div class="px-10">
                     <p class="text-md font-semibold text-slate-600 mb-5">
-                        Dear {{ $name }},
+                        Dear {{ $user->name }},
                     </p>
 
                     <p class="text-md font-normal text-slate-800 ">
@@ -51,7 +51,7 @@
                     <p class="text-md font-normal text-slate-800 ">
                         We understand that circumstances may change, and it is entirely your prerogative to manage your
                         presence on our platform. If you ever decide to return, we will be more than happy to welcome
-                        you back as a valued user.
+                        you back as a valued {{ $user->role }}.
                     </p>
                     <br>
                     <p class="text-md font-normal text-slate-800 ">

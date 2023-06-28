@@ -49,7 +49,7 @@ class ConfirmOfAccountDeletionMail extends Mailable
         return new Content(
             view: 'mails.for-users.confirm-account-deletion-mail',
             with: [
-                'name' => $this->user->name,
+                'user' => $this->user,
             ],
         );
     }

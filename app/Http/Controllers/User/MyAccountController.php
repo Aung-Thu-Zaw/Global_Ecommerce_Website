@@ -54,6 +54,10 @@ class MyAccountController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        $user=$request->user();
+
+        Mail::to($user->email)->queue(new ConfirmOfAccountDeletionMail($user));
+
         (new DeleteUserAction())->execute($request);
 
         return Redirect::to('/')->with("success", "Your account is deleted successfully.");

@@ -24,11 +24,7 @@ class DeleteUserAction
 
         User::deleteUserAvatar($user);
 
-        Mail::to($user->email)->queue(new ConfirmOfAccountDeletionMail($user));
-
         Auth::logout();
-
-        $user->forceDelete();
 
         $request->session()->invalidate();
 
