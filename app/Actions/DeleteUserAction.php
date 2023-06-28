@@ -2,9 +2,11 @@
 
 namespace App\Actions;
 
+use App\Mail\ConfirmOfAccountDeletionMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class DeleteUserAction
 {
@@ -21,6 +23,8 @@ class DeleteUserAction
         User::deleteDefaultAvatar($user);
 
         User::deleteUserAvatar($user);
+
+        Mail::to($user->email)->queue(new ConfirmOfAccountDeletionMail($user));
 
         Auth::logout();
 
