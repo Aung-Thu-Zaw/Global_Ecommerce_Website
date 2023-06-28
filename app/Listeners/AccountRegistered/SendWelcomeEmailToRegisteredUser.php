@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listeners\Registered;
+namespace App\Listeners\AccountRegistered;
 
 use App\Mail\ForTheRegisteredUser\RegisteredUserWelcomeMail;
 use App\Mail\ForTheRegisteredUser\RegisteredVendorWelcomeMail;
@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
 
-class SendWelcomeEmailToRegisteredAccount
+class SendWelcomeEmailToRegisteredUser
 {
     /**
      * Create the event listener.

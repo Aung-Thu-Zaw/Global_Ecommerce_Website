@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Registered;
+namespace App\Jobs\AccountRegistered;
 
 use App\Mail\ForTheRegisteredUser\RegisteredUserWelcomeMail;
 use App\Models\User;

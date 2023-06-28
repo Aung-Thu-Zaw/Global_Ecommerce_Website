@@ -21,7 +21,7 @@ const formattedTime = computed(() =>
   <Link
     v-if="
       notification.type ===
-        'App\\Notifications\\AccountRegistered\\RegisteredUserNotification' &&
+        'App\\Notifications\\AccountDeleted\\UserAccountDeletedNotification' &&
       notification.data.user &&
       notification.data.user.role === 'user'
     "
@@ -35,9 +35,9 @@ const formattedTime = computed(() =>
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
-      class="flex-shrink-0 bg-red-300 text-red-700 ring-2 ring-red-400 w-10 h-10 rounded-full flex items-center justify-center p-3 font-bold"
+      class="flex-shrink-0 bg-lime-300 text-lime-700 ring-2 ring-lime-400 w-10 h-10 rounded-full flex items-center justify-center p-3 font-bold"
     >
-      <i class="fa-solid fa-user"></i>
+      <i class="fa-solid fa-user-xmark"></i>
     </div>
     <div class="w-full pl-3">
       <div
@@ -48,17 +48,6 @@ const formattedTime = computed(() =>
         }"
       >
         {{ notification.data.message }}
-        {{
-          notification.data.user.google_id
-            ? 'Registered with "google" auth.'
-            : ""
-        }}
-
-        {{
-          notification.data.user.facebook_id
-            ? 'Registered with "facebook" auth.'
-            : ""
-        }}
 
         <span
           class="font-bold text-sm"
@@ -72,7 +61,7 @@ const formattedTime = computed(() =>
       <div
         class="text-xs font-bold dark:text-blue-500"
         :class="{
-          'text-red-500': !notification.read_at,
+          'text-lime-500': !notification.read_at,
           'text-gray-500': notification.read_at,
         }"
       >

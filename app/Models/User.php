@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Notifications\ResetPasswordQueued;
-use App\Notifications\Registered\VerifyEmailQueued;
+use App\Notifications\AccountRegistered\VerifyEmailQueued;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;

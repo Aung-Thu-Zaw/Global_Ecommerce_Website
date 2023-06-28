@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Actions\DeleteUserAction;
+use App\Events\AccountDeleted;
 use App\Http\Requests\MyAccountUpdateRequest;
 use App\Mail\ConfirmOfAccountDeletionMail;
 use App\Services\UserAvatarService;
@@ -56,9 +57,9 @@ class MyAccountController extends Controller
     {
         $user=$request->user();
 
-        Mail::to($user->email)->queue(new ConfirmOfAccountDeletionMail($user));
-
         (new DeleteUserAction())->execute($request);
+
+        event(new AccountDeleted($user));
 
         return Redirect::to('/')->with("success", "Your account is deleted successfully.");
     }

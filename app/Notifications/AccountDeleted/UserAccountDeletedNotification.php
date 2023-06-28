@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications\Registered;
+namespace App\Notifications\AccountDeleted;
 
 use App\Models\User;
 use Illuminate\Bus\Queueable;
@@ -10,7 +10,7 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class RegisteredUserNotification extends Notification implements ShouldBroadcast
+class UserAccountDeletedNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;
 
@@ -35,16 +35,16 @@ class RegisteredUserNotification extends Notification implements ShouldBroadcast
         return ['database', 'broadcast'];
     }
 
-     /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array<string|int>
-     */
+    /**
+    * Get the array representation of the notification.
+    *
+    * @param  mixed  $notifiable
+    * @return array<string|int>
+    */
     public function toArray($notifiable)
     {
         return [
-            "message" =>$this->user->role==='vendor' ? "New Vendor Registered." : "New User Registered.",
+            "message" =>$this->user->role==='vendor' ? "Vendor Account Deleted." : "User Account Deleted.",
             "user"=>$this->user
         ];
     }
@@ -59,7 +59,7 @@ class RegisteredUserNotification extends Notification implements ShouldBroadcast
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" =>$this->user->role==='vendor' ? "New Vendor Registered." : "New User Registered.",
+            "message" =>$this->user->role==='vendor' ? "Vendor Account Deleted." : "User Account Deleted.",
             "user"=>$this->user
         ]);
     }

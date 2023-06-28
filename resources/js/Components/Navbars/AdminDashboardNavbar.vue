@@ -3,7 +3,8 @@ import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
 import RegisteredVendorNotificationCard from "@/Components/Cards/RegisteredVendorNotificationCard.vue";
 import RegisteredUserNotificationCard from "@/Components/Cards/RegisteredUserNotificationCard.vue";
 import OrderPlacedNotificationCard from "@/Components/Cards/OrderPlacedNotificationCard.vue";
-import FollowedShopNotificationCard from "@/Components/Cards/FollowedShopNotificationCard.vue";
+import DeletedUserNotificationCard from "@/Components/Cards/DeletedUserNotificationCard.vue";
+import DeletedVendorNotificationCard from "@/Components/Cards/DeletedVendorNotificationCard.vue";
 import { Link, usePage } from "@inertiajs/vue3";
 import { computed, onMounted, ref } from "vue";
 
@@ -30,7 +31,9 @@ onMounted(() => {
         });
       } else if (
         notification.type ===
-        "App\\Notifications\\Registered\\RegisteredUserNotification"
+          "App\\Notifications\\AccountRegistered\\RegisteredUserNotification" ||
+        notification.type ===
+          "App\\Notifications\\AccountDeleted\\UserAccountDeletedNotification"
       ) {
         notifications.value.push({
           id: notification.id,
@@ -130,8 +133,9 @@ onMounted(() => {
           >
             <RegisteredVendorNotificationCard :notification="notification" />
             <RegisteredUserNotificationCard :notification="notification" />
+            <DeletedVendorNotificationCard :notification="notification" />
+            <DeletedUserNotificationCard :notification="notification" />
             <OrderPlacedNotificationCard :notification="notification" />
-            <FollowedShopNotificationCard :notification="notification" />
           </div>
 
           <div class="w-full text-center py-3" v-if="!notifications.length">

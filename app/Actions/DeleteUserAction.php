@@ -26,6 +26,8 @@ class DeleteUserAction
 
         Auth::logout();
 
+        $user->delete();
+
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications\Registered;
+namespace App\Notifications\AccountRegistered;
 
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Bus\Queueable;

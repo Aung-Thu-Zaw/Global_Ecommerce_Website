@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Jobs\Registered;
+namespace App\Jobs\AccountRegistered;
 
 use App\Models\User;
-use App\Notifications\Registered\RegisteredUserEmailNotification;
+use App\Notifications\AccountRegistered\RegisteredUserNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,7 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Notification;
 
-class SendNewUserRegisteredWithSocialiteEmailNotificationForAdmin implements ShouldQueue
+class SendNewUserRegisteredWithSocialiteNotificationForAdminDashboard implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -24,7 +24,7 @@ class SendNewUserRegisteredWithSocialiteEmailNotificationForAdmin implements Sho
      *
      * @return void
      */
-    public function __construct(protected User $user)
+    public function __construct(private User $user)
     {
         //
     }
@@ -37,6 +37,6 @@ class SendNewUserRegisteredWithSocialiteEmailNotificationForAdmin implements Sho
     public function handle()
     {
         $admins=User::where("role", "admin")->get();
-        Notification::send($admins, new RegisteredUserEmailNotification($this->user));
+        Notification::send($admins, new RegisteredUserNotification($this->user));
     }
 }

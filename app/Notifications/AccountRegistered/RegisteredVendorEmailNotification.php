@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications\Registered;
+namespace App\Notifications\AccountRegistered;
 
 use App\Models\User;
 use Carbon\Carbon;
@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class RegisteredUserEmailNotification extends Notification
+class RegisteredVendorEmailNotification extends Notification
 {
     use Queueable;
 
@@ -43,14 +43,14 @@ class RegisteredUserEmailNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage())
-                    ->subject("New User Registered")
-                    ->greeting("Dear ".$notifiable->name.",")
-                    ->line("A new user has registered on our platform. Please review the details below:")
-                    ->line("Name: ".$this->user->name)
-                    ->line("Email: ".$this->user->email)
-                    ->line("Registration Date: ".Carbon::parse($this->user->created_at)->format("Y-m-d"))
-                    ->action('See More Details', route('admin.users.register.show', $this->user->id));
-
+        ->subject("New Vendor Registered")
+        ->greeting("Dear ".$notifiable->name.",")
+        ->line("A new vendor has registered on our platform. Please review the details below:")
+        ->line("Shop Name: ".$this->user->shop_name)
+        ->line("Email: ".$this->user->email)
+        ->line("Registration Date: ".Carbon::parse($this->user->created_at)->format("Y-m-d"))
+        ->action('See More Details', route('admin.vendors.register.show', $this->user->id));
     }
+
 
 }

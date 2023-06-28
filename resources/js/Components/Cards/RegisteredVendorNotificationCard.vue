@@ -21,7 +21,7 @@ const formattedTime = computed(() =>
   <Link
     v-if="
       notification.type ===
-        'App\\Notifications\\Registered\\RegisteredUserNotification' &&
+        'App\\Notifications\\AccountRegistered\\RegisteredUserNotification' &&
       notification.data.user &&
       notification.data.user.role === 'vendor'
     "

@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Listeners\Registered;
+namespace App\Listeners\AccountRegistered;
 
 use App\Models\User;
-use App\Notifications\Registered\RegisteredUserNotification;
+use App\Notifications\AccountRegistered\RegisteredUserNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Notification;
 
-class SendNewUserRegisteredNotificationForAdminDashboard
+class SendNewUserRegisteredNotificationToAdminDashboard
 {
     /**
      * Create the event listener.
