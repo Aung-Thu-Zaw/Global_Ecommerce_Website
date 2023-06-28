@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Notifications\ResetPasswordQueued;
-use App\Notifications\VerifyEmailQueued;
+use App\Notifications\Registered\VerifyEmailQueued;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -101,7 +101,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 
-        /**
+    /**
     * @return \Illuminate\Database\Eloquent\Relations\HasOne<Cart>
     */
     public function cart(): HasOne
