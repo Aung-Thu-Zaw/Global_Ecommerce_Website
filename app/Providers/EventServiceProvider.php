@@ -7,6 +7,7 @@ use App\Listeners\HandleChatMessage;
 use App\Listeners\RegisteredUserListener;
 use App\Listeners\Registered\SendNewUserRegisteredEmailNotificationForAdmin;
 use App\Listeners\Registered\SendNewUserRegisteredNotificationForAdminDashboard;
+use App\Listeners\Registered\SendWelcomeEmailToRegisteredAccount;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -24,6 +25,7 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
             SendNewUserRegisteredNotificationForAdminDashboard::class,
             SendNewUserRegisteredEmailNotificationForAdmin::class,
+            SendWelcomeEmailToRegisteredAccount::class,
         ],
     ];
 

@@ -39,12 +39,12 @@
 
                 <div class="px-10">
                     <p class="text-md font-semibold text-slate-600 mb-5">
-                        Hey Aung Thu Zaw!
+                        Hey {{ $name }}!
                     </p>
 
                     <p class="text-md font-normal text-slate-800 ">
                         Welcome to our online store!
-                        Thank you for creating a global e-commerce account.
+                        Thank you for joining our platform.
                     </p>
                     <p class="text-md font-normal text-slate-800 ">
                         Please make yourself at home and enjoy shopping with us.
@@ -52,7 +52,7 @@
                     <br>
                     <p class="text-md font-normal text-slate-800 ">
                         But before you start, here's a short tutorial we created for our new clients. It will help you
-                        easy to use our online shopping website. <a href="#"
+                        easy to use our online shopping website. <a href="https://example.com" target="_blank"
                             class="font-bold text-blue-600 underline">Tutorial Link</a>
                     </p>
 
@@ -72,10 +72,10 @@
                             you spend minimun $250.
                         </p>
 
-                        <button
+                        <a href="/" target="_blank"
                             class="font-bold text-sm px-10 uppercase py-3 shadow bg-blue-600 text-white rounded-sm mt-3 ">
                             Shop Now
-                        </button>
+                        </a>
                     </div>
 
                     <br>
@@ -85,30 +85,34 @@
                     </p>
                     <p class="text-sm font-bold text-slate-600">
                         The Customer Support Team at
-                        <a href="#" class="text-blue-600 underline">Global Ecommerce</a>
+                        <a href="/" class="text-blue-600 underline">Global Ecommerce</a>
                     </p>
                 </div>
 
 
                 <div class="w-full bg-blue-700 text-white text-sm my-5 p-3">
                     <p class="font-bold text-center">STILL HAVE QUESTIONS?
-                        <a href="#" class="underline hover:animate-bounce">
+                        <a href="https://example.com" target="_blank" class="underline hover:animate-bounce">
                             GO TO HELP CENTER
                         </a>
                     </p>
                 </div>
 
                 <div class="flex items-center justify-center mt-3">
-                    <a href="#" class="text-slate-700 hover:text-blue-600 font-bold text-2xl mx-3">
+                    <a href="https://example.com" target="_blank"
+                        class="text-slate-700 hover:text-blue-600 font-bold text-2xl mx-3">
                         <i class="fa-brands fa-facebook"></i>
                     </a>
-                    <a href="#" class="text-slate-700 hover:text-pink-600 font-bold text-2xl mx-3">
+                    <a href="https://example.com" target="_blank"
+                        class="text-slate-700 hover:text-pink-600 font-bold text-2xl mx-3">
                         <i class="fa-brands fa-instagram"></i>
                     </a>
-                    <a href="#" class="text-slate-700 hover:text-sky-600 font-bold text-2xl mx-3">
+                    <a href="https://example.com" target="_blank"
+                        class="text-slate-700 hover:text-sky-600 font-bold text-2xl mx-3">
                         <i class="fa-brands fa-twitter"></i>
                     </a>
-                    <a href="#" class="text-slate-700 hover:text-red-600 font-bold text-2xl mx-3">
+                    <a href="https://example.com" target="_blank"
+                        class="text-slate-700 hover:text-red-600 font-bold text-2xl mx-3">
                         <i class="fa-brands fa-youtube"></i>
                     </a>
                 </div>

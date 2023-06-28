@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Jobs\Registered\SendNewUserRegisteredWithSocialiteEmailNotificationForAdmin;
 use App\Jobs\Registered\SendNewUserRegisteredWithSocialiteNotificationForAdminDashboard;
+use App\Jobs\Registered\SendWelcomeEmailToRegisteredWithSocialiteAccount;
 use Laravel\Socialite\Two\InvalidStateException;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
@@ -43,6 +44,8 @@ class SocialiteFacebookAuthController extends Controller
             SendNewUserRegisteredWithSocialiteNotificationForAdminDashboard::dispatch($newUser);
 
             SendNewUserRegisteredWithSocialiteEmailNotificationForAdmin::dispatch($newUser);
+
+            SendWelcomeEmailToRegisteredWithSocialiteAccount::dispatch($newUser);
 
             Auth::login($newUser);
         } else {

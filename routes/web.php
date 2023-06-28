@@ -44,7 +44,7 @@ require __DIR__.'/vendor.php';
 
 Route::get('/', [HomeController::class,"index"])->name("home");
 // Route::get('/', function () {
-//     return view("mails.for-users.thanks-for-request-features-mail");
+//     return view("mails.for-registered.welcome-mail-for-vendor");
 // });
 
 Route::controller(ProductController::class)

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Jobs\Registered\SendNewUserRegisteredWithSocialiteEmailNotificationForAdmin;
 use App\Jobs\Registered\SendNewUserRegisteredWithSocialiteNotificationForAdminDashboard;
+use App\Jobs\Registered\SendWelcomeEmailToRegisteredWithSocialiteAccount;
 use App\Models\User;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\InvalidStateException;
@@ -43,6 +44,8 @@ class SocialiteGoogleAuthController extends Controller
             SendNewUserRegisteredWithSocialiteNotificationForAdminDashboard::dispatch($newUser);
 
             SendNewUserRegisteredWithSocialiteEmailNotificationForAdmin::dispatch($newUser);
+
+            SendWelcomeEmailToRegisteredWithSocialiteAccount::dispatch($newUser);
 
             Auth::login($newUser);
         } else {
