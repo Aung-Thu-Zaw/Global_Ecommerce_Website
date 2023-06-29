@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Ecommerce;
 
+use App\Events\SuggestionForWebsite;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SuggestionRequest;
 use App\Mail\SubscriberMail;
@@ -20,7 +21,7 @@ class SuggestionController extends Controller
 
         $suggestionMultiImageUploadService->createMultiImage($request, $suggestion);
 
-        Mail::to($request->email)->queue(new ThankForSuggestionMail($suggestion));
+        event(new SuggestionForWebsite($suggestion));
 
         return back()->with("success", "Thank for your suggestion.");
     }

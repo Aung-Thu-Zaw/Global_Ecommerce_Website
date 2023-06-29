@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Events\AccountDeleted;
 use App\Events\SubscribedNewsletter;
+use App\Events\SuggestionForWebsite;
 use App\Listeners\AccountDeleted\SendConfirmOfAccountDeletionEmailToUser;
 use App\Listeners\AccountDeleted\SendUserAccountDeletedEmailNotificationToAdmin;
 use App\Listeners\AccountDeleted\SendUserAccountDeletedNotificationToAdminDashboard;
@@ -13,6 +14,9 @@ use App\Listeners\AccountRegistered\SendWelcomeEmailToRegisteredUser;
 use App\Listeners\SubscribedNewsletter\SendNewSubscriberEmailNotificationToAdmin;
 use App\Listeners\SubscribedNewsletter\SendNewSubscriberNotificationToAdminDashboard;
 use App\Listeners\SubscribedNewsletter\SendThankForSubscribeWebsiteEmailToSubscriber;
+use App\Listeners\WebsiteSuggestion\SendNewSuggestionEmailNotificationToAdmin;
+use App\Listeners\WebsiteSuggestion\SendNewSuggestionNotificationToAdminDashboard;
+use App\Listeners\WebsiteSuggestion\SendThankForSuggestionEmailToSuggestionSubmitter;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -40,6 +44,11 @@ class EventServiceProvider extends ServiceProvider
             SendNewSubscriberNotificationToAdminDashboard::class,
             SendNewSubscriberEmailNotificationToAdmin::class,
             SendThankForSubscribeWebsiteEmailToSubscriber::class,
+        ],
+        SuggestionForWebsite::class=>[
+            SendNewSuggestionNotificationToAdminDashboard::class,
+            SendNewSuggestionEmailNotificationToAdmin::class,
+            SendThankForSuggestionEmailToSuggestionSubmitter::class,
         ]
     ];
 
