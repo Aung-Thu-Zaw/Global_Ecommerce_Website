@@ -1,4 +1,5 @@
 <script setup>
+import InputError from "@/Components/Forms/InputError.vue";
 import { useForm } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 
@@ -60,6 +61,8 @@ const submit = () => {
               Subscribe
             </button>
           </form>
+
+          <InputError class="mt-2" :message="form.errors.email" />
 
           <p
             v-if="$page.props.flash.successMessage"

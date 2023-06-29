@@ -29,7 +29,7 @@ class SubscriberRequest extends FormRequest
         ];
     }
 
-        /**
+    /**
     *     @return array<string>
     */
     public function messages(): array
@@ -38,7 +38,7 @@ class SubscriberRequest extends FormRequest
             "email.required" => "The email address field is required.",
             "email.string" => "The email address must be a string.",
             "email.email" =>  "The email address must be a valid email address.",
-            "email.unique"=>"The email has already been taken."
+            "email.unique"=>"The email has already been subscribed."
         ];
     }
 

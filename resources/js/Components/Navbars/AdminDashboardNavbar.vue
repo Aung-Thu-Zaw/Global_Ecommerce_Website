@@ -5,6 +5,7 @@ import RegisteredUserNotificationCard from "@/Components/Cards/RegisteredUserNot
 import OrderPlacedNotificationCard from "@/Components/Cards/OrderPlacedNotificationCard.vue";
 import DeletedUserNotificationCard from "@/Components/Cards/DeletedUserNotificationCard.vue";
 import DeletedVendorNotificationCard from "@/Components/Cards/DeletedVendorNotificationCard.vue";
+import NewsletterSubscribedNotificationCard from "@/Components/Cards/NewsletterSubscribedNotificationCard.vue";
 import { Link, usePage } from "@inertiajs/vue3";
 import { computed, onMounted, ref } from "vue";
 
@@ -46,13 +47,23 @@ onMounted(() => {
       } else if (
         notification.type === "App\\Notifications\\FollowedShopNotification"
       ) {
-        console.log(notification);
-
         notifications.value.push({
           id: notification.id,
           type: notification.type,
           data: {
             message: notification.message,
+          },
+        });
+      } else if (
+        notification.type ===
+        "App\\Notifications\\SubscribedNewsletter\\NewsletterSubscribedNotification"
+      ) {
+        notifications.value.push({
+          id: notification.id,
+          type: notification.type,
+          data: {
+            message: notification.message,
+            subscriber: notification.subscriber,
           },
         });
       }
@@ -135,6 +146,9 @@ onMounted(() => {
             <RegisteredUserNotificationCard :notification="notification" />
             <DeletedVendorNotificationCard :notification="notification" />
             <DeletedUserNotificationCard :notification="notification" />
+            <NewsletterSubscribedNotificationCard
+              :notification="notification"
+            />
             <OrderPlacedNotificationCard :notification="notification" />
           </div>
 
