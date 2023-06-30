@@ -40,8 +40,6 @@ class AdminSuggestionController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-
-        dd("hit");
         $trashSuggestions=Suggestion::search(request("search"))
                                     ->onlyTrashed()
                                     ->orderBy(request("sort", "id"), request("direction", "desc"))

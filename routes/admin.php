@@ -500,13 +500,28 @@ Route::middleware(["admin","verified","user.role:admin"])
 
 
 
+
+
+           // Admin Dashboard Subscriber Section
+           Route::controller(AdminSubscriberController::class)
+           ->prefix("/subscribers")
+           ->name("subscribers.")
+           ->group(function () {
+               Route::get("/", "index")->middleware('permission:subscriber.menu')->name("index");
+               Route::delete("/{subscriber}", "destroy")->middleware('permission:subscriber.delete')->name("destroy");
+               Route::get("/trash", "trash")->middleware('permission:subscriber.trash.list')->name("trash");
+               Route::post("/{subscriber}/restore", "restore")->middleware('permission:subscriber.trash.restore')->name("restore");
+               Route::delete("/{subscriber}/force-delete", "forceDelete")->middleware('permission:subscriber.trash.delete')->name("force.delete");
+               Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:subscriber.trash.delete')->name("permanently.delete");
+           });
+
            // Admin Dashboard Suggestion Section
            Route::controller(AdminSuggestionController::class)
            ->prefix("/suggestions")
            ->name("suggestions.")
            ->group(function () {
                Route::get("/", "index")->middleware('permission:suggestion.menu')->name("index");
-               Route::get("/{suggestion}", "show")->middleware('permission:suggestion.detail')->name("show");
+               Route::get("/details/{suggestion}", "show")->middleware('permission:suggestion.detail')->name("show");
                Route::delete("/{suggestion}", "destroy")->middleware('permission:suggestion.delete')->name("destroy");
                Route::get("/trash", "trash")->middleware('permission:suggestion.trash.list')->name("trash");
                Route::post("/{suggestion}/restore", "restore")->middleware('permission:suggestion.trash.restore')->name("restore");
@@ -520,24 +535,11 @@ Route::middleware(["admin","verified","user.role:admin"])
            ->name("website-feedbacks.")
            ->group(function () {
                Route::get("/", "index")->middleware('permission:feedback.menu')->name("index");
-               Route::get("/{website_feedback}", "show")->middleware('permission:feedback.detail')->name("show");
+               Route::get("/details/{website_feedback}", "show")->middleware('permission:feedback.detail')->name("show");
                Route::delete("/{website_feedback}", "destroy")->middleware('permission:feedback.delete')->name("destroy");
                Route::get("/trash", "trash")->middleware('permission:feedback.trash.list')->name("trash");
                Route::post("/{website_feedback}/restore", "restore")->middleware('permission:feedback.trash.restore')->name("restore");
                Route::delete("/{website_feedback}/force-delete", "forceDelete")->middleware('permission:feedback.trash.delete')->name("force.delete");
                Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:feedback.trash.delete')->name("permanently.delete");
-           });
-
-           // Admin Dashboard Subscriber Section
-           Route::controller(AdminSubscriberController::class)
-           ->prefix("/subscribers")
-           ->name("subscribers.")
-           ->group(function () {
-               Route::get("/", "index")->middleware('permission:subscriber.menu')->name("index");
-               Route::delete("/{subscriber}", "destroy")->middleware('permission:subscriber.delete')->name("destroy");
-               Route::get("/trash", "trash")->middleware('permission:subscriber.trash.list')->name("trash");
-               Route::post("/{subscriber}/restore", "restore")->middleware('permission:subscriber.trash.restore')->name("restore");
-               Route::delete("/{subscriber}/force-delete", "forceDelete")->middleware('permission:subscriber.trash.delete')->name("force.delete");
-               Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:subscriber.trash.delete')->name("permanently.delete");
            });
        });

@@ -153,13 +153,6 @@ const feedbackDelete = computed(() => {
       )
     : false;
 });
-
-if (usePage().props.flash.successMessage) {
-  swal({
-    icon: "success",
-    title: usePage().props.flash.successMessage,
-  });
-}
 </script>
 
 <template>
@@ -339,7 +332,7 @@ if (usePage().props.flash.successMessage) {
             <Td v-if="feedbackDelete || feedbackDetail">
               <button
                 v-if="feedbackDelete"
-                @click="handleDelete(websiteFeedback)"
+                @click="handleDelete(websiteFeedback.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>

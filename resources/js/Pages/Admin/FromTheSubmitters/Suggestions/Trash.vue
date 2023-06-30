@@ -169,7 +169,7 @@ const handlePermanentlyDelete = async () => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
-    text: "All suggesstions in the trash will be permanetly deleted! You can't get it back.",
+    text: "All suggestions in the trash will be permanetly deleted! You can't get it back.",
     showCancelButton: true,
     confirmButtonText: "Yes, delete it !",
     confirmButtonColor: "#ef4444",
