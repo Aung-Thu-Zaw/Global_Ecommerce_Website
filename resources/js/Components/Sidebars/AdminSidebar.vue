@@ -931,6 +931,62 @@
             </Link>
           </li>
         </ul>
+
+        <hr class="my-4 md:min-w-full" />
+        <h6
+          class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
+        >
+          From The Submitters
+        </h6>
+
+        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <li v-if="suggestionMenu" class="items-center">
+            <Link
+              :href="route('admin.suggestions.index')"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url === '/admin/suggestions',
+                'text-slate-700 hover:text-slate-500':
+                  $page.url !== '/admin/suggestions',
+              }"
+            >
+              <i class="fa-solid fa-lightbulb mr-2 text-sm"></i>
+
+              Suggestions
+            </Link>
+          </li>
+          <li v-if="feedbackMenu" class="items-center">
+            <Link
+              :href="route('admin.website-feedbacks.index')"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url === '/admin/website-feedbacks',
+                'text-slate-700 hover:text-slate-500':
+                  $page.url !== '/admin/website-feedbacks',
+              }"
+            >
+              <i class="fa-solid fa-message mr-2 text-sm"></i>
+              Feedbacks
+            </Link>
+          </li>
+          <li v-if="subscriberMenu" class="items-center">
+            <Link
+              :href="route('admin.subscribers.index')"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url === '/admin/subscribers',
+                'text-slate-700 hover:text-slate-500':
+                  $page.url !== '/admin/subscribers',
+              }"
+            >
+              <i class="fa-solid fa-user-check mr-2 text-sm"></i>
+              Subscribers
+            </Link>
+          </li>
+        </ul>
       </div>
     </div>
   </nav>
@@ -1196,11 +1252,32 @@ export default {
           )
         : false;
     },
-
     seoSettingMenu() {
       return this.$page.props.auth.user.permissions.length
         ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "seo-setting.menu"
+          )
+        : false;
+    },
+
+    suggestionMenu() {
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
+            (permission) => permission.name === "suggestion.menu"
+          )
+        : false;
+    },
+    feedbackMenu() {
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
+            (permission) => permission.name === "feedback.menu"
+          )
+        : false;
+    },
+    subscriberMenu() {
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
+            (permission) => permission.name === "subscriber.menu"
           )
         : false;
     },

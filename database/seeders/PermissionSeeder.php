@@ -143,5 +143,25 @@ class PermissionSeeder extends Seeder
 
         Permission::create(["name"=>"seo-setting.menu","group"=>"seo-setting"]);
         Permission::create(["name"=>"seo-setting.edit","group"=>"seo-setting"]);
+
+        Permission::create(["name"=>"suggestion.menu","group"=>"suggestion"]);
+        Permission::create(["name"=>"suggestion.detail","group"=>"suggestion"]);
+        Permission::create(["name"=>"suggestion.delete","group"=>"suggestion"]);
+        Permission::create(["name"=>"suggestion.trash.list","group"=>"suggestion"]);
+        Permission::create(["name"=>"suggestion.trash.restore","group"=>"suggestion"]);
+        Permission::create(["name"=>"suggestion.trash.delete","group"=>"suggestion"]);
+
+        Permission::create(["name"=>"feedback.menu","group"=>"feedback"]);
+        Permission::create(["name"=>"feedback.detail","group"=>"feedback"]);
+        Permission::create(["name"=>"feedback.delete","group"=>"feedback"]);
+        Permission::create(["name"=>"feedback.trash.list","group"=>"feedback"]);
+        Permission::create(["name"=>"feedback.trash.restore","group"=>"feedback"]);
+        Permission::create(["name"=>"feedback.trash.delete","group"=>"feedback"]);
+
+        Permission::create(["name"=>"subscriber.menu","group"=>"subscriber"]);
+        Permission::create(["name"=>"subscriber.delete","group"=>"subscriber"]);
+        Permission::create(["name"=>"subscriber.trash.list","group"=>"subscriber"]);
+        Permission::create(["name"=>"subscriber.trash.restore","group"=>"subscriber"]);
+        Permission::create(["name"=>"subscriber.trash.delete","group"=>"subscriber"]);
     }
 }

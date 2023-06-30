@@ -35,6 +35,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('role:delete')->daily();
         $schedule->command('permission:delete')->daily();
         $schedule->command('user:delete')->daily();
+        $schedule->command('subscriber:delete')->daily();
+        $schedule->command('website_feedback:delete')->daily();
+        $schedule->command('suggestion:delete')->daily();
     }
 
     /**

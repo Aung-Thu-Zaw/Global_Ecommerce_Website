@@ -18,6 +18,7 @@ return new class () extends Migration {
             $table->text("description");
             $table->enum("type", ["request_feature","report_bug"]);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

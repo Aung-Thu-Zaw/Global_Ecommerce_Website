@@ -229,6 +229,16 @@ const submit = () => {
               >
                 Seo Setting
               </option>
+
+              <option value="suggestion" :selected="form.group == 'suggestion'">
+                Suggestion
+              </option>
+              <option value="feedback" :selected="form.group == 'feedback'">
+                Feedback
+              </option>
+              <option value="subscriber" :selected="form.group == 'subscriber'">
+                Subscriber
+              </option>
             </select>
 
             <InputError class="mt-2" :message="form.errors.group" />

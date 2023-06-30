@@ -153,6 +153,9 @@ const submit = () => {
               <option value="blog-post">Blog Post</option>
               <option value="website-setting">Website Setting</option>
               <option value="seo-setting">Seo Setting</option>
+              <option value="suggestion">Suggestion</option>
+              <option value="feedback">Feedback</option>
+              <option value="subscriber">Subscriber</option>
             </select>
 
             <InputError class="mt-2" :message="form.errors.group" />
