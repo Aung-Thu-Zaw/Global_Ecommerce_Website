@@ -11,7 +11,6 @@ class Color extends Model
 {
     use HasFactory;
 
-
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Color, never>
     */

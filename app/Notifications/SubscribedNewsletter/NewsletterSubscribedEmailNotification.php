@@ -48,6 +48,5 @@ class NewsletterSubscribedEmailNotification extends Notification
         ->line("A new subscriber has subscribed to the website newsletter. Here are the details:")
         ->line("Subscriber Email: ".$this->subscriber->email)
         ->line("Subscribe Date: ".Carbon::parse($this->subscriber->created_at)->format("Y-m-d"));
-        // ->action('See More Details', route('admin.subscribers.index'));
     }
 }

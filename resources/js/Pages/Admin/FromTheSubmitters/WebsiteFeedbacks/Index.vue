@@ -18,6 +18,118 @@ const props = defineProps({
 
 const swal = inject("$swal");
 
+// Query String Parameteres
+const params = reactive({
+  search: null,
+  page: props.websiteFeedbacks.current_page
+    ? props.websiteFeedbacks.current_page
+    : 1,
+  per_page: props.websiteFeedbacks.per_page
+    ? props.websiteFeedbacks.per_page
+    : 10,
+  sort: "id",
+  direction: "desc",
+});
+
+const handleSearchBox = () => {
+  params.search = "";
+};
+
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    router.get(
+      route("admin.website-feedbacks.index"),
+      {
+        search: params.search,
+        per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
+      },
+      {
+        replace: true,
+        preserveState: true,
+      }
+    );
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    router.get(
+      route("admin.website-feedbacks.index"),
+      {
+        search: params.search,
+        page: params.page,
+        per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
+      },
+      {
+        replace: true,
+        preserveState: true,
+      }
+    );
+  }
+);
+
+// Update Sorting Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  router.get(
+    route("admin.website-feedbacks.index"),
+    {
+      search: params.search,
+      page: params.page,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    { replace: true, preserveState: true }
+  );
+};
+
+// Handle Delete Website Feedback
+const handleDelete = async (websiteFeedbackId) => {
+  const result = await swal({
+    icon: "warning",
+    title: "Are you sure you want to delete this website feedback?",
+    text: "You will be able to restore this website feedback in the trash!",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it!",
+    confirmButtonColor: "#ef4444",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.delete(
+      route("admin.website-feedbacks.destroy", {
+        website_feedback: websiteFeedbackId,
+        page: params.page,
+        per_page: params.per_page,
+      }),
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
+    );
+  }
+};
+
+// Feedback Permissions
 const feedbackTrashList = computed(() => {
   return usePage().props.auth.user.permissions.length
     ? usePage().props.auth.user.permissions.some(
@@ -42,108 +154,6 @@ const feedbackDelete = computed(() => {
     : false;
 });
 
-const params = reactive({
-  search: null,
-  page: props.websiteFeedbacks.current_page
-    ? props.websiteFeedbacks.current_page
-    : 1,
-  per_page: props.websiteFeedbacks.per_page
-    ? props.websiteFeedbacks.per_page
-    : 10,
-  sort: "id",
-  direction: "desc",
-});
-
-const handleSearchBox = () => {
-  params.search = "";
-};
-
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.website-feedbacks.index"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.website-feedbacks.index"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
-  router.get(
-    route("admin.website-feedbacks.index"),
-    {
-      search: params.search,
-      page: params.page,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-    },
-    { replace: true, preserveState: true }
-  );
-};
-
-const handleDelete = async (websiteFeedback) => {
-  const result = await swal({
-    icon: "warning",
-    title: "Are you sure you want to delete this website feedback?",
-    text: "You will be able to restore this website feedback in the trash!",
-    showCancelButton: true,
-    confirmButtonText: "Yes, delete it!",
-    confirmButtonColor: "#ef4444",
-    timer: 20000,
-    timerProgressBar: true,
-    reverseButtons: true,
-  });
-
-  if (result.isConfirmed) {
-    router.delete(
-      route("admin.website-feedbacks.destroy", {
-        website_feedback: websiteFeedback.id,
-        page: params.page,
-        per_page: params.per_page,
-      })
-    );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
-  }
-};
-
 if (usePage().props.flash.successMessage) {
   swal({
     icon: "success",
@@ -158,8 +168,10 @@ if (usePage().props.flash.successMessage) {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb />
 
+        <!-- Trash Button -->
         <div v-if="feedbackTrashList">
           <Link
             as="button"
@@ -175,6 +187,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <div class="flex items-center ml-auto">
+          <!-- Search Box -->
           <form class="w-[350px] relative">
             <input
               type="text"
@@ -189,6 +202,8 @@ if (usePage().props.flash.successMessage) {
               @click="handleSearchBox"
             ></i>
           </form>
+
+          <!-- Select Box -->
           <div class="ml-5">
             <select
               class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -206,6 +221,7 @@ if (usePage().props.flash.successMessage) {
         </div>
       </div>
 
+      <!-- Table -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -255,32 +271,6 @@ if (usePage().props.flash.successMessage) {
                   params.direction !== '' &&
                   params.direction !== 'desc' &&
                   params.sort === 'email',
-              }"
-            ></i>
-          </HeaderTh>
-          <HeaderTh @click="updateSorting('feedback_text')">
-            Feedback
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'feedback_text',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'feedback_text',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' &&
-                  params.sort === 'feedback_text',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'feedback_text',
               }"
             ></i>
           </HeaderTh>
@@ -344,7 +334,6 @@ if (usePage().props.flash.successMessage) {
           >
             <BodyTh>{{ websiteFeedback.id }}</BodyTh>
             <Td>{{ websiteFeedback.email }}</Td>
-            <Td class="line-clamp-1">{{ websiteFeedback.feedback_text }}</Td>
             <Td>{{ websiteFeedback.rating }}</Td>
             <Td>{{ websiteFeedback.created_at }}</Td>
             <Td v-if="feedbackDelete || feedbackDetail">
@@ -376,8 +365,10 @@ if (usePage().props.flash.successMessage) {
         </tbody>
       </TableContainer>
 
+      <!-- No Avaliable Data Row -->
       <NotAvaliableData v-if="!websiteFeedbacks.data.length" />
 
+      <!-- Pagination -->
       <Pagination class="mt-6" :links="websiteFeedbacks.links" />
     </div>
   </AdminDashboardLayout>

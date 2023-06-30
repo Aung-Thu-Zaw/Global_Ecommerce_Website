@@ -11,7 +11,6 @@ use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Laravel\Scout\Searchable;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -36,7 +35,6 @@ class Product extends Model
         'featured' => 'boolean',
     ];
 
-
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
@@ -49,7 +47,6 @@ class Product extends Model
         return 'slug';
     }
 
-
     /**
     *     @return array<string>
     */
@@ -60,7 +57,6 @@ class Product extends Model
         ];
     }
 
-
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Product, never>
     */
@@ -70,7 +66,6 @@ class Product extends Model
             set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/products/$value"),
         );
     }
-
 
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Product, never>
@@ -101,7 +96,6 @@ class Product extends Model
             get : fn ($value) => (bool) $value
         );
     }
-
 
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Product, never>
@@ -145,7 +139,6 @@ class Product extends Model
         return $this->belongsTo(Collection::class);
     }
 
-
     /**
     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Color>
     */
@@ -169,7 +162,6 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
-
 
     /**
     * @return \Illuminate\Database\Eloquent\Relations\HasMany<CartItem>
@@ -210,7 +202,6 @@ class Product extends Model
     {
         return $this->hasMany(ProductReview::class);
     }
-
 
     public static function deleteImage(Product $product): void
     {
@@ -269,14 +260,5 @@ class Product extends Model
         //               ->havingRaw("AVG(rating) >= ?", [$rating]);
         //     });
         // });
-
-        // $query->when($filterBy["rating"] ?? null, function ($query, $rating) {
-        //     $query->whereHas("productReviews", function ($query) use ($rating) {
-        //         $query->groupBy("product_id");
-
-        //     });
-        // });
     }
-
-
 }

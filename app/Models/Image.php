@@ -11,7 +11,6 @@ class Image extends Model
 {
     use HasFactory;
 
-
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Image, never>
     */
@@ -22,7 +21,6 @@ class Image extends Model
         );
     }
 
-
     /**
     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Product,Image>
     */
@@ -30,7 +28,6 @@ class Image extends Model
     {
         return $this->belongsTo(Product::class);
     }
-
 
     public static function deleteImage(Image $image): void
     {

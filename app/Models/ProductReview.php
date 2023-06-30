@@ -40,7 +40,6 @@ class ProductReview extends Model
         return $this->hasOne(Reply::class);
     }
 
-
     /**
     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Product,ProductReview>
     */
@@ -48,5 +47,4 @@ class ProductReview extends Model
     {
         return $this->belongsTo(Product::class);
     }
-
 }

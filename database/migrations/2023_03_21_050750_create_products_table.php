@@ -27,7 +27,7 @@ return new class () extends Migration {
             $table->boolean("hot_deal")->default(false);
             $table->boolean("special_offer")->default(false);
             $table->boolean("featured")->default(false);
-            $table->enum("status", ["active","inactive"])->default("active");
+            $table->enum("status", ["active","inactive"]);
             $table->softDeletes();
             $table->timestamps();
         });

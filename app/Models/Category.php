@@ -27,7 +27,6 @@ class Category extends Model
     protected array $cascadeDeletes = ['children'];
     protected $guarded=[];
 
-
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()

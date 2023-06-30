@@ -39,7 +39,6 @@ class Reply extends Model
         return $this->belongsTo(ShopReview::class);
     }
 
-
     /**
     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,Reply>
     */
@@ -47,5 +46,4 @@ class Reply extends Model
     {
         return $this->belongsTo(User::class);
     }
-
 }

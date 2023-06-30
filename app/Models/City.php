@@ -21,13 +21,11 @@ class City extends Model
     use CascadeSoftDeletes;
     use HasSlug;
 
-
     /**
     * @var string[]
     */
     protected array $cascadeDeletes = ['townships'];
     protected $guarded=[];
-
 
     public function getSlugOptions(): SlugOptions
     {
@@ -40,7 +38,6 @@ class City extends Model
     {
         return 'slug';
     }
-
 
     /**
     *     @return array<string>
@@ -72,7 +69,6 @@ class City extends Model
         return $this->belongsTo(Region::class);
     }
 
-
     /**
     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Township>
     */
@@ -80,5 +76,4 @@ class City extends Model
     {
         return $this->hasMany(Township::class);
     }
-
 }

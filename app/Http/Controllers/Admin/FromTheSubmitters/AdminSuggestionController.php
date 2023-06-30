@@ -40,6 +40,8 @@ class AdminSuggestionController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
+
+        dd("hit");
         $trashSuggestions=Suggestion::search(request("search"))
                                     ->onlyTrashed()
                                     ->orderBy(request("sort", "id"), request("direction", "desc"))
@@ -49,18 +51,18 @@ class AdminSuggestionController extends Controller
         return inertia("Admin/FromTheSubmitters/Suggestions/Trash", compact("trashSuggestions"));
     }
 
-    public function restore(Request $request, int $id): RedirectResponse
+    public function restore(Request $request, int $suggestionId): RedirectResponse
     {
-        $suggestion = Suggestion::onlyTrashed()->where("id", $id)->first();
+        $suggestion = Suggestion::onlyTrashed()->findOrFail($suggestionId);
 
         $suggestion->restore();
 
         return to_route('admin.suggestions.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Suggestion has been successfully restored.");
     }
 
-    public function forceDelete(Request $request, int $id): RedirectResponse
+    public function forceDelete(Request $request, int $suggestionId): RedirectResponse
     {
-        $suggestion = Suggestion::onlyTrashed()->where("id", $id)->first();
+        $suggestion = Suggestion::onlyTrashed()->findOrFail($suggestionId);
 
         $multiImages=Image::where("suggestion_id", $suggestion->id)->get();
 
@@ -78,6 +80,12 @@ class AdminSuggestionController extends Controller
         $suggestions = Suggestion::onlyTrashed()->get();
 
         $suggestions->each(function ($suggestion) {
+
+            $multiImages=Image::where("suggestion_id", $suggestion->id)->get();
+
+            $multiImages->each(function ($image) {
+                Image::deleteImage($image);
+            });
 
             $suggestion->forceDelete();
 

@@ -39,5 +39,4 @@ class ShopReview extends Model
     {
         return $this->hasOne(Reply::class);
     }
-
 }

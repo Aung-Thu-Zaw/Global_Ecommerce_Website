@@ -20,7 +20,6 @@ class Country extends Model
     use CascadeSoftDeletes;
     use HasSlug;
 
-
     /**
     * @var string[]
     */
@@ -69,5 +68,4 @@ class Country extends Model
     {
         return $this->hasMany(Region::class);
     }
-
 }

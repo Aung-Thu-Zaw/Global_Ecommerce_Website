@@ -32,7 +32,7 @@ class WebsiteFeedback extends Model
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date("j-F-Y ( h:i A )", strtotime($value)),
         );
     }
 
@@ -42,7 +42,7 @@ class WebsiteFeedback extends Model
     protected function deletedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date("j-F-Y ( h:i A )", strtotime($value)),
         );
     }
 }

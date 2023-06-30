@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Image;
 use App\Models\Suggestion;
-use App\Models\WebsiteFeedback;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -29,9 +29,16 @@ class PermanentlyAutoDeleteSuggestionCommand extends Command
         $cutoffDate = Carbon::now()->subDays(60);
 
         $suggestions=Suggestion::onlyTrashed()
-        ->where('deleted_at', '<=', $cutoffDate)->get();
+                               ->where('deleted_at', '<=', $cutoffDate)
+                               ->get();
 
         $suggestions->each(function ($suggestion) {
+            $multiImages=Image::where("suggestion_id", $suggestion->id)->get();
+
+            $multiImages->each(function ($image) {
+                Image::deleteImage($image);
+            });
+
             $suggestion->forceDelete();
         });
     }

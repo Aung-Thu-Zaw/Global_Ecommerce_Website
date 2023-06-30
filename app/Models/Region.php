@@ -40,8 +40,6 @@ class Region extends Model
         return 'slug';
     }
 
-
-
     /**
     *     @return array<string>
     */
@@ -53,7 +51,7 @@ class Region extends Model
         ];
     }
 
-        /**
+    /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Region, never>
     */
     protected function createdAt(): Attribute
@@ -63,7 +61,6 @@ class Region extends Model
         );
     }
 
-
     /**
     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Country,Region>
     */
@@ -72,8 +69,6 @@ class Region extends Model
         return $this->belongsTo(Country::class);
     }
 
-
-
     /**
     * @return \Illuminate\Database\Eloquent\Relations\HasMany<City>
     */
@@ -81,5 +76,4 @@ class Region extends Model
     {
         return $this->hasMany(City::class);
     }
-
 }

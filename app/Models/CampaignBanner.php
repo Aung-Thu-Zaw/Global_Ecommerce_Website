@@ -16,7 +16,6 @@ class CampaignBanner extends Model
 
     protected $guarded=[];
 
-
     /**
     *     @return array<string|bool>
     */
@@ -26,7 +25,6 @@ class CampaignBanner extends Model
             'url' => $this->url,
         ];
     }
-
 
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<CampaignBanner, never>
@@ -48,7 +46,6 @@ class CampaignBanner extends Model
         );
     }
 
-
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<CampaignBanner, never>
     */
@@ -58,7 +55,6 @@ class CampaignBanner extends Model
             set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/campaign-banners/$value"),
         );
     }
-
 
     public static function deleteImage(CampaignBanner $campaignBanner): void
     {

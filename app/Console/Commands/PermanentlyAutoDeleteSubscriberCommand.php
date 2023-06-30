@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Brand;
 use App\Models\Subscriber;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -21,7 +20,7 @@ class PermanentlyAutoDeleteSubscriberCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Subscribers in the Trash will be automatically deleted after 60 days';
+    protected $description = 'Subscribers in the trash will be automatically deleted after 60 days';
 
 
     public function handle(): void
@@ -29,7 +28,8 @@ class PermanentlyAutoDeleteSubscriberCommand extends Command
         $cutoffDate = Carbon::now()->subDays(60);
 
         $subscribers=Subscriber::onlyTrashed()
-        ->where('deleted_at', '<=', $cutoffDate)->get();
+                               ->where('deleted_at', '<=', $cutoffDate)
+                               ->get();
 
         $subscribers->each(function ($subscriber) {
             $subscriber->forceDelete();

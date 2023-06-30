@@ -39,18 +39,19 @@ class AdminSubscriberController extends Controller
         return inertia("Admin/FromTheSubmitters/Subscribers/Trash", compact("trashSubscribers"));
     }
 
-    public function restore(Request $request, int $id): RedirectResponse
+    public function restore(Request $request, int $subscriberId): RedirectResponse
     {
-        $subscriber = Subscriber::onlyTrashed()->findOrFail($id);
+
+        $subscriber = Subscriber::onlyTrashed()->findOrFail($subscriberId);
 
         $subscriber->restore();
 
         return to_route('admin.subscribers.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Subscriber has been successfully restored.");
     }
 
-    public function forceDelete(Request $request, int $id): RedirectResponse
+    public function forceDelete(Request $request, int $subscriberId): RedirectResponse
     {
-        $subscriber = Subscriber::onlyTrashed()->findOrFail($id);
+        $subscriber = Subscriber::onlyTrashed()->findOrFail($subscriberId);
 
         $subscriber->forceDelete();
 

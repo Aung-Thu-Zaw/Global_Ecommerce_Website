@@ -19,7 +19,6 @@ use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 use Overtrue\LaravelFollow\Traits\Follower;
 use Overtrue\LaravelFollow\Traits\Followable;
-use Spatie\Permission\Models\Role;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -43,7 +42,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-
     /**
     *     @return array<string>
     */
@@ -56,7 +54,6 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<User, never>
     */
@@ -66,7 +63,6 @@ class User extends Authenticatable implements MustVerifyEmail
             set: fn ($value) => Hash::needsRehash($value) ? bcrypt($value) : $value,
         );
     }
-
 
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<User, never>
@@ -78,7 +74,6 @@ class User extends Authenticatable implements MustVerifyEmail
             get: fn ($value) => $value ??  asset("storage/avatars/default-avatar-".auth()->user()->id.".png"),
         );
     }
-
 
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<User, never>
@@ -100,7 +95,6 @@ class User extends Authenticatable implements MustVerifyEmail
         );
     }
 
-
     /**
     * @return \Illuminate\Database\Eloquent\Relations\HasOne<Cart>
     */
@@ -108,7 +102,6 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(Cart::class);
     }
-
 
     /**
     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Watchlist>
@@ -126,7 +119,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Order::class);
     }
 
-
     /**
     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Coupon>
     */
@@ -137,7 +129,6 @@ class User extends Authenticatable implements MustVerifyEmail
             ->withTimestamps();
     }
 
-
     /**
     * @return \Illuminate\Database\Eloquent\Relations\HasOne<DeliveryInformation>
     */
@@ -145,7 +136,6 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(DeliveryInformation::class);
     }
-
 
     /**
     * @return \Illuminate\Database\Eloquent\Relations\HasMany<ProductQuestion>
@@ -171,7 +161,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Message::class);
     }
 
-
     public function getRedirectRouteName(): string
     {
         return match ((string)$this->role) {
@@ -189,7 +178,6 @@ class User extends Authenticatable implements MustVerifyEmail
             "user"=>"home",
         };
     }
-
 
     public static function deleteDefaultAvatar(User $user): void
     {
@@ -214,5 +202,4 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new ResetPasswordQueued($token));
     }
-
 }

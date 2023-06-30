@@ -20,7 +20,7 @@ class PermanentlyAutoDeleteFeedbackCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Website Feedbacks in the Trash will be automatically deleted after 60 days';
+    protected $description = 'Website Feedbacks in the trash will be automatically deleted after 60 days';
 
 
     public function handle(): void
@@ -28,10 +28,13 @@ class PermanentlyAutoDeleteFeedbackCommand extends Command
         $cutoffDate = Carbon::now()->subDays(60);
 
         $websiteFeedbacks=WebsiteFeedback::onlyTrashed()
-        ->where('deleted_at', '<=', $cutoffDate)->get();
+                                         ->where('deleted_at', '<=', $cutoffDate)
+                                         ->get();
 
         $websiteFeedbacks->each(function ($websiteFeedback) {
+
             $websiteFeedback->forceDelete();
+
         });
     }
 }

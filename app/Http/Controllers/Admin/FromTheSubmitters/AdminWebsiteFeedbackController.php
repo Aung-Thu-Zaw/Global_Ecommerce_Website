@@ -14,9 +14,9 @@ class AdminWebsiteFeedbackController extends Controller
     public function index(): Response|ResponseFactory
     {
         $websiteFeedbacks=WebsiteFeedback::search(request("search"))
-                               ->orderBy(request("sort", "id"), request("direction", "desc"))
-                               ->paginate(request("per_page", 10))
-                               ->appends(request()->all());
+                                         ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                         ->paginate(request("per_page", 10))
+                                         ->appends(request()->all());
 
         return inertia("Admin/FromTheSubmitters/WebsiteFeedbacks/Index", compact("websiteFeedbacks"));
     }
@@ -37,27 +37,29 @@ class AdminWebsiteFeedbackController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
+
+        dd("hit");
         $trashWebsiteFeedbacks=WebsiteFeedback::search(request("search"))
-                                    ->onlyTrashed()
-                                    ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                    ->paginate(request("per_page", 10))
-                                    ->appends(request()->all());
+                                              ->onlyTrashed()
+                                              ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                              ->paginate(request("per_page", 10))
+                                              ->appends(request()->all());
 
         return inertia("Admin/FromTheSubmitters/WebsiteFeedbacks/Trash", compact("trashWebsiteFeedbacks"));
     }
 
-    public function restore(Request $request, int $id): RedirectResponse
+    public function restore(Request $request, WebsiteFeedback $websiteFeedback): RedirectResponse
     {
-        $websiteFeedback = WebsiteFeedback::onlyTrashed()->where("id", $id)->first();
+        $websiteFeedback = WebsiteFeedback::onlyTrashed()->where("id", $websiteFeedback->id)->first();
 
         $websiteFeedback->restore();
 
         return to_route('admin.website-feedbacks.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Website Feedback has been successfully restored.");
     }
 
-    public function forceDelete(Request $request, int $id): RedirectResponse
+    public function forceDelete(Request $request, WebsiteFeedback $websiteFeedback): RedirectResponse
     {
-        $websiteFeedback = WebsiteFeedback::onlyTrashed()->where("id", $id)->first();
+        $websiteFeedback = WebsiteFeedback::onlyTrashed()->where("id", $websiteFeedback->id)->first();
 
         $websiteFeedback->forceDelete();
 

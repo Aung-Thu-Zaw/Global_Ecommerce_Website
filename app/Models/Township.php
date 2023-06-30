@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -20,7 +19,6 @@ class Township extends Model
     use SoftDeletes;
     use CascadeSoftDeletes;
     use HasSlug;
-
 
     /**
     * @var string[]
@@ -40,7 +38,6 @@ class Township extends Model
     {
         return 'slug';
     }
-
 
     /**
     *     @return array<string>
@@ -70,6 +67,4 @@ class Township extends Model
     {
         return $this->belongsTo(City::class);
     }
-
-
 }

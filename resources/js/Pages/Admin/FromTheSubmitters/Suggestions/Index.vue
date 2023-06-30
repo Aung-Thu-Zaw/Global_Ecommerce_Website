@@ -18,6 +18,124 @@ const props = defineProps({
 
 const swal = inject("$swal");
 
+const formatSuggestionType = (suggestionType) => {
+  const words = suggestionType.split("_");
+  const capitalizedWords = words.map(
+    (word) => word.charAt(0).toUpperCase() + word.slice(1)
+  );
+  const formattedString = capitalizedWords.join(" ");
+
+  return formattedString;
+};
+
+// Query String Parameteres
+const params = reactive({
+  search: null,
+  page: props.suggestions.current_page ? props.suggestions.current_page : 1,
+  per_page: props.suggestions.per_page ? props.suggestions.per_page : 10,
+  sort: "id",
+  direction: "desc",
+});
+
+const handleSearchBox = () => {
+  params.search = "";
+};
+
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    router.get(
+      route("admin.suggestions.index"),
+      {
+        search: params.search,
+        per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
+      },
+      {
+        replace: true,
+        preserveState: true,
+      }
+    );
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    router.get(
+      route("admin.suggestions.index"),
+      {
+        search: params.search,
+        page: params.page,
+        per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
+      },
+      {
+        replace: true,
+        preserveState: true,
+      }
+    );
+  }
+);
+
+// Update Sorting Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  router.get(
+    route("admin.suggestions.index"),
+    {
+      search: params.search,
+      page: params.page,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    { replace: true, preserveState: true }
+  );
+};
+
+// Handle Delete Suggestion
+const handleDelete = async (suggestionId) => {
+  const result = await swal({
+    icon: "warning",
+    title: "Are you sure you want to delete this suggestion?",
+    text: "You will be able to restore this suggestion in the trash!",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it!",
+    confirmButtonColor: "#ef4444",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.delete(
+      route("admin.suggestions.destroy", {
+        suggestion: suggestionId,
+        page: params.page,
+        per_page: params.per_page,
+      }),
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
+    );
+  }
+};
+
+// Suggestion Permissions
 const suggestionTrashList = computed(() => {
   return usePage().props.auth.user.permissions.length
     ? usePage().props.auth.user.permissions.some(
@@ -41,134 +159,6 @@ const suggestionDelete = computed(() => {
       )
     : false;
 });
-
-// formattedString() {
-//       // Split the string at each underscore
-//       const words = this.stringToFormat.split('_');
-
-//       // Capitalize the first letter of each word
-//       const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
-
-//       // Join the words back together with a space in between
-//       const formattedString = capitalizedWords.join(' ');
-
-//       return formattedString;
-//     },
-
-const formatSuggestionType = (suggestionType) => {
-  const words = suggestionType.split("_");
-  const capitalizedWords = words.map(
-    (word) => word.charAt(0).toUpperCase() + word.slice(1)
-  );
-  const formattedString = capitalizedWords.join(" ");
-
-  return formattedString;
-};
-
-const params = reactive({
-  search: null,
-  page: props.suggestions.current_page ? props.suggestions.current_page : 1,
-  per_page: props.suggestions.per_page ? props.suggestions.per_page : 10,
-  sort: "id",
-  direction: "desc",
-});
-
-const handleSearchBox = () => {
-  params.search = "";
-};
-
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.suggestions.index"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.suggestions.index"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
-  router.get(
-    route("admin.suggestions.index"),
-    {
-      search: params.search,
-      page: params.page,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-    },
-    { replace: true, preserveState: true }
-  );
-};
-
-const handleDelete = async (suggestion) => {
-  const result = await swal({
-    icon: "warning",
-    title: "Are you sure you want to delete this suggestion?",
-    text: "You will be able to restore this suggestion in the trash!",
-    showCancelButton: true,
-    confirmButtonText: "Yes, delete it!",
-    confirmButtonColor: "#ef4444",
-    timer: 20000,
-    timerProgressBar: true,
-    reverseButtons: true,
-  });
-
-  if (result.isConfirmed) {
-    router.delete(
-      route("admin.suggestions.destroy", {
-        suggestion: suggestion.id,
-        page: params.page,
-        per_page: params.per_page,
-      })
-    );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
-  }
-};
-
-if (usePage().props.flash.successMessage) {
-  swal({
-    icon: "success",
-    title: usePage().props.flash.successMessage,
-  });
-}
 </script>
 
 <template>
@@ -177,8 +167,10 @@ if (usePage().props.flash.successMessage) {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb />
 
+        <!-- Trash Button -->
         <div v-if="suggestionTrashList">
           <Link
             as="button"
@@ -194,6 +186,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <div class="flex items-center ml-auto">
+          <!-- Search Box -->
           <form class="w-[350px] relative">
             <input
               type="text"
@@ -208,6 +201,8 @@ if (usePage().props.flash.successMessage) {
               @click="handleSearchBox"
             ></i>
           </form>
+
+          <!-- Select Box -->
           <div class="ml-5">
             <select
               class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -225,6 +220,7 @@ if (usePage().props.flash.successMessage) {
         </div>
       </div>
 
+      <!-- Table -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -343,7 +339,7 @@ if (usePage().props.flash.successMessage) {
             <Td v-if="suggestionDelete || suggestionDetail">
               <button
                 v-if="suggestionDelete"
-                @click="handleDelete(suggestion)"
+                @click="handleDelete(suggestion.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>
@@ -367,8 +363,10 @@ if (usePage().props.flash.successMessage) {
         </tbody>
       </TableContainer>
 
+      <!-- No Avaliable Data Row -->
       <NotAvaliableData v-if="!suggestions.data.length" />
 
+      <!-- Pagination -->
       <Pagination class="mt-6" :links="suggestions.links" />
     </div>
   </AdminDashboardLayout>

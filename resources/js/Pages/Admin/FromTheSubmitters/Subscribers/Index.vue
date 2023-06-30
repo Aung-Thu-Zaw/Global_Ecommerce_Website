@@ -18,22 +18,7 @@ const props = defineProps({
 
 const swal = inject("$swal");
 
-const subscriberTrashList = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "subscriber.trash.list"
-      )
-    : false;
-});
-
-const subscriberDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "subscriber.delete"
-      )
-    : false;
-});
-
+// Query String Parameteres
 const params = reactive({
   search: null,
   page: props.subscribers.current_page ? props.subscribers.current_page : 1,
@@ -46,6 +31,7 @@ const handleSearchBox = () => {
   params.search = "";
 };
 
+// Watching Search Box
 watch(
   () => params.search,
   () => {
@@ -65,6 +51,7 @@ watch(
   }
 );
 
+// Watching Perpage Select Box
 watch(
   () => params.per_page,
   () => {
@@ -85,6 +72,7 @@ watch(
   }
 );
 
+// Update Sorting Column
 const updateSorting = (sort = "id") => {
   params.sort = sort;
   params.direction = params.direction === "asc" ? "desc" : "asc";
@@ -102,7 +90,8 @@ const updateSorting = (sort = "id") => {
   );
 };
 
-const handleDelete = async (subscriber) => {
+// Handle Delete Subscriber
+const handleDelete = async (subscriberId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete this subscriber?",
@@ -118,26 +107,40 @@ const handleDelete = async (subscriber) => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.subscribers.destroy", {
-        subscriber: subscriber.id,
+        subscriber: subscriberId,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
-if (usePage().props.flash.successMessage) {
-  swal({
-    icon: "success",
-    title: usePage().props.flash.successMessage,
-  });
-}
+// Subscriber Permissions
+const subscriberTrashList = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "subscriber.trash.list"
+      )
+    : false;
+});
+
+const subscriberDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "subscriber.delete"
+      )
+    : false;
+});
 </script>
 
 <template>
@@ -146,8 +149,10 @@ if (usePage().props.flash.successMessage) {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb />
 
+        <!-- Trash Button -->
         <div v-if="subscriberTrashList">
           <Link
             as="button"
@@ -163,6 +168,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <div class="flex items-center ml-auto">
+          <!-- Search Box -->
           <form class="w-[350px] relative">
             <input
               type="text"
@@ -177,6 +183,8 @@ if (usePage().props.flash.successMessage) {
               @click="handleSearchBox"
             ></i>
           </form>
+
+          <!-- Select Box -->
           <div class="ml-5">
             <select
               class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -194,6 +202,7 @@ if (usePage().props.flash.successMessage) {
         </div>
       </div>
 
+      <!-- Table -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -282,7 +291,7 @@ if (usePage().props.flash.successMessage) {
             <Td v-if="subscriberDelete">
               <button
                 v-if="subscriberDelete"
-                @click="handleDelete(subscriber)"
+                @click="handleDelete(subscriber.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>
@@ -293,8 +302,10 @@ if (usePage().props.flash.successMessage) {
         </tbody>
       </TableContainer>
 
+      <!-- No Avaliable Data Row -->
       <NotAvaliableData v-if="!subscribers.data.length" />
 
+      <!-- Pagination -->
       <Pagination class="mt-6" :links="subscribers.links" />
     </div>
   </AdminDashboardLayout>

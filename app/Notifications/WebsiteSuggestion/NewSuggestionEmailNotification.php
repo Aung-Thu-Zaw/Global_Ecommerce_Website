@@ -3,6 +3,7 @@
 namespace App\Notifications\WebsiteSuggestion;
 
 use App\Models\Suggestion;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -42,11 +43,12 @@ class NewSuggestionEmailNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage())
-        // ->subject("Report")
-        // ->greeting("Dear ".$notifiable->name.",")
-        // ->line("A new subscriber has subscribed to the website newsletter. Here are the details:")
-        // ->line("Subscriber Email: ".$this->subscriber->email)
-        // ->line("Subscribe Date: ".Carbon::parse($this->subscriber->created_at)->format("Y-m-d"));
-        // ->action('See More Details', route('admin.subscribers.index'));
+        ->subject("Report A New Suggestions")
+        ->greeting("Dear ".$notifiable->name.",")
+        ->line("A new subscriber has subscribed to the website newsletter. Here are the details:")
+        ->line("Submitter Email: ".$this->suggestion->email)
+        ->line("Type of Report: ".$this->suggestion->type==='request_feature' ? "Request New Feature" : "Report Bug")
+        ->line("Report Date: ".Carbon::parse($this->suggestion->created_at)->format("Y-m-d"))
+        ->action('See More Details', route('admin.suggestions.show', $this->suggestion->id));
     }
 }

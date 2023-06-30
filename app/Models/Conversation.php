@@ -13,7 +13,6 @@ class Conversation extends Model
 
     protected $guarded=[];
 
-
     /**
     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Message>
     */
@@ -37,5 +36,4 @@ class Conversation extends Model
     {
         return $this->belongsTo(User::class, "vendor_id");
     }
-
 }

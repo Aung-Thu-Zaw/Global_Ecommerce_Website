@@ -18,22 +18,7 @@ const props = defineProps({
 
 const swal = inject("$swal");
 
-const subscriberTrashRestore = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "subscriber.trash.restore"
-      )
-    : false;
-});
-
-const subscriberTrashDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "subscriber.trash.delete"
-      )
-    : false;
-});
-
+// Query String Parameteres
 const params = reactive({
   search: null,
   page: props.trashSubscribers.current_page
@@ -50,6 +35,7 @@ const handleSearchBox = () => {
   params.search = "";
 };
 
+// Watching Search Box
 watch(
   () => params.search,
   () => {
@@ -69,6 +55,7 @@ watch(
   }
 );
 
+// Watching Perpage Select Box
 watch(
   () => params.per_page,
   () => {
@@ -89,6 +76,7 @@ watch(
   }
 );
 
+// Update Sorting Column
 const updateSorting = (sort = "id") => {
   params.sort = sort;
   params.direction = params.direction === "asc" ? "desc" : "asc";
@@ -106,6 +94,7 @@ const updateSorting = (sort = "id") => {
   );
 };
 
+// Handle Restore Subscriber
 const handleRestore = async (trashSubscriberId) => {
   const result = await swal({
     icon: "info",
@@ -121,20 +110,26 @@ const handleRestore = async (trashSubscriberId) => {
   if (result.isConfirmed) {
     router.post(
       route("admin.subscribers.restore", {
-        id: trashSubscriberId,
+        subscriber: trashSubscriberId,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {},
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
+// Handle Delete Subscriber
 const handleDelete = async (trashSubscriberId) => {
   const result = await swal({
     icon: "warning",
@@ -150,21 +145,26 @@ const handleDelete = async (trashSubscriberId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.subscribers.forceDelete", {
-        id: trashSubscriberId,
+      route("admin.subscribers.force.delete", {
+        subscriber: trashSubscriberId,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
+// Handle Permanently Delete Subscribers
 const handlePermanentlyDelete = async () => {
   const result = await swal({
     icon: "warning",
@@ -180,19 +180,41 @@ const handlePermanentlyDelete = async () => {
 
   if (result.isConfirmed) {
     router.get(
-      route("admin.subscribers.permanentlyDelete", {
+      route("admin.subscribers.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {},
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
+
+// Subscriber Permissions
+const subscriberTrashRestore = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "subscriber.trash.restore"
+      )
+    : false;
+});
+
+const subscriberTrashDelete = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "subscriber.trash.delete"
+      )
+    : false;
+});
 </script>
 
 <template>
@@ -201,6 +223,7 @@ const handlePermanentlyDelete = async () => {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -225,6 +248,7 @@ const handlePermanentlyDelete = async () => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back Button -->
         <div>
           <Link
             as="button"
@@ -238,6 +262,7 @@ const handlePermanentlyDelete = async () => {
       </div>
 
       <div class="flex items-center justify-end mb-5">
+        <!-- Search Box -->
         <form class="w-[350px] relative">
           <input
             type="text"
@@ -252,6 +277,8 @@ const handlePermanentlyDelete = async () => {
             @click="handleSearchBox"
           ></i>
         </form>
+
+        <!-- Select Box -->
         <div class="ml-5">
           <select
             class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -268,6 +295,7 @@ const handlePermanentlyDelete = async () => {
         </div>
       </div>
 
+      <!-- Empty Trash Button -->
       <p
         v-if="subscriberTrashDelete"
         class="text-left text-sm font-bold mb-2 text-warning-600"
@@ -281,6 +309,7 @@ const handlePermanentlyDelete = async () => {
         </button>
       </p>
 
+      <!-- Table -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -369,9 +398,7 @@ const handlePermanentlyDelete = async () => {
             :key="trashSubscriber.id"
           >
             <BodyTh>{{ trashSubscriber.id }}</BodyTh>
-
             <Td>{{ trashSubscriber.email }}</Td>
-
             <Td>{{ trashSubscriber.deleted_at }}</Td>
             <Td v-if="subscriberTrashRestore || subscriberTrashDelete">
               <button
@@ -395,8 +422,10 @@ const handlePermanentlyDelete = async () => {
         </tbody>
       </TableContainer>
 
+      <!-- No Avaliable Data Row -->
       <NotAvaliableData v-if="!trashSubscribers.data.length" />
 
+      <!-- Pagination -->
       <Pagination class="mt-6" :links="trashSubscribers.links" />
     </div>
   </AdminDashboardLayout>

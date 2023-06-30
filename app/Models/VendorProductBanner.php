@@ -15,6 +15,7 @@ class VendorProductBanner extends Model
     use Searchable;
 
     protected $guarded=[];
+
     /**
     *     @return array<string>
     */
