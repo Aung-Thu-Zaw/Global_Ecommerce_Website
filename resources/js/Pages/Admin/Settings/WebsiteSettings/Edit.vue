@@ -1,11 +1,11 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { useForm, Head, usePage } from "@inertiajs/vue3";
-import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/WebsiteSettingBreadcrumb.vue";
+import { useForm, Head, usePage } from "@inertiajs/vue3";
+import { useReCaptcha } from "vue-recaptcha-v3";
 import { computed, ref } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -16,6 +16,7 @@ const props = defineProps({
 
 const processing = ref(false);
 
+// Website Setting Permission
 const websiteSettingEdit = computed(() => {
   return usePage().props.auth.user.permissions.length
     ? usePage().props.auth.user.permissions.some(
@@ -24,6 +25,7 @@ const websiteSettingEdit = computed(() => {
     : false;
 });
 
+// Preview Photos
 const previewPhoto1 = ref("");
 const getPreviewPhotoPath1 = (path) => {
   previewPhoto1.value.src = URL.createObjectURL(path);
@@ -34,6 +36,7 @@ const getPreviewPhotoPath2 = (path) => {
   previewPhoto2.value.src = URL.createObjectURL(path);
 };
 
+// Handle Website Setting
 const form = useForm({
   logo: props.websiteSetting ? props.websiteSetting.logo : "",
   favicon: props.websiteSetting ? props.websiteSetting.favicon : "",
@@ -89,11 +92,13 @@ const submit = () => {
     <Head title="Website Setting" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb />
       </div>
 
       <div class="border shadow-md p-10">
         <form @submit.prevent="handleEditWebsiteSetting">
+          <!-- Preview Images -->
           <div class="grid grid-cols-2 gap-3 mb-5">
             <div class="h-[200px]">
               <img
@@ -112,6 +117,7 @@ const submit = () => {
           </div>
 
           <div class="grid grid-cols-2 gap-3">
+            <!-- Logo File Upload Input -->
             <div class="mb-3">
               <InputLabel for="logo" value="Logo" />
 
@@ -125,6 +131,8 @@ const submit = () => {
 
               <InputError class="mt-2" :message="form.errors.logo" />
             </div>
+
+            <!-- Favicon File Upload Input -->
             <div class="mb-3">
               <InputLabel for="favicon" value="Favicon" />
 
@@ -139,6 +147,8 @@ const submit = () => {
               <InputError class="mt-2" :message="form.errors.favicon" />
             </div>
           </div>
+
+          <!-- Componay Email Input -->
           <div class="mb-3">
             <InputLabel for="email" value="Company Email" />
 
@@ -159,6 +169,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.email" />
           </div>
           <div class="grid grid-cols-2 gap-3">
+            <!-- Company Phone Input -->
             <div class="mb-3">
               <InputLabel for="phone" value="Company Phone" />
 
@@ -177,6 +188,8 @@ const submit = () => {
               </TextInput>
               <InputError class="mt-2" :message="form.errors.phone" />
             </div>
+
+            <!-- Support Phone Input -->
             <div class="mb-3">
               <InputLabel for="support_phone" value="Support Phone" />
 
@@ -198,6 +211,7 @@ const submit = () => {
             </div>
           </div>
 
+          <!-- Company Address Input -->
           <div class="mb-3">
             <InputLabel for="company_address" value="Company Address" />
 
@@ -217,6 +231,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.company_address" />
           </div>
 
+          <!-- Copyright Input -->
           <div class="mb-3">
             <InputLabel for="copyright" value="Copy Right" />
 
@@ -236,6 +251,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.copyright" />
           </div>
 
+          <!-- Facebook Input -->
           <div class="grid grid-cols-2 gap-3">
             <div class="mb-3">
               <InputLabel for="facebook" value="Facebook URL" />
@@ -255,6 +271,8 @@ const submit = () => {
               </TextInput>
               <InputError class="mt-2" :message="form.errors.facebook" />
             </div>
+
+            <!-- Instagram Input -->
             <div class="mb-3">
               <InputLabel for="instagram" value="Instagram URL" />
 
@@ -275,6 +293,7 @@ const submit = () => {
             </div>
           </div>
 
+          <!-- Twitter Input -->
           <div class="grid grid-cols-2 gap-3">
             <div class="mb-3">
               <InputLabel for="twitter" value="Twitter URL" />
@@ -294,6 +313,8 @@ const submit = () => {
               </TextInput>
               <InputError class="mt-2" :message="form.errors.twitter" />
             </div>
+
+            <!-- Youtube Input -->
             <div class="mb-3">
               <InputLabel for="youtube" value="Youtube URL" />
 
@@ -314,6 +335,7 @@ const submit = () => {
             </div>
           </div>
 
+          <!-- Reddit Input -->
           <div class="grid grid-cols-2 gap-3">
             <div class="mb-3">
               <InputLabel for="reddit" value="Reddit URL" />
@@ -333,6 +355,8 @@ const submit = () => {
               </TextInput>
               <InputError class="mt-2" :message="form.errors.reddit" />
             </div>
+
+            <!-- Linked In Input -->
             <div class="mb-3">
               <InputLabel for="linked_in" value="Linked In URL" />
 
@@ -353,6 +377,7 @@ const submit = () => {
             </div>
           </div>
 
+          <!-- Handle Button -->
           <div v-if="websiteSettingEdit" class="mb-6">
             <button
               class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"

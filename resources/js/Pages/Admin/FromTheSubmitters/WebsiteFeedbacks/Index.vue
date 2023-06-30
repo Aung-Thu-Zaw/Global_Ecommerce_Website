@@ -9,6 +9,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/WebsiteFeedbackBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
 import { reactive, watch, inject, computed } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
@@ -130,26 +131,26 @@ const handleDelete = async (websiteFeedbackId) => {
 };
 
 // Feedback Permissions
-const feedbackTrashList = computed(() => {
+const websiteFeedbackTrashList = computed(() => {
   return usePage().props.auth.user.permissions.length
     ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "feedback.trash.list"
+        (permission) => permission.name === "website-feedback.trash.list"
       )
     : false;
 });
 
-const feedbackDetail = computed(() => {
+const websiteFeedbackDetail = computed(() => {
   return usePage().props.auth.user.permissions.length
     ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "feedback.detail"
+        (permission) => permission.name === "website-feedback.detail"
       )
     : false;
 });
 
-const feedbackDelete = computed(() => {
+const websiteFeedbackDelete = computed(() => {
   return usePage().props.auth.user.permissions.length
     ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "feedback.delete"
+        (permission) => permission.name === "website-feedback.delete"
       )
     : false;
 });
@@ -165,7 +166,7 @@ const feedbackDelete = computed(() => {
         <Breadcrumb />
 
         <!-- Trash Button -->
-        <div v-if="feedbackTrashList">
+        <div v-if="websiteFeedbackTrashList">
           <Link
             as="button"
             :href="route('admin.website-feedbacks.trash')"
@@ -317,7 +318,9 @@ const feedbackDelete = computed(() => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh v-if="feedbackDelete || feedbackDetail"> Action </HeaderTh>
+          <HeaderTh v-if="websiteFeedbackDelete || websiteFeedbackDetail">
+            Action
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="websiteFeedbacks.data.length">
@@ -327,11 +330,13 @@ const feedbackDelete = computed(() => {
           >
             <BodyTh>{{ websiteFeedback.id }}</BodyTh>
             <Td>{{ websiteFeedback.email }}</Td>
-            <Td>{{ websiteFeedback.rating }}</Td>
+            <Td>
+              <TotalRatingStars :rating="websiteFeedback.rating" />
+            </Td>
             <Td>{{ websiteFeedback.created_at }}</Td>
-            <Td v-if="feedbackDelete || feedbackDetail">
+            <Td v-if="websiteFeedbackDelete || websiteFeedbackDetail">
               <button
-                v-if="feedbackDelete"
+                v-if="websiteFeedbackDelete"
                 @click="handleDelete(websiteFeedback.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
@@ -339,7 +344,7 @@ const feedbackDelete = computed(() => {
                 Delete
               </button>
               <Link
-                v-if="feedbackDetail"
+                v-if="websiteFeedbackDetail"
                 as="button"
                 :href="
                   route('admin.website-feedbacks.show', websiteFeedback.id)

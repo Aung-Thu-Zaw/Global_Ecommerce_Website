@@ -534,12 +534,12 @@ Route::middleware(["admin","verified","user.role:admin"])
            ->prefix("/website-feedbacks")
            ->name("website-feedbacks.")
            ->group(function () {
-               Route::get("/", "index")->middleware('permission:feedback.menu')->name("index");
-               Route::get("/details/{website_feedback}", "show")->middleware('permission:feedback.detail')->name("show");
-               Route::delete("/{website_feedback}", "destroy")->middleware('permission:feedback.delete')->name("destroy");
-               Route::get("/trash", "trash")->middleware('permission:feedback.trash.list')->name("trash");
-               Route::post("/{website_feedback}/restore", "restore")->middleware('permission:feedback.trash.restore')->name("restore");
-               Route::delete("/{website_feedback}/force-delete", "forceDelete")->middleware('permission:feedback.trash.delete')->name("force.delete");
-               Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:feedback.trash.delete')->name("permanently.delete");
+               Route::get("/", "index")->middleware('permission:website-feedback.menu')->name("index");
+               Route::get("/details/{website_feedback}", "show")->middleware('permission:website-feedback.detail')->name("show");
+               Route::delete("/{website_feedback}", "destroy")->middleware('permission:website-feedback.delete')->name("destroy");
+               Route::get("/trash", "trash")->middleware('permission:website-feedback.trash.list')->name("trash");
+               Route::post("/{website_feedback}/restore", "restore")->middleware('permission:website-feedback.trash.restore')->name("restore");
+               Route::delete("/{website_feedback}/force-delete", "forceDelete")->middleware('permission:website-feedback.trash.delete')->name("force.delete");
+               Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:website-feedback.trash.delete')->name("permanently.delete");
            });
        });

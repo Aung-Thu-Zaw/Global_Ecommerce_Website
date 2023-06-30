@@ -7,6 +7,16 @@ const props = defineProps({
   paginate: Object,
   suggestion: Object,
 });
+
+const formatSuggestionType = (suggestionType) => {
+  const words = suggestionType.split("_");
+  const capitalizedWords = words.map(
+    (word) => word.charAt(0).toUpperCase() + word.slice(1)
+  );
+  const formattedString = capitalizedWords.join(" ");
+
+  return formattedString;
+};
 </script>
 
 <template>
@@ -79,19 +89,56 @@ const props = defineProps({
       </div>
 
       <div class="p-5 border shadow-md rounded-sm my-5">
-        <h1 class="font-bold text-slate-700 text-2xl border-b-4 px-10 py-3">
-          {{
-            suggestion.type === "report_bug"
-              ? "Bug Report : "
-              : "Request Feature :"
-          }}
-        </h1>
-
-        <p class="px-10 py-5 text-slate-700">{{ suggestion.description }}</p>
-
-        <div v-if="suggestion.images.length" class="flex items-cener">
-          <div v-for="image in suggestion.images" :key="image.id">
-            <img :src="image.img_path" alt="" class="h-[200px] mx-3" />
+        <div v-if="suggestion" class="my-3">
+          <div
+            class="w-full text-sm text-left text-gray-500 border overflow-hidden shadow rounded-md my-5"
+          >
+            <div>
+              <div
+                class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
+              >
+                <span
+                  class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
+                >
+                  Email
+                </span>
+                <span class="w-1/2 block">
+                  {{ suggestion.email }}
+                </span>
+              </div>
+              <div class="border-b py-3 bg-gray-50 flex items-center">
+                <span
+                  class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
+                >
+                  Suggestion Type
+                </span>
+                <span class="w-1/2 block capitalize">
+                  {{ formatSuggestionType(suggestion.type) }}
+                </span>
+              </div>
+              <div
+                class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
+              >
+                <span
+                  class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
+                >
+                  Suggestion Date
+                </span>
+                <span class="w-1/2 block pr-5">
+                  {{ suggestion.created_at }}
+                </span>
+              </div>
+              <div class="border-b py-3 bg-gray-50 flex items-start">
+                <span
+                  class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
+                >
+                  Description
+                </span>
+                <span class="w-1/2 block">
+                  {{ suggestion.description }}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

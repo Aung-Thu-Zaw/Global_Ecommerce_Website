@@ -233,7 +233,10 @@ const submit = () => {
               <option value="suggestion" :selected="form.group == 'suggestion'">
                 Suggestion
               </option>
-              <option value="feedback" :selected="form.group == 'feedback'">
+              <option
+                value="website-feedback"
+                :selected="form.group == 'website-feedback'"
+              >
                 Feedback
               </option>
               <option value="subscriber" :selected="form.group == 'subscriber'">

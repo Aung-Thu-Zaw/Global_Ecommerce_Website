@@ -1,11 +1,11 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { useForm, Head, usePage } from "@inertiajs/vue3";
-import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/SeoSettingBreadcrumb.vue";
+import { useForm, Head, usePage } from "@inertiajs/vue3";
+import { useReCaptcha } from "vue-recaptcha-v3";
 import { computed, ref } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -16,6 +16,7 @@ const props = defineProps({
 
 const processing = ref(false);
 
+// Seo Permissions
 const seoSettingEdit = computed(() => {
   return usePage().props.auth.user.permissions.length
     ? usePage().props.auth.user.permissions.some(
@@ -24,6 +25,7 @@ const seoSettingEdit = computed(() => {
     : false;
 });
 
+// Handle Seo Setting
 const form = useForm({
   meta_title: props.seoSetting ? props.seoSetting.meta_title : "",
   meta_author: props.seoSetting ? props.seoSetting.meta_author : "",
@@ -68,11 +70,13 @@ const submit = () => {
     <Head title="SEO Setting" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb />
       </div>
 
       <div class="border shadow-md p-10">
         <form @submit.prevent="handleEditSeoSetting">
+          <!-- Meta Title Input -->
           <div class="mb-3">
             <InputLabel for="meta_title" value="Meta Title" />
 
@@ -86,6 +90,8 @@ const submit = () => {
 
             <InputError class="mt-2" :message="form.errors.meta_title" />
           </div>
+
+          <!-- Meta Author Input -->
           <div class="mb-3">
             <InputLabel for="meta_author" value="Meta Author" />
 
@@ -100,6 +106,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.meta_author" />
           </div>
 
+          <!-- Meta Keyword Input -->
           <div class="mb-3">
             <InputLabel for="meta_keyword" value="Meta Keyword" />
 
@@ -114,6 +121,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.meta_keyword" />
           </div>
 
+          <!-- Meta Description Textarea -->
           <div class="mb-3">
             <InputLabel for="meta_description" value="Meta Description" />
 
@@ -129,6 +137,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.meta_description" />
           </div>
 
+          <!-- Handle Button -->
           <div v-if="seoSettingEdit" class="mb-6">
             <button
               class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"

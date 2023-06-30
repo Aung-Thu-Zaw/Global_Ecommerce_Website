@@ -154,7 +154,7 @@ const submit = () => {
               <option value="website-setting">Website Setting</option>
               <option value="seo-setting">Seo Setting</option>
               <option value="suggestion">Suggestion</option>
-              <option value="feedback">Feedback</option>
+              <option value="website-feedback">Website Feedback</option>
               <option value="subscriber">Subscriber</option>
             </select>
 

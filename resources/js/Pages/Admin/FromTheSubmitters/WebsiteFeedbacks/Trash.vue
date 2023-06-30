@@ -9,6 +9,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/WebsiteFeedbackBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
 import { inject, reactive, watch, computed } from "vue";
 import { router, usePage, Link, Head } from "@inertiajs/vue3";
 
@@ -200,18 +201,18 @@ const handlePermanentlyDelete = async () => {
 };
 
 // Feedback Permissions
-const feedbackTrashRestore = computed(() => {
+const websiteFeedbackTrashRestore = computed(() => {
   return usePage().props.auth.user.permissions.length
     ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "feedback.trash.restore"
+        (permission) => permission.name === "website-feedback.trash.restore"
       )
     : false;
 });
 
-const feedbackTrashDelete = computed(() => {
+const websiteFeedbackTrashDelete = computed(() => {
   return usePage().props.auth.user.permissions.length
     ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "feedback.trash.delete"
+        (permission) => permission.name === "website-feedback.trash.delete"
       )
     : false;
 });
@@ -297,7 +298,7 @@ const feedbackTrashDelete = computed(() => {
 
       <!-- Empty Trash Button -->
       <p
-        v-if="feedbackTrashDelete"
+        v-if="websiteFeedbackTrashDelete"
         class="text-left text-sm font-bold mb-2 text-warning-600"
       >
         Website Feedbacks in the Trash will be automatically deleted after 60
@@ -413,7 +414,9 @@ const feedbackTrashDelete = computed(() => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh v-if="feedbackTrashRestore || feedbackTrashDelete">
+          <HeaderTh
+            v-if="websiteFeedbackTrashRestore || websiteFeedbackTrashDelete"
+          >
             Action
           </HeaderTh>
         </TableHeader>
@@ -425,11 +428,15 @@ const feedbackTrashDelete = computed(() => {
           >
             <BodyTh>{{ trashWebsiteFeedback.id }}</BodyTh>
             <Td>{{ trashWebsiteFeedback.email }}</Td>
-            <Td>{{ trashWebsiteFeedback.rating }}</Td>
+            <Td>
+              <TotalRatingStars :rating="trashWebsiteFeedback.rating" />
+            </Td>
             <Td>{{ trashWebsiteFeedback.deleted_at }}</Td>
-            <Td v-if="feedbackTrashRestore || feedbackTrashDelete">
+            <Td
+              v-if="websiteFeedbackTrashRestore || websiteFeedbackTrashDelete"
+            >
               <button
-                v-if="feedbackTrashRestore"
+                v-if="websiteFeedbackTrashRestore"
                 @click="handleRestore(trashWebsiteFeedback.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
@@ -437,7 +444,7 @@ const feedbackTrashDelete = computed(() => {
                 Restore
               </button>
               <button
-                v-if="feedbackTrashDelete"
+                v-if="websiteFeedbackTrashDelete"
                 @click="handleDelete(trashWebsiteFeedback.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >

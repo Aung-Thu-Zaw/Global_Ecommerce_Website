@@ -151,12 +151,12 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"suggestion.trash.restore","group"=>"suggestion"]);
         Permission::create(["name"=>"suggestion.trash.delete","group"=>"suggestion"]);
 
-        Permission::create(["name"=>"feedback.menu","group"=>"feedback"]);
-        Permission::create(["name"=>"feedback.detail","group"=>"feedback"]);
-        Permission::create(["name"=>"feedback.delete","group"=>"feedback"]);
-        Permission::create(["name"=>"feedback.trash.list","group"=>"feedback"]);
-        Permission::create(["name"=>"feedback.trash.restore","group"=>"feedback"]);
-        Permission::create(["name"=>"feedback.trash.delete","group"=>"feedback"]);
+        Permission::create(["name"=>"website-feedback.menu","group"=>"website-feedback"]);
+        Permission::create(["name"=>"website-feedback.detail","group"=>"website-feedback"]);
+        Permission::create(["name"=>"website-feedback.delete","group"=>"website-feedback"]);
+        Permission::create(["name"=>"website-feedback.trash.list","group"=>"website-feedback"]);
+        Permission::create(["name"=>"website-feedback.trash.restore","group"=>"website-feedback"]);
+        Permission::create(["name"=>"website-feedback.trash.delete","group"=>"website-feedback"]);
 
         Permission::create(["name"=>"subscriber.menu","group"=>"subscriber"]);
         Permission::create(["name"=>"subscriber.delete","group"=>"subscriber"]);

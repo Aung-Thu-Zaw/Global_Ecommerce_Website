@@ -940,6 +940,21 @@
         </h6>
 
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <li v-if="subscriberMenu" class="items-center">
+            <Link
+              :href="route('admin.subscribers.index')"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url === '/admin/subscribers',
+                'text-slate-700 hover:text-slate-500':
+                  $page.url !== '/admin/subscribers',
+              }"
+            >
+              <i class="fa-solid fa-user-check mr-2 text-sm"></i>
+              Subscribers
+            </Link>
+          </li>
           <li v-if="suggestionMenu" class="items-center">
             <Link
               :href="route('admin.suggestions.index')"
@@ -968,22 +983,7 @@
               }"
             >
               <i class="fa-solid fa-message mr-2 text-sm"></i>
-              Feedbacks
-            </Link>
-          </li>
-          <li v-if="subscriberMenu" class="items-center">
-            <Link
-              :href="route('admin.subscribers.index')"
-              class="text-xs uppercase py-3 font-bold block"
-              :class="{
-                'text-blue-500 hover:text-blue-600':
-                  $page.url === '/admin/subscribers',
-                'text-slate-700 hover:text-slate-500':
-                  $page.url !== '/admin/subscribers',
-              }"
-            >
-              <i class="fa-solid fa-user-check mr-2 text-sm"></i>
-              Subscribers
+              Website Feedbacks
             </Link>
           </li>
         </ul>
@@ -1270,7 +1270,7 @@ export default {
     feedbackMenu() {
       return this.$page.props.auth.user.permissions.length
         ? this.$page.props.auth.user.permissions.some(
-            (permission) => permission.name === "feedback.menu"
+            (permission) => permission.name === "website-feedback.menu"
           )
         : false;
     },
