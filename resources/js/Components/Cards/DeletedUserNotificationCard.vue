@@ -35,33 +35,38 @@ const formattedTime = computed(() =>
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
-      class="flex-shrink-0 bg-lime-300 text-lime-700 ring-2 ring-lime-400 w-10 h-10 rounded-full flex items-center justify-center p-3 font-bold"
+      class="flex-shrink-0 bg-red-300 text-red-700 ring-2 ring-red-400 w-10 h-10 rounded-full flex items-center justify-center p-3 font-bold"
     >
-      <i class="fa-solid fa-user-xmark"></i>
+      <i
+        class="fa-solid fa-user-xmark"
+        :class="{
+          'animate-pulse': !notification.read_at,
+        }"
+      ></i>
     </div>
     <div class="w-full pl-3">
       <div
         class="text-sm mb-1.5"
         :class="{
-          'text-gray-600': !notification.read_at,
+          'text-gray-700': !notification.read_at,
           'text-gray-500': notification.read_at,
         }"
       >
         {{ notification.data.message }}
 
         <span
-          class="font-bold text-sm"
+          class="font-bold text-sm block"
           :class="{
             'text-slate-600': !notification.read_at,
             'text-gray-500': notification.read_at,
           }"
-          >User Email : {{ notification.data.user.email }}</span
+          >Email : {{ notification.data.user.email }}</span
         >
       </div>
       <div
         class="text-xs font-bold dark:text-blue-500"
         :class="{
-          'text-lime-500': !notification.read_at,
+          'text-red-500': !notification.read_at,
           'text-gray-500': notification.read_at,
         }"
       >

@@ -45,10 +45,9 @@ class NewSuggestionEmailNotification extends Notification
         return (new MailMessage())
         ->subject("Report A New Suggestions")
         ->greeting("Dear ".$notifiable->name.",")
-        ->line("A new subscriber has subscribed to the website newsletter. Here are the details:")
+        ->line("We got a new suggestion from the submitter:")
         ->line("Submitter Email: ".$this->suggestion->email)
-        ->line("Type of Report: ".$this->suggestion->type==='request_feature' ? "Request New Feature" : "Report Bug")
-        ->line("Report Date: ".Carbon::parse($this->suggestion->created_at)->format("Y-m-d"))
+        ->line("Report Date: ".$this->suggestion->created_at)
         ->action('See More Details', route('admin.suggestions.show', $this->suggestion->id));
     }
 }

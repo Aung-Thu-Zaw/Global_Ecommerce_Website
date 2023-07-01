@@ -24,37 +24,42 @@ const formattedTime = computed(() =>
       'App\\Notifications\\SubscribedNewsletter\\NewsletterSubscribedNotification'
     "
     href="#"
-    class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
+    class="flex px-4 py-3 hover:bg-gray-100"
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
-      class="flex-shrink-0 bg-emerald-300 text-emerald-700 ring-2 ring-emerald-400 w-10 h-10 rounded-full flex items-center justify-center p-3 font-bold"
+      class="flex-shrink-0 bg-green-300 text-green-700 ring-2 ring-green-400 w-10 h-10 rounded-full flex items-center justify-center p-3 font-bold"
     >
-      <i class="fa-solid fa-envelope-circle-check"></i>
+      <i
+        class="fa-solid fa-bell"
+        :class="{
+          'animate-pulse': !notification.read_at,
+        }"
+      ></i>
     </div>
     <div class="w-full pl-3">
       <div
         class="text-sm mb-1.5"
         :class="{
-          'text-emerald-600': !notification.read_at,
+          'text-gray-700': !notification.read_at,
           'text-gray-500': notification.read_at,
         }"
       >
         {{ notification.data.message }}
 
         <span
-          class="font-bold text-sm"
+          class="font-bold text-sm block"
           :class="{
             'text-slate-600': !notification.read_at,
             'text-gray-500': notification.read_at,
           }"
-          >Subscribe Mail : {{ notification.data.subscriber.email }}</span
+          >Subscriber : {{ notification.data.subscriber.email }}</span
         >
       </div>
       <div
         class="text-xs font-bold dark:text-blue-500"
         :class="{
-          'text-gray-500': !notification.read_at,
+          'text-green-500': !notification.read_at,
           'text-gray-500': notification.read_at,
         }"
       >

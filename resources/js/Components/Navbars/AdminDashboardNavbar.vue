@@ -6,8 +6,9 @@ import OrderPlacedNotificationCard from "@/Components/Cards/OrderPlacedNotificat
 import DeletedUserNotificationCard from "@/Components/Cards/DeletedUserNotificationCard.vue";
 import DeletedVendorNotificationCard from "@/Components/Cards/DeletedVendorNotificationCard.vue";
 import NewsletterSubscribedNotificationCard from "@/Components/Cards/NewsletterSubscribedNotificationCard.vue";
-import { Link, usePage } from "@inertiajs/vue3";
-import { computed, onMounted, ref } from "vue";
+import NewSuggestionNotificationCard from "@/Components/Cards/NewSuggestionNotificationCard.vue";
+import { Link, router, usePage } from "@inertiajs/vue3";
+import { computed, onMounted, ref, watch } from "vue";
 
 const notifications = ref([]);
 
@@ -64,6 +65,18 @@ onMounted(() => {
           data: {
             message: notification.message,
             subscriber: notification.subscriber,
+          },
+        });
+      } else if (
+        notification.type ===
+        "App\\Notifications\\WebsiteSuggestion\\NewSuggestionNotification"
+      ) {
+        notifications.value.push({
+          id: notification.id,
+          type: notification.type,
+          data: {
+            message: notification.message,
+            suggestion: notification.suggestion,
           },
         });
       }
@@ -128,11 +141,11 @@ onMounted(() => {
         <!-- Dropdown menu -->
         <div
           id="dropdownNotification"
-          class="z-20 w-1/2 hidden h-auto max-h-[800px] overflow-auto max-w-sm bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-800 dark:divide-gray-700 border scrollbar"
+          class="z-20 w-1/2 hidden h-auto max-h-[800px] overflow-auto max-w-sm bg-white divide-y divide-gray-100 rounded-lg shadow border scrollbar"
           aria-labelledby="dropdownNotificationButton"
         >
           <div
-            class="block px-4 py-2 font-medium text-center text-gray-700 rounded-t-lg bg-gray-50 dark:bg-gray-800 dark:text-white"
+            class="block px-4 py-2 font-medium text-center text-gray-700 rounded-t-lg bg-gray-50"
           >
             Notifications
           </div>
@@ -140,7 +153,7 @@ onMounted(() => {
           <div
             v-for="notification in notifications"
             :key="notification.id"
-            class="divide-y divide-gray-300 dark:divide-gray-700"
+            class="divide-y divide-gray-300"
           >
             <RegisteredVendorNotificationCard :notification="notification" />
             <RegisteredUserNotificationCard :notification="notification" />
@@ -149,6 +162,7 @@ onMounted(() => {
             <NewsletterSubscribedNotificationCard
               :notification="notification"
             />
+            <NewSuggestionNotificationCard :notification="notification" />
             <OrderPlacedNotificationCard :notification="notification" />
           </div>
 

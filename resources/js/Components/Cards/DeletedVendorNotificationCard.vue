@@ -35,22 +35,27 @@ const formattedTime = computed(() =>
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
-      class="flex-shrink-0 bg-gray-300 text-gray-700 ring-2 ring-gray-400 w-10 h-10 rounded-full flex items-center justify-center p-3 font-bold"
+      class="flex-shrink-0 bg-orange-300 text-orange-700 ring-2 ring-orange-400 w-10 h-10 rounded-full flex items-center justify-center p-3 font-bold"
     >
-      <i class="fa-solid fa-shop-slash"></i>
+      <i
+        class="fa-solid fa-shop-slash"
+        :class="{
+          'animate-pulse': !notification.read_at,
+        }"
+      ></i>
     </div>
     <div class="w-full pl-3">
       <div
         class="text-sm mb-1.5"
         :class="{
-          'text-gray-600': !notification.read_at,
+          'text-gray-700': !notification.read_at,
           'text-gray-500': notification.read_at,
         }"
       >
         {{ notification.data.message }}
 
         <span
-          class="font-bold text-sm"
+          class="font-bold text-sm block"
           :class="{
             'text-slate-600': !notification.read_at,
             'text-gray-500': notification.read_at,
@@ -61,7 +66,7 @@ const formattedTime = computed(() =>
       <div
         class="text-xs font-bold dark:text-blue-500"
         :class="{
-          'text-gray-500': !notification.read_at,
+          'text-orange-500': !notification.read_at,
           'text-gray-500': notification.read_at,
         }"
       >

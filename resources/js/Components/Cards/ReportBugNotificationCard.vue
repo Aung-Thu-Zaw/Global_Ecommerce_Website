@@ -21,29 +21,24 @@ const formattedTime = computed(() =>
   <Link
     v-if="
       notification.type ===
-        'App\\Notifications\\AccountRegistered\\RegisteredUserNotification' &&
-      notification.data.user &&
-      notification.data.user.role === 'vendor'
+        'App\\Notifications\\WebsiteSuggestion\\NewSuggestionNotification' &&
+      notification.data.suggestion.type === 'report_bug'
     "
-    :href="
-      route('admin.vendors.register.show', {
-        user: notification.data.user.id,
-        noti_id: notification.id,
-      })
-    "
-    class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
+    href="#"
+    class="flex px-4 py-3 hover:bg-gray-100"
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
-      class="flex-shrink-0 bg-blueGray-300 text-blueGray-700 ring-2 ring-blueGray-400 w-10 h-10 rounded-full flex items-center justify-center p-3 font-bold"
+      class="flex-shrink-0 bg-amber-300 text-amber-700 ring-2 ring-amber-400 w-10 h-10 rounded-full flex items-center justify-center p-3 font-bold"
     >
       <i
-        class="fa-solid fa-shop"
+        class="fa-solid fa-bug"
         :class="{
           'animate-pulse': !notification.read_at,
         }"
       ></i>
     </div>
+
     <div class="w-full pl-3">
       <div
         class="text-sm mb-1.5"
@@ -60,13 +55,13 @@ const formattedTime = computed(() =>
             'text-slate-600': !notification.read_at,
             'text-gray-500': notification.read_at,
           }"
-          >Shop Name : {{ notification.data.user.shop_name }}</span
-        >
+          >From : {{ notification.data.suggestion.email }}
+        </span>
       </div>
       <div
         class="text-xs font-bold dark:text-blue-500"
         :class="{
-          'text-blueGray-500': !notification.read_at,
+          'text-amber-500': !notification.read_at,
           'text-gray-500': notification.read_at,
         }"
       >

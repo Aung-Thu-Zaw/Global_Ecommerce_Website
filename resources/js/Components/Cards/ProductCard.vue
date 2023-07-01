@@ -94,7 +94,7 @@ const handleGoToProductDetailPage = (slug) => {
       </h3>
       <div class="p-4 border-t border-t-gray-200">
         <span
-          v-if="product.shop.offical"
+          v-if="product.shop && product.shop.offical"
           class="px-3 rounded-sm py-1 font-bold uppercase text-[0.6rem] text-white bg-fuchsia-600"
         >
           <i class="fas fa-crown"></i>

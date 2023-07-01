@@ -35,44 +35,49 @@ const formattedTime = computed(() =>
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
-      class="flex-shrink-0 bg-red-300 text-red-700 ring-2 ring-red-400 w-10 h-10 rounded-full flex items-center justify-center p-3 font-bold"
+      class="flex-shrink-0 bg-blue-300 text-blue-700 ring-2 ring-blue-400 w-10 h-10 rounded-full flex items-center justify-center p-3 font-bold"
     >
-      <i class="fa-solid fa-user"></i>
+      <i
+        class="fa-solid fa-user-plus"
+        :class="{
+          'animate-pulse': !notification.read_at,
+        }"
+      ></i>
     </div>
     <div class="w-full pl-3">
       <div
         class="text-sm mb-1.5"
         :class="{
-          'text-gray-600': !notification.read_at,
+          'text-gray-700': !notification.read_at,
           'text-gray-500': notification.read_at,
         }"
       >
         {{ notification.data.message }}
         {{
           notification.data.user.google_id
-            ? 'Registered with "google" auth.'
+            ? 'Registered with "Google" auth.'
             : ""
         }}
 
         {{
           notification.data.user.facebook_id
-            ? 'Registered with "facebook" auth.'
+            ? 'Registered with "Facebook" auth.'
             : ""
         }}
 
         <span
-          class="font-bold text-sm"
+          class="font-bold text-sm block"
           :class="{
             'text-slate-600': !notification.read_at,
             'text-gray-500': notification.read_at,
           }"
-          >User Email : {{ notification.data.user.email }}</span
+          >Email : {{ notification.data.user.email }}</span
         >
       </div>
       <div
         class="text-xs font-bold dark:text-blue-500"
         :class="{
-          'text-red-500': !notification.read_at,
+          'text-blue-500': !notification.read_at,
           'text-gray-500': notification.read_at,
         }"
       >

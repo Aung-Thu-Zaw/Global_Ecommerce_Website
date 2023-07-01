@@ -51,6 +51,7 @@ Route::middleware(["admin","verified","user.role:admin"])
 
            Route::get("/dashboard", [AdminDashboardController::class,"index"])->name("dashboard");
 
+
            Route::controller(AdminBrandController::class)
                 ->prefix("/brands")
                 ->name("brands.")
