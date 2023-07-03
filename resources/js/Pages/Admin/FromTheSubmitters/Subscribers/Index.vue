@@ -9,74 +9,62 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/SubscriberBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject, computed } from "vue";
+import { reactive, watch, inject, computed, ref } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
+// Define the props
 const props = defineProps({
   subscribers: Object,
 });
 
+// Define Alert Variables
 const swal = inject("$swal");
 
 // Query String Parameteres
 const params = reactive({
-  search: null,
+  search: usePage().props.ziggy.query?.search,
   page: props.subscribers.current_page ? props.subscribers.current_page : 1,
   per_page: props.subscribers.per_page ? props.subscribers.per_page : 10,
   sort: "id",
   direction: "desc",
 });
 
-const handleSearchBox = () => {
-  params.search = "";
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.subscribers.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 
-// Watching Search Box
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.subscribers.index"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.subscribers.index"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-// Watching Perpage Select Box
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.subscribers.index"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-// Update Sorting Column
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("admin.subscribers.index"),
     {
@@ -86,8 +74,39 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
+};
+
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
 };
 
 // Handle Delete Subscriber
@@ -125,18 +144,22 @@ const handleDelete = async (subscriberId) => {
   }
 };
 
-// Subscriber Permissions
+// Define Permissions Variables
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
+
+// Subscriber Trash List Permission
 const subscriberTrashList = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
+  return permissions.value.length
+    ? permissions.value.some(
         (permission) => permission.name === "subscriber.trash.list"
       )
     : false;
 });
 
+// Subscriber Delete Permission
 const subscriberDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
+  return permissions.value.length
+    ? permissions.value.some(
         (permission) => permission.name === "subscriber.delete"
       )
     : false;
@@ -179,8 +202,8 @@ const subscriberDelete = computed(() => {
 
             <i
               v-if="params.search"
-              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-              @click="handleSearchBox"
+              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+              @click="removeSearch"
             ></i>
           </form>
 

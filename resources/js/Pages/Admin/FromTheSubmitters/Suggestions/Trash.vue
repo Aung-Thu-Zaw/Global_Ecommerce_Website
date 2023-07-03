@@ -17,6 +17,17 @@ const props = defineProps({
   trashSuggestions: Object,
 });
 
+// Formatted Suggestion Type
+const formatSuggestionType = (suggestionType) => {
+  const words = suggestionType.split("_");
+  const capitalizedWords = words.map(
+    (word) => word.charAt(0).toUpperCase() + word.slice(1)
+  );
+  const formattedString = capitalizedWords.join(" ");
+
+  return formattedString;
+};
+
 // Define Alert Variables
 const swal = inject("$swal");
 
@@ -33,56 +44,42 @@ const params = reactive({
   direction: "desc",
 });
 
-const handleSearchBox = () => {
-  params.search = "";
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.suggestions.trash"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 
-// Watching Search Box
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.suggestions.trash"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.suggestions.trash"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-// Watching Perpage Select Box
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.suggestions.trash"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-// Update Sorting Column
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("admin.suggestions.trash"),
     {
@@ -92,8 +89,39 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
+};
+
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
 };
 
 // Handle Restore Suggestion
@@ -279,8 +307,8 @@ const suggestionTrashDelete = computed(() => {
 
           <i
             v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-            @click="handleSearchBox"
+            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+            @click="removeSearch"
           ></i>
         </form>
 
@@ -303,7 +331,7 @@ const suggestionTrashDelete = computed(() => {
 
       <!-- Empty Trash Button -->
       <p
-        v-if="suggestionTrashDelete"
+        v-if="suggestionTrashDelete && trashSuggestions.data.length !== 0"
         class="text-left text-sm font-bold mb-2 text-warning-600"
       >
         Suggesstions in the Trash will be automatically deleted after 60 days.
@@ -430,7 +458,9 @@ const suggestionTrashDelete = computed(() => {
           >
             <BodyTh>{{ trashSuggesstion.id }}</BodyTh>
             <Td>{{ trashSuggesstion.email }}</Td>
-            <Td class="capitalize">{{ trashSuggesstion.type }}</Td>
+            <Td class="capitalize">{{
+              formatSuggestionType(trashSuggesstion.type)
+            }}</Td>
             <Td>{{ trashSuggesstion.deleted_at }}</Td>
             <Td v-if="suggestionTrashRestore || suggestionTrashDelete">
               <button

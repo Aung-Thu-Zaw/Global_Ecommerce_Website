@@ -10,18 +10,20 @@ import Breadcrumb from "@/Components/Breadcrumbs/WebsiteFeedbackBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
-import { inject, reactive, watch, computed } from "vue";
+import { inject, reactive, watch, computed, ref } from "vue";
 import { router, usePage, Link, Head } from "@inertiajs/vue3";
 
+// Define the Props
 const props = defineProps({
   trashWebsiteFeedbacks: Object,
 });
 
+// Define Alert Variables
 const swal = inject("$swal");
 
 // Query String Parameteres
 const params = reactive({
-  search: null,
+  search: usePage().props.ziggy.query?.search,
   page: props.trashWebsiteFeedbacks.current_page
     ? props.trashWebsiteFeedbacks.current_page
     : 1,
@@ -32,56 +34,42 @@ const params = reactive({
   direction: "desc",
 });
 
-const handleSearchBox = () => {
-  params.search = "";
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.website-feedbacks.trash"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 
-// Watching Search Box
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.website-feedbacks.trash"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.website-feedbacks.trash"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-// Watching Perpage Select Box
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.website-feedbacks.trash"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-// Update Sorting Column
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("admin.website-feedbacks.trash"),
     {
@@ -91,8 +79,39 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
+};
+
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
 };
 
 // Handle Restore Website Feedback
@@ -200,18 +219,22 @@ const handlePermanentlyDelete = async () => {
   }
 };
 
-// Feedback Permissions
+// Define Permissions Variables
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
+
+// Website Feedback Trash Restore Permission
 const websiteFeedbackTrashRestore = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
+  return permissions.value.length
+    ? permissions.value.some(
         (permission) => permission.name === "website-feedback.trash.restore"
       )
     : false;
 });
 
+// Website Feedback Trash Delete Permission
 const websiteFeedbackTrashDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
+  return permissions.value.length
+    ? permissions.value.some(
         (permission) => permission.name === "website-feedback.trash.delete"
       )
     : false;
@@ -274,8 +297,8 @@ const websiteFeedbackTrashDelete = computed(() => {
 
           <i
             v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-            @click="handleSearchBox"
+            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+            @click="removeSearch"
           ></i>
         </form>
 
@@ -298,7 +321,9 @@ const websiteFeedbackTrashDelete = computed(() => {
 
       <!-- Empty Trash Button -->
       <p
-        v-if="websiteFeedbackTrashDelete"
+        v-if="
+          websiteFeedbackTrashDelete && trashWebsiteFeedbacks.data.length !== 0
+        "
         class="text-left text-sm font-bold mb-2 text-warning-600"
       >
         Website Feedbacks in the Trash will be automatically deleted after 60
@@ -426,12 +451,22 @@ const websiteFeedbackTrashDelete = computed(() => {
             v-for="trashWebsiteFeedback in trashWebsiteFeedbacks.data"
             :key="trashWebsiteFeedback.id"
           >
-            <BodyTh>{{ trashWebsiteFeedback.id }}</BodyTh>
-            <Td>{{ trashWebsiteFeedback.email }}</Td>
+            <BodyTh>
+              {{ trashWebsiteFeedback.id }}
+            </BodyTh>
+
+            <Td>
+              {{ trashWebsiteFeedback.email }}
+            </Td>
+
             <Td>
               <TotalRatingStars :rating="trashWebsiteFeedback.rating" />
             </Td>
-            <Td>{{ trashWebsiteFeedback.deleted_at }}</Td>
+
+            <Td>
+              {{ trashWebsiteFeedback.deleted_at }}
+            </Td>
+
             <Td
               v-if="websiteFeedbackTrashRestore || websiteFeedbackTrashDelete"
             >

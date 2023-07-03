@@ -10,18 +10,20 @@ import Breadcrumb from "@/Components/Breadcrumbs/WebsiteFeedbackBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
-import { reactive, watch, inject, computed } from "vue";
+import { reactive, watch, inject, computed, ref } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
+// Define the props
 const props = defineProps({
   websiteFeedbacks: Object,
 });
 
+// Define Alert Variables
 const swal = inject("$swal");
 
 // Query String Parameteres
 const params = reactive({
-  search: null,
+  search: usePage().props.ziggy.query?.search,
   page: props.websiteFeedbacks.current_page
     ? props.websiteFeedbacks.current_page
     : 1,
@@ -32,56 +34,42 @@ const params = reactive({
   direction: "desc",
 });
 
-const handleSearchBox = () => {
-  params.search = "";
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.website-feedbacks.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 
-// Watching Search Box
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.website-feedbacks.index"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.website-feedbacks.index"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-// Watching Perpage Select Box
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.website-feedbacks.index"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-// Update Sorting Column
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("admin.website-feedbacks.index"),
     {
@@ -91,8 +79,39 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
+};
+
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
 };
 
 // Handle Delete Website Feedback
@@ -130,26 +149,31 @@ const handleDelete = async (websiteFeedbackId) => {
   }
 };
 
-// Feedback Permissions
+// Define Permissions Variables
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
+
+// Website Feedback Trash List Permission
 const websiteFeedbackTrashList = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
+  return permissions.value.length
+    ? permissions.value.some(
         (permission) => permission.name === "website-feedback.trash.list"
       )
     : false;
 });
 
+// Website Feedback Detail Permission
 const websiteFeedbackDetail = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
+  return permissions.value.length
+    ? permissions.value.some(
         (permission) => permission.name === "website-feedback.detail"
       )
     : false;
 });
 
+// Website Feedback Delete Permission
 const websiteFeedbackDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
+  return permissions.value.length
+    ? permissions.value.some(
         (permission) => permission.name === "website-feedback.delete"
       )
     : false;
@@ -192,8 +216,8 @@ const websiteFeedbackDelete = computed(() => {
 
             <i
               v-if="params.search"
-              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-              @click="handleSearchBox"
+              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+              @click="removeSearch"
             ></i>
           </form>
 
@@ -328,12 +352,22 @@ const websiteFeedbackDelete = computed(() => {
             v-for="websiteFeedback in websiteFeedbacks.data"
             :key="websiteFeedback.id"
           >
-            <BodyTh>{{ websiteFeedback.id }}</BodyTh>
-            <Td>{{ websiteFeedback.email }}</Td>
+            <BodyTh>
+              {{ websiteFeedback.id }}
+            </BodyTh>
+
+            <Td>
+              {{ websiteFeedback.email }}
+            </Td>
+
             <Td>
               <TotalRatingStars :rating="websiteFeedback.rating" />
             </Td>
-            <Td>{{ websiteFeedback.created_at }}</Td>
+
+            <Td>
+              {{ websiteFeedback.created_at }}
+            </Td>
+
             <Td v-if="websiteFeedbackDelete || websiteFeedbackDetail">
               <button
                 v-if="websiteFeedbackDelete"
