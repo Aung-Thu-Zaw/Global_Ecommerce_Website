@@ -9,45 +9,20 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/RoleInPermissionBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject, computed } from "vue";
+import { reactive, watch, inject, computed, ref } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
+// Define the props
 const props = defineProps({
   rolesWithPermissions: Object,
 });
 
+// Define Alert Variables
 const swal = inject("$swal");
 
-const handleSearchBox = () => {
-  params.search = "";
-};
-
-const roleInPermissionsAdd = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "role-in-permissions.add"
-      )
-    : false;
-});
-
-const roleInPermissionsEdit = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "role-in-permissions.edit"
-      )
-    : false;
-});
-
-const roleInPermissionsDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "role-in-permissions.delete"
-      )
-    : false;
-});
-
+// Query String Parameteres
 const params = reactive({
-  search: null,
+  search: usePage().props.ziggy.query?.search,
   page: props.rolesWithPermissions.current_page
     ? props.rolesWithPermissions.current_page
     : 1,
@@ -58,49 +33,42 @@ const params = reactive({
   direction: "desc",
 });
 
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.role-in-permissions.index"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.role-in-permissions.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.role-in-permissions.index"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.role-in-permissions.index"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("admin.role-in-permissions.index"),
     {
@@ -110,11 +78,64 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
-const handleDelete = async (role) => {
+// Handle Brand Delete
+const handleBrandDelete = (brand) => {
+  router.delete(
+    route("admin.role-in-permissions.destroy", {
+      brand: brand,
+      page: params.page,
+      per_page: params.per_page,
+    }),
+    {
+      onSuccess: () => {
+        if (usePage().props.flash.successMessage) {
+          swal({
+            icon: "success",
+            title: usePage().props.flash.successMessage,
+          });
+        }
+      },
+    }
+  );
+};
+
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
+};
+
+// Handle Delete Role In Permissions
+const handleRoleInPermissionsDelete = async (role) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete this role in permissions?",
@@ -129,19 +150,53 @@ const handleDelete = async (role) => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.role-in-permissions.destroy", {
-        role: role.id,
+        role: role,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
+
+// Define Permissions Variables
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
+
+// Create New RoleInPermissions Permission
+const roleInPermissionsAdd = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "role-in-permissions.add"
+      )
+    : false;
+});
+
+// RoleInPermissions Edit Permission
+const roleInPermissionsEdit = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "role-in-permissions.edit"
+      )
+    : false;
+});
+
+// RoleInPermissions Delete Permission
+const roleInPermissionsDelete = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "role-in-permissions.delete"
+      )
+    : false;
+});
 
 if (usePage().props.flash.successMessage) {
   swal({
@@ -157,10 +212,12 @@ if (usePage().props.flash.successMessage) {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb />
       </div>
 
       <div class="mb-5 flex items-center justify-between">
+        <!-- Create Role In Permissions Button -->
         <Link
           v-if="roleInPermissionsAdd"
           as="button"
@@ -174,6 +231,7 @@ if (usePage().props.flash.successMessage) {
           Add Role In Permissions</Link
         >
         <div class="flex items-center">
+          <!-- Search Box -->
           <form class="w-[350px] relative">
             <input
               type="text"
@@ -184,10 +242,12 @@ if (usePage().props.flash.successMessage) {
 
             <i
               v-if="params.search"
-              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-              @click="handleSearchBox"
+              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-500"
+              @click="removeSearch"
             ></i>
           </form>
+
+          <!-- Perpage Select Box -->
           <div class="ml-5">
             <select
               class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -205,6 +265,7 @@ if (usePage().props.flash.successMessage) {
         </div>
       </div>
 
+      <!-- RoleInPermissions Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -293,12 +354,14 @@ if (usePage().props.flash.successMessage) {
             v-for="roleWithPermissions in rolesWithPermissions.data"
             :key="roleWithPermissions.id"
           >
-            <BodyTh v-if="roleWithPermissions.permissions.length">{{
-              roleWithPermissions.id
-            }}</BodyTh>
-            <Td v-if="roleWithPermissions.permissions.length">{{
-              roleWithPermissions.name
-            }}</Td>
+            <BodyTh v-if="roleWithPermissions.permissions.length">
+              {{ roleWithPermissions.id }}
+            </BodyTh>
+
+            <Td v-if="roleWithPermissions.permissions.length">
+              {{ roleWithPermissions.name }}
+            </Td>
+
             <Td
               v-if="roleWithPermissions.permissions.length"
               class="w-[1000px] flex items-start"
@@ -311,9 +374,11 @@ if (usePage().props.flash.successMessage) {
                 {{ permission.name }}
               </span>
             </Td>
-            <Td v-if="roleWithPermissions.permissions.length">{{
-              roleWithPermissions.created_at
-            }}</Td>
+
+            <Td v-if="roleWithPermissions.permissions.length">
+              {{ roleWithPermissions.created_at }}
+            </Td>
+
             <Td
               v-if="
                 roleWithPermissions.permissions.length &&
@@ -340,7 +405,7 @@ if (usePage().props.flash.successMessage) {
               </Link>
               <button
                 v-if="roleInPermissionsDelete"
-                @click="handleDelete(roleWithPermissions)"
+                @click="handleRoleInPermissionsDelete(roleWithPermissions.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>
@@ -350,9 +415,12 @@ if (usePage().props.flash.successMessage) {
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- RoleInPermissions Table End -->
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!rolesWithPermissions.data.length" />
 
+      <!-- Pagination -->
       <Pagination class="mt-6" :links="rolesWithPermissions.links" />
     </div>
   </AdminDashboardLayout>

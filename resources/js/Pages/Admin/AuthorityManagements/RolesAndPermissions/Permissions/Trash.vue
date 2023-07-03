@@ -9,17 +9,20 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/RoleAndPermissionBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { inject, reactive, watch, computed } from "vue";
+import { inject, reactive, watch, computed, ref } from "vue";
 import { router, usePage, Link, Head } from "@inertiajs/vue3";
 
+// Define the Props
 const props = defineProps({
   trashPermissions: Object,
 });
 
+// Define Alert Variables
 const swal = inject("$swal");
 
+// Query String Parameteres
 const params = reactive({
-  search: null,
+  search: usePage().props.ziggy.query?.search,
   page: props.trashPermissions.current_page
     ? props.trashPermissions.current_page
     : 1,
@@ -30,69 +33,42 @@ const params = reactive({
   direction: "desc",
 });
 
-const handleSearchBox = () => {
-  params.search = "";
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.permissions.trash"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 
-const roleAndPermissionTrashRestore = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "role-and-permission.trash.restore"
-      )
-    : false;
-});
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.permissions.trash"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-const roleAndPermissionTrashDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "role-and-permission.trash.delete"
-      )
-    : false;
-});
-
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.permissions.trash"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.permissions.trash"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("admin.permissions.trash"),
     {
@@ -102,11 +78,43 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
-const handleRestore = async (trashPermissionId) => {
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
+};
+
+// Handle Trash Permission Restore
+const handlePermissionRestore = async (trashPermissionId) => {
   const result = await swal({
     icon: "info",
     title: "Are you sure you want to restore this permission?",
@@ -124,18 +132,22 @@ const handleRestore = async (trashPermissionId) => {
         id: trashPermissionId,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {},
+      {
+        onSuccess: () => {
+          swal({
+            icon: "success",
+            title: usePage().props.flash.successMessage,
+          });
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
-const handleDelete = async (trashPermissionId) => {
+// Handle Trash Permission Delete
+const handlePermissionDelete = async (trashPermissionId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -150,21 +162,26 @@ const handleDelete = async (trashPermissionId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.permissions.forceDelete", {
+      route("admin.permissions.force.delete", {
         id: trashPermissionId,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
+// Handle Trash Permission Delete Permanently
 const handlePermanentlyDelete = async () => {
   const result = await swal({
     icon: "warning",
@@ -180,19 +197,43 @@ const handlePermanentlyDelete = async () => {
 
   if (result.isConfirmed) {
     router.get(
-      route("admin.permissions.permanentlyDelete", {
+      route("admin.permissions.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {},
+      {
+        onSuccess: () => {
+          swal({
+            icon: "success",
+            title: usePage().props.flash.successMessage,
+          });
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
+
+// Define Permissions Variables
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
+
+// Permission Trash Restore Permission
+const roleAndPermissionTrashRestore = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "role-and-permission.trash.restore"
+      )
+    : false;
+});
+
+// Permission Trash Delete Permission
+const roleAndPermissionTrashDelete = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "role-and-permission.trash.delete"
+      )
+    : false;
+});
 </script>
 
 <template>
@@ -201,6 +242,7 @@ const handlePermanentlyDelete = async () => {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -246,6 +288,7 @@ const handlePermanentlyDelete = async () => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back Button -->
         <div>
           <Link
             :href="route('admin.permissions.index')"
@@ -258,6 +301,7 @@ const handlePermanentlyDelete = async () => {
       </div>
 
       <div class="flex items-center justify-end mb-5">
+        <!-- Search Box -->
         <form class="w-[350px] relative">
           <input
             type="text"
@@ -268,10 +312,11 @@ const handlePermanentlyDelete = async () => {
 
           <i
             v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-            @click="handleSearchBox"
+            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+            @click="removeSearch"
           ></i>
         </form>
+        <!-- Perpage Select Box -->
         <div class="ml-5">
           <select
             class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -288,8 +333,11 @@ const handlePermanentlyDelete = async () => {
         </div>
       </div>
 
+      <!-- Permission Permanently Delete Button -->
       <p
-        v-if="roleAndPermissionTrashDelete"
+        v-if="
+          roleAndPermissionTrashDelete && trashPermissions.data.length !== 0
+        "
         class="text-left text-sm font-bold mb-2 text-warning-600"
       >
         Permissions in the Trash will be automatically deleted after 60 days.
@@ -301,6 +349,7 @@ const handlePermanentlyDelete = async () => {
         </button>
       </p>
 
+      <!-- Permission Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -415,10 +464,22 @@ const handlePermanentlyDelete = async () => {
             v-for="trashPermission in trashPermissions.data"
             :key="trashPermission.id"
           >
-            <BodyTh>{{ trashPermission.id }}</BodyTh>
-            <Td>{{ trashPermission.name }}</Td>
-            <Td class="capitalize">{{ trashPermission.group }}</Td>
-            <Td>{{ trashPermission.deleted_at }}</Td>
+            <BodyTh>
+              {{ trashPermission.id }}
+            </BodyTh>
+
+            <Td>
+              {{ trashPermission.name }}
+            </Td>
+
+            <Td class="capitalize">
+              {{ trashPermission.group }}
+            </Td>
+
+            <Td>
+              {{ trashPermission.deleted_at }}
+            </Td>
+
             <Td
               v-if="
                 roleAndPermissionTrashRestore || roleAndPermissionTrashDelete
@@ -426,7 +487,7 @@ const handlePermanentlyDelete = async () => {
             >
               <button
                 v-if="roleAndPermissionTrashRestore"
-                @click="handleRestore(trashPermission.id)"
+                @click="handlePermissionRestore(trashPermission.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-recycle"></i>
@@ -434,7 +495,7 @@ const handlePermanentlyDelete = async () => {
               </button>
               <button
                 v-if="roleAndPermissionTrashDelete"
-                @click="handleDelete(trashPermission.id)"
+                @click="handlePermissionDelete(trashPermission.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-trash"></i>
@@ -444,9 +505,12 @@ const handlePermanentlyDelete = async () => {
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Permission Table End -->
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!trashPermissions.data.length" />
 
+      <!-- Pagination -->
       <Pagination class="mt-6" :links="trashPermissions.links" />
     </div>
   </AdminDashboardLayout>

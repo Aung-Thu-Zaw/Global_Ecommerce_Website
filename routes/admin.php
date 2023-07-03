@@ -419,6 +419,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:admin-manage.trash.delete')->name("permanentlyDelete");
                 });
 
+           // Admin Dashboard Role Section
            Route::controller(AdminRoleController::class)
                 ->prefix("/roles-and-permissions/roles")
                 ->name("roles.")
@@ -431,10 +432,11 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::delete("/{role}", "destroy")->middleware('permission:role-and-permission.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:role-and-permission.trash.list')->name("trash");
                     Route::post("/{id}/restore", "restore")->middleware('permission:role-and-permission.trash.restore')->name("restore");
-                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:role-and-permission.trash.delete')->name("forceDelete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:role-and-permission.trash.delete')->name("permanentlyDelete");
+                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:role-and-permission.trash.delete')->name("force.delete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:role-and-permission.trash.delete')->name("permanently.delete");
                 });
 
+           // Admin Dashboard Permission Section
            Route::controller(AdminPermissionController::class)
                 ->prefix("/roles-and-permissions/permissions")
                 ->name("permissions.")
@@ -447,10 +449,11 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::delete("/{permission}", "destroy")->middleware('permission:role-and-permission.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:role-and-permission.trash.list')->name("trash");
                     Route::post("/{id}/restore", "restore")->middleware('permission:role-and-permission.trash.restore')->name("restore");
-                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:role-and-permission.trash.delete')->name("forceDelete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:role-and-permission.trash.delete')->name("permanentlyDelete");
+                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:role-and-permission.trash.delete')->name("force.delete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:role-and-permission.trash.delete')->name("permanently.delete");
                 });
 
+           // Admin Dashboard Role In Permission Section
            Route::controller(AdminRoleInPermissionController::class)
                 ->prefix("/role-in-permissions")
                 ->name("role-in-permissions.")

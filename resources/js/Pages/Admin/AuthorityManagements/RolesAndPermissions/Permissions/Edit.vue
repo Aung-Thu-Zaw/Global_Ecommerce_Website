@@ -1,34 +1,37 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, useForm, Head } from "@inertiajs/vue3";
-import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/RoleAndPermissionBreadcrumb.vue";
+import { Link, useForm, Head } from "@inertiajs/vue3";
+import { useReCaptcha } from "vue-recaptcha-v3";
 import { ref } from "vue";
 
+// Define the props
 const props = defineProps({
   paginate: Array,
   permission: Object,
 });
 
+// Define Variables
 const processing = ref(false);
 
+// Permission Edit Form Data
 const form = useForm({
   name: props.permission.name,
   group: props.permission.group,
   captcha_token: null,
 });
 
+// Destructing ReCaptcha
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+
+// Handle Edit Permission
 const handleEditPermission = async () => {
   await recaptchaLoaded();
   form.captcha_token = await executeRecaptcha("edit_permission");
-  submit();
-};
 
-const submit = () => {
   processing.value = true;
   form.post(
     route("admin.permissions.update", props.permission.id, {
@@ -50,6 +53,7 @@ const submit = () => {
     <Head title="Edit Permission" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -89,12 +93,34 @@ const submit = () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                >{{ permission.name }}</span
+              >
+            </div>
+          </li>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span
+                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
                 >Edit</span
               >
             </div>
           </li>
         </Breadcrumb>
 
+        <!-- Go Back button -->
         <div>
           <Link
             as="button"
@@ -113,6 +139,7 @@ const submit = () => {
 
       <div class="border shadow-md p-10">
         <form @submit.prevent="handleEditPermission">
+          <!-- Permission Name Input -->
           <div class="mb-6">
             <InputLabel for="name" value="Permission Name *" />
 
@@ -128,6 +155,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.name" />
           </div>
 
+          <!-- Group Select Box -->
           <div class="mb-6">
             <InputLabel for="group" value="Group *" />
 
@@ -247,6 +275,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.group" />
           </div>
 
+          <!-- Edit Button -->
           <div class="mb-6">
             <button
               class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"

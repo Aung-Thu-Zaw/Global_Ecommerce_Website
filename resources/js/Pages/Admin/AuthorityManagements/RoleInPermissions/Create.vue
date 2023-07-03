@@ -1,12 +1,13 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, useForm, Head } from "@inertiajs/vue3";
-import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/RoleInPermissionBreadcrumb.vue";
 import { computed, ref } from "vue";
+import { Link, useForm, Head } from "@inertiajs/vue3";
+import { useReCaptcha } from "vue-recaptcha-v3";
 
+// Define the props
 const props = defineProps({
   per_page: String,
   roles: Object,
@@ -14,13 +15,8 @@ const props = defineProps({
   permissionGroups: Object,
 });
 
+// Define Variables
 const processing = ref(false);
-
-const form = useForm({
-  role_id: "",
-  permission_id: [],
-  captcha_token: null,
-});
 
 const filterRoles = computed(() =>
   props.roles.filter((role) => !role.permissions.length)
@@ -30,6 +26,7 @@ const allPermissionsSelected = computed(() => {
   return form.permission_id.length === props.permissions.length;
 });
 
+// Handle Select All Button
 const selectAllPermissions = () => {
   if (allPermissionsSelected.value) {
     form.permission_id = [];
@@ -38,14 +35,21 @@ const selectAllPermissions = () => {
   }
 };
 
+// Role In Permissions Create Form Data
+const form = useForm({
+  role_id: "",
+  permission_id: [],
+  captcha_token: null,
+});
+
+// Destructing ReCaptcha
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+
+// Handle Create Role In Permissions
 const handleCreateRoleInPermissions = async () => {
   await recaptchaLoaded();
   form.captcha_token = await executeRecaptcha("create_role_in_permissions");
-  submit();
-};
 
-const submit = () => {
   processing.value = true;
   form.post(
     route("admin.role-in-permissions.store", {
@@ -67,6 +71,7 @@ const submit = () => {
     <Head title="Create Role In Permissions" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -91,6 +96,7 @@ const submit = () => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back button -->
         <div>
           <Link
             as="button"
@@ -108,6 +114,7 @@ const submit = () => {
 
       <div class="border shadow-md p-10">
         <form @submit.prevent="handleCreateRoleInPermissions">
+          <!-- Role Input -->
           <div class="mb-6">
             <InputLabel for="role" value="Role *" />
 
@@ -130,6 +137,7 @@ const submit = () => {
 
           <hr class="mb-6" />
 
+          <!-- Permissions Checkbox -->
           <div class="mb-6">
             <InputLabel for="name" value="Permissions *" />
 
@@ -201,6 +209,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.permission_id" />
           </div>
 
+          <!-- Create Button -->
           <div class="mb-6">
             <button
               class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"
@@ -232,23 +241,3 @@ const submit = () => {
   </AdminDashboardLayout>
 </template>
 
-
-<style>
-.scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: #999 #f0f0f0;
-}
-
-.scrollbar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.scrollbar::-webkit-scrollbar-track {
-  background-color: #f0f0f0;
-}
-
-.scrollbar::-webkit-scrollbar-thumb {
-  background-color: #999;
-  border-radius: 3px;
-}
-</style>

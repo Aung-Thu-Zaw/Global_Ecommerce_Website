@@ -1,33 +1,36 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, useForm, Head } from "@inertiajs/vue3";
-import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/RoleAndPermissionBreadcrumb.vue";
 import { ref } from "vue";
+import { Link, useForm, Head } from "@inertiajs/vue3";
+import { useReCaptcha } from "vue-recaptcha-v3";
 
+// Define the props
 const props = defineProps({
   per_page: String,
 });
 
+// Define Variables
 const processing = ref(false);
 
+// Permission Create Form Data
 const form = useForm({
   name: "",
   group: "",
   captcha_token: null,
 });
 
+// Destructing ReCaptcha
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+
+// Handle Create Permission
 const handleCreatePermission = async () => {
   await recaptchaLoaded();
   form.captcha_token = await executeRecaptcha("create_permission");
-  submit();
-};
 
-const submit = () => {
   processing.value = true;
   form.post(
     route("admin.permissions.store", {
@@ -49,6 +52,7 @@ const submit = () => {
     <Head title="Create Permission" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -94,6 +98,7 @@ const submit = () => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back button -->
         <div>
           <Link
             as="button"
@@ -111,6 +116,7 @@ const submit = () => {
 
       <div class="border shadow-md p-10">
         <form @submit.prevent="handleCreatePermission">
+          <!-- Permission Name Input -->
           <div class="mb-6">
             <InputLabel for="name" value="Permission Name *" />
 
@@ -126,6 +132,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.name" />
           </div>
 
+          <!-- Group Select Box -->
           <div class="mb-6">
             <InputLabel for="group" value="Group *" />
 
@@ -161,6 +168,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.group" />
           </div>
 
+          <!-- Create Button -->
           <div class="mb-6">
             <button
               class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"
