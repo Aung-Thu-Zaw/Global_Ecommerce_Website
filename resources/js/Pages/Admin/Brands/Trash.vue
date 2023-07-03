@@ -12,6 +12,7 @@ import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { inject, reactive, watch, computed, ref } from "vue";
 import { router, usePage, Link, Head } from "@inertiajs/vue3";
 
+// Define the Props
 const props = defineProps({
   trashBrands: Object,
 });
@@ -21,7 +22,7 @@ const swal = inject("$swal");
 
 // Query String Parameteres
 const params = reactive({
-  search: null,
+  search: usePage().props.ziggy.query?.search,
   page: props.trashBrands.current_page ? props.trashBrands.current_page : 1,
   per_page: props.trashBrands.per_page ? props.trashBrands.per_page : 10,
   sort: "id",
@@ -109,7 +110,7 @@ const updateSorting = (sort = "id") => {
 };
 
 // Handle Trash Brand Restore
-const handleRestore = async (trashBrandId) => {
+const handleBrandRestore = async (trashBrandId) => {
   const result = await swal({
     icon: "info",
     title: "Are you sure you want to restore this brand?",
@@ -144,7 +145,7 @@ const handleRestore = async (trashBrandId) => {
 };
 
 // Handle Trash Brand Delete
-const handleDelete = async (trashBrandId) => {
+const handleBrandDelete = async (trashBrandId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -468,7 +469,7 @@ const brandTrashDelete = computed(() => {
             <Td v-if="brandTrashRestore || brandTrashDelete">
               <button
                 v-if="brandTrashRestore"
-                @click="handleRestore(trashBrand.id)"
+                @click="handleBrandRestore(trashBrand.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-recycle"></i>
@@ -476,7 +477,7 @@ const brandTrashDelete = computed(() => {
               </button>
               <button
                 v-if="brandTrashDelete"
-                @click="handleDelete(trashBrand.id)"
+                @click="handleBrandDelete(trashBrand.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-trash"></i>
@@ -491,7 +492,7 @@ const brandTrashDelete = computed(() => {
       <!-- No Data Row -->
       <NotAvaliableData v-if="!trashBrands.data.length" />
 
-      <!-- Paginations -->
+      <!-- Pagination -->
       <Pagination class="mt-6" :links="trashBrands.links" />
     </div>
   </AdminDashboardLayout>

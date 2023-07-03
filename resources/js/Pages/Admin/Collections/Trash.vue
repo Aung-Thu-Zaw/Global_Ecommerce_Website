@@ -9,33 +9,20 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/CollectionBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { inject, reactive, watch, computed } from "vue";
+import { inject, reactive, watch, computed, ref } from "vue";
 import { router, usePage, Link, Head } from "@inertiajs/vue3";
 
+// Define the Props
 const props = defineProps({
   trashCollections: Object,
 });
 
+// Define Alert Variables
 const swal = inject("$swal");
 
-const collectionTrashRestore = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "collection.trash.restore"
-      )
-    : false;
-});
-
-const collectionTrashDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "collection.trash.delete"
-      )
-    : false;
-});
-
+// Query String Parameteres
 const params = reactive({
-  search: null,
+  search: usePage().props.ziggy.query?.search,
   page: props.trashCollections.current_page
     ? props.trashCollections.current_page
     : 1,
@@ -46,53 +33,42 @@ const params = reactive({
   direction: "desc",
 });
 
-const handleSearchBox = () => {
-  params.search = "";
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.collections.trash"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.collections.trash"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.collections.trash"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.collections.trash"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("admin.collections.trash"),
     {
@@ -102,11 +78,43 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
-const handleRestore = async (trashCollectionId) => {
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
+};
+
+// Handle Trash Collection Restore
+const handleCollectionRestore = async (trashCollectionId) => {
   const result = await swal({
     icon: "info",
     title: "Are you sure you want to restore this collection?",
@@ -124,18 +132,24 @@ const handleRestore = async (trashCollectionId) => {
         id: trashCollectionId,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {},
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
-const handleDelete = async (trashCollectionId) => {
+// Handle Trash Collection Delete
+const handleCollectionDelete = async (trashCollectionId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -150,21 +164,26 @@ const handleDelete = async (trashCollectionId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.collections.forceDelete", {
+      route("admin.collections.force.delete", {
         id: trashCollectionId,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
+// Handle Trash Brand Delete Permanently
 const handlePermanentlyDelete = async () => {
   const result = await swal({
     icon: "warning",
@@ -180,19 +199,43 @@ const handlePermanentlyDelete = async () => {
 
   if (result.isConfirmed) {
     router.get(
-      route("admin.collections.permanentlyDelete", {
+      route("admin.collections.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {},
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
+
+// Define Permissions Variables
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
+
+const collectionTrashRestore = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "collection.trash.restore"
+      )
+    : false;
+});
+
+const collectionTrashDelete = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "collection.trash.delete"
+      )
+    : false;
+});
 </script>
 
 <template>
@@ -201,6 +244,7 @@ const handlePermanentlyDelete = async () => {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -225,6 +269,7 @@ const handlePermanentlyDelete = async () => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back Button -->
         <div>
           <Link
             as="button"
@@ -238,6 +283,7 @@ const handlePermanentlyDelete = async () => {
       </div>
 
       <div class="flex items-center justify-end mb-5">
+        <!-- Search Box -->
         <form class="w-[350px] relative">
           <input
             type="text"
@@ -248,10 +294,11 @@ const handlePermanentlyDelete = async () => {
 
           <i
             v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-            @click="handleSearchBox"
+            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+            @click="removeSearch"
           ></i>
         </form>
+        <!-- Perpage Select Box -->
         <div class="ml-5">
           <select
             class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -268,6 +315,7 @@ const handlePermanentlyDelete = async () => {
         </div>
       </div>
 
+      <!-- Collection Permanently Delete Button -->
       <p
         v-if="collectionTrashDelete"
         class="text-left text-sm font-bold mb-2 text-warning-600"
@@ -281,6 +329,7 @@ const handlePermanentlyDelete = async () => {
         </button>
       </p>
 
+      <!-- Collection Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -393,14 +442,26 @@ const handlePermanentlyDelete = async () => {
             v-for="trashCollection in trashCollections.data"
             :key="trashCollection.id"
           >
-            <BodyTh>{{ trashCollection.id }}</BodyTh>
-            <Td>{{ trashCollection.title }}</Td>
-            <Td>{{ trashCollection.description }}</Td>
-            <Td>{{ trashCollection.deleted_at }}</Td>
+            <BodyTh>
+              {{ trashCollection.id }}
+            </BodyTh>
+
+            <Td>
+              {{ trashCollection.title }}
+            </Td>
+
+            <Td>
+              {{ trashCollection.description }}
+            </Td>
+
+            <Td>
+              {{ trashCollection.deleted_at }}
+            </Td>
+
             <Td v-if="collectionTrashRestore || collectionTrashDelete">
               <button
                 v-if="collectionTrashRestore"
-                @click="handleRestore(trashCollection.id)"
+                @click="handleCollectionRestore(trashCollection.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-recycle"></i>
@@ -408,7 +469,7 @@ const handlePermanentlyDelete = async () => {
               </button>
               <button
                 v-if="collectionTrashDelete"
-                @click="handleDelete(trashCollection.id)"
+                @click="handleCollectionDelete(trashCollection.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-trash"></i>
@@ -418,9 +479,12 @@ const handlePermanentlyDelete = async () => {
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Collection Table End -->
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!trashCollections.data.length" />
 
+      <!-- Pagination -->
       <Pagination class="mt-6" :links="trashCollections.links" />
     </div>
   </AdminDashboardLayout>

@@ -78,6 +78,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:brand.trash.delete')->name("permanently.delete");
                 });
 
+           // Admin Dashboard Collection Section
            Route::controller(AdminCollectionController::class)
                 ->prefix("/collections")
                 ->name("collections.")
@@ -90,8 +91,8 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::delete("/{collection}", "destroy")->middleware('permission:collection.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:collection.trash.list')->name("trash");
                     Route::post("/{id}/restore", "restore")->middleware('permission:collection.trash.restore')->name("restore");
-                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:collection.trash.delete')->name("forceDelete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:collection.trash.delete')->name("permanentlyDelete");
+                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:collection.trash.delete')->name("force.delete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:collection.trash.delete')->name("permanently.delete");
                 });
 
            Route::controller(AdminCategoryController::class)

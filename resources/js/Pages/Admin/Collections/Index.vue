@@ -9,102 +9,62 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/CollectionBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject, computed } from "vue";
+import { reactive, watch, inject, computed, ref } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
+// Define the props
 const props = defineProps({
   collections: Object,
 });
 
+// Define Alert Variables
 const swal = inject("$swal");
 
-const collectionAdd = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "collection.add"
-      )
-    : false;
-});
-
-const collectionEdit = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "collection.edit"
-      )
-    : false;
-});
-
-const collectionDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "collection.delete"
-      )
-    : false;
-});
-
-const collectionTrashList = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "collection.trash.list"
-      )
-    : false;
-});
-
+// Query String Parameteres
 const params = reactive({
-  search: null,
+  search: usePage().props.ziggy.query?.search,
   page: props.collections.current_page ? props.collections.current_page : 1,
   per_page: props.collections.per_page ? props.collections.per_page : 10,
   sort: "id",
   direction: "desc",
 });
 
-const handleSearchBox = () => {
-  params.search = "";
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.collections.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.collections.index"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.collections.index"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.collections.index"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("admin.collections.index"),
     {
@@ -114,11 +74,42 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
-const handleDelete = async (collection) => {
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
+};
+
+// Handle Collection Delete
+const handleCollectionDelete = async (collection) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete this collection?",
@@ -134,19 +125,61 @@ const handleDelete = async (collection) => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.collections.destroy", {
-        collection: collection.slug,
+        collection: collection,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
+
+// Define Permissions Variables
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
+
+// Create New Collection Permission
+const collectionAdd = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "collection.add"
+      )
+    : false;
+});
+
+// Collection Edit Permission
+const collectionEdit = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "collection.edit"
+      )
+    : false;
+});
+
+// Collection Delete Permission
+const collectionDelete = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "collection.delete"
+      )
+    : false;
+});
+// Collection Trash List Permission
+const collectionTrashList = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "collection.trash.list"
+      )
+    : false;
+});
 
 if (usePage().props.flash.successMessage) {
   swal({
@@ -162,7 +195,10 @@ if (usePage().props.flash.successMessage) {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb />
+
+        <!-- Trash Button -->
         <div v-if="collectionTrashList">
           <Link
             as="button"
@@ -177,6 +213,7 @@ if (usePage().props.flash.successMessage) {
       </div>
 
       <div class="mb-5 flex items-center justify-between">
+        <!-- Create Collection Button -->
         <Link
           v-if="collectionAdd"
           as="button"
@@ -190,6 +227,7 @@ if (usePage().props.flash.successMessage) {
           Add Collection</Link
         >
         <div class="flex items-center ml-auto">
+          <!-- Search Box -->
           <form class="w-[350px] relative">
             <input
               type="text"
@@ -200,10 +238,12 @@ if (usePage().props.flash.successMessage) {
 
             <i
               v-if="params.search"
-              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-              @click="handleSearchBox"
+              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+              @click="removeSearch"
             ></i>
           </form>
+
+          <!-- Perpage Select Box -->
           <div class="ml-5">
             <select
               class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -221,6 +261,7 @@ if (usePage().props.flash.successMessage) {
         </div>
       </div>
 
+      <!-- Collection Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -330,10 +371,22 @@ if (usePage().props.flash.successMessage) {
 
         <tbody v-if="collections.data.length">
           <Tr v-for="collection in collections.data" :key="collection.id">
-            <BodyTh>{{ collection.id }}</BodyTh>
-            <Td>{{ collection.title }}</Td>
-            <Td>{{ collection.description }}</Td>
-            <Td>{{ collection.created_at }}</Td>
+            <BodyTh>
+              {{ collection.id }}
+            </BodyTh>
+
+            <Td>
+              {{ collection.title }}
+            </Td>
+
+            <Td>
+              {{ collection.description }}
+            </Td>
+
+            <Td>
+              {{ collection.created_at }}
+            </Td>
+
             <Td v-if="collectionEdit || collectionDelete">
               <Link
                 v-if="collectionEdit"
@@ -350,7 +403,7 @@ if (usePage().props.flash.successMessage) {
               </Link>
               <button
                 v-if="collectionDelete"
-                @click="handleDelete(collection)"
+                @click="handleCollectionDelete(collection.slug)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>
@@ -360,9 +413,12 @@ if (usePage().props.flash.successMessage) {
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Collection Table End -->
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!collections.data.length" />
 
+      <!-- Paginations -->
       <Pagination class="mt-6" :links="collections.links" />
     </div>
   </AdminDashboardLayout>

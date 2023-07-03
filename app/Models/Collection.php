@@ -42,7 +42,6 @@ class Collection extends Model
     {
         return [
             'title' => $this->title,
-            'description' => $this->description,
         ];
     }
 

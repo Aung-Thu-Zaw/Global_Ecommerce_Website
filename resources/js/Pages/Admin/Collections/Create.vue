@@ -1,34 +1,38 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, useForm, Head } from "@inertiajs/vue3";
-import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/CollectionBreadcrumb.vue";
+import { Link, useForm, Head } from "@inertiajs/vue3";
+import { useReCaptcha } from "vue-recaptcha-v3";
 import { ref } from "vue";
 
+// Define the props
 const props = defineProps({
   per_page: String,
 });
 
+// Define Variables
 const processing = ref(false);
 
+// Collection Create Form Data
 const form = useForm({
   title: "",
   description: "",
   captcha_token: null,
 });
 
+// Destructing ReCaptcha
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+
+// Handle Create Collection
 const handleCreateCollection = async () => {
   await recaptchaLoaded();
   form.captcha_token = await executeRecaptcha("create_collection");
-  submit();
-};
 
-const submit = () => {
   processing.value = true;
+
   form.post(
     route("admin.collections.store", {
       per_page: props.per_page,
@@ -49,6 +53,7 @@ const submit = () => {
     <Head title="Create Collection" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -73,6 +78,7 @@ const submit = () => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back button -->
         <div>
           <Link
             as="button"
@@ -90,6 +96,7 @@ const submit = () => {
 
       <div class="border shadow-md p-10">
         <form @submit.prevent="handleCreateCollection">
+          <!-- Collection Title Input -->
           <div class="mb-6">
             <InputLabel for="title" value="Collection Title *" />
 
@@ -104,6 +111,8 @@ const submit = () => {
 
             <InputError class="mt-2" :message="form.errors.title" />
           </div>
+
+          <!-- Collection Description Input -->
           <div class="mb-6">
             <InputLabel for="description" value="Collection Description *" />
 
@@ -119,6 +128,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.description" />
           </div>
 
+          <!-- Create Button -->
           <div class="mb-6">
             <button
               class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"
