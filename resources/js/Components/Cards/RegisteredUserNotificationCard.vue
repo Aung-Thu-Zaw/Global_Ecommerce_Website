@@ -1,5 +1,4 @@
 <script setup>
-import { Link } from "@inertiajs/vue3";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { computed } from "vue";
@@ -15,23 +14,36 @@ const formattedTime = computed(() =>
     ? dayjs(props.notification.created_at).fromNow()
     : ""
 );
+
+const goToDetailPage = () => {
+  router.get(
+    route("admin.users.register.show", props.notification.data.user.id)
+  );
+};
+
+const handleNotificationReadAt = () => {
+  router.post(
+    route("admin.notifications.read", props.notification.id),
+    {},
+    {
+      onSuccess: () => {
+        goToDetailPage();
+      },
+    }
+  );
+};
 </script>
 
 <template>
-  <Link
+  <div
+    @click="handleNotificationReadAt"
     v-if="
       notification.type ===
         'App\\Notifications\\AccountRegistered\\RegisteredUserNotification' &&
       notification.data.user &&
       notification.data.user.role === 'user'
     "
-    :href="
-      route('admin.users.register.show', {
-        user: notification.data.user.id,
-        noti_id: notification.id,
-      })
-    "
-    class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
+    class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
@@ -88,5 +100,5 @@ const formattedTime = computed(() =>
         {{ formattedTime }}
       </div>
     </div>
-  </Link>
+  </div>
 </template>

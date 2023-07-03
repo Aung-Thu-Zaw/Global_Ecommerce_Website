@@ -26,12 +26,6 @@ class AdminRegisterUserController extends Controller
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
-        if(request()->noti_id) {
-            $notification=auth()->user()->notifications()->where("id", request()->noti_id)->first();
-
-            $notification->update(['read_at' => now()]);
-        }
-
         return inertia("Admin/UserManagements/UserManage/RegisterUsers/Details", compact("user", "paginate"));
     }
 

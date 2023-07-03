@@ -15,17 +15,35 @@ const formattedTime = computed(() =>
     ? dayjs(props.notification.created_at).fromNow()
     : ""
 );
+
+const goToDetailPage = () => {
+  router.get(
+    route("admin.suggestions.show", props.notification.data.suggestion.id)
+  );
+};
+
+const handleNotificationReadAt = () => {
+  router.post(
+    route("admin.notifications.read", props.notification.id),
+    {},
+    {
+      onSuccess: () => {
+        goToDetailPage();
+      },
+    }
+  );
+};
 </script>
 
 <template>
   <Link
+    @click="handleNotificationReadAt"
     v-if="
       notification.type ===
         'App\\Notifications\\WebsiteSuggestion\\NewSuggestionNotification' &&
       notification.data.suggestion.type === 'request_feature'
     "
-    href="#"
-    class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
+    class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div

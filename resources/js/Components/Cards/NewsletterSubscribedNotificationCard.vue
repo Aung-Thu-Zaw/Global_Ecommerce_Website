@@ -15,16 +15,34 @@ const formattedTime = computed(() =>
     ? dayjs(props.notification.created_at).fromNow()
     : ""
 );
+
+const goToDetailPage = () => {
+  router.get(
+    route("admin.subscribers.index", props.notification.data.subscriber.id)
+  );
+};
+
+const handleNotificationReadAt = () => {
+  router.post(
+    route("admin.notifications.read", props.notification.id),
+    {},
+    {
+      onSuccess: () => {
+        goToDetailPage();
+      },
+    }
+  );
+};
 </script>
 
 <template>
-  <Link
+  <div
+    @click="handleNotificationReadAt"
     v-if="
       notification.type ===
       'App\\Notifications\\SubscribedNewsletter\\NewsletterSubscribedNotification'
     "
-    href="#"
-    class="flex px-4 py-3 hover:bg-gray-100"
+    class="flex px-4 py-3 hover:bg-gray-100 cursor-pointer"
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
@@ -70,5 +88,5 @@ const formattedTime = computed(() =>
         {{ formattedTime }}
       </div>
     </div>
-  </Link>
+  </div>
 </template>

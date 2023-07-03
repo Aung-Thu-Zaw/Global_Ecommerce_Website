@@ -1,5 +1,5 @@
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { computed } from "vue";
@@ -15,17 +15,35 @@ const formattedTime = computed(() =>
     ? dayjs(props.notification.created_at).fromNow()
     : ""
 );
+
+const goToDetailPage = () => {
+  router.get(
+    route("admin.suggestions.show", props.notification.data.suggestion.id)
+  );
+};
+
+const handleNotificationReadAt = () => {
+  router.post(
+    route("admin.notifications.read", props.notification.id),
+    {},
+    {
+      onSuccess: () => {
+        goToDetailPage();
+      },
+    }
+  );
+};
 </script>
 
 <template>
-  <Link
+  <div
+    @click="handleNotificationReadAt"
     v-if="
       notification.type ===
         'App\\Notifications\\WebsiteSuggestion\\NewSuggestionNotification' &&
       notification.data.suggestion.type === 'report_bug'
     "
-    href="#"
-    class="flex px-4 py-3 hover:bg-gray-100"
+    class="flex px-4 py-3 hover:bg-gray-100 cursor-pointer"
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
@@ -72,5 +90,5 @@ const formattedTime = computed(() =>
         {{ formattedTime }}
       </div>
     </div>
-  </Link>
+  </div>
 </template>

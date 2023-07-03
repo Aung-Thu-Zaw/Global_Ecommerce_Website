@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AdminCollectionController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminCouponController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminDashboardNotificationController;
 use App\Http\Controllers\MultiImageController;
 use App\Http\Controllers\Admin\Banners\AdminProductBannerController;
 use App\Http\Controllers\Admin\UserManagements\VendorManage\AdminActiveVendorController;
@@ -50,6 +51,14 @@ Route::middleware(["admin","verified","user.role:admin"])
        ->group(function () {
 
            Route::get("/dashboard", [AdminDashboardController::class,"index"])->name("dashboard");
+
+           Route::controller(AdminDashboardNotificationController::class)
+           ->prefix("/notifications")
+           ->name("notifications.")
+           ->group(function () {
+               Route::post("/{notification_id}/read", "reatNotification")->name("read");
+               //    Route::post("/create", "create")->middleware('permission:brand.add')->name("create");
+           });
 
 
            Route::controller(AdminBrandController::class)
