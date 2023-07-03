@@ -10,20 +10,13 @@ import { computed, ref } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
+// Define the props
 const props = defineProps({
   websiteSetting: Object,
 });
 
+// Define Variables
 const processing = ref(false);
-
-// Website Setting Permission
-const websiteSettingEdit = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "website-setting.edit"
-      )
-    : false;
-});
 
 // Preview Photos
 const previewPhoto1 = ref("");
@@ -36,34 +29,32 @@ const getPreviewPhotoPath2 = (path) => {
   previewPhoto2.value.src = URL.createObjectURL(path);
 };
 
-// Handle Website Setting
+// Website Setting Edit Form Data
 const form = useForm({
-  logo: props.websiteSetting ? props.websiteSetting.logo : "",
-  favicon: props.websiteSetting ? props.websiteSetting.favicon : "",
-  phone: props.websiteSetting ? props.websiteSetting.phone : "",
-  support_phone: props.websiteSetting ? props.websiteSetting.support_phone : "",
-  email: props.websiteSetting ? props.websiteSetting.email : "",
-  company_address: props.websiteSetting
-    ? props.websiteSetting.company_address
-    : "",
-  copyright: props.websiteSetting ? props.websiteSetting.copyright : "",
-  facebook: props.websiteSetting ? props.websiteSetting.facebook : "",
-  twitter: props.websiteSetting ? props.websiteSetting.twitter : "",
-  instagram: props.websiteSetting ? props.websiteSetting.instagram : "",
-  youtube: props.websiteSetting ? props.websiteSetting.youtube : "",
-  reddit: props.websiteSetting ? props.websiteSetting.reddit : "",
-  linked_in: props.websiteSetting ? props.websiteSetting.linked_in : "",
+  logo: props.websiteSetting?.logo,
+  favicon: props.websiteSetting?.favicon,
+  phone: props.websiteSetting?.phone,
+  support_phone: props.websiteSetting?.support_phone,
+  email: props.websiteSetting?.email,
+  company_address: props.websiteSetting?.company_address,
+  copyright: props.websiteSetting?.copyright,
+  facebook: props.websiteSetting?.facebook,
+  twitter: props.websiteSetting?.twitter,
+  instagram: props.websiteSetting?.instagram,
+  youtube: props.websiteSetting?.youtube,
+  reddit: props.websiteSetting?.reddit,
+  linked_in: props.websiteSetting?.linked_in,
   captcha_token: null,
 });
 
+// Destructing ReCaptcha
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+
+// Handle Edit Website Setting
 const handleEditWebsiteSetting = async () => {
   await recaptchaLoaded();
   form.captcha_token = await executeRecaptcha("edit_website_setting");
-  submit();
-};
 
-const submit = () => {
   processing.value = true;
   form.post(
     route("admin.website-settings.update", {
@@ -85,6 +76,15 @@ const submit = () => {
     }
   );
 };
+
+// Website Setting Edit Permission
+const websiteSettingEdit = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "website-setting.edit"
+      )
+    : false;
+});
 </script>
 
 <template>

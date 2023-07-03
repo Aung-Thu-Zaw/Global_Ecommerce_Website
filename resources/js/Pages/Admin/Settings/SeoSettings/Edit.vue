@@ -10,22 +10,15 @@ import { computed, ref } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
+// Define the props
 const props = defineProps({
   seoSetting: Object,
 });
 
+// Define Variables
 const processing = ref(false);
 
-// Seo Permissions
-const seoSettingEdit = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "seo-setting.edit"
-      )
-    : false;
-});
-
-// Handle Seo Setting
+// Seo Setting Edit Form Data
 const form = useForm({
   meta_title: props.seoSetting ? props.seoSetting.meta_title : "",
   meta_author: props.seoSetting ? props.seoSetting.meta_author : "",
@@ -34,14 +27,14 @@ const form = useForm({
   captcha_token: null,
 });
 
+// Destructing ReCaptcha
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+
+// Handle Edit Seo Setting
 const handleEditSeoSetting = async () => {
   await recaptchaLoaded();
   form.captcha_token = await executeRecaptcha("edit_seo_setting");
-  submit();
-};
 
-const submit = () => {
   processing.value = true;
   form.post(
     route("admin.seo-settings.update", {
@@ -63,6 +56,15 @@ const submit = () => {
     }
   );
 };
+
+// Seo Setting Edit Permission
+const seoSettingEdit = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "seo-setting.edit"
+      )
+    : false;
+});
 </script>
 
 <template>
