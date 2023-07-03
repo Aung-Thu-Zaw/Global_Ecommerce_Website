@@ -1,11 +1,41 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, usePage, router } from "@inertiajs/vue3";
 import Pagination from "@/Components/Paginations/Pagination.vue";
+import { reactive, ref, watch } from "vue";
 
 const props = defineProps({
   vendorShops: Object,
 });
+
+// Query String Parameters
+const params = reactive({
+  search_shop: usePage().props.ziggy.query?.search_shop,
+});
+
+// Handle Search Box
+const handleSearch = () => {
+  router.get(route("shop.index"), {
+    search_shop: params.search_shop,
+  });
+};
+
+watch(
+  () => params.search_shop,
+  () => {
+    if (params.search_shop === "") {
+      router.get(route("shop.index"));
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Remove Query String Search
+const handelRemoveSearch = () => {
+  params.search_shop = "";
+  router.get(route("shop.index"));
+};
 </script>
 
 
@@ -27,6 +57,30 @@ const props = defineProps({
           >
             <p class="text-center uppercase">Our Seller Shops</p>
           </div>
+        </div>
+
+        <!-- Search Box -->
+        <div>
+          <form
+            @submit.prevent="handleSearch"
+            class="flex items-center justify-end"
+          >
+            <div
+              class="border-2 border-slate-300 rounded-md focus:ring-0 focus:border-slate-300 w-[300px] flex items-center justify-between"
+            >
+              <input
+                type="text"
+                class="border-none focus:ring-0 w-full"
+                placeholder="Search by shop name"
+                v-model="params.search_shop"
+              />
+              <i
+                v-if="params.search_shop"
+                @click="handelRemoveSearch"
+                class="fa-solid fa-xmark mx-2 cursor-pointer hover:text-slate-600"
+              ></i>
+            </div>
+          </form>
         </div>
 
         <div class="grid grid-cols-5 gap-3 my-3">

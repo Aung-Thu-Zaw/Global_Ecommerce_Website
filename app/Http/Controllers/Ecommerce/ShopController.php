@@ -19,9 +19,10 @@ class ShopController extends Controller
 {
     public function index(): Response | ResponseFactory
     {
-        $vendorShops=User::whereStatus("active")
-                  ->whereRole("vendor")
-                  ->paginate(30);
+        $vendorShops=User::search(request("search_shop"))
+                         ->where("status", "active")
+                         ->where("role", "vendor")
+                         ->paginate(30);
 
         return inertia("Ecommerce/Shops/Index", compact("vendorShops"));
     }
