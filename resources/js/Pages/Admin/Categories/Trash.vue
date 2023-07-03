@@ -2,6 +2,8 @@
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
+import ActiveStatus from "@/Components/Status/ActiveStatus.vue";
+import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
 import TableHeader from "@/Components/Table/TableHeader.vue";
@@ -9,33 +11,20 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/CategoryBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { inject, reactive, watch, computed } from "vue";
+import { inject, reactive, watch, computed, ref } from "vue";
 import { router, usePage, Link, Head } from "@inertiajs/vue3";
 
+// Define the Props
 const props = defineProps({
   trashCategories: Object,
 });
 
+// Define Alert Variables
 const swal = inject("$swal");
 
-const categoryTrashRestore = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "category.trash.restore"
-      )
-    : false;
-});
-
-const categoryTrashDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "category.trash.delete"
-      )
-    : false;
-});
-
+// Query String Parameteres
 const params = reactive({
-  search: null,
+  search: usePage().props.ziggy.query?.search,
   page: props.trashCategories.current_page
     ? props.trashCategories.current_page
     : 1,
@@ -46,53 +35,42 @@ const params = reactive({
   direction: "desc",
 });
 
-const handleSearchBox = () => {
-  params.search = "";
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.categories.trash"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.categories.trash"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.categories.trash"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.categories.trash"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("admin.categories.trash"),
     {
@@ -102,11 +80,43 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
-const handleRestore = async (trashCategoryId) => {
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
+};
+
+// Handle Trash Category Restore
+const handleCategoryRestore = async (trashCategoryId) => {
   const result = await swal({
     icon: "info",
     title: "Are you sure you want to restore this category?",
@@ -124,18 +134,24 @@ const handleRestore = async (trashCategoryId) => {
         id: trashCategoryId,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {},
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
-const handleDelete = async (trashCategoryId) => {
+// Handle Trash Category Delete
+const handleCategoryDelete = async (trashCategoryId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -150,21 +166,26 @@ const handleDelete = async (trashCategoryId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.categories.forceDelete", {
+      route("admin.categories.force.delete", {
         id: trashCategoryId,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
+// Handle Trash Category Delete Permanently
 const handlePermanentlyDelete = async () => {
   const result = await swal({
     icon: "warning",
@@ -180,19 +201,45 @@ const handlePermanentlyDelete = async () => {
 
   if (result.isConfirmed) {
     router.get(
-      route("admin.categories.permanentlyDelete", {
+      route("admin.categories.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {},
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
+
+// Define Permissions Variables
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
+
+// Category Trash Restore Permission
+const categoryTrashRestore = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "category.trash.restore"
+      )
+    : false;
+});
+
+// Category Trash Delete Permission
+const categoryTrashDelete = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "category.trash.delete"
+      )
+    : false;
+});
 </script>
 
 <template>
@@ -225,8 +272,10 @@ const handlePermanentlyDelete = async () => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back Button -->
         <div>
           <Link
+            as="button"
             :href="route('admin.categories.index')"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
@@ -237,6 +286,7 @@ const handlePermanentlyDelete = async () => {
       </div>
 
       <div class="flex items-center justify-end mb-5">
+        <!-- Search Box -->
         <form class="w-[350px] relative">
           <input
             type="text"
@@ -247,10 +297,12 @@ const handlePermanentlyDelete = async () => {
 
           <i
             v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-            @click="handleSearchBox"
+            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+            @click="removeSearch"
           ></i>
         </form>
+
+        <!-- Perpage Select Box -->
         <div class="ml-5">
           <select
             class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -267,6 +319,7 @@ const handlePermanentlyDelete = async () => {
         </div>
       </div>
 
+      <!-- Category Permanently Delete Button -->
       <p
         v-if="categoryTrashDelete"
         class="text-left text-sm font-bold mb-2 text-warning-600"
@@ -280,6 +333,7 @@ const handlePermanentlyDelete = async () => {
         </button>
       </p>
 
+      <!-- Category Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -333,6 +387,31 @@ const handlePermanentlyDelete = async () => {
               }"
             ></i>
           </HeaderTh>
+          <HeaderTh @click="updateSorting('status')">
+            Status
+            <i
+              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'asc' && params.sort === 'status',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'asc' &&
+                  params.sort === 'status',
+              }"
+            ></i>
+            <i
+              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
+              :class="{
+                'text-blue-600':
+                  params.direction === 'desc' && params.sort === 'status',
+                'visually-hidden':
+                  params.direction !== '' &&
+                  params.direction !== 'desc' &&
+                  params.sort === 'status',
+              }"
+            ></i>
+          </HeaderTh>
           <HeaderTh @click="updateSorting('deleted_at')">
             Deleted At
             <i
@@ -368,7 +447,10 @@ const handlePermanentlyDelete = async () => {
             v-for="trashCategory in trashCategories.data"
             :key="trashCategory.id"
           >
-            <BodyTh>{{ trashCategory.id }}</BodyTh>
+            <BodyTh>
+              {{ trashCategory.id }}
+            </BodyTh>
+
             <Td>
               <img
                 :src="trashCategory.image"
@@ -376,12 +458,28 @@ const handlePermanentlyDelete = async () => {
                 alt=""
               />
             </Td>
-            <Td>{{ trashCategory.name }}</Td>
-            <Td>{{ trashCategory.deleted_at }}</Td>
+
+            <Td>
+              {{ trashCategory.name }}
+            </Td>
+
+            <Td>
+              <ActiveStatus v-if="trashCategory.status == 'show'">
+                {{ trashCategory.status }}
+              </ActiveStatus>
+              <InactiveStatus v-if="trashCategory.status == 'hide'">
+                {{ trashCategory.status }}
+              </InactiveStatus>
+            </Td>
+
+            <Td>
+              {{ trashCategory.deleted_at }}
+            </Td>
+
             <Td v-if="categoryTrashRestore || categoryTrashDelete">
               <button
                 v-if="categoryTrashDelete"
-                @click="handleRestore(trashCategory.id)"
+                @click="handleCategoryRestore(trashCategory.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-recycle"></i>
@@ -389,7 +487,7 @@ const handlePermanentlyDelete = async () => {
               </button>
               <button
                 v-if="categoryTrashDelete"
-                @click="handleDelete(trashCategory.id)"
+                @click="handleCategoryDelete(trashCategory.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-trash"></i>
@@ -399,9 +497,12 @@ const handlePermanentlyDelete = async () => {
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Category Table End -->
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!trashCategories.data.length" />
 
+      <!-- Pagination -->
       <Pagination class="mt-6" :links="trashCategories.links" />
     </div>
   </AdminDashboardLayout>

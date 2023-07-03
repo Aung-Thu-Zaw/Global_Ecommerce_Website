@@ -11,102 +11,62 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/CategoryBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject, computed } from "vue";
+import { reactive, watch, inject, computed,ref } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
+// Define the props
 const props = defineProps({
   categories: Object,
 });
 
+// Define Alert Variables
 const swal = inject("$swal");
 
-const handleSearchBox = () => {
-  params.search = "";
-};
-
-const categoryAdd = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "category.add"
-      )
-    : false;
-});
-
-const categoryEdit = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "category.edit"
-      )
-    : false;
-});
-
-const categoryDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "category.delete"
-      )
-    : false;
-});
-
-const categoryTrashList = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "category.trash.list"
-      )
-    : false;
-});
-
+// Query String Parameteres
 const params = reactive({
-  search: null,
+  search: usePage().props.ziggy.query?.search,
   page: props.categories.current_page ? props.categories.current_page : 1,
   per_page: props.categories.per_page ? props.categories.per_page : 10,
   sort: "id",
   direction: "desc",
 });
 
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.categories.index"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.categories.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.categories.index"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.categories.index"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("admin.categories.index"),
     {
@@ -116,10 +76,63 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
+// Handle Category Delete
+const handleCategoryDelete = (category) => {
+  router.delete(
+    route("admin.categories.destroy", {
+      category: category,
+      page: params.page,
+      per_page: params.per_page,
+    }),
+    {
+      onSuccess: () => {
+        if (usePage().props.flash.successMessage) {
+          swal({
+            icon: "success",
+            title: usePage().props.flash.successMessage,
+          });
+        }
+      },
+    }
+  );
+};
+
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
+};
+
+// Handle Delete Category
 const handleDelete = async (category) => {
   if (category.children.length > 0) {
     const result = await swal({
@@ -135,19 +148,7 @@ const handleDelete = async (category) => {
       reverseButtons: true,
     });
     if (result.isConfirmed) {
-      router.delete(
-        route("admin.categories.destroy", {
-          category: category.slug,
-          page: params.page,
-          per_page: params.per_page,
-        })
-      );
-      setTimeout(() => {
-        swal({
-          icon: "success",
-          title: usePage().props.flash.successMessage,
-        });
-      }, 500);
+      handleCategoryDelete(category.slug);
     }
   } else {
     const result = await swal({
@@ -163,22 +164,47 @@ const handleDelete = async (category) => {
     });
 
     if (result.isConfirmed) {
-      router.delete(
-        route("admin.categories.destroy", {
-          category: category.slug,
-          page: params.page,
-          per_page: params.per_page,
-        })
-      );
-      setTimeout(() => {
-        swal({
-          icon: "success",
-          title: usePage().props.flash.successMessage,
-        });
-      }, 500);
+      handleCategoryDelete(category.slug);
     }
   }
 };
+
+// Define Permissions Variables
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
+
+// Create New Category Permission
+const categoryAdd = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some((permission) => permission.name === "category.add")
+    : false;
+});
+
+// Category Edit Permission
+const categoryEdit = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "category.edit"
+      )
+    : false;
+});
+
+// Category Delete Permission
+const categoryDelete = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "category.delete"
+      )
+    : false;
+});
+
+// Category Trash List Permission
+const categoryTrashList = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "category.trash.list"
+      )
+    : false;
+});
 
 if (usePage().props.flash.successMessage) {
   swal({
@@ -194,8 +220,10 @@ if (usePage().props.flash.successMessage) {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb />
 
+        <!-- Trash Button -->
         <div v-if="categoryTrashList">
           <Link
             as="button"
@@ -210,6 +238,7 @@ if (usePage().props.flash.successMessage) {
       </div>
 
       <div class="mb-5 flex items-center justify-between">
+        <!-- Create Brand Button -->
         <Link
           v-if="categoryAdd"
           as="button"
@@ -223,6 +252,7 @@ if (usePage().props.flash.successMessage) {
           Add Category</Link
         >
         <div class="flex items-center ml-auto">
+          <!-- Search Box -->
           <form class="w-[350px] relative">
             <input
               type="text"
@@ -233,10 +263,12 @@ if (usePage().props.flash.successMessage) {
 
             <i
               v-if="params.search"
-              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-              @click="handleSearchBox"
+              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-700"
+              @click="removeSearch"
             ></i>
           </form>
+
+          <!-- Perpage Select Box -->
           <div class="ml-5">
             <select
               class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -254,6 +286,7 @@ if (usePage().props.flash.successMessage) {
         </div>
       </div>
 
+      <!-- Category Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -362,7 +395,10 @@ if (usePage().props.flash.successMessage) {
 
         <tbody v-if="categories.data.length">
           <Tr v-for="category in categories.data" :key="category.id">
-            <BodyTh>{{ category.id }}</BodyTh>
+            <BodyTh>
+              {{ category.id }}
+            </BodyTh>
+
             <Td>
               <img
                 :src="category.image"
@@ -370,7 +406,11 @@ if (usePage().props.flash.successMessage) {
                 alt=""
               />
             </Td>
-            <Td>{{ category.name }}</Td>
+
+            <Td>
+              {{ category.name }}
+            </Td>
+
             <Td>
               <ActiveStatus v-if="category.status == 'show'">
                 {{ category.status }}
@@ -379,7 +419,11 @@ if (usePage().props.flash.successMessage) {
                 {{ category.status }}
               </InactiveStatus>
             </Td>
-            <Td>{{ category.created_at }}</Td>
+
+            <Td>
+              {{ category.created_at }}
+            </Td>
+
             <Td v-if="categoryEdit || categoryDelete">
               <Link
                 v-if="categoryEdit"
@@ -406,9 +450,12 @@ if (usePage().props.flash.successMessage) {
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Category Table End -->
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!categories.data.length" />
 
+      <!-- Pagination -->
       <Pagination class="mt-6" :links="categories.links" />
     </div>
   </AdminDashboardLayout>

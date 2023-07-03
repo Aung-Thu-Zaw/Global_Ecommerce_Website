@@ -13,7 +13,7 @@ return new class () extends Migration {
     public function up()
     {
         Schema::table('brands', function (Blueprint $table) {
-            $table->foreignId("category_id")->nullable()->after("id")->constrained();
+            $table->foreignId("category_id")->nullable()->after("id");
         });
     }
 

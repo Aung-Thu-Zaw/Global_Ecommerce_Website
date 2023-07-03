@@ -95,6 +95,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:collection.trash.delete')->name("permanently.delete");
                 });
 
+           // Admin Dashboard Category Section
            Route::controller(AdminCategoryController::class)
                 ->prefix("/categories")
                 ->name("categories.")
@@ -107,8 +108,8 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::delete("/{category}", "destroy")->middleware('permission:category.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:category.trash.list')->name("trash");
                     Route::post("/{id}/restore", "restore")->middleware('permission:category.trash.restore')->name("restore");
-                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:category.trash.delete')->name("forceDelete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:category.trash.delete')->name("permanentlyDelete");
+                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:category.trash.delete')->name("force.delete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:category.trash.delete')->name("permanently.delete");
                 });
 
            Route::controller(AdminProductController::class)

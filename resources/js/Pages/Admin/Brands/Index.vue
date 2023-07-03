@@ -22,7 +22,7 @@ const swal = inject("$swal");
 
 // Query String Parameteres
 const params = reactive({
-    search: usePage().props.ziggy.query?.search,
+  search: usePage().props.ziggy.query?.search,
   page: props.brands.current_page ? props.brands.current_page : 1,
   per_page: props.brands.per_page ? props.brands.per_page : 10,
   sort: "id",
@@ -445,7 +445,7 @@ if (usePage().props.flash.successMessage) {
       <!-- No Data Row -->
       <NotAvaliableData v-if="!brands.data.length" />
 
-      <!-- Paginations -->
+      <!-- Pagination -->
       <Pagination class="mt-6" :links="brands.links" />
     </div>
   </AdminDashboardLayout>
