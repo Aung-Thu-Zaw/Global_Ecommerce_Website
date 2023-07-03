@@ -61,6 +61,7 @@ Route::middleware(["admin","verified","user.role:admin"])
            });
 
 
+           // Admin Dashboard Brand Section
            Route::controller(AdminBrandController::class)
                 ->prefix("/brands")
                 ->name("brands.")
@@ -73,8 +74,8 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::delete("/{brand}", "destroy")->middleware('permission:brand.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:brand.trash.list')->name("trash");
                     Route::post("/{id}/restore", "restore")->middleware('permission:brand.trash.restore')->name("restore");
-                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:brand.trash.delete')->name("forceDelete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:brand.trash.delete')->name("permanentlyDelete");
+                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:brand.trash.delete')->name("force.delete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:brand.trash.delete')->name("permanently.delete");
                 });
 
            Route::controller(AdminCollectionController::class)

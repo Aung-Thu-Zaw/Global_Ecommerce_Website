@@ -9,47 +9,18 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/BrandBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject, computed } from "vue";
+import { reactive, watch, inject, computed, ref } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
+// Define the props
 const props = defineProps({
   brands: Object,
 });
 
+// Define Alert Variables
 const swal = inject("$swal");
 
-const brandAdd = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "brand.add"
-      )
-    : false;
-});
-
-const brandEdit = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "brand.edit"
-      )
-    : false;
-});
-
-const brandDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "brand.delete"
-      )
-    : false;
-});
-
-const brandTrashList = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "brand.trash.list"
-      )
-    : false;
-});
-
+// Query String Parameteres
 const params = reactive({
   search: null,
   page: props.brands.current_page ? props.brands.current_page : 1,
@@ -58,53 +29,42 @@ const params = reactive({
   direction: "desc",
 });
 
-const handleSearchBox = () => {
-  params.search = "";
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.brands.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.brands.index"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.brands.index"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.brands.index"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("admin.brands.index"),
     {
@@ -114,10 +74,63 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
+// Handle Brand Delete
+const handleBrandDelete = (brand) => {
+  router.delete(
+    route("admin.brands.destroy", {
+      brand: brand,
+      page: params.page,
+      per_page: params.per_page,
+    }),
+    {
+      onSuccess: () => {
+        if (usePage().props.flash.successMessage) {
+          swal({
+            icon: "success",
+            title: usePage().props.flash.successMessage,
+          });
+        }
+      },
+    }
+  );
+};
+
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
+};
+
+// Handle Delete Brand
 const handleDelete = async (brand) => {
   if (brand.products.length > 0) {
     const result = await swal({
@@ -132,19 +145,7 @@ const handleDelete = async (brand) => {
       reverseButtons: true,
     });
     if (result.isConfirmed) {
-      router.delete(
-        route("admin.brands.destroy", {
-          brand: brand.slug,
-          page: params.page,
-          per_page: params.per_page,
-        })
-      );
-      setTimeout(() => {
-        swal({
-          icon: "success",
-          title: usePage().props.flash.successMessage,
-        });
-      }, 500);
+      handleBrandDelete(brand.slug);
     }
   } else {
     const result = await swal({
@@ -160,22 +161,43 @@ const handleDelete = async (brand) => {
     });
 
     if (result.isConfirmed) {
-      router.delete(
-        route("admin.brands.destroy", {
-          brand: brand.slug,
-          page: params.page,
-          per_page: params.per_page,
-        })
-      );
-      setTimeout(() => {
-        swal({
-          icon: "success",
-          title: usePage().props.flash.successMessage,
-        });
-      }, 500);
+      handleBrandDelete(brand.slug);
     }
   }
 };
+
+// Define Permissions Variables
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
+
+// Create New Brand Permission
+const brandAdd = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some((permission) => permission.name === "brand.add")
+    : false;
+});
+
+// Brand Edit Permission
+const brandEdit = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some((permission) => permission.name === "brand.edit")
+    : false;
+});
+
+// Brand Delete Permission
+const brandDelete = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some((permission) => permission.name === "brand.delete")
+    : false;
+});
+
+// Brand Trash List Permission
+const brandTrashList = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "brand.trash.list"
+      )
+    : false;
+});
 
 if (usePage().props.flash.successMessage) {
   swal({
@@ -191,8 +213,10 @@ if (usePage().props.flash.successMessage) {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb />
 
+        <!-- Trash Button -->
         <div v-if="brandTrashList">
           <Link
             as="button"
@@ -207,6 +231,7 @@ if (usePage().props.flash.successMessage) {
       </div>
 
       <div class="mb-5 flex items-center justify-between">
+        <!-- Create Brand Button -->
         <Link
           v-if="brandAdd"
           as="button"
@@ -219,7 +244,9 @@ if (usePage().props.flash.successMessage) {
           <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
           Add Brand
         </Link>
+
         <div class="flex items-center ml-auto">
+          <!-- Search Box -->
           <form class="w-[350px] relative">
             <input
               type="text"
@@ -230,10 +257,12 @@ if (usePage().props.flash.successMessage) {
 
             <i
               v-if="params.search"
-              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-              @click="handleSearchBox"
+              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+              @click="removeSearch"
             ></i>
           </form>
+
+          <!-- Perpage Select Box -->
           <div class="ml-5">
             <select
               class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -251,6 +280,7 @@ if (usePage().props.flash.successMessage) {
         </div>
       </div>
 
+      <!-- Brand Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -359,7 +389,10 @@ if (usePage().props.flash.successMessage) {
 
         <tbody v-if="brands.data.length">
           <Tr v-for="brand in brands.data" :key="brand.id">
-            <BodyTh>{{ brand.id }}</BodyTh>
+            <BodyTh>
+              {{ brand.id }}
+            </BodyTh>
+
             <Td>
               <img
                 :src="brand.image"
@@ -367,12 +400,20 @@ if (usePage().props.flash.successMessage) {
                 alt=""
               />
             </Td>
-            <Td>{{ brand.name }}</Td>
+
+            <Td>
+              {{ brand.name }}
+            </Td>
+
             <Td>
               <span v-html="brand.description" class="line-clamp-1 w-[500px]">
               </span>
             </Td>
-            <Td>{{ brand.created_at }}</Td>
+
+            <Td>
+              {{ brand.created_at }}
+            </Td>
+
             <Td v-if="brandEdit || brandDelete">
               <Link
                 v-if="brandEdit"
@@ -399,9 +440,12 @@ if (usePage().props.flash.successMessage) {
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Brand Table End -->
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!brands.data.length" />
 
+      <!-- Paginations -->
       <Pagination class="mt-6" :links="brands.links" />
     </div>
   </AdminDashboardLayout>

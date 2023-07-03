@@ -9,31 +9,17 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/BrandBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { inject, reactive, watch, computed } from "vue";
+import { inject, reactive, watch, computed, ref } from "vue";
 import { router, usePage, Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
   trashBrands: Object,
 });
 
+// Define Alert Variables
 const swal = inject("$swal");
 
-const brandTrashRestore = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "brand.trash.restore"
-      )
-    : false;
-});
-
-const brandTrashDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "brand.trash.delete"
-      )
-    : false;
-});
-
+// Query String Parameteres
 const params = reactive({
   search: null,
   page: props.trashBrands.current_page ? props.trashBrands.current_page : 1,
@@ -42,53 +28,42 @@ const params = reactive({
   direction: "desc",
 });
 
-const handleSearchBox = () => {
-  params.search = "";
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.brands.trash"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.brands.trash"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.brands.trash"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.brands.trash"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("admin.brands.trash"),
     {
@@ -98,10 +73,42 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
+};
+
+// Handle Trash Brand Restore
 const handleRestore = async (trashBrandId) => {
   const result = await swal({
     icon: "info",
@@ -120,17 +127,23 @@ const handleRestore = async (trashBrandId) => {
         id: trashBrandId,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {},
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
+// Handle Trash Brand Delete
 const handleDelete = async (trashBrandId) => {
   const result = await swal({
     icon: "warning",
@@ -146,21 +159,26 @@ const handleDelete = async (trashBrandId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.brands.forceDelete", {
+      route("admin.brands.force.delete", {
         id: trashBrandId,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
+// Handle Trash Brand Delete Permanently
 const handlePermanentlyDelete = async () => {
   const result = await swal({
     icon: "warning",
@@ -176,19 +194,45 @@ const handlePermanentlyDelete = async () => {
 
   if (result.isConfirmed) {
     router.get(
-      route("admin.brands.permanentlyDelete", {
+      route("admin.brands.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {},
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
+
+// Define Permissions Variables
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
+
+// Brand Trash Restore Permission
+const brandTrashRestore = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "brand.trash.restore"
+      )
+    : false;
+});
+
+// Brand Trash Delete Permission
+const brandTrashDelete = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "brand.trash.delete"
+      )
+    : false;
+});
 </script>
 
 <template>
@@ -197,6 +241,7 @@ const handlePermanentlyDelete = async () => {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -221,6 +266,7 @@ const handlePermanentlyDelete = async () => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back Button -->
         <div>
           <Link
             as="button"
@@ -234,6 +280,7 @@ const handlePermanentlyDelete = async () => {
       </div>
 
       <div class="flex items-center justify-end mb-5">
+        <!-- Search Box -->
         <form class="w-[350px] relative">
           <input
             type="text"
@@ -244,10 +291,11 @@ const handlePermanentlyDelete = async () => {
 
           <i
             v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-            @click="handleSearchBox"
+            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+            @click="removeSearch"
           ></i>
         </form>
+        <!-- Perpage Select Box -->
         <div class="ml-5">
           <select
             class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -264,6 +312,7 @@ const handlePermanentlyDelete = async () => {
         </div>
       </div>
 
+      <!-- Brand Permanently Delete Button -->
       <p
         v-if="brandTrashDelete"
         class="text-left text-sm font-bold mb-2 text-warning-600"
@@ -277,6 +326,7 @@ const handlePermanentlyDelete = async () => {
         </button>
       </p>
 
+      <!-- Brand Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -387,7 +437,10 @@ const handlePermanentlyDelete = async () => {
 
         <tbody v-if="trashBrands.data.length">
           <Tr v-for="trashBrand in trashBrands.data" :key="trashBrand.id">
-            <BodyTh>{{ trashBrand.id }}</BodyTh>
+            <BodyTh>
+              {{ trashBrand.id }}
+            </BodyTh>
+
             <Td>
               <img
                 :src="trashBrand.image"
@@ -395,7 +448,11 @@ const handlePermanentlyDelete = async () => {
                 alt=""
               />
             </Td>
-            <Td>{{ trashBrand.name }}</Td>
+
+            <Td>
+              {{ trashBrand.name }}
+            </Td>
+
             <Td>
               <span
                 v-html="trashBrand.description"
@@ -403,7 +460,11 @@ const handlePermanentlyDelete = async () => {
               >
               </span>
             </Td>
-            <Td>{{ trashBrand.deleted_at }}</Td>
+
+            <Td>
+              {{ trashBrand.deleted_at }}
+            </Td>
+
             <Td v-if="brandTrashRestore || brandTrashDelete">
               <button
                 v-if="brandTrashRestore"
@@ -425,9 +486,12 @@ const handlePermanentlyDelete = async () => {
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Brand Table End -->
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!trashBrands.data.length" />
 
+      <!-- Paginations -->
       <Pagination class="mt-6" :links="trashBrands.links" />
     </div>
   </AdminDashboardLayout>

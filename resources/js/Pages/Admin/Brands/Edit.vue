@@ -1,45 +1,48 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, useForm, Head } from "@inertiajs/vue3";
-import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/BrandBreadcrumb.vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { Link, useForm, Head } from "@inertiajs/vue3";
+import { useReCaptcha } from "vue-recaptcha-v3";
 import { ref } from "vue";
 
+// Define the props
 const props = defineProps({
   paginate: Array,
   brand: Object,
   categories: Object,
 });
 
+// Define Variables
 const editor = ClassicEditor;
 const processing = ref(false);
-
 const previewPhoto = ref("");
 
+// Handle Preview Image
 const getPreviewPhotoPath = (path) => {
   previewPhoto.value.src = URL.createObjectURL(path);
 };
 
+// Brand Edit Form Data
 const form = useForm({
-  name: props.brand.name,
-  image: props.brand.image,
-  category_id: props.brand.category_id,
-  description: props.brand.description,
+  name: props.brand?.name,
+  image: props.brand?.image,
+  category_id: props.brand?.category_id,
+  description: props.brand?.description,
   captcha_token: null,
 });
 
+// Destructing ReCaptcha
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+
+// Handle Edit Brand
 const handleEditBrand = async () => {
   await recaptchaLoaded();
   form.captcha_token = await executeRecaptcha("edit_brand");
-  submit();
-};
 
-const submit = () => {
   processing.value = true;
   form.post(
     route("admin.brands.update", {
@@ -63,7 +66,29 @@ const submit = () => {
     <Head title="Edit Brand" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span
+                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                >{{ brand.name }}
+              </span>
+            </div>
+          </li>
           <li aria-current="page">
             <div class="flex items-center">
               <svg
@@ -87,8 +112,10 @@ const submit = () => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back button -->
         <div>
           <Link
+            as="button"
             :href="route('admin.brands.index')"
             :data="{
               page: paginate.page,
@@ -103,6 +130,7 @@ const submit = () => {
       </div>
 
       <div class="border shadow-md p-10">
+        <!-- Preview Image -->
         <div class="mb-6">
           <img
             ref="previewPhoto"
@@ -112,6 +140,7 @@ const submit = () => {
           />
         </div>
         <form @submit.prevent="handleEditBrand">
+          <!-- Brand Name Input -->
           <div class="mb-6">
             <InputLabel for="name" value="Brand Name *" />
 
@@ -127,6 +156,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.name" />
           </div>
 
+          <!-- Brand Description Editor -->
           <div class="mb-6">
             <InputLabel for="description" value="Brand Description *" />
 
@@ -135,6 +165,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.description" />
           </div>
 
+          <!-- Brand Select Box -->
           <div class="mb-6">
             <InputLabel for="category" value="Select Category" />
 
@@ -159,6 +190,7 @@ const submit = () => {
           <div class="mb-6">
             <InputLabel for="image" value="Image *" />
 
+            <!-- Brand File Input -->
             <input
               class="relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-neutral-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out file:-mx-3 file:-my-1.5 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-1.5 file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[margin-inline-end:0.75rem] file:[border-inline-end-width:1px] hover:file:bg-neutral-200 focus:border-primary focus:bg-white focus:text-neutral-700 focus:shadow-[0_0_0_1px] focus:shadow-primary focus:outline-none dark:bg-transparent dark:text-neutral-200 dark:focus:bg-transparent"
               type="file"
@@ -174,6 +206,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.image" />
           </div>
 
+          <!-- Edit Button -->
           <div class="mb-6">
             <button
               class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"

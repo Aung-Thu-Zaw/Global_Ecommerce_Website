@@ -1,28 +1,31 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, useForm, Head } from "@inertiajs/vue3";
-import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/BrandBreadcrumb.vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { Link, useForm, Head } from "@inertiajs/vue3";
+import { useReCaptcha } from "vue-recaptcha-v3";
 import { ref } from "vue";
 
+// Define the props
 const props = defineProps({
   per_page: String,
   categories: Object,
 });
 
+// Define Variables
 const editor = ClassicEditor;
 const processing = ref(false);
-
 const previewPhoto = ref("");
 
+// Handle Preview Image
 const getPreviewPhotoPath = (path) => {
   previewPhoto.value.src = URL.createObjectURL(path);
 };
 
+// Brand Create Form Data
 const form = useForm({
   name: "",
   image: "",
@@ -31,15 +34,16 @@ const form = useForm({
   captcha_token: null,
 });
 
+// Destructing ReCaptcha
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+
+// Handle Create Brand
 const handleCreateBrand = async () => {
   await recaptchaLoaded();
   form.captcha_token = await executeRecaptcha("create_brand");
-  submit();
-};
 
-const submit = () => {
   processing.value = true;
+
   form.post(
     route("admin.brands.store", {
       per_page: props.per_page,
@@ -60,6 +64,7 @@ const submit = () => {
     <Head title="Create Brand" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -84,8 +89,10 @@ const submit = () => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back button -->
         <div>
           <Link
+            as="button"
             :href="route('admin.brands.index')"
             :data="{
               per_page: props.per_page,
@@ -99,6 +106,7 @@ const submit = () => {
       </div>
 
       <div class="border shadow-md p-10">
+        <!-- Preview Image -->
         <div class="mb-6">
           <img
             ref="previewPhoto"
@@ -107,7 +115,9 @@ const submit = () => {
             class="h-[100px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300"
           />
         </div>
+
         <form @submit.prevent="handleCreateBrand">
+          <!-- Brand Name Input -->
           <div class="mb-6">
             <InputLabel for="name" value="Brand Name *" />
 
@@ -123,6 +133,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.name" />
           </div>
 
+          <!-- Brand Description Editor -->
           <div class="mb-6">
             <InputLabel for="description" value="Brand Description *" />
 
@@ -131,6 +142,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.description" />
           </div>
 
+          <!-- Brand Select Box -->
           <div class="mb-6">
             <InputLabel for="category" value="Select Category" />
 
@@ -151,6 +163,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.category_id" />
           </div>
 
+          <!-- Brand File Input -->
           <div class="mb-6">
             <InputLabel for="image" value="Image *" />
 
@@ -170,6 +183,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.image" />
           </div>
 
+          <!-- Create Button -->
           <div class="mb-6">
             <button
               class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"
