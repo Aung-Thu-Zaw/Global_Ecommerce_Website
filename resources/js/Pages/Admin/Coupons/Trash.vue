@@ -9,86 +9,83 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/CouponBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { inject, reactive, watch, computed } from "vue";
+import { inject, reactive, watch, computed, ref } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
+// Define the Props
 const props = defineProps({
   trashCoupons: Object,
 });
 
+// Formatted Amount
+const formattedAmount = (amount) => {
+  const totalAmount = parseFloat(amount);
+  if (Number.isInteger(totalAmount)) {
+    return totalAmount.toFixed(0);
+  } else {
+    return totalAmount.toFixed(2);
+  }
+};
+
+// Formatted Discount Type
+const formatDiscountType = (suggestionType) => {
+  const words = suggestionType.split("_");
+  const capitalizedWords = words.map(
+    (word) => word.charAt(0).toUpperCase() + word.slice(1)
+  );
+  const formattedString = capitalizedWords.join(" ");
+
+  return formattedString;
+};
+
+// Define Alert Variables
 const swal = inject("$swal");
 
-const couponTrashRestore = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "coupon.trash.restore"
-      )
-    : false;
-});
-
-const couponTrashDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "coupon.trash.delete"
-      )
-    : false;
-});
-
+// Query String Parameteres
 const params = reactive({
-  search: null,
+  search: usePage().props.ziggy.query?.search,
   page: props.trashCoupons.current_page ? props.trashCoupons.current_page : 1,
   per_page: props.trashCoupons.per_page ? props.trashCoupons.per_page : 10,
   sort: "id",
   direction: "desc",
 });
 
-const handleSearchBox = () => {
-  params.search = "";
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.coupons.trash"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.coupons.trash"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.coupons.trash"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.coupons.trash"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("admin.coupons.trash"),
     {
@@ -98,11 +95,43 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
-const handleRestore = async (trashCouponId) => {
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
+};
+
+// Handle Trash Coupon Restore
+const handleCouponRestore = async (trashCouponId) => {
   const result = await swal({
     icon: "info",
     title: "Are you sure you want to restore this coupon?",
@@ -120,18 +149,24 @@ const handleRestore = async (trashCouponId) => {
         id: trashCouponId,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {},
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
-const handleDelete = async (trashCouponId) => {
+// Handle Trash Coupon Delete
+const handleCouponDelete = async (trashCouponId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -146,21 +181,26 @@ const handleDelete = async (trashCouponId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.coupons.forceDelete", {
+      route("admin.coupons.force.delete", {
         id: trashCouponId,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
+// Handle Trash Coupon Delete Permanently
 const handlePermanentlyDelete = async () => {
   const result = await swal({
     icon: "warning",
@@ -176,19 +216,45 @@ const handlePermanentlyDelete = async () => {
 
   if (result.isConfirmed) {
     router.get(
-      route("admin.coupons.permanentlyDelete", {
+      route("admin.coupons.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {},
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
+
+// Define Permissions Variables
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
+
+// Coupon Trash Restore Permission
+const couponTrashRestore = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "coupon.trash.restore"
+      )
+    : false;
+});
+
+// Coupon Trash Delete Permission
+const couponTrashDelete = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "coupon.trash.delete"
+      )
+    : false;
+});
 </script>
 
 <template>
@@ -244,8 +310,8 @@ const handlePermanentlyDelete = async () => {
 
           <i
             v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-            @click="handleSearchBox"
+            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+            @click="removeSearch"
           ></i>
         </form>
         <div class="ml-5">
@@ -265,7 +331,7 @@ const handlePermanentlyDelete = async () => {
       </div>
 
       <p
-        v-if="couponTrashDelete"
+        v-if="couponTrashDelete && trashCoupons.data.length !== 0"
         class="text-left text-sm font-bold mb-2 text-warning-600"
       >
         Coupons in the Trash will be automatically deleted after 60 days.
@@ -277,6 +343,7 @@ const handlePermanentlyDelete = async () => {
         </button>
       </p>
 
+      <!-- Coupon Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -465,19 +532,42 @@ const handlePermanentlyDelete = async () => {
 
         <tbody v-if="trashCoupons.data.length">
           <Tr v-for="trashCoupon in trashCoupons.data" :key="trashCoupon.id">
-            <BodyTh>{{ trashCoupon.id }}</BodyTh>
+            <BodyTh>
+              {{ trashCoupon.id }}
+            </BodyTh>
 
-            <Td>{{ trashCoupon.code }}</Td>
-            <Td>{{ trashCoupon.discount_type }}</Td>
-            <Td>{{ trashCoupon.discount_amount }}</Td>
-            <Td>{{ trashCoupon.min_spend }}</Td>
-            <Td>{{ trashCoupon.max_uses }}</Td>
-            <Td>{{ trashCoupon.uses_count ? trashCoupon.uses_count : 0 }}</Td>
-            <Td>{{ trashCoupon.deleted_at }}</Td>
+            <Td>
+              {{ trashCoupon.code }}
+            </Td>
+
+            <Td>
+              {{ formatDiscountType(trashCoupon.discount_type) }}
+            </Td>
+
+            <Td>
+              {{ formattedAmount(trashCoupon.discount_amount) }}
+            </Td>
+
+            <Td>
+              {{ formattedAmount(trashCoupon.min_spend) }}
+            </Td>
+
+            <Td>
+              {{ trashCoupon.max_uses }}
+            </Td>
+
+            <Td>
+              {{ trashCoupon.uses_count ? trashCoupon.uses_count : 0 }}
+            </Td>
+
+            <Td>
+              {{ trashCoupon.deleted_at }}
+            </Td>
+
             <Td v-if="couponTrashRestore || couponTrashDelete">
               <button
                 v-if="couponTrashRestore"
-                @click="handleRestore(trashCoupon.id)"
+                @click="handleCouponRestore(trashCoupon.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-recycle"></i>
@@ -485,7 +575,7 @@ const handlePermanentlyDelete = async () => {
               </button>
               <button
                 v-if="couponTrashDelete"
-                @click="handleDelete(trashCoupon.id)"
+                @click="handleCouponDelete(trashCoupon.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-trash"></i>
@@ -495,9 +585,12 @@ const handlePermanentlyDelete = async () => {
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Coupon Table End -->
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!trashCoupons.data.length" />
 
+      <!-- Pagination -->
       <Pagination class="mt-6" :links="trashCoupons.links" />
     </div>
   </AdminDashboardLayout>

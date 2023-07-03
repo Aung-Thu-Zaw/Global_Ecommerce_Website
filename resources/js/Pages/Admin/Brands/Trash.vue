@@ -315,7 +315,7 @@ const brandTrashDelete = computed(() => {
 
       <!-- Brand Permanently Delete Button -->
       <p
-        v-if="brandTrashDelete && trashBrands.length !== 0"
+        v-if="brandTrashDelete && trashBrands.data.length !== 0"
         class="text-left text-sm font-bold mb-2 text-warning-600"
       >
         Brands in the Trash will be automatically deleted after 60 days.

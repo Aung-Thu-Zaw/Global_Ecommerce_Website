@@ -1,25 +1,27 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, useForm, Head } from "@inertiajs/vue3";
-import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/CouponBreadcrumb.vue";
-import { computed, ref } from "vue";
 import datepicker from "vue3-datepicker";
+import { computed, ref } from "vue";
+import { Link, useForm, Head } from "@inertiajs/vue3";
+import { useReCaptcha } from "vue-recaptcha-v3";
 
+// Define the props
 const props = defineProps({
   paginate: Array,
   coupon: Object,
 });
 
+// Define Variables
 const processing = ref(false);
-
 const startDate = ref(
   props.coupon.start_date ? new Date(props.coupon.start_date) : ""
 );
 
+// Format Date
 const formatStartDate = computed(() => {
   const year = startDate.value ? startDate.value.getFullYear() : "";
   const month = startDate.value ? startDate.value.getMonth() + 1 : "";
@@ -40,25 +42,26 @@ const formatEndDate = computed(() => {
   return `${year}-${month}-${day}`;
 });
 
+// Coupon Edit Form Data
 const form = useForm({
-  code: props.coupon.code,
-  discount_type: props.coupon.discount_type,
-  discount_amount: props.coupon.discount_amount,
-  min_spend: props.coupon.min_spend,
+  code: props.coupon?.code,
+  discount_type: props.coupon?.discount_type,
+  discount_amount: props.coupon?.discount_amount,
+  min_spend: props.coupon?.min_spend,
   start_date: formatStartDate,
   end_date: formatEndDate,
-  max_uses: props.coupon.max_uses,
+  max_uses: props.coupon?.max_uses,
   captcha_token: null,
 });
 
+// Destructing ReCaptcha
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+
+// Handle Edit Coupon
 const handleEditCoupon = async () => {
   await recaptchaLoaded();
   form.captcha_token = await executeRecaptcha("edit_coupon");
-  submit();
-};
 
-const submit = () => {
   processing.value = true;
   form.post(
     route("admin.coupons.update", {
@@ -82,7 +85,29 @@ const submit = () => {
     <Head title="Edit Coupon" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span
+                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                >{{ coupon.code }}</span
+              >
+            </div>
+          </li>
           <li aria-current="page">
             <div class="flex items-center">
               <svg
@@ -106,6 +131,7 @@ const submit = () => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back button -->
         <div>
           <Link
             as="button"
@@ -124,6 +150,7 @@ const submit = () => {
 
       <div class="border shadow-md p-10">
         <form @submit.prevent="handleEditCoupon">
+          <!-- Coupon Code Input -->
           <div class="mb-6">
             <InputLabel for="code" value="Coupon Code *" />
 
@@ -139,6 +166,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.code" />
           </div>
 
+          <!-- Coupon Type Select Box -->
           <div class="mb-6">
             <InputLabel for="discount_type" value="Coupon Discount Type *" />
 
@@ -154,6 +182,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.discount_type" />
           </div>
 
+          <!-- Coupon Amount Input -->
           <div class="mb-6">
             <InputLabel
               for="discount_amount"
@@ -167,11 +196,27 @@ const submit = () => {
               v-model="form.discount_amount"
               required
               placeholder="Enter Discount Amount"
-            />
+            >
+              <template v-slot:icon>
+                <span
+                  v-if="form.discount_type === 'fixed_amount'"
+                  class="text-slate-500"
+                >
+                  $
+                </span>
+                <span
+                  v-else-if="form.discount_type === 'percentage'"
+                  class="text-slate-500"
+                >
+                  %
+                </span>
+              </template>
+            </TextInput>
 
             <InputError class="mt-2" :message="form.errors.discount_amount" />
           </div>
 
+          <!-- Coupon Min Spend Input -->
           <div class="mb-6">
             <InputLabel for="min_spend" value="Minmimum Spend *" />
 
@@ -186,6 +231,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.min_spend" />
           </div>
 
+          <!-- Coupon Date Component -->
           <div class="mb-6">
             <InputLabel for="start_date" value="Coupon Start Date *" />
 
@@ -198,6 +244,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.start_date" />
           </div>
 
+          <!-- Coupon Date Component -->
           <div class="mb-6">
             <InputLabel for="end_date" value="Coupon End Date *" />
 
@@ -210,6 +257,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.end_date" />
           </div>
 
+          <!-- Coupon Max Usage Input -->
           <div class="mb-6">
             <InputLabel for="max_uses" value="Max Uses *" />
 
@@ -224,6 +272,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.max_uses" />
           </div>
 
+          <!-- Edit Button -->
           <div class="mb-6">
             <button
               class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"

@@ -317,7 +317,7 @@ const collectionTrashDelete = computed(() => {
 
       <!-- Collection Permanently Delete Button -->
       <p
-        v-if="collectionTrashDelete && trashCollections.length!==0"
+        v-if="collectionTrashDelete && trashCollections.data.length!==0"
         class="text-left text-sm font-bold mb-2 text-warning-600"
       >
         Collections in the Trash will be automatically deleted after 60 days.

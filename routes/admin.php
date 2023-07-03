@@ -130,6 +130,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 });
            Route::delete('products/{product_id}/images/{image_id}', [MultiImageController::class,"destroy"])->name("image.destroy");
 
+           // Admin Dashboard Coupon Section
            Route::controller(AdminCouponController::class)
                 ->prefix("/coupons")
                 ->name("coupons.")
@@ -142,8 +143,8 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::delete("/{coupon}", "destroy")->middleware('permission:coupon.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:coupon.trash.list')->name("trash");
                     Route::post("/{id}/restore", "restore")->middleware('permission:coupon.trash.restore')->name("restore");
-                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:coupon.trash.delete')->name("forceDelete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:coupon.trash.delete')->name("permanentlyDelete");
+                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:coupon.trash.delete')->name("force.delete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:coupon.trash.delete')->name("permanently.delete");
                 });
 
            Route::controller(AdminSliderBannerController::class)

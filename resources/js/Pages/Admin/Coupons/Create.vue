@@ -1,22 +1,25 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, useForm, Head } from "@inertiajs/vue3";
-import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/CouponBreadcrumb.vue";
 import datepicker from "vue3-datepicker";
 import { computed, ref } from "vue";
+import { Link, useForm, Head } from "@inertiajs/vue3";
+import { useReCaptcha } from "vue-recaptcha-v3";
 
+// Define the props
 const props = defineProps({
   per_page: String,
 });
 
+// Define Variables
 const processing = ref(false);
-
 const startDate = ref(null);
+const endDate = ref(null);
 
+// Format Date
 const formatStartDate = computed(() => {
   const year = startDate.value ? startDate.value.getFullYear() : "";
   const month = startDate.value ? startDate.value.getMonth() + 1 : "";
@@ -24,8 +27,6 @@ const formatStartDate = computed(() => {
 
   return `${year}-${month}-${day}`;
 });
-
-const endDate = ref(null);
 
 const formatEndDate = computed(() => {
   const year = endDate.value ? endDate.value.getFullYear() : "";
@@ -35,6 +36,7 @@ const formatEndDate = computed(() => {
   return `${year}-${month}-${day}`;
 });
 
+// Coupon Create Form Data
 const form = useForm({
   code: "",
   discount_type: "",
@@ -46,14 +48,14 @@ const form = useForm({
   captcha_token: null,
 });
 
+// Destructing ReCaptcha
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+
+// Handle Create Coupon
 const handleCreateCoupon = async () => {
   await recaptchaLoaded();
   form.captcha_token = await executeRecaptcha("create_coupon");
-  submit();
-};
 
-const submit = () => {
   processing.value = true;
   form.post(
     route("admin.coupons.store", {
@@ -74,8 +76,8 @@ const submit = () => {
   <AdminDashboardLayout>
     <Head title="Create Coupon" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -100,6 +102,7 @@ const submit = () => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back button -->
         <div>
           <Link
             :href="route('admin.coupons.index')"
@@ -116,6 +119,7 @@ const submit = () => {
 
       <div class="border shadow-md p-10">
         <form @submit.prevent="handleCreateCoupon">
+          <!-- Coupon Code Input -->
           <div class="mb-6">
             <InputLabel for="code" value="Coupon Code *" />
 
@@ -131,6 +135,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.code" />
           </div>
 
+          <!-- Coupon Type Select Box -->
           <div class="mb-6">
             <InputLabel for="discount_type" value="Coupon Discount Type *" />
 
@@ -146,6 +151,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.discount_type" />
           </div>
 
+          <!-- Coupon Amount Input -->
           <div class="mb-6">
             <InputLabel
               for="discount_amount"
@@ -178,6 +184,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.discount_amount" />
           </div>
 
+          <!-- Coupon Min Spend Input -->
           <div class="mb-6">
             <InputLabel for="min_spend" value="Minmimum Spend *" />
 
@@ -192,6 +199,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.min_spend" />
           </div>
 
+          <!-- Coupon Date Component -->
           <div class="mb-6">
             <InputLabel for="start_date" value="Coupon Start Date *" />
 
@@ -204,6 +212,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.start_date" />
           </div>
 
+          <!-- Coupon Date Component -->
           <div class="mb-6">
             <InputLabel for="end_date" value="Coupon End Date *" />
 
@@ -216,6 +225,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.end_date" />
           </div>
 
+          <!-- Coupon Max Usage Input -->
           <div class="mb-6">
             <InputLabel for="max_uses" value="Max Uses *" />
 
@@ -230,6 +240,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.max_uses" />
           </div>
 
+          <!-- Create Button -->
           <div class="mb-6">
             <button
               class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"
