@@ -89,7 +89,60 @@ const props = defineProps({
           <OrderDetailCard
             :deliveryInformation="deliveryInformation"
             :order="deliveredOrderDetail"
-          />
+          >
+            <div
+              v-if="deliveredOrderDetail.confirmed_date"
+              class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
+            >
+              <span
+                class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
+              >
+                Order Confirmed Date
+              </span>
+              <span class="w-full block">
+                {{ deliveredOrderDetail.confirmed_date }}
+              </span>
+            </div>
+            <div
+              v-if="deliveredOrderDetail.processing_date"
+              class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
+            >
+              <span
+                class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
+              >
+                Order Processing Date
+              </span>
+              <span class="w-full block">
+                {{ deliveredOrderDetail.processing_date }}
+              </span>
+            </div>
+            <div
+              v-if="deliveredOrderDetail.shipped_date"
+              class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
+            >
+              <span
+                class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
+              >
+                Order Shipped Date
+              </span>
+              <span class="w-full block">
+                {{ deliveredOrderDetail.shipped_date }}
+              </span>
+            </div>
+            <div
+              class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
+              v-if="deliveredOrderDetail.delivered_date"
+            >
+              <span
+                class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
+              >
+                Order Delivered Date
+              </span>
+              <span class="w-full block">
+                {{ deliveredOrderDetail.delivered_date }}
+              </span>
+            </div>
+          </OrderDetailCard>
         </div>
       </div>
       <div class="border shadow rounded-sm">

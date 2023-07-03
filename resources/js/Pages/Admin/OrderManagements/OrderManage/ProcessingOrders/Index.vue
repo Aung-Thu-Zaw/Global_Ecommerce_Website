@@ -10,12 +10,22 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, Head, router,usePage } from "@inertiajs/vue3";
+import { Link, Head, router, usePage } from "@inertiajs/vue3";
 import { reactive, watch, computed } from "vue";
 
 const props = defineProps({
   processingOrders: Object,
 });
+
+// Formatted Amount
+const formattedAmount = (amount) => {
+  const totalAmount = parseFloat(amount);
+  if (Number.isInteger(totalAmount)) {
+    return totalAmount.toFixed(0);
+  } else {
+    return totalAmount.toFixed(2);
+  }
+};
 
 const orderManageDetail = computed(() => {
   return usePage().props.auth.user.permissions.length
@@ -300,7 +310,7 @@ const updateSorting = (sort = "id") => {
             <BodyTh>{{ processingOrder.id }}</BodyTh>
             <Td>{{ processingOrder.invoice_no }}</Td>
             <Td class="capitalize">{{ processingOrder.payment_type }}</Td>
-            <Td>$ {{ processingOrder.total_amount }}</Td>
+            <Td>$ {{ formattedAmount(processingOrder.total_amount) }}</Td>
             <Td>
               <ProcessingStatus>
                 {{ processingOrder.order_status }}

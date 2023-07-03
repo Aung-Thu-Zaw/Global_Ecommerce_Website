@@ -17,6 +17,16 @@ const props = defineProps({
   deliveredOrders: Object,
 });
 
+// Formatted Amount
+const formattedAmount = (amount) => {
+  const totalAmount = parseFloat(amount);
+  if (Number.isInteger(totalAmount)) {
+    return totalAmount.toFixed(0);
+  } else {
+    return totalAmount.toFixed(2);
+  }
+};
+
 const orderManageDetail = computed(() => {
   return usePage().props.auth.user.permissions.length
     ? usePage().props.auth.user.permissions.some(
@@ -301,7 +311,7 @@ const updateSorting = (sort = "id") => {
             <BodyTh>{{ deliveredOrder.id }}</BodyTh>
             <Td>{{ deliveredOrder.invoice_no }}</Td>
             <Td class="capitalize">{{ deliveredOrder.payment_type }}</Td>
-            <Td>$ {{ deliveredOrder.total_amount }}</Td>
+            <Td>$ {{ formattedAmount(deliveredOrder.total_amount) }}</Td>
             <Td>
               <DeliveredStatus>
                 {{ deliveredOrder.order_status }}

@@ -303,7 +303,7 @@ const updateSorting = (sort = "id") => {
             <BodyTh>{{ pendingOrder.id }}</BodyTh>
             <Td>{{ pendingOrder.invoice_no }}</Td>
             <Td class="capitalize">{{ pendingOrder.payment_type }}</Td>
-            <Td>$ {{ pendingOrder.total_amount }}</Td>
+            <Td>$ {{ formattedAmount(pendingOrder.total_amount) }}</Td>
             <Td>
               <PendingStatus>
                 {{ pendingOrder.order_status }}

@@ -9,6 +9,16 @@ defineProps({
   deliveryInformation: Object,
   order: Object,
 });
+
+// Formatted Amount
+const formattedAmount = (amount) => {
+  const totalAmount = parseFloat(amount);
+  if (Number.isInteger(totalAmount)) {
+    return totalAmount.toFixed(0);
+  } else {
+    return totalAmount.toFixed(2);
+  }
+};
 </script>
 
 <template>
@@ -86,17 +96,21 @@ defineProps({
           >
             Total Amount
           </span>
-          <span class="w-full block"> $ {{ order.total_amount }} </span>
+          <span class="w-full block">
+            $ {{ formattedAmount(order.total_amount) }}
+          </span>
         </div>
+
         <div class="border-b py-3 bg-gray-50 flex items-center">
           <span
             class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
           >
             Transaction Id
           </span>
-          <span class="w-full block">
+          <span v-if="order.transaction_id" class="w-full block">
             {{ order.transaction_id }}
           </span>
+          <span v-else class="w-full block"> Transition does not exist. </span>
         </div>
         <div class="bg-white border-b py-3 dark:bg-gray-900 flex items-center">
           <span
@@ -108,65 +122,9 @@ defineProps({
             {{ order.order_date }}
           </span>
         </div>
-        <div
-          v-if="
-            order.confirmed_date ||
-            order.processing_date ||
-            order.shipped_date ||
-            order.delivered_date
-          "
-          class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
-        >
-          <span
-            class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
-          >
-            Order Confirmed Date
-          </span>
-          <span class="w-full block">
-            {{ order.confirmed_date }}
-          </span>
-        </div>
-        <div
-          v-if="
-            order.processing_date || order.shipped_date || order.delivered_date
-          "
-          class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
-        >
-          <span
-            class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
-          >
-            Order Processing Date
-          </span>
-          <span class="w-full block">
-            {{ order.processing_date }}
-          </span>
-        </div>
-        <div
-          v-if="order.shipped_date || order.delivered_date"
-          class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
-        >
-          <span
-            class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
-          >
-            Order Shipped Date
-          </span>
-          <span class="w-full block">
-            {{ order.shipped_date }}
-          </span>
-        </div>
-        <div
-          v-if="order.delivered_date"
-          class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
-        >
-          <span
-            class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
-          >
-            Order Delivered Date
-          </span>
-          <span class="w-full block">
-            {{ order.delivered_date }}
-          </span>
-        </div>
+
+        <slot />
+
         <div class="border-b py-3 bg-gray-50 flex items-center">
           <span
             class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"

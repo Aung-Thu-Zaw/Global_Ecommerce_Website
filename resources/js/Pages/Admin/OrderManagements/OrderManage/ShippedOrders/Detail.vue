@@ -1,5 +1,5 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/OrderManage/Breadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/OrderManageBreadcrumb.vue";
 import OrderDetailCard from "@/Components/Cards/OrderDetailCard.vue";
 import DeliveryInformationCard from "@/Components/Cards/DeliveryInformationCard.vue";
 import Tr from "@/Components/Table/Tr.vue";
@@ -136,7 +136,47 @@ const handleDelivered = async (id) => {
           <OrderDetailCard
             :deliveryInformation="deliveryInformation"
             :order="shippedOrderDetail"
-          />
+          >
+            <div
+              v-if="shippedOrderDetail.confirmed_date"
+              class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
+            >
+              <span
+                class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
+              >
+                Order Confirmed Date
+              </span>
+              <span class="w-full block">
+                {{ shippedOrderDetail.confirmed_date }}
+              </span>
+            </div>
+            <div
+              v-if="shippedOrderDetail.processing_date"
+              class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
+            >
+              <span
+                class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
+              >
+                Order Processing Date
+              </span>
+              <span class="w-full block">
+                {{ shippedOrderDetail.processing_date }}
+              </span>
+            </div>
+            <div
+              v-if="shippedOrderDetail.shipped_date"
+              class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
+            >
+              <span
+                class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
+              >
+                Order Shipped Date
+              </span>
+              <span class="w-full block">
+                {{ shippedOrderDetail.shipped_date }}
+              </span>
+            </div>
+          </OrderDetailCard>
           <button
             @click="handleDelivered(shippedOrderDetail.id)"
             v-if="

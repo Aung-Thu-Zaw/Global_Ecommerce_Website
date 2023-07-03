@@ -136,7 +136,21 @@ const handleProcessing = async (id) => {
           <OrderDetailCard
             :deliveryInformation="deliveryInformation"
             :order="confirmedOrderDetail"
-          />
+          >
+            <div
+              v-if="confirmedOrderDetail.confirmed_date"
+              class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
+            >
+              <span
+                class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
+              >
+                Order Confirmed Date
+              </span>
+              <span class="w-full block">
+                {{ confirmedOrderDetail.confirmed_date }}
+              </span>
+            </div>
+          </OrderDetailCard>
           <button
             @click="handleProcessing(confirmedOrderDetail.id)"
             v-if="

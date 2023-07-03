@@ -135,7 +135,34 @@ const handleShipped = async (id) => {
           <OrderDetailCard
             :deliveryInformation="deliveryInformation"
             :order="processingOrderDetail"
-          />
+          >
+            <div
+              v-if="processingOrderDetail.confirmed_date"
+              class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
+            >
+              <span
+                class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
+              >
+                Order Confirmed Date
+              </span>
+              <span class="w-full block">
+                {{ processingOrderDetail.confirmed_date }}
+              </span>
+            </div>
+            <div
+              v-if="processingOrderDetail.processing_date"
+              class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
+            >
+              <span
+                class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
+              >
+                Order Processing Date
+              </span>
+              <span class="w-full block">
+                {{ processingOrderDetail.processing_date }}
+              </span>
+            </div>
+          </OrderDetailCard>
           <button
             v-if="
               processingOrderDetail.order_status === 'processing' &&
