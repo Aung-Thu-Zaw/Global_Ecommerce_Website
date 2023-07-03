@@ -9,15 +9,18 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/SuggestionBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject, computed } from "vue";
+import { reactive, watch, inject, computed, ref } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
+// Define the props
 const props = defineProps({
   suggestions: Object,
 });
 
+// Define Alert Variables
 const swal = inject("$swal");
 
+// Formatted Suggestion Type
 const formatSuggestionType = (suggestionType) => {
   const words = suggestionType.split("_");
   const capitalizedWords = words.map(
@@ -30,63 +33,49 @@ const formatSuggestionType = (suggestionType) => {
 
 // Query String Parameteres
 const params = reactive({
-  search: null,
+  search: usePage().props.ziggy.query?.search,
   page: props.suggestions.current_page ? props.suggestions.current_page : 1,
   per_page: props.suggestions.per_page ? props.suggestions.per_page : 10,
   sort: "id",
   direction: "desc",
 });
 
-const handleSearchBox = () => {
-  params.search = "";
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.suggestions.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 
-// Watching Search Box
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.suggestions.index"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.suggestions.index"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-// Watching Perpage Select Box
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.suggestions.index"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-// Update Sorting Column
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("admin.suggestions.index"),
     {
@@ -96,12 +85,43 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
-// Handle Delete Suggestion
-const handleDelete = async (suggestionId) => {
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
+};
+
+// Handle Suggestion Delete
+const handleSuggestionDelete = async (suggestionId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete this suggestion?",
@@ -135,26 +155,31 @@ const handleDelete = async (suggestionId) => {
   }
 };
 
-// Suggestion Permissions
+// Define Permissions Variables
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
+
+// Suggestion Trash List Permission
 const suggestionTrashList = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
+  return permissions.value.length
+    ? permissions.value.some(
         (permission) => permission.name === "suggestion.trash.list"
       )
     : false;
 });
 
+// Suggestion Detail Permission
 const suggestionDetail = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
+  return permissions.value.length
+    ? permissions.value.some(
         (permission) => permission.name === "suggestion.detail"
       )
     : false;
 });
 
+// Suggestion Delete Permission
 const suggestionDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
+  return permissions.value.length
+    ? permissions.value.some(
         (permission) => permission.name === "suggestion.delete"
       )
     : false;
@@ -197,8 +222,8 @@ const suggestionDelete = computed(() => {
 
             <i
               v-if="params.search"
-              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-              @click="handleSearchBox"
+              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+              @click="removeSearch"
             ></i>
           </form>
 
@@ -339,7 +364,7 @@ const suggestionDelete = computed(() => {
             <Td v-if="suggestionDelete || suggestionDetail">
               <button
                 v-if="suggestionDelete"
-                @click="handleDelete(suggestion.id)"
+                @click="handleSuggestionDelete(suggestion.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>

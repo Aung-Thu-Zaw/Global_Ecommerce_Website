@@ -9,18 +9,20 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/SuggestionBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { inject, reactive, watch, computed } from "vue";
+import { inject, reactive, watch, computed, ref } from "vue";
 import { router, usePage, Link, Head } from "@inertiajs/vue3";
 
+// Define the Props
 const props = defineProps({
   trashSuggestions: Object,
 });
 
+// Define Alert Variables
 const swal = inject("$swal");
 
 // Query String Parameteres
 const params = reactive({
-  search: null,
+  search: usePage().props.ziggy.query?.search,
   page: props.trashSuggestions.current_page
     ? props.trashSuggestions.current_page
     : 1,
@@ -130,7 +132,7 @@ const handleRestore = async (trashSuggesstionId) => {
 };
 
 // Handle Delete Suggestion
-const handleDelete = async (trashSuggesstionId) => {
+const handleSuggestionDelete = async (trashSuggesstionId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -199,18 +201,22 @@ const handlePermanentlyDelete = async () => {
   }
 };
 
-// Suggestion Permissions
+// Define Permissions Variables
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
+
+// Suggestion Trash Restore Permission
 const suggestionTrashRestore = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
+  return permissions.value.length
+    ? permissions.value.some(
         (permission) => permission.name === "suggestion.trash.restore"
       )
     : false;
 });
 
+// Suggestion Trash Delete Permission
 const suggestionTrashDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
+  return permissions.value.length
+    ? permissions.value.some(
         (permission) => permission.name === "suggestion.trash.delete"
       )
     : false;
@@ -437,7 +443,7 @@ const suggestionTrashDelete = computed(() => {
               </button>
               <button
                 v-if="suggestionTrashDelete"
-                @click="handleDelete(trashSuggesstion.id)"
+                @click="handleSuggestionDelete(trashSuggesstion.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-trash"></i>
