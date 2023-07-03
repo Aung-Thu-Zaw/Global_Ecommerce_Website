@@ -45,7 +45,6 @@ class HandleInertiaRequests extends Middleware
             ],
             'parentCategory'=>Category::with("children")->whereNull("parent_id")->get(),
             'vendors'=>User::where([["role","vendor"],["status","active"]])->limit(30)->get(),
-            'brands'=>Brand::limit(30)->get(),
             'totalCartItems'=> Cart::with("cartItems")->where("user_id", $request->user()->id ?? null)->first(),
             'socialShares'=>ShareFacade::currentPage("Global E-commerce")
                                ->facebook()
