@@ -463,6 +463,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::delete("/{role}", "destroy")->middleware('permission:role-in-permissions.delete')->name("destroy");
                 });
 
+           // Admin Dashboard Blog Category Section
            Route::controller(AdminBlogCategoryController::class)
                 ->prefix("/blogs/categories")
                 ->name("blogs.categories.")
@@ -475,10 +476,11 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::delete("/{blog_category}", "destroy")->middleware('permission:blog-category.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:blog-category.trash.list')->name("trash");
                     Route::post("/{id}/restore", "restore")->middleware('permission:blog-category.trash.restore')->name("restore");
-                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:blog-category.trash.delete')->name("forceDelete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:blog-category.trash.delete')->name("permanentlyDelete");
+                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:blog-category.trash.delete')->name("force.delete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:blog-category.trash.delete')->name("permanently.delete");
                 });
 
+           // Admin Dashboard Blog Post Section
            Route::controller(AdminBlogPostController::class)
                 ->prefix("/blogs/posts")
                 ->name("blogs.posts.")
@@ -491,8 +493,8 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::delete("/{blog_post}", "destroy")->middleware('permission:blog-post.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:blog-post.trash.list')->name("trash");
                     Route::post("/{id}/restore", "restore")->middleware('permission:blog-post.trash.restore')->name("restore");
-                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:blog-post.trash.delete')->name("forceDelete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:blog-post.trash.delete')->name("permanentlyDelete");
+                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:blog-post.trash.delete')->name("force.delete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:blog-post.trash.delete')->name("permanently.delete");
                 });
 
            Route::controller(AdminWebsiteSettingController::class)

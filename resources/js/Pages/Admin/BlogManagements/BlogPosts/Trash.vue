@@ -9,33 +9,20 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/BlogPostBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { inject, reactive, watch, computed } from "vue";
+import { inject, reactive, watch, computed, ref } from "vue";
 import { router, usePage, Link, Head } from "@inertiajs/vue3";
 
+// Define the Props
 const props = defineProps({
   trashBlogPosts: Object,
 });
 
+// Define Alert Variables
 const swal = inject("$swal");
 
-const blogPostTrashRestore = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "blog-post.trash.restore"
-      )
-    : false;
-});
-
-const blogPostTrashDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "blog-post.trash.delete"
-      )
-    : false;
-});
-
+// Query String Parameteres
 const params = reactive({
-  search: null,
+  search: usePage().props.ziggy.query?.search,
   page: props.trashBlogPosts.current_page
     ? props.trashBlogPosts.current_page
     : 1,
@@ -44,53 +31,42 @@ const params = reactive({
   direction: "desc",
 });
 
-const handleSearchBox = () => {
-  params.search = "";
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.blogs.posts.trash"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.blogs.posts.trash"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.blogs.posts.trash"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.blogs.posts.trash"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("admin.blogs.posts.trash"),
     {
@@ -100,11 +76,43 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
-const handleRestore = async (trashBlogPostId) => {
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
+};
+
+// Handle Trash Blog Post Restore
+const handleBlogPostRestore = async (trashBlogPostId) => {
   const result = await swal({
     icon: "info",
     title: "Are you sure you want to restore this blog post?",
@@ -122,18 +130,24 @@ const handleRestore = async (trashBlogPostId) => {
         id: trashBlogPostId,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {},
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
-const handleDelete = async (trashBlogPostId) => {
+// Handle Trash Blog Post Delete
+const handleBlogPostDelete = async (trashBlogPostId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -148,21 +162,26 @@ const handleDelete = async (trashBlogPostId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.blogs.posts.forceDelete", {
+      route("admin.blogs.posts.force.delete", {
         id: trashBlogPostId,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
+// Handle Trash Blog Post Delete Permanently
 const handlePermanentlyDelete = async () => {
   const result = await swal({
     icon: "warning",
@@ -178,19 +197,45 @@ const handlePermanentlyDelete = async () => {
 
   if (result.isConfirmed) {
     router.get(
-      route("admin.blogs.posts.permanentlyDelete", {
+      route("admin.blogs.posts.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {},
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
+
+// Define Permissions Variables
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
+
+// Blog Post Trash Restore Permission
+const blogPostTrashRestore = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "blog-post.trash.restore"
+      )
+    : false;
+});
+
+// Blog Post Trash Delete Permission
+const blogPostTrashDelete = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "blog-post.trash.delete"
+      )
+    : false;
+});
 </script>
 
 <template>
@@ -199,6 +244,7 @@ const handlePermanentlyDelete = async () => {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -223,6 +269,7 @@ const handlePermanentlyDelete = async () => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back Button -->
         <div>
           <Link
             as="button"
@@ -236,6 +283,7 @@ const handlePermanentlyDelete = async () => {
       </div>
 
       <div class="flex items-center justify-end mb-5">
+        <!-- Search Box -->
         <form class="w-[350px] relative">
           <input
             type="text"
@@ -246,10 +294,12 @@ const handlePermanentlyDelete = async () => {
 
           <i
             v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-            @click="handleSearchBox"
+            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+            @click="removeSearch"
           ></i>
         </form>
+
+        <!-- Perpage Select Box -->
         <div class="ml-5">
           <select
             class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -266,8 +316,9 @@ const handlePermanentlyDelete = async () => {
         </div>
       </div>
 
+      <!-- Blog Post Permanently Delete Button -->
       <p
-        v-if="blogPostTrashDelete"
+        v-if="blogPostTrashDelete && trashBlogPosts.data.length !== 0"
         class="text-left text-sm font-bold mb-2 text-warning-600"
       >
         Blog posts in the Trash will be automatically deleted after 60 days.
@@ -279,6 +330,7 @@ const handlePermanentlyDelete = async () => {
         </button>
       </p>
 
+      <!-- Blog Post Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -392,7 +444,10 @@ const handlePermanentlyDelete = async () => {
             v-for="trashBlogPost in trashBlogPosts.data"
             :key="trashBlogPost.id"
           >
-            <BodyTh>{{ trashBlogPost.id }}</BodyTh>
+            <BodyTh>
+              {{ trashBlogPost.id }}
+            </BodyTh>
+
             <Td>
               <img
                 :src="trashBlogPost.image"
@@ -400,7 +455,11 @@ const handlePermanentlyDelete = async () => {
                 alt=""
               />
             </Td>
-            <Td>{{ trashBlogPost.title }}</Td>
+
+            <Td>
+              {{ trashBlogPost.title }}
+            </Td>
+
             <Td>
               <span
                 v-html="trashBlogPost.description"
@@ -408,11 +467,15 @@ const handlePermanentlyDelete = async () => {
               >
               </span>
             </Td>
-            <Td>{{ trashBlogPost.deleted_at }}</Td>
+
+            <Td>
+              {{ trashBlogPost.deleted_at }}
+            </Td>
+
             <Td v-if="blogPostTrashRestore || blogPostTrashDelete">
               <button
                 v-if="blogPostTrashRestore"
-                @click="handleRestore(trashBlogPost.id)"
+                @click="handleBlogPostRestore(trashBlogPost.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-recycle"></i>
@@ -420,7 +483,7 @@ const handlePermanentlyDelete = async () => {
               </button>
               <button
                 v-if="blogPostTrashDelete"
-                @click="handleDelete(trashBlogPost.id)"
+                @click="handleBlogPostDelete(trashBlogPost.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-trash"></i>
@@ -430,9 +493,12 @@ const handlePermanentlyDelete = async () => {
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Blog Post Table End -->
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!trashBlogPosts.data.length" />
 
+      <!-- Pagination -->
       <Pagination class="mt-6" :links="trashBlogPosts.links" />
     </div>
   </AdminDashboardLayout>

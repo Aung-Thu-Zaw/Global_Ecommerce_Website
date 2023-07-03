@@ -1,24 +1,28 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, useForm, Head } from "@inertiajs/vue3";
-import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/BlogCategoryBreadcrumb.vue";
+import { Link, useForm, Head } from "@inertiajs/vue3";
+import { useReCaptcha } from "vue-recaptcha-v3";
 import { ref } from "vue";
 
+// Define the props
 const props = defineProps({
   per_page: String,
 });
 
+// Define Variables
 const processing = ref(false);
-
 const previewPhoto = ref("");
+
+// Handle Preview Image
 const getPreviewPhotoPath = (path) => {
   previewPhoto.value.src = URL.createObjectURL(path);
 };
 
+// Blog Category Create Form Data
 const form = useForm({
   name: "",
   status: "",
@@ -26,14 +30,14 @@ const form = useForm({
   captcha_token: null,
 });
 
+// Destructing ReCaptcha
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+
+// Handle Create Blog Category
 const handleCreateBlogCatrgory = async () => {
   await recaptchaLoaded();
   form.captcha_token = await executeRecaptcha("create_blog_category");
-  submit();
-};
 
-const submit = () => {
   processing.value = true;
   form.post(
     route("admin.blogs.categories.store", {
@@ -55,6 +59,7 @@ const submit = () => {
     <Head title="Create Blog Category" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -79,6 +84,7 @@ const submit = () => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back button -->
         <div>
           <Link
             as="button"
@@ -95,6 +101,7 @@ const submit = () => {
       </div>
 
       <div class="border shadow-md p-10">
+        <!-- Preview Image -->
         <div class="mb-6">
           <img
             ref="previewPhoto"
@@ -104,6 +111,7 @@ const submit = () => {
           />
         </div>
         <form @submit.prevent="handleCreateBlogCatrgory">
+          <!-- Blog Category Name Input -->
           <div class="mb-6">
             <InputLabel for="name" value="Blog Category Name *" />
 
@@ -119,6 +127,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.name" />
           </div>
 
+          <!-- Status Select Box -->
           <div class="mb-6">
             <InputLabel for="status" value="Status *" />
 
@@ -134,6 +143,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.status" />
           </div>
 
+          <!-- Blog Category File Input -->
           <div class="mb-6">
             <InputLabel for="image" value="Image" />
 
@@ -152,6 +162,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.image" />
           </div>
 
+          <!-- Create Button -->
           <div class="mb-6">
             <button
               class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"

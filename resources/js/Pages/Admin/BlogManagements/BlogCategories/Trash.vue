@@ -9,33 +9,20 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/BlogCategoryBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { inject, reactive, watch, computed } from "vue";
+import { inject, reactive, watch, computed, ref } from "vue";
 import { router, usePage, Link, Head } from "@inertiajs/vue3";
 
+// Define the Props
 const props = defineProps({
   trashBlogCategories: Object,
 });
 
+// Define Alert Variables
 const swal = inject("$swal");
 
-const blogCategoryTrashRestore = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "blog-category.trash.restore"
-      )
-    : false;
-});
-
-const blogCategoryTrashDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "blog-category.trash.delete"
-      )
-    : false;
-});
-
+// Query String Parameteres
 const params = reactive({
-  search: null,
+  search: usePage().props.ziggy.query?.search,
   page: props.trashBlogCategories.current_page
     ? props.trashBlogCategories.current_page
     : 1,
@@ -46,53 +33,42 @@ const params = reactive({
   direction: "desc",
 });
 
-const handleSearchBox = () => {
-  params.search = "";
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.blogs.categories.trash"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.blogs.categories.trash"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.blogs.categories.trash"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.blogs.categories.trash"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("admin.blogs.categories.trash"),
     {
@@ -102,11 +78,43 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
-const handleRestore = async (trashBlogCategoryId) => {
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
+};
+
+// Handle Trash Blog Category Restore
+const handleBlogCategoryRestore = async (trashBlogCategoryId) => {
   const result = await swal({
     icon: "info",
     title: "Are you sure you want to restore this blog category?",
@@ -124,18 +132,24 @@ const handleRestore = async (trashBlogCategoryId) => {
         id: trashBlogCategoryId,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {},
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
-const handleDelete = async (trashBlogCategoryId) => {
+// Handle Trash Blog Category Delete
+const handleBlogCategoryDelete = async (trashBlogCategoryId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -150,21 +164,26 @@ const handleDelete = async (trashBlogCategoryId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.blogs.categories.forceDelete", {
+      route("admin.blogs.categories.force.delete", {
         id: trashBlogCategoryId,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
+// Handle Trash Blog Category Delete Permanently
 const handlePermanentlyDelete = async () => {
   const result = await swal({
     icon: "warning",
@@ -180,19 +199,45 @@ const handlePermanentlyDelete = async () => {
 
   if (result.isConfirmed) {
     router.get(
-      route("admin.blogs.categories.permanentlyDelete", {
+      route("admin.blogs.categories.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {},
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
+
+// Define Permissions Variables
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
+
+// Blog Category Trash Restore Permission
+const blogCategoryTrashRestore = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "blog-category.trash.restore"
+      )
+    : false;
+});
+
+// Blog Category Trash Delete Permission
+const blogCategoryTrashDelete = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "blog-category.trash.delete"
+      )
+    : false;
+});
 </script>
 
 <template>
@@ -201,6 +246,7 @@ const handlePermanentlyDelete = async () => {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -225,6 +271,7 @@ const handlePermanentlyDelete = async () => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back Button -->
         <div>
           <Link
             :href="route('admin.blogs.categories.index')"
@@ -237,6 +284,7 @@ const handlePermanentlyDelete = async () => {
       </div>
 
       <div class="flex items-center justify-end mb-5">
+        <!-- Search Box -->
         <form class="w-[350px] relative">
           <input
             type="text"
@@ -247,10 +295,12 @@ const handlePermanentlyDelete = async () => {
 
           <i
             v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-            @click="handleSearchBox"
+            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+            @click="removeSearch"
           ></i>
         </form>
+
+        <!-- Perpage Select Box -->
         <div class="ml-5">
           <select
             class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -267,8 +317,9 @@ const handlePermanentlyDelete = async () => {
         </div>
       </div>
 
+      <!-- Blog Category Permanently Delete Button -->
       <p
-        v-if="blogCategoryTrashDelete"
+        v-if="blogCategoryTrashDelete && trashBlogCategories.data.length !== 0"
         class="text-left text-sm font-bold mb-2 text-warning-600"
       >
         Blog categories in the Trash will be automatically deleted after 60
@@ -281,6 +332,7 @@ const handlePermanentlyDelete = async () => {
         </button>
       </p>
 
+      <!-- Blog Category Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -369,7 +421,10 @@ const handlePermanentlyDelete = async () => {
             v-for="trashBlogCategory in trashBlogCategories.data"
             :key="trashBlogCategory.id"
           >
-            <BodyTh>{{ trashBlogCategory.id }}</BodyTh>
+            <BodyTh>
+              {{ trashBlogCategory.id }}
+            </BodyTh>
+
             <Td>
               <img
                 :src="trashBlogCategory.image"
@@ -377,12 +432,19 @@ const handlePermanentlyDelete = async () => {
                 alt=""
               />
             </Td>
-            <Td>{{ trashBlogCategory.name }}</Td>
-            <Td>{{ trashBlogCategory.deleted_at }}</Td>
+
+            <Td>
+              {{ trashBlogCategory.name }}
+            </Td>
+
+            <Td>
+              {{ trashBlogCategory.deleted_at }}
+            </Td>
+
             <Td v-if="blogCategoryTrashRestore || blogCategoryTrashDelete">
               <button
                 v-if="blogCategoryTrashRestore"
-                @click="handleRestore(trashBlogCategory.id)"
+                @click="handleBlogCategoryRestore(trashBlogCategory.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-recycle"></i>
@@ -390,7 +452,7 @@ const handlePermanentlyDelete = async () => {
               </button>
               <button
                 v-if="blogCategoryTrashDelete"
-                @click="handleDelete(trashBlogCategory.id)"
+                @click="handleBlogCategoryDelete(trashBlogCategory.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-trash"></i>
@@ -400,9 +462,12 @@ const handlePermanentlyDelete = async () => {
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Blog Category Table End -->
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!trashBlogCategories.data.length" />
 
+      <!-- Pagination -->
       <Pagination class="mt-6" :links="trashBlogCategories.links" />
     </div>
   </AdminDashboardLayout>

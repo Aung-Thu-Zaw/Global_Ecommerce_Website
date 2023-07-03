@@ -1,27 +1,31 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, useForm, Head, usePage } from "@inertiajs/vue3";
-import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/BlogPostBreadcrumb.vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { Link, useForm, Head, usePage } from "@inertiajs/vue3";
+import { useReCaptcha } from "vue-recaptcha-v3";
 import { ref } from "vue";
 
+// Define the props
 const props = defineProps({
   per_page: String,
   blogCategories: Object,
 });
 
+// Define Variables
 const editor = ClassicEditor;
 const processing = ref(false);
-
 const previewPhoto = ref("");
+
+// Handle Preview Image
 const getPreviewPhotoPath = (path) => {
   previewPhoto.value.src = URL.createObjectURL(path);
 };
 
+// Blog Post Create Form Data
 const form = useForm({
   blog_category_id: "",
   author_id:
@@ -34,14 +38,14 @@ const form = useForm({
   captcha_token: null,
 });
 
+// Destructing ReCaptcha
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+
+// Handle Create Blog Post
 const handleCreateBlogPost = async () => {
   await recaptchaLoaded();
   form.captcha_token = await executeRecaptcha("create_blog_post");
-  submit();
-};
 
-const submit = () => {
   processing.value = true;
   form.post(
     route("admin.blogs.posts.store", {
@@ -63,6 +67,7 @@ const submit = () => {
     <Head title="Create Blog Post" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -87,6 +92,7 @@ const submit = () => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back button -->
         <div>
           <Link
             as="button"
@@ -103,6 +109,7 @@ const submit = () => {
       </div>
 
       <div class="border shadow-md p-10">
+        <!-- Preview Image -->
         <div class="mb-6">
           <img
             ref="previewPhoto"
@@ -112,6 +119,7 @@ const submit = () => {
           />
         </div>
         <form @submit.prevent="handleCreateBlogPost">
+          <!-- Blog Post Title Input -->
           <div class="mb-6">
             <InputLabel for="title" value="Blog Post Title *" />
 
@@ -127,6 +135,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.title" />
           </div>
 
+          <!-- Blog Post Description Editor -->
           <div class="mb-6">
             <InputLabel for="description" value="Blog Post Description *" />
 
@@ -135,6 +144,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.description" />
           </div>
 
+          <!-- Blog Category Select Box -->
           <div class="mb-6">
             <InputLabel for="blog_category" value="Blog Category *" />
 
@@ -155,6 +165,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.blog_category_id" />
           </div>
 
+          <!-- Blog Post File Input -->
           <div class="mb-6">
             <InputLabel for="image" value="Image *" />
 
@@ -173,6 +184,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.image" />
           </div>
 
+          <!-- Create Button -->
           <div class="mb-6">
             <button
               class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"
