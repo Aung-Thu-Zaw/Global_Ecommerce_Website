@@ -321,7 +321,7 @@ const categoryTrashDelete = computed(() => {
 
       <!-- Category Permanently Delete Button -->
       <p
-        v-if="categoryTrashDelete"
+        v-if="categoryTrashDelete && trashCategories.length!==0"
         class="text-left text-sm font-bold mb-2 text-warning-600"
       >
         Categories in the Trash will be automatically deleted after 60 days.
