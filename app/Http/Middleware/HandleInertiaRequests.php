@@ -6,6 +6,7 @@ use App\Models\Brand;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Conversation;
+use App\Models\Language;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -44,6 +45,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => User::with(["cart","permissions","notifications"])->where("id", $request->user()->id ?? null)->first(),
             ],
             'parentCategory'=>Category::with("children")->whereNull("parent_id")->get(),
+            'languages'=>Language::all(),
             'vendors'=>User::where([["role","vendor"],["status","active"]])->limit(30)->get(),
             'totalCartItems'=> Cart::with("cartItems")->where("user_id", $request->user()->id ?? null)->first(),
             'socialShares'=>ShareFacade::currentPage("Global E-commerce")

@@ -188,6 +188,9 @@ const handleEditPermission = async () => {
               >
                 Shipping Area
               </option>
+              <option value="language" :selected="form.group == 'language'">
+                Language
+              </option>
               <option
                 value="order-manage"
                 :selected="form.group == 'order-manage'"

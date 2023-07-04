@@ -38,6 +38,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('subscriber:delete')->daily();
         $schedule->command('website_feedback:delete')->daily();
         $schedule->command('suggestion:delete')->daily();
+        $schedule->command('language:delete')->daily();
     }
 
     /**

@@ -304,6 +304,24 @@
           </li>
         </ul>
 
+        <!-- Language Section -->
+        <li v-if="languageMenu" class="items-center">
+          <Link
+            :href="route('admin.languages.index')"
+            class="text-xs uppercase py-3 font-bold block"
+            :class="{
+              'text-blue-500 hover:text-blue-600':
+                $page.url.startsWith('/admin/languages'),
+              'text-slate-700 hover:text-slate-500':
+                !$page.url.startsWith('/admin/languages'),
+            }"
+          >
+            <i class="fa-solid fa-language mr-2 text-sm"></i>
+
+            Languages
+          </Link>
+        </li>
+
         <hr
           v-if="
             orderManageMenu || returnOrderManageMenu || cancelOrderManageMenu
@@ -1161,6 +1179,14 @@ export default {
       return this.$page.props.auth.user.permissions.length
         ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "shipping-area.menu"
+          )
+        : false;
+    },
+
+    languageMenu() {
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
+            (permission) => permission.name === "language.menu"
           )
         : false;
     },

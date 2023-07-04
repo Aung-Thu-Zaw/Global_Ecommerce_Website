@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminCouponController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminDashboardNotificationController;
+use App\Http\Controllers\Admin\AdminLanguageController;
 use App\Http\Controllers\MultiImageController;
 use App\Http\Controllers\Admin\Banners\AdminProductBannerController;
 use App\Http\Controllers\Admin\UserManagements\VendorManage\AdminActiveVendorController;
@@ -263,6 +264,23 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::post("/{id}/restore", "restore")->middleware('permission:shipping-area.trash.restore')->name("restore");
                     Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:shipping-area.trash.delete')->name("forceDelete");
                     Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:shipping-area.trash.delete')->name("permanentlyDelete");
+                });
+
+           // Admin Dashboard Language Section
+           Route::controller(AdminLanguageController::class)
+                ->prefix("/languages")
+                ->name("languages.")
+                ->group(function () {
+                    Route::get("/", "index")->middleware('permission:language.menu')->name("index");
+                    Route::get("/create", "create")->middleware('permission:language.add')->name("create");
+                    Route::post("/", "store")->middleware('permission:language.add')->name("store");
+                    Route::get("/{language}/edit", "edit")->middleware('permission:language.edit')->name("edit");
+                    Route::post("/{language}", "update")->middleware('permission:language.edit')->name("update");
+                    Route::delete("/{language}", "destroy")->middleware('permission:language.delete')->name("destroy");
+                    Route::get("/trash", "trash")->middleware('permission:language.trash.list')->name("trash");
+                    Route::post("/{id}/restore", "restore")->middleware('permission:language.trash.restore')->name("restore");
+                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:language.trash.delete')->name("force.delete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:language.trash.delete')->name("permanently.delete");
                 });
 
            Route::controller(AdminPendingOrderController::class)

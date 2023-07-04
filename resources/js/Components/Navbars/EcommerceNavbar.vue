@@ -169,29 +169,17 @@ const submit = () => {
                 aria-labelledby="dropdownMenuButton2"
                 data-te-dropdown-menu-ref
               >
-                <li>
+                <li
+                  v-for="language in $page.props.languages"
+                  :key="language.id"
+                >
                   <a
                     class="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400"
                     href="#"
                     data-te-dropdown-item-ref
-                    >English</a
                   >
-                </li>
-                <li>
-                  <a
-                    class="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400"
-                    href="#"
-                    data-te-dropdown-item-ref
-                    >French</a
-                  >
-                </li>
-                <li>
-                  <a
-                    class="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400"
-                    href="#"
-                    data-te-dropdown-item-ref
-                    >Myanmar</a
-                  >
+                    {{ language.name }}
+                  </a>
                 </li>
               </ul>
             </div>
