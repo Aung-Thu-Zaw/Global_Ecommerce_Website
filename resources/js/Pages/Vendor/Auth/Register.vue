@@ -40,12 +40,12 @@ const submit = () => {
 
 <template>
   <AppLayout>
-    <Head title="Seller Register" />
+    <Head :title="__('SELLER_REGISTER')" />
     <div class="mt-48 mb-10 flex items-center justify-center w-full px-5">
       <FormContainer>
         <form @submit.prevent="recaptcha" class="w-full">
           <h1 class="text-center text-2xl text-dark mb-5 font-bold">
-            BECOME A SELLER
+            {{ __("BECOME_A_SELLER") }}
           </h1>
 
           <!-- Hidden Input Fields  -->
@@ -55,13 +55,13 @@ const submit = () => {
 
           <!-- Company Name Input -->
           <div class="mb-3">
-            <InputLabel for="companyName" value="Company Name" />
+            <InputLabel for="companyName" :value="__('COMPANY_NAME')" />
 
             <TextInput
               id="companyName"
               type="text"
               v-model="form.company_name"
-              placeholder="Enter Company Name"
+              :placeholder="__('ENTER_COMPANY_NAME')"
             >
               <template v-slot:icon>
                 <span>
@@ -75,14 +75,14 @@ const submit = () => {
 
           <!-- Shop Name Input -->
           <div class="mb-3">
-            <InputLabel for="shopName" value="Shop Name *" />
+            <InputLabel for="shopName" :value="__('SHOP_NAME') + '*'" />
 
             <TextInput
               id="shopName"
               type="text"
               v-model="form.shop_name"
               required
-              placeholder="Enter Shop Name"
+              :placeholder="__('ENTER_SHOP_NAME')"
             >
               <template v-slot:icon>
                 <span>
@@ -96,14 +96,14 @@ const submit = () => {
 
           <!-- Username Input -->
           <div class="mb-3">
-            <InputLabel for="name" value="Name *" />
+            <InputLabel for="name" :value="__('NAME') + '*'" />
 
             <TextInput
               id="name"
               type="text"
               v-model="form.name"
               required
-              placeholder="Enter Your Fullname"
+              :placeholder="__('ENTER_YOUR_FULLNAME')"
             >
               <template v-slot:icon>
                 <span>
@@ -117,14 +117,14 @@ const submit = () => {
 
           <!-- Email Input -->
           <div class="mb-3">
-            <InputLabel for="email" value="Email *" />
+            <InputLabel for="email" :value="__('EMAIL_ADDRESS') + '*'" />
 
             <TextInput
               id="email"
               type="email"
               v-model="form.email"
               required
-              placeholder="Enter Your Email Address"
+              :placeholder="__('ENTER_YOUR_EMAIL_ADDRESS')"
             >
               <template v-slot:icon>
                 <span>
@@ -138,14 +138,14 @@ const submit = () => {
 
           <!-- Phone Number Input -->
           <div class="mb-3">
-            <InputLabel for="phone" value="Phone *" />
+            <InputLabel for="phone" :value="__('PHONE') + '*'" />
 
             <TextInput
               id="phone"
               type="text"
               v-model="form.phone"
               required
-              placeholder="Enter Your Phone Number"
+              :placeholder="__('ENTER_YOUR_PHONE_NUMBER')"
             >
               <template v-slot:icon>
                 <span>
@@ -159,14 +159,14 @@ const submit = () => {
 
           <!-- Password Input -->
           <div class="mb-3">
-            <InputLabel for="password" value="Password *" />
+            <InputLabel for="password" :value="__('PASSWORD') + '*'" />
 
             <TextInput
               id="password"
               type="password"
               v-model="form.password"
               required
-              placeholder="Enter Password"
+              :placeholder="__('ENTER_PASSWORD')"
             >
               <template v-slot:icon>
                 <span>
@@ -182,7 +182,7 @@ const submit = () => {
           <div class="mb-3">
             <InputLabel
               for="password_confirmation"
-              value="Confirm Password *"
+              :value="__('CONFIRM_PASSWORD') + '*'"
             />
 
             <TextInput
@@ -190,7 +190,7 @@ const submit = () => {
               type="password"
               v-model="form.password_confirmation"
               required
-              placeholder="Retype Your Password"
+              :placeholder="__('RETYPE_YOUR_PASSWORD')"
             >
               <template v-slot:icon>
                 <span>
@@ -207,7 +207,7 @@ const submit = () => {
 
           <!-- Submit Button -->
           <div class="mb-3">
-            <FormButton> Sign Up </FormButton>
+            <FormButton> {{ __("SIGN_UP") }} </FormButton>
           </div>
 
           <InputError
@@ -216,12 +216,12 @@ const submit = () => {
           />
 
           <p class="text-center text-sm">
-            Already has a seller account?
+            {{ __("ALREADY_HAS_A_SELLER_ACCOUNT") }}?
             <Link
               :href="route('vendor.login')"
               class="text-blue-600 font-bold hover:cursor-pointer hover:underline"
             >
-              Login
+              {{ __("SIGN_IN") }}
             </Link>
           </p>
         </form>

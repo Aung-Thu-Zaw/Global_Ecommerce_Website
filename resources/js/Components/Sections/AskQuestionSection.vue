@@ -36,12 +36,12 @@ const submit = () => {
 <template>
   <div class="border border-gray-200 shadow-sm rounded bg-white w-full">
     <h3 class="text-lg font-bold text-slate-700 border-b pb-3 mb-3 p-5">
-      Ask Questions About This Product
+      {{ __("ASK_QUESTIONS_ABOUT_THIS_PRODCUT") }}
     </h3>
 
     <div class="w-full">
       <p class="font-bold text-md text-slate-600 px-5 mb-5">
-        Total Questions ({{ productQuestions.data.length }})
+        {{ __("TOTAL_QUESTIONS") }} ({{ productQuestions.data.length }})
       </p>
 
       <div v-if="productQuestions.data.length" class="px-5 w-full">
@@ -68,7 +68,7 @@ const submit = () => {
       <div v-else class="px-5 w-full">
         <p class="text-center font-bold text-slate-500 my-6">
           <i class="fa-solid fa-circle-question"></i>
-          Questions Not Yet
+          {{ __("QUESTIONS_NOT_YET") }}
         </p>
       </div>
 
@@ -85,25 +85,27 @@ const submit = () => {
             cols="30"
             rows="10"
             class="w-full h-[200px] rounded-md border-2 border-slate-400 focus:ring-0 focus:border-slate-400"
-            placeholder="Write question what you want to ask about this product"
+            :placeholder="
+              __('WRITE_QUESTION_WHAT_YOU_WANT_TO_ASK_ABOUT_THIS_PRODUCT')
+            "
             v-model="form.question_text"
           ></textarea>
           <button
             class="bg-blue-600 font-bold text-white w-full py-2 rounded-sm hover:bg-blue-700 my-5"
           >
-            Ask Question
+            {{ __("ASK_QUESTION") }}
           </button>
         </form>
       </div>
       <div v-else-if="!$page.props.auth.user" class="px-5 my-5">
         <p class="font-bold text-sm text-slate-600 text-center">
-          If you want to ask questions you need to login first. Here
+          {{ __("IF_YOU_WANT_TO_ASK_QUESTIONS_YOU_NEED_TO_LOGIN_FIRST_HERE") }}
           <Link :href="route('login')" class="text-blue-600 underline">
-            Login
+            {{ __("SIGN_IN") }}
           </Link>
-          Or
+          {{ __("Or") }}
           <Link :href="route('register')" class="text-blue-600 underline">
-            Register
+            {{ __("SIGN_UP") }}
           </Link>
         </p>
       </div>

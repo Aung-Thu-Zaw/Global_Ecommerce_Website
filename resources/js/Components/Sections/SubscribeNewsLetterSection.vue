@@ -41,8 +41,10 @@ const submit = () => {
             <i class="fa fa-envelope fa-lg text-blue-400"></i>
           </div>
           <div>
-            <p class="font-semibold text-lg">Subscribe</p>
-            <p class="text-sm text-gray-600">Get notified on offers</p>
+            <p class="font-semibold text-lg">{{ __("SUBSCRIBE") }}</p>
+            <p class="text-sm text-gray-600">
+              {{ __("GET_NOTIFIED_ON_OFFERS") }}
+            </p>
           </div>
         </div>
 
@@ -52,13 +54,13 @@ const submit = () => {
             <input
               class="text-black w-full appearance-none border border-gray-200 bg-white py-2 px-3 rounded-tl-md rounded-bl-md focus:outline-none focus:ring-0 focus:border-gray-200 hover:border-gray-400"
               type="email"
-              placeholder="Email"
+              :placeholder="__('EMAIL_ADDRESS')"
               v-model="form.email"
             />
             <button
               class="px-4 py-2 text-blue-600 bg-white border border-gray-200 rounded-tr-md rounded-br-md hover:text-white hover:bg-blue-600"
             >
-              Subscribe
+              {{ __("SUBMIT") }}
             </button>
           </form>
 

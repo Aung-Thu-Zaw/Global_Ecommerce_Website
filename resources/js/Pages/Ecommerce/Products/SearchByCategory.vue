@@ -270,8 +270,8 @@ const handleRemoveBrand = () => {
               </p>
               <div class="flex items-center ml-auto">
                 <!-- Sorting Select Box -->
-                <div class="w-[220px] flex items-center justify-between">
-                  <span class="">Sort By : </span>
+                <div class="w-[260px] flex items-center justify-between">
+                  <span class="">{{ __("SORT_BY") }} : </span>
                   <select
                     id="countries"
                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[150px] p-2.5 text-slate-700"
@@ -283,17 +283,17 @@ const handleRemoveBrand = () => {
                         params.direction === 'desc' || params.direction === null
                       "
                     >
-                      Latest Arrivals
+                      {{ __("LATEST_ARRIVALS") }}
                     </option>
                     <option value="asc" :selected="params.direction === 'asc'">
-                      Earliest Arrivals
+                      {{ __("EARLIEST_ARRIVALS") }}
                     </option>
                   </select>
                 </div>
 
                 <!-- Dynamic View -->
                 <div class="flex items-center ml-3">
-                  <span class="mr-2">View : </span>
+                  <span class="mr-2">{{ __("VIEW") }} : </span>
                   <div class="flex items-center justify-between">
                     <!-- Grid View -->
                     <Link
@@ -351,7 +351,7 @@ const handleRemoveBrand = () => {
                   $page.props.ziggy.query.brand
                 "
                 class="font-bold text-slate-600 text-lg mr-3"
-                >Filtered By :</span
+                >{{ __("FILTERED_BY") }} :</span
               >
 
               <!-- Brand Filter Tag -->
@@ -359,7 +359,7 @@ const handleRemoveBrand = () => {
                 <span
                   class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
                 >
-                  Brand : {{ $page.props.ziggy.query.brand }}
+                  {{ __("BRAND") }} : {{ $page.props.ziggy.query.brand }}
 
                   <i
                     @click="handleRemoveBrand"
@@ -374,7 +374,8 @@ const handleRemoveBrand = () => {
                 v-if="$page.props.ziggy.query.rating"
                 class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
               >
-                Rating : {{ $page.props.ziggy.query.rating }} Stars And Up
+                {{ __("RATING") }} : {{ $page.props.ziggy.query.rating }} Stars
+                And Up
 
                 <i
                   @click="handleRemoveRating"
@@ -388,7 +389,7 @@ const handleRemoveBrand = () => {
                 v-if="$page.props.ziggy.query.price"
                 class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
               >
-                Price : {{ minPrice }} - {{ maxPrice }}
+                {{ __("PRICE") }} : {{ minPrice }} - {{ maxPrice }}
 
                 <i
                   @click="handleRemovePrice"
@@ -414,10 +415,14 @@ const handleRemoveBrand = () => {
               </div>
               <div v-else>
                 <h4 class="font-bold text-slate-600 text-center mt-20 text-xl">
-                  ☹️ Items Not Found!
+                  ☹️ {{ __("ITEMS_NOT_FOUND") }}!
                 </h4>
                 <p class="my-3 font-bold text-slate-500 text-center">
-                  We're sorry. We cannot find any matches for your filter term.
+                  {{
+                    __(
+                      "WE'RE_SORRY_WE_CANNOT_FIND_ANY_MATCHES_FOR_YOUR_FILTER_TERM"
+                    )
+                  }}
                 </p>
               </div>
               <Pagination class="mt-6" :links="products.links" />
@@ -439,10 +444,14 @@ const handleRemoveBrand = () => {
               </div>
               <div v-else>
                 <h4 class="font-bold text-slate-600 text-center mt-20 text-xl">
-                  ☹️ Items Not Found!
+                  ☹️ {{ __("ITEMS_NOT_FOUND") }}!
                 </h4>
                 <p class="my-3 font-bold text-slate-500 text-center">
-                  We're sorry. We cannot find any matches for your filter term.
+                  {{
+                    __(
+                      "WE'RE_SORRY_WE_CANNOT_FIND_ANY_MATCHES_FOR_YOUR_FILTER_TERM"
+                    )
+                  }}
                 </p>
               </div>
 

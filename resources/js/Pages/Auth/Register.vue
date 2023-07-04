@@ -50,18 +50,18 @@ const submit = () => {
 
 <template>
   <AppLayout>
-    <Head title="Register" />
+    <Head :title="__('SIGN_UP')" />
 
     <div class="mt-48 mb-10 flex items-center justify-center w-full px-5">
       <FormContainer>
         <form @submit.prevent="recaptcha" class="w-full">
           <h1 class="text-center text-2xl text-dark mb-5 font-bold">
-            Create Global Ecommerce Account
+            {{ __("CREATE_GLOBAL_E-COMMERCE_ACCOUNT") }}
           </h1>
 
           <!-- Name Input -->
           <div class="mb-3">
-            <InputLabel for="name" value="Name *" />
+            <InputLabel for="name" :value="__('NAME') + '*'" />
 
             <TextInput
               id="name"
@@ -70,7 +70,7 @@ const submit = () => {
               v-model="form.name"
               required
               autofocus
-              placeholder="Enter Your Fullname"
+              :placeholder="__('ENTER_YOUR_FULLNAME')"
             >
               <template v-slot:icon>
                 <span>
@@ -84,7 +84,7 @@ const submit = () => {
 
           <!-- Email Input -->
           <div class="mb-3">
-            <InputLabel for="email" value="Email *" />
+            <InputLabel for="email" :value="__('EMAIL_ADDRESS') + '*'" />
 
             <TextInput
               id="email"
@@ -92,7 +92,7 @@ const submit = () => {
               class="mt-1 block w-full"
               v-model="form.email"
               required
-              placeholder="Enter Your Email Address"
+              :placeholder="__('ENTER_YOUR_EMAIL_ADDRESS')"
             >
               <template v-slot:icon>
                 <span>
@@ -106,7 +106,7 @@ const submit = () => {
 
           <!-- Password Input -->
           <div class="mb-3">
-            <InputLabel for="password" value="Password *" />
+            <InputLabel for="password" :value="__('PASSWORD') + '*'" />
 
             <TextInput
               id="password"
@@ -114,7 +114,7 @@ const submit = () => {
               class="mt-1 block w-full"
               v-model="form.password"
               required
-              placeholder="Enter Password"
+              :placeholder="__('ENTER_PASSWORD')"
             >
               <template v-slot:icon>
                 <span>
@@ -130,7 +130,7 @@ const submit = () => {
           <div class="mb-3">
             <InputLabel
               for="password_confirmation"
-              value="Confirm Password *"
+              :value="__('CONFIRM_PASSWORD') + '*'"
             />
 
             <TextInput
@@ -139,7 +139,7 @@ const submit = () => {
               class="mt-1 block w-full"
               v-model="form.password_confirmation"
               required
-              placeholder="Retype Your Password"
+              :placeholder="__('RETYPE_YOUR_PASSWORD')"
             >
               <template v-slot:icon>
                 <span>
@@ -156,17 +156,19 @@ const submit = () => {
 
           <!-- Gender Selectbox -->
           <div class="mb-3">
-            <InputLabel for="gender" value="Gender *" />
+            <InputLabel for="gender" :value="__('GENDER') + '*'" />
 
             <select
               class="p-4 w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
               v-model="form.gender"
               required
             >
-              <option value="" selected disabled>Select Your Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
+              <option value="" selected disabled>
+                {{ __("SELECT_YOUR_GENDER") }}
+              </option>
+              <option value="male">{{ __("MALE") }}</option>
+              <option value="female">{{ __("FEMALE") }}</option>
+              <option value="other">{{ __("OTHER") }}</option>
             </select>
 
             <InputError class="mt-2" :message="form.errors.gender" />
@@ -174,14 +176,14 @@ const submit = () => {
 
           <!-- Birthday Selectbox -->
           <div class="mb-3">
-            <InputLabel for="birthday" value="Birthday" />
+            <InputLabel for="birthday" :value="__('BIRTHDAY') + '*'" />
 
             <InputContainer>
               <i class="fa-solid fa-calendar text-gray-600"></i>
               <datepicker
                 class="p-2 w-[400px] border-transparent border-none outline-none focus:ring-0 placeholder:text-gray-400 placeholder:text-sm"
                 v-model="date"
-                placeholder="Select Your Birthday"
+                :placeholder="__('SELECT_YOUR_BIRTHDAY')"
               />
             </InputContainer>
 
@@ -190,7 +192,7 @@ const submit = () => {
 
           <!-- Submit Button -->
           <div class="mb-3">
-            <FormButton> Sign Up </FormButton>
+            <FormButton> {{ __("SIGN_UP") }} </FormButton>
           </div>
 
           <InputError
@@ -199,15 +201,18 @@ const submit = () => {
           />
 
           <p class="text-center text-sm">
-            Already have account?
+            {{ __("ALREDAY_HAVE_ACCOUNT") }}?
             <Link
               :href="route('login')"
               class="text-blue-600 font-bold hover:cursor-pointer hover:underline"
-              >Login</Link
+            >
+              {{ __("SIGN_IN") }}</Link
             >
           </p>
         </form>
-        <span class="my-4">Or</span>
+        <span class="my-4">
+          {{ __("Or") }}
+        </span>
 
         <!-- Social Signup -->
         <SocialiteAuth />

@@ -57,7 +57,9 @@ const fiveStarRating = computed(() => {
 
 <template>
   <div v-if="productReviews.length" class="text-center mb-5 p-5">
-    <h1 class="font-bold text-slate-600 text-xl my-3">Product Reviews</h1>
+    <h1 class="font-bold text-slate-600 text-xl my-3">
+      {{ __("PRODUCT_REVIEWS") }}
+    </h1>
 
     <div class="flex items-center justify-center">
       <div class="flex items-center mb-3">
@@ -222,7 +224,7 @@ const fiveStarRating = computed(() => {
 
   <div class="p-5">
     <h1 class="font-bold text-slate-600 text-xl my-3">
-      Customer Product Reviews ({{ productReviews.length }})
+      {{ __("CUSTOMER_PRODUCT_PRVIEWS") }} ({{ productReviews.length }})
     </h1>
 
     <div v-if="paginateProductReviews.data.length">
@@ -246,9 +248,13 @@ const fiveStarRating = computed(() => {
     <div v-else>
       <div class="font-bold text-center text-sm text-slate-600 my-10">
         <i class="fa-solid fa-star text-3xl mb-5 animate-bounce"></i>
-        <p>This product has no reviews.</p>
+        <p>{{ __("THIS_PRODUCT_HAS_NO_REVIEWS") }}</p>
         <p>
-          Let others know what you think and be the first to write a review.
+          {{
+            __(
+              "LET_OTHERS_KNOW_WHAT_YOU_THINK_AND_BE_THE_FIRST_TO_WRITE_A_REVIEW"
+            )
+          }}
         </p>
       </div>
     </div>
@@ -263,13 +269,15 @@ const fiveStarRating = computed(() => {
 
   <div v-else-if="!$page.props.auth.user" class="px-5 my-5">
     <p class="font-bold text-sm text-slate-600 text-center">
-      If you want to review this product you need to login first. Here
+      {{
+        __("IF_YOU_WANT_TO_REVIEW_THIS_PRODUCT_YOU_NEED_TO_LOGIN_FIRST_HERE")
+      }}
       <Link :href="route('login')" class="text-blue-600 underline">
-        Login
+        {{ __("SIGN_IN") }}
       </Link>
       Or
       <Link :href="route('register')" class="text-blue-600 underline">
-        Register
+        {{ __("SIGN_UP") }}
       </Link>
     </p>
   </div>

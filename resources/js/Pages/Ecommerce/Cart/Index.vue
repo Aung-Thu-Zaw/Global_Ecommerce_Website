@@ -59,7 +59,7 @@ const applyCoupon = () => {
     <section class="py-5 sm:py-7 mt-44">
       <div class="container max-w-screen-xl mx-auto px-4">
         <h2 class="text-4xl text-slate-700 font-semibold mb-2">
-          Shopping cart
+          {{ __("SHOPPING_CART") }}
         </h2>
       </div>
     </section>
@@ -79,10 +79,10 @@ const applyCoupon = () => {
               >
                 <span>
                   <i class="fas fa-box"></i>
-                  Package {{ index + 1 }}
+                  {{ __("PACKAGE") }} {{ index + 1 }}
                 </span>
                 <span class="text-sm text-slate-500">
-                  Shipped By
+                  {{ __("SHIPPED_BY") }}
                   <span class="text-slate-700">{{ shop.shop_name }}</span>
                 </span>
               </div>
@@ -108,17 +108,17 @@ const applyCoupon = () => {
               class="border border-gray-200 bg-white shadow-sm rounded my-5 p-3"
             >
               <h2 class="font-bold text-lg mb-1 text-slate-700">
-                Apply Coupon
+                {{ __("APPLY_COUPON") }}
               </h2>
 
               <span v-if="coupon" class="font-bold text-green-700 text-sm my-4">
-                Coupon code applied.
+                {{ __("COUPON_CODE_APPLIED") }}
               </span>
 
               <input
                 type="text"
                 class="w-full my-2 rounded-md py-2 text-sm font-bold text-slate-700 border-slate-400"
-                placeholder="Enter Cupon Code"
+                :placeholder="__('ENTER_COUPON_CODE')"
                 v-model="coupon_code"
                 :disabled="coupon ? true : false"
               />
@@ -128,7 +128,7 @@ const applyCoupon = () => {
                 @click="applyCoupon"
                 :disabled="coupon ? true : false"
               >
-                Apply
+                {{ __("APPLY") }}
               </button>
             </div>
           </aside>
@@ -140,14 +140,15 @@ const applyCoupon = () => {
       <h2 class="font-semibold text-lg text-center text-slate-600 mb-20">
         <i class="fa-solid fa-bag-shopping"></i>
         <br />
-        There are no items in this cart.
+
+        {{ __("THERE_ARE_NO_ITEMS_IN_THIS_CART") }}
       </h2>
       <Link
         :href="route('home')"
         class="border border-blue-600 px-5 py-3 shadow animate-bounce font-semibold text-blue-600 rounded text-sm hover:bg-blue-600 hover:text-white transition-all"
       >
         <i class="fa-solid fa-cart-shopping"></i>
-        Continue Shopping
+        {{ __("CONTINUE_SHOPPING") }}
       </Link>
     </section>
   </AppLayout>

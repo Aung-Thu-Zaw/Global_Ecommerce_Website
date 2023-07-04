@@ -57,22 +57,22 @@ const removeCoupon = () => {
     class="border border-gray-200 bg-white shadow-sm rounded mb-5 p-3 lg:p-5"
   >
     <h2 class="text-center mb-5 font-bold text-2xl text-slate-800">
-      Order Summary
+      {{ __("ORDER_SUMMARY") }}
     </h2>
     <ul class="mb-5">
       <li class="flex justify-between text-gray-600 mb-1">
-        <span>Total Items:</span>
-        <span>{{ totalItems }} Items</span>
+        <span> {{ __("TOTAL_ITEMS") }}:</span>
+        <span>{{ totalItems }} {{ __("ITEMS") }}</span>
       </li>
 
       <li class="flex justify-between text-gray-600 mb-1">
-        <span>Total price:</span>
+        <span> {{ __("TOTAL_PRICE") }}:</span>
         <span>${{ totalPrice }}</span>
       </li>
 
       <div v-if="coupon">
         <li class="flex justify-between text-gray-600 mb-1">
-          <span>Coupon Code:</span>
+          <span> {{ __("COUPON_CODE") }}:</span>
           <span class="text-yellow-600 text-sm font-bold">
             {{ coupon.code }}
             <i
@@ -82,7 +82,7 @@ const removeCoupon = () => {
           </span>
         </li>
         <li class="flex justify-between text-gray-600 mb-1">
-          <span>Coupon Discount:</span>
+          <span> {{ __("COUPON_DISCOUNT") }}:</span>
           <span
             v-if="coupon.discount_type === 'fixed_amount'"
             class="text-gray-600 text-sm font-bold"
@@ -99,7 +99,7 @@ const removeCoupon = () => {
       </div>
 
       <li class="text-lg font-bold border-t flex justify-between mt-3 pt-3">
-        <span>Total price:</span>
+        <span> {{ __("TOTAL_PRICE") }}:</span>
         <span v-if="totalPriceWithCoupon"> ${{ totalPriceWithCoupon }} </span>
         <span v-else>${{ totalPrice }}</span>
       </li>
@@ -111,7 +111,7 @@ const removeCoupon = () => {
       :href="route('checkout.index')"
     >
       <i class="fa-solid fa-right-from-bracket"></i>
-      Proceed To Checkout
+      {{ __("PROCEED_TO_CHECKOUT") }}
     </Link>
 
     <Link
@@ -120,7 +120,7 @@ const removeCoupon = () => {
       :href="route('home')"
     >
       <i class="fa-solid fa-shop"></i>
-      Back to shop
+      {{ __("BACK_TO_SHOP") }}
     </Link>
   </article>
 </template>

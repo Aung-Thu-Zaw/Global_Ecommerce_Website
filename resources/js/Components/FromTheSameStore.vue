@@ -13,7 +13,9 @@ const props = defineProps({
     <article
       class="border border-gray-200 shadow-sm rounded bg-white w-full p-4"
     >
-      <h3 class="mb-5 text-lg font-semibold capitalize">from the same store</h3>
+      <h3 class="mb-5 text-lg font-semibold capitalize">
+        {{ __("FROM_THE_SAME_STORE") }}
+      </h3>
 
       <figure
         v-for="product in productsFromShop"
@@ -73,7 +75,7 @@ const props = defineProps({
         class="bg-blue-600 text-white w-full font-bold py-2 rounded-sm shadow-md hover:bg-blue-700"
       >
         <i class="fas fa-shop mr-1"></i>
-        Visit Shop
+        {{ __("VISIT_SHOP") }}
       </Link>
     </article>
   </aside>

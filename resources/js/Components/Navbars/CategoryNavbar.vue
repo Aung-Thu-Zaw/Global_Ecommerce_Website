@@ -31,7 +31,7 @@ const params = reactive({
                 class="flex items-center justify-between w-full pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto"
               >
                 <i class="fa-solid fa-list mr-2"></i>
-                Shop By Categories
+                {{ __("SHOP_BY_CATEGORIES") }}
                 <svg
                   class="w-5 h-5 ml-1"
                   aria-hidden="true"
@@ -123,7 +123,7 @@ const params = reactive({
                 class="flex items-center justify-between w-full pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto"
               >
                 <i class="fa-solid fa-shop mr-2"></i>
-                Our Seller Shops
+                {{ __("OUR_SELLER_SHOPS") }}
                 <svg
                   class="w-5 h-5 ml-1"
                   aria-hidden="true"
@@ -173,7 +173,7 @@ const params = reactive({
                   class="flex items-center justify-center p-3 text-sm font-medium text-blue-600 border-2 border-gray-200 bg-white rounded-b-lg hover:bg-gray-100"
                 >
                   <i class="fas fa-eye mr-2"></i>
-                  View More
+                  {{ __("VIEW_MORE") }}
                 </Link>
               </div>
             </li>
@@ -189,7 +189,9 @@ const params = reactive({
           class="font-bold text-sm text-gray-700 hover:text-blue-700 transition-all ml-3"
         >
           <i class="fa-solid fa-newspaper mr-2"></i>
-          <span>Our Blogs</span>
+          <span>
+            {{ __("OUR_BLOGS") }}
+          </span>
         </Link>
       </div>
     </div>

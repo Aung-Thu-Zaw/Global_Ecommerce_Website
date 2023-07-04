@@ -45,7 +45,7 @@ defineProps({
                   <span
                     class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-700 md:ml-2"
                   >
-                    Blogs
+                    {{ __("BLOGS") }}
                   </span>
                 </div>
               </Link>

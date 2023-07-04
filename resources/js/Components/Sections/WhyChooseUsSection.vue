@@ -1,7 +1,7 @@
 <template>
   <section class="bg-white py-12">
     <div class="container max-w-screen-xl mx-auto px-4">
-      <h2 class="text-3xl font-bold mb-8">Why choose us</h2>
+      <h2 class="text-3xl font-bold mb-8">{{ __("WHY_CHOOSE_US") }}</h2>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <div>

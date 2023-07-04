@@ -41,7 +41,7 @@ defineProps({
           }"
           class="inline-flex items-center text-sm font-medium text-center text-slate-700 hover:text-blue-700 rounded-lg hover:animate-bounce"
         >
-          Read more
+          {{ __("READ_MORE") }}
           <svg
             aria-hidden="true"
             class="w-4 h-4 ml-2 -mr-1"

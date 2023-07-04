@@ -32,7 +32,9 @@ const submit = () => {
 
 <template>
   <div class="p-5">
-    <h1 class="font-bold text-slate-600 text-xl my-3">Add a Review</h1>
+    <h1 class="font-bold text-slate-600 text-xl my-3">
+      {{ __("ADD_A_REVIEW") }}
+    </h1>
     <form @submit.prevent="handleCreateReview">
       <div
         class="border shadow-md rounded-sm my-5 flex items-center justify-between"
@@ -321,7 +323,7 @@ const submit = () => {
       <button
         class="bg-blue-600 font-bold text-white w-full py-2 rounded-sm hover:bg-blue-700 my-5"
       >
-        Add Review
+        {{ __("ADD_REVIEW") }}
       </button>
     </form>
   </div>

@@ -41,7 +41,7 @@ const loadMoreCollection = () => {
 
 <template>
   <AppLayout>
-    <Head title="All Collections" />
+    <Head :title="__('ALL_COLLECTIONS')" />
     <section class="pt-10 mt-44">
       <div class="container max-w-screen-xl mx-auto px-4">
         <!-- Collections Card -->
@@ -53,7 +53,7 @@ const loadMoreCollection = () => {
         </nav>
         <div v-else>
           <p class="text-center text-xl font-bold text-red-600 animate-bounce">
-            No Collection Found!
+            {{ __("NO_COLLECTION_FOUND") }}!
           </p>
         </div>
       </div>
@@ -75,11 +75,11 @@ const loadMoreCollection = () => {
           @click="loadMoreCollection"
           class="border-2 border-slate-500 text-slate-600 rounded-sm px-5 py-2 shadow-md font-bold hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all"
         >
-          LOAD MORE COLLECTIONS
+          {{ __("LOAD_MORE_PRODUCTS") }}
         </button>
       </div>
       <p v-else class="my-5 text-slate-600 text-center">
-        You have reached the end of the page.
+        {{ __("YOU_HAVE_REACH_THE_END_OF_THE_PAGE") }}
       </p>
     </section>
   </AppLayout>

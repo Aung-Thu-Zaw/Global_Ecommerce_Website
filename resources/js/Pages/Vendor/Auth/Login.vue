@@ -57,19 +57,19 @@ if (usePage().props.flash.successMessage) {
       </div>
       <form @submit.prevent="recaptcha" class="w-full">
         <h1 class="text-center text-2xl text-dark mb-5 font-bold">
-          Seller Dashboard Login
+          {{ __("SELLER_DASHBOARD_LOGIN") }}
         </h1>
 
         <!-- Email Input -->
         <div class="mb-3">
-          <InputLabel for="email" value="Email *" />
+          <InputLabel for="email" :value="__('EMAIL_ADDRESS') + '*'" />
 
           <TextInput
             id="email"
             type="email"
             v-model="form.email"
             required
-            placeholder="Enter Your Email Address"
+            :placeholder="__('ENTER_YOUR_EMAIL_ADDRESS')"
           >
             <template v-slot:icon>
               <span>
@@ -83,14 +83,14 @@ if (usePage().props.flash.successMessage) {
 
         <!-- Password Input -->
         <div class="mb-3">
-          <InputLabel for="password" value="Password *" />
+          <InputLabel for="password" :value="__('PASSWORD') + '*'" />
 
           <TextInput
             id="password"
             type="password"
             v-model="form.password"
             required
-            placeholder="Enter Password"
+            :placeholder="__('ENTER_PASSWORD')"
           >
             <template v-slot:icon>
               <span>
@@ -107,7 +107,9 @@ if (usePage().props.flash.successMessage) {
           <div>
             <label class="flex items-center">
               <Checkbox name="remember" v-model:checked="form.remember" />
-              <span class="ml-2 text-sm text-gray-600">Remember me</span>
+              <span class="ml-2 text-sm text-gray-600">
+                {{ __("REMEMBER_ME") }}</span
+              >
             </label>
           </div>
 
@@ -117,7 +119,7 @@ if (usePage().props.flash.successMessage) {
               :href="route('password.request')"
               class="underline text-sm text-gray-600 rounded-md hover:text-blue-500"
             >
-              Forgot your password?
+              {{ __("FORGOT_PASSWORD") }}?
             </Link>
           </div>
         </div>
@@ -128,7 +130,7 @@ if (usePage().props.flash.successMessage) {
             :class="{ 'opacity-25': form.processing }"
             :disabled="form.processing"
           >
-            Login
+            {{ __("SIGN_IN") }}
           </FormButton>
         </div>
 

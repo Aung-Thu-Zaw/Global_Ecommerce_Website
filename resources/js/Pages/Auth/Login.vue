@@ -38,7 +38,7 @@ const submit = () => {
 
 <template>
   <AppLayout>
-    <Head title="Login" />
+    <Head :title="__('SIGN_IN')" />
 
     <div class="mt-48 mb-10 flex items-center justify-center w-full px-5">
       <FormContainer>
@@ -50,12 +50,12 @@ const submit = () => {
         </div>
         <form @submit.prevent="recaptcha" class="w-full">
           <h1 class="text-center text-2xl text-dark mb-5 font-bold">
-            Login With Global Ecommerce Account
+            {{ __("LOGIN_WITH_GLOBAL_E-COMMERCE_ACCOUNT") }}
           </h1>
 
           <!-- Email Input -->
           <div class="mb-3">
-            <InputLabel for="email" value="Email *" />
+            <InputLabel for="email" :value="__('EMAIL_ADDRESS') + '*'" />
 
             <TextInput
               id="email"
@@ -64,7 +64,7 @@ const submit = () => {
               v-model="form.email"
               required
               autocomplete="username"
-              placeholder="Enter Your Email Address"
+              :placeholder="__('ENTER_YOUR_EMAIL_ADDRESS')"
             >
               <template v-slot:icon>
                 <span>
@@ -78,7 +78,7 @@ const submit = () => {
 
           <!-- Password Input -->
           <div class="mb-3">
-            <InputLabel for="password" value="Password *" />
+            <InputLabel for="password" :value="__('PASSWORD') + '*'" />
 
             <TextInput
               id="password"
@@ -87,7 +87,7 @@ const submit = () => {
               v-model="form.password"
               required
               autocomplete="new-password"
-              placeholder="Enter Password"
+              :placeholder="__('ENTER_PASSWORD')"
             >
               <template v-slot:icon>
                 <span>
@@ -104,7 +104,9 @@ const submit = () => {
             <div>
               <label class="flex items-center">
                 <Checkbox name="remember" v-model:checked="form.remember" />
-                <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                <span class="ml-2 text-sm text-gray-600">{{
+                  __("REMEMBER_ME")
+                }}</span>
               </label>
             </div>
 
@@ -114,7 +116,7 @@ const submit = () => {
                 :href="route('password.request')"
                 class="underline text-sm text-gray-600 rounded-md hover:text-blue-500"
               >
-                Forgot your password?
+                {{ __("FORGOT_PASSWORD") }}?
               </Link>
             </div>
           </div>
@@ -125,7 +127,7 @@ const submit = () => {
               :class="{ 'opacity-25': form.processing }"
               :disabled="form.processing"
             >
-              Login
+              {{ __("SIGN_IN") }}
             </FormButton>
           </div>
 
@@ -135,15 +137,16 @@ const submit = () => {
           />
 
           <p class="text-center text-sm">
-            You don't have account? Please
+            {{ __("YOU_DON'T_HAVE_ACCOUNT") }}
             <Link
               :href="route('register')"
               class="text-blue-600 font-bold hover:cursor-pointer hover:underline"
-              >Register</Link
+            >
+              {{ __("SIGN_UP") }}</Link
             >
           </p>
         </form>
-        <span class="my-4">Or</span>
+        <span class="my-4"> {{ __("Or") }}</span>
 
         <!-- Social Signup -->
         <SocialiteAuth />

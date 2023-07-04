@@ -112,9 +112,9 @@ const handleRemoveBlogCategory = () => {
                     clip-rule="evenodd"
                   ></path>
                 </svg>
-                <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2"
-                  >Blogs</span
-                >
+                <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">{{
+                  __("BLOGS")
+                }}</span>
               </div>
             </li>
           </Breadcrumb>
@@ -140,7 +140,7 @@ const handleRemoveBlogCategory = () => {
               >
                 <input
                   type="text"
-                  placeholder="Search Blogs"
+                  :placeholder="__('SEARCH_BLOG')"
                   class="text-sm w-full focus:ring-0 border-none bg-gray-50"
                   v-model="params.search_blog"
                 />
@@ -154,14 +154,14 @@ const handleRemoveBlogCategory = () => {
 
               <!-- Search Result Text -->
               <p v-if="params.search_blog" class="ml-5">
-                {{ blogPosts.data.length }} post found for result
+                {{ blogPosts.data.length }} {{ __("POST_FOUND_FOR_RESULT") }}
                 <span class="text-blue-600">"{{ params.search_blog }}"</span>
               </p>
 
               <div class="flex items-center ml-auto">
                 <!-- Blog Sorting -->
-                <div class="w-[220px] flex items-center justify-between">
-                  <span class="">Sort By : </span>
+                <div class="w-[260px] flex items-center justify-between">
+                  <span class="flex items-center">{{ __("SORT_BY") }} : </span>
                   <select
                     id="countries"
                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[150px] p-2.5 text-slate-700"
@@ -173,17 +173,17 @@ const handleRemoveBlogCategory = () => {
                         params.direction === 'desc' || params.direction === null
                       "
                     >
-                      Latest Post
+                      {{ __("LATEST_POST") }}
                     </option>
                     <option value="asc" :selected="params.direction === 'asc'">
-                      Newest Post
+                      {{ __("NEWEST_POST") }}
                     </option>
                   </select>
                 </div>
 
                 <!-- Blog Card Views -->
                 <div class="flex items-center ml-3">
-                  <span class="mr-2">View : </span>
+                  <span class="mr-2"> {{ __("VIEW") }} : </span>
                   <div class="flex items-center justify-between">
                     <Link
                       :href="route('blogs.index')"
@@ -233,14 +233,15 @@ const handleRemoveBlogCategory = () => {
               <span
                 v-if="$page.props.ziggy.query.blog_category"
                 class="font-bold text-slate-600 text-lg mr-3"
-                >Filtered By :</span
+                >{{ __("FILTERED_BY") }} :</span
               >
 
               <span
                 v-if="$page.props.ziggy.query.blog_category"
                 class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow capitalize"
               >
-                Category : {{ $page.props.ziggy.query.blog_category }}
+                {{ __("CATEGORY") }} :
+                {{ $page.props.ziggy.query.blog_category }}
 
                 <i
                   @click="handleRemoveBlogCategory"

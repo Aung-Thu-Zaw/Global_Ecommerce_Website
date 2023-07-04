@@ -110,14 +110,14 @@ const handleCreateConversion = () => {
         class="px-5 py-2 bg-blue-600 w-1/3 rounded-sm font-bold text-white text-sm hover:bg-blue-700 shadow"
       >
         <i class="fas fa-store mr-1"></i>
-        Visit Shop
+        {{ __("VISIT_SHOP") }}
       </Link>
       <button
         @click="handleCreateConversion"
-        class="px-5 py-2 bg-yellow-500 w-1/3 rounded-sm font-bold text-white text-sm hover:bg-yellow-700 shadow"
+        class="px-5 py-2 bg-yellow-500 min-w-1/3 w-auto rounded-sm font-bold text-white text-sm hover:bg-yellow-700 shadow"
       >
         <i class="fas fa-message mr-1"></i>
-        Chat Now
+        {{ __("CHAT_NOW") }}
       </button>
     </div>
 

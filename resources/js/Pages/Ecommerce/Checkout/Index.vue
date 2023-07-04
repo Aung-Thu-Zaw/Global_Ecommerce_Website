@@ -60,7 +60,7 @@ const submit = () => {
       <div class="container max-w-screen-xl mx-auto px-4">
         <h1 class="font-semibold text-xl text-slate-700 mb-5">
           <i class="fa-solid fa-file-lines"></i>
-          Delivery Information
+          {{ __("DELIVERY_INFORMATION") }}
         </h1>
 
         <div class="flex flex-col md:flex-row gap-4">
@@ -83,10 +83,10 @@ const submit = () => {
               >
                 <span>
                   <i class="fas fa-box"></i>
-                  Package {{ index + 1 }}
+                  {{ __("PACKAGE") }} {{ index + 1 }}
                 </span>
                 <span class="text-sm text-slate-500">
-                  Shipped By
+                  {{ __("SHIPPED_BY") }}
                   <span class="text-slate-700">{{ shop.shop_name }}</span>
                 </span>
               </div>
@@ -107,28 +107,28 @@ const submit = () => {
               class="border border-gray-200 bg-white shadow-sm rounded mb-5 p-3 lg:p-5"
             >
               <h2 class="text-center mb-5 font-bold text-2xl text-slate-800">
-                Order Summary
+                {{ __("ORDER_SUMMARY") }}
               </h2>
               <ul class="mb-5">
                 <li class="flex justify-between text-gray-600 mb-1">
-                  <span>Total Items:</span>
-                  <span>{{ totalItems }} Items</span>
+                  <span> {{ __("TOTAL_ITEMS") }} :</span>
+                  <span>{{ totalItems }} {{ __("ITEMS") }} </span>
                 </li>
 
                 <li class="flex justify-between text-gray-600 mb-1">
-                  <span>Total price:</span>
+                  <span> {{ __("TOTAL_PRICE") }} :</span>
                   <span>${{ totalPrice }}</span>
                 </li>
 
                 <div v-if="coupon">
                   <li class="flex justify-between text-gray-600 mb-1">
-                    <span>Coupon Code:</span>
+                    <span> {{ __("COUPON_CODE") }} :</span>
                     <span class="text-yellow-600 text-sm font-bold">
                       {{ coupon.code }}
                     </span>
                   </li>
                   <li class="flex justify-between text-gray-600 mb-1">
-                    <span>Coupon Discount:</span>
+                    <span> {{ __("COUPON_DISCOUNT") }} :</span>
                     <span class="text-gray-600 text-sm font-bold">
                       - ${{ coupon.discount_amount }}
                     </span>
@@ -138,7 +138,7 @@ const submit = () => {
                 <li
                   class="text-lg font-bold border-t flex justify-between mt-3 pt-3"
                 >
-                  <span>Total price:</span>
+                  <span> {{ __("TOTAL_PRICE") }} :</span>
                   <span v-if="totalPriceWithCoupon">
                     ${{ totalPriceWithCoupon }}
                   </span>
@@ -149,7 +149,7 @@ const submit = () => {
               <form @submit.prevent="handlePlaceOrder">
                 <div class="my-10">
                   <h1 class="font-bold text-lg text-slate-700">
-                    Select Payment Methods
+                    {{ __("SELECT_PAYMENT_METHODS") }}
                   </h1>
 
                   <input type="hidden" v-model="form.total_price" />
@@ -217,7 +217,7 @@ const submit = () => {
                   :disabled="!deliveryInformation"
                 >
                   <i class="fa-solid fa-bag-shopping"></i>
-                  Place Order
+                {{__("PLACE_ORDER")}}
                 </button>
               </form>
             </article>

@@ -78,7 +78,7 @@ const submit = () => {
       <nav class="hidden lg:flex flex-1 items-center justify-end py-1">
         <a class="text-sm font-bold px-3 py-2 hover:text-gray-300" href="#">
           <i class="fa-solid fa-circle-info"></i>
-          HELP CENTER
+          {{ __("HELP_CENTER") }}
         </a>
 
         <span>|</span>
@@ -88,7 +88,7 @@ const submit = () => {
           :href="route('vendor.register')"
         >
           <i class="fa-solid fa-store"></i>
-          BECOME A SELLER
+          {{ __("BECOME_A_SELLER") }}
         </Link>
 
         <span>|</span>
@@ -103,7 +103,7 @@ const submit = () => {
           title="Check what happened to my products order?"
         >
           <i class="fa-solid fa-location-crosshairs"></i>
-          TRACK MY ORDER
+          {{ __("TRACK_MY_ORDER") }}
         </div>
         <div
           id="dropdownSearch"
@@ -111,13 +111,13 @@ const submit = () => {
         >
           <h4 class="font-bold text-lg mb-4 text-slate-700 text-center">
             <i class="fa-solid fa-location-crosshairs"></i>
-            Track My Order
+            {{ __("TRACK_MY_ORDER") }}
           </h4>
 
-          <label for="" class="text-sm font-bold text-slate-800"
-            >Enter your order number</label
-          >
           <form @submit.prevent="handleTrackOrder">
+            <label for="" class="text-sm font-bold text-slate-800 mb-3">
+              {{ __("ENTER_YOUR_ORDER_NUMBER") }}
+            </label>
             <input
               type="text"
               class="w-full rounded-sm text-slate-800"
@@ -127,7 +127,7 @@ const submit = () => {
             <button
               class="font-bold text-sm bg-blue-600 w-full py-2 px 4 my-3 hover:bg-blue-700"
             >
-              Search
+              {{ __("SEARCH") }}
             </button>
           </form>
         </div>
@@ -148,7 +148,7 @@ const submit = () => {
               >
                 <i class="fa-solid fa-globe mr-1"></i>
 
-                LANGUAGE
+                {{ __("LANGUAGE") }}
                 <span class="ml-2 w-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -228,7 +228,7 @@ const submit = () => {
             class="flex-grow appearance-none border border-gray-200 bg-gray-100 rounded-md mr-2 py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 placeholder:text-sm placeholder:text-gray-400"
             type="text"
             v-model="params.search"
-            placeholder="What are you looking for?"
+            :placeholder="__('WHAT_ARE_YOU_LOOKING_FOR') + '?'"
           />
           <button
             @click="handleSearch"
@@ -251,7 +251,7 @@ const submit = () => {
             :href="route('cart.index')"
           >
             <i class="w-5 fa fa-shopping-cart"></i>
-            <span class="hidden lg:inline ml-1">My cart</span>
+            <span class="hidden lg:inline ml-1"> {{ __("MY_CART") }}</span>
             <span
               v-if="totalItems"
               class="bg-red-500 text-[.7rem] absolute -top-2 -right-2 w-5 h-5 p-2 rounded-full flex items-center justify-center"
@@ -268,18 +268,18 @@ const submit = () => {
               :href="route('register')"
             >
               <i class="text-gray-400 w-5 fa fa-user"></i>
-              <span class="hidden lg:inline ml-1 text-sm font-bold"
-                >SIGN UP</span
-              >
+              <span class="hidden lg:inline ml-1 text-sm font-bold">
+                {{ __("SIGN_UP") }}
+              </span>
             </Link>
             <Link
               class="px-3 py-2 inline-block text-center text-white bg-blue-500 shadow-sm border border-gray-200 rounded-md hover:bg-blue-700"
               :href="route('login')"
             >
               <i class="w-5 fa fa-user"></i>
-              <span class="hidden lg:inline ml-1 text-sm font-bold"
-                >SIGN IN</span
-              >
+              <span class="hidden lg:inline ml-1 text-sm font-bold">
+                {{ __("SIGN_IN") }}
+              </span>
             </Link>
           </div>
         </nav>

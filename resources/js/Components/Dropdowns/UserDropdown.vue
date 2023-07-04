@@ -53,7 +53,7 @@
         class="text-left text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"
       >
         <i class="fa-solid fa-address-card mr-3"></i>
-        My Account
+        {{ __("MY_ACCOUNT") }}
       </Link>
       <Link
         v-if="$page.props.auth.user?.role === 'vendor'"
@@ -63,7 +63,7 @@
         class="text-left text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"
       >
         <i class="fa-solid fa-store mr-3"></i>
-        My Shop
+        {{ __("MY_SHOP") }}
       </Link>
       <Link
         :href="route('my-orders.index')"
@@ -72,7 +72,7 @@
         class="text-left text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"
       >
         <i class="fa-solid fa-bag-shopping mr-3"></i>
-        My Orders
+        {{ __("MY_ORDERS") }}
       </Link>
 
       <Link
@@ -82,7 +82,7 @@
         class="text-left text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"
       >
         <i class="fa-solid fa-rotate-left mr-3"></i>
-        Return Orders & Items
+        {{ __("RETURN_ORDERS_AND_ITEMS") }}
       </Link>
 
       <Link
@@ -92,7 +92,7 @@
         class="text-left text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"
       >
         <i class="fa-solid fa-xmark mr-3"></i>
-        Cancel Orders & Items
+        {{ __("CANCEL_ORDERS_AND_ITEMS") }}
       </Link>
 
       <Link
@@ -100,14 +100,14 @@
         class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"
       >
         <i class="fa-solid fa-heart mr-3"></i>
-        My Watchlist
+        {{ __("MY_WATCHLIST") }}
       </Link>
       <Link
         :href="route('user.shop.followed')"
         class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"
       >
         <i class="fa-solid fa-store mr-3"></i>
-        Followed Shops
+        {{ __("FOLLOWED_SHOPS") }}
       </Link>
 
       <Link
@@ -117,7 +117,8 @@
         class="text-left text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"
       >
         <i class="fa-solid fa-right-from-bracket mr-3"></i>
-        Logout
+
+        {{ __("LOGOUT") }}
       </Link>
     </div>
   </div>

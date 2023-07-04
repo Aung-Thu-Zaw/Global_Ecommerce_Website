@@ -40,7 +40,7 @@ const props = defineProps({
                     }"
                   >
                     <i class="fa-solid fa-scroll mr-2 text-sm"></i>
-                    Description
+                    {{ __("DESCRIPTION") }}
                   </Link>
                 </li>
                 <li class="mr-2" role="presentation">
@@ -56,7 +56,8 @@ const props = defineProps({
                     }"
                   >
                     <i class="fa-solid fa-truck mr-2 text-sm"></i>
-                    Delievery & Services
+
+                    {{ __("DELIVERY_AND_SERVICES") }}
                   </Link>
                 </li>
                 <li class="mr-2" role="presentation">
@@ -72,7 +73,7 @@ const props = defineProps({
                   >
                     <i class="fa-solid fa-money-bill mr-2 text-sm"></i>
 
-                    Available Payments
+                    {{ __("AVAILABLE_PAYMENTS") }}
                   </Link>
                 </li>
                 <li class="mr-2" role="presentation">
@@ -87,7 +88,8 @@ const props = defineProps({
                     }"
                   >
                     <i class="fa-solid fa-star mr-2 text-sm"></i>
-                    Product Reviews
+
+                    {{ __("PRODUCT_REVIEWS") }}
                   </Link>
                 </li>
               </ul>

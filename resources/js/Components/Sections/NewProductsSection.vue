@@ -14,13 +14,13 @@ defineProps({
       <div
         class="bg-orange-500 p-3 text-white lg:text-slate-600 lg:bg-transparent lg:p-0 mb-5 rounded-md flex items-center justify-between"
       >
-        <h2 class="text-md md:text-2xl font-bold">NEW PRODUCTS</h2>
+        <h2 class="text-md md:text-2xl font-bold">{{ __("NEW_PRODUCTS") }}</h2>
         <span class="hidden border-4 border-slate-300 w-[70%] lg:block"></span>
         <Link
           :href="route('products.new')"
           class="text-sm font-bold md:text-md animate-bounce"
         >
-          SEE ALL
+          {{ __("SEE_ALL") }}
           <i class="fa-solid fa-angles-right ml-3"></i>
         </Link>
       </div>
@@ -36,7 +36,7 @@ defineProps({
       </div>
       <div v-else>
         <p class="text-center text-xl font-bold text-red-600 animate-bounce">
-          No Product Found!
+          {{ __("NO_PRODUCT_FOUND") }}!
         </p>
       </div>
     </div>
