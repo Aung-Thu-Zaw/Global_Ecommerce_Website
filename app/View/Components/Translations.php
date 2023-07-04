@@ -29,8 +29,6 @@ class Translations extends Component
     {
         $locale=App::getLocale();
 
-        // dd($locale);
-
         $translations=Cache::rememberForever("translations_$locale", function () use ($locale) {
 
             $phpTranslations=[];
