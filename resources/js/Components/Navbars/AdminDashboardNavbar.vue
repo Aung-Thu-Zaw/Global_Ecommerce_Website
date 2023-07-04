@@ -96,7 +96,7 @@ onMounted(() => {
         :href="route('admin.dashboard')"
         class="text-white text-sm uppercase hidden lg:inline-block font-semibold text-right ml-60"
       >
-        Admin Dashboard
+        {{ __("ADMIN_DASHBOARD :name", { name: $page.props.auth.user.name }) }}
       </Link>
 
       <form

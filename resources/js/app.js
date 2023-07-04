@@ -10,8 +10,7 @@ import { VueReCaptcha } from "vue-recaptcha-v3";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import CKEditor from "@ckeditor/ckeditor5-vue";
-
-
+import { translations } from "./Translations/translations";
 
 const appName =
     window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
@@ -28,6 +27,7 @@ createInertiaApp({
 
         return createApp({ render: () => h(App, props) })
             .use(plugin)
+            .mixin(translations)
             .use(VueReCaptcha, {
                 siteKey: captcheKey,
                 loaderOptions: {
