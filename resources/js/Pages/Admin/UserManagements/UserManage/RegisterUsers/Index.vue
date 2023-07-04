@@ -9,94 +9,73 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject, computed } from "vue";
+import { reactive, watch, inject, computed, ref } from "vue";
 import { router, Head, Link, usePage } from "@inertiajs/vue3";
 
+// Define the props
 const props = defineProps({
   users: Object,
 });
 
+// Define Alert Variables
 const swal = inject("$swal");
 
+// User Activity Status
+const currentTime = new Date();
+const threshold = 1000 * 60 * 5; //5minutes in millseconds
+
+const status = (last_activity) => {
+  const lastActivity = new Date(last_activity);
+  const timeDifference = currentTime.getTime() - lastActivity.getTime();
+
+  return timeDifference < threshold ? "active" : "offline";
+};
+
+// Query String Parameteres
 const params = reactive({
-  search: null,
+  search: usePage().props.ziggy.query?.search,
   page: props.users.current_page ? props.users.current_page : 1,
   per_page: props.users.per_page ? props.users.per_page : 10,
   sort: "id",
   direction: "desc",
 });
 
-const userManageDetail = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "user-manage.detail"
-      )
-    : false;
-});
-
-const userManageDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "user-manage.delete"
-      )
-    : false;
-});
-
-const userManageTrashList = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "user-manage.trash.list"
-      )
-    : false;
-});
-
-const handleSearchBox = () => {
-  params.search = "";
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.users.register.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.users.register.index"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.users.register.index"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.users.register.index"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("admin.users.register.index"),
     {
@@ -106,11 +85,43 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
-const handleDelete = async (admin) => {
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
+};
+
+// Handle User Delete
+const handleUserDelete = async (admin) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete this user?",
@@ -126,29 +137,53 @@ const handleDelete = async (admin) => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.users.register.destroy", {
-        user: admin.id,
+        user: admin,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
-const currentTime = new Date();
-const threshold = 1000 * 60 * 3; //3minutes in millseconds
+// Define Permissions Variables
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
 
-const status = (last_activity) => {
-  const lastActivity = new Date(last_activity);
-  const timeDifference = currentTime.getTime() - lastActivity.getTime();
+// User Detail Permission
+const userManageDetail = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "user-manage.detail"
+      )
+    : false;
+});
 
-  return timeDifference < threshold ? "online" : "offline";
-};
+// User Delete Permission
+const userManageDelete = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "user-manage.delete"
+      )
+    : false;
+});
+
+// User Trash List Permission
+const userManageTrashList = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "user-manage.trash.list"
+      )
+    : false;
+});
 </script>
 
 <template>
@@ -157,6 +192,7 @@ const status = (last_activity) => {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -180,6 +216,7 @@ const status = (last_activity) => {
           </li>
         </Breadcrumb>
 
+        <!-- Trash Button -->
         <div v-if="userManageTrashList">
           <Link
             as="button"
@@ -194,6 +231,7 @@ const status = (last_activity) => {
       </div>
 
       <div class="flex items-center justify-end mb-5">
+        <!-- Search Box -->
         <form class="w-[350px] relative">
           <input
             type="text"
@@ -204,11 +242,12 @@ const status = (last_activity) => {
 
           <i
             v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-            @click="handleSearchBox"
+            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+            @click="removeSearch"
           ></i>
         </form>
 
+        <!-- Perpage Select Box -->
         <div class="ml-5">
           <select
             class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -225,6 +264,7 @@ const status = (last_activity) => {
         </div>
       </div>
 
+      <!-- User Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -337,7 +377,10 @@ const status = (last_activity) => {
 
         <tbody v-if="users.data.length">
           <Tr v-for="user in users.data" :key="user.id">
-            <BodyTh>{{ user.id }}</BodyTh>
+            <BodyTh>
+              {{ user.id }}
+            </BodyTh>
+
             <Td>
               <img
                 :src="user.avatar"
@@ -345,8 +388,11 @@ const status = (last_activity) => {
                 class="h-[50px] w-[50px] ring-2 ring-slate-300 object-cover rounded-full"
               />
             </Td>
+
             <Td>{{ user.name }}</Td>
+
             <Td>{{ user.email }}</Td>
+
             <Td>
               <span
                 class="capitalize bg-sky-200 text-sky-500 px-3 py-1 font-bold text-sm rounded-full"
@@ -354,6 +400,7 @@ const status = (last_activity) => {
                 {{ user.role }}
               </span>
             </Td>
+
             <Td>
               <span
                 class="capitalize px-3 py-1 font-bold text-sm rounded-full"
@@ -368,11 +415,15 @@ const status = (last_activity) => {
                 {{ status(user.last_activity) }}
               </span>
             </Td>
-            <Td>{{ user.created_at }}</Td>
+
+            <Td>
+              {{ user.created_at }}
+            </Td>
+
             <Td v-if="userManageDelete || userManageDetail">
               <button
                 v-if="userManageDelete"
-                @click="handleDelete(user)"
+                @click="handleUserDelete(user.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>
@@ -395,9 +446,12 @@ const status = (last_activity) => {
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- User Table End -->
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!users.data.length" />
 
+      <!-- Pagination -->
       <Pagination class="mt-6" :links="users.links" />
     </div>
   </AdminDashboardLayout>

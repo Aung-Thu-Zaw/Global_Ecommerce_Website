@@ -1,21 +1,26 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, useForm, Head } from "@inertiajs/vue3";
-import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/AdminManageBreadcrumb.vue";
 import { computed, ref } from "vue";
+import { Link, useForm, Head } from "@inertiajs/vue3";
+import { useReCaptcha } from "vue-recaptcha-v3";
 import datepicker from "vue3-datepicker";
 
+// Define the props
 const props = defineProps({
   per_page: String,
   roles: Object,
 });
 
+// Define Variables
 const date = ref(null);
+const processing = ref(false);
+const previewPhoto = ref("");
 
+// Formatted Date
 const formatDate = computed(() => {
   const year = date.value ? date.value.getFullYear() : "";
   const month = date.value ? date.value.getMonth() + 1 : "";
@@ -24,14 +29,12 @@ const formatDate = computed(() => {
   return year && month && day ? `${year}-${month}-${day}` : null;
 });
 
-const processing = ref(false);
-
-const previewPhoto = ref("");
-
+// Handle Preview Image
 const getPreviewPhotoPath = (path) => {
   previewPhoto.value.src = URL.createObjectURL(path);
 };
 
+// Admin Create Form Data
 const form = useForm({
   avatar: "",
   address: "",
@@ -48,14 +51,14 @@ const form = useForm({
   captcha_token: null,
 });
 
+// Destructing ReCaptcha
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+
+// Handle Create Admin
 const handleCreateAdminUser = async () => {
   await recaptchaLoaded();
   form.captcha_token = await executeRecaptcha("create_admin");
-  submit();
-};
 
-const submit = () => {
   processing.value = true;
   form.post(
     route("admin.admin-manage.store", {
@@ -77,6 +80,7 @@ const submit = () => {
     <Head title="Create Admin" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -101,6 +105,7 @@ const submit = () => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back button -->
         <div>
           <Link
             as="button"
@@ -117,6 +122,7 @@ const submit = () => {
       </div>
 
       <div class="border shadow-md p-10">
+        <!-- Preview Image -->
         <div class="mb-6">
           <img
             ref="previewPhoto"
@@ -127,6 +133,7 @@ const submit = () => {
         </div>
         <form @submit.prevent="handleCreateAdminUser">
           <div class="grid grid-cols-2 gap-5">
+            <!-- Name Input -->
             <div class="mb-6">
               <InputLabel for="name" value="Name *" />
 
@@ -141,6 +148,8 @@ const submit = () => {
 
               <InputError class="mt-2" :message="form.errors.name" />
             </div>
+
+            <!-- Email Input -->
             <div class="mb-6">
               <InputLabel for="email" value="Email Address *" />
 
@@ -156,7 +165,9 @@ const submit = () => {
               <InputError class="mt-2" :message="form.errors.email" />
             </div>
           </div>
+
           <div class="grid grid-cols-2 gap-5">
+              <!-- Phone Input -->
             <div class="mb-6">
               <InputLabel for="phone" value="Phone No *" />
 
@@ -172,6 +183,7 @@ const submit = () => {
               <InputError class="mt-2" :message="form.errors.phone" />
             </div>
 
+            <!-- Password Input -->
             <div class="mb-6">
               <InputLabel for="password" value="Password *" />
 
@@ -188,6 +200,7 @@ const submit = () => {
             </div>
           </div>
           <div class="grid grid-cols-2 gap-5">
+            <!-- Gender Select Box -->
             <div class="mb-6">
               <InputLabel for="gender" value="Gender *" />
 
@@ -205,6 +218,7 @@ const submit = () => {
               <InputError class="mt-2" :message="form.errors.gender" />
             </div>
 
+            <!-- Calendar Component -->
             <div class="mb-6">
               <InputLabel for="birthday" value="Birthday" />
 
@@ -218,6 +232,7 @@ const submit = () => {
             </div>
           </div>
 
+          <!-- Address Input -->
           <div class="mb-6">
             <InputLabel for="address" value="Address" />
 
@@ -233,6 +248,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.address" />
           </div>
 
+          <!-- About Textarea -->
           <div class="mb-6">
             <InputLabel for="about" value="About" />
 
@@ -247,6 +263,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.about" />
           </div>
 
+          <!-- Role Select Box -->
           <div class="mb-6">
             <InputLabel for="assignRole" value="Role *" />
 
@@ -264,6 +281,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.assign_role" />
           </div>
 
+          <!-- Avatar File Input -->
           <div class="mb-6">
             <InputLabel for="image" value="Avatar" />
 
@@ -282,6 +300,7 @@ const submit = () => {
             <InputError class="mt-2" :message="form.errors.avatar" />
           </div>
 
+          <!-- Create Button -->
           <div class="mb-6">
             <button
               class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"

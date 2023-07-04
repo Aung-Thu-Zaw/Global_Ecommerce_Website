@@ -9,110 +9,73 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/AdminManageBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject, computed } from "vue";
+import { reactive, watch, inject, computed, ref } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
+// Define the props
 const props = defineProps({
   admins: Object,
 });
 
+// Define Alert Variables
 const swal = inject("$swal");
 
-const handleSearchBox = () => {
-  params.search = "";
+// Admin Activity Status
+const currentTime = new Date();
+const threshold = 1000 * 60 * 5; //5minutes in millseconds
+
+const status = (last_activity) => {
+  const lastActivity = new Date(last_activity);
+  const timeDifference = currentTime.getTime() - lastActivity.getTime();
+
+  return timeDifference < threshold ? "active" : "offline";
 };
 
-const adminManageAdd = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "admin-manage.add"
-      )
-    : false;
-});
-
-const adminManageEdit = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "admin-manage.edit"
-      )
-    : false;
-});
-
-const adminManageDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "admin-manage.delete"
-      )
-    : false;
-});
-
-const adminManageDetail = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "admin-manage.detail"
-      )
-    : false;
-});
-
-const adminManageTrashList = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "admin-manage.trash.list"
-      )
-    : false;
-});
-
+// Query String Parameteres
 const params = reactive({
-  search: null,
+  search: usePage().props.ziggy.query?.search,
   page: props.admins.current_page ? props.admins.current_page : 1,
   per_page: props.admins.per_page ? props.admins.per_page : 10,
   sort: "id",
   direction: "desc",
 });
 
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.admin-manage.index"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.admin-manage.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.admin-manage.index"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.admin-manage.index"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("admin.admin-manage.index"),
     {
@@ -122,11 +85,43 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
-const handleDelete = async (admin) => {
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
+};
+
+// Handle Admin Delete
+const handleAdminDelete = async (admin) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete this admin user?",
@@ -142,29 +137,71 @@ const handleDelete = async (admin) => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.admin-manage.destroy", {
-        user: admin.id,
+        user: admin,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
-const currentTime = new Date();
-const threshold = 1000 * 60 * 5; //5minutes in millseconds
+// Define Permissions Variables
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
 
-const status = (last_activity) => {
-  const lastActivity = new Date(last_activity);
-  const timeDifference = currentTime.getTime() - lastActivity.getTime();
+// Create New Admin Manage Permission
+const adminManageAdd = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "admin-manage.add"
+      )
+    : false;
+});
 
-  return timeDifference < threshold ? "active" : "offline";
-};
+// Admin Manage Edit Permission
+const adminManageEdit = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "admin-manage.edit"
+      )
+    : false;
+});
+
+// Admin Manage Delete Permission
+const adminManageDelete = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "admin-manage.delete"
+      )
+    : false;
+});
+
+// Admin Manage Detail Permission
+const adminManageDetail = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "admin-manage.detail"
+      )
+    : false;
+});
+
+// Admin Manage Trash List Permission
+const adminManageTrashList = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "admin-manage.trash.list"
+      )
+    : false;
+});
 
 if (usePage().props.flash.successMessage) {
   swal({
@@ -180,8 +217,10 @@ if (usePage().props.flash.successMessage) {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb />
 
+        <!-- Trash Button -->
         <div v-if="adminManageTrashList">
           <Link
             as="button"
@@ -196,6 +235,7 @@ if (usePage().props.flash.successMessage) {
       </div>
 
       <div class="mb-5 flex items-center justify-between">
+        <!-- Create Admin Button -->
         <Link
           v-if="adminManageAdd"
           as="button"
@@ -209,6 +249,7 @@ if (usePage().props.flash.successMessage) {
           Add Admin</Link
         >
         <div class="flex items-center ml-auto">
+          <!-- Search Box -->
           <form class="w-[350px] relative">
             <input
               type="text"
@@ -219,10 +260,12 @@ if (usePage().props.flash.successMessage) {
 
             <i
               v-if="params.search"
-              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-              @click="handleSearchBox"
+              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+              @click="removeSearch"
             ></i>
           </form>
+
+          <!-- Perpage Select Box -->
           <div class="ml-5">
             <select
               class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -240,6 +283,7 @@ if (usePage().props.flash.successMessage) {
         </div>
       </div>
 
+      <!-- Admin Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -379,7 +423,10 @@ if (usePage().props.flash.successMessage) {
 
         <tbody v-if="admins.data.length">
           <Tr v-for="admin in admins.data" :key="admin.id">
-            <BodyTh>{{ admin.id }}</BodyTh>
+            <BodyTh>
+              {{ admin.id }}
+            </BodyTh>
+
             <Td>
               <img
                 :src="admin.avatar"
@@ -387,9 +434,13 @@ if (usePage().props.flash.successMessage) {
                 class="h-[50px] w-[50px] ring-2 ring-slate-300 object-cover rounded-full"
               />
             </Td>
+
             <Td>{{ admin.name }}</Td>
+
             <Td>{{ admin.email }}</Td>
+
             <Td>{{ admin.phone }}</Td>
+
             <Td>
               <span
                 v-if="admin.roles.length"
@@ -404,6 +455,7 @@ if (usePage().props.flash.successMessage) {
                 No Role
               </span>
             </Td>
+
             <Td>
               <span
                 class="capitalize px-3 py-1 font-bold text-sm rounded-md"
@@ -418,6 +470,7 @@ if (usePage().props.flash.successMessage) {
                 {{ status(admin.last_activity) }}
               </span>
             </Td>
+
             <Td>{{ admin.created_at }}</Td>
 
             <Td
@@ -438,7 +491,7 @@ if (usePage().props.flash.successMessage) {
               </Link>
               <button
                 v-if="adminManageDelete"
-                @click="handleDelete(admin)"
+                @click="handleAdminDelete(admin.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>
@@ -461,9 +514,12 @@ if (usePage().props.flash.successMessage) {
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Admin Table End -->
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!admins.data.length" />
 
+      <!-- Pagination -->
       <Pagination class="mt-6" :links="admins.links" />
     </div>
   </AdminDashboardLayout>

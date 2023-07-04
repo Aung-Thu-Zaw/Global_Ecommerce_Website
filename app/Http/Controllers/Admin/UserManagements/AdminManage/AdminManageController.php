@@ -12,6 +12,7 @@ use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Str;
 
 class AdminManageController extends Controller
 {
@@ -50,7 +51,7 @@ class AdminManageController extends Controller
 
     public function store(AdminManageRequest $request, AdminUserAvatarUploadService $adminUserAvatarUploadService): RedirectResponse
     {
-        $user=User::create($request->validated()+["avatar"=>$adminUserAvatarUploadService->createImage($request)]);
+        $user=User::create($request->validated()+["uuid"=>Str::uuid(),"avatar"=>$adminUserAvatarUploadService->createImage($request)]);
 
         $user->assignRole($request->assign_role);
 

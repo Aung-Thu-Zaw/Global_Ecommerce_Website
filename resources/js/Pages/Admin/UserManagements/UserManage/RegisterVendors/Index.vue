@@ -9,94 +9,73 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject, computed } from "vue";
+import { reactive, watch, inject, computed, ref } from "vue";
 import { router, Head, Link, usePage } from "@inertiajs/vue3";
 
+// Define the props
 const props = defineProps({
   vendors: Object,
 });
 
+// Define Alert Variables
 const swal = inject("$swal");
 
+// Vendor Activity Status
+const currentTime = new Date();
+const threshold = 1000 * 60 * 5; //5minutes in millseconds
+
+const status = (last_activity) => {
+  const lastActivity = new Date(last_activity);
+  const timeDifference = currentTime.getTime() - lastActivity.getTime();
+
+  return timeDifference < threshold ? "active" : "offline";
+};
+
+// Query String Parameteres
 const params = reactive({
-  search: null,
+  search: usePage().props.ziggy.query?.search,
   page: props.vendors.current_page ? props.vendors.current_page : 1,
   per_page: props.vendors.per_page ? props.vendors.per_page : 10,
   sort: "id",
   direction: "desc",
 });
 
-const vendorManageDetail = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "vendor-manage.detail"
-      )
-    : false;
-});
-
-const vendorManageDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "vendor-manage.delete"
-      )
-    : false;
-});
-
-const vendorManageTrashList = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "vendor-manage.trash.list"
-      )
-    : false;
-});
-
-const handleSearchBox = () => {
-  params.search = "";
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.vendors.register.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.vendors.register.index"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.vendors.register.index"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.vendors.register.index"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("admin.vendors.register.index"),
     {
@@ -106,11 +85,43 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
-const handleDelete = async (admin) => {
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
+};
+
+// Handle Vendor Delete
+const handleVendorDelete = async (admin) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete this vendor?",
@@ -126,29 +137,53 @@ const handleDelete = async (admin) => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.vendors.register.destroy", {
-        user: admin.id,
+        user: admin,
         page: params.page,
         per_page: params.per_page,
-      })
+      }),
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
-const currentTime = new Date();
-const threshold = 1000 * 60 * 3; //3minutes in millseconds
+// Define Permissions Variables
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
 
-const status = (last_activity) => {
-  const lastActivity = new Date(last_activity);
-  const timeDifference = currentTime.getTime() - lastActivity.getTime();
+// Vendor Manage Detail Permission
+const vendorManageDetail = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "vendor-manage.detail"
+      )
+    : false;
+});
 
-  return timeDifference < threshold ? "online" : "offline";
-};
+// Admin Manage Delete Permission
+const vendorManageDelete = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "vendor-manage.delete"
+      )
+    : false;
+});
+
+// Vendor Manage Trash List Permission
+const vendorManageTrashList = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "vendor-manage.trash.list"
+      )
+    : false;
+});
 </script>
 
 <template>
@@ -204,8 +239,8 @@ const status = (last_activity) => {
 
           <i
             v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-            @click="handleSearchBox"
+            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+            @click="removeSearch"
           ></i>
         </form>
 
@@ -372,7 +407,7 @@ const status = (last_activity) => {
             <Td v-if="vendorManageDelete || vendorManageDetail">
               <button
                 v-if="vendorManageDelete"
-                @click="handleDelete(user)"
+                @click="handleVendorDelete(user.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>
