@@ -23,6 +23,7 @@ use App\Http\Controllers\Ecommerce\ProductReviewReplyController;
 use App\Http\Controllers\Ecommerce\ReturnOrderAndItemController;
 use App\Http\Controllers\Ecommerce\ReviewController;
 use App\Http\Controllers\Ecommerce\SearchByCategoryProductController;
+use App\Http\Controllers\Ecommerce\SearchHistoryController;
 use App\Http\Controllers\Ecommerce\SearchResultProductController;
 use App\Http\Controllers\Ecommerce\ShopController;
 use App\Http\Controllers\Ecommerce\ShopReviewController;
@@ -72,6 +73,8 @@ Route::get("{category}/products", [SearchByCategoryProductController::class,"sho
 Route::get('/collections', [CollectionController::class,"index"])->name("collections.index");
 
 Route::get('/collections/{collection}/products', [CollectionController::class,"show"])->name("collections.show");
+
+Route::delete('/search/history', [SearchHistoryController::class,"destroy"])->name("search.history.delete");
 
 
 Route::post('/languages/change', [LanguageController::class,"change"])->name("languages.change");

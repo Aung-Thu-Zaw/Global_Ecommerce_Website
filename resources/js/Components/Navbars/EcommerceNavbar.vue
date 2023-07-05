@@ -1,10 +1,15 @@
 <script setup>
 import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
 import { Link, router, useForm, usePage } from "@inertiajs/vue3";
-import { computed, reactive } from "vue";
+import { computed, reactive, ref, watch } from "vue";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+
+const visibleHistory = ref(false);
+const showSuggestions = ref(false);
+const suggestions = ref([]);
+const selectedSuggestion = ref(null);
 
 // Calculate Total Item
 const totalItems = computed(() => {
@@ -30,16 +35,17 @@ const params = reactive({
 });
 
 // Handle Search
-const handleSearch = () => {
-  if (params.search === "") {
-    router.get(route("home"));
-  } else {
+const handleSearch = (keyword = "") => {
+  if (params.search || keyword) {
+    params.search = params.search ? params.search : keyword;
     router.get(route("product.search"), {
       search: params.search,
       sort: params.sort,
       direction: params.direction,
       view: params.view,
     });
+  } else {
+    router.get(route("home"));
   }
 };
 
@@ -79,6 +85,10 @@ const handleChangeLanguage = (language) => {
       },
     }
   );
+};
+
+const handleDeleteSearchHistory = () => {
+  router.delete(route("search.history.delete"));
 };
 </script>
 
@@ -195,6 +205,13 @@ const handleChangeLanguage = (language) => {
                     data-te-dropdown-item-ref
                   >
                     {{ language.name }}
+
+                    <span
+                      v-if="language.short_name === $page.props.locale"
+                      class="ml-1"
+                    >
+                      <i class="fa-solid fa-check"></i>
+                    </span>
                   </div>
                 </li>
               </ul>
@@ -227,20 +244,51 @@ const handleChangeLanguage = (language) => {
           </div>
         </div>
 
-        <div class="w-full flex flex-nowrap items-center md:w-1/2">
-          <input
-            class="flex-grow appearance-none border border-gray-200 bg-gray-100 rounded-md mr-2 py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 placeholder:text-sm placeholder:text-gray-400"
-            type="text"
-            v-model="params.search"
-            :placeholder="__('WHAT_ARE_YOU_LOOKING_FOR') + '?'"
-          />
-          <button
-            @click="handleSearch"
-            type="button"
-            class="px-4 py-2 inline-block text-white border border-transparent bg-blue-600 rounded-md hover:bg-blue-700"
+        <div class="w-[600px] relative">
+          <form
+            @submit.prevent="handleSearch()"
+            class="w-[580px] flex flex-nowrap items-center"
           >
-            <i class="fa fa-search"></i>
-          </button>
+            <input
+              @click="visibleHistory = !visibleHistory"
+              class="flex-grow appearance-none border border-gray-200 bg-gray-100 rounded-md mr-2 py-2 px-3 hover:border-gray-400 focus:ring-0 focus:outline-none focus:border-gray-400 placeholder:text-sm placeholder:text-gray-400"
+              type="text"
+              v-model="params.search"
+              :placeholder="__('WHAT_ARE_YOU_LOOKING_FOR') + '?'"
+            />
+            <button
+              type="submit"
+              class="px-4 py-2 inline-block text-white border border-transparent bg-blue-600 rounded-md hover:bg-blue-700"
+            >
+              <i class="fa fa-search"></i>
+            </button>
+          </form>
+
+          <!-- Search History -->
+          <div
+            v-if="visibleHistory && $page.props.searchHistories.length !== 0"
+            class="border fixed z-50 rounded-md text-sm border-gray-200 mt-1 text-slate-700 font-semibold bg-white w-[520px] max-h-[400px] h-auto shadow"
+          >
+            <div class="px-3 py-2 flex items-center justify-between border-b-2">
+              <span class="text-[.8rem] text-slate-500"> Search History </span>
+              <span
+                @click="handleDeleteSearchHistory"
+                class="cursor-pointer text-[.8rem]"
+              >
+                <i class="fa-solid fa-trash hover:text-red-600"></i>
+              </span>
+            </div>
+            <ul class="text-gray-600">
+              <li
+                v-for="history in $page.props.searchHistories"
+                :key="history.id"
+                class="hover:bg-gray-100 font-normal text-[.8rem] px-3 py-2 cursor-pointer"
+                @click="handleSearch(history.keyword)"
+              >
+                {{ history.keyword }}
+              </li>
+            </ul>
+          </div>
         </div>
 
         <nav

@@ -58,7 +58,7 @@ const submit = () => {
               v-model="form.email"
             />
             <button
-              class="px-4 py-2 text-blue-600 bg-white border border-gray-200 rounded-tr-md rounded-br-md hover:text-white hover:bg-blue-600"
+              class="px-4 py-2 text-blue-600 bg-white border border-gray-200 rounded-tr-md rounded-br-md w-[100px] hover:text-white hover:bg-blue-600"
             >
               {{ __("SUBMIT") }}
             </button>
