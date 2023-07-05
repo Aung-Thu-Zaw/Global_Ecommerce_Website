@@ -85,6 +85,8 @@ class AdminLanguageController extends Controller
     {
         $language = Language::onlyTrashed()->findOrFail($id);
 
+        unlink(resource_path("lang/$language->short_name.json"));
+
         $language->forceDelete();
 
         return to_route('admin.languages.trash', "page=$request->page&per_page=$request->per_page")->with("success", "The language has been permanently deleted");
@@ -96,10 +98,45 @@ class AdminLanguageController extends Controller
 
         $languages->each(function ($language) {
 
+            unlink(resource_path("lang/$language->short_name.json"));
+
             $language->forceDelete();
 
         });
 
         return to_route('admin.languages.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Languages have been successfully deleted.");
     }
+
+    public function languageDetail(Language $language): Response|ResponseFactory
+    {
+        $jsonData=json_decode(file_get_contents(resource_path("lang/$language->short_name.json")));
+
+        return inertia("Admin/Languages/Detail", compact("jsonData", "language"));
+    }
+
+    // public function updateDetailUpdate(Request $request, Language $language)
+    // {
+    //     $arr1=[];
+    //     $arr2=[];
+
+    //     foreach ($request->key as $value) {
+    //         $arr1[]=$value;
+    //     }
+
+    //     foreach ($request->value as $value) {
+    //         $arr2[]=$value;
+    //     }
+
+
+    //     for ($i=0;$i<count($arr1);$i++) {
+    //         $data[$arr1[$i]]=$arr2[$i];
+    //     }
+
+
+    //     $encodeJson=json_encode($data, JSON_PRETTY_PRINT);
+
+    //     file_put_contents(resource_path("lang/$language->short_name.json"), $encodeJson);
+
+    //     return to_route("admin.languages.index")->with("success", "Language Details is updated successfully");
+    // }
 }

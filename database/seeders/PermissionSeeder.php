@@ -75,6 +75,7 @@ class PermissionSeeder extends Seeder
 
         Permission::create(["name"=>"language.menu","group"=>"language"]);
         Permission::create(["name"=>"language.add","group"=>"language"]);
+        Permission::create(["name"=>"language.detail","group"=>"language"]);
         Permission::create(["name"=>"language.edit","group"=>"language"]);
         Permission::create(["name"=>"language.delete","group"=>"language"]);
         Permission::create(["name"=>"language.trash.list","group"=>"language"]);

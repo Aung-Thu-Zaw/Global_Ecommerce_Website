@@ -154,6 +154,15 @@ const languageAdd = computed(() => {
     : false;
 });
 
+// Language Detail Permission
+const languageDetail = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "language.detail"
+      )
+    : false;
+});
+
 // Language Edit Permission
 const languageEdit = computed(() => {
   return permissions.value.length
@@ -365,7 +374,9 @@ if (usePage().props.flash.successMessage) {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh v-if="languageEdit || languageDelete"> Action </HeaderTh>
+          <HeaderTh v-if="languageEdit || languageDelete || languageDetail">
+            Action
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="languages.data.length">
@@ -386,7 +397,7 @@ if (usePage().props.flash.successMessage) {
               {{ language.created_at }}
             </Td>
 
-            <Td v-if="languageEdit || languageDelete">
+            <Td v-if="languageEdit || languageDelete || languageDetail">
               <Link
                 v-if="languageEdit"
                 as="button"
@@ -408,14 +419,15 @@ if (usePage().props.flash.successMessage) {
                 <i class="fa-solid fa-xmark"></i>
                 Delete
               </button>
-              <button
-                v-if="languageDelete"
-                @click="handleLanguageDelete(language.id)"
+              <Link
+                v-if="languageDetail"
+                as="button"
+                :href="route('admin.languages.show', language.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-arrow-up"></i>
                 Update Detail
-              </button>
+              </Link>
             </Td>
           </Tr>
         </tbody>

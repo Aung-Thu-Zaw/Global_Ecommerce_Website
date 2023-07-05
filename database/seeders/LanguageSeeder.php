@@ -15,24 +15,37 @@ class LanguageSeeder extends Seeder
      */
     public function run()
     {
-        Language::create([
+
+        $copyData=file_get_contents(resource_path("lang/en.json"));
+
+        $english=Language::create([
             "name"=>"English",
             "short_name"=>"en"
         ]);
+        file_put_contents(resource_path('lang/'.$english->short_name.'.json'), $copyData);
 
-        Language::create([
+
+        $myanmar=Language::create([
             "name"=>"Myanmar",
             "short_name"=>"my"
         ]);
+        file_put_contents(resource_path('lang/'.$myanmar->short_name.'.json'), $copyData);
 
-        Language::create([
+
+        $spanish=Language::create([
             "name"=>"Spanish",
             "short_name"=>"sp"
         ]);
+        file_put_contents(resource_path('lang/'.$spanish->short_name.'.json'), $copyData);
 
-        Language::create([
+
+        $french=Language::create([
             "name"=>"French",
             "short_name"=>"fr"
         ]);
+        file_put_contents(resource_path('lang/'.$french->short_name.'.json'), $copyData);
+
+
+
     }
 }

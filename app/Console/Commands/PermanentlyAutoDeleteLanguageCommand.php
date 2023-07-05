@@ -32,6 +32,8 @@ class PermanentlyAutoDeleteLanguageCommand extends Command
         ->where('deleted_at', '<=', $cutoffDate)->get();
 
         $languages->each(function ($language) {
+            unlink(resource_path("lang/$language->short_name.json"));
+
             $language->forceDelete();
         });
     }
