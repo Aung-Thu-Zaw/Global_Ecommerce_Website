@@ -33,6 +33,10 @@ class AdminLanguageController extends Controller
     {
         Language::create($request->validated());
 
+        $copyData=file_get_contents(resource_path("lang/en.json"));
+
+        file_put_contents(resource_path('lang/'.$request->short_name.'.json'), $copyData);
+
         return to_route("admin.languages.index", "per_page=$request->per_page")->with("success", "Language has been successfully created.");
     }
 

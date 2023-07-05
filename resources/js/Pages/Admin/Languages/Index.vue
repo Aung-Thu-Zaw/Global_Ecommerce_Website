@@ -408,6 +408,14 @@ if (usePage().props.flash.successMessage) {
                 <i class="fa-solid fa-xmark"></i>
                 Delete
               </button>
+              <button
+                v-if="languageDelete"
+                @click="handleLanguageDelete(language.id)"
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 mr-3 my-1"
+              >
+                <i class="fa-solid fa-arrow-up"></i>
+                Update Detail
+              </button>
             </Td>
           </Tr>
         </tbody>

@@ -27,7 +27,7 @@ class Translations extends Component
      */
     public function render()
     {
-        $locale=App::getLocale();
+        $locale=session("locale") ? session("locale") : App::getLocale();
 
         $translations=Cache::rememberForever("translations_$locale", function () use ($locale) {
 
@@ -42,6 +42,7 @@ class Translations extends Component
                  })->flatMap(function ($file) {
                      return Arr::dot(File::getRequire($file->getRealPath()));
                  })->toArray();
+
             }
 
             if(File::exists(resource_path("lang/$locale.json"))) {

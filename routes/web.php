@@ -10,6 +10,7 @@ use App\Http\Controllers\Ecommerce\ProductController;
 use App\Http\Controllers\Ecommerce\CheckoutController;
 use App\Http\Controllers\Ecommerce\ConversationController;
 use App\Http\Controllers\Ecommerce\DeliveryInformationController;
+use App\Http\Controllers\Ecommerce\LanguageController;
 use App\Http\Controllers\User\FollowedShopController;
 use App\Http\Controllers\Ecommerce\MessageController;
 use App\Http\Controllers\Ecommerce\Payments\PaymentController;
@@ -72,6 +73,8 @@ Route::get('/collections', [CollectionController::class,"index"])->name("collect
 
 Route::get('/collections/{collection}/products', [CollectionController::class,"show"])->name("collections.show");
 
+
+Route::post('/languages/change', [LanguageController::class,"change"])->name("languages.change");
 
 Route::get("/blogs", [BlogController::class,"index"])->name("blogs.index");
 

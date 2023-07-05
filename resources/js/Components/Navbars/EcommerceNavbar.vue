@@ -67,6 +67,19 @@ const submit = () => {
     },
   });
 };
+
+// Handle Change Language
+const handleChangeLanguage = (language) => {
+  router.post(
+    route("languages.change", { locale: language }),
+    {},
+    {
+      onSuccess: () => {
+        window.location.reload();
+      },
+    }
+  );
+};
 </script>
 
 
@@ -76,7 +89,10 @@ const submit = () => {
       <span class="text-sm font-bold">GLOBAL E-COMMERCE WEBSITE</span>
       <!-- Menus -->
       <nav class="hidden lg:flex flex-1 items-center justify-end py-1">
-        <a class="text-sm font-bold px-3 py-2 hover:text-gray-300" href="#">
+        <a
+          class="text-sm font-bold px-3 py-2 hover:text-gray-300 uppercase"
+          href="#"
+        >
           <i class="fa-solid fa-circle-info"></i>
           {{ __("HELP_CENTER") }}
         </a>
@@ -84,7 +100,7 @@ const submit = () => {
         <span>|</span>
 
         <Link
-          class="text-sm font-bold px-3 py-2 hover:text-gray-300"
+          class="text-sm font-bold px-3 py-2 hover:text-gray-300 uppercase"
           :href="route('vendor.register')"
         >
           <i class="fa-solid fa-store"></i>
@@ -95,7 +111,7 @@ const submit = () => {
 
         <!-- Order Tracking -->
         <div
-          class="text-sm font-bold px-3 py-2 hover:text-gray-300 cursor-pointer"
+          class="text-sm font-bold px-3 py-2 hover:text-gray-300 cursor-pointer uppercase"
           data-dropdown-toggle="dropdownSearch"
           data-dropdown-placement="bottom"
           data-te-toggle="tooltip"
@@ -173,13 +189,13 @@ const submit = () => {
                   v-for="language in $page.props.languages"
                   :key="language.id"
                 >
-                  <a
-                    class="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400"
-                    href="#"
+                  <div
+                    @click="handleChangeLanguage(language.short_name)"
+                    class="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 cursor-pointer"
                     data-te-dropdown-item-ref
                   >
                     {{ language.name }}
-                  </a>
+                  </div>
                 </li>
               </ul>
             </div>
