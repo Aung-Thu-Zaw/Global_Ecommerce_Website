@@ -9,13 +9,9 @@ use Illuminate\Http\Request;
 
 class SearchHistoryController extends Controller
 {
-    public function destroy(): RedirectResponse
+    public function update(SearchHistory $searchHistory): RedirectResponse
     {
-        $searchHistories=SearchHistory::all();
-
-        $searchHistories->each(function ($searchHistory) {
-            $searchHistory->delete();
-        });
+        $searchHistory->update(["user_id"=>null]);
 
         return back();
     }

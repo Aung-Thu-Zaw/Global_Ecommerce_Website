@@ -1,15 +1,15 @@
 <script setup>
 import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
 import { Link, router, useForm, usePage } from "@inertiajs/vue3";
+import axios from "axios";
 import { computed, reactive, ref, watch } from "vue";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
 const visibleHistory = ref(false);
-const showSuggestions = ref(false);
-const suggestions = ref([]);
-const selectedSuggestion = ref(null);
+const searchedKeyword = ref("");
+const searchHistories = ref(usePage().props.searchHistories);
 
 // Calculate Total Item
 const totalItems = computed(() => {
@@ -34,10 +34,17 @@ const params = reactive({
     : "grid",
 });
 
+watch(
+  () => params.search,
+  () => {
+    searchedKeyword.value = params.search;
+  }
+);
+
 // Handle Search
-const handleSearch = (keyword = "") => {
-  if (params.search || keyword) {
-    params.search = params.search ? params.search : keyword;
+const handleSearch = () => {
+  if (params.search || searchedKeyword.value) {
+    params.search = params.search ? params.search : searchedKeyword.value;
     router.get(route("product.search"), {
       search: params.search,
       sort: params.sort,
@@ -87,8 +94,73 @@ const handleChangeLanguage = (language) => {
   );
 };
 
-const handleDeleteSearchHistory = () => {
-  router.delete(route("search.history.delete"));
+const handleUpdateSearchHistory = (historyId) => {
+  router.post(
+    route("user.search.history.update", { search_history: historyId })
+  );
+};
+
+const searchSuggestions = computed(() => {
+  if (params.search.length >= 1) {
+    return searchHistories.value
+      .filter(
+        (history) =>
+          history.keyword.includes(params.search) &&
+          history.user_id !== usePage().props.auth.user?.id
+      )
+      .slice(0, 20);
+  } else {
+    return [];
+  }
+});
+
+const filteredUserSearchHistories = computed(() => {
+  const searchQuery = params.search.toLowerCase();
+
+  if (usePage().props.auth.user) {
+    return params.search === ""
+      ? searchHistories.value
+          .filter((history) => {
+            return history.user_id === usePage().props.auth.user.id;
+          })
+          .slice(0, 10)
+      : searchHistories.value
+          .filter((history) => {
+            const historyKeyword = history.keyword.toLowerCase();
+            return (
+              history.user_id === usePage().props.auth.user.id &&
+              historyKeyword.includes(searchQuery)
+            );
+          })
+          .slice(0, 10);
+  } else {
+    return [];
+  }
+});
+
+const handleSearchInputKeyword = (keyword) => {
+  params.search = keyword;
+
+  handleSearch();
+};
+
+const highlightKeyword = (text) => {
+  const keyword = searchedKeyword.value;
+  if (keyword && text.includes(keyword)) {
+    const regex = new RegExp(keyword, "gi");
+    return text.replace(
+      regex,
+      `<span class="font-bold text-gray-800">${keyword}</span>`
+    );
+  }
+  return text;
+};
+
+const handleRemoveSearchHistory = (index, historyId) => {
+  const updatedSearchHistories = [...filteredUserSearchHistories.value];
+  updatedSearchHistories.splice(index, 1);
+  searchHistories.value = updatedSearchHistories;
+  handleUpdateSearchHistory(historyId);
 };
 </script>
 
@@ -106,7 +178,6 @@ const handleDeleteSearchHistory = () => {
           <i class="fa-solid fa-circle-info"></i>
           {{ __("HELP_CENTER") }}
         </a>
-
         <span>|</span>
 
         <Link
@@ -264,30 +335,75 @@ const handleDeleteSearchHistory = () => {
             </button>
           </form>
 
-          <!-- Search History -->
+          <!-- Search History And Suggestions -->
+
           <div
-            v-if="visibleHistory && $page.props.searchHistories.length !== 0"
-            class="border fixed z-50 rounded-md text-sm border-gray-200 mt-1 text-slate-700 font-semibold bg-white w-[520px] max-h-[400px] h-auto shadow"
+            v-if="
+              visibleHistory &&
+              (searchSuggestions.length || filteredUserSearchHistories.length)
+            "
+            class="border fixed z-50 rounded-md text-sm border-gray-200 mt-1 text-slate-700 font-semibold bg-white w-[520px] max-h-[400px] h-auto shadow overflow-auto scrollbar"
           >
-            <div class="px-3 py-2 flex items-center justify-between border-b-2">
-              <span class="text-[.8rem] text-slate-500"> Search History </span>
-              <span
-                @click="handleDeleteSearchHistory"
-                class="cursor-pointer text-[.8rem]"
-              >
-                <i class="fa-solid fa-trash hover:text-red-600"></i>
-              </span>
+            <!-- Your Search History -->
+            <div v-if="filteredUserSearchHistories.length !== 0">
+              <div class="px-3 py-2 flex items-center justify-between">
+                <span class="text-[.8rem] text-slate-600">
+                  <i class="fa-solid fa-clock mr-1"></i>
+                  Your Search History
+                </span>
+              </div>
+              <ul class="text-gray-600">
+                <li
+                  v-for="(history, index) in filteredUserSearchHistories"
+                  :key="history.id"
+                  class="hover:bg-gray-100 font-normal text-[.8rem] px-3 py-2 cursor-pointer"
+                >
+                  <span
+                    v-if="history.user_id === $page.props.auth.user?.id"
+                    class="flex items-center justify-between"
+                  >
+                    <span
+                      @click="handleSearchInputKeyword(history.keyword)"
+                      v-html="highlightKeyword(history.keyword)"
+                      class="w-full"
+                    >
+                    </span>
+                    <span class="cursor-pointer text-sm">
+                      <i
+                        @click="handleRemoveSearchHistory(index, history.id)"
+                        class="fa-solid fa-xmark hover:text-red-600"
+                      ></i>
+                    </span>
+                  </span>
+                </li>
+              </ul>
             </div>
-            <ul class="text-gray-600">
-              <li
-                v-for="history in $page.props.searchHistories"
-                :key="history.id"
-                class="hover:bg-gray-100 font-normal text-[.8rem] px-3 py-2 cursor-pointer"
-                @click="handleSearch(history.keyword)"
-              >
-                {{ history.keyword }}
-              </li>
-            </ul>
+
+            <!-- Global E-commerce Suggest -->
+            <div
+              v-if="params.search.length >= 1 && searchSuggestions.length !== 0"
+            >
+              <div class="px-3 py-2 flex items-center justify-between">
+                <span class="text-[.8rem] text-slate-600">
+                  <i class="fa-solid fa-lightbulb"></i>
+                  Global E-commerce Suggest
+                </span>
+              </div>
+              <ul class="text-gray-600">
+                <li
+                  v-for="history in searchSuggestions"
+                  :key="history.id"
+                  class="hover:bg-gray-100 font-normal text-[.8rem] px-3 py-2 cursor-pointer flex items-center justify-between"
+                >
+                  <span
+                    @click="handleSearchInputKeyword(history.keyword)"
+                    v-html="highlightKeyword(history.keyword)"
+                    class="w-full"
+                  >
+                  </span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 

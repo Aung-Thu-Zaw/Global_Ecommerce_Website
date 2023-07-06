@@ -7,6 +7,8 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\SearchHistory;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -15,8 +17,8 @@ class SearchResultProductController extends Controller
     public function index(): Response|ResponseFactory
     {
         SearchHistory::firstOrCreate(
-            ["user_id"=>auth()->user()->id,"keyword"=>request("search")],
-            ["user_id"=>auth()->user()->id,"keyword"=>request("search")]
+            ["user_id"=>auth()->user()->id ?? null,"keyword"=>request("search")],
+            ["user_id"=>auth()->user()->id ?? null,"keyword"=>request("search")]
         );
 
         $products=Product::select("id", "user_id", "image", "name", "description", "slug", "price", "discount", "special_offer")
@@ -41,4 +43,18 @@ class SearchResultProductController extends Controller
 
         return inertia("Ecommerce/Products/SearchResult", compact("categories", "brands", "products"));
     }
+
+    // public function suggestionSearch(): RedirectResponse
+    // {
+
+    //     $suggestionProducts=Product::select("id", "name", "slug")
+    //                     ->filterBy(request(["search"]))
+    //                     ->orderBy(request("sort", "id"), request("direction", "desc"))
+    //                     ->limit(15)
+    //                     ->get();
+
+    //     dd($suggestionProducts);
+
+    //     return back()->with("suggestions", $suggestionProducts);
+    // }
 }

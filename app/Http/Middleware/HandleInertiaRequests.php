@@ -48,8 +48,7 @@ class HandleInertiaRequests extends Middleware
             'parentCategory'=>Category::with("children")->whereNull("parent_id")->get(),
             'languages'=>Language::all(),
             'locale'=>session('locale'),
-            'searchHistories'=>SearchHistory::where("user_id", $request->user()->id ?? null)->get(),
-            // 'suggestionSearchList'=>SearchHistory::where("user_id", $request->user()->id ?? null)->get(),
+            'searchHistories'=>SearchHistory::orderBy("id", "desc")->get(),
             'vendors'=>User::where([["role","vendor"],["status","active"]])->limit(30)->get(),
             'totalCartItems'=> Cart::with("cartItems")->where("user_id", $request->user()->id ?? null)->first(),
             'socialShares'=>ShareFacade::currentPage("Global E-commerce")
@@ -70,6 +69,7 @@ class HandleInertiaRequests extends Middleware
                 'successMessage'=>session('success'),
                 'errorMessage'=>session('error'),
                 'infoMessage'=>session('info'),
+                'suggestions'=>session('suggestions'),
 
             ],
             'ziggy' => function () use ($request) {

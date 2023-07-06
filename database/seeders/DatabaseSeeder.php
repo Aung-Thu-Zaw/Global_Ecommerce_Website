@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder
                 ProductReviewSeeder::class,
                 VendorProductBannerSeeder::class,
                 LanguageSeeder::class,
+                SearchHistorySeeder::class,
             ]
         );
     }

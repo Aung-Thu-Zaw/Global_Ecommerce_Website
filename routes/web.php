@@ -74,7 +74,9 @@ Route::get('/collections', [CollectionController::class,"index"])->name("collect
 
 Route::get('/collections/{collection}/products', [CollectionController::class,"show"])->name("collections.show");
 
-Route::delete('/search/history', [SearchHistoryController::class,"destroy"])->name("search.history.delete");
+Route::post('/search/histories/{search_history}', [SearchHistoryController::class,"update"])->name("user.search.history.update");
+
+// Route::get('/search/suggestions', [SearchResultProductController::class,"suggestionSearch"])->name("product.search.suggestions");
 
 
 Route::post('/languages/change', [LanguageController::class,"change"])->name("languages.change");
