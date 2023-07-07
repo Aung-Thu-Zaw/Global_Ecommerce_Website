@@ -7,21 +7,21 @@ import datepicker from "vue3-datepicker";
 import { Link, useForm, usePage } from "@inertiajs/vue3";
 import { computed, inject, ref } from "vue";
 
+// Define the props
 const props = defineProps({
   mustVerifyEmail: Boolean,
   status: String,
 });
 
+// Define Variables
 const user = usePage().props.auth.user;
-
 const loading = ref(false);
-
 const swal = inject("$swal");
-
-// Format Date
 const date = ref(user.birthday ? new Date(user.birthday) : "");
+const previewPhoto = ref("");
 
-const formatDate = computed(() => {
+// Formatted Date
+const formattedDate = computed(() => {
   const year = date.value ? date.value.getFullYear() : "";
   const month = date.value ? date.value.getMonth() + 1 : "";
   const day = date.value ? date.value.getDate() : "";
@@ -33,8 +33,6 @@ const formatDate = computed(() => {
 });
 
 // Handle Select Photo Preview
-const previewPhoto = ref("");
-
 const getPreviewPhotoPath = (path) => {
   previewPhoto.value.src = URL.createObjectURL(path);
 };
@@ -47,7 +45,7 @@ const form = useForm({
   phone: user.phone,
   address: user.address,
   gender: user.gender,
-  birthday: formatDate,
+  birthday: formattedDate,
 });
 
 const submit = () => {
@@ -71,6 +69,7 @@ const submit = () => {
 
 <template>
   <section class="flex flex-wrap items-start justify-between">
+    <!-- Avatar Profile Photo  -->
     <div v-if="user.avatar" class="mx-auto">
       <img
         ref="previewPhoto"
@@ -90,16 +89,19 @@ const submit = () => {
 
     <div class="mx-auto w-full md:w-[60%]">
       <header>
-        <h2 class="text-lg font-medium text-gray-900">Profile Information</h2>
+        <h2 class="text-lg font-medium text-gray-900">
+          {{ __("PROFILE_INFORMATION") }}
+        </h2>
 
         <p class="mt-1 text-sm text-gray-600">
-          Update your account's profile information and email address.
+          {{ __("UPDATE_YOUR_ACCOUNT_PROFILE_INFORMATION") }}
         </p>
       </header>
 
       <form @submit.prevent="submit" class="mt-6 space-y-6">
+        <!-- Name Input -->
         <div>
-          <InputLabel for="name" value="Name *" />
+          <InputLabel for="name" :value="__('NAME') + '*'" />
 
           <TextInput
             id="name"
@@ -108,14 +110,15 @@ const submit = () => {
             v-model="form.name"
             required
             autofocus
-            placeholder="Enter Your Name"
+            :placeholder="__('ENTER_YOUR_FULLNAME')"
           />
 
           <InputError class="mt-2" :message="form.errors.name" />
         </div>
 
+        <!-- Email Input -->
         <div>
-          <InputLabel for="email" value="Email *" />
+          <InputLabel for="email" :value="__('EMAIL_ADDRESS') + '*'" />
 
           <TextInput
             id="email"
@@ -123,22 +126,23 @@ const submit = () => {
             class="mt-1 block w-full"
             v-model="form.email"
             required
-            placeholder="Enter Your Email"
+            :placeholder="__('ENTER_YOUR_EMAIL_ADDRESS')"
           />
 
           <InputError class="mt-2" :message="form.errors.email" />
         </div>
 
+        <!-- Resend Verification Link -->
         <div v-if="props.mustVerifyEmail && user.email_verified_at === null">
           <p class="text-sm mt-2 text-gray-800">
-            Your email address is unverified.
+            {{ __("YOUR_EMAIL_ADDRESS_IS_UNVERIFIED") }}
             <Link
               :href="route('verification.send')"
               method="post"
               as="button"
               class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Click here to re-send the verification email.
+              {{ __("CLICK_HERE_TO_RESEND_THE_VERIFICATION_EMAIL") }}
             </Link>
           </p>
 
@@ -146,68 +150,77 @@ const submit = () => {
             v-show="props.status === 'verification-link-sent'"
             class="mt-2 font-medium text-sm text-green-600"
           >
-            A new verification link has been sent to your email address.
+            {{
+              __("A_NEW_VERIFICATION_LINK_HAS_BEEN_SENT_TO_YOUR_EMAIL_ADDRESS")
+            }}
           </div>
         </div>
 
+        <!-- Phone Input -->
         <div>
-          <InputLabel for="phone" value="Phone" />
+          <InputLabel for="phone" :value="__('PHONE') + '*'" />
 
           <TextInput
             id="phone"
             type="phone"
             class="mt-1 block w-full"
             v-model="form.phone"
-            placeholder="Enter Your Phone Number"
+            :placeholder="__('ENTER_YOUR_PHONE_NUMBER')"
           />
 
           <InputError class="mt-2" :message="form.errors.phone" />
         </div>
 
+        <!-- Address Input -->
         <div>
-          <InputLabel for="address" value="Address" />
+          <InputLabel for="address" :value="__('ADDRESS')" />
 
           <TextInput
             id="address"
             type="address"
             class="mt-1 block w-full"
             v-model="form.address"
-            placeholder="Enter Your Address"
+            :placeholder="__('ENTER_YOUR_ADDRESS')"
           />
 
           <InputError class="mt-2" :message="form.errors.address" />
         </div>
 
+        <!-- Gender Select Box -->
         <div>
-          <InputLabel for="gender" value="Gender *" />
+          <InputLabel for="gender" :value="__('GENDER') + '*'" />
 
           <select
             class="p-3 w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 placeholder:text-gray-400 placeholder:text-sm"
             v-model="form.gender"
           >
-            <option value="" selected disabled>Select Your Gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
+            <option value="" selected disabled>
+              {{ __("SELECT_YOUR_GENDER") }}
+            </option>
+            <option value="male">{{ __("MALE") }}</option>
+            <option value="female">{{ __("FEMALE") }}</option>
+            <option value="other">{{ __("OTHER") }}</option>
           </select>
 
           <InputError class="mt-2" :message="form.errors.gender" />
         </div>
 
+        <!-- Birthday Calendar Component -->
         <div>
-          <InputLabel for="birthday" value="Birthday" />
+          <InputLabel for="birthday" :value="__('BIRTHDAY')" />
 
           <datepicker
             class="p-3 w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 placeholder:text-gray-400 placeholder:text-sm"
-            placeholder="Select Your Birthday"
+            :placeholder="__('SELECT_YOUR_BIRTHDAY')"
             v-model="date"
           />
 
           <InputError class="mt-2" :message="form.errors.birthday" />
         </div>
 
+        <!-- Avatar File Input -->
         <div>
-          <InputLabel for="avatar" value="Avatar" />
+          <InputLabel for="avatar" :value="__('AVATAR')" />
 
           <input
             class="relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-neutral-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out file:-mx-3 file:-my-1.5 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-1.5 file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[margin-inline-end:0.75rem] file:[border-inline-end-width:1px] hover:file:bg-neutral-200 focus:border-primary focus:bg-white focus:text-neutral-700 focus:shadow-[0_0_0_1px] focus:shadow-primary focus:outline-none dark:bg-transparent dark:text-neutral-200 dark:focus:bg-transparent"
@@ -220,6 +233,7 @@ const submit = () => {
           <InputError class="mt-2" :message="form.errors.avatar" />
         </div>
 
+        <!-- Save Button -->
         <div class="flex items-center gap-4">
           <FormButton>
             <svg
@@ -240,7 +254,7 @@ const submit = () => {
                 fill="currentColor"
               />
             </svg>
-            {{ loading ? "Loading..." : "Save" }}
+            {{ loading ? "Loading..." : __("SAVE") }}
           </FormButton>
 
           <Transition

@@ -12,7 +12,7 @@ defineProps({
 </script>
 
 <template>
-  <Head title="My Account" />
+  <Head :title="__('MY_ACCOUNT')" />
 
   <AppLayout>
     <div
@@ -21,7 +21,7 @@ defineProps({
       <!-- Title -->
       <h1 class="font-bold text-2xl text-slate-600 uppercase mb-5 self-start">
         <i class="fa-solid fa-user"></i>
-        My Account
+        {{ __("MY_ACCOUNT") }}
       </h1>
       <div class="w-full flex flex-col items-start mx-auto">
         <ul
@@ -41,7 +41,7 @@ defineProps({
               }"
             >
               <i class="fa-solid fa-address-card mr-2 text-sm"></i>
-              Edit Profile
+              {{ __("EDIT_PROFILE") }}
             </Link>
           </li>
 
@@ -58,7 +58,7 @@ defineProps({
               }"
             >
               <i class="fa-solid fa-key mr-2 text-sm"></i>
-              Change Password
+              {{ __("CHANGE_PASSWORD") }}
             </Link>
           </li>
 
@@ -75,7 +75,7 @@ defineProps({
               }"
             >
               <i class="fa-solid fa-trash mr-2 text-sm"></i>
-              Delete Account
+              {{ __("DELETE_ACCOUNT") }}
             </Link>
           </li>
         </ul>

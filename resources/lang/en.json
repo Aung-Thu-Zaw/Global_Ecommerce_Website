@@ -208,5 +208,22 @@
     "SUPPORT": "Support",
     "GUIDE": "Guide",
     "VENDOR_SUPPORT": "Vendor Support",
-    "CUSTOMER_SUPPORT": "Customer Support"
+    "CUSTOMER_SUPPORT": "Customer Support",
+    "EDIT_PROFILE": "Edit Profile",
+    "CHANGE_PASSWORD": "Change Password",
+    "DELETE_ACCOUNT": "Delete Account",
+    "PROFILE_INFORMATION": "Profile Information",
+    "UPDATE_YOUR_ACCOUNT_PROFILE_INFORMATION": "Update your account's profile information.",
+    "ADDRESS": "Address",
+    "SAVE": "Save",
+    "AVATAR": "Avatar",
+    "UPDATE_PASSWORD": "Update Password",
+    "CURRENT_PASSWORD": "Current Password",
+    "NEW_PASSWORD": "New Password",
+    "ONCE_YOUR_ACCOUNT_IS_DELETED_ALL_OF_ITS_RESOURCES_AND_DATA_WILL_BE_PERMANENTLY_DELETED_BEFPORE_DELETING_YOUR_ACCOUNT_PLEASE_DOWNLOAD_ANY_DATA_OR_INFORMATION_THAT_YOU_WISH_TO_RETAIN": "Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_YOUR_ACCOUNT": "Are you sure you want to delete your account",
+    "CANCEL": "Cancel",
+    "YOUR_EMAIL_ADDRESS_IS_UNVERIFIED": "Your email address is unverified.",
+    "CLICK_HERE_TO_RESEND_THE_VERIFICATION_EMAIL": "Click here to re-send the verification email.",
+    "A_NEW_VERIFICATION_LINK_HAS_BEEN_SENT_TO_YOUR_EMAIL_ADDRESS": "A new verification link has been sent to your email address."
 }

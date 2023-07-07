@@ -6,11 +6,22 @@ import { useReCaptcha } from "vue-recaptcha-v3";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
+// Define Veriables
 const visibleHistory = ref(false);
 const searchedKeyword = ref("");
 const searchHistories = ref(usePage().props.searchHistories);
 
-// Calculate Total Item
+// Query String Parameter
+const params = reactive({
+  search: usePage().props.ziggy.query?.search,
+  sort: "id",
+  direction: "desc",
+  view: usePage().props.ziggy.query.view
+    ? usePage().props.ziggy.query.view
+    : "grid",
+});
+
+// Calculate Total Items
 const totalItems = computed(() => {
   if (usePage().props.totalCartItems) {
     return usePage().props.totalCartItems.cart_items.reduce(
@@ -21,17 +32,27 @@ const totalItems = computed(() => {
   return;
 });
 
-// Query String Parameter
-const params = reactive({
-  search: usePage().props.ziggy.query.search
-    ? usePage().props.ziggy.query.search
-    : "",
-  sort: "id",
-  direction: "desc",
-  view: usePage().props.ziggy.query.view
-    ? usePage().props.ziggy.query.view
-    : "grid",
+// Handle Order No Tracking
+const form = useForm({
+  order_no: "",
 });
+
+const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+const handleTrackOrder = async () => {
+  await recaptchaLoaded();
+  form.captcha_token = await executeRecaptcha("track_order");
+
+  form.post(route("order.track"), {
+    onFinish: () => form.reset(),
+    onSuccess: () => {
+      if (usePage().props.flash.errorMessage) {
+        toast.error(usePage().props.flash.errorMessage, {
+          autoClose: 2000,
+        });
+      }
+    },
+  });
+};
 
 watch(
   () => params.search,
@@ -40,7 +61,7 @@ watch(
   }
 );
 
-// Handle Search
+// Handle Search Box
 const handleSearch = () => {
   if (params.search || searchedKeyword.value) {
     params.search = params.search ? params.search : searchedKeyword.value;
@@ -55,50 +76,13 @@ const handleSearch = () => {
   }
 };
 
-// Handle Order Tracking
-const form = useForm({
-  order_no: "",
-});
-
-const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
-const handleTrackOrder = async () => {
-  await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("track_order");
-  submit();
-};
-
-const submit = () => {
-  form.post(route("order.track"), {
-    onFinish: () => form.reset(),
-    onSuccess: () => {
-      if (usePage().props.flash.errorMessage) {
-        toast.error(usePage().props.flash.errorMessage, {
-          autoClose: 2000,
-        });
-      }
-    },
-  });
-};
-
-// Handle Change Language
-const handleChangeLanguage = (language) => {
-  router.post(
-    route("languages.change", { locale: language }),
-    {},
-    {
-      onSuccess: () => {
-        window.location.reload();
-      },
-    }
-  );
-};
-
 const handleUpdateSearchHistory = (historyId) => {
   router.post(
     route("user.search.history.update", { search_history: historyId })
   );
 };
 
+// Global Ecommerce Suggestion Search
 const searchSuggestions = computed(() => {
   if (params.search.length >= 1) {
     return searchHistories.value
@@ -113,6 +97,7 @@ const searchSuggestions = computed(() => {
   }
 });
 
+// Filtered User Search Histories
 const filteredUserSearchHistories = computed(() => {
   const searchQuery = params.search.toLowerCase();
 
@@ -137,12 +122,14 @@ const filteredUserSearchHistories = computed(() => {
   }
 });
 
+// Handle Search Input
 const handleSearchInputKeyword = (keyword) => {
   params.search = keyword;
 
   handleSearch();
 };
 
+// Highlisht Search Input Word
 const highlightKeyword = (text) => {
   const keyword = searchedKeyword.value;
   if (keyword && text.includes(keyword)) {
@@ -155,11 +142,25 @@ const highlightKeyword = (text) => {
   return text;
 };
 
+// Remove User Search History
 const handleRemoveSearchHistory = (index, historyId) => {
   const updatedSearchHistories = [...filteredUserSearchHistories.value];
   updatedSearchHistories.splice(index, 1);
   searchHistories.value = updatedSearchHistories;
   handleUpdateSearchHistory(historyId);
+};
+
+// Handle Change Language
+const handleChangeLanguage = (language) => {
+  router.post(
+    route("languages.change", { locale: language }),
+    {},
+    {
+      onSuccess: () => {
+        window.location.reload();
+      },
+    }
+  );
 };
 </script>
 
@@ -296,6 +297,7 @@ const handleRemoveSearchHistory = (index, historyId) => {
     </div>
   </nav>
 
+  <!-- Middle Navbar -->
   <header class="bg-white shadow-sm border border-b">
     <div class="container max-w-screen-xl mx-auto px-4">
       <div class="py-3 md:flex items-center">

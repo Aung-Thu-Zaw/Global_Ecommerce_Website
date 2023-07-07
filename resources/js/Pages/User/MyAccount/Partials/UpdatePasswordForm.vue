@@ -48,17 +48,23 @@ const updatePassword = () => {
 <template>
   <section class="">
     <header>
-      <h2 class="text-lg font-medium text-gray-900">Update Password</h2>
+      <h2 class="text-lg font-medium text-gray-900">
+        {{ __("UPDATE_PASSWORD") }}
+      </h2>
 
       <p class="mt-1 text-sm text-gray-600">
-        Ensure your account is using a long, random password to stay secure.
+        {{
+          __(
+            "ENSURE_YOUR_ACCOUNT_IS_USING_A_LONG_RANDOM_PASSWORD_TO_STAY_SECURE"
+          )
+        }}
       </p>
     </header>
 
     <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
       <!-- Current Password Input -->
       <div>
-        <InputLabel for="current_password" value="Current Password" />
+        <InputLabel for="current_password" :value="__('CURRENT_PASSWORD')" />
 
         <TextInput
           id="current_password"
@@ -74,7 +80,7 @@ const updatePassword = () => {
 
       <!-- New Password Input -->
       <div>
-        <InputLabel for="password" value="New Password" />
+        <InputLabel for="password" :value="__('NEW_PASSWORD')" />
 
         <TextInput
           id="password"
@@ -90,7 +96,10 @@ const updatePassword = () => {
 
       <!-- Confirm Password Input -->
       <div>
-        <InputLabel for="password_confirmation" value="Confirm Password" />
+        <InputLabel
+          for="password_confirmation"
+          :value="__('CONFIRM_PASSWORD')"
+        />
 
         <TextInput
           id="password_confirmation"
@@ -124,7 +133,7 @@ const updatePassword = () => {
               fill="currentColor"
             />
           </svg>
-          {{ loading ? "Loading..." : "Save" }}
+          {{ loading ? "Loading..." : __("SAVE") }}
         </FormButton>
 
         <Transition
