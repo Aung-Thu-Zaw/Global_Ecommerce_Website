@@ -47,7 +47,7 @@ if (usePage().props.flash.successMessage) {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Admin Dashboard" />
+    <Head :title="__('ADMIN_DASHBOARD')" />
 
     <AdminHeaderStats
       :totalUsers="totalUsers"

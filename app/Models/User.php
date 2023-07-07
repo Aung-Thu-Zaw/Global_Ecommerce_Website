@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Notifications\ResetPasswordQueued;
 use App\Notifications\AccountRegistered\VerifyEmailQueued;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Traits\HasPermissions;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -30,6 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use Follower;
     use Followable;
     use HasRoles;
+    use HasPermissions;
 
     protected $guarded=[];
 

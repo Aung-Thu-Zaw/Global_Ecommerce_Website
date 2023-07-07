@@ -14,7 +14,7 @@ if (usePage().props.flash.successMessage) {
 
 <template>
   <VendorDashboardLayout>
-    <Head title="Vendor Dashboard" />
+    <Head :title="__('VENDOR_DASHBOARD')" />
     <div
       v-if="
         $page.props.auth.user.role === 'vendor' &&
@@ -32,14 +32,21 @@ if (usePage().props.flash.successMessage) {
         class="mx-auto p-5 bg-green-100"
       >
         <h2 class="text-md font-bold text-green-700">
-          Your shop has been successfully registered 🎉.Please verify your email
-          in your email inbox or spam box.
+          {{
+            __(
+              "YOUR_SHOP_HAS_BEEN_SUCCESSFULLY_REGISTERED_PLEASE_VERIFY_YOUR_EMAIL_IN_YOUR_EMAIL_INBOX_OR_SPAN_BOX"
+            )
+          }}
         </h2>
       </div>
     </div>
     <div class="mt-2 mx-auto p-5 bg-orange-100">
       <h2 class="text-md font-bold text-slate-700">
-        At the moment, Your shop is inactive. Admin will check and contact you.
+        {{
+          __(
+            "AT_THE_MONENT_YOUR_SHOP_IS_INACTIVE_ADMIN_WILL_CHECK_AND_CONTACT_YOU"
+          )
+        }}
       </h2>
     </div>
 
@@ -53,7 +60,7 @@ if (usePage().props.flash.successMessage) {
         class="border border-blue-600 px-5 animate-bounce py-3 shadow font-semibold text-blue-600 rounded text-sm hover:bg-blue-600 hover:text-white transition-all"
       >
         <i class="fa-solid fa-home"></i>
-        Go To Home Page
+        {{ __("GO_TO_HOME_PAGE") }}
       </Link>
     </div>
   </VendorDashboardLayout>

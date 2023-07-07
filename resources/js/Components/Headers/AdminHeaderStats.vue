@@ -37,7 +37,7 @@ const formatpercentageChangeForSales = computed(() =>
         <div class="flex flex-wrap">
           <div class="w-full lg:w-6/12 xl:w-3/12 px-5 py-3">
             <CardStats
-              statSubtitle="TOTAL USERS"
+              :statSubtitle="__('TOTAL_USERS')"
               :statTitle="totalUsers"
               :statArrow="formatpercentageChangeForUser > 0 ? 'up' : 'down'"
               :statPercent="formatpercentageChangeForUser"
@@ -46,7 +46,7 @@ const formatpercentageChangeForSales = computed(() =>
                   ? 'text-green-500'
                   : 'text-red-500'
               "
-              statDescripiron="Since last month"
+              :statDescripiron="__('THAN_LAST_MONTH')"
               statIconName="fas fa-users"
               statIconColor="bg-teal-500"
             />
@@ -54,7 +54,7 @@ const formatpercentageChangeForSales = computed(() =>
 
           <div class="w-full lg:w-6/12 xl:w-3/12 px-5 py-3">
             <CardStats
-              statSubtitle="TOTAL VENDORS"
+              :statSubtitle="__('TOTAL_VENDORS')"
               :statTitle="totalVendors"
               :statArrow="formatpercentageChangeForVendor > 0 ? 'up' : 'down'"
               :statPercent="formatpercentageChangeForVendor"
@@ -63,7 +63,7 @@ const formatpercentageChangeForSales = computed(() =>
                   ? 'text-green-500'
                   : 'text-red-500'
               "
-              statDescripiron="Since last month"
+              :statDescripiron="__('THAN_LAST_MONTH')"
               statIconName="fas fa-store"
               statIconColor="bg-blue-500"
             />
@@ -71,7 +71,7 @@ const formatpercentageChangeForSales = computed(() =>
 
           <div class="w-full lg:w-6/12 xl:w-3/12 px-5 py-3">
             <CardStats
-              statSubtitle="TOTAL ORDERS"
+              :statSubtitle="__('TOTAL_ORDERS')"
               :statTitle="totalOrders"
               :statArrow="formatpercentageChangeForOrder > 0 ? 'up' : 'down'"
               :statPercent="formatpercentageChangeForOrder"
@@ -80,7 +80,7 @@ const formatpercentageChangeForSales = computed(() =>
                   ? 'text-green-500'
                   : 'text-red-500'
               "
-              statDescripiron="Since last month"
+              :statDescripiron="__('THAN_LAST_MONTH')"
               statIconName="fas fa-boxes-packing"
               statIconColor="bg-orange-500"
             />
@@ -88,7 +88,7 @@ const formatpercentageChangeForSales = computed(() =>
 
           <div class="w-full lg:w-6/12 xl:w-3/12 px-5 py-3">
             <CardStats
-              statSubtitle="TODAY SALES"
+              :statSubtitle="__('TODAY_SALES')"
               :statTitle="todaySales"
               :statArrow="formatpercentageChangeForSales > 0 ? 'up' : 'down'"
               :statPercent="formatpercentageChangeForSales"
@@ -97,7 +97,7 @@ const formatpercentageChangeForSales = computed(() =>
                   ? 'text-green-500'
                   : 'text-red-500'
               "
-              statDescripiron="Since yesterday"
+              :statDescripiron="__('THAN_YESTERDAY')"
               statIconName="fas fa-dollar-sign"
               statIconColor="bg-rose-500"
             />

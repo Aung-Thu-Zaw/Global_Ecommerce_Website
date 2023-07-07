@@ -55,7 +55,7 @@ onMounted(() => {
           class="px-3 py-1 bg-orange-200 text-orange-700 rounded-xl"
         >
           <i class="fa-solid fa-spinner animate-spin"></i>
-          Pending
+          {{ __("PENDING") }}
         </span>
         <span
           v-if="
@@ -65,7 +65,7 @@ onMounted(() => {
           class="px-3 py-1 bg-green-200 text-green-600 rounded-xl"
         >
           <i class="fa-solid fa-circle-check"></i>
-          Verified
+          {{ __("VERIFIED") }}
         </span>
       </Link>
 
@@ -80,11 +80,12 @@ onMounted(() => {
           </span>
           <input
             type="text"
-            placeholder="Search here..."
+            :placeholder="__('SEARCH_HERE') + '...'"
             class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
           />
         </div>
       </form>
+
       <ul class="flex-col md:flex-row list-none items-center hidden md:flex">
         <button
           id="vendorDropdownNotificationButton"
@@ -117,7 +118,7 @@ onMounted(() => {
           <div
             class="block px-4 py-2 font-medium text-center text-gray-700 rounded-t-lg bg-gray-50 dark:bg-gray-800 dark:text-white"
           >
-            Notifications
+            {{ __("NOTIFICATIONS") }}
           </div>
 
           <div
@@ -131,7 +132,7 @@ onMounted(() => {
           <div class="w-full text-center py-3" v-if="!notifications.length">
             <span class="text-sm text-slate-500 font-bold">
               <i class="fa-solid fa-bell" />
-              There are no notifications
+              {{ __("THERE_ARE_NO_NOTIFICATIONS") }}
             </span>
           </div>
         </div>

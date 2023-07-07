@@ -1,7 +1,6 @@
 <script setup>
 import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
 import { Link, router, useForm, usePage } from "@inertiajs/vue3";
-import axios from "axios";
 import { computed, reactive, ref, watch } from "vue";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import { toast } from "vue3-toastify";
@@ -211,6 +210,7 @@ const handleRemoveSearchHistory = (index, historyId) => {
             {{ __("TRACK_MY_ORDER") }}
           </h4>
 
+          <!-- Order Tracking Search Box -->
           <form @submit.prevent="handleTrackOrder">
             <label for="" class="text-sm font-bold text-slate-800 mb-3">
               {{ __("ENTER_YOUR_ORDER_NUMBER") }}
@@ -231,7 +231,7 @@ const handleRemoveSearchHistory = (index, historyId) => {
 
         <span>|</span>
 
-        <!-- Languages Dropdown -->
+        <!-- Change Languages Dropdown -->
         <div class="flex justify-center">
           <div>
             <div class="relative" data-te-dropdown-ref>
@@ -278,7 +278,10 @@ const handleRemoveSearchHistory = (index, historyId) => {
                     {{ language.name }}
 
                     <span
-                      v-if="language.short_name === $page.props.locale"
+                      v-if="
+                        language.short_name === $page.props.locale ||
+                        language.short_name === 'en'
+                      "
                       class="ml-1"
                     >
                       <i class="fa-solid fa-check"></i>
@@ -336,7 +339,6 @@ const handleRemoveSearchHistory = (index, historyId) => {
           </form>
 
           <!-- Search History And Suggestions -->
-
           <div
             v-if="
               visibleHistory &&
@@ -414,7 +416,9 @@ const handleRemoveSearchHistory = (index, historyId) => {
           <!-- User Profile Dropdown  -->
           <UserDropdown />
 
+          <!-- My Cart Button -->
           <Link
+            as="button"
             class="relative px-3 py-2 ml-5 inline-block text-center text-white bg-blue-600 shadow-sm border border-gray-300 rounded-md hover:bg-blue-700"
             :href="route('cart.index')"
           >
@@ -429,10 +433,12 @@ const handleRemoveSearchHistory = (index, historyId) => {
           </Link>
         </nav>
 
+        <!-- Unauthorized User Actions -->
         <nav v-else class="hidden md:flex justify-end flex-1 items-center">
           <div class="flex items-center space-x-2 ml-auto">
             <Link
-              class="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
+              as="button"
+              class="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300 uppercase"
               :href="route('register')"
             >
               <i class="text-gray-400 w-5 fa fa-user"></i>
@@ -441,7 +447,8 @@ const handleRemoveSearchHistory = (index, historyId) => {
               </span>
             </Link>
             <Link
-              class="px-3 py-2 inline-block text-center text-white bg-blue-500 shadow-sm border border-gray-200 rounded-md hover:bg-blue-700"
+              as="button"
+              class="px-3 py-2 inline-block text-center text-white bg-blue-500 shadow-sm border border-gray-200 rounded-md hover:bg-blue-700 uppercase"
               :href="route('login')"
             >
               <i class="w-5 fa fa-user"></i>

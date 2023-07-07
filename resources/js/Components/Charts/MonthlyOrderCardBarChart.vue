@@ -126,9 +126,11 @@ onMounted(() => {
       <div class="flex flex-wrap items-center">
         <div class="relative w-full max-w-full flex-grow flex-1">
           <h6 class="uppercase text-blueGray-400 mb-1 text-xs font-semibold">
-            Performance
+            {{ __("PERFORMANCE") }}
           </h6>
-          <h2 class="text-blueGray-700 text-xl font-semibold">Total Orders</h2>
+          <h2 class="text-blueGray-700 text-xl font-semibold">
+            {{ __("TOTAL_ORDERS") }}
+          </h2>
         </div>
       </div>
     </div>

@@ -16,7 +16,7 @@
         :href="route('home')"
         class="md:block text-left md:pb-2 text-slate-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
       >
-        Global Ecommerce
+        Global E-commerce
       </Link>
       <ul class="md:hidden items-center flex flex-wrap list-none">
         <li class="inline-block relative">
@@ -39,7 +39,7 @@
                 :href="route('home')"
                 class="md:block text-left md:pb-2 text-slate-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
               >
-                Global Ecommerce
+                Global E-commerce
               </Link>
             </div>
             <div class="w-6/12 flex justify-end">
@@ -67,7 +67,7 @@
         <h6
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
-          Admin Web Control Area
+          {{ __("ADMIN_WEB_CONTROL_AREA") }}
         </h6>
         <!-- Dashboard -->
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
@@ -83,7 +83,8 @@
               }"
             >
               <i class="fa-solid fa-chart-line mr-2 text-sm"></i>
-              Dashboard
+
+              {{ __("DASHBOARD") }}
             </Link>
           </li>
 
@@ -100,7 +101,8 @@
               }"
             >
               <i class="fa-solid fa-award mr-2 text-sm"></i>
-              Brands
+
+              {{ __("BRANDS") }}
             </Link>
           </li>
 
@@ -117,7 +119,8 @@
               }"
             >
               <i class="fa-solid fa-box mr-2 text-sm"></i>
-              Collections
+
+              {{ __("COLLECTIONS") }}
             </Link>
           </li>
 
@@ -134,7 +137,8 @@
               }"
             >
               <i class="fa-solid fa-list mr-2 text-sm"></i>
-              Categories
+
+              {{ __("CATEGORIES") }}
             </Link>
           </li>
 
@@ -151,7 +155,8 @@
               }"
             >
               <i class="fa-solid fa-basket-shopping mr-2 text-sm"></i>
-              Products
+
+              {{ __("PRODUCTS") }}
             </Link>
           </li>
 
@@ -168,7 +173,8 @@
               }"
             >
               <i class="fa-solid fa-ticket mr-2 text-sm"></i>
-              Coupons
+
+              {{ __("COUPONS") }}
             </Link>
           </li>
         </ul>
@@ -185,7 +191,8 @@
             >
               <span>
                 <i class="fa-solid fa-ad mr-2 text-sm"></i>
-                Banners
+
+                {{ __("BANNERS") }}
               </span>
               <i v-if="bannersIsHidden" class="fa-solid fa-chevron-right"></i>
               <i v-if="!bannersIsHidden" class="fa-solid fa-chevron-down"></i>
@@ -204,7 +211,7 @@
                   ),
                 }"
               >
-                Slider Banners
+                {{ __("SLIDER_BANNERS") }}
               </Link>
               <Link
                 :href="route('admin.campaign-banners.index')"
@@ -215,7 +222,7 @@
                   ),
                 }"
               >
-                Campaign Banners
+                {{ __("CAMPAIGN_BANNERS") }}
               </Link>
               <Link
                 :href="route('admin.product-banners.index')"
@@ -226,7 +233,7 @@
                   ),
                 }"
               >
-                Product Banners
+                {{ __("PRODUCT_BANNERS") }}
               </Link>
             </ul>
           </li>
@@ -244,7 +251,7 @@
             >
               <span>
                 <i class="fa-solid fa-map-location-dot mr-2 text-sm"></i>
-                Shipping Areas
+                {{ __("SHIPPING_AREAS") }}
               </span>
               <i
                 v-if="shippingAreaIsHidden"
@@ -318,7 +325,7 @@
           >
             <i class="fa-solid fa-language mr-2 text-sm"></i>
 
-            Languages
+            {{ __("LANGUAGES") }}
           </Link>
         </li>
 
@@ -336,7 +343,7 @@
           "
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
-          Order Managements
+          {{ __("ORDER_MANAGEMENTS") }}
         </h6>
 
         <!-- Order Manage -->
@@ -351,7 +358,7 @@
             >
               <span>
                 <i class="fa-solid fa-boxes-packing mr-2 text-sm"></i>
-                Order Manage
+                {{ __("ORDER_MANAGE") }}
               </span>
               <i
                 v-if="orderManageIsHidden"
@@ -376,7 +383,7 @@
                   ),
                 }"
               >
-                Pending Orders
+                {{ __("PENDING_ORDERS") }}
               </Link>
               <Link
                 :href="route('admin.orders.confirmed.index')"
@@ -387,7 +394,7 @@
                   ),
                 }"
               >
-                Confirmed Orders
+                {{ __("CONFIRMED_ORDERS") }}
               </Link>
               <Link
                 :href="route('admin.orders.processing.index')"
@@ -398,7 +405,7 @@
                   ),
                 }"
               >
-                Processing Orders
+                {{ __("PROCESSING_ORDERS") }}
               </Link>
               <Link
                 :href="route('admin.orders.shipped.index')"
@@ -409,7 +416,7 @@
                   ),
                 }"
               >
-                Shipped Orders
+                {{ __("SHIPPED_ORDERS") }}
               </Link>
               <Link
                 :href="route('admin.orders.delivered.index')"
@@ -420,7 +427,7 @@
                   ),
                 }"
               >
-                Delivered Orders
+                {{ __("DELIVERED_ORDERS") }}
               </Link>
             </ul>
           </li>
@@ -438,7 +445,7 @@
             >
               <span>
                 <i class="fa-solid fa-rotate-left mr-2 text-sm"></i>
-                Return Order Manage
+                {{ __("RETURN_ORDER_MANAGE") }}
               </span>
               <i
                 v-if="returnOrderManageIsHidden"
@@ -463,7 +470,7 @@
                   ),
                 }"
               >
-                Requested Return
+                {{ __("REQUESTED_RETURNS") }}
               </Link>
               <Link
                 :href="route('admin.return-orders.approved.index')"
@@ -474,7 +481,7 @@
                   ),
                 }"
               >
-                Approved Return
+                {{ __("APPROVED_RETURNS") }}
               </Link>
               <Link
                 :href="route('admin.return-orders.refunded.index')"
@@ -485,7 +492,7 @@
                   ),
                 }"
               >
-                Refunded Return
+                {{ __("REFUNDED_RETURNS") }}
               </Link>
             </ul>
           </li>
@@ -503,7 +510,7 @@
             >
               <span>
                 <i class="fa-solid fa-xmark mr-2 text-sm"></i>
-                Cancel Order Manage
+                {{ __("CANCEL_ORDER_MANAGE") }}
               </span>
               <i
                 v-if="cancelOrderManageIsHidden"
@@ -528,7 +535,7 @@
                   ),
                 }"
               >
-                Requested Cancel
+                {{ __("REQUESTED_CANCELS") }}
               </Link>
               <Link
                 :href="route('admin.cancel-orders.approved.index')"
@@ -539,7 +546,7 @@
                   ),
                 }"
               >
-                Approved Cancel
+                {{ __("APPROVED_CANCELS") }}
               </Link>
             </ul>
           </li>
@@ -555,7 +562,7 @@
           v-if="vendorManageMenu || userManageMenu || adminManageMenu"
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
-          User Managements
+          {{ __("USER_MANAGEMENTS") }}
         </h6>
 
         <!-- Vendor Manage -->
@@ -570,7 +577,7 @@
             >
               <span>
                 <i class="fas fa-store mr-2 text-sm"></i>
-                Vendor Manage
+                {{ __("VENDOR_MANAGE") }}
               </span>
               <i
                 v-if="vendorManageIsHidden"
@@ -595,7 +602,7 @@
                   ),
                 }"
               >
-                Active Vendors
+                {{ __("ACTIVE_VENDORS") }}
               </Link>
               <Link
                 :href="route('admin.vendors.inactive.index')"
@@ -606,7 +613,7 @@
                   ),
                 }"
               >
-                Inactive Vendors
+                {{ __("INACTIVE_VENDORS") }}
               </Link>
             </ul>
           </li>
@@ -623,7 +630,7 @@
             >
               <span>
                 <i class="fas fa-users mr-2 text-sm"></i>
-                User Manage
+                {{ __("USER_MANAGE") }}
               </span>
               <i
                 v-if="userManageIsHidden"
@@ -648,7 +655,7 @@
                   ),
                 }"
               >
-                Register Users
+                {{ __("REGISTERED_USERS") }}
               </Link>
               <Link
                 :href="route('admin.vendors.register.index')"
@@ -659,7 +666,7 @@
                   ),
                 }"
               >
-                Register Vendors
+                {{ __("REGISTERED_VENDORS") }}
               </Link>
             </ul>
           </li>
@@ -680,7 +687,7 @@
               }"
             >
               <i class="fa-solid fa-user-gear mr-2 text-sm"></i>
-              Admin Manage
+              {{ __("ADMIN_MANAGE") }}
             </Link>
           </li>
         </ul>
@@ -695,7 +702,7 @@
           v-if="roleAndPermissionMenu || roleInPermissionsMenu"
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
-          Authority Managements
+          {{ __("AUTHORITY_MANAGEMENTS") }}
         </h6>
 
         <!-- Role And Permission Manage -->
@@ -713,7 +720,7 @@
             >
               <span>
                 <i class="fa-solid fa-user-shield mr-2 text-sm"></i>
-                Roles & Permissions
+                {{ __("ROLES_AND_PERMISSIONS") }}
               </span>
               <i
                 v-if="roleAndPermissionManageIsHidden"
@@ -738,7 +745,7 @@
                   ),
                 }"
               >
-                Roles
+                {{ __("ROLES") }}
               </Link>
               <Link
                 :href="route('admin.permissions.index')"
@@ -749,7 +756,7 @@
                   ),
                 }"
               >
-                Permissions
+                {{ __("PERMISSIONS") }}
               </Link>
             </ul>
           </li>
@@ -771,7 +778,7 @@
               }"
             >
               <i class="fa-solid fa-user-lock mr-2 text-sm"></i>
-              Role In Permissions
+              {{ __("ROLE_IN_PERMISSIONS") }}
             </Link>
           </li>
         </ul>
@@ -868,7 +875,7 @@
           v-if="blogCategoryMenu || blogPostMenu"
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
-          Blog Managements
+          {{ __("BLOG_MANAGEMENTS") }}
         </h6>
 
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
@@ -884,7 +891,7 @@
               }"
             >
               <i class="fa-regular fa-rectangle-list mr-2 text-sm"></i>
-              Blog Categories
+              {{ __("BLOG_CATEGORIES") }}
             </Link>
           </li>
           <li class="items-center" v-if="blogPostMenu">
@@ -899,7 +906,7 @@
               }"
             >
               <i class="fa-solid fa-newspaper mr-2 text-sm"></i>
-              Blog Posts
+              {{ __("BLOG_POSTS") }}
             </Link>
           </li>
         </ul>
@@ -914,7 +921,7 @@
           v-if="websiteSettingMenu || seoSettingMenu"
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
-          Site Settings
+          {{ __("SITE_SETTINGS") }}
         </h6>
 
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
@@ -930,7 +937,7 @@
               }"
             >
               <i class="fa-solid fa-gear mr-2 text-sm"></i>
-              Website Settings
+              {{ __("WEBSITE_SETTINGS") }}
             </Link>
           </li>
           <li v-if="seoSettingMenu" class="items-center">
@@ -945,7 +952,7 @@
               }"
             >
               <i class="fa-brands fa-searchengin mr-2 text-sm"></i>
-              SEO Setting
+              {{ __("SEO_SETTING") }}
             </Link>
           </li>
         </ul>
@@ -954,7 +961,7 @@
         <h6
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
-          From The Submitters
+          {{ __("FROM_THE_SUBMITTERS") }}
         </h6>
 
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
@@ -970,7 +977,7 @@
               }"
             >
               <i class="fa-solid fa-user-check mr-2 text-sm"></i>
-              Subscribers
+              {{ __("SUBSCRIBERS") }}
             </Link>
           </li>
           <li v-if="suggestionMenu" class="items-center">
@@ -986,7 +993,7 @@
             >
               <i class="fa-solid fa-lightbulb mr-2 text-sm"></i>
 
-              Suggestions
+              {{ __("SUGGESTIONS") }}
             </Link>
           </li>
           <li v-if="feedbackMenu" class="items-center">
@@ -1001,7 +1008,7 @@
               }"
             >
               <i class="fa-solid fa-message mr-2 text-sm"></i>
-              Website Feedbacks
+              {{ __("WEBSITE_FEEDBACKS") }}
             </Link>
           </li>
         </ul>

@@ -109,7 +109,9 @@ class AdminLanguageController extends Controller
 
     public function languageDetail(Language $language): Response|ResponseFactory
     {
-        $jsonData=json_decode(file_get_contents(resource_path("lang/$language->short_name.json")));
+        $json = file_get_contents(resource_path("lang/$language->short_name.json"));
+
+        $jsonData = $json !== false ? json_decode($json) : null;
 
         return inertia("Admin/Languages/Detail", compact("jsonData", "language"));
     }

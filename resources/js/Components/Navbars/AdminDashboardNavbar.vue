@@ -96,7 +96,7 @@ onMounted(() => {
         :href="route('admin.dashboard')"
         class="text-white text-sm uppercase hidden lg:inline-block font-semibold text-right ml-60"
       >
-        <!-- {{ __("ADMIN_DASHBOARD :name", { name: $page.props.auth.user.name }) }} -->
+        Admin Dashboard
       </Link>
 
       <form
@@ -110,7 +110,7 @@ onMounted(() => {
           </span>
           <input
             type="text"
-            placeholder="Search here..."
+            :placeholder="__('SEARCH_HERE') + '...'"
             class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
           />
         </div>
@@ -147,7 +147,7 @@ onMounted(() => {
           <div
             class="block px-4 py-2 font-medium text-center text-gray-700 rounded-t-lg bg-gray-50"
           >
-            Notifications
+            {{ __("NOTIFICATIONS") }}
           </div>
 
           <div
@@ -169,7 +169,7 @@ onMounted(() => {
           <div class="w-full text-center py-3" v-if="!notifications.length">
             <span class="text-sm text-slate-500 font-bold">
               <i class="fa-solid fa-bell" />
-              There are no notifications
+              {{ __("THERE_ARE_NO_NOTIFICATIONS") }}
             </span>
           </div>
         </div>

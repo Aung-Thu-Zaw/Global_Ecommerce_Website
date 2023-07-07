@@ -16,7 +16,7 @@
         :href="route('home')"
         class="md:block text-left md:pb-2 text-slate-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
       >
-        Global Ecommerce
+        Global E-commerce
       </Link>
       <ul class="md:hidden items-center flex flex-wrap list-none">
         <li class="inline-block relative">
@@ -39,7 +39,7 @@
                 :href="route('home')"
                 class="md:block text-left md:pb-2 text-slate-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
               >
-                Global Ecommerce
+                Global E-commerce
               </Link>
             </div>
             <div class="w-6/12 flex justify-end">
@@ -67,7 +67,7 @@
         <h6
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
-          Vendor Control Area
+          {{ __("VENDOR_WEB_CONTROL_AREA") }}
         </h6>
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
           <li class="items-center">
@@ -82,7 +82,7 @@
               }"
             >
               <i class="fas fa-tv mr-2 text-sm"></i>
-              Dashboard
+              {{ __("DASHBOARD") }}
             </Link>
           </li>
           <!-- Product Section -->
@@ -104,7 +104,7 @@
               }"
             >
               <i class="fa-solid fa-basket-shopping mr-2 text-sm"></i>
-              Products
+              {{ __("PRODUCTS") }}
             </Link>
           </li>
           <!-- Product Section -->
@@ -128,7 +128,7 @@
               }"
             >
               <i class="fa-solid fa-basket-shopping mr-2 text-sm"></i>
-              Product Banners
+              {{ __("PRODUCT_BANNERS") }}
             </Link>
           </li>
           <!-- Order Section -->
@@ -150,7 +150,38 @@
               }"
             >
               <i class="fa-solid fa-boxes-packing mr-2 text-sm"></i>
-              Orders
+              {{ __("ORDERS") }}
+            </Link>
+          </li>
+          <!-- Order Section -->
+        </ul>
+
+        <hr class="my-4 md:min-w-full" />
+        <h6
+          class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
+        >
+          {{ __("VENDOR_SUPPORT") }}
+        </h6>
+
+        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <li class="items-center">
+            <Link
+              :href="route('vendor.orders.index')"
+              class="text-xs uppercase py-3 font-bold block"
+            >
+              <i class="fa-solid fa-book mr-2 text-sm"></i>
+
+              {{ __("GUIDE") }}
+            </Link>
+          </li>
+          <li class="items-center">
+            <Link
+              :href="route('vendor.orders.index')"
+              class="text-xs uppercase py-3 font-bold block"
+            >
+              <i class="fa-solid fa-headset mr-2 text-sm"></i>
+
+              {{ __("SUPPORT") }}
             </Link>
           </li>
         </ul>

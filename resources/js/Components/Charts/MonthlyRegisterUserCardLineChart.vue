@@ -153,10 +153,10 @@ onMounted(() => {
       <div class="flex flex-wrap items-center">
         <div class="relative w-full max-w-full flex-grow flex-1">
           <h6 class="uppercase text-blueGray-400 mb-1 text-xs font-semibold">
-            Overview
+            {{ __("OVERVIEW") }}
           </h6>
           <h2 class="text-xl font-semibold text-blueGray-700">
-            Total Register User
+           {{__("TOTAL_REGISTERED_USERS")}}
           </h2>
         </div>
       </div>
