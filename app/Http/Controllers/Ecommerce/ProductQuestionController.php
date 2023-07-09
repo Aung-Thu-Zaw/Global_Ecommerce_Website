@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Ecommerce;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductQuestionRequest;
+use App\Models\Product;
 use App\Models\ProductQuestion;
+use App\Models\User;
+use App\Notifications\ProductQuestions\NewProductQuestionFromUserNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -12,7 +15,13 @@ class ProductQuestionController extends Controller
 {
     public function storeQuestion(ProductQuestionRequest $request): RedirectResponse
     {
-        ProductQuestion::create($request->validated());
+        $productQuestion=ProductQuestion::create($request->validated());
+
+        $vendor=User::findOrFail($request->shop_id);
+
+        $product=Product::findOrFail($request->product_id);
+
+        $vendor->notify(new NewProductQuestionFromUserNotification($productQuestion, $product));
 
         return back();
     }

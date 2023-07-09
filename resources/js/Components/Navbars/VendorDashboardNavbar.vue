@@ -1,12 +1,11 @@
 <script setup>
 import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
 import FollowedShopNotificationCard from "@/Components/Cards/FollowedShopNotificationCard.vue";
+import ProductQuestionNotificationCard from "@/Components/Cards/ProductQuestionNotificationCard.vue";
 import { Link, usePage } from "@inertiajs/vue3";
 import { computed, onMounted, ref } from "vue";
 
 const notifications = ref([]);
-
-const notificationCount = ref(0);
 
 const totalUnreadNotifications = computed(() =>
   notifications.value.filter((notification) => !notification.read_at)
@@ -20,13 +19,24 @@ onMounted(() => {
       if (
         notification.type === "App\\Notifications\\FollowedShopNotification"
       ) {
-        console.log(notification);
-
         notifications.value.push({
           id: notification.id,
           type: notification.type,
           data: {
             message: notification.message,
+          },
+        });
+      } else if (
+        notification.type ===
+        "App\\Notifications\\ProductQuestions\\NewProductQuestionFromUserNotification"
+      ) {
+        notifications.value.push({
+          id: notification.id,
+          type: notification.type,
+          data: {
+            message: notification.message,
+            product: notification.product,
+            question: notification.question,
           },
         });
       }
@@ -126,7 +136,8 @@ onMounted(() => {
             :key="notification.id"
             class="divide-y divide-gray-300 dark:divide-gray-700"
           >
-            <FollowedShopNotificationCard :notification="notification" />
+            <!-- <FollowedShopNotificationCard :notification="notification" /> -->
+            <ProductQuestionNotificationCard :notification="notification" />
           </div>
 
           <div class="w-full text-center py-3" v-if="!notifications.length">

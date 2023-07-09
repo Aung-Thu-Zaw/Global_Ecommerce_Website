@@ -13,6 +13,7 @@ const props = defineProps({
 const form = useForm({
   user_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
   product_id: props.product.id,
+  shop_id: props.product.user_id,
   question_text: "",
   captcha_token: null,
 });
@@ -38,7 +39,6 @@ const submit = () => {
     <h3 class="text-lg font-bold text-slate-700 border-b pb-3 mb-3 p-5">
       {{ __("ASK_QUESTIONS_ABOUT_THIS_PRODCUT") }}
     </h3>
-
     <div class="w-full">
       <p class="font-bold text-md text-slate-600 px-5 mb-5">
         {{ __("TOTAL_QUESTIONS") }} ({{ productQuestions.data.length }})

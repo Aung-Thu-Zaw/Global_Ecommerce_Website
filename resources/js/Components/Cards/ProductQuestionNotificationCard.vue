@@ -16,68 +16,65 @@ const formattedTime = computed(() =>
     : ""
 );
 
-const goToDetailPage = () => {
-  router.get(
-    route("admin.subscribers.index", props.notification.data.subscriber.id)
-  );
+const goToQuestion = () => {
+  router.get(route("products.show", props.notification.data.product));
 };
 
 const handleNotificationReadAt = () => {
   router.post(
-    route("admin.notifications.read", props.notification.id),
+    route("vendor.notifications.read", props.notification.id),
     {},
     {
       onSuccess: () => {
-        goToDetailPage();
+        goToQuestion();
       },
     }
   );
 };
 </script>
 
+
+
 <template>
   <div
     @click="handleNotificationReadAt"
     v-if="
       notification.type ===
-      'App\\Notifications\\SubscribedNewsletter\\NewsletterSubscribedNotification'
+      'App\\Notifications\\ProductQuestions\\NewProductQuestionFromUserNotification'
     "
-    class="flex px-4 py-3 hover:bg-gray-100 cursor-pointer"
+    :href="route('products.show', notification.data.product)"
+    class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
-      class="flex-shrink-0 bg-green-300 text-green-700 ring-2 ring-green-400 w-10 h-10 rounded-full flex items-center justify-center p-3 font-bold"
+      class="flex-shrink-0 bg-rose-300 text-rose-700 ring-2 ring-rose-400 w-10 h-10 rounded-full flex items-center justify-center p-3 font-bold"
     >
-      <i
-        class="fa-solid fa-bell"
-        :class="{
-          'animate-pulse': !notification.read_at,
-        }"
-      ></i>
+      <i class="fa-solid fa-question"></i>
     </div>
     <div class="w-full pl-3">
       <div
         class="text-sm mb-1.5"
         :class="{
-          'text-gray-700': !notification.read_at,
+          'text-gray-600': !notification.read_at,
           'text-gray-500': notification.read_at,
         }"
       >
         {{ notification.data.message }}
 
         <span
-          class="font-bold text-sm block"
+          class="font-bold text-sm block line-clamp-1"
           :class="{
             'text-slate-600': !notification.read_at,
             'text-gray-500': notification.read_at,
           }"
-          >Subscriber : {{ notification.data.subscriber.email }}</span
         >
+          {{ notification.data.question }}
+        </span>
       </div>
       <div
-        class="text-xs font-bold dark:text-blue-500"
+        class="text-xs font-bold"
         :class="{
-          'text-green-500': !notification.read_at,
+          'text-rose-500': !notification.read_at,
           'text-gray-500': notification.read_at,
         }"
       >

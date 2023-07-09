@@ -3,6 +3,7 @@
 use App\Http\Controllers\MultiImageController;
 use App\Http\Controllers\Vendor\VendorAuthController;
 use App\Http\Controllers\Vendor\VendorDashboardController;
+use App\Http\Controllers\Vendor\VendorDashboardNotificationController;
 use App\Http\Controllers\Vendor\VendorOrderController;
 use App\Http\Controllers\Vendor\VendorProductBannerController;
 use App\Http\Controllers\Vendor\VendorProductController;
@@ -17,6 +18,15 @@ Route::middleware(["vendor","user.role:vendor"])
         ->group(function () {
 
             Route::get("/dashboard", [VendorDashboardController::class,"index"])->name("dashboard");
+
+
+            Route::controller(VendorDashboardNotificationController::class)
+            ->prefix("/notifications")
+            ->name("notifications.")
+            ->group(function () {
+                Route::post("/{notification_id}/read", "reatNotification")->name("read");
+                //    Route::post("/create", "create")->middleware('permission:brand.add')->name("create");
+            });
 
             // Products
             Route::controller(VendorProductController::class)

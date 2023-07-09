@@ -46,7 +46,7 @@ if (usePage().props.flash.successMessage) {
 
 <template>
   <GuestLayout>
-    <Head title="Seller Dashboard Login" />
+    <Head :title="__('SELLER_DASHBOARD_LOGIN')" />
 
     <FormContainer>
       <div

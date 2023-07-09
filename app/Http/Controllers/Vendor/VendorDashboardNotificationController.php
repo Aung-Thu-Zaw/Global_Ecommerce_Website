@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
-class AdminDashboardNotificationController extends Controller
+class VendorDashboardNotificationController extends Controller
 {
     public function reatNotification(string $notificationId): RedirectResponse
     {
