@@ -50,11 +50,13 @@ class ProductController extends Controller
 
     public function show(Product $product): Response|ResponseFactory
     {
+        $userId=$product->shop ? $product->shop->id : null;
+
         $product->load(["images","brand:id,name","colors","sizes","shop:id,uuid,offical,shop_name,avatar","watchlists","cartItems"]);
 
         $productsFromShop=Product::select("id", "user_id", "image", "name", "slug", "price", "discount")
                                  ->with(["shop:id,uuid"])
-                                 ->where("user_id", $product->shop->id)
+                                 ->where("user_id", $userId)
                                  ->where("id", "!=", $product->id)
                                  ->limit(5)
                                  ->get();

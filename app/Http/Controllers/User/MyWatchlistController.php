@@ -16,7 +16,7 @@ class MyWatchlistController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $watchlists=auth()->user()->watchlists;
+        $watchlists=Watchlist::findOrFail(auth()->id());
 
         $shopIds=$watchlists->pluck("shop_id")->unique()->values();
 
@@ -24,7 +24,7 @@ class MyWatchlistController extends Controller
 
         $watchlists->load(["product.shop:id,shop_name","product.brand:id,name","product.sizes","product.colors"]);
 
-        $mostViewedProducts=UserProductInteraction::where('user_id', auth()->user()->id)
+        $mostViewedProducts=UserProductInteraction::where('user_id', auth()->id())
                                                   ->groupBy('product_id')
                                                   ->pluck('product_id')
                                                   ->toArray();

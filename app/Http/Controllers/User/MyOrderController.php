@@ -18,7 +18,7 @@ class MyOrderController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $orders=Order::where("user_id", auth()->user()->id)
+        $orders=Order::where("user_id", auth()->id())
                      ->whereNull("return_reason")
                      ->whereNull("return_date")
                      ->whereNull("return_status")
@@ -28,7 +28,7 @@ class MyOrderController extends Controller
                      ->orderBy("id", "desc")
                      ->get();
 
-        $toPayOrders=Order::where("user_id", auth()->user()->id)
+        $toPayOrders=Order::where("user_id", auth()->id())
                           ->where("payment_type", "cash on delivery")
                           ->whereNull("return_reason")
                           ->whereNull("return_date")
@@ -39,7 +39,7 @@ class MyOrderController extends Controller
                           ->orderBy("id", "desc")
                           ->get();
 
-        $toReceiveOrders=Order::where("user_id", auth()->user()->id)
+        $toReceiveOrders=Order::where("user_id", auth()->id())
                                 ->where(function ($query) {
                                     $query->where("order_status", "confirmed")
                                           ->orWhere("order_status", "shipped");
@@ -53,7 +53,7 @@ class MyOrderController extends Controller
                                 ->orderBy("id", "desc")
                                 ->get();
 
-        $receivedOrders=Order::where("user_id", auth()->user()->id)
+        $receivedOrders=Order::where("user_id", auth()->id())
                              ->where("order_status", "delivered")
                              ->whereNull("return_reason")
                              ->whereNull("return_date")
@@ -100,7 +100,7 @@ class MyOrderController extends Controller
 
     public function return(ReturnOrCancelOrderRequest $request, int $order_id): RedirectResponse
     {
-        $order=Order::find($order_id);
+        $order=Order::findOrFail($order_id);
 
         $order->update([
             "return_date"=>now()->format("Y-m-d"),
@@ -121,7 +121,7 @@ class MyOrderController extends Controller
 
     public function cancel(ReturnOrCancelOrderRequest $request, int $order_id): RedirectResponse
     {
-        $order=Order::find($order_id);
+        $order=Order::findOrFail($order_id);
 
         $order->update([
             "cancel_date"=>now()->format("Y-m-d"),

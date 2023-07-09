@@ -27,6 +27,7 @@ class SendThankForSuggestionEmailToSuggestionSubmitter
      */
     public function handle($event)
     {
-        Mail::to($event->suggestion->email)->queue(new ThankForSuggestionMail($event->suggestion));
+        $suggestion=$event->suggestion ?? null;
+        Mail::to($suggestion->email)->queue(new ThankForSuggestionMail($suggestion));
     }
 }

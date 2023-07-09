@@ -44,20 +44,23 @@ class AdminProcessingOrderController extends Controller
         $orderItems=OrderItem::where("order_id", $id)->get();
 
         $orderItems->each(function ($orderItem) {
-            $product=Product::where("id", $orderItem->product_id)->first();
+            $product=Product::findOrFail($orderItem->product_id);
             $product->update(["qty"=>$product->qty - $orderItem->qty]);
         });
 
-        $order=Order::with(["deliveryInformation","orderItems.product.shop"])->where("id", $id)->first();
+        $order=Order::with(["deliveryInformation","orderItems.product.shop"])->findOrFail($id);
 
         $order->update([
             "order_status"=>"shipped",
             "shipped_date"=>now()->format("Y-m-d")
     ]);
 
-        Mail::to($order->deliveryInformation->email)->send(new OrderShippedMail($order));
+        $deliveryInformation = $order->deliveryInformation;
 
+        if ($deliveryInformation) {
+            Mail::to($deliveryInformation->email)->send(new OrderShippedMail($order));
+        }
         return to_route("admin.orders.shipped.index")->with("success", "Order is shipped");
-    }
 
+    }
 }

@@ -34,17 +34,20 @@ class MyAccountController extends Controller
      */
     public function update(MyAccountUpdateRequest $request, UserAvatarService $userAvatarService): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if ($user) {
+            $user->fill($request->validated());
+
+            if ($user->isDirty('email')) {
+                $user->email_verified_at = null;
+            }
+
+            $userAvatarService->regenerateDefaultAvatar($request);
+            $userAvatarService->uploadAvatar($request);
+
+            $user->save();
         }
-
-        $userAvatarService->regenerateDefaultAvatar($request);
-
-        $userAvatarService->uploadAvatar($request);
-
-        $request->user()->save();
 
         return to_route('my-account.edit', 'tab=edit-profile')->with("success", "Profile updated successfully");
     }
@@ -57,9 +60,12 @@ class MyAccountController extends Controller
     {
         $user=$request->user();
 
-        (new DeleteUserAction())->execute($request);
+        if($user) {
 
-        event(new AccountDeleted($user));
+            (new DeleteUserAction())->execute($request);
+
+            event(new AccountDeleted($user));
+        }
 
         return Redirect::to('/')->with("success", "Your account is deleted successfully.");
     }

@@ -29,10 +29,12 @@ class SendNewUserRegisteredEmailNotificationToAdmin implements ShouldQueue
      */
     public function handle($event)
     {
+        $user=$event->user ?? null;
+
         $admins=User::where("role", "admin")->get();
 
-        $event->user->role==="vendor" ?
-            Notification::send($admins, new RegisteredVendorEmailNotification($event->user)) :
-            Notification::send($admins, new RegisteredUserEmailNotification($event->user));
+        $user->role==="vendor" ?
+            Notification::send($admins, new RegisteredVendorEmailNotification($user)) :
+            Notification::send($admins, new RegisteredUserEmailNotification($user));
     }
 }

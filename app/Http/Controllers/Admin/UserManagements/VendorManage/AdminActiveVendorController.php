@@ -28,7 +28,7 @@ class AdminActiveVendorController extends Controller
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
-        $activeVendor=User::find($id);
+        $activeVendor=User::findOrFail($id);
 
         return inertia("Admin/UserManagements/VendorManage/ActiveVendors/Details", compact("activeVendor", "paginate"));
     }
@@ -36,7 +36,7 @@ class AdminActiveVendorController extends Controller
     public function update(Request $request, int $id): RedirectResponse
     {
 
-        $activeVendor=User::find($id);
+        $activeVendor=User::findOrFail($id);
 
         $message="";
 

@@ -11,21 +11,21 @@ class ReturnOrderAndItemController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $allReturnOrders=Order::where("user_id", auth()->user()->id)
+        $allReturnOrders=Order::where("user_id", auth()->id())
                      ->whereNotNull("return_reason")
                      ->whereNotNull("return_date")
                      ->whereNotNull("return_status")
                      ->orderBy("id", "desc")
                      ->get();
 
-        $requestedReturnOrders=Order::where("user_id", auth()->user()->id)
+        $requestedReturnOrders=Order::where("user_id", auth()->id())
                      ->whereNotNull("return_reason")
                      ->whereNotNull("return_date")
                      ->where("return_status", "requested")
                      ->orderBy("id", "desc")
                      ->get();
 
-        $approvedReturnOrders=Order::where("user_id", auth()->user()->id)
+        $approvedReturnOrders=Order::where("user_id", auth()->id())
                      ->whereNotNull("return_reason")
                      ->whereNotNull("return_date")
                      ->where("return_status", "approved")
@@ -33,7 +33,7 @@ class ReturnOrderAndItemController extends Controller
                      ->orderBy("id", "desc")
                      ->get();
 
-        $refundedReturnOrders=Order::where("user_id", auth()->user()->id)
+        $refundedReturnOrders=Order::where("user_id", auth()->id())
                      ->whereNotNull("return_reason")
                      ->whereNotNull("return_date")
                      ->where("return_status", "refunded")

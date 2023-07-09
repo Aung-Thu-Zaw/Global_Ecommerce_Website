@@ -119,7 +119,7 @@ class AdminProductController extends Controller
 
     public function restore(Request $request, int $id): RedirectResponse
     {
-        $product = Product::onlyTrashed()->where("id", $id)->first();
+        $product = Product::onlyTrashed()->findOrFail($id);
 
         $product->restore();
 
@@ -128,7 +128,7 @@ class AdminProductController extends Controller
 
     public function forceDelete(Request $request, int $id): RedirectResponse
     {
-        $product = Product::onlyTrashed()->where("id", $id)->first();
+        $product = Product::onlyTrashed()->findOrFail($id);
 
         $multiImages=Image::where("product_id", $product->id)->get();
 

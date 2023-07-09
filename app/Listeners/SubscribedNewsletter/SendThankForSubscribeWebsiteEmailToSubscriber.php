@@ -27,6 +27,8 @@ class SendThankForSubscribeWebsiteEmailToSubscriber
      */
     public function handle($event)
     {
-        Mail::to($event->subscriber->email)->queue(new ThankForSubscribeWebsiteMail());
+        $subscriber=$event->subscriber ?? null;
+
+        Mail::to($subscriber->email)->queue(new ThankForSubscribeWebsiteMail());
     }
 }

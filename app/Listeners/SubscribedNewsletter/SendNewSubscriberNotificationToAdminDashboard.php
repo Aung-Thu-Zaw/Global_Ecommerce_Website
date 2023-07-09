@@ -28,7 +28,8 @@ class SendNewSubscriberNotificationToAdminDashboard
      */
     public function handle($event)
     {
+        $subscriber=$event->subscriber ?? null;
         $admins=User::where("role", "admin")->get();
-        Notification::send($admins, new NewsletterSubscribedNotification($event->subscriber));
+        Notification::send($admins, new NewsletterSubscribedNotification($subscriber));
     }
 }

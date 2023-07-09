@@ -19,7 +19,7 @@ class ShopReviewController extends Controller
 
     public function updateReview(ShopReviewRequest $request, int $reviewId): RedirectResponse
     {
-        $shopReview=ShopReview::where("id", $reviewId)->first();
+        $shopReview=ShopReview::findOrFail($reviewId);
 
         $shopReview->update(["review_text"=>$request->review_text]);
 
@@ -28,7 +28,7 @@ class ShopReviewController extends Controller
 
     public function destroyReview(int $reviewId): RedirectResponse
     {
-        $shopReview=ShopReview::where("id", $reviewId)->first();
+        $shopReview=ShopReview::findOrFail($reviewId);
 
         $shopReview->delete();
 

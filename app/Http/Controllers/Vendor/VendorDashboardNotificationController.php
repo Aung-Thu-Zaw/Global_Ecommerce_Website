@@ -11,9 +11,9 @@ class VendorDashboardNotificationController extends Controller
 {
     public function reatNotification(string $notificationId): RedirectResponse
     {
-        $user=User::findOrFail(auth()->user()->id);
+        $user=User::findOrFail(auth()->id());
 
-        $notification=$user->notifications()->where("id", $notificationId)->first();
+        $notification=$user->notifications()->findOrFail($notificationId);
 
         $notification->update(['read_at' => now()]);
 

@@ -26,9 +26,10 @@ class ProductQuestionController extends Controller
         return back();
     }
 
+
     public function updateQuestion(ProductQuestionRequest $request, int $questionId): RedirectResponse
     {
-        $productQuestion=ProductQuestion::where("id", $questionId)->first();
+        $productQuestion=ProductQuestion::findOrFail($questionId);
 
         $productQuestion->update(["question_text"=>$request->question_text]);
 
@@ -38,7 +39,7 @@ class ProductQuestionController extends Controller
     public function destroyQuestion(int $questionId): RedirectResponse
     {
 
-        $productQuestion=ProductQuestion::where("id", $questionId)->first();
+        $productQuestion=ProductQuestion::findOrFail($questionId);
 
         $productQuestion->delete();
 

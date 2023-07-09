@@ -30,8 +30,9 @@ class BrandRequest extends FormRequest
             "description"=>["required","string"]
         ];
 
-        if (in_array($this->method(), ["POST",'PUT', 'PATCH'])) {
-            $brand = $this->route()->parameter('brand');
+        $route = $this->route();
+        if ($route&&in_array($this->method(), ["POST",'PUT', 'PATCH'])) {
+            $brand = $route->parameter('brand');
             $rules["name"]=["required","string",Rule::unique("brands", "name")->ignore($brand)];
         }
 

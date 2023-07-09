@@ -51,16 +51,22 @@ class AdminManageController extends Controller
 
     public function store(AdminManageRequest $request, AdminUserAvatarUploadService $adminUserAvatarUploadService): RedirectResponse
     {
-        $user=User::create($request->validated()+["uuid"=>Str::uuid(),"avatar"=>$adminUserAvatarUploadService->createImage($request)]);
+        $user = User::create($request->validated() + [
+            "uuid" => Str::uuid(),
+            "avatar" => $adminUserAvatarUploadService->createImage($request)
+        ]);
 
         $user->assignRole($request->assign_role);
 
-        $role=Role::with("permissions")->where("id", $request->assign_role)->first();
+        $role = Role::with("permissions")->where("id", $request->assign_role)->first();
 
-        $user->syncPermissions($role->permissions);
+        if ($role) {
+            $user->syncPermissions($role->permissions);
+        }
 
         return to_route("admin.admin-manage.index", "per_page=$request->per_page")->with("success", "Admin has been successfully created.");
     }
+
 
     public function edit(User $user): Response|ResponseFactory
     {
@@ -75,22 +81,23 @@ class AdminManageController extends Controller
 
     public function update(AdminManageRequest $request, User $user, AdminUserAvatarUploadService $adminUserAvatarUploadService): RedirectResponse
     {
-        $user->update($request->validated()+["avatar"=>$adminUserAvatarUploadService->updateImage($request, $user)]);
+        $user->update($request->validated() + ["avatar" => $adminUserAvatarUploadService->updateImage($request, $user)]);
 
         if ($request->assign_role) {
             $user->roles()->detach();
-
             $user->permissions()->detach();
-
             $user->assignRole($request->assign_role);
 
-            $role=Role::with("permissions")->where("id", $request->assign_role)->first();
+            $role = Role::with("permissions")->where("id", $request->assign_role)->first();
 
-            $user->syncPermissions($role->permissions);
+            if ($role) {
+                $user->syncPermissions($role->permissions);
+            }
         }
 
         return to_route("admin.admin-manage.index", "page=$request->page&per_page=$request->per_page")->with("success", "Admin has been successfully updated.");
     }
+
 
     public function destroy(Request $request, User $user): RedirectResponse
     {

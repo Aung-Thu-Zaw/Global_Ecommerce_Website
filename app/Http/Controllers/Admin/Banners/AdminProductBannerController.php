@@ -99,7 +99,9 @@ class AdminProductBannerController extends Controller
 
         $productBanner = ProductBanner::where([["id", $id],["status","hide"]])->first();
 
-        $productBanner->update(["status"=>"show"]);
+        if($productBanner) {
+            $productBanner->update(["status"=>"show"]);
+        }
 
         return to_route('admin.product-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "Product Banner has been successfully displayed.");
     }
@@ -108,7 +110,9 @@ class AdminProductBannerController extends Controller
     {
         $productBanner = ProductBanner::where([["id", $id],["status","show"]])->first();
 
-        $productBanner->update(["status"=>"hide"]);
+        if($productBanner) {
+            $productBanner->update(["status"=>"hide"]);
+        }
 
         return to_route('admin.product-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "Product Banner has been successfully hidden.");
     }

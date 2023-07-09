@@ -136,7 +136,7 @@ onMounted(() => {
             :key="notification.id"
             class="divide-y divide-gray-300 dark:divide-gray-700"
           >
-            <!-- <FollowedShopNotificationCard :notification="notification" /> -->
+            <FollowedShopNotificationCard :notification="notification" />
             <ProductQuestionNotificationCard :notification="notification" />
           </div>
 

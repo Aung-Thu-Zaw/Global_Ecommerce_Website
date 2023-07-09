@@ -14,13 +14,13 @@ class FollowedShopController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $user=auth()->user();
+        $user=User::findOrFail(auth()->id());
 
         $followedShops=$user->followings()->with('followable')->get();
 
         $followedShopIds = $followedShops->pluck('followable_id')->toArray();
 
-        if(!$followedShops) {
+        if ($followedShops->isEmpty()) {
 
             $mostViewedProducts=UserProductInteraction::whereUserId($user->id)
                                                       ->groupBy('product_id')
@@ -54,9 +54,9 @@ class FollowedShopController extends Controller
 
     public function unfollowShop(int $shopId): RedirectResponse
     {
-        $user=auth()->user();
+        $user=User::findOrFail(auth()->id());
 
-        $shop=User::find($shopId);
+        $shop=User::findOrFail($shopId);
 
         $user->unfollow($shop);
 

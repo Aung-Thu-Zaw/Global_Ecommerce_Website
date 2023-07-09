@@ -29,10 +29,12 @@ class SendUserAccountDeletedEmailNotificationToAdmin implements ShouldQueue
      */
     public function handle($event)
     {
+        $user=$event->user ?? null;
+
         $admins=User::where("role", "admin")->get();
 
-        $event->user->role==="vendor" ?
-        Notification::send($admins, new VendorAccountDeletedEmailNotification($event->user)) :
-        Notification::send($admins, new UserAccountDeletedEmailNotification($event->user));
+        $user->role==="vendor" ?
+        Notification::send($admins, new VendorAccountDeletedEmailNotification($user)) :
+        Notification::send($admins, new UserAccountDeletedEmailNotification($user));
     }
 }

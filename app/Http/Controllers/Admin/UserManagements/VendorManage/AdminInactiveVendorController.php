@@ -27,14 +27,14 @@ class AdminInactiveVendorController extends Controller
     {
         $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
 
-        $inactiveVendor=User::find($id);
+        $inactiveVendor=User::findOrFail($id);
 
         return inertia("Admin/UserManagements/VendorManage/InactiveVendors/Details", compact("inactiveVendor", "paginate"));
     }
 
     public function update(Request $request, int $id): RedirectResponse
     {
-        $inactiveVendor=User::find($id);
+        $inactiveVendor=User::findOrFail($id);
 
         $inactiveVendor->update(["status"=>"active"]);
 
@@ -43,7 +43,7 @@ class AdminInactiveVendorController extends Controller
 
     public function destroy(Request $request, int  $id): RedirectResponse
     {
-        $inactiveVendor = User::find($id);
+        $inactiveVendor = User::findOrFail($id);
 
         $inactiveVendor->delete();
 
@@ -65,7 +65,7 @@ class AdminInactiveVendorController extends Controller
 
     public function restore(Request $request, int $id): RedirectResponse
     {
-        $inactiveVendor = User::onlyTrashed()->where("id", $id)->first();
+        $inactiveVendor = User::onlyTrashed()->findOrFail($id);
 
         $inactiveVendor->restore();
 
@@ -74,7 +74,7 @@ class AdminInactiveVendorController extends Controller
 
     public function forceDelete(Request $request, int $id): RedirectResponse
     {
-        $inactiveVendor = User::onlyTrashed()->where("id", $id)->first();
+        $inactiveVendor = User::onlyTrashed()->findOrFail($id);
 
         User::deleteUserAvatar($inactiveVendor);
 

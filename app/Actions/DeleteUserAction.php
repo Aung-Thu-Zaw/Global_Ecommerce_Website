@@ -2,11 +2,9 @@
 
 namespace App\Actions;
 
-use App\Mail\ConfirmOfAccountDeletionMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 
 class DeleteUserAction
 {
@@ -20,13 +18,17 @@ class DeleteUserAction
 
         $user = $request->user();
 
-        User::deleteDefaultAvatar($user);
+        if($user) {
 
-        User::deleteUserAvatar($user);
+            User::deleteDefaultAvatar($user);
 
-        Auth::logout();
+            User::deleteUserAvatar($user);
 
-        $user->delete();
+            Auth::logout();
+
+            $user->delete();
+
+        }
 
         $request->session()->invalidate();
 

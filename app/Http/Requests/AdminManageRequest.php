@@ -40,8 +40,9 @@ class AdminManageRequest extends FormRequest
             "role"=>["nullable",Rule::in(["admin","vendor","user"])],
         ];
 
-        if (in_array($this->method(), ['POST','PUT', 'PATCH'])) {
-            $user = $this->route()->parameter('user');
+        $route = $this->route();
+        if ($route&&in_array($this->method(), ['POST','PUT', 'PATCH'])) {
+            $user = $route->parameter('user');
             $rules["email"]=["required","string","email","max:255",Rule::unique("users", "email")->ignore($user)];
             $rules["phone"]=["required",Rule::unique("users", "phone")->ignore($user)];
             $rules["password"]=["nullable"];

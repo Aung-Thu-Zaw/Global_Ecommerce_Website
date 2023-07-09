@@ -15,7 +15,9 @@ class MessageController extends Controller
     {
         $message= (new CreateMessageAction())->handle($request);
 
-        event(new ChatMessage($message->load("user:id,avatar")));
+        if($message) {
+            event(new ChatMessage($message->load("user:id,avatar")));
+        }
     }
 
 }

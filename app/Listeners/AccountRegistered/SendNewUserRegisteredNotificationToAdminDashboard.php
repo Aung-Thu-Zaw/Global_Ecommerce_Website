@@ -28,7 +28,9 @@ class SendNewUserRegisteredNotificationToAdminDashboard
      */
     public function handle($event)
     {
+        $user=$event->user ?? null;
+
         $admins=User::where("role", "admin")->get();
-        Notification::send($admins, new RegisteredUserNotification($event->user));
+        Notification::send($admins, new RegisteredUserNotification($user));
     }
 }

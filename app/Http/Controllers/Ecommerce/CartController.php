@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Ecommerce;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
+use App\Models\CartItem;
 use App\Models\Coupon;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -16,9 +18,13 @@ class CartController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $cart=auth()->user()->cart;
+        $cart=Cart::where("user_id", auth()->id())->first();
 
-        $cartItems=$cart->cartItems;
+        $cartItems=[];
+
+        if($cart) {
+            $cartItems=CartItem::where("cart_id", $cart->id)->get();
+        }
 
         $shopIds=$cartItems->pluck("shop_id")->unique()->values();
         $shops = User::select("id", "shop_name")->whereIn('id', $shopIds)->get();
@@ -32,8 +38,7 @@ class CartController extends Controller
 
     public function applyCoupon(Request $request): RedirectResponse
     {
-        /** @var \App\Models\User|null $user */
-        $user = auth()->user();
+        $user = User::findOrFail(auth()->id());
 
         $coupon = Coupon::where('code', $request->code)
                         ->where('start_date', '<=', now())

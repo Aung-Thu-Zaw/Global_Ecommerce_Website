@@ -54,7 +54,7 @@ class OrderPlacedNotification extends Notification implements ShouldBroadcast
      * Get the array representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return array<string|int>
+     * @return array<string|int|null>
      */
     public function toArray($notifiable)
     {
@@ -83,4 +83,3 @@ class OrderPlacedNotification extends Notification implements ShouldBroadcast
 
 
 }
-

@@ -29,8 +29,9 @@ class BlogCategoryRequest extends FormRequest
             "status"=>["required","string",Rule::in(["show","hide"])]
         ];
 
-        if (in_array($this->method(), ['POST','PUT', 'PATCH'])) {
-            $blog_category = $this->route()->parameter('blog_category');
+        $route = $this->route();
+        if ($route&&in_array($this->method(), ['POST','PUT', 'PATCH'])) {
+            $blog_category = $route->parameter('blog_category');
             $rules["name"]=["required","string","max:255",Rule::unique("blog_categories", "name")->ignore($blog_category)];
         }
 

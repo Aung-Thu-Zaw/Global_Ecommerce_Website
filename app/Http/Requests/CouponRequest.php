@@ -35,8 +35,9 @@ class CouponRequest extends FormRequest
             "max_uses"=>["required","numeric"],
         ];
 
-        if (in_array($this->method(), ['POST','PUT', 'PATCH'])) {
-            $coupon = $this->route()->parameter('coupon');
+        $route = $this->route();
+        if ($route&&in_array($this->method(), ['POST','PUT', 'PATCH'])) {
+            $coupon = $route->parameter('coupon');
             $rules["code"]=["required","string",Rule::unique("coupons", "code")->ignore($coupon)];
         }
 

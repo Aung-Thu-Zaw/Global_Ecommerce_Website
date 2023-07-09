@@ -28,7 +28,9 @@ class SendNewSubscriberEmailNotificationToAdmin implements ShouldQueue
      */
     public function handle($event)
     {
+        $subscriber=$event->subscriber ?? null;
+
         $admins=User::where("role", "admin")->get();
-        Notification::send($admins, new NewsletterSubscribedEmailNotification($event->subscriber));
+        Notification::send($admins, new NewsletterSubscribedEmailNotification($subscriber));
     }
 }

@@ -28,7 +28,8 @@ class SendNewSuggestionNotificationToAdminDashboard
      */
     public function handle($event)
     {
+        $suggestion=$event->suggestion ?? null;
         $admins=User::where("role", "admin")->get();
-        Notification::send($admins, new NewSuggestionNotification($event->suggestion));
+        Notification::send($admins, new NewSuggestionNotification($suggestion));
     }
 }

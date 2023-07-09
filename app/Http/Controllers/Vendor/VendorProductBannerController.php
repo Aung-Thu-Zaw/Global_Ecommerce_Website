@@ -16,7 +16,7 @@ class VendorProductBannerController extends Controller
     public function index(): Response|ResponseFactory
     {
         $vendorProductBanners=VendorProductBanner::search(request("search"))
-                                                 ->where("user_id", auth()->user()->id)
+                                                 ->where("user_id", auth()->id())
                                                  ->orderBy(request("sort", "id"), request("direction", "desc"))
                                                  ->paginate(request("per_page", 10))
                                                  ->appends(request()->all());
@@ -64,7 +64,7 @@ class VendorProductBannerController extends Controller
     {
         $trashVendorProductBanners=VendorProductBanner::search(request("search"))
                                             ->onlyTrashed()
-                                            ->where("user_id", auth()->user()->id)
+                                            ->where("user_id", auth()->id())
                                             ->orderBy(request("sort", "id"), request("direction", "desc"))
                                             ->paginate(request("per_page", 10))
                                             ->appends(request()->all());
@@ -74,7 +74,7 @@ class VendorProductBannerController extends Controller
 
     public function restore(Request $request, int $id): RedirectResponse
     {
-        $vendorProductBanner = VendorProductBanner::onlyTrashed()->where("id", $id)->first();
+        $vendorProductBanner = VendorProductBanner::onlyTrashed()->findOrFail($id);
 
         $vendorProductBanner->restore();
 
@@ -83,7 +83,7 @@ class VendorProductBannerController extends Controller
 
     public function forceDelete(Request $request, int $id): RedirectResponse
     {
-        $vendorProductBanner = VendorProductBanner::onlyTrashed()->where("id", $id)->first();
+        $vendorProductBanner = VendorProductBanner::onlyTrashed()->findOrFail($id);
 
         VendorProductBanner::deleteImage($vendorProductBanner);
 
@@ -94,7 +94,7 @@ class VendorProductBannerController extends Controller
 
     public function handleShow(Request $request, int $id): RedirectResponse
     {
-        $countVendorProductBanners=VendorProductBanner::where([["user_id", auth()->user()->id ],["status", "show"]])->count();
+        $countVendorProductBanners=VendorProductBanner::where([["user_id", auth()->id() ],["status", "show"]])->count();
 
         if ($countVendorProductBanners >= 6) {
             return to_route('vendor.product-banners.index', "page=$request->page&per_page=$request->per_page")->with("error", "You can't display the product banner. Only 6 product banners are allowed.");
@@ -102,7 +102,9 @@ class VendorProductBannerController extends Controller
 
         $vendorProductBanner = VendorProductBanner::where([["id", $id],["status","hide"]])->first();
 
-        $vendorProductBanner->update(["status"=>"show"]);
+        if($vendorProductBanner) {
+            $vendorProductBanner->update(["status"=>"show"]);
+        }
 
         return to_route('vendor.product-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "Product Banner has been successfully displayed.");
     }
@@ -111,7 +113,9 @@ class VendorProductBannerController extends Controller
     {
         $vendorProductBanner = VendorProductBanner::where([["id", $id],["status","show"]])->first();
 
-        $vendorProductBanner->update(["status"=>"hide"]);
+        if($vendorProductBanner) {
+            $vendorProductBanner->update(["status"=>"hide"]);
+        }
 
         return to_route('vendor.product-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "Product Banner has been successfully hidden.");
     }
@@ -119,7 +123,7 @@ class VendorProductBannerController extends Controller
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $vendorProductBanners = VendorProductBanner::onlyTrashed()->where("user_id", auth()->user()->id)->get();
+        $vendorProductBanners = VendorProductBanner::onlyTrashed()->where("user_id", auth()->id())->get();
 
         $vendorProductBanners->each(function ($vendorProductBanner) {
             VendorProductBanner::deleteImage($vendorProductBanner);

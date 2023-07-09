@@ -35,26 +35,13 @@ class SearchResultProductController extends Controller
 
         if(request("category")) {
             $category=Category::where("slug", request("category"))->first();
-
-            $brands=Brand::where("category_id", $category->id)->get();
+            if($category) {
+                $brands=Brand::where("category_id", $category->id)->get();
+            }
         } else {
             $brands=Brand::all();
         }
 
         return inertia("Ecommerce/Products/SearchResult", compact("categories", "brands", "products"));
     }
-
-    // public function suggestionSearch(): RedirectResponse
-    // {
-
-    //     $suggestionProducts=Product::select("id", "name", "slug")
-    //                     ->filterBy(request(["search"]))
-    //                     ->orderBy(request("sort", "id"), request("direction", "desc"))
-    //                     ->limit(15)
-    //                     ->get();
-
-    //     dd($suggestionProducts);
-
-    //     return back()->with("suggestions", $suggestionProducts);
-    // }
 }

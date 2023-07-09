@@ -29,8 +29,9 @@ class CollectionRequest extends FormRequest
             "description"=>["required","string"],
         ];
 
-        if (in_array($this->method(), ['POST','PUT', 'PATCH'])) {
-            $collection = $this->route()->parameter('collection');
+        $route = $this->route();
+        if ($route&&in_array($this->method(), ['POST','PUT', 'PATCH'])) {
+            $collection = $route->parameter('collection');
             $rules["title"]=["required","string",Rule::unique("collections", "title")->ignore($collection)];
         }
 

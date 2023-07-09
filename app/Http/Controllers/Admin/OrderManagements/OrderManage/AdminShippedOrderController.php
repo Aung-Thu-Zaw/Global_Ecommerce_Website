@@ -41,14 +41,18 @@ class AdminShippedOrderController extends Controller
 
     public function update(int $id): RedirectResponse
     {
-        $order=Order::with(["deliveryInformation","orderItems.product.shop"])->where("id", $id)->first();
+        $order=Order::with(["deliveryInformation","orderItems.product.shop"])->findOrFail($id);
 
         $order->update([
             "order_status"=>"delivered",
             "delivered_date"=>now()->format("Y-m-d")
         ]);
 
-        Mail::to($order->deliveryInformation->email)->send(new OrderDeliveredMail($order));
+        $deliveryInformation = $order->deliveryInformation;
+
+        if ($deliveryInformation) {
+            Mail::to($deliveryInformation->email)->send(new OrderDeliveredMail($order));
+        }
 
         return to_route("admin.orders.delivered.index")->with("success", "Order is delivered");
     }

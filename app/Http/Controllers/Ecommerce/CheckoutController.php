@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ecommerce;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\DeliveryInformation;
@@ -18,7 +19,8 @@ class CheckoutController extends Controller
     public function index(): Response|ResponseFactory
     {
 
-        $cart=auth()->user()->cart;
+        $cart=Cart::findOrFail(auth()->id());
+
         $cartItems=$cart->cartItems;
 
         $shopIds=$cartItems->pluck("shop_id")->unique()->values();
@@ -32,7 +34,7 @@ class CheckoutController extends Controller
         $cities=City::with("region")->get();
         $townships=Township::with("city")->get();
 
-        $deliveryInformation=DeliveryInformation::where("user_id", auth()->user()->id)->first();
+        $deliveryInformation=DeliveryInformation::where("user_id", auth()->id())->first();
 
         $coupon=session("coupon") ?? "";
 

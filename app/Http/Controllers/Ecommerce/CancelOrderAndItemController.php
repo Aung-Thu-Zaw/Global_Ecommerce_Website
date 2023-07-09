@@ -11,21 +11,21 @@ class CancelOrderAndItemController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $allCancelOrders=Order::where("user_id", auth()->user()->id)
+        $allCancelOrders=Order::where("user_id", auth()->id())
                      ->whereNotNull("cancel_reason")
                      ->whereNotNull("cancel_date")
                      ->whereNotNull("cancel_status")
                      ->orderBy("id", "desc")
                      ->get();
 
-        $requestedCancelOrders=Order::where("user_id", auth()->user()->id)
+        $requestedCancelOrders=Order::where("user_id", auth()->id())
                      ->whereNotNull("cancel_reason")
                      ->whereNotNull("cancel_date")
                      ->where("cancel_status", "requested")
                      ->orderBy("id", "desc")
                      ->get();
 
-        $approvedCancelOrders=Order::where("user_id", auth()->user()->id)
+        $approvedCancelOrders=Order::where("user_id", auth()->id())
                      ->whereNotNull("cancel_reason")
                      ->whereNotNull("cancel_date")
                      ->where("cancel_status", "approved")

@@ -28,7 +28,10 @@ class SendUserAccountDeletedNotificationToAdminDashboard
      */
     public function handle($event)
     {
+        $user=$event->user ?? null;
+
         $admins=User::where("role", "admin")->get();
-        Notification::send($admins, new UserAccountDeletedNotification($event->user));
+
+        Notification::send($admins, new UserAccountDeletedNotification($user));
     }
 }

@@ -45,14 +45,11 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-    *     @return array<string>
+    *     @return array<string|null>
     */
     public function toSearchableArray(): array
     {
         return [
-            // 'name' => $this->name,
-            // 'email' => $this->email,
-            // 'phone'=>$this->phone,
             'shop_name'=>$this->shop_name,
         ];
     }
@@ -74,7 +71,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return Attribute::make(
             set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/avatars/$value"),
-            get: fn ($value) => $value ??  asset("storage/avatars/default-avatar-".auth()->user()->id.".png"),
+            get: fn ($value) => $value ?? (auth()->user() ? asset("storage/avatars/default-avatar-" . auth()->user()->id . ".png") : asset("storage/avatars/default-avatar.png")),
         );
     }
 

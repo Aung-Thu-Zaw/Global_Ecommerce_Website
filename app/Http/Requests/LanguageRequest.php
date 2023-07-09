@@ -22,21 +22,24 @@ class LanguageRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
+
     public function rules()
     {
-        $rules= [
-            "name"=>["required","string",Rule::unique("languages", "name")],
-            "short_name"=>["required","string",Rule::unique("languages", "short_name")]
+        $rules = [
+            "name" => ["required", "string", Rule::unique("languages", "name")],
+            "short_name" => ["required", "string", Rule::unique("languages", "short_name")]
         ];
 
-        if (in_array($this->method(), ["POST",'PUT', 'PATCH'])) {
-            $language = $this->route()->parameter('language');
-            $rules["name"]=["required","string",Rule::unique("languages", "name")->ignore($language)];
-            $rules["short_name"]=["required","string",Rule::unique("languages", "short_name")->ignore($language)];
+        $route = $this->route();
+        if ($route && in_array($this->method(), ["POST", 'PUT', 'PATCH'])) {
+            $language = $route->parameter('language');
+            $rules["name"] = ["required", "string", Rule::unique("languages", "name")->ignore($language)];
+            $rules["short_name"] = ["required", "string", Rule::unique("languages", "short_name")->ignore($language)];
         }
 
         return $rules;
     }
+
 
     /**
     *     @return array<string>

@@ -91,7 +91,7 @@ class AdminTownshipController extends Controller
 
     public function restore(Request $request, int $id): RedirectResponse
     {
-        $township = Township::onlyTrashed()->where("id", $id)->first();
+        $township = Township::onlyTrashed()->findOrFail($id);
 
         $township->restore();
 
@@ -100,7 +100,7 @@ class AdminTownshipController extends Controller
 
     public function forceDelete(Request $request, int $id): RedirectResponse
     {
-        $township = Township::onlyTrashed()->where("id", $id)->first();
+        $township = Township::onlyTrashed()->findOrFail($id);
 
         $township->forceDelete();
 

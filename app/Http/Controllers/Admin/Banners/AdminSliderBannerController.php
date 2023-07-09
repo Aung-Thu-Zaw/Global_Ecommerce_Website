@@ -99,7 +99,9 @@ class AdminSliderBannerController extends Controller
 
         $sliderBanner = SliderBanner::where([["id", $id],["status","hide"]])->first();
 
-        $sliderBanner->update(["status"=>"show"]);
+        if($sliderBanner) {
+            $sliderBanner->update(["status"=>"show"]);
+        }
 
         return to_route('admin.slider-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "Slider Banner has been successfully displayed.");
     }
@@ -108,7 +110,9 @@ class AdminSliderBannerController extends Controller
     {
         $sliderBanner = SliderBanner::where([["id", $id],["status","show"]])->first();
 
-        $sliderBanner->update(["status"=>"hide"]);
+        if($sliderBanner) {
+            $sliderBanner->update(["status"=>"hide"]);
+        }
 
         return to_route('admin.slider-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "Slider Banner has been successfully hidden.");
     }

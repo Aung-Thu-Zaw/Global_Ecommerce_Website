@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\RedirectResponse;
@@ -24,8 +25,9 @@ class UpdateLastActivity
         $response = $next($request);
 
         if (Auth::check()) {
+            $user = User::findOrFail(auth()->id());
 
-            Auth::user()->update(['last_activity' => now()]);
+            $user->update(['last_activity' => now()]);
         }
 
         return $response;

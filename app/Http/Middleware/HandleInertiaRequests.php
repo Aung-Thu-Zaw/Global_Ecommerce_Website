@@ -12,9 +12,9 @@ use App\Models\SearchHistory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
-use Jorenvh\Share\Share;
 use Jorenvh\Share\ShareFacade;
 use Tightenco\Ziggy\Ziggy;
+use Jorenvh\Share\Share;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -51,7 +51,8 @@ class HandleInertiaRequests extends Middleware
             'searchHistories'=>SearchHistory::orderBy("id", "desc")->get(),
             'vendors'=>User::where([["role","vendor"],["status","active"]])->limit(30)->get(),
             'totalCartItems'=> Cart::with("cartItems")->where("user_id", $request->user()->id ?? null)->first(),
-            'socialShares'=>ShareFacade::currentPage("Global E-commerce")
+            'socialShares' => (new Share())
+                               ->currentPage("Global E-commerce")
                                ->facebook()
                                ->twitter()
                                ->linkedIn()

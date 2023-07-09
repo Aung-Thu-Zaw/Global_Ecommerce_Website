@@ -11,9 +11,12 @@ class MultiImageController extends Controller
     {
         $image=Image::where([["product_id",$productId],["id",$imageId]])->first();
 
-        Image::deleteImage($image);
+        if($image) {
 
-        $image->delete();
+            Image::deleteImage($image);
+
+            $image->delete();
+        }
 
         return back();
     }

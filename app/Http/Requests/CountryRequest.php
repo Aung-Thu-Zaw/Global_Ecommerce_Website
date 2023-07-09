@@ -28,8 +28,9 @@ class CountryRequest extends FormRequest
             "name"=>["required","string","max:255",Rule::unique("countries", "name")],
         ];
 
-        if (in_array($this->method(), ['POST','PUT', 'PATCH'])) {
-            $country = $this->route()->parameter('country');
+        $route = $this->route();
+        if ($route&&in_array($this->method(), ['POST','PUT', 'PATCH'])) {
+            $country = $route->parameter('country');
             $rules["name"]=["required","string","max:255",Rule::unique("countries", "name")->ignore($country)];
         }
 

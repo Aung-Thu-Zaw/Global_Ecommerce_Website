@@ -28,7 +28,9 @@ class SendNewSuggestionEmailNotificationToAdmin implements ShouldQueue
      */
     public function handle($event)
     {
+        $suggestion=$event->suggestion ?? null;
+
         $admins=User::where("role", "admin")->get();
-        Notification::send($admins, new NewSuggestionEmailNotification($event->suggestion));
+        Notification::send($admins, new NewSuggestionEmailNotification($suggestion));
     }
 }

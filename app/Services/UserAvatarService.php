@@ -10,7 +10,7 @@ class UserAvatarService
 {
     public function regenerateDefaultAvatar(Request $request): void
     {
-        if ($request->user()->isDirty('name')) {
+        if ($request->user() && $request->user()->isDirty('name')) {
             $userId=$request->user()->id;
 
 
@@ -51,21 +51,23 @@ class UserAvatarService
         if ($request->hasFile("avatar")) {
             $user=$request->user();
 
-            User::deleteDefaultAvatar($user);
+            if($user) {
+                User::deleteDefaultAvatar($user);
 
-            User::deleteUserAvatar($user);
+                User::deleteUserAvatar($user);
 
-            $file=$request->file("avatar");
+                $file=$request->file("avatar");
 
-            /** @var \Illuminate\Http\UploadedFile $file */
+                /** @var \Illuminate\Http\UploadedFile $file */
 
-            $extension=$file->extension();
+                $extension=$file->extension();
 
-            $finalName="avatar-$user->id.$extension";
+                $finalName="avatar-$user->id.$extension";
 
-            $file->move(storage_path("app/public/avatars/"), $finalName);
+                $file->move(storage_path("app/public/avatars/"), $finalName);
 
-            $request->user()->avatar=$finalName;
+                $user->avatar=$finalName;
+            }
         }
     }
 }

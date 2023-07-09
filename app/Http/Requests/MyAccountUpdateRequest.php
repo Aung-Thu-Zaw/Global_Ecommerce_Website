@@ -16,10 +16,12 @@ class MyAccountUpdateRequest extends FormRequest
 
     public function rules(): array
     {
+        $userId=$this->user() ? $this->user()->id : null;
+
         $rules= [
             'name' => ['string', 'max:255'],
-            'email' => ['email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
-            'phone'=>["nullable","min:0","max:25", Rule::unique(User::class)->ignore($this->user()->id)],
+            'email' => ['email', 'max:255', Rule::unique(User::class)->ignore($userId)],
+            'phone'=>["nullable","min:0","max:25", Rule::unique(User::class)->ignore($userId)],
             'address'=>["nullable","min:0","max:150"],
             'gender'=>["required",Rule::in(['male','female','other'])],
             'birthday'=>["nullable"],

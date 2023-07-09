@@ -28,9 +28,11 @@ class SendWelcomeEmailToRegisteredUser
      */
     public function handle($event)
     {
-        $event->user->role ==="user" ?
-        Mail::to($event->user->email)->queue(new RegisteredUserWelcomeMail($event->user)) :
-        Mail::to($event->user->email)->queue(new RegisteredVendorWelcomeMail($event->user));
+        $user=$event->user ?? null;
+
+        $user->role ==="user" ?
+        Mail::to($user->email)->queue(new RegisteredUserWelcomeMail($user)) :
+        Mail::to($user->email)->queue(new RegisteredVendorWelcomeMail($user));
 
     }
 }

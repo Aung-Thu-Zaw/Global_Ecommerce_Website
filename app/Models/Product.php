@@ -166,10 +166,10 @@ class Product extends Model
     /**
     * @return \Illuminate\Database\Eloquent\Relations\HasMany<CartItem>
     */
-     public function cartItems(): HasMany
-     {
-         return $this->hasMany(CartItem::class);
-     }
+    public function cartItems(): HasMany
+    {
+        return $this->hasMany(CartItem::class);
+    }
 
     /**
     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Watchlist>
@@ -229,18 +229,21 @@ class Product extends Model
         );
 
         $query->when($filterBy["price"] ?? null, function ($query, $price) {
-            $priceRange = explode("-", $price);
+            if ($price !== null) {
+                $priceRange = explode("-", $price);
 
-            if (count($priceRange) === 2) {
-                $minPrice = $priceRange[0];
-                $maxPrice = $priceRange[1];
+                if (count($priceRange) === 2) {
+                    $minPrice = $priceRange[0];
+                    $maxPrice = $priceRange[1];
 
-                $query->where(function ($query) use ($minPrice, $maxPrice) {
-                    $query->whereBetween("price", [$minPrice, $maxPrice])
-                        ->orWhereBetween("discount", [$minPrice, $maxPrice]);
-                });
+                    $query->where(function ($query) use ($minPrice, $maxPrice) {
+                        $query->whereBetween("price", [$minPrice, $maxPrice])
+                            ->orWhereBetween("discount", [$minPrice, $maxPrice]);
+                    });
+                }
             }
         });
+
 
         $query->when($filterBy["category"]?? null, function ($query, $categorySlug) {
             $query->whereHas("category", function ($query) use ($categorySlug) {

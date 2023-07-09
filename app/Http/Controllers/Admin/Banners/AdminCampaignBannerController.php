@@ -97,7 +97,9 @@ class AdminCampaignBannerController extends Controller
 
         $campaignBanner = CampaignBanner::where([["id", $id],["status","hide"]])->first();
 
-        $campaignBanner->update(["status"=>"show"]);
+        if($campaignBanner) {
+            $campaignBanner->update(["status"=>"show"]);
+        }
 
         return to_route('admin.campaign-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "The campaign banner has been successfully displayed.");
     }
@@ -106,7 +108,9 @@ class AdminCampaignBannerController extends Controller
     {
         $campaignBanner = CampaignBanner::where([["id", $id],["status","show"]])->first();
 
-        $campaignBanner->update(["status"=>"hide"]);
+        if($campaignBanner) {
+            $campaignBanner->update(["status"=>"hide"]);
+        }
 
         return to_route('admin.campaign-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "The campaign banner has been successfully hidden.");
     }

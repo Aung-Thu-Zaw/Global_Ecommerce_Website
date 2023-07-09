@@ -48,7 +48,7 @@ class AdminWebsiteFeedbackController extends Controller
 
     public function restore(Request $request, int $websiteFeedbackId): RedirectResponse
     {
-        $websiteFeedback = WebsiteFeedback::onlyTrashed()->where("id", $websiteFeedbackId)->first();
+        $websiteFeedback = WebsiteFeedback::onlyTrashed()->findOrFail($websiteFeedbackId);
 
         $websiteFeedback->restore();
 
@@ -57,7 +57,7 @@ class AdminWebsiteFeedbackController extends Controller
 
     public function forceDelete(Request $request, int $websiteFeedbackId): RedirectResponse
     {
-        $websiteFeedback = WebsiteFeedback::onlyTrashed()->where("id", $websiteFeedbackId)->first();
+        $websiteFeedback = WebsiteFeedback::onlyTrashed()->findOrFail($websiteFeedbackId);
 
         $websiteFeedback->forceDelete();
 

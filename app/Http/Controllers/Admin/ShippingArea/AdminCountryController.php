@@ -77,7 +77,7 @@ class AdminCountryController extends Controller
 
     public function restore(Request $request, int $id): RedirectResponse
     {
-        $country = Country::onlyTrashed()->where("id", $id)->first();
+        $country = Country::onlyTrashed()->findOrFail($id);
 
         $country->restore();
 
@@ -86,7 +86,7 @@ class AdminCountryController extends Controller
 
     public function forceDelete(Request $request, int $id): RedirectResponse
     {
-        $country = Country::onlyTrashed()->where("id", $id)->first();
+        $country = Country::onlyTrashed()->findOrFail($id);
 
         $country->forceDelete();
 

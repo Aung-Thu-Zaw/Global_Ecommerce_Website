@@ -83,6 +83,7 @@ class AdminRoleInPermissionController extends Controller
             $user->syncPermissions($role->permissions);
         });
 
+
         return to_route("admin.role-in-permissions.index", "page=$request->page&per_page=$request->per_page")->with("success", "Role in permissions has been successfully updated.");
     }
 

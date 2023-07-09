@@ -81,7 +81,7 @@ class AdminRegionController extends Controller
 
     public function restore(Request $request, int $id): RedirectResponse
     {
-        $region = Region::onlyTrashed()->where("id", $id)->first();
+        $region = Region::onlyTrashed()->findOrFail($id);
 
         $region->restore();
 
@@ -90,7 +90,7 @@ class AdminRegionController extends Controller
 
     public function forceDelete(Request $request, int $id): RedirectResponse
     {
-        $region = Region::onlyTrashed()->where("id", $id)->first();
+        $region = Region::onlyTrashed()->findOrFail($id);
 
         $region->forceDelete();
 

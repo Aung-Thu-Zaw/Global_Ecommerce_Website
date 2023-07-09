@@ -9,7 +9,7 @@ use Illuminate\Http\UploadedFile;
 
 class CreateMessageAction
 {
-    public function handle(Request $request): Message
+    public function handle(Request $request): ?Message
     {
         $files = $request->file('files');
 

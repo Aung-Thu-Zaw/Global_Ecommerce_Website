@@ -17,7 +17,7 @@ class VendorOrderController extends Controller
                              ->query(function (Builder $builder) {
                                  $builder->with("order");
                              })
-                             ->where("vendor_id", auth()->user()->id)
+                             ->where("vendor_id", auth()->id())
                              ->orderBy(request("sort", "id"), request("direction", "desc"))
                              ->paginate(request("per_page", 10))
                              ->appends(request()->all());

@@ -23,7 +23,7 @@ class VendorProductController extends Controller
     public function index(): Response|ResponseFactory
     {
         $products=Product::search(request("search"))
-                           ->where("user_id", auth()->user()->id)
+                           ->where("user_id", auth()->id())
                            ->orderBy(request("sort", "id"), request("direction", "desc"))
                            ->paginate(request("per_page", 10))
                            ->appends(request()->all());
@@ -93,7 +93,7 @@ class VendorProductController extends Controller
     {
         $trashProducts=Product::search(request("search"))
                                 ->onlyTrashed()
-                                ->where("user_id", auth()->user()->id)
+                                ->where("user_id", auth()->id())
                                 ->orderBy(request("sort", "id"), request("direction", "desc"))
                                 ->paginate(request("per_page", 10))
                                 ->appends(request()->all());
@@ -104,7 +104,7 @@ class VendorProductController extends Controller
 
     public function restore(Request $request, int $id): RedirectResponse
     {
-        $product = Product::onlyTrashed()->where("id", $id)->first();
+        $product = Product::onlyTrashed()->findOrFail($id);
 
         $product->restore();
 
@@ -113,7 +113,7 @@ class VendorProductController extends Controller
 
     public function forceDelete(Request $request, int $id): RedirectResponse
     {
-        $product = Product::onlyTrashed()->where("id", $id)->first();
+        $product = Product::onlyTrashed()->findOrFail($id);
 
         $multiImages=Image::where("product_id", $product->id)->get();
 
@@ -130,7 +130,7 @@ class VendorProductController extends Controller
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $products = Product::onlyTrashed()->where("user_id", auth()->user()->id)->get();
+        $products = Product::onlyTrashed()->where("user_id", auth()->id())->get();
 
         $products->each(function ($product) {
             Product::deleteImage($product);

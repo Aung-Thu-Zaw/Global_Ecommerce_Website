@@ -87,7 +87,7 @@ class AdminCityController extends Controller
 
     public function restore(Request $request, int $id): RedirectResponse
     {
-        $city = City::onlyTrashed()->where("id", $id)->first();
+        $city = City::onlyTrashed()->findOrFail($id);
 
         $city->restore();
 
@@ -96,7 +96,7 @@ class AdminCityController extends Controller
 
     public function forceDelete(Request $request, int $id): RedirectResponse
     {
-        $city = City::onlyTrashed()->where("id", $id)->first();
+        $city = City::onlyTrashed()->findOrFail($id);
 
         $city->forceDelete();
 
