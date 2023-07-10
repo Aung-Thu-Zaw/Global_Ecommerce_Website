@@ -19,9 +19,9 @@
         Global E-commerce
       </Link>
       <ul class="md:hidden items-center flex flex-wrap list-none">
-        <li class="inline-block relative">
+        <!-- <li class="inline-block relative">
           <NotificationDropdown />
-        </li>
+        </li> -->
         <li class="inline-block relative">
           <UserDropdown />
         </li>
@@ -153,7 +153,34 @@
               {{ __("ORDERS") }}
             </Link>
           </li>
-          <!-- Order Section -->
+          <!-- Return Order Section -->
+          <li class="items-center">
+            <Link href="#" class="text-xs uppercase py-3 font-bold block">
+              <i class="fa-solid fa-rotate-left mr-2 text-sm"></i>
+              {{ __("RETURN_ORDERS") }}
+            </Link>
+          </li>
+          <!-- Cancel Order Section -->
+          <li class="items-center">
+            <Link href="#" class="text-xs uppercase py-3 font-bold block">
+              <i class="fa-solid fa-xmark mr-2 text-sm"></i>
+              {{ __("CANCEL_ORDERS") }}
+            </Link>
+          </li>
+          <!-- Product Review Section -->
+          <li class="items-center">
+            <Link href="#" class="text-xs uppercase py-3 font-bold block">
+              <i class="fa-solid fa-star mr-2 text-sm"></i>
+              {{ __("PRODUCT_REVIEWS") }}
+            </Link>
+          </li>
+          <!-- Shop Review Section -->
+          <li class="items-center">
+            <Link href="#" class="text-xs uppercase py-3 font-bold block">
+              <i class="fa-solid fa-shop mr-2 text-sm"></i>
+              {{ __("SHOP_REVIEWS") }}
+            </Link>
+          </li>
         </ul>
 
         <hr class="my-4 md:min-w-full" />
@@ -193,7 +220,6 @@
 
 <script>
 import { Link } from "@inertiajs/vue3";
-import NotificationDropdown from "@/Components/Dropdowns/NotificationDropdown.vue";
 import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
 
 export default {
@@ -208,7 +234,6 @@ export default {
     },
   },
   components: {
-    NotificationDropdown,
     UserDropdown,
     Link,
   },

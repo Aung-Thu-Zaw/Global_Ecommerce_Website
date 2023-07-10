@@ -226,5 +226,8 @@
     "YOUR_EMAIL_ADDRESS_IS_UNVERIFIED": "Your email address is unverified.",
     "CLICK_HERE_TO_RESEND_THE_VERIFICATION_EMAIL": "Click here to re-send the verification email.",
     "A_NEW_VERIFICATION_LINK_HAS_BEEN_SENT_TO_YOUR_EMAIL_ADDRESS": "A new verification link has been sent to your email address.",
-    "ADMIN_DASHBOARD_LOGIN": "Admin Dashboard Login"
+    "ADMIN_DASHBOARD_LOGIN": "Admin Dashboard Login",
+    "SHOP_REVIEWS": "Shop Reviews",
+    "CANCEL_ORDERS": "Cancel Orders",
+    "RETURN_ORDERS": "Return Orders"
 }

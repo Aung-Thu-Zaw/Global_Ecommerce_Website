@@ -227,5 +227,8 @@
     "YOUR_EMAIL_ADDRESS_IS_UNVERIFIED": "သင့်အီးမေးလ်လိပ်စာကို အတည်မပြုရသေးပါ။",
     "CLICK_HERE_TO_RESEND_THE_VERIFICATION_EMAIL": "အတည်ပြုအီးမေးလ်ကို ပြန်လည်ပေးပို့ရန် ဤနေရာကိုနှိပ်ပါ။",
     "A_NEW_VERIFICATION_LINK_HAS_BEEN_SENT_TO_YOUR_EMAIL_ADDRESS": "အတည်ပြုခြင်းလင့်ခ်အသစ်တစ်ခုကို သင့်အီးမေးလ်လိပ်စာသို့ ပို့လိုက်ပါပြီ။",
-    "ADMIN_DASHBOARD_LOGIN": "စီမံခန့်ခွဲသူ ဒက်ရှ်ဘုတ် အကောင့်ဝင်ပါ။"
+    "ADMIN_DASHBOARD_LOGIN": "စီမံခန့်ခွဲသူ ဒက်ရှ်ဘုတ် အကောင့်ဝင်ပါ။",
+    "SHOP_REVIEWS": "ဆိုင်သုံးသပ်ချက်များ",
+    "CANCEL_ORDERS": "ပယ်ဖျက်ထားသော အော်ဒါများ",
+    "RETURN_ORDERS": "ပြန်လာသော အော်ဒါများ"
 }

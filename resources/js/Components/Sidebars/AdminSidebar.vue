@@ -19,9 +19,9 @@
         Global E-commerce
       </Link>
       <ul class="md:hidden items-center flex flex-wrap list-none">
-        <li class="inline-block relative">
+        <!-- <li class="inline-block relative">
           <NotificationDropdown />
-        </li>
+        </li> -->
         <li class="inline-block relative">
           <UserDropdown />
         </li>
@@ -1020,7 +1020,7 @@
 
 <script>
 import { Link } from "@inertiajs/vue3";
-import NotificationDropdown from "@/Components/Dropdowns/NotificationDropdown.vue";
+// import NotificationDropdown from "@/Components/Dropdowns/NotificationDropdown.vue";
 import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
 
 export default {
@@ -1316,7 +1316,7 @@ export default {
     },
   },
   components: {
-    NotificationDropdown,
+    // NotificationDropdown,
     UserDropdown,
     Link,
   },
