@@ -209,6 +209,19 @@ const handleEditPermission = async () => {
               >
                 Cancel Order Manage
               </option>
+
+              <option
+                value="shop-review"
+                :selected="form.group == 'shop-review'"
+              >
+                Shop Review
+              </option>
+              <option
+                value="product-review"
+                :selected="form.group == 'product-review'"
+              >
+                Product Review
+              </option>
               <option
                 value="vendor-manage"
                 :selected="form.group == 'vendor-manage'"

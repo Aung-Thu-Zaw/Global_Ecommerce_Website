@@ -229,5 +229,8 @@
     "ADMIN_DASHBOARD_LOGIN": "Admin Dashboard Login",
     "SHOP_REVIEWS": "Shop Reviews",
     "CANCEL_ORDERS": "Cancel Orders",
-    "RETURN_ORDERS": "Return Orders"
+    "RETURN_ORDERS": "Return Orders",
+    "REVIEW_MANAGEMENTS": "Review Managements",
+    "PENDING_REVIEWS": "Pending Reviews",
+    "PUBLISHED_REVIEWS": "Published Reviews"
 }

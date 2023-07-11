@@ -20,6 +20,7 @@ return new class () extends Migration {
             $table->text("review_text");
             $table->integer("rating");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

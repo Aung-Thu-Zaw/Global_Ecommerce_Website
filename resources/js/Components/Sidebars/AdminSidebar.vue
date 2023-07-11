@@ -553,6 +553,126 @@
         </ul>
 
         <hr
+          v-if="productReviewMenu || shopReviewMenu"
+          class="my-4 md:min-w-full"
+        />
+
+        <h6
+          v-if="productReviewMenu || shopReviewMenu"
+          class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
+        >
+          {{ __("REVIEW_MANAGEMENTS") }}
+        </h6>
+
+        <ul
+          v-if="productReviewMenu"
+          class="md:flex-col md:min-w-full flex flex-col list-none"
+        >
+          <li class="items-center cursor-pointer">
+            <div
+              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+              @click="
+                productReviewManageIsHidden = !productReviewManageIsHidden
+              "
+            >
+              <span>
+                <i class="fa-solid fa-star mr-2 text-sm"></i>
+                {{ __("PRODUCT_REVIEWS") }}
+              </span>
+              <i
+                v-if="productReviewManageIsHidden"
+                class="fa-solid fa-chevron-right"
+              ></i>
+              <i
+                v-if="!productReviewManageIsHidden"
+                class="fa-solid fa-chevron-down"
+              ></i>
+            </div>
+
+            <ul
+              v-if="!productReviewManageIsHidden || productReviewManage"
+              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+            >
+              <Link
+                :href="route('admin.product-reviews.pending.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/product-reviews/pending-reviews'
+                  ),
+                }"
+              >
+                {{ __("PENDING_REVIEWS") }}
+              </Link>
+              <Link
+                :href="route('admin.product-reviews.published.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/product-reviews/published-reviews'
+                  ),
+                }"
+              >
+                {{ __("PUBLISHED_REVIEWS") }}
+              </Link>
+            </ul>
+          </li>
+        </ul>
+
+        <ul
+          v-if="shopReviewMenu"
+          class="md:flex-col md:min-w-full flex flex-col list-none"
+        >
+          <li class="items-center cursor-pointer">
+            <div
+              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+              @click="shopReviewManageIsHidden = !shopReviewManageIsHidden"
+            >
+              <span>
+                <i class="fa-solid fa-shop mr-2 text-sm"></i>
+                {{ __("SHOP_REVIEWS") }}
+              </span>
+              <i
+                v-if="shopReviewManageIsHidden"
+                class="fa-solid fa-chevron-right"
+              ></i>
+              <i
+                v-if="!shopReviewManageIsHidden"
+                class="fa-solid fa-chevron-down"
+              ></i>
+            </div>
+
+            <ul
+              v-if="!shopReviewManageIsHidden || shopReviewManage"
+              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+            >
+              <Link
+                :href="route('admin.shop-reviews.pending.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/shop-reviews/pending-reviews'
+                  ),
+                }"
+              >
+                {{ __("PENDING_REVIEWS") }}
+              </Link>
+              <Link
+                :href="route('admin.shop-reviews.published.index')"
+                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                :class="{
+                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                    '/admin/shop-reviews/published-reviews'
+                  ),
+                }"
+              >
+                {{ __("PUBLISHED_REVIEWS") }}
+              </Link>
+            </ul>
+          </li>
+        </ul>
+
+        <hr
           v-if="vendorManageMenu || userManageMenu || adminManageMenu"
           class="my-4 md:min-w-full"
         />
@@ -1035,6 +1155,8 @@ export default {
       orderManageIsHidden: true,
       returnOrderManageIsHidden: true,
       cancelOrderManageIsHidden: true,
+      shopReviewManageIsHidden: true,
+      productReviewManageIsHidden: true,
       roleAndPermissionManageIsHidden: true,
     };
   },
@@ -1133,6 +1255,22 @@ export default {
         return (this.roleAndPermissionManageIsHidden = false);
       }
     },
+    productReviewManage() {
+      if (
+        this.$page.url.startsWith("/admin/product-reviews/pending-reviews") ||
+        this.$page.url.startsWith("/admin/product-reviews/published-reviews")
+      ) {
+        return (this.productReviewManageIsHidden = false);
+      }
+    },
+    shopReviewManage() {
+      if (
+        this.$page.url.startsWith("/admin/shop-reviews/pending-reviews") ||
+        this.$page.url.startsWith("/admin/shop-reviews/published-reviews")
+      ) {
+        return (this.shopReviewManageIsHidden = false);
+      }
+    },
 
     brandMenu() {
       return this.$page.props.auth.user.permissions.length
@@ -1226,6 +1364,22 @@ export default {
       return this.$page.props.auth.user.permissions.length
         ? this.$page.props.auth.user.permissions.some(
             (permission) => permission.name === "vendor-manage.menu"
+          )
+        : false;
+    },
+
+    productReviewMenu() {
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
+            (permission) => permission.name === "product-review.menu"
+          )
+        : false;
+    },
+
+    shopReviewMenu() {
+      return this.$page.props.auth.user.permissions.length
+        ? this.$page.props.auth.user.permissions.some(
+            (permission) => permission.name === "shop-review.menu"
           )
         : false;
     },

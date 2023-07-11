@@ -94,6 +94,22 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"cancel-order-manage.detail","group"=>"cancel-order-manage"]);
         Permission::create(["name"=>"cancel-order-manage.control","group"=>"cancel-order-manage"]);
 
+        Permission::create(["name"=>"shop-review.menu","group"=>"shop-review"]);
+        Permission::create(["name"=>"shop-review.detail","group"=>"shop-review"]);
+        Permission::create(["name"=>"shop-review.control","group"=>"shop-review"]);
+        Permission::create(["name"=>"shop-review.delete","group"=>"shop-review"]);
+        Permission::create(["name"=>"shop-review.trash.list","group"=>"shop-review"]);
+        Permission::create(["name"=>"shop-review.trash.restore","group"=>"shop-review"]);
+        Permission::create(["name"=>"shop-review.trash.delete","group"=>"shop-review"]);
+
+        Permission::create(["name"=>"product-review.menu","group"=>"product-review"]);
+        Permission::create(["name"=>"product-review.detail","group"=>"product-review"]);
+        Permission::create(["name"=>"product-review.control","group"=>"product-review"]);
+        Permission::create(["name"=>"product-review.delete","group"=>"product-review"]);
+        Permission::create(["name"=>"product-review.trash.list","group"=>"product-review"]);
+        Permission::create(["name"=>"product-review.trash.restore","group"=>"product-review"]);
+        Permission::create(["name"=>"product-review.trash.delete","group"=>"product-review"]);
+
         Permission::create(["name"=>"vendor-manage.menu","group"=>"vendor-manage"]);
         Permission::create(["name"=>"vendor-manage.detail","group"=>"vendor-manage"]);
         Permission::create(["name"=>"vendor-manage.control","group"=>"vendor-manage"]);

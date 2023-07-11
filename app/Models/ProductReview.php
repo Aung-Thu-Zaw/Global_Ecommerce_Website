@@ -7,12 +7,36 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 
 class ProductReview extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+    use Searchable;
 
     protected $guarded=[];
+
+    /**
+    *     @return array<string>
+    */
+    public function toSearchableArray(): array
+    {
+        return [
+            'review_text' => $this->review_text,
+        ];
+    }
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductReview, never>
+    */
+    protected function createdAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => date("j/F/Y ( h:i:s A )", strtotime($value)),
+        );
+    }
 
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductReview, never>
@@ -20,7 +44,7 @@ class ProductReview extends Model
     protected function updatedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j/F/Y h:i:s A", strtotime($value)),
+            get: fn ($value) => date("j/F/Y ( h:i:s A )", strtotime($value)),
         );
     }
 

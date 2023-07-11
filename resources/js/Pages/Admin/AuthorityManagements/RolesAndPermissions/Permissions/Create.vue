@@ -152,6 +152,8 @@ const handleCreatePermission = async () => {
               <option value="order-manage">Order Manage</option>
               <option value="return-order-manage">Return Order Manage</option>
               <option value="cancel-order-manage">Cancel Order Manage</option>
+              <option value="shop-review">Shop Review</option>
+              <option value="product-review">Product Review</option>
               <option value="vendor-manage">Vendor Manage</option>
               <option value="user-manage">User Manage</option>
               <option value="admin-manage">Admin Manage</option>

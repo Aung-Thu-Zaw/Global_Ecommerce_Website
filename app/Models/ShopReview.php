@@ -7,12 +7,26 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 
 class ShopReview extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+    use Searchable;
 
     protected $guarded=[];
+
+    /**
+    *     @return array<string>
+    */
+    public function toSearchableArray(): array
+    {
+        return [
+            'review_text' => $this->review_text,
+        ];
+    }
 
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<ShopReview, never>

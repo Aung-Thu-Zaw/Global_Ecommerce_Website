@@ -42,6 +42,10 @@ use App\Http\Controllers\Admin\FromTheSubmitters\AdminWebsiteFeedbackController;
 use App\Http\Controllers\Admin\FromTheSubmitters\AdminSubscriberController;
 use App\Http\Controllers\Admin\FromTheSubmitters\AdminSuggestionController;
 use App\Http\Controllers\Admin\UserManagements\AdminManage\AdminManageController;
+use App\Http\Controllers\ReviewManagements\ProductReviews\AdminPendingProductReviewController;
+use App\Http\Controllers\ReviewManagements\ProductReviews\AdminPublishedProductReviewController;
+use App\Http\Controllers\ReviewManagements\ShopReviews\AdminPendingShopReviewController;
+use App\Http\Controllers\ReviewManagements\ShopReviews\AdminPublishedShopReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/admin/login", [AdminAuthController::class,"login"])->middleware("guest")->name("admin.login");
@@ -372,6 +376,64 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::get("/", "index")->middleware('permission:cancel-order-manage.menu')->name("index");
                     Route::get("/details/{id}", "show")->middleware('permission:cancel-order-manage.detail')->name("show");
                 });
+
+
+
+           //    Admin Dashboard Pending Product Review Section
+           Route::controller(AdminPendingProductReviewController::class)
+           ->prefix("/product-reviews/pending-reviews")
+           ->name("product-reviews.pending.")
+           ->group(function () {
+               Route::get("/", "index")->middleware('permission:product-review.menu')->name("index");
+               Route::get("/details/{product_review}", "show")->middleware('permission:product-review.detail')->name("show");
+               Route::post("/{product_review}", "update")->middleware('permission:product-review.control')->name("update");
+               Route::delete("/{product_review}", "destroy")->middleware('permission:product-review.delete')->name("destroy");
+               Route::get("/trash", "trash")->middleware('permission:product-review.trash.list')->name("trash");
+               Route::post("/{id}/restore", "restore")->middleware('permission:product-review.trash.restore')->name("restore");
+               Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:product-review.trash.delete')->name("force.delete");
+               Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:product-review.trash.delete')->name("permanently.delete");
+           });
+
+           //    Admin Dashboard Published Product Review Section
+           Route::controller(AdminPublishedProductReviewController::class)
+           ->prefix("/product-reviews/published-reviews")
+           ->name("product-reviews.published.")
+           ->group(function () {
+               Route::get("/", "index")->middleware('permission:product-review.menu')->name("index");
+               Route::get("/details/{product_review}", "show")->middleware('permission:product-review.detail')->name("show");
+               Route::post("/{product_review}", "update")->middleware('permission:product-review.control')->name("update");
+               Route::delete("/{product_review}", "destroy")->middleware('permission:product-review.delete')->name("destroy");
+               //    Route::get("/trash", "trash")->middleware('permission:product-review.trash.list')->name("trash");
+               //    Route::post("/{id}/restore", "restore")->middleware('permission:product-review.trash.restore')->name("restore");
+               //    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:product-review.trash.delete')->name("force.delete");
+               //    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:product-review.trash.delete')->name("permanently.delete");
+           });
+
+           //    Admin Dashboard Pending Shop Review Section
+           Route::controller(AdminPendingShopReviewController::class)
+           ->prefix("/shop-reviews/pending-reviews")
+           ->name("shop-reviews.pending.")
+           ->group(function () {
+               Route::get("/", "index")->middleware('permission:shop-review.menu')->name("index");
+               Route::get("/details/{id}", "show")->middleware('permission:shop-review.detail')->name("show");
+               Route::post("/{id}", "update")->middleware('permission:shop-review.control')->name("update");
+           });
+
+           //    Admin Dashboard Published Shop Review Section
+           Route::controller(AdminPublishedShopReviewController::class)
+           ->prefix("/shop-reviews/published-reviews")
+           ->name("shop-reviews.published.")
+           ->group(function () {
+               Route::get("/", "index")->middleware('permission:shop-review.menu')->name("index");
+               Route::get("/details/{id}", "show")->middleware('permission:shop-review.detail')->name("show");
+               Route::post("/{id}", "update")->middleware('permission:shop-review.control')->name("update");
+               Route::delete("/{id}", "destroy")->middleware('permission:shop-review.delete')->name("destroy");
+               //    Route::get("/trash", "trash")->middleware('permission:shop-review.trash.list')->name("trash");
+               //    Route::post("/{id}/restore", "restore")->middleware('permission:shop-review.trash.restore')->name("restore");
+               //    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:shop-review.trash.delete')->name("force.delete");
+               //    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:shop-review.trash.delete')->name("permanently.delete");
+           });
+
 
            // Admin Dashboard Inactive Vendor Section
            Route::controller(AdminInactiveVendorController::class)
