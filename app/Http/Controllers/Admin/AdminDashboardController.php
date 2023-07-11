@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\SocialTraffic;
 use App\Models\User;
 use Carbon\Carbon;
 use Inertia\Response;
@@ -128,6 +129,9 @@ class AdminDashboardController extends Controller
         $lastYearMonthlyVendorRegisterLables = $lastYearMonthlyVendorRegister->pluck('month');
         $lastYearMonthlyVendorRegisterData = $lastYearMonthlyVendorRegister->pluck('total_register');
 
+
+        $socialTraffics=SocialTraffic::all();
+
         return inertia("Admin/Dashboard", compact(
             "totalUsers",
             "totalVendors",
@@ -153,6 +157,7 @@ class AdminDashboardController extends Controller
             "thisYearMonthlyVendorRegisterData",
             "lastYearMonthlyVendorRegisterLables",
             "lastYearMonthlyVendorRegisterData",
+            "socialTraffics"
         ));
 
     }

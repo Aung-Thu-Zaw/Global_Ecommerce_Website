@@ -232,5 +232,7 @@
     "RETURN_ORDERS": "Return Orders",
     "REVIEW_MANAGEMENTS": "Review Managements",
     "PENDING_REVIEWS": "Pending Reviews",
-    "PUBLISHED_REVIEWS": "Published Reviews"
+    "PUBLISHED_REVIEWS": "Published Reviews",
+    "TARGET_VISITORS": "Target Visitors",
+    "ACTUAL_VISITORS": "Actual Visitors"
 }

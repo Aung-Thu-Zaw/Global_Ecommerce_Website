@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
                 VendorProductBannerSeeder::class,
                 LanguageSeeder::class,
                 SearchHistorySeeder::class,
+                SocialTrafficSeeder::class,
             ]
         );
     }

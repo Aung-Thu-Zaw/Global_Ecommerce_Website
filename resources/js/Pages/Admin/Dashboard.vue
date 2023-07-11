@@ -10,7 +10,9 @@ import CardSocialTraffic from "@/Components/Cards/CardSocialTraffic.vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import { usePage, Head } from "@inertiajs/vue3";
+import { watch } from "vue";
 
+// Define the props
 defineProps({
   totalUsers: Number,
   totalVendors: Number,
@@ -36,19 +38,33 @@ defineProps({
   thisYearMonthlyVendorRegisterData: Object,
   lastYearMonthlyVendorRegisterLables: Object,
   lastYearMonthlyVendorRegisterData: Object,
+  socialTraffics: Object,
 });
 
-if (usePage().props.flash.successMessage) {
-  toast.success(usePage().props.flash.successMessage, {
-    autoClose: 2000,
-  });
-}
+// Success Toast
+// if (usePage().props.flash.successMessage) {
+//   toast.success(usePage().props.flash.successMessage, {
+//     autoClose: 2000,
+//   });
+// }
+
+watch(
+  () => usePage().props.flash.successMessage,
+  () => {
+    if (usePage().props.flash.successMessage) {
+      toast.success(usePage().props.flash.successMessage, {
+        autoClose: 2000,
+      });
+    }
+  }
+);
 </script>
 
 <template>
   <AdminDashboardLayout>
     <Head :title="__('ADMIN_DASHBOARD')" />
 
+    <!-- Status Cards -->
     <AdminHeaderStats
       :totalUsers="totalUsers"
       :totalVendors="totalVendors"
@@ -59,10 +75,13 @@ if (usePage().props.flash.successMessage) {
       :percentageChangeForOrder="percentageChangeForOrder"
       :percentageChangeForSales="percentageChangeForSales"
     />
+
+    <!-- Charts Container -->
     <div class="px-4 md:px-10 mx-auto w-full -m-24">
       <div class="relative z-1">
         <div class="flex flex-wrap">
-          <div class="w-full xl:w-6/12 mb-12 xl:mb-0 px-4">
+          <!-- Monthly Registered User Chart -->
+          <div class="w-full xl:w-1/2 mb-12 xl:mb-0 px-4">
             <MonthlyRegisterUserCardLineChart
               :thisYearMonthlyUserRegisterLables="
                 thisYearMonthlyUserRegisterLables
@@ -74,7 +93,8 @@ if (usePage().props.flash.successMessage) {
               :lastYearMonthlyUserRegisterData="lastYearMonthlyUserRegisterData"
             />
           </div>
-          <div class="w-full xl:w-6/12 mb-12 xl:mb-0 px-4">
+          <!-- Monthly Registered Vendor Chart -->
+          <div class="w-full xl:w-1/2 mb-12 xl:mb-0 px-4">
             <MonthlyRegisterVendorCardLineChart
               :thisYearMonthlyVendorRegisterLables="
                 thisYearMonthlyVendorRegisterLables
@@ -92,6 +112,7 @@ if (usePage().props.flash.successMessage) {
           </div>
         </div>
         <div class="flex flex-wrap">
+          <!-- Monthly Sales Chart -->
           <div class="w-full xl:w-8/12 mb-12 xl:mb-0 px-4">
             <MonthlySalesCardLineChart
               :thisYearMonthlySaleLables="thisYearMonthlySaleLables"
@@ -100,6 +121,7 @@ if (usePage().props.flash.successMessage) {
               :lastYearMonthlySaleData="lastYearMonthlySaleData"
             />
           </div>
+          <!-- Monthly Order Chart -->
           <div class="w-full xl:w-4/12 px-4">
             <MonthlyOrderCardBarChart
               :thisYearMonthlyOrderLables="thisYearMonthlyOrderLables"
@@ -110,11 +132,14 @@ if (usePage().props.flash.successMessage) {
           </div>
         </div>
         <div class="flex flex-wrap mt-4">
-          <div class="w-full xl:w-8/12 mb-12 xl:mb-0 px-4">
+          <!-- Page Visits -->
+          <div class="w-full xl:w-1/2 mb-12 xl:mb-0 px-4">
             <CardPageVisits />
           </div>
-          <div class="w-full xl:w-4/12 px-4">
-            <CardSocialTraffic />
+
+          <!-- Social Traffic -->
+          <div class="w-full xl:w-1/2 px-4">
+            <CardSocialTraffic :socialTraffics="socialTraffics" />
           </div>
         </div>
       </div>

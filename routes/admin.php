@@ -38,6 +38,7 @@ use App\Http\Controllers\Admin\ShippingArea\AdminRegionController;
 use App\Http\Controllers\Admin\ShippingArea\AdminTownshipController;
 use App\Http\Controllers\Admin\AuthorityManagements\RolesAndPermissions\AdminRoleController;
 use App\Http\Controllers\Admin\AuthorityManagements\RolesAndPermissions\AdminPermissionController;
+use App\Http\Controllers\Admin\Dashboard\AdminSocialTrafficController;
 use App\Http\Controllers\Admin\FromTheSubmitters\AdminWebsiteFeedbackController;
 use App\Http\Controllers\Admin\FromTheSubmitters\AdminSubscriberController;
 use App\Http\Controllers\Admin\FromTheSubmitters\AdminSuggestionController;
@@ -64,6 +65,17 @@ Route::middleware(["admin","verified","user.role:admin"])
                Route::post("/{notification_id}/read", "reatNotification")->name("read");
                //    Route::post("/create", "create")->middleware('permission:brand.add')->name("create");
            });
+
+
+           Route::controller(AdminSocialTrafficController::class)
+           ->prefix("/social-traffics")
+           ->name("social-traffics.")
+           ->group(function () {
+               Route::post("/change-target", "changeTarget")->name("change.target");
+               Route::post("/{social_traffic}/increment-visitors", "incrementActualVisitors")->name("increment.visitors");
+           });
+
+
 
 
            // Admin Dashboard Brand Section

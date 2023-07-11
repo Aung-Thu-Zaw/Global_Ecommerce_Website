@@ -1,6 +1,6 @@
 <script setup>
 import InputError from "@/Components/Forms/InputError.vue";
-import { useForm } from "@inertiajs/vue3";
+import { router, useForm } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 
 const props = defineProps({
@@ -25,6 +25,22 @@ const submit = () => {
     preserveScroll: true,
     onFinish: () => (form.email = ""),
   });
+};
+
+const openLink = (socialLink) => {
+  window.open(socialLink, "_blank");
+};
+
+const handleTrafficIncrement = (id, socialLink) => {
+  router.post(
+    route("admin.social-traffics.increment.visitors", id),
+    {},
+    {
+      onSuccess: () => {
+        openLink(socialLink);
+      },
+    }
+  );
 };
 </script>
 
@@ -76,60 +92,54 @@ const submit = () => {
 
         <!-- Social Media Icons -->
         <nav v-if="socialMedia" class="flex lg:ml-auto space-x-2">
-          <a
-            v-if="socialMedia.youtube"
-            class="px-3 py-2 inline-block text-center text-gray-500 bg-white shadow-sm border border-gray-200 rounded-md hover:text-red-600"
-            :href="socialMedia.youtube"
-            target="_blank"
-          >
-            <span class="sr-only">YouTube</span>
-            <i class="w-4 fab fa-youtube"></i>
-          </a>
-          <a
+          <div
+            @click="handleTrafficIncrement(1, socialMedia.facebook)"
             v-if="socialMedia.facebook"
             class="px-3 py-2 inline-block text-center text-gray-500 bg-white shadow-sm border border-gray-200 rounded-md hover:text-blue-600"
-            :href="socialMedia.facebook"
-            target="_blank"
           >
             <span class="sr-only">Facebook</span>
             <i class="fab fa-facebook-square"></i>
-          </a>
-          <a
-            v-if="socialMedia.twitter"
-            class="px-3 py-2 inline-block text-center text-gray-500 bg-white shadow-sm border border-gray-200 rounded-md hover:text-sky-600"
-            :href="socialMedia.twitter"
-            target="_blank"
-          >
-            <span class="sr-only">Twitter</span>
-            <i class="fab fa-twitter"></i>
-          </a>
-          <a
+          </div>
+          <div
+            @click="handleTrafficIncrement(2, socialMedia.instagram)"
             v-if="socialMedia.instagram"
             class="px-3 py-2 inline-block text-center text-gray-500 bg-white shadow-sm border border-gray-200 rounded-md hover:text-pink-600"
-            :href="socialMedia.instagram"
-            target="_blank"
           >
             <span class="sr-only">Instagram</span>
             <i class="fab fa-instagram"></i>
-          </a>
-          <a
+          </div>
+          <div
+            @click="handleTrafficIncrement(3, socialMedia.twitter)"
+            v-if="socialMedia.twitter"
+            class="px-3 py-2 inline-block text-center text-gray-500 bg-white shadow-sm border border-gray-200 rounded-md hover:text-sky-600"
+          >
+            <span class="sr-only">Twitter</span>
+            <i class="fab fa-twitter"></i>
+          </div>
+          <div
+            @click="handleTrafficIncrement(4, socialMedia.youtube)"
+            v-if="socialMedia.youtube"
+            class="px-3 py-2 inline-block text-center text-gray-500 bg-white shadow-sm border border-gray-200 rounded-md hover:text-red-600"
+          >
+            <span class="sr-only">YouTube</span>
+            <i class="w-4 fab fa-youtube"></i>
+          </div>
+          <div
+            @click="handleTrafficIncrement(5, socialMedia.reddit)"
             v-if="socialMedia.reddit"
             class="px-3 py-2 inline-block text-center text-gray-500 bg-white shadow-sm border border-gray-200 rounded-md hover:text-orange-500"
-            :href="socialMedia.reddit"
-            target="_blank"
           >
             <span class="sr-only">Reddit</span>
             <i class="fab fa-reddit"></i>
-          </a>
-          <a
+          </div>
+          <div
+            @click="handleTrafficIncrement(6, socialMedia.linked_in)"
             v-if="socialMedia.linked_in"
             class="px-3 py-2 inline-block text-center text-gray-500 bg-white shadow-sm border border-gray-200 rounded-md hover:text-primary-600"
-            :href="socialMedia.linked_in"
-            target="_blank"
           >
             <span class="sr-only">Linked In</span>
             <i class="fab fa-linkedin"></i>
-          </a>
+          </div>
         </nav>
       </div>
     </div>

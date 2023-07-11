@@ -11,7 +11,10 @@ onMounted(() => {
 
 <template>
   <div class="font-roboto">
+    <!-- Admin Control Sidebar -->
     <AdminSidebar />
+
+    <!-- Admin Navbar -->
     <AdminDashboardNavbar />
     <div class="relative md:ml-64 bg-white">
       <slot />

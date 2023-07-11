@@ -11,6 +11,7 @@ import NotificationDropdownForAdminDashboard from "@/Components/Dropdowns/Notifi
     <div
       class="w-full mx-auto items-center flex justify-end md:flex-nowrap flex-wrap md:px-10 px-4"
     >
+      <!-- Dashboard Title -->
       <Link
         :href="route('admin.dashboard')"
         class="text-white text-sm uppercase hidden lg:inline-block font-semibold text-right ml-60"
@@ -18,6 +19,7 @@ import NotificationDropdownForAdminDashboard from "@/Components/Dropdowns/Notifi
         Admin Dashboard
       </Link>
 
+      <!-- Dashboard Search Form -->
       <form
         class="md:flex hidden flex-row flex-wrap items-center lg:ml-auto mr-3"
       >
@@ -37,10 +39,13 @@ import NotificationDropdownForAdminDashboard from "@/Components/Dropdowns/Notifi
       <ul
         class="flex-col md:flex-row list-none items-center justify-center hidden md:flex"
       >
+        <!-- Admin Dashboard Notification Dropdown -->
         <NotificationDropdownForAdminDashboard />
 
+        <!-- Admin Dashboard Language Dropdown -->
         <LanguageDropdownForDashboard />
 
+        <!-- User Dropdown -->
         <UserDropdown />
       </ul>
     </div>
