@@ -12,11 +12,10 @@ return new class () extends Migration {
      */
     public function up()
     {
-        Schema::create('social_traffic', function (Blueprint $table) {
+        Schema::create('vendor_dashboard_guides', function (Blueprint $table) {
             $table->id();
-            $table->string("social_name");
-            $table->integer("actual_visitors")->default(0);
-            $table->integer("target_visitors")->default(0);
+            $table->string("title");
+            $table->text("description");
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class () extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('social_traffic');
+        Schema::dropIfExists('vendor_dashboard_guides');
     }
 };

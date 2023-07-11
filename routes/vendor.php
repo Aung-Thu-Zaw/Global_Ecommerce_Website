@@ -3,11 +3,13 @@
 use App\Http\Controllers\MultiImageController;
 use App\Http\Controllers\Vendor\VendorAuthController;
 use App\Http\Controllers\Vendor\VendorDashboardController;
+use App\Http\Controllers\Vendor\VendorDashboardGuideController;
 use App\Http\Controllers\Vendor\VendorDashboardNotificationController;
 use App\Http\Controllers\Vendor\VendorOrderController;
 use App\Http\Controllers\Vendor\VendorProductBannerController;
 use App\Http\Controllers\Vendor\VendorProductController;
 use Illuminate\Support\Facades\Route;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get("vendor/register", [VendorAuthController::class,"register"])->middleware("guest")->name("vendor.register");
 Route::get("vendor/login", [VendorAuthController::class,"login"])->middleware("guest")->name("vendor.login");
@@ -27,6 +29,8 @@ Route::middleware(["vendor","user.role:vendor"])
                 Route::post("/{notification_id}/read", "reatNotification")->name("read");
                 //    Route::post("/create", "create")->middleware('permission:brand.add')->name("create");
             });
+
+            Route::get("/guide", [VendorDashboardGuideController::class,"index"])->name("dashboard.guide");
 
             // Products
             Route::controller(VendorProductController::class)

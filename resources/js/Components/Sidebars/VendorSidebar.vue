@@ -193,7 +193,7 @@
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
           <li class="items-center">
             <Link
-              :href="route('vendor.orders.index')"
+              :href="route('vendor.dashboard.guide')"
               class="text-xs uppercase py-3 font-bold block"
             >
               <i class="fa-solid fa-book mr-2 text-sm"></i>

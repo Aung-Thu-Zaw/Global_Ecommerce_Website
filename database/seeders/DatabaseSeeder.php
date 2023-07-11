@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
                 LanguageSeeder::class,
                 SearchHistorySeeder::class,
                 SocialTrafficSeeder::class,
+                VendorDashboardGuideSeeder::class
             ]
         );
     }
