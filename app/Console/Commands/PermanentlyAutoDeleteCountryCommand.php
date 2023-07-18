@@ -20,7 +20,7 @@ class PermanentlyAutoDeleteCountryCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Countries in the Trash will be automatically deleted after 60 days';
+    protected $description = 'Countries in the trash will be automatically deleted after 60 days';
 
 
     public function handle(): void
@@ -28,10 +28,13 @@ class PermanentlyAutoDeleteCountryCommand extends Command
         $cutoffDate = Carbon::now()->subDays(60);
 
         $countries=Country::onlyTrashed()
-        ->where('deleted_at', '<=', $cutoffDate)->get();
+                          ->where('deleted_at', '<=', $cutoffDate)
+                          ->get();
 
         $countries->each(function ($country) {
+
             $country->forceDelete();
+
         });
     }
 }

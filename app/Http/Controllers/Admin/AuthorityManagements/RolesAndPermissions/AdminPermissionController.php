@@ -47,14 +47,14 @@ class AdminPermissionController extends Controller
     {
         $permission->update($request->validated());
 
-        return to_route("admin.permissions.index", "page=$request->page&per_page=$request->per_page")->with("success", "Permission has been successfully updated.");
+        return to_route("admin.permissions.index","page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Permission has been successfully updated.");
     }
 
     public function destroy(Request $request, Permission $permission): RedirectResponse
     {
         $permission->delete();
 
-        return to_route("admin.permissions.index", "page=$request->page&per_page=$request->per_page")->with("success", "Permission has been successfully deleted.");
+        return to_route("admin.permissions.index","page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Permission has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -74,7 +74,7 @@ class AdminPermissionController extends Controller
 
         $permission->restore();
 
-        return to_route('admin.permissions.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Permission has been successfully restored.");
+        return to_route('admin.permissions.trash',"page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Permission has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $id): RedirectResponse
@@ -83,7 +83,7 @@ class AdminPermissionController extends Controller
 
         $permission->forceDelete();
 
-        return to_route('admin.permissions.trash', "page=$request->page&per_page=$request->per_page")->with("success", "The permission has been permanently deleted");
+        return to_route('admin.permissions.trash',"page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The permission has been permanently deleted");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -96,6 +96,6 @@ class AdminPermissionController extends Controller
 
         });
 
-        return to_route('admin.permissions.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Permissions have been successfully deleted.");
+        return to_route('admin.permissions.trash',"page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Permissions have been successfully deleted.");
     }
 }

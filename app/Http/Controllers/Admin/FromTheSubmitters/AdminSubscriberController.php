@@ -25,7 +25,7 @@ class AdminSubscriberController extends Controller
     {
         $subscriber->delete();
 
-        return to_route("admin.subscribers.index", "page=$request->page&per_page=$request->per_page")->with("success", "Subscriber has been successfully deleted.");
+        return to_route("admin.subscribers.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Subscriber has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -46,7 +46,7 @@ class AdminSubscriberController extends Controller
 
         $subscriber->restore();
 
-        return to_route('admin.subscribers.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Subscriber has been successfully restored.");
+        return to_route('admin.subscribers.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Subscriber has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $subscriberId): RedirectResponse
@@ -55,7 +55,7 @@ class AdminSubscriberController extends Controller
 
         $subscriber->forceDelete();
 
-        return to_route('admin.subscribers.trash', "page=$request->page&per_page=$request->per_page")->with("success", "The subscriber has been permanently deleted");
+        return to_route('admin.subscribers.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The subscriber has been permanently deleted");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -68,6 +68,6 @@ class AdminSubscriberController extends Controller
 
         });
 
-        return to_route('admin.subscribers.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Subscribers have been successfully deleted.");
+        return to_route('admin.subscribers.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Subscribers have been successfully deleted.");
     }
 }

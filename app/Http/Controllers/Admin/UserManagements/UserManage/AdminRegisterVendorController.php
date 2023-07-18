@@ -33,7 +33,7 @@ class AdminRegisterVendorController extends Controller
     {
         $user->delete();
 
-        return to_route("admin.vendors.register.index", "page=$request->page&per_page=$request->per_page")->with("success", "Vendor has been successfully deleted.");
+        return to_route("admin.vendors.register.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Vendor has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -54,7 +54,7 @@ class AdminRegisterVendorController extends Controller
 
         $user->restore();
 
-        return to_route('admin.vendors.register.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Vendor has been successfully restored.");
+        return to_route('admin.vendors.register.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Vendor has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $id): RedirectResponse
@@ -63,7 +63,7 @@ class AdminRegisterVendorController extends Controller
 
         $user->forceDelete();
 
-        return to_route('admin.vendors.register.trash', "page=$request->page&per_page=$request->per_page")->with("success", "The vendor has been permanently deleted");
+        return to_route('admin.vendors.register.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The vendor has been permanently deleted");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -77,6 +77,6 @@ class AdminRegisterVendorController extends Controller
             $user->forceDelete();
         });
 
-        return to_route('admin.vendors.register.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Vendors have been successfully deleted.");
+        return to_route('admin.vendors.register.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Vendors have been successfully deleted.");
     }
 }

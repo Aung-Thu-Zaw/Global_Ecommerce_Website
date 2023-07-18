@@ -57,14 +57,14 @@ class AdminBrandController extends Controller
     {
         $brand->update($request->validated()+["image"=>$brandImageUploadService->updateImage($request, $brand)]);
 
-        return to_route("admin.brands.index", "page=$request->page&per_page=$request->per_page")->with("success", "Brand has been successfully updated.");
+        return to_route("admin.brands.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Brand has been successfully updated.");
     }
 
     public function destroy(Request $request, Brand $brand): RedirectResponse
     {
         $brand->delete();
 
-        return to_route("admin.brands.index", "page=$request->page&per_page=$request->per_page")->with("success", "Brand has been successfully deleted.");
+        return to_route("admin.brands.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Brand has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -78,24 +78,24 @@ class AdminBrandController extends Controller
         return inertia("Admin/Brands/Trash", compact("trashBrands"));
     }
 
-    public function restore(Request $request, int $id): RedirectResponse
+    public function restore(Request $request, int $brandId): RedirectResponse
     {
-        $brand = Brand::onlyTrashed()->findOrFail($id);
+        $brand = Brand::onlyTrashed()->findOrFail($brandId);
 
         $brand->restore();
 
-        return to_route('admin.brands.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Brand has been successfully restored.");
+        return to_route('admin.brands.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Brand has been successfully restored.");
     }
 
-    public function forceDelete(Request $request, int $id): RedirectResponse
+    public function forceDelete(Request $request, int $brandId): RedirectResponse
     {
-        $brand = Brand::onlyTrashed()->findOrFail($id);
+        $brand = Brand::onlyTrashed()->findOrFail($brandId);
 
         Brand::deleteImage($brand);
 
         $brand->forceDelete();
 
-        return to_route('admin.brands.trash', "page=$request->page&per_page=$request->per_page")->with("success", "The brand has been permanently deleted");
+        return to_route('admin.brands.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The brand has been permanently deleted");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -110,6 +110,6 @@ class AdminBrandController extends Controller
 
         });
 
-        return to_route('admin.brands.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Brands have been successfully deleted.");
+        return to_route('admin.brands.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Brands have been successfully deleted.");
     }
 }

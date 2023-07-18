@@ -58,14 +58,14 @@ class AdminRegionController extends Controller
 
         $region->update($request->validated());
 
-        return to_route("admin.regions.index", "page=$request->page&per_page=$request->per_page")->with("success", "Region has been successfully updated.");
+        return to_route("admin.regions.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Region has been successfully updated.");
     }
 
     public function destroy(Request $request, Region $region): RedirectResponse
     {
         $region->delete();
 
-        return to_route("admin.regions.index", "page=$request->page&per_page=$request->per_page")->with("success", "Region has been successfully deleted.");
+        return to_route("admin.regions.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Region has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -85,7 +85,7 @@ class AdminRegionController extends Controller
 
         $region->restore();
 
-        return to_route('admin.regions.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Region has been successfully restored.");
+        return to_route('admin.regions.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Region has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $id): RedirectResponse
@@ -94,7 +94,7 @@ class AdminRegionController extends Controller
 
         $region->forceDelete();
 
-        return to_route('admin.regions.trash', "page=$request->page&per_page=$request->per_page")->with("success", "The Region has been permanently deleted.");
+        return to_route('admin.regions.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The Region has been permanently deleted.");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -105,6 +105,6 @@ class AdminRegionController extends Controller
             $region->forceDelete();
         });
 
-        return to_route('admin.regions.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Regions have been successfully deleted.");
+        return to_route('admin.regions.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Regions have been successfully deleted.");
     }
 }

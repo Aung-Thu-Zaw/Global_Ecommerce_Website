@@ -23,14 +23,10 @@ const swal = inject("$swal");
 // Query String Parameteres
 const params = reactive({
   search: usePage().props.ziggy.query?.search,
-  page: props.rolesWithPermissions.current_page
-    ? props.rolesWithPermissions.current_page
-    : 1,
-  per_page: props.rolesWithPermissions.per_page
-    ? props.rolesWithPermissions.per_page
-    : 10,
-  sort: "id",
-  direction: "desc",
+  page: usePage().props.ziggy.query?.page,
+  per_page: usePage().props.ziggy.query?.per_page,
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
 });
 
 // Handle Search

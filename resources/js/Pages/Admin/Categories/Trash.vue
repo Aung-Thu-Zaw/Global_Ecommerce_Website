@@ -25,14 +25,10 @@ const swal = inject("$swal");
 // Query String Parameteres
 const params = reactive({
   search: usePage().props.ziggy.query?.search,
-  page: props.trashCategories.current_page
-    ? props.trashCategories.current_page
-    : 1,
-  per_page: props.trashCategories.per_page
-    ? props.trashCategories.per_page
-    : 10,
-  sort: "id",
-  direction: "desc",
+  page: usePage().props.ziggy.query?.page,
+  per_page: usePage().props.ziggy.query?.per_page,
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
 });
 
 // Handle Search
@@ -131,9 +127,11 @@ const handleCategoryRestore = async (trashCategoryId) => {
   if (result.isConfirmed) {
     router.post(
       route("admin.categories.restore", {
-        id: trashCategoryId,
+        category: trashCategoryId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {},
       {
@@ -167,9 +165,11 @@ const handleCategoryDelete = async (trashCategoryId) => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.categories.force.delete", {
-        id: trashCategoryId,
+        category: trashCategoryId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {
         onSuccess: () => {
@@ -204,6 +204,8 @@ const handlePermanentlyDelete = async () => {
       route("admin.categories.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {},
       {
@@ -277,6 +279,12 @@ const categoryTrashDelete = computed(() => {
           <Link
             as="button"
             :href="route('admin.categories.index')"
+            :data="{
+              page: 1,
+              per_page: 10,
+              sort: 'id',
+              direction: 'desc',
+            }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
             <i class="fa-solid fa-arrow-left"></i>
@@ -291,7 +299,7 @@ const categoryTrashDelete = computed(() => {
           <input
             type="text"
             class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-            placeholder="Search"
+            placeholder="Search by name"
             v-model="params.search"
           />
 
@@ -321,7 +329,7 @@ const categoryTrashDelete = computed(() => {
 
       <!-- Category Permanently Delete Button -->
       <p
-        v-if="categoryTrashDelete && trashCategories.data.length!==0"
+        v-if="categoryTrashDelete && trashCategories.data.length !== 0"
         class="text-left text-sm font-bold mb-2 text-warning-600"
       >
         Categories in the Trash will be automatically deleted after 60 days.

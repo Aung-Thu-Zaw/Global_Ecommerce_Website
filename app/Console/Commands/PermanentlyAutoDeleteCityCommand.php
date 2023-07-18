@@ -20,7 +20,7 @@ class PermanentlyAutoDeleteCityCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Cities in the Trash will be automatically deleted after 60 days';
+    protected $description = 'Cities in the trash will be automatically deleted after 60 days';
 
 
     public function handle(): void
@@ -28,10 +28,13 @@ class PermanentlyAutoDeleteCityCommand extends Command
         $cutoffDate = Carbon::now()->subDays(60);
 
         $cities=City::onlyTrashed()
-        ->where('deleted_at', '<=', $cutoffDate)->get();
+                    ->where('deleted_at', '<=', $cutoffDate)
+                    ->get();
 
         $cities->each(function ($city) {
+
             $city->forceDelete();
+
         });
     }
 }

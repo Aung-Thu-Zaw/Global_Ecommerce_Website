@@ -53,14 +53,14 @@ class AdminBlogPostController extends Controller
     {
         $blogPost->update($request->validated()+["image"=>$blogPostImageUploadService->updateImage($request, $blogPost)]);
 
-        return to_route("admin.blogs.posts.index", "page=$request->page&per_page=$request->per_page")->with("success", "Post has been successfully updated.");
+        return to_route("admin.blogs.posts.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Post has been successfully updated.");
     }
 
     public function destroy(Request $request, BlogPost $blogPost): RedirectResponse
     {
         $blogPost->delete();
 
-        return to_route("admin.blogs.posts.index", "page=$request->page&per_page=$request->per_page")->with("success", "Post has been successfully deleted.");
+        return to_route("admin.blogs.posts.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Post has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -81,7 +81,7 @@ class AdminBlogPostController extends Controller
 
         $blogPost->restore();
 
-        return to_route('admin.blogs.posts.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Post has been successfully restored.");
+        return to_route('admin.blogs.posts.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Post has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $id): RedirectResponse
@@ -92,7 +92,7 @@ class AdminBlogPostController extends Controller
 
         $blogPost->forceDelete();
 
-        return to_route('admin.blogs.posts.trash', "page=$request->page&per_page=$request->per_page")->with("success", "The post has been permanently deleted.");
+        return to_route('admin.blogs.posts.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The post has been permanently deleted.");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -107,6 +107,6 @@ class AdminBlogPostController extends Controller
 
         });
 
-        return to_route('admin.blogs.posts.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Posts have been successfully deleted.");
+        return to_route('admin.blogs.posts.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Posts have been successfully deleted.");
     }
 }

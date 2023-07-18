@@ -54,14 +54,14 @@ class AdminCountryController extends Controller
 
         $country->update($request->validated());
 
-        return to_route("admin.countries.index", "page=$request->page&per_page=$request->per_page")->with("success", "Country has been successfully updated.");
+        return to_route("admin.countries.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Country has been successfully updated.");
     }
 
     public function destroy(Request $request, Country $country): RedirectResponse
     {
         $country->delete();
 
-        return to_route("admin.countries.index", "page=$request->page&per_page=$request->per_page")->with("success", "Country has been successfully deleted.");
+        return to_route("admin.countries.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Country has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -81,7 +81,7 @@ class AdminCountryController extends Controller
 
         $country->restore();
 
-        return to_route('admin.countries.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Country has been successfully restored.");
+        return to_route('admin.countries.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Country has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $id): RedirectResponse
@@ -90,7 +90,7 @@ class AdminCountryController extends Controller
 
         $country->forceDelete();
 
-        return to_route('admin.countries.trash', "page=$request->page&per_page=$request->per_page")->with("success", "The country has been permanently deleted.");
+        return to_route('admin.countries.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The country has been permanently deleted.");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -101,6 +101,6 @@ class AdminCountryController extends Controller
             $country->forceDelete();
         });
 
-        return to_route('admin.countries.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Countries have been successfully deleted.");
+        return to_route('admin.countries.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Countries have been successfully deleted.");
     }
 }

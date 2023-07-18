@@ -56,7 +56,7 @@ class AdminActiveVendorController extends Controller
             $message= "Vendor has been successfully set unoffical";
         }
 
-        return to_route('admin.vendors.active.index', "page=$request->page&per_page=$request->per_page")->with("success", $message);
+        return to_route('admin.vendors.active.index', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", $message);
 
 
     }

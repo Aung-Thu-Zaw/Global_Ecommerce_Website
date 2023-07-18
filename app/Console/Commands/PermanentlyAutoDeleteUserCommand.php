@@ -20,7 +20,7 @@ class PermanentlyAutoDeleteUserCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Users in the Trash will be automatically deleted after 60 days';
+    protected $description = 'Users in the trash will be automatically deleted after 60 days';
 
 
     public function handle(): void
@@ -28,11 +28,15 @@ class PermanentlyAutoDeleteUserCommand extends Command
         $cutoffDate = Carbon::now()->subDays(60);
 
         $users=User::onlyTrashed()
-        ->where('deleted_at', '<=', $cutoffDate)->get();
+                   ->where('deleted_at', '<=', $cutoffDate)
+                   ->get();
 
         $users->each(function ($user) {
+
             User::deleteUserAvatar($user);
+
             $user->forceDelete();
+
         });
     }
 }

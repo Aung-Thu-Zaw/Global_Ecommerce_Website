@@ -95,7 +95,7 @@ class AdminManageController extends Controller
             }
         }
 
-        return to_route("admin.admin-manage.index", "page=$request->page&per_page=$request->per_page")->with("success", "Admin has been successfully updated.");
+        return to_route("admin.admin-manage.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Admin has been successfully updated.");
     }
 
 
@@ -103,7 +103,7 @@ class AdminManageController extends Controller
     {
         $user->delete();
 
-        return to_route("admin.admin-manage.index", "page=$request->page&per_page=$request->per_page")->with("success", "Admin has been successfully deleted.");
+        return to_route("admin.admin-manage.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Admin has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -126,7 +126,7 @@ class AdminManageController extends Controller
 
         $admin->restore();
 
-        return to_route('admin.admin-manage.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Admin has been successfully restored.");
+        return to_route('admin.admin-manage.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Admin has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $id): RedirectResponse
@@ -135,7 +135,7 @@ class AdminManageController extends Controller
 
         $admin->forceDelete();
 
-        return to_route('admin.admin-manage.trash', "page=$request->page&per_page=$request->per_page")->with("success", "The admin has been permanently deleted");
+        return to_route('admin.admin-manage.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The admin has been permanently deleted");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -149,6 +149,6 @@ class AdminManageController extends Controller
             $admin->forceDelete();
         });
 
-        return to_route('admin.admin-manage.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Admins have been successfully deleted.");
+        return to_route('admin.admin-manage.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Admins have been successfully deleted.");
     }
 }

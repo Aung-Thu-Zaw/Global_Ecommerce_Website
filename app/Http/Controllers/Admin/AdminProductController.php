@@ -24,9 +24,9 @@ class AdminProductController extends Controller
     public function index(): Response|ResponseFactory
     {
         $products=Product::search(request("search"))
-                           ->orderBy(request("sort", "id"), request("direction", "desc"))
-                           ->paginate(request("per_page", 10))
-                           ->appends(request()->all());
+                         ->orderBy(request("sort", "id"), request("direction", "desc"))
+                         ->paginate(request("per_page", 10))
+                         ->appends(request()->all());
 
         return inertia("Admin/Products/Index", compact("products"));
     }
@@ -95,14 +95,14 @@ class AdminProductController extends Controller
 
         $productMultiImageUploadService->createMultiImage($request, $product);
 
-        return to_route("admin.products.index", "page=$request->page&per_page=$request->per_page")->with("success", "Product has been successfully updated.");
+        return to_route("admin.products.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product has been successfully updated.");
     }
 
     public function destroy(Request $request, Product $product): RedirectResponse
     {
         $product->delete();
 
-        return to_route("admin.products.index", "page=$request->page&per_page=$request->per_page")->with("success", "Product has been successfully deleted.");
+        return to_route("admin.products.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -123,7 +123,7 @@ class AdminProductController extends Controller
 
         $product->restore();
 
-        return to_route('admin.products.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Product has been successfully restored.");
+        return to_route('admin.products.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $id): RedirectResponse
@@ -140,7 +140,7 @@ class AdminProductController extends Controller
 
         $product->forceDelete();
 
-        return to_route('admin.products.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Product has been permanently deleted.");
+        return to_route('admin.products.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product has been permanently deleted.");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -152,6 +152,6 @@ class AdminProductController extends Controller
             $product->forceDelete();
         });
 
-        return to_route('admin.products.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Products have been successfully deleted.");
+        return to_route('admin.products.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Products have been successfully deleted.");
     }
 }

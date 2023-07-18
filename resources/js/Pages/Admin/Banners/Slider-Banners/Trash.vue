@@ -121,9 +121,11 @@ const handleRestore = async (trashSliderBannerId) => {
   if (result.isConfirmed) {
     router.post(
       route("admin.slider-banners.restore", {
-        id: trashSliderBannerId,
+        slider_banner: trashSliderBannerId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       })
     );
     setTimeout(() => {
@@ -150,10 +152,12 @@ const handleDelete = async (trashSliderBannerId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.slider-banners.forceDelete", {
-        id: trashSliderBannerId,
+      route("admin.slider-banners.force.delete", {
+        slider_banner: trashSliderBannerId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       })
     );
     setTimeout(() => {
@@ -180,9 +184,11 @@ const handlePermanentlyDelete = async () => {
 
   if (result.isConfirmed) {
     router.get(
-      route("admin.slider-banners.permanentlyDelete", {
+      route("admin.slider-banners.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       })
     );
     setTimeout(() => {
@@ -250,6 +256,12 @@ const handlePermanentlyDelete = async () => {
           <Link
             as="button"
             :href="route('admin.slider-banners.index')"
+            :data="{
+              page: 1,
+              per_page: 10,
+              sort: 'id',
+              direction: 'desc',
+            }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
             <i class="fa-solid fa-arrow-left"></i>

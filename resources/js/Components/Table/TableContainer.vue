@@ -3,7 +3,7 @@
     class="relative overflow-x-auto shadow-md overflow-auto scrollbar border-2"
   >
     <table
-      class="text-sm text-left text-gray-500 min-w-[1800px] max-w-[2500px]"
+      class="text-sm text-left text-gray-500 w-auto min-w-[1505px] max-w-[2500px]"
     >
       <slot />
     </table>

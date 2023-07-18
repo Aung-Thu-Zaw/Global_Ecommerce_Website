@@ -79,14 +79,14 @@ class VendorProductController extends Controller
 
         $productMultiImageUploadService->createMultiImage($request, $product);
 
-        return to_route("vendor.products.index", "page=$request->page&per_page=$request->per_page")->with("success", "Product has been successfully updated.");
+        return to_route("vendor.products.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product has been successfully updated.");
     }
 
     public function destroy(Request $request, Product $product): RedirectResponse
     {
         $product->delete();
 
-        return to_route("vendor.products.index", "page=$request->page&per_page=$request->per_page")->with("success", "Product has been successfully deleted.");
+        return to_route("vendor.products.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -108,7 +108,7 @@ class VendorProductController extends Controller
 
         $product->restore();
 
-        return to_route('vendor.products.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Product has been successfully restored.");
+        return to_route('vendor.products.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $id): RedirectResponse
@@ -125,7 +125,7 @@ class VendorProductController extends Controller
 
         $product->forceDelete();
 
-        return to_route('vendor.products.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Product has been permanently deleted.");
+        return to_route('vendor.products.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product has been permanently deleted.");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -137,6 +137,6 @@ class VendorProductController extends Controller
             $product->forceDelete();
         });
 
-        return to_route('vendor.products.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Products have been successfully deleted.");
+        return to_route('vendor.products.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Products have been successfully deleted.");
     }
 }

@@ -116,9 +116,11 @@ const handleRestore = async (trashProductId) => {
   if (result.isConfirmed) {
     router.post(
       route("admin.products.restore", {
-        id: trashProductId,
+        product: trashProductId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       })
     );
     setTimeout(() => {
@@ -145,10 +147,12 @@ const handleDelete = async (trashProductId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.products.forceDelete", {
-        id: trashProductId,
+      route("admin.products.force.delete", {
+        product: trashProductId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       })
     );
     setTimeout(() => {
@@ -175,9 +179,11 @@ const handlePermanentlyDelete = async () => {
 
   if (result.isConfirmed) {
     router.get(
-      route("admin.products.permanentlyDelete", {
+      route("admin.products.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       })
     );
     setTimeout(() => {
@@ -222,7 +228,14 @@ const handlePermanentlyDelete = async () => {
 
         <div>
           <Link
+            as="button"
             :href="route('admin.products.index')"
+            :data="{
+              page: 1,
+              per_page: 10,
+              sort: 'id',
+              direction: 'desc',
+            }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
             <i class="fa-solid fa-arrow-left"></i>

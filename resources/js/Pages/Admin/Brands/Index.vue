@@ -23,10 +23,10 @@ const swal = inject("$swal");
 // Query String Parameteres
 const params = reactive({
   search: usePage().props.ziggy.query?.search,
-  page: props.brands.current_page ? props.brands.current_page : 1,
-  per_page: props.brands.per_page ? props.brands.per_page : 10,
-  sort: "id",
-  direction: "desc",
+  page: usePage().props.ziggy.query?.page,
+  per_page: usePage().props.ziggy.query?.per_page,
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
 });
 
 // Handle Search
@@ -81,27 +81,6 @@ const handleQueryStringParameter = () => {
   );
 };
 
-// Handle Brand Delete
-const handleBrandDelete = (brand) => {
-  router.delete(
-    route("admin.brands.destroy", {
-      brand: brand,
-      page: params.page,
-      per_page: params.per_page,
-    }),
-    {
-      onSuccess: () => {
-        if (usePage().props.flash.successMessage) {
-          swal({
-            icon: "success",
-            title: usePage().props.flash.successMessage,
-          });
-        }
-      },
-    }
-  );
-};
-
 // Watching Search Box
 watch(
   () => params.search,
@@ -128,6 +107,29 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   handleQueryStringParameter();
+};
+
+// Handle Brand Delete
+const handleBrandDelete = (brand) => {
+  router.delete(
+    route("admin.brands.destroy", {
+      brand: brand,
+      page: params.page,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    }),
+    {
+      onSuccess: () => {
+        if (usePage().props.flash.successMessage) {
+          swal({
+            icon: "success",
+            title: usePage().props.flash.successMessage,
+          });
+        }
+      },
+    }
+  );
 };
 
 // Handle Delete Brand
@@ -221,6 +223,12 @@ if (usePage().props.flash.successMessage) {
           <Link
             as="button"
             :href="route('admin.brands.trash')"
+            :data="{
+              page: 1,
+              per_page: 10,
+              sort: 'id',
+              direction: 'desc',
+            }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
           >
             <i class="fa-solid fa-trash"></i>
@@ -251,7 +259,7 @@ if (usePage().props.flash.successMessage) {
             <input
               type="text"
               class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-              placeholder="Search"
+              placeholder="Search by name"
               v-model="params.search"
             />
 

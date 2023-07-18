@@ -20,7 +20,7 @@ class PermanentlyAutoDeleteCouponCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Coupons in the Trash will be automatically deleted after 60 days';
+    protected $description = 'Coupons in the trash will be automatically deleted after 60 days';
 
 
     public function handle(): void
@@ -28,10 +28,13 @@ class PermanentlyAutoDeleteCouponCommand extends Command
         $cutoffDate = Carbon::now()->subDays(60);
 
         $coupons=Coupon::onlyTrashed()
-        ->where('deleted_at', '<=', $cutoffDate)->get();
+                       ->where('deleted_at', '<=', $cutoffDate)
+                       ->get();
 
         $coupons->each(function ($coupon) {
+
             $coupon->forceDelete();
+
         });
     }
 }

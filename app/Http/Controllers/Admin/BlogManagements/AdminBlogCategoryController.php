@@ -48,14 +48,14 @@ class AdminBlogCategoryController extends Controller
     {
         $blogCategory->update($request->validated()+["image"=>$blogCategoryImageUploadService->updateImage($request, $blogCategory)]);
 
-        return to_route("admin.blogs.categories.index", "page=$request->page&per_page=$request->per_page")->with("success", "Blog category has been successfully updated.");
+        return to_route("admin.blogs.categories.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Blog category has been successfully updated.");
     }
 
     public function destroy(Request $request, BlogCategory $blogCategory): RedirectResponse
     {
         $blogCategory->delete();
 
-        return to_route("admin.blogs.categories.index", "page=$request->page&per_page=$request->per_page")->with("success", "Blog category has been successfully deleted.");
+        return to_route("admin.blogs.categories.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Blog category has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -75,7 +75,7 @@ class AdminBlogCategoryController extends Controller
 
         $blogCategory->restore();
 
-        return to_route('admin.blogs.categories.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Blog category has been successfully restored.");
+        return to_route('admin.blogs.categories.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Blog category has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $id): RedirectResponse
@@ -86,7 +86,7 @@ class AdminBlogCategoryController extends Controller
 
         $blogCategory->forceDelete();
 
-        return to_route('admin.blogs.categories.trash', "page=$request->page&per_page=$request->per_page")->with("success", "The blog category has been permanently deleted.");
+        return to_route('admin.blogs.categories.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The blog category has been permanently deleted.");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -101,6 +101,6 @@ class AdminBlogCategoryController extends Controller
 
         });
 
-        return to_route('admin.blogs.categories.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Blog categories have been successfully deleted.");
+        return to_route('admin.blogs.categories.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Blog categories have been successfully deleted.");
     }
 }

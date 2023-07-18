@@ -20,7 +20,7 @@ class PermanentlyAutoDeleteTownshipCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Townships in the Trash will be automatically deleted after 60 days';
+    protected $description = 'Townships in the trash will be automatically deleted after 60 days';
 
 
     public function handle(): void
@@ -28,10 +28,13 @@ class PermanentlyAutoDeleteTownshipCommand extends Command
         $cutoffDate = Carbon::now()->subDays(60);
 
         $townships=Township::onlyTrashed()
-        ->where('deleted_at', '<=', $cutoffDate)->get();
+                           ->where('deleted_at', '<=', $cutoffDate)
+                           ->get();
 
         $townships->each(function ($township) {
+
             $township->forceDelete();
+
         });
     }
 }

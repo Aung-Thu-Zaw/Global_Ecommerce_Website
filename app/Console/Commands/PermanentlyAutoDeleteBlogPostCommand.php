@@ -20,7 +20,7 @@ class PermanentlyAutoDeleteBlogPostCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Blog posts in the Trash will be automatically deleted after 60 days';
+    protected $description = 'Blog posts in the trash will be automatically deleted after 60 days';
 
 
     public function handle(): void
@@ -28,11 +28,15 @@ class PermanentlyAutoDeleteBlogPostCommand extends Command
         $cutoffDate = Carbon::now()->subDays(60);
 
         $blogPosts=BlogPost::onlyTrashed()
-        ->where('deleted_at', '<=', $cutoffDate)->get();
+                           ->where('deleted_at', '<=', $cutoffDate)
+                           ->get();
 
         $blogPosts->each(function ($blogPost) {
+
             BlogPost::deleteImage($blogPost);
+
             $blogPost->forceDelete();
+
         });
     }
 }

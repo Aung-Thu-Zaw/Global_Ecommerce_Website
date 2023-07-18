@@ -48,14 +48,14 @@ class AdminSliderBannerController extends Controller
     {
         $sliderBanner->update($request->validated()+["image"=>$sliderBannerImageUploadService->updateImage($request, $sliderBanner),"status"=>$sliderBanner->status]);
 
-        return to_route("admin.slider-banners.index", "page=$request->page&per_page=$request->per_page")->with("success", "Slider Banner has been successfully updated.");
+        return to_route("admin.slider-banners.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Slider Banner has been successfully updated.");
     }
 
     public function destroy(Request $request, SliderBanner $sliderBanner): RedirectResponse
     {
         $sliderBanner->delete();
 
-        return to_route("admin.slider-banners.index", "page=$request->page&per_page=$request->per_page")->with("success", "Slider Banner has been successfully deleted.");
+        return to_route("admin.slider-banners.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Slider Banner has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -75,7 +75,7 @@ class AdminSliderBannerController extends Controller
 
         $sliderBanner->restore();
 
-        return to_route('admin.slider-banners.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Slider Banner has been successfully restored.");
+        return to_route('admin.slider-banners.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Slider Banner has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $id): RedirectResponse
@@ -86,7 +86,7 @@ class AdminSliderBannerController extends Controller
 
         $sliderBanner->forceDelete();
 
-        return to_route('admin.slider-banners.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Slider Banner has been permanently deleted.");
+        return to_route('admin.slider-banners.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Slider Banner has been permanently deleted.");
     }
 
     public function handleShow(Request $request, int $id): RedirectResponse
@@ -94,7 +94,7 @@ class AdminSliderBannerController extends Controller
         $countsliderBanner=SliderBanner::where("status", "show")->count();
 
         if ($countsliderBanner >= 6) {
-            return to_route('admin.slider-banners.index', "page=$request->page&per_page=$request->per_page")->with("error", "You can't display the slider banner. Only 6 slider banners are allowed.");
+            return to_route('admin.slider-banners.index', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("error", "You can't display the slider banner. Only 6 slider banners are allowed.");
         }
 
         $sliderBanner = SliderBanner::where([["id", $id],["status","hide"]])->first();
@@ -103,7 +103,7 @@ class AdminSliderBannerController extends Controller
             $sliderBanner->update(["status"=>"show"]);
         }
 
-        return to_route('admin.slider-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "Slider Banner has been successfully displayed.");
+        return to_route('admin.slider-banners.index', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Slider Banner has been successfully displayed.");
     }
 
     public function handleHide(Request $request, int $id): RedirectResponse
@@ -114,7 +114,7 @@ class AdminSliderBannerController extends Controller
             $sliderBanner->update(["status"=>"hide"]);
         }
 
-        return to_route('admin.slider-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "Slider Banner has been successfully hidden.");
+        return to_route('admin.slider-banners.index', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Slider Banner has been successfully hidden.");
     }
 
 
@@ -127,6 +127,6 @@ class AdminSliderBannerController extends Controller
             $sliderBanner->forceDelete();
         });
 
-        return to_route('admin.slider-banners.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Slider Banners have been successfully deleted.");
+        return to_route('admin.slider-banners.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Slider Banners have been successfully deleted.");
     }
 }

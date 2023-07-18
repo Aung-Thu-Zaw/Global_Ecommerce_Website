@@ -121,9 +121,11 @@ const handleRestore = async (trashBannerId) => {
   if (result.isConfirmed) {
     router.post(
       route("admin.product-banners.restore", {
-        id: trashBannerId,
+        product_banner: trashBannerId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       })
     );
     setTimeout(() => {
@@ -151,9 +153,11 @@ const handleDelete = async (trashBannerId) => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.product-banners.forceDelete", {
-        id: trashBannerId,
+        product_banner: trashBannerId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       })
     );
     setTimeout(() => {
@@ -183,6 +187,8 @@ const handlePermanentlyDelete = async () => {
       route("admin.product-banners.permanentlyDelete", {
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       })
     );
     setTimeout(() => {
@@ -248,7 +254,14 @@ const handlePermanentlyDelete = async () => {
 
         <div>
           <Link
+            as="button"
             :href="route('admin.product-banners.index')"
+            :data="{
+              page: 1,
+              per_page: 10,
+              sort: 'id',
+              direction: 'desc',
+            }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
             <i class="fa-solid fa-arrow-left"></i>

@@ -32,7 +32,9 @@ class PermanentlyAutoDeleteSubscriberCommand extends Command
                                ->get();
 
         $subscribers->each(function ($subscriber) {
+
             $subscriber->forceDelete();
+
         });
     }
 }

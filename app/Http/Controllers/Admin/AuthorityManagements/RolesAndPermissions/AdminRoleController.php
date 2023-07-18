@@ -47,14 +47,14 @@ class AdminRoleController extends Controller
     {
         $role->update($request->validated());
 
-        return to_route("admin.roles.index", "page=$request->page&per_page=$request->per_page")->with("success", "Role has been successfully updated.");
+        return to_route("admin.roles.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Role has been successfully updated.");
     }
 
     public function destroy(Request $request, Role $role): RedirectResponse
     {
         $role->delete();
 
-        return to_route("admin.roles.index", "page=$request->page&per_page=$request->per_page")->with("success", "Role has been successfully deleted.");
+        return to_route("admin.roles.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Role has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -74,7 +74,7 @@ class AdminRoleController extends Controller
 
         $role->restore();
 
-        return to_route('admin.roles.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Role has been successfully restored.");
+        return to_route('admin.roles.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Role has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $id): RedirectResponse
@@ -83,7 +83,7 @@ class AdminRoleController extends Controller
 
         $role->forceDelete();
 
-        return to_route('admin.roles.trash', "page=$request->page&per_page=$request->per_page")->with("success", "The role has been permanently deleted");
+        return to_route('admin.roles.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The role has been permanently deleted");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -96,6 +96,6 @@ class AdminRoleController extends Controller
 
         });
 
-        return to_route('admin.roles.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Roles have been successfully deleted.");
+        return to_route('admin.roles.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Roles have been successfully deleted.");
     }
 }

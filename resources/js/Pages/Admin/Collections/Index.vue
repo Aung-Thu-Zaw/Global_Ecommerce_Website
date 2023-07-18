@@ -23,10 +23,10 @@ const swal = inject("$swal");
 // Query String Parameteres
 const params = reactive({
   search: usePage().props.ziggy.query?.search,
-  page: props.collections.current_page ? props.collections.current_page : 1,
-  per_page: props.collections.per_page ? props.collections.per_page : 10,
-  sort: "id",
-  direction: "desc",
+  page: usePage().props.ziggy.query?.page,
+  per_page: usePage().props.ziggy.query?.per_page,
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
 });
 
 // Handle Search
@@ -108,8 +108,8 @@ const updateSorting = (sort = "id") => {
   handleQueryStringParameter();
 };
 
-// Handle Collection Delete
-const handleCollectionDelete = async (collection) => {
+// Handle Delete Collection
+const handleDeleteCollection = async (collection) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete this collection?",
@@ -203,6 +203,12 @@ if (usePage().props.flash.successMessage) {
           <Link
             as="button"
             :href="route('admin.collections.trash')"
+            :data="{
+              page: 1,
+              per_page: 10,
+              sort: 'id',
+              direction: 'desc',
+            }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
           >
             <i class="fa-solid fa-trash"></i>
@@ -232,7 +238,7 @@ if (usePage().props.flash.successMessage) {
             <input
               type="text"
               class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-              placeholder="Search"
+              placeholder="Search by title"
               v-model="params.search"
             />
 
@@ -403,7 +409,7 @@ if (usePage().props.flash.successMessage) {
               </Link>
               <button
                 v-if="collectionDelete"
-                @click="handleCollectionDelete(collection.slug)"
+                @click="handleDeleteCollection(collection.slug)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>

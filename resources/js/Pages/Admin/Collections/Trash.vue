@@ -23,14 +23,10 @@ const swal = inject("$swal");
 // Query String Parameteres
 const params = reactive({
   search: usePage().props.ziggy.query?.search,
-  page: props.trashCollections.current_page
-    ? props.trashCollections.current_page
-    : 1,
-  per_page: props.trashCollections.per_page
-    ? props.trashCollections.per_page
-    : 10,
-  sort: "id",
-  direction: "desc",
+  page: usePage().props.ziggy.query?.page,
+  per_page: usePage().props.ziggy.query?.per_page,
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
 });
 
 // Handle Search
@@ -114,7 +110,7 @@ const updateSorting = (sort = "id") => {
 };
 
 // Handle Trash Collection Restore
-const handleCollectionRestore = async (trashCollectionId) => {
+const handleRestoreTrashCollection = async (trashCollectionId) => {
   const result = await swal({
     icon: "info",
     title: "Are you sure you want to restore this collection?",
@@ -129,9 +125,11 @@ const handleCollectionRestore = async (trashCollectionId) => {
   if (result.isConfirmed) {
     router.post(
       route("admin.collections.restore", {
-        id: trashCollectionId,
+        collection: trashCollectionId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {},
       {
@@ -149,7 +147,7 @@ const handleCollectionRestore = async (trashCollectionId) => {
 };
 
 // Handle Trash Collection Delete
-const handleCollectionDelete = async (trashCollectionId) => {
+const handleDeleteTrashCollection = async (trashCollectionId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -165,9 +163,11 @@ const handleCollectionDelete = async (trashCollectionId) => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.collections.force.delete", {
-        id: trashCollectionId,
+        collection: trashCollectionId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {
         onSuccess: () => {
@@ -202,6 +202,8 @@ const handlePermanentlyDelete = async () => {
       route("admin.collections.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {},
       {
@@ -274,6 +276,12 @@ const collectionTrashDelete = computed(() => {
           <Link
             as="button"
             :href="route('admin.collections.index')"
+            :data="{
+              page: 1,
+              per_page: 10,
+              sort: 'id',
+              direction: 'desc',
+            }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
             <i class="fa-solid fa-arrow-left"></i>
@@ -288,7 +296,7 @@ const collectionTrashDelete = computed(() => {
           <input
             type="text"
             class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-            placeholder="Search"
+            placeholder="Search by title"
             v-model="params.search"
           />
 
@@ -317,7 +325,7 @@ const collectionTrashDelete = computed(() => {
 
       <!-- Collection Permanently Delete Button -->
       <p
-        v-if="collectionTrashDelete && trashCollections.data.length!==0"
+        v-if="collectionTrashDelete && trashCollections.data.length !== 0"
         class="text-left text-sm font-bold mb-2 text-warning-600"
       >
         Collections in the Trash will be automatically deleted after 60 days.
@@ -461,7 +469,7 @@ const collectionTrashDelete = computed(() => {
             <Td v-if="collectionTrashRestore || collectionTrashDelete">
               <button
                 v-if="collectionTrashRestore"
-                @click="handleCollectionRestore(trashCollection.id)"
+                @click="handleRestoreTrashCollection(trashCollection.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-recycle"></i>
@@ -469,7 +477,7 @@ const collectionTrashDelete = computed(() => {
               </button>
               <button
                 v-if="collectionTrashDelete"
-                @click="handleCollectionDelete(trashCollection.id)"
+                @click="handleDeleteTrashCollection(trashCollection.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-trash"></i>

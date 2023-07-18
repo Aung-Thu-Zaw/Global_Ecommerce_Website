@@ -20,7 +20,7 @@ class PermanentlyAutoDeleteRegionCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Regions in the Trash will be automatically deleted after 60 days';
+    protected $description = 'Regions in the trash will be automatically deleted after 60 days';
 
 
     public function handle(): void
@@ -28,10 +28,13 @@ class PermanentlyAutoDeleteRegionCommand extends Command
         $cutoffDate = Carbon::now()->subDays(60);
 
         $regions=Region::onlyTrashed()
-        ->where('deleted_at', '<=', $cutoffDate)->get();
+                       ->where('deleted_at', '<=', $cutoffDate)
+                       ->get();
 
         $regions->each(function ($region) {
+
             $region->forceDelete();
+
         });
     }
 }

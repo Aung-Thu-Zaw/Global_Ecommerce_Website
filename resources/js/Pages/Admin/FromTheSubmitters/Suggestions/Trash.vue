@@ -34,14 +34,10 @@ const swal = inject("$swal");
 // Query String Parameteres
 const params = reactive({
   search: usePage().props.ziggy.query?.search,
-  page: props.trashSuggestions.current_page
-    ? props.trashSuggestions.current_page
-    : 1,
-  per_page: props.trashSuggestions.per_page
-    ? props.trashSuggestions.per_page
-    : 10,
-  sort: "id",
-  direction: "desc",
+  page: usePage().props.ziggy.query?.page,
+  per_page: usePage().props.ziggy.query?.per_page,
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
 });
 
 // Handle Search
@@ -143,6 +139,8 @@ const handleRestore = async (trashSuggesstionId) => {
         suggestion: trashSuggesstionId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {},
       {
@@ -179,6 +177,8 @@ const handleSuggestionDelete = async (trashSuggesstionId) => {
         suggestion: trashSuggesstionId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {
         onSuccess: () => {
@@ -213,6 +213,8 @@ const handlePermanentlyDelete = async () => {
       route("admin.suggestions.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {},
       {
@@ -287,6 +289,12 @@ const suggestionTrashDelete = computed(() => {
           <Link
             as="button"
             :href="route('admin.suggestions.index')"
+            :data="{
+              page: 1,
+              per_page: 10,
+              sort: 'id',
+              direction: 'desc',
+            }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
             <i class="fa-solid fa-arrow-left"></i>

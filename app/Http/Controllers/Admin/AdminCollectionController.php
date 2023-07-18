@@ -51,14 +51,14 @@ class AdminCollectionController extends Controller
     {
         $collection->update($request->validated());
 
-        return to_route("admin.collections.index", "page=$request->page&per_page=$request->per_page")->with("success", "Collection has been successfully updated.");
+        return to_route("admin.collections.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Collection has been successfully updated.");
     }
 
     public function destroy(Request $request, Collection $collection): RedirectResponse
     {
         $collection->delete();
 
-        return to_route("admin.collections.index", "page=$request->page&per_page=$request->per_page")->with("success", "Collection has been successfully deleted.");
+        return to_route("admin.collections.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Collection has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -72,24 +72,22 @@ class AdminCollectionController extends Controller
         return inertia("Admin/Collections/Trash", compact("trashCollections"));
     }
 
-    public function restore(Request $request, int $id): RedirectResponse
+    public function restore(Request $request, int $collectionId): RedirectResponse
     {
-        $collection = Collection::onlyTrashed()->findOrFail($id);
+        $collection = Collection::onlyTrashed()->findOrFail($collectionId);
 
         $collection->restore();
 
-        return to_route('admin.collections.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Collection has been successfully restored.");
+        return to_route('admin.collections.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Collection has been successfully restored.");
     }
 
-    public function forceDelete(Request $request, int $id): RedirectResponse
+    public function forceDelete(Request $request, int $collectionId): RedirectResponse
     {
-        $collection = Collection::onlyTrashed()->findOrFail($id);
-
-        Collection::deleteImage($collection);
+        $collection = Collection::onlyTrashed()->findOrFail($collectionId);
 
         $collection->forceDelete();
 
-        return to_route('admin.collections.trash', "page=$request->page&per_page=$request->per_page")->with("success", "The collection has been permanently deleted");
+        return to_route('admin.collections.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The collection has been permanently deleted");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -98,12 +96,10 @@ class AdminCollectionController extends Controller
 
         $collections->each(function ($collection) {
 
-            Collection::deleteImage($collection);
-
             $collection->forceDelete();
 
         });
 
-        return to_route('admin.collections.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Collections have been successfully deleted.");
+        return to_route('admin.collections.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Collections have been successfully deleted.");
     }
 }

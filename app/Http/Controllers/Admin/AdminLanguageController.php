@@ -51,14 +51,14 @@ class AdminLanguageController extends Controller
     {
         $language->update($request->validated());
 
-        return to_route("admin.languages.index", "page=$request->page&per_page=$request->per_page")->with("success", "Language has been successfully updated.");
+        return to_route("admin.languages.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Language has been successfully updated.");
     }
 
     public function destroy(Request $request, Language $language): RedirectResponse
     {
         $language->delete();
 
-        return to_route("admin.languages.index", "page=$request->page&per_page=$request->per_page")->with("success", "Language has been successfully deleted.");
+        return to_route("admin.languages.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Language has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -78,7 +78,7 @@ class AdminLanguageController extends Controller
 
         $language->restore();
 
-        return to_route('admin.languages.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Language has been successfully restored.");
+        return to_route('admin.languages.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Language has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $id): RedirectResponse
@@ -89,7 +89,7 @@ class AdminLanguageController extends Controller
 
         $language->forceDelete();
 
-        return to_route('admin.languages.trash', "page=$request->page&per_page=$request->per_page")->with("success", "The language has been permanently deleted");
+        return to_route('admin.languages.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The language has been permanently deleted");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -104,7 +104,7 @@ class AdminLanguageController extends Controller
 
         });
 
-        return to_route('admin.languages.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Languages have been successfully deleted.");
+        return to_route('admin.languages.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Languages have been successfully deleted.");
     }
 
     public function languageDetail(Language $language): Response|ResponseFactory

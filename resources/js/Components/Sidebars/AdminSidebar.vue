@@ -19,9 +19,6 @@
         Global E-commerce
       </Link>
       <ul class="md:hidden items-center flex flex-wrap list-none">
-        <!-- <li class="inline-block relative">
-          <NotificationDropdown />
-        </li> -->
         <li class="inline-block relative">
           <UserDropdown />
         </li>
@@ -64,13 +61,16 @@
         </form>
 
         <hr class="my-4 md:min-w-full" />
+
+        <!-- Admin Dashboard Web Control Area Section Title -->
         <h6
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
           {{ __("ADMIN_WEB_CONTROL_AREA") }}
         </h6>
-        <!-- Dashboard -->
+
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <!-- Dashboard Section -->
           <li class="items-center">
             <Link
               :href="route('admin.dashboard')"
@@ -92,6 +92,12 @@
           <li v-if="brandMenu" class="items-center">
             <Link
               :href="route('admin.brands.index')"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
                 'text-blue-500 hover:text-blue-600':
@@ -101,7 +107,6 @@
               }"
             >
               <i class="fa-solid fa-award mr-2 text-sm"></i>
-
               {{ __("BRANDS") }}
             </Link>
           </li>
@@ -110,6 +115,12 @@
           <li v-if="collectionMenu" class="items-center">
             <Link
               :href="route('admin.collections.index')"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
                 'text-blue-500 hover:text-blue-600':
@@ -119,7 +130,6 @@
               }"
             >
               <i class="fa-solid fa-box mr-2 text-sm"></i>
-
               {{ __("COLLECTIONS") }}
             </Link>
           </li>
@@ -128,6 +138,12 @@
           <li v-if="categoryMenu" class="items-center">
             <Link
               :href="route('admin.categories.index')"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
                 'text-blue-500 hover:text-blue-600':
@@ -137,7 +153,6 @@
               }"
             >
               <i class="fa-solid fa-list mr-2 text-sm"></i>
-
               {{ __("CATEGORIES") }}
             </Link>
           </li>
@@ -146,6 +161,12 @@
           <li v-if="productMenu" class="items-center">
             <Link
               :href="route('admin.products.index')"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
                 'text-blue-500 hover:text-blue-600':
@@ -155,7 +176,6 @@
               }"
             >
               <i class="fa-solid fa-basket-shopping mr-2 text-sm"></i>
-
               {{ __("PRODUCTS") }}
             </Link>
           </li>
@@ -164,6 +184,12 @@
           <li v-if="couponMenu" class="items-center">
             <Link
               :href="route('admin.coupons.index')"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
                 'text-blue-500 hover:text-blue-600':
@@ -173,161 +199,244 @@
               }"
             >
               <i class="fa-solid fa-ticket mr-2 text-sm"></i>
-
               {{ __("COUPONS") }}
             </Link>
           </li>
-        </ul>
 
-        <!-- Banner Section -->
-        <ul
-          v-if="bannerMenu"
-          class="md:flex-col md:min-w-full flex flex-col list-none"
-        >
-          <li class="items-center cursor-pointer">
-            <div
-              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
-              @click="bannersIsHidden = !bannersIsHidden"
-            >
-              <span>
-                <i class="fa-solid fa-ad mr-2 text-sm"></i>
+          <!-- Banner Sections -->
+          <li v-if="bannerMenu" class="items-center">
+            <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+              <li class="items-center cursor-pointer">
+                <div
+                  class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+                  @click="bannersIsHidden = !bannersIsHidden"
+                >
+                  <span>
+                    <i class="fa-solid fa-ad mr-2 text-sm"></i>
+                    {{ __("BANNERS") }}
+                  </span>
+                  <i
+                    v-if="bannersIsHidden"
+                    class="fa-solid fa-chevron-right"
+                  ></i>
+                  <i
+                    v-if="!bannersIsHidden"
+                    class="fa-solid fa-chevron-down"
+                  ></i>
+                </div>
 
-                {{ __("BANNERS") }}
-              </span>
-              <i v-if="bannersIsHidden" class="fa-solid fa-chevron-right"></i>
-              <i v-if="!bannersIsHidden" class="fa-solid fa-chevron-down"></i>
-            </div>
+                <ul
+                  v-if="!bannersIsHidden || bannersArea"
+                  class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+                >
+                  <!-- Slider Banner Section -->
 
-            <ul
-              v-if="!bannersIsHidden || bannersArea"
-              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
-            >
-              <Link
-                :href="route('admin.slider-banners.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/slider-banners'
-                  ),
-                }"
-              >
-                {{ __("SLIDER_BANNERS") }}
-              </Link>
-              <Link
-                :href="route('admin.campaign-banners.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/campaign-banners'
-                  ),
-                }"
-              >
-                {{ __("CAMPAIGN_BANNERS") }}
-              </Link>
-              <Link
-                :href="route('admin.product-banners.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/product-banners'
-                  ),
-                }"
-              >
-                {{ __("PRODUCT_BANNERS") }}
-              </Link>
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/slider-banners'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.slider-banners.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("SLIDER_BANNERS") }}
+                    </Link>
+                  </li>
+
+                  <!-- Campaign Banner Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/campaign-banners'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.campaign-banners.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("CAMPAIGN_BANNERS") }}
+                    </Link>
+                  </li>
+
+                  <!-- Product Banner Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/product-banners'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.product-banners.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("PRODUCT_BANNERS") }}
+                    </Link>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </li>
-        </ul>
 
-        <!-- Shipping Areas Section -->
-        <ul
-          v-if="shippingAreaMenu"
-          class="md:flex-col md:min-w-full flex flex-col list-none"
-        >
-          <li class="items-center cursor-pointer">
-            <div
-              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
-              @click="shippingAreaIsHidden = !shippingAreaIsHidden"
-            >
-              <span>
-                <i class="fa-solid fa-map-location-dot mr-2 text-sm"></i>
-                {{ __("SHIPPING_AREAS") }}
-              </span>
-              <i
-                v-if="shippingAreaIsHidden"
-                class="fa-solid fa-chevron-right"
-              ></i>
-              <i
-                v-if="!shippingAreaIsHidden"
-                class="fa-solid fa-chevron-down"
-              ></i>
-            </div>
+          <!-- Shipping Areas Section -->
+          <li v-if="shippingAreaMenu" class="items-center">
+            <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+              <li class="items-center cursor-pointer">
+                <div
+                  class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+                  @click="shippingAreaIsHidden = !shippingAreaIsHidden"
+                >
+                  <span>
+                    <i class="fa-solid fa-map-location-dot mr-2 text-sm"></i>
+                    {{ __("SHIPPING_AREAS") }}
+                  </span>
+                  <i
+                    v-if="shippingAreaIsHidden"
+                    class="fa-solid fa-chevron-right"
+                  ></i>
+                  <i
+                    v-if="!shippingAreaIsHidden"
+                    class="fa-solid fa-chevron-down"
+                  ></i>
+                </div>
 
-            <ul
-              v-if="!shippingAreaIsHidden || shippingArea"
-              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
-            >
-              <Link
-                :href="route('admin.countries.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600':
-                    $page.url.startsWith('/admin/countries'),
-                }"
-              >
-                Country
-              </Link>
-              <Link
-                :href="route('admin.regions.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600':
-                    $page.url.startsWith('/admin/regions'),
-                }"
-              >
-                Region
-              </Link>
-              <Link
-                :href="route('admin.cities.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600':
-                    $page.url.startsWith('/admin/cities'),
-                }"
-              >
-                City
-              </Link>
-              <Link
-                :href="route('admin.townships.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600':
-                    $page.url.startsWith('/admin/townships'),
-                }"
-              >
-                Township
-              </Link>
+                <ul
+                  v-if="!shippingAreaIsHidden || shippingArea"
+                  class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+                >
+                  <!-- Country Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600':
+                        $page.url.startsWith('/admin/countries'),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.countries.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      Country
+                    </Link>
+                  </li>
+
+                  <!-- Region Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600':
+                        $page.url.startsWith('/admin/regions'),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.regions.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      Region
+                    </Link>
+                  </li>
+
+                  <!-- City Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600':
+                        $page.url.startsWith('/admin/cities'),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.cities.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      City
+                    </Link>
+                  </li>
+
+                  <!-- Township Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600':
+                        $page.url.startsWith('/admin/townships'),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.townships.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      Township
+                    </Link>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </li>
+
+          <!-- Language Section -->
+          <li v-if="languageMenu" class="items-center">
+            <Link
+              :href="route('admin.languages.index')"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: id,
+                direction: desc,
+              }"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url.startsWith('/admin/languages'),
+                'text-slate-700 hover:text-slate-500':
+                  !$page.url.startsWith('/admin/languages'),
+              }"
+            >
+              <i class="fa-solid fa-language mr-2 text-sm"></i>
+              {{ __("LANGUAGES") }}
+            </Link>
+          </li>
         </ul>
-
-        <!-- Language Section -->
-        <li v-if="languageMenu" class="items-center">
-          <Link
-            :href="route('admin.languages.index')"
-            class="text-xs uppercase py-3 font-bold block"
-            :class="{
-              'text-blue-500 hover:text-blue-600':
-                $page.url.startsWith('/admin/languages'),
-              'text-slate-700 hover:text-slate-500':
-                !$page.url.startsWith('/admin/languages'),
-            }"
-          >
-            <i class="fa-solid fa-language mr-2 text-sm"></i>
-
-            {{ __("LANGUAGES") }}
-          </Link>
-        </li>
 
         <hr
           v-if="
@@ -336,7 +445,7 @@
           class="my-4 md:min-w-full"
         />
 
-        <!-- Order Management Area -->
+        <!-- Order Managements Section Title -->
         <h6
           v-if="
             orderManageMenu || returnOrderManageMenu || cancelOrderManageMenu
@@ -346,208 +455,312 @@
           {{ __("ORDER_MANAGEMENTS") }}
         </h6>
 
-        <!-- Order Manage -->
-        <ul
-          v-if="orderManageMenu"
-          class="md:flex-col md:min-w-full flex flex-col list-none"
-        >
-          <li class="items-center cursor-pointer">
-            <div
-              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
-              @click="orderManageIsHidden = !orderManageIsHidden"
-            >
-              <span>
-                <i class="fa-solid fa-boxes-packing mr-2 text-sm"></i>
-                {{ __("ORDER_MANAGE") }}
-              </span>
-              <i
-                v-if="orderManageIsHidden"
-                class="fa-solid fa-chevron-right"
-              ></i>
-              <i
-                v-if="!orderManageIsHidden"
-                class="fa-solid fa-chevron-down"
-              ></i>
-            </div>
+        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <!-- Order Manage Section -->
+          <li v-if="orderManageMenu" class="items-center">
+            <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+              <li class="items-center cursor-pointer">
+                <div
+                  class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+                  @click="orderManageIsHidden = !orderManageIsHidden"
+                >
+                  <span>
+                    <i class="fa-solid fa-boxes-packing mr-2 text-sm"></i>
+                    {{ __("ORDER_MANAGE") }}
+                  </span>
+                  <i
+                    v-if="orderManageIsHidden"
+                    class="fa-solid fa-chevron-right"
+                  ></i>
+                  <i
+                    v-if="!orderManageIsHidden"
+                    class="fa-solid fa-chevron-down"
+                  ></i>
+                </div>
 
-            <ul
-              v-if="!orderManageIsHidden || orderManage"
-              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
-            >
-              <Link
-                :href="route('admin.orders.pending.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/order-manage/pending-orders'
-                  ),
-                }"
-              >
-                {{ __("PENDING_ORDERS") }}
-              </Link>
-              <Link
-                :href="route('admin.orders.confirmed.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/order-manage/confirmed-orders'
-                  ),
-                }"
-              >
-                {{ __("CONFIRMED_ORDERS") }}
-              </Link>
-              <Link
-                :href="route('admin.orders.processing.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/order-manage/processing-orders'
-                  ),
-                }"
-              >
-                {{ __("PROCESSING_ORDERS") }}
-              </Link>
-              <Link
-                :href="route('admin.orders.shipped.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/order-manage/shipped-orders'
-                  ),
-                }"
-              >
-                {{ __("SHIPPED_ORDERS") }}
-              </Link>
-              <Link
-                :href="route('admin.orders.delivered.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/order-manage/delivered-orders'
-                  ),
-                }"
-              >
-                {{ __("DELIVERED_ORDERS") }}
-              </Link>
+                <ul
+                  v-if="!orderManageIsHidden || orderManage"
+                  class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+                >
+                  <!-- Pending Order Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/order-manage/pending-orders'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.orders.pending.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("PENDING_ORDERS") }}
+                    </Link>
+                  </li>
+
+                  <!-- Confirmed Order Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/order-manage/confirmed-orders'
+                      ),
+                    }"
+                  >
+                    <Link :href="route('admin.orders.confirmed.index')">
+                      {{ __("CONFIRMED_ORDERS") }}
+                    </Link>
+                  </li>
+
+                  <!-- Processing Order Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/order-manage/processing-orders'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.orders.processing.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("PROCESSING_ORDERS") }}
+                    </Link>
+                  </li>
+
+                  <!-- Shipped Order Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/order-manage/shipped-orders'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.orders.shipped.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("SHIPPED_ORDERS") }}
+                    </Link>
+                  </li>
+
+                  <!-- Delivered Order Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/order-manage/delivered-orders'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.orders.delivered.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("DELIVERED_ORDERS") }}
+                    </Link>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </li>
-        </ul>
 
-        <!-- Return Order Manage -->
-        <ul
-          v-if="returnOrderManageMenu"
-          class="md:flex-col md:min-w-full flex flex-col list-none"
-        >
-          <li class="items-center cursor-pointer">
-            <div
-              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
-              @click="returnOrderManageIsHidden = !returnOrderManageIsHidden"
-            >
-              <span>
-                <i class="fa-solid fa-rotate-left mr-2 text-sm"></i>
-                {{ __("RETURN_ORDER_MANAGE") }}
-              </span>
-              <i
-                v-if="returnOrderManageIsHidden"
-                class="fa-solid fa-chevron-right"
-              ></i>
-              <i
-                v-if="!returnOrderManageIsHidden"
-                class="fa-solid fa-chevron-down"
-              ></i>
-            </div>
+          <!-- Return Order Manage Section -->
+          <li v-if="returnOrderManageMenu" class="items-center">
+            <!-- Return Order Manage -->
+            <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+              <li class="items-center cursor-pointer">
+                <div
+                  class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+                  @click="
+                    returnOrderManageIsHidden = !returnOrderManageIsHidden
+                  "
+                >
+                  <span>
+                    <i class="fa-solid fa-rotate-left mr-2 text-sm"></i>
+                    {{ __("RETURN_ORDER_MANAGE") }}
+                  </span>
+                  <i
+                    v-if="returnOrderManageIsHidden"
+                    class="fa-solid fa-chevron-right"
+                  ></i>
+                  <i
+                    v-if="!returnOrderManageIsHidden"
+                    class="fa-solid fa-chevron-down"
+                  ></i>
+                </div>
 
-            <ul
-              v-if="!returnOrderManageIsHidden || returnOrderManage"
-              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
-            >
-              <Link
-                :href="route('admin.return-orders.requested.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/return-order-manage/requested-return'
-                  ),
-                }"
-              >
-                {{ __("REQUESTED_RETURNS") }}
-              </Link>
-              <Link
-                :href="route('admin.return-orders.approved.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/return-order-manage/approved-return'
-                  ),
-                }"
-              >
-                {{ __("APPROVED_RETURNS") }}
-              </Link>
-              <Link
-                :href="route('admin.return-orders.refunded.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/return-order-manage/refunded-return'
-                  ),
-                }"
-              >
-                {{ __("REFUNDED_RETURNS") }}
-              </Link>
+                <ul
+                  v-if="!returnOrderManageIsHidden || returnOrderManage"
+                  class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+                >
+                  <!-- Requested Return Order Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/return-order-manage/requested-return'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.return-orders.requested.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("REQUESTED_RETURNS") }}
+                    </Link>
+                  </li>
+
+                  <!-- Approved Return Order Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/return-order-manage/approved-return'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.return-orders.approved.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("APPROVED_RETURNS") }}
+                    </Link>
+                  </li>
+
+                  <!-- Refunded Return Order Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/return-order-manage/refunded-return'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.return-orders.refunded.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("REFUNDED_RETURNS") }}
+                    </Link>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </li>
-        </ul>
 
-        <!-- Cancel Order Manage -->
-        <ul
-          v-if="cancelOrderManageMenu"
-          class="md:flex-col md:min-w-full flex flex-col list-none"
-        >
-          <li class="items-center cursor-pointer">
-            <div
-              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
-              @click="cancelOrderManageIsHidden = !cancelOrderManageIsHidden"
-            >
-              <span>
-                <i class="fa-solid fa-xmark mr-2 text-sm"></i>
-                {{ __("CANCEL_ORDER_MANAGE") }}
-              </span>
-              <i
-                v-if="cancelOrderManageIsHidden"
-                class="fa-solid fa-chevron-right"
-              ></i>
-              <i
-                v-if="!cancelOrderManageIsHidden"
-                class="fa-solid fa-chevron-down"
-              ></i>
-            </div>
+          <!-- Cancel Order Manage Section -->
+          <li v-if="cancelOrderManageMenu" class="items-center">
+            <!-- Cancel Order Manage -->
+            <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+              <li class="items-center cursor-pointer">
+                <div
+                  class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+                  @click="
+                    cancelOrderManageIsHidden = !cancelOrderManageIsHidden
+                  "
+                >
+                  <span>
+                    <i class="fa-solid fa-xmark mr-2 text-sm"></i>
+                    {{ __("CANCEL_ORDER_MANAGE") }}
+                  </span>
+                  <i
+                    v-if="cancelOrderManageIsHidden"
+                    class="fa-solid fa-chevron-right"
+                  ></i>
+                  <i
+                    v-if="!cancelOrderManageIsHidden"
+                    class="fa-solid fa-chevron-down"
+                  ></i>
+                </div>
 
-            <ul
-              v-if="!cancelOrderManageIsHidden || cancelOrderManage"
-              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
-            >
-              <Link
-                :href="route('admin.cancel-orders.requested.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/cancel-order-manage/requested-cancel'
-                  ),
-                }"
-              >
-                {{ __("REQUESTED_CANCELS") }}
-              </Link>
-              <Link
-                :href="route('admin.cancel-orders.approved.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/cancel-order-manage/approved-cancel'
-                  ),
-                }"
-              >
-                {{ __("APPROVED_CANCELS") }}
-              </Link>
+                <ul
+                  v-if="!cancelOrderManageIsHidden || cancelOrderManage"
+                  class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+                >
+                  <!-- Requested Cancel Order Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/cancel-order-manage/requested-cancel'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.cancel-orders.requested.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("REQUESTED_CANCELS") }}
+                    </Link>
+                  </li>
+
+                  <!-- Approved Cancel Order Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/cancel-order-manage/approved-cancel'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.cancel-orders.approved.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("APPROVED_CANCELS") }}
+                    </Link>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </li>
         </ul>
@@ -557,6 +770,7 @@
           class="my-4 md:min-w-full"
         />
 
+        <!-- Review Managements Section Title -->
         <h6
           v-if="productReviewMenu || shopReviewMenu"
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
@@ -564,110 +778,154 @@
           {{ __("REVIEW_MANAGEMENTS") }}
         </h6>
 
-        <ul
-          v-if="productReviewMenu"
-          class="md:flex-col md:min-w-full flex flex-col list-none"
-        >
-          <li class="items-center cursor-pointer">
-            <div
-              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
-              @click="
-                productReviewManageIsHidden = !productReviewManageIsHidden
-              "
-            >
-              <span>
-                <i class="fa-solid fa-star mr-2 text-sm"></i>
-                {{ __("PRODUCT_REVIEWS") }}
-              </span>
-              <i
-                v-if="productReviewManageIsHidden"
-                class="fa-solid fa-chevron-right"
-              ></i>
-              <i
-                v-if="!productReviewManageIsHidden"
-                class="fa-solid fa-chevron-down"
-              ></i>
-            </div>
+        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <!-- Product Reviews Section -->
+          <li v-if="productReviewMenu" class="items-center">
+            <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+              <li class="items-center cursor-pointer">
+                <div
+                  class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+                  @click="
+                    productReviewManageIsHidden = !productReviewManageIsHidden
+                  "
+                >
+                  <span>
+                    <i class="fa-solid fa-star mr-2 text-sm"></i>
+                    {{ __("PRODUCT_REVIEWS") }}
+                  </span>
+                  <i
+                    v-if="productReviewManageIsHidden"
+                    class="fa-solid fa-chevron-right"
+                  ></i>
+                  <i
+                    v-if="!productReviewManageIsHidden"
+                    class="fa-solid fa-chevron-down"
+                  ></i>
+                </div>
 
-            <ul
-              v-if="!productReviewManageIsHidden || productReviewManage"
-              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
-            >
-              <Link
-                :href="route('admin.product-reviews.pending.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/product-reviews/pending-reviews'
-                  ),
-                }"
-              >
-                {{ __("PENDING_REVIEWS") }}
-              </Link>
-              <Link
-                :href="route('admin.product-reviews.published.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/product-reviews/published-reviews'
-                  ),
-                }"
-              >
-                {{ __("PUBLISHED_REVIEWS") }}
-              </Link>
+                <ul
+                  v-if="!productReviewManageIsHidden || productReviewManage"
+                  class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+                >
+                  <!-- Pending Product Reviews Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/product-reviews/pending-reviews'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.product-reviews.pending.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("PENDING_REVIEWS") }}
+                    </Link>
+                  </li>
+
+                  <!-- Published Product Reviews Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/product-reviews/published-reviews'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.product-reviews.published.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("PUBLISHED_REVIEWS") }}
+                    </Link>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </li>
-        </ul>
 
-        <ul
-          v-if="shopReviewMenu"
-          class="md:flex-col md:min-w-full flex flex-col list-none"
-        >
-          <li class="items-center cursor-pointer">
-            <div
-              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
-              @click="shopReviewManageIsHidden = !shopReviewManageIsHidden"
-            >
-              <span>
-                <i class="fa-solid fa-shop mr-2 text-sm"></i>
-                {{ __("SHOP_REVIEWS") }}
-              </span>
-              <i
-                v-if="shopReviewManageIsHidden"
-                class="fa-solid fa-chevron-right"
-              ></i>
-              <i
-                v-if="!shopReviewManageIsHidden"
-                class="fa-solid fa-chevron-down"
-              ></i>
-            </div>
+          <!-- Shop Reviews Section -->
+          <li v-if="shopReviewMenu" class="items-center">
+            <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+              <li class="items-center cursor-pointer">
+                <div
+                  class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+                  @click="shopReviewManageIsHidden = !shopReviewManageIsHidden"
+                >
+                  <span>
+                    <i class="fa-solid fa-shop mr-2 text-sm"></i>
+                    {{ __("SHOP_REVIEWS") }}
+                  </span>
+                  <i
+                    v-if="shopReviewManageIsHidden"
+                    class="fa-solid fa-chevron-right"
+                  ></i>
+                  <i
+                    v-if="!shopReviewManageIsHidden"
+                    class="fa-solid fa-chevron-down"
+                  ></i>
+                </div>
 
-            <ul
-              v-if="!shopReviewManageIsHidden || shopReviewManage"
-              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
-            >
-              <Link
-                :href="route('admin.shop-reviews.pending.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/shop-reviews/pending-reviews'
-                  ),
-                }"
-              >
-                {{ __("PENDING_REVIEWS") }}
-              </Link>
-              <Link
-                :href="route('admin.shop-reviews.published.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/shop-reviews/published-reviews'
-                  ),
-                }"
-              >
-                {{ __("PUBLISHED_REVIEWS") }}
-              </Link>
+                <ul
+                  v-if="!shopReviewManageIsHidden || shopReviewManage"
+                  class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+                >
+                  <!-- Pending Shop Reviews Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/shop-reviews/pending-reviews'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.shop-reviews.pending.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("PENDING_REVIEWS") }}
+                    </Link>
+                  </li>
+
+                  <!-- Published Shop Reviews Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/shop-reviews/published-reviews'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.shop-reviews.published.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("PUBLISHED_REVIEWS") }}
+                    </Link>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </li>
         </ul>
@@ -677,7 +935,7 @@
           class="my-4 md:min-w-full"
         />
 
-        <!-- Management Area -->
+        <!-- User Managements Section Title -->
         <h6
           v-if="vendorManageMenu || userManageMenu || adminManageMenu"
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
@@ -685,117 +943,165 @@
           {{ __("USER_MANAGEMENTS") }}
         </h6>
 
-        <!-- Vendor Manage -->
-        <ul
-          v-if="vendorManageMenu"
-          class="md:flex-col md:min-w-full flex flex-col list-none"
-        >
-          <li class="items-center cursor-pointer">
-            <div
-              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
-              @click="vendorManageIsHidden = !vendorManageIsHidden"
-            >
-              <span>
-                <i class="fas fa-store mr-2 text-sm"></i>
-                {{ __("VENDOR_MANAGE") }}
-              </span>
-              <i
-                v-if="vendorManageIsHidden"
-                class="fa-solid fa-chevron-right"
-              ></i>
-              <i
-                v-if="!vendorManageIsHidden"
-                class="fa-solid fa-chevron-down"
-              ></i>
-            </div>
+        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <!-- Vendor Manage Section -->
+          <li v-if="vendorManageMenu" class="items-center">
+            <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+              <li class="items-center cursor-pointer">
+                <div
+                  class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+                  @click="vendorManageIsHidden = !vendorManageIsHidden"
+                >
+                  <span>
+                    <i class="fas fa-store mr-2 text-sm"></i>
+                    {{ __("VENDOR_MANAGE") }}
+                  </span>
+                  <i
+                    v-if="vendorManageIsHidden"
+                    class="fa-solid fa-chevron-right"
+                  ></i>
+                  <i
+                    v-if="!vendorManageIsHidden"
+                    class="fa-solid fa-chevron-down"
+                  ></i>
+                </div>
 
-            <ul
-              v-if="!vendorManageIsHidden || vendorManage"
-              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
-            >
-              <Link
-                :href="route('admin.vendors.active.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/vendor-manage/active-vendors'
-                  ),
-                }"
-              >
-                {{ __("ACTIVE_VENDORS") }}
-              </Link>
-              <Link
-                :href="route('admin.vendors.inactive.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/vendor-manage/inactive-vendors'
-                  ),
-                }"
-              >
-                {{ __("INACTIVE_VENDORS") }}
-              </Link>
+                <ul
+                  v-if="!vendorManageIsHidden || vendorManage"
+                  class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+                >
+                  <!-- Active Vendor Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/vendor-manage/active-vendors'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.vendors.active.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("ACTIVE_VENDORS") }}
+                    </Link>
+                  </li>
+
+                  <!-- Inactive Vendor Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/vendor-manage/inactive-vendors'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.vendors.inactive.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("INACTIVE_VENDORS") }}
+                    </Link>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </li>
-        </ul>
-        <!-- User Manage -->
-        <ul
-          v-if="userManageMenu"
-          class="md:flex-col md:min-w-full flex flex-col list-none"
-        >
-          <li class="items-center cursor-pointer">
-            <div
-              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
-              @click="userManageIsHidden = !userManageIsHidden"
-            >
-              <span>
-                <i class="fas fa-users mr-2 text-sm"></i>
-                {{ __("USER_MANAGE") }}
-              </span>
-              <i
-                v-if="userManageIsHidden"
-                class="fa-solid fa-chevron-right"
-              ></i>
-              <i
-                v-if="!userManageIsHidden"
-                class="fa-solid fa-chevron-down"
-              ></i>
-            </div>
 
-            <ul
-              v-if="!userManageIsHidden || userManage"
-              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
-            >
-              <Link
-                :href="route('admin.users.register.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/user-manage/register-users'
-                  ),
-                }"
-              >
-                {{ __("REGISTERED_USERS") }}
-              </Link>
-              <Link
-                :href="route('admin.vendors.register.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/user-manage/register-vendors'
-                  ),
-                }"
-              >
-                {{ __("REGISTERED_VENDORS") }}
-              </Link>
+          <!-- Registered User Manage Section -->
+          <li v-if="userManageMenu" class="items-center">
+            <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+              <li class="items-center cursor-pointer">
+                <div
+                  class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+                  @click="userManageIsHidden = !userManageIsHidden"
+                >
+                  <span>
+                    <i class="fas fa-users mr-2 text-sm"></i>
+                    {{ __("USER_MANAGE") }}
+                  </span>
+                  <i
+                    v-if="userManageIsHidden"
+                    class="fa-solid fa-chevron-right"
+                  ></i>
+                  <i
+                    v-if="!userManageIsHidden"
+                    class="fa-solid fa-chevron-down"
+                  ></i>
+                </div>
+
+                <ul
+                  v-if="!userManageIsHidden || userManage"
+                  class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+                >
+                  <!-- Registered Users Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/user-manage/register-users'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.users.register.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("REGISTERED_USERS") }}
+                    </Link>
+                  </li>
+
+                  <!-- Registered Vendors Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/user-manage/register-vendors'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.vendors.register.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("REGISTERED_VENDORS") }}
+                    </Link>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </li>
-        </ul>
-        <!-- Admin Manage -->
-        <ul v-if="adminManageMenu">
-          <li class="items-center">
+
+          <!-- Admin Manage Section -->
+          <li v-if="adminManageMenu" class="items-center">
             <Link
               :href="route('admin.admin-manage.index')"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
                 'text-blue-500 hover:text-blue-600': $page.url.startsWith(
@@ -817,7 +1123,7 @@
           class="my-4 md:min-w-full"
         />
 
-        <!-- Authorization Management Area -->
+        <!-- Authority Managements Section Title -->
         <h6
           v-if="roleAndPermissionMenu || roleInPermissionsMenu"
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
@@ -825,66 +1131,91 @@
           {{ __("AUTHORITY_MANAGEMENTS") }}
         </h6>
 
-        <!-- Role And Permission Manage -->
-        <ul
-          v-if="roleAndPermissionMenu"
-          class="md:flex-col md:min-w-full flex flex-col list-none"
-        >
-          <li class="items-center cursor-pointer">
-            <div
-              class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
-              @click="
-                roleAndPermissionManageIsHidden =
-                  !roleAndPermissionManageIsHidden
-              "
-            >
-              <span>
-                <i class="fa-solid fa-user-shield mr-2 text-sm"></i>
-                {{ __("ROLES_AND_PERMISSIONS") }}
-              </span>
-              <i
-                v-if="roleAndPermissionManageIsHidden"
-                class="fa-solid fa-chevron-right"
-              ></i>
-              <i
-                v-if="!roleAndPermissionManageIsHidden"
-                class="fa-solid fa-chevron-down"
-              ></i>
-            </div>
-
+        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <!-- Roles And Permissions Section -->
+          <li class="items-center">
             <ul
-              v-if="!roleAndPermissionManageIsHidden || roleAndPermissionManage"
-              class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+              v-if="roleAndPermissionMenu"
+              class="md:flex-col md:min-w-full flex flex-col list-none"
             >
-              <Link
-                :href="route('admin.roles.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/roles-and-permissions/roles'
-                  ),
-                }"
-              >
-                {{ __("ROLES") }}
-              </Link>
-              <Link
-                :href="route('admin.permissions.index')"
-                class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                :class="{
-                  'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                    '/admin/roles-and-permissions/permissions'
-                  ),
-                }"
-              >
-                {{ __("PERMISSIONS") }}
-              </Link>
+              <li class="items-center cursor-pointer">
+                <div
+                  class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+                  @click="
+                    roleAndPermissionManageIsHidden =
+                      !roleAndPermissionManageIsHidden
+                  "
+                >
+                  <span>
+                    <i class="fa-solid fa-user-shield mr-2 text-sm"></i>
+                    {{ __("ROLES_AND_PERMISSIONS") }}
+                  </span>
+                  <i
+                    v-if="roleAndPermissionManageIsHidden"
+                    class="fa-solid fa-chevron-right"
+                  ></i>
+                  <i
+                    v-if="!roleAndPermissionManageIsHidden"
+                    class="fa-solid fa-chevron-down"
+                  ></i>
+                </div>
+
+                <ul
+                  v-if="
+                    !roleAndPermissionManageIsHidden || roleAndPermissionManage
+                  "
+                  class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+                >
+                  <!-- Roles Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/roles-and-permissions/roles'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.roles.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("ROLES") }}
+                    </Link>
+                  </li>
+
+                  <!-- Permissions Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/roles-and-permissions/permissions'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.permissions.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: id,
+                        direction: desc,
+                      }"
+                    >
+                      {{ __("PERMISSIONS") }}
+                    </Link>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </li>
-        </ul>
 
-        <!-- Role In Permission Manage -->
-        <ul v-if="roleInPermissionsMenu">
-          <li class="items-center">
+          <!-- Role In Permissions Section -->
+          <li v-if="roleInPermissionsMenu" class="items-center">
             <Link
               :href="route('admin.role-in-permissions.index')"
               class="text-xs uppercase py-3 font-bold block"
@@ -903,94 +1234,12 @@
           </li>
         </ul>
 
-        <!-- <ul class="md:flex-col md:min-w-full flex flex-col list-none">
-          <li class="items-center">
-            <Link
-              :href="route('admin.dashboard')"
-              class="text-xs uppercase py-3 font-bold block"
-              :class="{
-                'text-blue-500 hover:text-blue-600':
-                  $page.url === '/admin/dashboard',
-                'text-slate-700 hover:text-slate-500':
-                  $page.url !== '/admin/dashboard',
-              }"
-            >
-              <i class="fa-solid fa-paper-plane mr-2 text-sm"></i>
-              Send Emails
-            </Link>
-          </li>
-
-          <li class="items-center">
-            <Link
-              :href="route('admin.dashboard')"
-              class="text-xs uppercase py-3 font-bold block"
-              :class="{
-                'text-blue-500 hover:text-blue-600':
-                  $page.url === '/admin/dashboard',
-                'text-slate-700 hover:text-slate-500':
-                  $page.url !== '/admin/dashboard',
-              }"
-            >
-              <i class="fa-solid fa-star mr-2 text-sm"></i>
-              Reviews
-            </Link>
-          </li>
-
-          <li class="items-center">
-            <Link
-              :href="route('admin.dashboard')"
-              class="text-xs uppercase py-3 font-bold block"
-              :class="{
-                'text-blue-500 hover:text-blue-600':
-                  $page.url === '/admin/dashboard',
-                'text-slate-700 hover:text-slate-500':
-                  $page.url !== '/admin/dashboard',
-              }"
-            >
-              <i class="fa-solid fa-flag mr-2 text-sm"></i>
-              Reports
-            </Link>
-          </li>
-
-          <li class="items-center">
-            <Link
-              :href="route('admin.dashboard')"
-              class="text-xs uppercase py-3 font-bold block"
-              :class="{
-                'text-blue-500 hover:text-blue-600':
-                  $page.url === '/admin/dashboard',
-                'text-slate-700 hover:text-slate-500':
-                  $page.url !== '/admin/dashboard',
-              }"
-            >
-              <i class="fa-solid fa-laptop mr-2 text-sm"></i>
-              Blogs
-            </Link>
-          </li>
-
-          <li class="items-center">
-            <Link
-              :href="route('admin.dashboard')"
-              class="text-xs uppercase py-3 font-bold block"
-              :class="{
-                'text-blue-500 hover:text-blue-600':
-                  $page.url === '/admin/dashboard',
-                'text-slate-700 hover:text-slate-500':
-                  $page.url !== '/admin/dashboard',
-              }"
-            >
-              <i class="fa-solid fa-arrow-trend-up mr-2 text-sm"></i>
-              Product Stocks
-            </Link>
-          </li>
-        </ul> -->
-
         <hr
           v-if="blogCategoryMenu || blogPostMenu"
           class="my-4 md:min-w-full"
         />
 
-        <!-- Blog Management Area -->
+        <!-- Blog Managements Section Title -->
         <h6
           v-if="blogCategoryMenu || blogPostMenu"
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
@@ -999,9 +1248,16 @@
         </h6>
 
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <!-- Blog Category Section -->
           <li v-if="blogCategoryMenu" class="items-center">
             <Link
               :href="route('admin.blogs.categories.index')"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
                 'text-blue-500 hover:text-blue-600':
@@ -1014,9 +1270,17 @@
               {{ __("BLOG_CATEGORIES") }}
             </Link>
           </li>
-          <li class="items-center" v-if="blogPostMenu">
+
+          <!-- Blog Post Section -->
+          <li v-if="blogPostMenu" class="items-center">
             <Link
               :href="route('admin.blogs.posts.index')"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
                 'text-blue-500 hover:text-blue-600':
@@ -1036,7 +1300,7 @@
           class="my-4 md:min-w-full"
         />
 
-        <!-- Site Settings -->
+        <!-- Site Settings Section Title -->
         <h6
           v-if="websiteSettingMenu || seoSettingMenu"
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
@@ -1045,9 +1309,16 @@
         </h6>
 
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <!-- Website Setting -->
           <li v-if="websiteSettingMenu" class="items-center">
             <Link
               :href="route('admin.website-settings.edit')"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
                 'text-blue-500 hover:text-blue-600':
@@ -1060,9 +1331,17 @@
               {{ __("WEBSITE_SETTINGS") }}
             </Link>
           </li>
+
+          <!-- SEO Setting -->
           <li v-if="seoSettingMenu" class="items-center">
             <Link
               :href="route('admin.seo-settings.edit')"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
                 'text-blue-500 hover:text-blue-600':
@@ -1077,17 +1356,30 @@
           </li>
         </ul>
 
-        <hr class="my-4 md:min-w-full" />
+        <hr
+          v-if="subscriberMenu || suggestionMenu || websiteFeedbackMenu"
+          class="my-4 md:min-w-full"
+        />
+
+        <!-- From The Submitters Section Title -->
         <h6
+          v-if="subscriberMenu || suggestionMenu || websiteFeedbackMenu"
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
           {{ __("FROM_THE_SUBMITTERS") }}
         </h6>
 
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <!-- Subscriber Section -->
           <li v-if="subscriberMenu" class="items-center">
             <Link
               :href="route('admin.subscribers.index')"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
                 'text-blue-500 hover:text-blue-600':
@@ -1100,9 +1392,17 @@
               {{ __("SUBSCRIBERS") }}
             </Link>
           </li>
+
+          <!-- Suggestion Section -->
           <li v-if="suggestionMenu" class="items-center">
             <Link
               :href="route('admin.suggestions.index')"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
                 'text-blue-500 hover:text-blue-600':
@@ -1116,9 +1416,17 @@
               {{ __("SUGGESTIONS") }}
             </Link>
           </li>
-          <li v-if="feedbackMenu" class="items-center">
+
+          <!-- Website Feedback Section -->
+          <li v-if="websiteFeedbackMenu" class="items-center">
             <Link
               :href="route('admin.website-feedbacks.index')"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
                 'text-blue-500 hover:text-blue-600':
@@ -1140,7 +1448,6 @@
 
 <script>
 import { Link } from "@inertiajs/vue3";
-// import NotificationDropdown from "@/Components/Dropdowns/NotificationDropdown.vue";
 import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
 
 export default {
@@ -1158,6 +1465,7 @@ export default {
       shopReviewManageIsHidden: true,
       productReviewManageIsHidden: true,
       roleAndPermissionManageIsHidden: true,
+      permissions: this.$page.props.auth.user.permissions,
     };
   },
   methods: {
@@ -1273,204 +1581,203 @@ export default {
     },
 
     brandMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "brand.menu"
           )
         : false;
     },
 
     collectionMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "collection.menu"
           )
         : false;
     },
 
     categoryMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "category.menu"
           )
         : false;
     },
 
     productMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "product.menu"
           )
         : false;
     },
 
     couponMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "coupon.menu"
           )
         : false;
     },
 
     bannerMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "banner.menu"
           )
         : false;
     },
 
     shippingAreaMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "shipping-area.menu"
           )
         : false;
     },
 
     languageMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "language.menu"
           )
         : false;
     },
 
     orderManageMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "order-manage.menu"
           )
         : false;
     },
 
     returnOrderManageMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "return-order-manage.menu"
           )
         : false;
     },
 
     cancelOrderManageMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "cancel-order-manage.menu"
           )
         : false;
     },
 
     vendorManageMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "vendor-manage.menu"
           )
         : false;
     },
 
     productReviewMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "product-review.menu"
           )
         : false;
     },
 
     shopReviewMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "shop-review.menu"
           )
         : false;
     },
 
     userManageMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "user-manage.menu"
           )
         : false;
     },
 
     adminManageMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "admin-manage.menu"
           )
         : false;
     },
 
     roleAndPermissionMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "role-and-permission.menu"
           )
         : false;
     },
 
     roleInPermissionsMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "role-in-permissions.menu"
           )
         : false;
     },
 
     blogCategoryMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "blog-category.menu"
           )
         : false;
     },
 
     blogPostMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "blog-post.menu"
           )
         : false;
     },
 
     websiteSettingMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "website-setting.menu"
           )
         : false;
     },
     seoSettingMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "seo-setting.menu"
           )
         : false;
     },
 
     suggestionMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "suggestion.menu"
           )
         : false;
     },
-    feedbackMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+    websiteFeedbackMenu() {
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "website-feedback.menu"
           )
         : false;
     },
     subscriberMenu() {
-      return this.$page.props.auth.user.permissions.length
-        ? this.$page.props.auth.user.permissions.some(
+      return this.permissions.length
+        ? this.permissions.some(
             (permission) => permission.name === "subscriber.menu"
           )
         : false;
     },
   },
   components: {
-    // NotificationDropdown,
     UserDropdown,
     Link,
   },

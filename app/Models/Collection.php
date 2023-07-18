@@ -48,16 +48,6 @@ class Collection extends Model
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Collection, never>
     */
-    protected function image(): Attribute
-    {
-        return Attribute::make(
-            set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/collections/$value"),
-        );
-    }
-
-    /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Collection, never>
-    */
     protected function createdAt(): Attribute
     {
         return Attribute::make(
@@ -81,12 +71,5 @@ class Collection extends Model
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
-    }
-
-    public static function deleteImage(Collection $collection): void
-    {
-        if (!empty($collection->image) && file_exists(storage_path("app/public/collections/".pathinfo($collection->image, PATHINFO_BASENAME)))) {
-            unlink(storage_path("app/public/collections/".pathinfo($collection->image, PATHINFO_BASENAME)));
-        }
     }
 }

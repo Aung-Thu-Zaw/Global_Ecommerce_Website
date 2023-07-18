@@ -23,14 +23,10 @@ const swal = inject("$swal");
 // Query String Parameteres
 const params = reactive({
   search: usePage().props.ziggy.query?.search,
-  page: props.trashBlogCategories.current_page
-    ? props.trashBlogCategories.current_page
-    : 1,
-  per_page: props.trashBlogCategories.per_page
-    ? props.trashBlogCategories.per_page
-    : 10,
-  sort: "id",
-  direction: "desc",
+  page: usePage().props.ziggy.query?.page,
+  per_page: usePage().props.ziggy.query?.per_page,
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
 });
 
 // Handle Search
@@ -129,9 +125,11 @@ const handleBlogCategoryRestore = async (trashBlogCategoryId) => {
   if (result.isConfirmed) {
     router.post(
       route("admin.blogs.categories.restore", {
-        id: trashBlogCategoryId,
+        blog_category: trashBlogCategoryId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {},
       {
@@ -165,9 +163,11 @@ const handleBlogCategoryDelete = async (trashBlogCategoryId) => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.blogs.categories.force.delete", {
-        id: trashBlogCategoryId,
+        blog_category: trashBlogCategoryId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {
         onSuccess: () => {
@@ -202,6 +202,8 @@ const handlePermanentlyDelete = async () => {
       route("admin.blogs.categories.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {},
       {
@@ -274,7 +276,14 @@ const blogCategoryTrashDelete = computed(() => {
         <!-- Go Back Button -->
         <div>
           <Link
+            as="button"
             :href="route('admin.blogs.categories.index')"
+            :data="{
+              page: 1,
+              per_page: 10,
+              sort: 'id',
+              direction: 'desc',
+            }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
             <i class="fa-solid fa-arrow-left"></i>

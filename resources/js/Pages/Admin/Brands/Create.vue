@@ -96,6 +96,8 @@ const handleCreateBrand = async () => {
             :href="route('admin.brands.index')"
             :data="{
               per_page: props.per_page,
+              sort: 'id',
+              direction: 'desc',
             }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >

@@ -127,9 +127,11 @@ const handleRestore = async (inactiveVendorId) => {
   if (result.isConfirmed) {
     router.post(
       route("admin.vendors.inactive.restore", {
-        id: inactiveVendorId,
+        user: inactiveVendorId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       })
     );
     setTimeout(() => {
@@ -156,10 +158,12 @@ const handleDelete = async (inactiveVendorId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.vendors.inactive.forceDelete", {
-        id: inactiveVendorId,
+      route("admin.vendors.inactive.force.delete", {
+        user: inactiveVendorId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       })
     );
     setTimeout(() => {
@@ -186,9 +190,11 @@ const handlePermanentlyDelete = async () => {
 
   if (result.isConfirmed) {
     router.get(
-      route("admin.vendors.inactive.permanentlyDelete", {
+      route("admin.vendors.inactive.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       })
     );
     setTimeout(() => {
@@ -256,6 +262,12 @@ const handlePermanentlyDelete = async () => {
           <Link
             as="button"
             :href="route('admin.vendors.inactive.index')"
+            :data="{
+              page: 1,
+              per_page: 10,
+              sort: 'id',
+              direction: 'desc',
+            }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
             <i class="fa-solid fa-arrow-left"></i>

@@ -50,14 +50,14 @@ class VendorProductBannerController extends Controller
     {
         $vendorProductBanner->update($request->validated()+["image"=>$productBannerImageUploadService->updateImageForVendor($request, $vendorProductBanner),"status"=>$vendorProductBanner->status]);
 
-        return to_route("vendor.product-banners.index", "page=$request->page&per_page=$request->per_page")->with("success", "Product Banner has been successfully updated.");
+        return to_route("vendor.product-banners.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product Banner has been successfully updated.");
     }
 
     public function destroy(Request $request, VendorProductBanner $vendorProductBanner): RedirectResponse
     {
         $vendorProductBanner->delete();
 
-        return to_route("vendor.product-banners.index", "page=$request->page&per_page=$request->per_page")->with("success", "Product Banner has been successfully deleted.");
+        return to_route("vendor.product-banners.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product Banner has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -78,7 +78,7 @@ class VendorProductBannerController extends Controller
 
         $vendorProductBanner->restore();
 
-        return to_route('vendor.product-banners.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Product Banner has been successfully restored.");
+        return to_route('vendor.product-banners.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product Banner has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $id): RedirectResponse
@@ -89,7 +89,7 @@ class VendorProductBannerController extends Controller
 
         $vendorProductBanner->forceDelete();
 
-        return to_route('vendor.product-banners.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Product Banner has been permanently deleted.");
+        return to_route('vendor.product-banners.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product Banner has been permanently deleted.");
     }
 
     public function handleShow(Request $request, int $id): RedirectResponse
@@ -97,7 +97,7 @@ class VendorProductBannerController extends Controller
         $countVendorProductBanners=VendorProductBanner::where([["user_id", auth()->id() ],["status", "show"]])->count();
 
         if ($countVendorProductBanners >= 6) {
-            return to_route('vendor.product-banners.index', "page=$request->page&per_page=$request->per_page")->with("error", "You can't display the product banner. Only 6 product banners are allowed.");
+            return to_route('vendor.product-banners.index', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("error", "You can't display the product banner. Only 6 product banners are allowed.");
         }
 
         $vendorProductBanner = VendorProductBanner::where([["id", $id],["status","hide"]])->first();
@@ -106,7 +106,7 @@ class VendorProductBannerController extends Controller
             $vendorProductBanner->update(["status"=>"show"]);
         }
 
-        return to_route('vendor.product-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "Product Banner has been successfully displayed.");
+        return to_route('vendor.product-banners.index', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product Banner has been successfully displayed.");
     }
 
     public function handleHide(Request $request, int $id): RedirectResponse
@@ -117,7 +117,7 @@ class VendorProductBannerController extends Controller
             $vendorProductBanner->update(["status"=>"hide"]);
         }
 
-        return to_route('vendor.product-banners.index', "page=$request->page&per_page=$request->per_page")->with("success", "Product Banner has been successfully hidden.");
+        return to_route('vendor.product-banners.index', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product Banner has been successfully hidden.");
     }
 
 
@@ -130,6 +130,6 @@ class VendorProductBannerController extends Controller
             $vendorProductBanner->forceDelete();
         });
 
-        return to_route('vendor.product-banners.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Product Banners have been successfully deleted.");
+        return to_route('vendor.product-banners.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product Banners have been successfully deleted.");
     }
 }

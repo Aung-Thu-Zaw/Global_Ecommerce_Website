@@ -68,14 +68,14 @@ class AdminTownshipController extends Controller
 
         $township->update($request->validated());
 
-        return to_route("admin.townships.index", "page=$request->page&per_page=$request->per_page")->with("success", "Township has been successfully updated.");
+        return to_route("admin.townships.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Township has been successfully updated.");
     }
 
     public function destroy(Request $request, Township $township): RedirectResponse
     {
         $township->delete();
 
-        return to_route("admin.townships.index", "page=$request->page&per_page=$request->per_page")->with("success", "Township has been successfully deleted.");
+        return to_route("admin.townships.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Township has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -95,7 +95,7 @@ class AdminTownshipController extends Controller
 
         $township->restore();
 
-        return to_route('admin.townships.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Township has been successfully restored.");
+        return to_route('admin.townships.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Township has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $id): RedirectResponse
@@ -104,7 +104,7 @@ class AdminTownshipController extends Controller
 
         $township->forceDelete();
 
-        return to_route('admin.townships.trash', "page=$request->page&per_page=$request->per_page")->with("success", "The Township has been permanently deleted.");
+        return to_route('admin.townships.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The Township has been permanently deleted.");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -115,6 +115,6 @@ class AdminTownshipController extends Controller
             $township->forceDelete();
         });
 
-        return to_route('admin.townships.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Townships have been successfully deleted.");
+        return to_route('admin.townships.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Townships have been successfully deleted.");
     }
 }

@@ -21,7 +21,7 @@ class PermanentlyAutoDeleteSuggestionCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Suggestions in the Trash will be automatically deleted after 60 days';
+    protected $description = 'Suggestions in the trash will be automatically deleted after 60 days';
 
 
     public function handle(): void
@@ -33,13 +33,17 @@ class PermanentlyAutoDeleteSuggestionCommand extends Command
                                ->get();
 
         $suggestions->each(function ($suggestion) {
+
             $multiImages=Image::where("suggestion_id", $suggestion->id)->get();
 
             $multiImages->each(function ($image) {
+
                 Image::deleteImage($image);
+
             });
 
             $suggestion->forceDelete();
+
         });
     }
 }

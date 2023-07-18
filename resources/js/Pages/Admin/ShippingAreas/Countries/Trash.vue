@@ -111,8 +111,10 @@ const handleRestore = async (trashCategoryId) => {
     router.post(
       route("admin.categories.restore", {
         id: trashCategoryId,
-        page: props.trashCategories.current_page,
+        page: params.current_page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       })
     );
     setTimeout(() => {
@@ -141,8 +143,10 @@ const handleDelete = async (trashCategoryId) => {
     router.delete(
       route("admin.categories.forceDelete", {
         id: trashCategoryId,
-        page: props.trashCategories.current_page,
+        page: params.current_page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       })
     );
     setTimeout(() => {
@@ -170,8 +174,10 @@ const handlePermanentlyDelete = async () => {
   if (result.isConfirmed) {
     router.get(
       route("admin.categories.permanentlyDelete", {
-        page: props.trashCategories.current_page,
+        page: params.current_page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       })
     );
     setTimeout(() => {
@@ -218,7 +224,14 @@ const handlePermanentlyDelete = async () => {
 
         <div>
           <Link
+            as="button"
             :href="route('admin.categories.index')"
+            :data="{
+              page: 1,
+              per_page: 10,
+              sort: 'id',
+              direction: 'desc',
+            }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
             <i class="fa-solid fa-arrow-left"></i>

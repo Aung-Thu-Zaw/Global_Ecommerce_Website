@@ -20,7 +20,7 @@ class PermanentlyAutoDeletePermissionCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Permissions in the Trash will be automatically deleted after 60 days';
+    protected $description = 'Permissions in the trash will be automatically deleted after 60 days';
 
 
     public function handle(): void
@@ -28,10 +28,13 @@ class PermanentlyAutoDeletePermissionCommand extends Command
         $cutoffDate = Carbon::now()->subDays(60);
 
         $permissions=Permission::onlyTrashed()
-        ->where('deleted_at', '<=', $cutoffDate)->get();
+                               ->where('deleted_at', '<=', $cutoffDate)
+                               ->get();
 
         $permissions->each(function ($permission) {
+
             $permission->forceDelete();
+
         });
     }
 }

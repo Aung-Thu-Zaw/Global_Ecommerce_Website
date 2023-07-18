@@ -20,7 +20,7 @@ class PermanentlyAutoDeleteRoleCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Roles in the Trash will be automatically deleted after 60 days';
+    protected $description = 'Roles in the trash will be automatically deleted after 60 days';
 
 
     public function handle(): void
@@ -28,10 +28,13 @@ class PermanentlyAutoDeleteRoleCommand extends Command
         $cutoffDate = Carbon::now()->subDays(60);
 
         $roles=Role::onlyTrashed()
-        ->where('deleted_at', '<=', $cutoffDate)->get();
+                   ->where('deleted_at', '<=', $cutoffDate)
+                   ->get();
 
         $roles->each(function ($role) {
+
             $role->forceDelete();
+
         });
     }
 }

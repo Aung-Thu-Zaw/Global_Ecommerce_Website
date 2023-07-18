@@ -34,12 +34,11 @@ const status = (last_activity) => {
 // Query String Parameteres
 const params = reactive({
   search: usePage().props.ziggy.query?.search,
-  page: props.vendors.current_page ? props.vendors.current_page : 1,
-  per_page: props.vendors.per_page ? props.vendors.per_page : 10,
-  sort: "id",
-  direction: "desc",
+  page: usePage().props.ziggy.query?.page,
+  per_page: usePage().props.ziggy.query?.per_page,
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
 });
-
 // Handle Search
 const handleSearch = () => {
   router.get(
@@ -219,6 +218,12 @@ const vendorManageTrashList = computed(() => {
           <Link
             as="button"
             :href="route('admin.vendors.register.trash')"
+            :data="{
+              page: 1,
+              per_page: 10,
+              sort: 'id',
+              direction: 'desc',
+            }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
           >
             <i class="fa-solid fa-trash"></i>

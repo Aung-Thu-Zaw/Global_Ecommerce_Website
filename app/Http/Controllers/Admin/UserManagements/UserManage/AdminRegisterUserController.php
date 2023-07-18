@@ -33,7 +33,7 @@ class AdminRegisterUserController extends Controller
     {
         $user->delete();
 
-        return to_route("admin.users.register.index", "page=$request->page&per_page=$request->per_page")->with("success", "User has been successfully deleted.");
+        return to_route("admin.users.register.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "User has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -54,7 +54,7 @@ class AdminRegisterUserController extends Controller
 
         $user->restore();
 
-        return to_route('admin.users.register.trash', "page=$request->page&per_page=$request->per_page")->with("success", "User has been successfully restored.");
+        return to_route('admin.users.register.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "User has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $id): RedirectResponse
@@ -63,7 +63,7 @@ class AdminRegisterUserController extends Controller
 
         $user->forceDelete();
 
-        return to_route('admin.users.register.trash', "page=$request->page&per_page=$request->per_page")->with("success", "The user has been permanently deleted");
+        return to_route('admin.users.register.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The user has been permanently deleted");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -77,6 +77,6 @@ class AdminRegisterUserController extends Controller
             $user->forceDelete();
         });
 
-        return to_route('admin.users.register.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Users have been successfully deleted.");
+        return to_route('admin.users.register.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Users have been successfully deleted.");
     }
 }

@@ -38,7 +38,7 @@ class AdminInactiveVendorController extends Controller
 
         $inactiveVendor->update(["status"=>"active"]);
 
-        return to_route('admin.vendors.inactive.index', "page=$request->page&per_page=$request->per_page")->with("success", "Vendor has been successfully activated.");
+        return to_route('admin.vendors.inactive.index', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Vendor has been successfully activated.");
     }
 
     public function destroy(Request $request, int  $id): RedirectResponse
@@ -47,7 +47,7 @@ class AdminInactiveVendorController extends Controller
 
         $inactiveVendor->delete();
 
-        return to_route('admin.vendors.inactive.index', "page=$request->page&per_page=$request->per_page")->with("success", "The vendor has been successfully moved to the trash.");
+        return to_route('admin.vendors.inactive.index', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The vendor has been successfully moved to the trash.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -69,7 +69,7 @@ class AdminInactiveVendorController extends Controller
 
         $inactiveVendor->restore();
 
-        return to_route('admin.vendors.inactive.trash', "page=$request->page&per_page=$request->per_page")->with("success", "vendor has been successfully restored.");
+        return to_route('admin.vendors.inactive.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "vendor has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $id): RedirectResponse
@@ -80,7 +80,7 @@ class AdminInactiveVendorController extends Controller
 
         $inactiveVendor->forceDelete();
 
-        return to_route('admin.vendors.inactive.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Vendor has been successfully deleted.");
+        return to_route('admin.vendors.inactive.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Vendor has been successfully deleted.");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -92,6 +92,6 @@ class AdminInactiveVendorController extends Controller
             $inactiveVendor->forceDelete();
         });
 
-        return to_route('admin.vendors.inactive.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Inactive Vendors have been successfully deleted.");
+        return to_route('admin.vendors.inactive.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Inactive Vendors have been successfully deleted.");
     }
 }

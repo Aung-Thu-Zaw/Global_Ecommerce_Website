@@ -20,7 +20,7 @@ class PermanentlyAutoDeleteCollectionCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Collections in the Trash will be automatically deleted after 60 days';
+    protected $description = 'Collections in the trash will be automatically deleted after 60 days';
 
 
     public function handle(): void
@@ -28,11 +28,13 @@ class PermanentlyAutoDeleteCollectionCommand extends Command
         $cutoffDate = Carbon::now()->subDays(60);
 
         $collections=Collection::onlyTrashed()
-        ->where('deleted_at', '<=', $cutoffDate)->get();
+                               ->where('deleted_at', '<=', $cutoffDate)
+                               ->get();
 
         $collections->each(function ($collection) {
-            Collection::deleteImage($collection);
+
             $collection->forceDelete();
+
         });
     }
 }

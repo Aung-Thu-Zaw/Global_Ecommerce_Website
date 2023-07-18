@@ -20,7 +20,7 @@ class PermanentlyAutoDeleteProductCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Products in the Trash will be automatically deleted after 60 days';
+    protected $description = 'Products in the trash will be automatically deleted after 60 days';
 
 
     public function handle(): void
@@ -28,11 +28,15 @@ class PermanentlyAutoDeleteProductCommand extends Command
         $cutoffDate = Carbon::now()->subDays(60);
 
         $products=Product::onlyTrashed()
-        ->where('deleted_at', '<=', $cutoffDate)->get();
+                         ->where('deleted_at', '<=', $cutoffDate)
+                         ->get();
 
         $products->each(function ($product) {
+
             Product::deleteImage($product);
+
             $product->forceDelete();
+
         });
     }
 }

@@ -35,7 +35,7 @@ class AdminSuggestionController extends Controller
     {
         $suggestion->delete();
 
-        return to_route("admin.suggestions.index", "page=$request->page&per_page=$request->per_page")->with("success", "Suggestion has been successfully deleted.");
+        return to_route("admin.suggestions.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Suggestion has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -55,7 +55,7 @@ class AdminSuggestionController extends Controller
 
         $suggestion->restore();
 
-        return to_route('admin.suggestions.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Suggestion has been successfully restored.");
+        return to_route('admin.suggestions.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Suggestion has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $suggestionId): RedirectResponse
@@ -70,7 +70,7 @@ class AdminSuggestionController extends Controller
 
         $suggestion->forceDelete();
 
-        return to_route('admin.suggestions.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Suggestion has been permanently deleted.");
+        return to_route('admin.suggestions.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Suggestion has been permanently deleted.");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -88,6 +88,6 @@ class AdminSuggestionController extends Controller
             $suggestion->forceDelete();
 
         });
-        return to_route('admin.suggestions.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Suggestions have been successfully deleted.");
+        return to_route('admin.suggestions.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Suggestions have been successfully deleted.");
     }
 }

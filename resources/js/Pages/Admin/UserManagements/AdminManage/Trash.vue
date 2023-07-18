@@ -23,10 +23,10 @@ const swal = inject("$swal");
 // Query String Parameteres
 const params = reactive({
   search: usePage().props.ziggy.query?.search,
-  page: props.trashAdmins.current_page ? props.trashAdmins.current_page : 1,
-  per_page: props.trashAdmins.per_page ? props.trashAdmins.per_page : 10,
-  sort: "id",
-  direction: "desc",
+  page: usePage().props.ziggy.query?.page,
+  per_page: usePage().props.ziggy.query?.per_page,
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
 });
 
 // Handle Search
@@ -125,9 +125,11 @@ const handleAdminRestore = async (trashAdminId) => {
   if (result.isConfirmed) {
     router.post(
       route("admin.admin-manage.restore", {
-        id: trashAdminId,
+        admin: trashAdminId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {},
       {
@@ -161,9 +163,11 @@ const handleAdminDelete = async (trashAdminId) => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.admin-manage.force.delete", {
-        id: trashAdminId,
+        admin: trashAdminId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {
         onSuccess: () => {
@@ -198,6 +202,8 @@ const handlePermanentlyDelete = async () => {
       route("admin.admin-manage.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {},
       {
@@ -268,7 +274,14 @@ const adminManageTrashDelete = computed(() => {
 
         <div>
           <Link
+            as="button"
             :href="route('admin.admin-manage.index')"
+            :data="{
+              page: 1,
+              per_page: 10,
+              sort: 'id',
+              direction: 'desc',
+            }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
             <i class="fa-solid fa-arrow-left"></i>

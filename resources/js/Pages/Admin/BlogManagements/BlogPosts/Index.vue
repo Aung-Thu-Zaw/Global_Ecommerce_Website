@@ -23,10 +23,10 @@ const swal = inject("$swal");
 // Query String Parameteres
 const params = reactive({
   search: usePage().props.ziggy.query?.search,
-  page: props.blogPosts.current_page ? props.blogPosts.current_page : 1,
-  per_page: props.blogPosts.per_page ? props.blogPosts.per_page : 10,
-  sort: "id",
-  direction: "desc",
+  page: usePage().props.ziggy.query?.page,
+  per_page: usePage().props.ziggy.query?.per_page,
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
 });
 
 // Handle Search
@@ -205,6 +205,12 @@ if (usePage().props.flash.successMessage) {
           <Link
             as="button"
             :href="route('admin.blogs.posts.trash')"
+            :data="{
+              page: 1,
+              per_page: 10,
+              sort: 'id',
+              direction: 'desc',
+            }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
           >
             <i class="fa-solid fa-trash"></i>

@@ -84,13 +84,13 @@ class AdminRoleInPermissionController extends Controller
         });
 
 
-        return to_route("admin.role-in-permissions.index", "page=$request->page&per_page=$request->per_page")->with("success", "Role in permissions has been successfully updated.");
+        return to_route("admin.role-in-permissions.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Role in permissions has been successfully updated.");
     }
 
     public function destroy(Request $request, Role $role): RedirectResponse
     {
         $role->permissions()->detach();
 
-        return to_route("admin.role-in-permissions.index", "page=$request->page&per_page=$request->per_page")->with("success", "Role in permissions has been successfully deleted.");
+        return to_route("admin.role-in-permissions.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Role in permissions has been successfully deleted.");
     }
 }
