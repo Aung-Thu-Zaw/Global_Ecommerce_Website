@@ -17,7 +17,17 @@ class Image extends Model
     protected function imgPath(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/products/$value"),
+            set: function ($value) {
+                if ($value && str_starts_with($value, "http")) {
+                    return $value;
+                } elseif ($value&& str_starts_with($value, "suggestion")) {
+                    return asset("storage/suggestions/$value");
+                } elseif ($value&& str_starts_with($value, "product")) {
+                    return asset("storage/products/$value");
+                } else {
+                    return null;
+                }
+            },
         );
     }
 
@@ -32,7 +42,16 @@ class Image extends Model
     public static function deleteImage(Image $image): void
     {
         if (!empty($image->img_path) && file_exists(storage_path("app/public/products/".pathinfo($image->img_path, PATHINFO_BASENAME)))) {
-            unlink(storage_path("app/public/products/".pathinfo($image->img_path, PATHINFO_BASENAME)));
+
+            if($image->product_id) {
+
+                unlink(storage_path("app/public/products/".pathinfo($image->img_path, PATHINFO_BASENAME)));
+
+            } else {
+
+                unlink(storage_path("app/public/suggestions/".pathinfo($image->img_path, PATHINFO_BASENAME)));
+
+            }
         }
     }
 }

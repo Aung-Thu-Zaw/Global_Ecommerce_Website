@@ -21,7 +21,7 @@ const formatSuggestionType = (suggestionType) => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Suggestion Details" />
+    <Head :title="formatSuggestionType(suggestion.type)" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -44,8 +44,9 @@ const formatSuggestionType = (suggestionType) => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >{{ formatSuggestionType(suggestion.type) }}</span
               >
+                {{ formatSuggestionType(suggestion.type) }}
+              </span>
             </div>
           </li>
           <li aria-current="page">
@@ -79,6 +80,8 @@ const formatSuggestionType = (suggestionType) => {
             :data="{
               page: props.paginate.page,
               per_page: props.paginate.per_page,
+              sort: 'id',
+              direction: 'desc',
             }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
@@ -90,6 +93,15 @@ const formatSuggestionType = (suggestionType) => {
 
       <div class="p-5 border shadow-md rounded-sm my-5">
         <div v-if="suggestion" class="my-3">
+          <div class="flex items-center flex-wrap">
+            <div v-for="image in suggestion.images" :key="image.id" class="m-3">
+              <img
+                :src="image.img_path"
+                alt=""
+                class="h-[200px] object-cover border-2 border-slate-300 shadow-md"
+              />
+            </div>
+          </div>
           <div
             class="w-full text-sm text-left text-gray-500 border overflow-hidden shadow rounded-md my-5"
           >

@@ -147,7 +147,7 @@ const handleBlogCategoryRestore = async (trashBlogCategoryId) => {
 };
 
 // Handle Trash Blog Category Delete
-const handleBlogCategoryDelete = async (trashBlogCategoryId) => {
+const handleDeleteTrashBlogCategory = async (trashBlogCategoryId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -184,7 +184,7 @@ const handleBlogCategoryDelete = async (trashBlogCategoryId) => {
 };
 
 // Handle Trash Blog Category Delete Permanently
-const handlePermanentlyDelete = async () => {
+const handlePermanentlyDeleteTrashBlogCategory = async () => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -298,7 +298,7 @@ const blogCategoryTrashDelete = computed(() => {
           <input
             type="text"
             class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-            placeholder="Search"
+            placeholder="Search by name"
             v-model="params.search"
           />
 
@@ -334,7 +334,7 @@ const blogCategoryTrashDelete = computed(() => {
         Blog categories in the Trash will be automatically deleted after 60
         days.
         <button
-          @click="handlePermanentlyDelete"
+          @click="handlePermanentlyDeleteTrashBlogCategory"
           class="text-primary-500 rounded-md px-2 py-1 hover:bg-primary-200 hover:text-primary-600 transition-all hover:animate-bounce"
         >
           Empty the trash now
@@ -461,7 +461,7 @@ const blogCategoryTrashDelete = computed(() => {
               </button>
               <button
                 v-if="blogCategoryTrashDelete"
-                @click="handleBlogCategoryDelete(trashBlogCategory.id)"
+                @click="handleDeleteTrashBlogCategory(trashBlogCategory.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-trash"></i>

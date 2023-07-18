@@ -1260,10 +1260,12 @@
               }"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
-                'text-blue-500 hover:text-blue-600':
-                  $page.url === '/admin/blogs/categories',
-                'text-slate-700 hover:text-slate-500':
-                  $page.url !== '/admin/blogs/categories',
+                'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                  '/admin/blogs/categories'
+                ),
+                'text-slate-700 hover:text-slate-500': !$page.url.startsWith(
+                  '/admin/blogs/categories'
+                ),
               }"
             >
               <i class="fa-regular fa-rectangle-list mr-2 text-sm"></i>
@@ -1284,9 +1286,9 @@
               class="text-xs uppercase py-3 font-bold block"
               :class="{
                 'text-blue-500 hover:text-blue-600':
-                  $page.url === '/admin/blogs/posts',
+                  $page.url.startsWith('/admin/blogs/posts'),
                 'text-slate-700 hover:text-slate-500':
-                  $page.url !== '/admin/blogs/posts',
+                  !$page.url.startsWith('/admin/blogs/posts'),
               }"
             >
               <i class="fa-solid fa-newspaper mr-2 text-sm"></i>
@@ -1313,18 +1315,14 @@
           <li v-if="websiteSettingMenu" class="items-center">
             <Link
               :href="route('admin.website-settings.edit')"
-              :data="{
-                page: 1,
-                per_page: 10,
-                sort: 'id',
-                direction: 'desc',
-              }"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
-                'text-blue-500 hover:text-blue-600':
-                  $page.url === '/admin/website-settings',
-                'text-slate-700 hover:text-slate-500':
-                  $page.url !== '/admin/website-settings',
+                'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                  '/admin/website-settings'
+                ),
+                'text-slate-700 hover:text-slate-500': !$page.url.startsWith(
+                  '/admin/website-settings'
+                ),
               }"
             >
               <i class="fa-solid fa-gear mr-2 text-sm"></i>
@@ -1336,18 +1334,14 @@
           <li v-if="seoSettingMenu" class="items-center">
             <Link
               :href="route('admin.seo-settings.edit')"
-              :data="{
-                page: 1,
-                per_page: 10,
-                sort: 'id',
-                direction: 'desc',
-              }"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
-                'text-blue-500 hover:text-blue-600':
-                  $page.url === '/admin/seo-settings',
-                'text-slate-700 hover:text-slate-500':
-                  $page.url !== '/admin/seo-settings',
+                'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                  '/admin/seo-settings'
+                ),
+                'text-slate-700 hover:text-slate-500': !$page.url.startsWith(
+                  '/admin/seo-settings'
+                ),
               }"
             >
               <i class="fa-brands fa-searchengin mr-2 text-sm"></i>
@@ -1383,9 +1377,9 @@
               class="text-xs uppercase py-3 font-bold block"
               :class="{
                 'text-blue-500 hover:text-blue-600':
-                  $page.url === '/admin/subscribers',
+                  $page.url.startsWith('/admin/subscribers'),
                 'text-slate-700 hover:text-slate-500':
-                  $page.url !== '/admin/subscribers',
+                  !$page.url.startsWith('/admin/subscribers'),
               }"
             >
               <i class="fa-solid fa-user-check mr-2 text-sm"></i>
@@ -1406,9 +1400,9 @@
               class="text-xs uppercase py-3 font-bold block"
               :class="{
                 'text-blue-500 hover:text-blue-600':
-                  $page.url === '/admin/suggestions',
+                  $page.url.startsWith('/admin/suggestions'),
                 'text-slate-700 hover:text-slate-500':
-                  $page.url !== '/admin/suggestions',
+                  !$page.url.startsWith('/admin/suggestions'),
               }"
             >
               <i class="fa-solid fa-lightbulb mr-2 text-sm"></i>
@@ -1429,10 +1423,12 @@
               }"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
-                'text-blue-500 hover:text-blue-600':
-                  $page.url === '/admin/website-feedbacks',
-                'text-slate-700 hover:text-slate-500':
-                  $page.url !== '/admin/website-feedbacks',
+                'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                  '/admin/website-feedbacks'
+                ),
+                'text-slate-700 hover:text-slate-500': !$page.url.startsWith(
+                  '/admin/website-feedbacks'
+                ),
               }"
             >
               <i class="fa-solid fa-message mr-2 text-sm"></i>

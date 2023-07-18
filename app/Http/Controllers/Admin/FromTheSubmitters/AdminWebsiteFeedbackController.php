@@ -32,7 +32,8 @@ class AdminWebsiteFeedbackController extends Controller
     {
         $websiteFeedback->delete();
 
-        return to_route("admin.website-feedbacks.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Website Feedback has been successfully deleted.");
+        return to_route("admin.website-feedbacks.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
+             ->with("success", "Website Feedback has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -52,7 +53,8 @@ class AdminWebsiteFeedbackController extends Controller
 
         $websiteFeedback->restore();
 
-        return to_route('admin.website-feedbacks.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Website Feedback has been successfully restored.");
+        return to_route('admin.website-feedbacks.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
+             ->with("success", "Website Feedback has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $websiteFeedbackId): RedirectResponse
@@ -61,7 +63,8 @@ class AdminWebsiteFeedbackController extends Controller
 
         $websiteFeedback->forceDelete();
 
-        return to_route('admin.website-feedbacks.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Website Feedback has been permanently deleted.");
+        return to_route('admin.website-feedbacks.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
+             ->with("success", "Website Feedback has been permanently deleted.");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -73,6 +76,7 @@ class AdminWebsiteFeedbackController extends Controller
             $websiteFeedback->forceDelete();
 
         });
-        return to_route('admin.website-feedbacks.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Website Feedbacks have been successfully deleted.");
+        return to_route('admin.website-feedbacks.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
+             ->with("success", "Website Feedbacks have been successfully deleted.");
     }
 }

@@ -121,7 +121,7 @@ const updateSorting = (sort = "id") => {
 };
 
 // Handle Restore Suggestion
-const handleRestore = async (trashSuggesstionId) => {
+const handleRestoreTrashSuggestion = async (trashSuggesstionId) => {
   const result = await swal({
     icon: "info",
     title: "Are you sure you want to restore this suggestion?",
@@ -158,7 +158,7 @@ const handleRestore = async (trashSuggesstionId) => {
 };
 
 // Handle Delete Suggestion
-const handleSuggestionDelete = async (trashSuggesstionId) => {
+const handleDeleteTrashSuggestion = async (trashSuggesstionId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -195,7 +195,7 @@ const handleSuggestionDelete = async (trashSuggesstionId) => {
 };
 
 // Handle Permanently Delete Suggestion
-const handlePermanentlyDelete = async () => {
+const handlePermanentlyDeleteTrashSuggestion = async () => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -309,7 +309,7 @@ const suggestionTrashDelete = computed(() => {
           <input
             type="text"
             class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-            placeholder="Search"
+            placeholder="Search by email"
             v-model="params.search"
           />
 
@@ -344,7 +344,7 @@ const suggestionTrashDelete = computed(() => {
       >
         Suggesstions in the Trash will be automatically deleted after 60 days.
         <button
-          @click="handlePermanentlyDelete"
+          @click="handlePermanentlyDeleteTrashSuggestion"
           class="text-primary-500 rounded-md px-2 py-1 hover:bg-primary-200 hover:text-primary-600 transition-all hover:animate-bounce"
         >
           Empty the trash now
@@ -464,16 +464,26 @@ const suggestionTrashDelete = computed(() => {
             v-for="trashSuggesstion in trashSuggestions.data"
             :key="trashSuggesstion.id"
           >
-            <BodyTh>{{ trashSuggesstion.id }}</BodyTh>
-            <Td>{{ trashSuggesstion.email }}</Td>
-            <Td class="capitalize">{{
-              formatSuggestionType(trashSuggesstion.type)
-            }}</Td>
-            <Td>{{ trashSuggesstion.deleted_at }}</Td>
+            <BodyTh>
+              {{ trashSuggesstion.id }}
+            </BodyTh>
+
+            <Td>
+              {{ trashSuggesstion.email }}
+            </Td>
+
+            <Td class="capitalize">
+              {{ formatSuggestionType(trashSuggesstion.type) }}
+            </Td>
+
+            <Td>
+              {{ trashSuggesstion.deleted_at }}
+            </Td>
+
             <Td v-if="suggestionTrashRestore || suggestionTrashDelete">
               <button
                 v-if="suggestionTrashRestore"
-                @click="handleRestore(trashSuggesstion.id)"
+                @click="handleRestoreTrashSuggestion(trashSuggesstion.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-recycle"></i>
@@ -481,7 +491,7 @@ const suggestionTrashDelete = computed(() => {
               </button>
               <button
                 v-if="suggestionTrashDelete"
-                @click="handleSuggestionDelete(trashSuggesstion.id)"
+                @click="handleDeleteTrashSuggestion(trashSuggesstion.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-trash"></i>

@@ -111,7 +111,7 @@ const updateSorting = (sort = "id") => {
 };
 
 // Handle Restore Website Feedback
-const handleRestore = async (trashWebsiteFeedbackId) => {
+const handleRestoreTrashFeedback = async (trashWebsiteFeedbackId) => {
   const result = await swal({
     icon: "info",
     title: "Are you sure you want to restore this website feedback?",
@@ -148,7 +148,7 @@ const handleRestore = async (trashWebsiteFeedbackId) => {
 };
 
 // Handle Delete Website Feedback
-const handleDelete = async (trashWebsiteFeedbackId) => {
+const handleDeleteTrashFeedback = async (trashWebsiteFeedbackId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -185,7 +185,7 @@ const handleDelete = async (trashWebsiteFeedbackId) => {
 };
 
 // Handle Permanently Delete Website Feedback
-const handlePermanentlyDelete = async () => {
+const handlePermanentlyDeleteTrashFeedback = async () => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -245,7 +245,7 @@ const websiteFeedbackTrashDelete = computed(() => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Trash Feedbacks" />
+    <Head title="Trash Website Feedbacks" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -299,7 +299,7 @@ const websiteFeedbackTrashDelete = computed(() => {
           <input
             type="text"
             class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-            placeholder="Search"
+            placeholder="Search by email"
             v-model="params.search"
           />
 
@@ -337,7 +337,7 @@ const websiteFeedbackTrashDelete = computed(() => {
         Website Feedbacks in the Trash will be automatically deleted after 60
         days.
         <button
-          @click="handlePermanentlyDelete"
+          @click="handlePermanentlyDeleteTrashFeedback"
           class="text-primary-500 rounded-md px-2 py-1 hover:bg-primary-200 hover:text-primary-600 transition-all hover:animate-bounce"
         >
           Empty the trash now
@@ -480,7 +480,7 @@ const websiteFeedbackTrashDelete = computed(() => {
             >
               <button
                 v-if="websiteFeedbackTrashRestore"
-                @click="handleRestore(trashWebsiteFeedback.id)"
+                @click="handleRestoreTrashFeedback(trashWebsiteFeedback.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-recycle"></i>
@@ -488,7 +488,7 @@ const websiteFeedbackTrashDelete = computed(() => {
               </button>
               <button
                 v-if="websiteFeedbackTrashDelete"
-                @click="handleDelete(trashWebsiteFeedback.id)"
+                @click="handleDeleteTrashFeedback(trashWebsiteFeedback.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-trash"></i>

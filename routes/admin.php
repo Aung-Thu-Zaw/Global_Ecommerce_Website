@@ -586,7 +586,37 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::delete("/{role}", "destroy")->middleware('permission:role-in-permissions.delete')->name("destroy");
                 });
 
-           // Admin Dashboard Blog Category Section
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           // Admin Blog Category Section
            Route::controller(AdminBlogCategoryController::class)
                 ->prefix("/blogs/categories")
                 ->name("blogs.categories.")
@@ -598,12 +628,12 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::post("/{blog_category}", "update")->middleware('permission:blog-category.edit')->name("update");
                     Route::delete("/{blog_category}", "destroy")->middleware('permission:blog-category.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:blog-category.trash.list')->name("trash");
-                    Route::post("/{id}/restore", "restore")->middleware('permission:blog-category.trash.restore')->name("restore");
-                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:blog-category.trash.delete')->name("force.delete");
+                    Route::post("/{blog_category}/restore", "restore")->middleware('permission:blog-category.trash.restore')->name("restore");
+                    Route::delete("/{blog_category}/force-delete", "forceDelete")->middleware('permission:blog-category.trash.delete')->name("force.delete");
                     Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:blog-category.trash.delete')->name("permanently.delete");
                 });
 
-           // Admin Dashboard Blog Post Section
+           // Admin Blog Post Section
            Route::controller(AdminBlogPostController::class)
                 ->prefix("/blogs/posts")
                 ->name("blogs.posts.")
@@ -615,11 +645,12 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::post("/{blog_post}", "update")->middleware('permission:blog-post.edit')->name("update");
                     Route::delete("/{blog_post}", "destroy")->middleware('permission:blog-post.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:blog-post.trash.list')->name("trash");
-                    Route::post("/{id}/restore", "restore")->middleware('permission:blog-post.trash.restore')->name("restore");
-                    Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:blog-post.trash.delete')->name("force.delete");
+                    Route::post("/{blog_post}/restore", "restore")->middleware('permission:blog-post.trash.restore')->name("restore");
+                    Route::delete("/{blog_post}/force-delete", "forceDelete")->middleware('permission:blog-post.trash.delete')->name("force.delete");
                     Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:blog-post.trash.delete')->name("permanently.delete");
                 });
 
+           // Admin Website Setting Section
            Route::controller(AdminWebsiteSettingController::class)
                 ->prefix("/website-settings")
                 ->name("website-settings.")
@@ -628,6 +659,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::post("/{website_setting}", "update")->middleware('permission:website-setting.edit')->name("update");
                 });
 
+           // Admin Seo Setting Section
            Route::controller(AdminSeoSettingController::class)
                 ->prefix("/seo-settings")
                 ->name("seo-settings.")
@@ -636,49 +668,44 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::post("/{seo_setting}", "update")->middleware('permission:seo-setting.edit')->name("update");
                 });
 
-
-
-
-
-
-           // Admin Dashboard Subscriber Section
+           // Admin Subscribers Section
            Route::controller(AdminSubscriberController::class)
-           ->prefix("/subscribers")
-           ->name("subscribers.")
-           ->group(function () {
-               Route::get("/", "index")->middleware('permission:subscriber.menu')->name("index");
-               Route::delete("/{subscriber}", "destroy")->middleware('permission:subscriber.delete')->name("destroy");
-               Route::get("/trash", "trash")->middleware('permission:subscriber.trash.list')->name("trash");
-               Route::post("/{subscriber}/restore", "restore")->middleware('permission:subscriber.trash.restore')->name("restore");
-               Route::delete("/{subscriber}/force-delete", "forceDelete")->middleware('permission:subscriber.trash.delete')->name("force.delete");
-               Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:subscriber.trash.delete')->name("permanently.delete");
-           });
+                ->prefix("/subscribers")
+                ->name("subscribers.")
+                ->group(function () {
+                    Route::get("/", "index")->middleware('permission:subscriber.menu')->name("index");
+                    Route::delete("/{subscriber}", "destroy")->middleware('permission:subscriber.delete')->name("destroy");
+                    Route::get("/trash", "trash")->middleware('permission:subscriber.trash.list')->name("trash");
+                    Route::post("/{subscriber}/restore", "restore")->middleware('permission:subscriber.trash.restore')->name("restore");
+                    Route::delete("/{subscriber}/force-delete", "forceDelete")->middleware('permission:subscriber.trash.delete')->name("force.delete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:subscriber.trash.delete')->name("permanently.delete");
+                });
 
-           // Admin Dashboard Suggestion Section
+           // Admin Suggestions Section
            Route::controller(AdminSuggestionController::class)
-           ->prefix("/suggestions")
-           ->name("suggestions.")
-           ->group(function () {
-               Route::get("/", "index")->middleware('permission:suggestion.menu')->name("index");
-               Route::get("/details/{suggestion}", "show")->middleware('permission:suggestion.detail')->name("show");
-               Route::delete("/{suggestion}", "destroy")->middleware('permission:suggestion.delete')->name("destroy");
-               Route::get("/trash", "trash")->middleware('permission:suggestion.trash.list')->name("trash");
-               Route::post("/{suggestion}/restore", "restore")->middleware('permission:suggestion.trash.restore')->name("restore");
-               Route::delete("/{suggestion}/force-delete", "forceDelete")->middleware('permission:suggestion.trash.delete')->name("force.delete");
-               Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:suggestion.trash.delete')->name("permanently.delete");
-           });
+                ->prefix("/suggestions")
+                ->name("suggestions.")
+                ->group(function () {
+                    Route::get("/", "index")->middleware('permission:suggestion.menu')->name("index");
+                    Route::get("/details/{suggestion}", "show")->middleware('permission:suggestion.detail')->name("show");
+                    Route::delete("/{suggestion}", "destroy")->middleware('permission:suggestion.delete')->name("destroy");
+                    Route::get("/trash", "trash")->middleware('permission:suggestion.trash.list')->name("trash");
+                    Route::post("/{suggestion}/restore", "restore")->middleware('permission:suggestion.trash.restore')->name("restore");
+                    Route::delete("/{suggestion}/force-delete", "forceDelete")->middleware('permission:suggestion.trash.delete')->name("force.delete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:suggestion.trash.delete')->name("permanently.delete");
+                });
 
-           // Admin Dashboard Website Feedback Section
+           // Admin Website Feedbacks Section
            Route::controller(AdminWebsiteFeedbackController::class)
-           ->prefix("/website-feedbacks")
-           ->name("website-feedbacks.")
-           ->group(function () {
-               Route::get("/", "index")->middleware('permission:website-feedback.menu')->name("index");
-               Route::get("/details/{website_feedback}", "show")->middleware('permission:website-feedback.detail')->name("show");
-               Route::delete("/{website_feedback}", "destroy")->middleware('permission:website-feedback.delete')->name("destroy");
-               Route::get("/trash", "trash")->middleware('permission:website-feedback.trash.list')->name("trash");
-               Route::post("/{website_feedback}/restore", "restore")->middleware('permission:website-feedback.trash.restore')->name("restore");
-               Route::delete("/{website_feedback}/force-delete", "forceDelete")->middleware('permission:website-feedback.trash.delete')->name("force.delete");
-               Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:website-feedback.trash.delete')->name("permanently.delete");
-           });
+                ->prefix("/website-feedbacks")
+                ->name("website-feedbacks.")
+                ->group(function () {
+                    Route::get("/", "index")->middleware('permission:website-feedback.menu')->name("index");
+                    Route::get("/details/{website_feedback}", "show")->middleware('permission:website-feedback.detail')->name("show");
+                    Route::delete("/{website_feedback}", "destroy")->middleware('permission:website-feedback.delete')->name("destroy");
+                    Route::get("/trash", "trash")->middleware('permission:website-feedback.trash.list')->name("trash");
+                    Route::post("/{website_feedback}/restore", "restore")->middleware('permission:website-feedback.trash.restore')->name("restore");
+                    Route::delete("/{website_feedback}/force-delete", "forceDelete")->middleware('permission:website-feedback.trash.delete')->name("force.delete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:website-feedback.trash.delete')->name("permanently.delete");
+                });
        });

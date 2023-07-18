@@ -20,10 +20,10 @@ const processing = ref(false);
 
 // Seo Setting Edit Form Data
 const form = useForm({
-  meta_title: props.seoSetting ? props.seoSetting.meta_title : "",
-  meta_author: props.seoSetting ? props.seoSetting.meta_author : "",
-  meta_keyword: props.seoSetting ? props.seoSetting.meta_keyword : "",
-  meta_description: props.seoSetting ? props.seoSetting.meta_description : "",
+  meta_title: props.seoSetting?.meta_title,
+  meta_author: props.seoSetting?.meta_author,
+  meta_keyword: props.seoSetting?.meta_keyword,
+  meta_description: props.seoSetting?.meta_description,
   captcha_token: null,
 });
 
@@ -36,6 +36,7 @@ const handleEditSeoSetting = async () => {
   form.captcha_token = await executeRecaptcha("edit_seo_setting");
 
   processing.value = true;
+
   form.post(
     route("admin.seo-settings.update", {
       seo_setting: props.seoSetting.id,

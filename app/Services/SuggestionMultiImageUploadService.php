@@ -21,7 +21,7 @@ class SuggestionMultiImageUploadService
                 $originalName=$image->getClientOriginalName();
                 $extension=$image->extension();
 
-                $finalName= Str::slug($originalName, '-')."."."$extension";
+                $finalName= Str::slug('suggestion-'.$originalName, '-')."."."$extension";
 
                 $image->move(storage_path("app/public/suggestions/"), $finalName);
 

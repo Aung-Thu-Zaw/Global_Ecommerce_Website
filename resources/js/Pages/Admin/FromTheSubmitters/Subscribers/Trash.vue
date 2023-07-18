@@ -110,7 +110,7 @@ const updateSorting = (sort = "id") => {
 };
 
 // Handle Restore Subscriber
-const handleRestore = async (trashSubscriberId) => {
+const handleRestoreSubscriber = async (trashSubscriberId) => {
   const result = await swal({
     icon: "info",
     title: "Are you sure you want to restore this subscriber?",
@@ -146,8 +146,8 @@ const handleRestore = async (trashSubscriberId) => {
   }
 };
 
-// Handle Delete Subscriber
-const handleDelete = async (trashSubscriberId) => {
+// Handle Delete Trash Subscriber
+const handleDeleteTrashSubscriber = async (trashSubscriberId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -183,8 +183,8 @@ const handleDelete = async (trashSubscriberId) => {
   }
 };
 
-// Handle Permanently Delete Subscribers
-const handlePermanentlyDelete = async () => {
+// Handle Permanently Delete Trash Subscribers
+const handlePermanentlyDeleteTrashSubscribers = async () => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -298,7 +298,7 @@ const subscriberTrashDelete = computed(() => {
           <input
             type="text"
             class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-            placeholder="Search"
+            placeholder="Search by email"
             v-model="params.search"
           />
 
@@ -333,7 +333,7 @@ const subscriberTrashDelete = computed(() => {
       >
         Subscribers in the Trash will be automatically deleted after 60 days.
         <button
-          @click="handlePermanentlyDelete"
+          @click="handlePermanentlyDeleteTrashSubscribers"
           class="text-primary-500 rounded-md px-2 py-1 hover:bg-primary-200 hover:text-primary-600 transition-all hover:animate-bounce"
         >
           Empty the trash now
@@ -434,7 +434,7 @@ const subscriberTrashDelete = computed(() => {
             <Td v-if="subscriberTrashRestore || subscriberTrashDelete">
               <button
                 v-if="subscriberTrashRestore"
-                @click="handleRestore(trashSubscriber.id)"
+                @click="handleRestoreSubscriber(trashSubscriber.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-recycle"></i>
@@ -442,7 +442,7 @@ const subscriberTrashDelete = computed(() => {
               </button>
               <button
                 v-if="subscriberTrashDelete"
-                @click="handleDelete(trashSubscriber.id)"
+                @click="handleDeleteTrashSubscriber(trashSubscriber.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-trash"></i>

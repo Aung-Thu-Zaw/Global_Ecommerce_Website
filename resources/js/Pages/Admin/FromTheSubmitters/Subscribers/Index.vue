@@ -110,7 +110,7 @@ const updateSorting = (sort = "id") => {
 };
 
 // Handle Delete Subscriber
-const handleDelete = async (subscriberId) => {
+const handleDeleteSubscriber = async (subscriberId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete this subscriber?",
@@ -129,6 +129,8 @@ const handleDelete = async (subscriberId) => {
         subscriber: subscriberId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {
         onSuccess: () => {
@@ -189,7 +191,6 @@ const subscriberDelete = computed(() => {
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
           >
             <i class="fa-solid fa-trash"></i>
-
             Trash
           </Link>
         </div>
@@ -202,7 +203,7 @@ const subscriberDelete = computed(() => {
             <input
               type="text"
               class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-              placeholder="Search"
+              placeholder="Search by email"
               v-model="params.search"
             />
 
@@ -314,13 +315,22 @@ const subscriberDelete = computed(() => {
 
         <tbody v-if="subscribers.data.length">
           <Tr v-for="subscriber in subscribers.data" :key="subscriber.id">
-            <BodyTh>{{ subscriber.id }}</BodyTh>
-            <Td>{{ subscriber.email }}</Td>
-            <Td>{{ subscriber.created_at }}</Td>
+            <BodyTh>
+              {{ subscriber.id }}
+            </BodyTh>
+
+            <Td>
+              {{ subscriber.email }}
+            </Td>
+
+            <Td>
+              {{ subscriber.created_at }}
+            </Td>
+
             <Td v-if="subscriberDelete">
               <button
                 v-if="subscriberDelete"
-                @click="handleDelete(subscriber.id)"
+                @click="handleDeleteSubscriber(subscriber.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>

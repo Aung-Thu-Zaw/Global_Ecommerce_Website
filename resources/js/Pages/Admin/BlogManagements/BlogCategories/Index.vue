@@ -112,7 +112,7 @@ const updateSorting = (sort = "id") => {
 };
 
 // Handle Delete Blog Category
-const handleBlogCategoryDelete = async (blogCategory) => {
+const handleDeleteBlogCategory = async (blogCategory) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete this blog category?",
@@ -131,6 +131,8 @@ const handleBlogCategoryDelete = async (blogCategory) => {
         blog_category: blogCategory,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {
         onSuccess: () => {
@@ -242,7 +244,7 @@ if (usePage().props.flash.successMessage) {
             <input
               type="text"
               class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-              placeholder="Search"
+              placeholder="Search by name"
               v-model="params.search"
             />
 
@@ -420,8 +422,10 @@ if (usePage().props.flash.successMessage) {
                 as="button"
                 :href="route('admin.blogs.categories.edit', blogCategory.slug)"
                 :data="{
-                  page: props.blogCategories.current_page,
+                  page: params.page,
                   per_page: params.per_page,
+                  sort: params.sort,
+                  direction: params.direction,
                 }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
@@ -430,7 +434,7 @@ if (usePage().props.flash.successMessage) {
               </Link>
               <button
                 v-if="blogCategoryDelete"
-                @click="handleBlogCategoryDelete(blogCategory.slug)"
+                @click="handleDeleteBlogCategory(blogCategory.slug)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>

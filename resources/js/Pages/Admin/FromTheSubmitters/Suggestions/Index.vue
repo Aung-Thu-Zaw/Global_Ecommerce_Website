@@ -121,7 +121,7 @@ const updateSorting = (sort = "id") => {
 };
 
 // Handle Suggestion Delete
-const handleSuggestionDelete = async (suggestionId) => {
+const handleDeleteSuggestion = async (suggestionId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete this suggestion?",
@@ -140,6 +140,8 @@ const handleSuggestionDelete = async (suggestionId) => {
         suggestion: suggestionId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {
         onSuccess: () => {
@@ -209,7 +211,6 @@ const suggestionDelete = computed(() => {
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
           >
             <i class="fa-solid fa-trash"></i>
-
             Trash
           </Link>
         </div>
@@ -222,7 +223,7 @@ const suggestionDelete = computed(() => {
             <input
               type="text"
               class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-              placeholder="Search"
+              placeholder="Search by email"
               v-model="params.search"
             />
 
@@ -361,21 +362,32 @@ const suggestionDelete = computed(() => {
 
         <tbody v-if="suggestions.data.length">
           <Tr v-for="suggestion in suggestions.data" :key="suggestion.id">
-            <BodyTh>{{ suggestion.id }}</BodyTh>
-            <Td>{{ suggestion.email }}</Td>
-            <Td class="capitalize">{{
-              formatSuggestionType(suggestion.type)
-            }}</Td>
-            <Td>{{ suggestion.created_at }}</Td>
+            <BodyTh>
+              {{ suggestion.id }}
+            </BodyTh>
+
+            <Td>
+              {{ suggestion.email }}
+            </Td>
+
+            <Td class="capitalize">
+              {{ formatSuggestionType(suggestion.type) }}
+            </Td>
+
+            <Td>
+              {{ suggestion.created_at }}
+            </Td>
+
             <Td v-if="suggestionDelete || suggestionDetail">
               <button
                 v-if="suggestionDelete"
-                @click="handleSuggestionDelete(suggestion.id)"
+                @click="handleDeleteSuggestion(suggestion.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>
                 Delete
               </button>
+
               <Link
                 v-if="suggestionDetail"
                 as="button"

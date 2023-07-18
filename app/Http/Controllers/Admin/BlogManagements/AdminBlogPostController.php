@@ -42,25 +42,27 @@ class AdminBlogPostController extends Controller
 
     public function edit(BlogPost $blogPost): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $queryStringParams=[ "page"=>request("page"),"per_page"=>request("per_page"),"sort"=>request("sort"),"direction"=>request("direction")];
 
         $blogCategories=BlogCategory::all();
 
-        return inertia("Admin/BlogManagements/BlogPosts/Edit", compact("blogPost", "paginate", "blogCategories"));
+        return inertia("Admin/BlogManagements/BlogPosts/Edit", compact("blogPost", "queryStringParams", "blogCategories"));
     }
 
     public function update(BlogPostRequest $request, BlogPost $blogPost, BlogPostImageUploadService $blogPostImageUploadService): RedirectResponse
     {
         $blogPost->update($request->validated()+["image"=>$blogPostImageUploadService->updateImage($request, $blogPost)]);
 
-        return to_route("admin.blogs.posts.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Post has been successfully updated.");
+        return to_route("admin.blogs.posts.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
+             ->with("success", "Post has been successfully updated.");
     }
 
     public function destroy(Request $request, BlogPost $blogPost): RedirectResponse
     {
         $blogPost->delete();
 
-        return to_route("admin.blogs.posts.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Post has been successfully deleted.");
+        return to_route("admin.blogs.posts.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
+             ->with("success", "Post has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -75,24 +77,26 @@ class AdminBlogPostController extends Controller
         return inertia("Admin/BlogManagements/BlogPosts/Trash", compact("trashBlogPosts"));
     }
 
-    public function restore(Request $request, int $id): RedirectResponse
+    public function restore(Request $request, int $blogPostId): RedirectResponse
     {
-        $blogPost = BlogPost::onlyTrashed()->findOrFail($id);
+        $blogPost = BlogPost::onlyTrashed()->findOrFail($blogPostId);
 
         $blogPost->restore();
 
-        return to_route('admin.blogs.posts.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Post has been successfully restored.");
+        return to_route('admin.blogs.posts.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
+             ->with("success", "Post has been successfully restored.");
     }
 
-    public function forceDelete(Request $request, int $id): RedirectResponse
+    public function forceDelete(Request $request, int $blogPostId): RedirectResponse
     {
-        $blogPost = BlogPost::onlyTrashed()->findOrFail($id);
+        $blogPost = BlogPost::onlyTrashed()->findOrFail($blogPostId);
 
         BlogPost::deleteImage($blogPost);
 
         $blogPost->forceDelete();
 
-        return to_route('admin.blogs.posts.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The post has been permanently deleted.");
+        return to_route('admin.blogs.posts.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
+             ->with("success", "The post has been permanently deleted.");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -107,6 +111,7 @@ class AdminBlogPostController extends Controller
 
         });
 
-        return to_route('admin.blogs.posts.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Posts have been successfully deleted.");
+        return to_route('admin.blogs.posts.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
+             ->with("success", "Posts have been successfully deleted.");
     }
 }

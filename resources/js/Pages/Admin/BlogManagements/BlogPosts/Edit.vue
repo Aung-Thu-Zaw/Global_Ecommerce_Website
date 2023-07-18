@@ -11,7 +11,7 @@ import { useReCaptcha } from "vue-recaptcha-v3";
 
 // Define the props
 const props = defineProps({
-  paginate: Array,
+  queryStringParams: Array,
   blogPost: Object,
   blogCategories: Object,
 });
@@ -51,8 +51,10 @@ const handleEditBlogPost = async () => {
   form.post(
     route("admin.blogs.posts.update", {
       blog_post: props.blogPost.slug,
-      page: props.paginate.page,
-      per_page: props.paginate.per_page,
+      page: props.queryStringParams.page,
+      per_page: props.queryStringParams.per_page,
+      sort: props.queryStringParams.sort,
+      direction: props.queryStringParams.direction,
     }),
     {
       replace: true,
@@ -122,8 +124,10 @@ const handleEditBlogPost = async () => {
             as="button"
             :href="route('admin.blogs.posts.index')"
             :data="{
-              page: props.paginate.page,
-              per_page: props.paginate.per_page,
+              page: props.queryStringParams.page,
+              per_page: props.queryStringParams.per_page,
+              sort: props.queryStringParams.sort,
+              direction: props.queryStringParams.direction,
             }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >

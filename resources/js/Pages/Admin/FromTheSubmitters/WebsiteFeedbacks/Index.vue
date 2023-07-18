@@ -130,6 +130,8 @@ const handleDelete = async (websiteFeedbackId) => {
         website_feedback: websiteFeedbackId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {
         onSuccess: () => {
@@ -178,7 +180,7 @@ const websiteFeedbackDelete = computed(() => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Feedbacks" />
+    <Head title="Website Feedbacks" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -212,7 +214,7 @@ const websiteFeedbackDelete = computed(() => {
             <input
               type="text"
               class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-              placeholder="Search"
+              placeholder="Search by email"
               v-model="params.search"
             />
 
