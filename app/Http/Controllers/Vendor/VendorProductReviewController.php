@@ -29,9 +29,7 @@ class VendorProductReviewController extends Controller
     {
         $queryStringParams=[ "page"=>request("page"),"per_page"=>request("per_page"),"sort"=>request("sort"),"direction"=>request("direction")];
 
-        $productReview=ProductReview::findOrFail($productReviewId);
-
-        $productReview->load(["product:id,name","user:id,name,email"]);
+        $productReview=ProductReview::with(["product:id,name","user:id,name,email"])->findOrFail($productReviewId);
 
         return inertia("Vendor/ProductReviews/Details", compact("productReview", "queryStringParams"));
     }

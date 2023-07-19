@@ -269,7 +269,7 @@
             class="items-center"
           >
             <Link
-              href="#"
+              :href="route('vendor.shop-reviews.index')"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
                 'text-blue-500 hover:text-blue-600': $page.url.startsWith(

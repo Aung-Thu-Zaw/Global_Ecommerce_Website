@@ -1,19 +1,19 @@
 <script setup>
 import VendorDashboardLayout from "@/Layouts/VendorDashboardLayout.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/ProductReviewBreadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/ShopReviewBreadcrumb.vue";
 import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
 import PublishedStatus from "@/Components/Status/PublishedStatus.vue";
 import { Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
   queryStringParams: Object,
-  productReview: Object,
+  shopReview: Object,
 });
 </script>
 
 <template>
   <VendorDashboardLayout>
-    <Head title="Product Review Details" />
+    <Head title="Shop Review Details" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -37,7 +37,7 @@ const props = defineProps({
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
               >
-                {{ productReview.user.email }}
+                {{ shopReview.user.email }}
               </span>
             </div>
           </li>
@@ -68,7 +68,7 @@ const props = defineProps({
         <div>
           <Link
             as="button"
-            :href="route('vendor.product-reviews.index')"
+            :href="route('vendor.shop-reviews.index')"
             :data="{
               page: props.queryStringParams.page,
               per_page: props.queryStringParams.per_page,
@@ -84,22 +84,22 @@ const props = defineProps({
       </div>
 
       <div class="p-5 border shadow-md rounded-sm my-5">
-        <div v-if="productReview" class="my-3">
+        <div v-if="shopReview" class="my-3">
           <div
             class="w-full text-sm text-left text-gray-500 border overflow-hidden shadow rounded-md my-5"
           >
             <div>
-              <!-- Product Name -->
+              <!-- Shop Name -->
               <div
                 class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
               >
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
-                  Product Name
+                  Shop Name
                 </span>
                 <span class="w-1/2 block">
-                  {{ productReview.product.name }}
+                  {{ shopReview.shop.shop_name }}
                 </span>
               </div>
 
@@ -111,7 +111,7 @@ const props = defineProps({
                   Reviewer Name
                 </span>
                 <span class="w-1/2 block capitalize">
-                  {{ productReview.user.name }}
+                  {{ shopReview.user.name }}
                 </span>
               </div>
 
@@ -125,7 +125,7 @@ const props = defineProps({
                   Reviewer Email
                 </span>
                 <span class="w-1/2 block pr-5">
-                  {{ productReview.user.email }}
+                  {{ shopReview.user.email }}
                 </span>
               </div>
 
@@ -137,7 +137,7 @@ const props = defineProps({
                   Review Date
                 </span>
                 <span class="w-1/2 block capitalize">
-                  {{ productReview.created_at }}
+                  {{ shopReview.created_at }}
                 </span>
               </div>
 
@@ -151,7 +151,7 @@ const props = defineProps({
                   Rating
                 </span>
                 <span class="w-1/2 block pr-5">
-                  <TotalRatingStars :rating="productReview.rating" />
+                  <TotalRatingStars :rating="shopReview.rating" />
                 </span>
               </div>
 
@@ -163,7 +163,7 @@ const props = defineProps({
                   Status
                 </span>
                 <span class="w-1/2 block">
-                  <PublishedStatus v-if="productReview.status === 1">
+                  <PublishedStatus v-if="shopReview.status === 1">
                     published
                   </PublishedStatus>
                 </span>
@@ -178,10 +178,7 @@ const props = defineProps({
                 >
                   Review Text
                 </span>
-                <span
-                  v-html="productReview.review_text"
-                  class="w-1/2 block pr-5"
-                >
+                <span v-html="shopReview.review_text" class="w-1/2 block pr-5">
                 </span>
               </div>
             </div>

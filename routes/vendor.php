@@ -9,6 +9,7 @@ use App\Http\Controllers\Vendor\VendorOrderController;
 use App\Http\Controllers\Vendor\VendorProductBannerController;
 use App\Http\Controllers\Vendor\VendorProductController;
 use App\Http\Controllers\Vendor\VendorProductReviewController;
+use App\Http\Controllers\Vendor\VendorShopReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("vendor/register", [VendorAuthController::class,"register"])->middleware("guest")->name("vendor.register");
@@ -63,8 +64,6 @@ Route::middleware(["vendor","user.role:vendor"])
                   Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
               });
 
-
-
          // Vendor Product Reviews Section
          Route::controller(VendorProductReviewController::class)
               ->prefix("/product-reviews")
@@ -72,6 +71,15 @@ Route::middleware(["vendor","user.role:vendor"])
               ->group(function () {
                   Route::get("/", "index")->name("index");
                   Route::get("/{product_review}", "show")->name("show");
+              });
+
+         // Vendor Shop Reviews Section
+         Route::controller(VendorShopReviewController::class)
+              ->prefix("/shop-reviews")
+              ->name("shop-reviews.")
+              ->group(function () {
+                  Route::get("/", "index")->name("index");
+                  Route::get("/{shop_review}", "show")->name("show");
               });
 
          // Vendor Dashboard Guide Section

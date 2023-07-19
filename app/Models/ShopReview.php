@@ -29,6 +29,16 @@ class ShopReview extends Model
     }
 
     /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductReview, never>
+    */
+    protected function createdAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => date("j/F/Y ( h:i:s A )", strtotime($value)),
+        );
+    }
+
+    /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<ShopReview, never>
     */
     protected function updatedAt(): Attribute
@@ -44,6 +54,14 @@ class ShopReview extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,ShopReview>
+    */
+    public function shop(): BelongsTo
+    {
+        return $this->belongsTo(User::class, "vendor_id");
     }
 
     /**

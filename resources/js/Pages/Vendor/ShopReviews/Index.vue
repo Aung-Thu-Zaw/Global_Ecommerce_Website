@@ -6,7 +6,7 @@ import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
 import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/ProductReviewBreadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/ShopReviewBreadcrumb.vue";
 import PublishedStatus from "@/Components/Status/PublishedStatus.vue";
 import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
@@ -16,7 +16,7 @@ import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 // Define the props
 const props = defineProps({
-  productReviews: Object,
+  shopReviews: Object,
 });
 
 // Query String Parameteres
@@ -31,7 +31,7 @@ const params = reactive({
 // Handle Search
 const handleSearch = () => {
   router.get(
-    route("vendor.product-reviews.index"),
+    route("vendor.shop-reviews.index"),
     {
       search: params.search,
       per_page: params.per_page,
@@ -49,7 +49,7 @@ const handleSearch = () => {
 const removeSearch = () => {
   params.search = "";
   router.get(
-    route("vendor.product-reviews.index"),
+    route("vendor.shop-reviews.index"),
     {
       per_page: params.per_page,
       sort: params.sort,
@@ -65,7 +65,7 @@ const removeSearch = () => {
 // Handle Query String Parameter
 const handleQueryStringParameter = () => {
   router.get(
-    route("vendor.product-reviews.index"),
+    route("vendor.shop-reviews.index"),
     {
       search: params.search,
       page: params.page,
@@ -111,7 +111,7 @@ const updateSorting = (sort = "id") => {
 
 <template>
   <VendorDashboardLayout>
-    <Head title="Vendor Product Reviews" />
+    <Head title="Vendor Shop Reviews" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -155,7 +155,7 @@ const updateSorting = (sort = "id") => {
         </div>
       </div>
 
-      <!-- Product Review Table Start -->
+      <!-- Shop Review Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -183,7 +183,7 @@ const updateSorting = (sort = "id") => {
               }"
             ></i>
           </HeaderTh>
-          <HeaderTh> Product Name </HeaderTh>
+          <HeaderTh> Shop Name </HeaderTh>
           <HeaderTh> Reviewer Name </HeaderTh>
           <HeaderTh @click="updateSorting('review_text')">
             Review Text
@@ -239,39 +239,36 @@ const updateSorting = (sort = "id") => {
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="productReviews.data.length">
-          <Tr
-            v-for="productReview in productReviews.data"
-            :key="productReview.id"
-          >
+        <tbody v-if="shopReviews.data.length">
+          <Tr v-for="shopReview in shopReviews.data" :key="shopReview.id">
             <BodyTh>
-              {{ productReview.id }}
+              {{ shopReview.id }}
             </BodyTh>
 
             <Td>
               <span class="line-clamp-1">
-                {{ productReview.product.name }}
+                {{ shopReview.shop.shop_name }}
               </span>
             </Td>
 
             <Td>
-              {{ productReview.user.name }}
+              {{ shopReview.user.name }}
             </Td>
 
             <Td>
               <span
-                v-html="productReview.review_text"
+                v-html="shopReview.review_text"
                 class="line-clamp-1 w-[300px]"
               >
               </span>
             </Td>
 
             <Td>
-              <TotalRatingStars :rating="productReview.rating" />
+              <TotalRatingStars :rating="shopReview.rating" />
             </Td>
 
             <Td>
-              <PublishedStatus v-if="productReview.status === 1">
+              <PublishedStatus v-if="shopReview.status === 1">
                 published
               </PublishedStatus>
             </Td>
@@ -279,7 +276,7 @@ const updateSorting = (sort = "id") => {
             <Td>
               <Link
                 as="button"
-                :href="route('vendor.product-reviews.show', productReview.id)"
+                :href="route('vendor.shop-reviews.show', shopReview.id)"
                 :data="{
                   page: params.page,
                   per_page: params.per_page,
@@ -295,13 +292,13 @@ const updateSorting = (sort = "id") => {
           </Tr>
         </tbody>
       </TableContainer>
-      <!-- Product Review Table End -->
+      <!-- Shop Review Table End -->
 
       <!-- No Data Row -->
-      <NotAvaliableData v-if="!productReviews.data.length" />
+      <NotAvaliableData v-if="!shopReviews.data.length" />
 
       <!-- Pagination -->
-      <Pagination class="mt-6" :links="productReviews.links" />
+      <Pagination class="mt-6" :links="shopReviews.links" />
     </div>
   </VendorDashboardLayout>
 </template>
