@@ -19,9 +19,6 @@
         Global E-commerce
       </Link>
       <ul class="md:hidden items-center flex flex-wrap list-none">
-        <!-- <li class="inline-block relative">
-          <NotificationDropdown />
-        </li> -->
         <li class="inline-block relative">
           <UserDropdown />
         </li>
@@ -64,6 +61,8 @@
         </form>
 
         <hr class="my-4 md:min-w-full" />
+
+        <!-- Vendor Web Control Area Section -->
         <h6
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
@@ -102,6 +101,12 @@
                 'text-slate-700 hover:text-slate-500':
                   !$page.url.startsWith('/vendor/products'),
               }"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
             >
               <i class="fa-solid fa-basket-shopping mr-2 text-sm"></i>
               {{ __("PRODUCTS") }}
@@ -126,6 +131,12 @@
                   '/vendor/product-banners'
                 ),
               }"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
             >
               <i class="fa-solid fa-basket-shopping mr-2 text-sm"></i>
               {{ __("PRODUCT_BANNERS") }}
@@ -148,35 +159,133 @@
                 'text-slate-700 hover:text-slate-500':
                   !$page.url.startsWith('/vendor/orders'),
               }"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
             >
               <i class="fa-solid fa-boxes-packing mr-2 text-sm"></i>
               {{ __("ORDERS") }}
             </Link>
           </li>
           <!-- Return Order Section -->
-          <li class="items-center">
-            <Link href="#" class="text-xs uppercase py-3 font-bold block">
+          <li
+            v-if="
+              $page.props.auth.user.role === 'vendor' &&
+              $page.props.auth.user.status === 'active'
+            "
+            class="items-center"
+          >
+            <Link
+              href="#"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                  '/vendor/return-orders'
+                ),
+                'text-slate-700 hover:text-slate-500': !$page.url.startsWith(
+                  '/vendor/return-orders'
+                ),
+              }"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
+            >
               <i class="fa-solid fa-rotate-left mr-2 text-sm"></i>
               {{ __("RETURN_ORDERS") }}
             </Link>
           </li>
           <!-- Cancel Order Section -->
-          <li class="items-center">
-            <Link href="#" class="text-xs uppercase py-3 font-bold block">
+          <li
+            v-if="
+              $page.props.auth.user.role === 'vendor' &&
+              $page.props.auth.user.status === 'active'
+            "
+            class="items-center"
+          >
+            <Link
+              href="#"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                  '/vendor/cancel-orders'
+                ),
+                'text-slate-700 hover:text-slate-500': !$page.url.startsWith(
+                  '/vendor/cancel-orders'
+                ),
+              }"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
+            >
               <i class="fa-solid fa-xmark mr-2 text-sm"></i>
               {{ __("CANCEL_ORDERS") }}
             </Link>
           </li>
           <!-- Product Review Section -->
-          <li class="items-center">
-            <Link href="#" class="text-xs uppercase py-3 font-bold block">
+          <li
+            v-if="
+              $page.props.auth.user.role === 'vendor' &&
+              $page.props.auth.user.status === 'active'
+            "
+            class="items-center"
+          >
+            <Link
+              :href="route('vendor.product-reviews.index')"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                  '/vendor/product-reviews'
+                ),
+                'text-slate-700 hover:text-slate-500': !$page.url.startsWith(
+                  '/vendor/product-reviews'
+                ),
+              }"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
+            >
               <i class="fa-solid fa-star mr-2 text-sm"></i>
               {{ __("PRODUCT_REVIEWS") }}
             </Link>
           </li>
           <!-- Shop Review Section -->
-          <li class="items-center">
-            <Link href="#" class="text-xs uppercase py-3 font-bold block">
+          <li
+            v-if="
+              $page.props.auth.user.role === 'vendor' &&
+              $page.props.auth.user.status === 'active'
+            "
+            class="items-center"
+          >
+            <Link
+              href="#"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                  '/vendor/shop-reviews'
+                ),
+                'text-slate-700 hover:text-slate-500': !$page.url.startsWith(
+                  '/vendor/shop-reviews'
+                ),
+              }"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
+            >
               <i class="fa-solid fa-shop mr-2 text-sm"></i>
               {{ __("SHOP_REVIEWS") }}
             </Link>
@@ -184,6 +293,8 @@
         </ul>
 
         <hr class="my-4 md:min-w-full" />
+
+        <!-- Vendor Support Section Title -->
         <h6
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
@@ -191,23 +302,48 @@
         </h6>
 
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
-          <li class="items-center">
+          <!-- Vendor Guide Section -->
+          <li
+            v-if="
+              $page.props.auth.user.role === 'vendor' &&
+              $page.props.auth.user.status === 'active'
+            "
+            class="items-center"
+          >
             <Link
               :href="route('vendor.dashboard.guide')"
               class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url.startsWith('/vendor/guide'),
+                'text-slate-700 hover:text-slate-500':
+                  !$page.url.startsWith('/vendor/guide'),
+              }"
             >
               <i class="fa-solid fa-book mr-2 text-sm"></i>
-
               {{ __("GUIDE") }}
             </Link>
           </li>
-          <li class="items-center">
+
+          <!-- Vendor Support Section -->
+          <li
+            v-if="
+              $page.props.auth.user.role === 'vendor' &&
+              $page.props.auth.user.status === 'active'
+            "
+            class="items-center"
+          >
             <Link
               :href="route('vendor.orders.index')"
               class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url.startsWith('/vendor/support'),
+                'text-slate-700 hover:text-slate-500':
+                  !$page.url.startsWith('/vendor/support'),
+              }"
             >
               <i class="fa-solid fa-headset mr-2 text-sm"></i>
-
               {{ __("SUPPORT") }}
             </Link>
           </li>

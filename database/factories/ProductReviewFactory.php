@@ -21,7 +21,8 @@ class ProductReviewFactory extends Factory
             "vendor_id"=>fake()->numberBetween(1, 61),
             "user_id"=>fake()->numberBetween(1, 263),
             "review_text"=>fake()->paragraph(),
-            "rating"=>fake()->numberBetween(1, 5)
+            "rating"=>fake()->numberBetween(1, 5),
+            "status"=>fake()->randomElement([true,false])
         ];
     }
 }

@@ -155,7 +155,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->name("products.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:product.menu')->name("index");
-                    Route::get("/details/{product}", "show")->middleware('permission:product.detail')->name("show");
+                    Route::get("/{product}", "show")->middleware('permission:product.detail')->name("show");
                     Route::get("/create", "create")->middleware('permission:product.add')->name("create");
                     Route::post("/", "store")->middleware('permission:product.add')->name("store");
                     Route::get("/{product}/edit", "edit")->middleware('permission:product.edit')->name("edit");
@@ -309,8 +309,8 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->name("languages.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:language.menu')->name("index");
-                    Route::get("/details/{language}", "languageDetail")->middleware('permission:language.detail')->name("show");
-                    Route::post("/details/{language}/update", "updateLanguageDetail")->middleware('permission:language.detail')->name("update.detail");
+                    Route::get("/{language}", "languageDetail")->middleware('permission:language.detail')->name("show");
+                    Route::post("/{language}/update", "updateLanguageDetail")->middleware('permission:language.detail')->name("update.detail");
                     Route::get("/create", "create")->middleware('permission:language.add')->name("create");
                     Route::post("/", "store")->middleware('permission:language.add')->name("store");
                     Route::get("/{language}/edit", "edit")->middleware('permission:language.edit')->name("edit");
@@ -327,7 +327,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->name("orders.pending.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:order-manage.menu')->name("index");
-                    Route::get("/details/{id}", "show")->middleware('permission:order-manage.detail')->name("show");
+                    Route::get("/{id}", "show")->middleware('permission:order-manage.detail')->name("show");
                     Route::post("/{id}", "update")->middleware('permission:order-manage.control')->name("update");
                 });
 
@@ -336,7 +336,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->name("orders.confirmed.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:order-manage.menu')->name("index");
-                    Route::get("/details/{id}", "show")->middleware('permission:order-manage.detail')->name("show");
+                    Route::get("/{id}", "show")->middleware('permission:order-manage.detail')->name("show");
                     Route::post("/{id}", "update")->middleware('permission:order-manage.control')->name("update");
                 });
 
@@ -345,7 +345,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->name("orders.processing.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:order-manage.menu')->name("index");
-                    Route::get("/details/{id}", "show")->middleware('permission:order-manage.detail')->name("show");
+                    Route::get("/{id}", "show")->middleware('permission:order-manage.detail')->name("show");
                     Route::post("/{id}", "update")->middleware('permission:order-manage.control')->name("update");
                 });
 
@@ -354,7 +354,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->name("orders.shipped.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:order-manage.menu')->name("index");
-                    Route::get("/details/{id}", "show")->middleware('permission:order-manage.detail')->name("show");
+                    Route::get("/{id}", "show")->middleware('permission:order-manage.detail')->name("show");
                     Route::post("/{id}", "update")->middleware('permission:order-manage.control')->name("update");
                 });
 
@@ -363,7 +363,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                  ->name("orders.delivered.")
                  ->group(function () {
                      Route::get("/", "index")->middleware('permission:order-manage.menu')->name("index");
-                     Route::get("/details/{id}", "show")->middleware('permission:order-manage.detail')->name("show");
+                     Route::get("/{id}", "show")->middleware('permission:order-manage.detail')->name("show");
                  });
 
 
@@ -372,7 +372,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->name("return-orders.requested.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:return-order-manage.menu')->name("index");
-                    Route::get("/details/{id}", "show")->middleware('permission:return-order-manage.detail')->name("show");
+                    Route::get("/{id}", "show")->middleware('permission:return-order-manage.detail')->name("show");
                     Route::post("/{id}", "update")->middleware('permission:return-order-manage.control')->name("update");
                 });
 
@@ -381,7 +381,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->name("return-orders.approved.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:return-order-manage.menu')->name("index");
-                    Route::get("/details/{id}", "show")->middleware('permission:return-order-manage.detail')->name("show");
+                    Route::get("/{id}", "show")->middleware('permission:return-order-manage.detail')->name("show");
                     Route::post("/{id}", "update")->middleware('permission:return-order-manage.control')->name("update");
                 });
 
@@ -390,7 +390,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->name("return-orders.refunded.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:return-order-manage.menu')->name("index");
-                    Route::get("/details/{id}", "show")->middleware('permission:return-order-manage.detail')->name("show");
+                    Route::get("/{id}", "show")->middleware('permission:return-order-manage.detail')->name("show");
                 });
 
            Route::controller(AdminRequestedCancelOrderController::class)
@@ -398,7 +398,7 @@ Route::middleware(["admin","verified","user.role:admin"])
            ->name("cancel-orders.requested.")
            ->group(function () {
                Route::get("/", "index")->middleware('permission:cancel-order-manage.menu')->name("index");
-               Route::get("/details/{id}", "show")->middleware('permission:cancel-order-manage.detail')->name("show");
+               Route::get("/{id}", "show")->middleware('permission:cancel-order-manage.detail')->name("show");
                Route::post("/{id}", "update")->middleware('permission:cancel-order-manage.control')->name("update");
            });
 
@@ -407,7 +407,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->name("cancel-orders.approved.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:cancel-order-manage.menu')->name("index");
-                    Route::get("/details/{id}", "show")->middleware('permission:cancel-order-manage.detail')->name("show");
+                    Route::get("/{id}", "show")->middleware('permission:cancel-order-manage.detail')->name("show");
                 });
 
 
@@ -418,7 +418,7 @@ Route::middleware(["admin","verified","user.role:admin"])
            ->name("product-reviews.pending.")
            ->group(function () {
                Route::get("/", "index")->middleware('permission:product-review.menu')->name("index");
-               Route::get("/details/{product_review}", "show")->middleware('permission:product-review.detail')->name("show");
+               Route::get("/{product_review}", "show")->middleware('permission:product-review.detail')->name("show");
                Route::post("/{product_review}", "update")->middleware('permission:product-review.control')->name("update");
                Route::delete("/{product_review}", "destroy")->middleware('permission:product-review.delete')->name("destroy");
                Route::get("/trash", "trash")->middleware('permission:product-review.trash.list')->name("trash");
@@ -433,7 +433,7 @@ Route::middleware(["admin","verified","user.role:admin"])
            ->name("product-reviews.published.")
            ->group(function () {
                Route::get("/", "index")->middleware('permission:product-review.menu')->name("index");
-               Route::get("/details/{product_review}", "show")->middleware('permission:product-review.detail')->name("show");
+               Route::get("/{product_review}", "show")->middleware('permission:product-review.detail')->name("show");
                Route::post("/{product_review}", "update")->middleware('permission:product-review.control')->name("update");
                Route::delete("/{product_review}", "destroy")->middleware('permission:product-review.delete')->name("destroy");
                //    Route::get("/trash", "trash")->middleware('permission:product-review.trash.list')->name("trash");
@@ -448,7 +448,7 @@ Route::middleware(["admin","verified","user.role:admin"])
            ->name("shop-reviews.pending.")
            ->group(function () {
                Route::get("/", "index")->middleware('permission:shop-review.menu')->name("index");
-               Route::get("/details/{id}", "show")->middleware('permission:shop-review.detail')->name("show");
+               Route::get("/{id}", "show")->middleware('permission:shop-review.detail')->name("show");
                Route::post("/{id}", "update")->middleware('permission:shop-review.control')->name("update");
            });
 
@@ -458,7 +458,7 @@ Route::middleware(["admin","verified","user.role:admin"])
            ->name("shop-reviews.published.")
            ->group(function () {
                Route::get("/", "index")->middleware('permission:shop-review.menu')->name("index");
-               Route::get("/details/{id}", "show")->middleware('permission:shop-review.detail')->name("show");
+               Route::get("/{id}", "show")->middleware('permission:shop-review.detail')->name("show");
                Route::post("/{id}", "update")->middleware('permission:shop-review.control')->name("update");
                Route::delete("/{id}", "destroy")->middleware('permission:shop-review.delete')->name("destroy");
                //    Route::get("/trash", "trash")->middleware('permission:shop-review.trash.list')->name("trash");
@@ -474,7 +474,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->name("vendors.inactive.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:vendor-manage.menu')->name("index");
-                    Route::get("/details/{id}", "show")->middleware('permission:vendor-manage.detail')->name("show");
+                    Route::get("/{id}", "show")->middleware('permission:vendor-manage.detail')->name("show");
                     Route::post("/{id}", "update")->middleware('permission:vendor-manage.control')->name("update");
                     Route::delete("/{id}", "destroy")->middleware('permission:vendor-manage.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:vendor-manage.trash.list')->name("trash");
@@ -489,7 +489,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->name("vendors.active.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:vendor-manage.menu')->name("index");
-                    Route::get("/details/{id}", "show")->middleware('permission:vendor-manage.detail')->name("show");
+                    Route::get("/{id}", "show")->middleware('permission:vendor-manage.detail')->name("show");
                     Route::post("/{id}", "update")->middleware('permission:vendor-manage.control')->name("update");
                 });
 
@@ -499,7 +499,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->name("users.register.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:user-manage.menu')->name("index");
-                    Route::get("/details/{user}", "show")->middleware('permission:user-manage.detail')->name("show");
+                    Route::get("/{user}", "show")->middleware('permission:user-manage.detail')->name("show");
                     Route::delete("/{user}", "destroy")->middleware('permission:user-manage.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:user-manage.trash.list')->name("trash");
                     Route::post("/{id}/restore", "restore")->middleware('permission:user-manage.trash.restore')->name("restore");
@@ -513,7 +513,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->name("vendors.register.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:user-manage.menu')->name("index");
-                    Route::get("/details/{user}", "show")->middleware('permission:user-manage.detail')->name("show");
+                    Route::get("/{user}", "show")->middleware('permission:user-manage.detail')->name("show");
                     Route::delete("/{user}", "destroy")->middleware('permission:user-manage.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:user-manage.trash.list')->name("trash");
                     Route::post("/{id}/restore", "restore")->middleware('permission:user-manage.trash.restore')->name("restore");
@@ -527,7 +527,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->name("admin-manage.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:admin-manage.menu')->name("index");
-                    Route::get("/details/{user}", "show")->middleware('permission:admin-manage.detail')->name("show");
+                    Route::get("/{user}", "show")->middleware('permission:admin-manage.detail')->name("show");
                     Route::get("/create", "create")->middleware('permission:admin-manage.add')->name("create");
                     Route::post("/", "store")->middleware('permission:admin-manage.add')->name("store");
                     Route::get("/{user}/edit", "edit")->middleware('permission:admin-manage.edit')->name("edit");
@@ -687,7 +687,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->name("suggestions.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:suggestion.menu')->name("index");
-                    Route::get("/details/{suggestion}", "show")->middleware('permission:suggestion.detail')->name("show");
+                    Route::get("/{suggestion}", "show")->middleware('permission:suggestion.detail')->name("show");
                     Route::delete("/{suggestion}", "destroy")->middleware('permission:suggestion.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:suggestion.trash.list')->name("trash");
                     Route::post("/{suggestion}/restore", "restore")->middleware('permission:suggestion.trash.restore')->name("restore");
@@ -701,7 +701,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->name("website-feedbacks.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:website-feedback.menu')->name("index");
-                    Route::get("/details/{website_feedback}", "show")->middleware('permission:website-feedback.detail')->name("show");
+                    Route::get("/{website_feedback}", "show")->middleware('permission:website-feedback.detail')->name("show");
                     Route::delete("/{website_feedback}", "destroy")->middleware('permission:website-feedback.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:website-feedback.trash.list')->name("trash");
                     Route::post("/{website_feedback}/restore", "restore")->middleware('permission:website-feedback.trash.restore')->name("restore");

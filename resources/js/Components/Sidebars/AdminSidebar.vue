@@ -244,8 +244,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("SLIDER_BANNERS") }}
@@ -266,8 +266,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("CAMPAIGN_BANNERS") }}
@@ -288,8 +288,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("PRODUCT_BANNERS") }}
@@ -339,8 +339,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       Country
@@ -360,8 +360,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       Region
@@ -381,8 +381,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       City
@@ -402,8 +402,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       Township
@@ -496,8 +496,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("PENDING_ORDERS") }}
@@ -532,8 +532,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("PROCESSING_ORDERS") }}
@@ -554,8 +554,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("SHIPPED_ORDERS") }}
@@ -576,8 +576,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("DELIVERED_ORDERS") }}
@@ -631,8 +631,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("REQUESTED_RETURNS") }}
@@ -653,8 +653,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("APPROVED_RETURNS") }}
@@ -675,8 +675,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("REFUNDED_RETURNS") }}
@@ -730,8 +730,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("REQUESTED_CANCELS") }}
@@ -752,8 +752,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("APPROVED_CANCELS") }}
@@ -821,8 +821,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("PENDING_REVIEWS") }}
@@ -843,8 +843,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("PUBLISHED_REVIEWS") }}
@@ -895,8 +895,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("PENDING_REVIEWS") }}
@@ -917,8 +917,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("PUBLISHED_REVIEWS") }}
@@ -984,8 +984,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("ACTIVE_VENDORS") }}
@@ -1006,8 +1006,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("INACTIVE_VENDORS") }}
@@ -1058,8 +1058,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("REGISTERED_USERS") }}
@@ -1080,8 +1080,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("REGISTERED_VENDORS") }}
@@ -1180,8 +1180,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("ROLES") }}
@@ -1202,8 +1202,8 @@
                       :data="{
                         page: 1,
                         per_page: 10,
-                        sort: id,
-                        direction: desc,
+                        sort: 'id',
+                        direction: 'desc',
                       }"
                     >
                       {{ __("PERMISSIONS") }}
