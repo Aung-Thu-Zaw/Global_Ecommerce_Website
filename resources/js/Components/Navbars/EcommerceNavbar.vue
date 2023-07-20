@@ -232,6 +232,18 @@ const handleRemoveSearchHistory = (index, historyId) => {
       <div class="py-3 md:flex items-center">
         <div class="flex items-center flex-shrink-0 mb-4 md:mb-0">
           <Link
+            v-if="$page.props.websiteSetting.logo"
+            :href="route('home')"
+            class="mr-20 md:mr-3 lg:mr-24 pr-4 w-[200px]"
+          >
+            <img
+              :src="$page.props.websiteSetting.logo"
+              alt=""
+              class="h-12 w-full object-cover"
+            />
+          </Link>
+          <Link
+            v-else
             :href="route('home')"
             class="mr-20 md:mr-3 lg:mr-24 pr-4 text-xl text-slate-600 font-bold"
           >

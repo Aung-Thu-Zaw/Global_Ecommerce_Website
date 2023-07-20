@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\SeoSetting;
+use App\Models\WebsiteSetting;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\View;
@@ -29,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Model::preventLazyLoading(! app()->isProduction());
 
-        View::share("meta", SeoSetting::find(1));
+        View::share("meta", SeoSetting::findOrFail(1));
+        View::share("setting", WebsiteSetting::select("favicon")->first());
     }
 }

@@ -1,3 +1,7 @@
+<script setup>
+import { Link } from "@inertiajs/vue3";
+</script>
+
 <template>
   <footer class="bg-blue-600">
     <section class="py-10 text-white">
@@ -6,7 +10,6 @@
           <aside class="w-full md:w-1/3 lg:w-1/4 mb-5">
             <h2 class="text-2xl font-bold">Global Ecommerce</h2>
             <p class="my-4">
-              Company name. <br />
               © 2018- 2021 Templatemount. <br />
               All rights reserved.
             </p>
@@ -15,22 +18,30 @@
             <h3 class="font-semibold">Store</h3>
             <ul class="mt-2 space-y-1">
               <li>
-                <a href="#" class="opacity-70 hover:opacity-100"> Join us </a>
+                <Link
+                  :href="route('vendor.register')"
+                  class="opacity-70 hover:opacity-100"
+                >
+                  Join us
+                </Link>
               </li>
               <li>
-                <a href="#" class="opacity-70 hover:opacity-100">
+                <Link
+                  :href="route('shop.index')"
+                  class="opacity-70 hover:opacity-100"
+                >
                   Find store
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" class="opacity-70 hover:opacity-100">
+                <Link href="#" class="opacity-70 hover:opacity-100">
                   Categories
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" class="opacity-70 hover:opacity-100">
+                <Link href="#" class="opacity-70 hover:opacity-100">
                   Partnership
-                </a>
+                </Link>
               </li>
             </ul>
           </aside>
@@ -38,18 +49,24 @@
             <h3 class="font-semibold">About</h3>
             <ul class="mt-2 space-y-1">
               <li>
-                <a href="#" class="opacity-70 hover:opacity-100"> About us </a>
+                <Link href="#" class="opacity-70 hover:opacity-100">
+                  About us
+                </Link>
               </li>
               <li>
-                <a href="#" class="opacity-70 hover:opacity-100">
+                <Link href="#" class="opacity-70 hover:opacity-100">
                   Our history
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" class="opacity-70 hover:opacity-100"> Our team </a>
+                <Link href="#" class="opacity-70 hover:opacity-100">
+                  Our team
+                </Link>
               </li>
               <li>
-                <a href="#" class="opacity-70 hover:opacity-100"> Offices </a>
+                <Link href="#" class="opacity-70 hover:opacity-100">
+                  Offices
+                </Link>
               </li>
             </ul>
           </aside>
@@ -57,20 +74,19 @@
             <h3 class="font-semibold">Help</h3>
             <ul class="mt-2 space-y-1">
               <li>
-                <a href="#" class="opacity-70 hover:opacity-100">
+                <Link href="#" class="opacity-70 hover:opacity-100">
                   Contact us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" class="opacity-70 hover:opacity-100">
-                  Submit ticket
-                </a>
+                <Link href="#" class="opacity-70 hover:opacity-100">
+                  FAQs
+                </Link>
               </li>
               <li>
-                <a href="#" class="opacity-70 hover:opacity-100"> FAQs </a>
-              </li>
-              <li>
-                <a href="#" class="opacity-70 hover:opacity-100"> Refunds </a>
+                <Link href="#" class="opacity-70 hover:opacity-100">
+                  Refunds
+                </Link>
               </li>
             </ul>
           </aside>
@@ -78,15 +94,19 @@
             <h3 class="font-semibold">Links</h3>
             <ul class="mt-2 space-y-1">
               <li>
-                <a href="#" class="opacity-70 hover:opacity-100"> Our terms </a>
+                <Link href="#" class="opacity-70 hover:opacity-100">
+                  Our terms
+                </Link>
               </li>
               <li>
-                <a href="#" class="opacity-70 hover:opacity-100">
-                  Privacy setting</a
+                <Link href="#" class="opacity-70 hover:opacity-100">
+                  Privacy setting</Link
                 >
               </li>
               <li>
-                <a href="#" class="opacity-70 hover:opacity-100"> Sign up </a>
+                <Link href="#" class="opacity-70 hover:opacity-100">
+                  Sign up
+                </Link>
               </li>
             </ul>
           </aside>

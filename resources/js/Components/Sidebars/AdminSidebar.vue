@@ -1302,12 +1302,11 @@
           class="my-4 md:min-w-full"
         />
 
-        <!-- Site Settings Section Title -->
+        <!-- Admin Dashboard Web Control Area Section Title -->
         <h6
-          v-if="websiteSettingMenu || seoSettingMenu"
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
-          {{ __("SITE_SETTINGS") }}
+          {{ __("ADMIN_WEB_CONTROL_AREA") }}
         </h6>
 
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">

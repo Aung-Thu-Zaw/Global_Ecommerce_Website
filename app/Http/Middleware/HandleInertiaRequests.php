@@ -10,6 +10,7 @@ use App\Models\Language;
 use App\Models\Message;
 use App\Models\SearchHistory;
 use App\Models\User;
+use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Jorenvh\Share\ShareFacade;
@@ -49,6 +50,7 @@ class HandleInertiaRequests extends Middleware
             'languages'=>Language::all(),
             'locale'=>session('locale'),
             'searchHistories'=>SearchHistory::orderBy("id", "desc")->get(),
+            'websiteSetting'=>WebsiteSetting::select("logo")->first(),
             'vendors'=>User::where([["role","vendor"],["status","active"]])->limit(30)->get(),
             'totalCartItems'=> Cart::with("cartItems")->where("user_id", $request->user()->id ?? null)->first(),
             'socialShares' => (new Share())
