@@ -15,14 +15,14 @@ import { Link } from "@inertiajs/vue3";
             </p>
           </aside>
           <aside class="w-1/2 sm:w-auto flex-auto mb-5">
-            <h3 class="font-semibold">Store</h3>
+            <h3 class="font-semibold">{{ __("STORE") }}</h3>
             <ul class="mt-2 space-y-1">
               <li>
                 <Link
                   :href="route('vendor.register')"
                   class="opacity-70 hover:opacity-100"
                 >
-                  Join us
+                  {{ __("JOIN_US") }}
                 </Link>
               </li>
               <li>
@@ -30,82 +30,76 @@ import { Link } from "@inertiajs/vue3";
                   :href="route('shop.index')"
                   class="opacity-70 hover:opacity-100"
                 >
-                  Find store
+                  {{ __("FIND_STORE") }}
                 </Link>
               </li>
               <li>
                 <Link href="#" class="opacity-70 hover:opacity-100">
-                  Categories
+                  {{ __("CATEGORIES") }}
                 </Link>
               </li>
               <li>
                 <Link href="#" class="opacity-70 hover:opacity-100">
-                  Partnership
-                </Link>
-              </li>
-            </ul>
-          </aside>
-          <aside class="w-1/2 sm:w-auto flex-auto mb-5">
-            <h3 class="font-semibold">About</h3>
-            <ul class="mt-2 space-y-1">
-              <li>
-                <Link href="#" class="opacity-70 hover:opacity-100">
-                  About us
-                </Link>
-              </li>
-              <li>
-                <Link href="#" class="opacity-70 hover:opacity-100">
-                  Our history
-                </Link>
-              </li>
-              <li>
-                <Link href="#" class="opacity-70 hover:opacity-100">
-                  Our team
-                </Link>
-              </li>
-              <li>
-                <Link href="#" class="opacity-70 hover:opacity-100">
-                  Offices
+                  {{ __("PARTNERSHIP") }}
                 </Link>
               </li>
             </ul>
           </aside>
           <aside class="w-1/2 sm:w-auto flex-auto mb-5">
-            <h3 class="font-semibold">Help</h3>
+            <h3 class="font-semibold">
+              {{ __("ABOUT") }}
+            </h3>
             <ul class="mt-2 space-y-1">
               <li>
                 <Link href="#" class="opacity-70 hover:opacity-100">
-                  Contact us
+                  {{ __("ABOUT_US") }}
                 </Link>
               </li>
               <li>
                 <Link href="#" class="opacity-70 hover:opacity-100">
-                  FAQs
+                  {{ __("OUR_HISTORY") }}
                 </Link>
               </li>
               <li>
                 <Link href="#" class="opacity-70 hover:opacity-100">
-                  Refunds
+                  {{ __("OUR_TEAM") }}
+                </Link>
+              </li>
+              <li>
+                <Link href="#" class="opacity-70 hover:opacity-100">
+                  {{ __("OFFICES") }}
                 </Link>
               </li>
             </ul>
           </aside>
           <aside class="w-1/2 sm:w-auto flex-auto mb-5">
-            <h3 class="font-semibold">Links</h3>
+            <h3 class="font-semibold">
+              {{ __("HELP") }}
+            </h3>
             <ul class="mt-2 space-y-1">
               <li>
                 <Link href="#" class="opacity-70 hover:opacity-100">
-                  Our terms
+                  {{ __("CONTACT_US") }}
                 </Link>
               </li>
               <li>
                 <Link href="#" class="opacity-70 hover:opacity-100">
-                  Privacy setting</Link
-                >
+                  {{ __("FAQS") }}
+                </Link>
               </li>
               <li>
                 <Link href="#" class="opacity-70 hover:opacity-100">
-                  Sign up
+                  {{ __("OUR_TERMS") }}
+                </Link>
+              </li>
+              <li>
+                <Link href="#" class="opacity-70 hover:opacity-100">
+                  {{ __("PRIVACY_POLICY") }}
+                </Link>
+              </li>
+              <li>
+                <Link href="#" class="opacity-70 hover:opacity-100">
+                  {{ __("RETURNS_AND_REFUNDS") }}
                 </Link>
               </li>
             </ul>

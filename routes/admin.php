@@ -15,8 +15,8 @@ use App\Http\Controllers\Admin\UserManagements\VendorManage\AdminActiveVendorCon
 use App\Http\Controllers\Admin\UserManagements\VendorManage\AdminInactiveVendorController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AuthorityManagements\AdminRoleInPermissionController;
-use App\Http\Controllers\Admin\SiteSettings\AdminSeoSettingController;
-use App\Http\Controllers\Admin\SiteSettings\AdminWebsiteSettingController;
+use App\Http\Controllers\Admin\AdminWebControlArea\SiteSettings\AdminSeoSettingController;
+use App\Http\Controllers\Admin\AdminWebControlArea\SiteSettings\AdminWebsiteSettingController;
 use App\Http\Controllers\Admin\Banners\AdminSliderBannerController;
 use App\Http\Controllers\Admin\BlogManagements\AdminBlogCategoryController;
 use App\Http\Controllers\Admin\BlogManagements\AdminBlogPostController;
@@ -655,8 +655,8 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->prefix("/website-settings")
                 ->name("website-settings.")
                 ->group(function () {
-                    Route::get("/", "edit")->middleware('permission:website-setting.menu')->name("edit");
-                    Route::post("/{website_setting}", "update")->middleware('permission:website-setting.edit')->name("update");
+                    Route::get("/", "edit")->middleware('permission:setting.menu')->name("edit");
+                    Route::post("/{website_setting}", "update")->middleware('permission:setting.edit')->name("update");
                 });
 
            // Admin Seo Setting Section
@@ -664,8 +664,8 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->prefix("/seo-settings")
                 ->name("seo-settings.")
                 ->group(function () {
-                    Route::get("/", "edit")->middleware('permission:seo-setting.menu')->name("edit");
-                    Route::post("/{seo_setting}", "update")->middleware('permission:seo-setting.edit')->name("update");
+                    Route::get("/", "edit")->middleware('permission:setting.menu')->name("edit");
+                    Route::post("/{seo_setting}", "update")->middleware('permission:setting.edit')->name("update");
                 });
 
            // Admin Subscribers Section

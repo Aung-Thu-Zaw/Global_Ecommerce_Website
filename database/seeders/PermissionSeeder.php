@@ -163,11 +163,11 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"blog-post.trash.restore","group"=>"blog-post"]);
         Permission::create(["name"=>"blog-post.trash.delete","group"=>"blog-post"]);
 
-        Permission::create(["name"=>"website-setting.menu","group"=>"website-setting"]);
-        Permission::create(["name"=>"website-setting.edit","group"=>"website-setting"]);
+        Permission::create(["name"=>"setting.menu","group"=>"setting"]);
+        Permission::create(["name"=>"setting.edit","group"=>"setting"]);
 
-        Permission::create(["name"=>"seo-setting.menu","group"=>"seo-setting"]);
-        Permission::create(["name"=>"seo-setting.edit","group"=>"seo-setting"]);
+        Permission::create(["name"=>"page.menu","group"=>"page"]);
+        Permission::create(["name"=>"page.edit","group"=>"page"]);
 
         Permission::create(["name"=>"suggestion.menu","group"=>"suggestion"]);
         Permission::create(["name"=>"suggestion.detail","group"=>"suggestion"]);

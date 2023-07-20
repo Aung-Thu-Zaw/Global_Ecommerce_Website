@@ -81,7 +81,7 @@ const handleEditWebsiteSetting = async () => {
 const websiteSettingEdit = computed(() => {
   return usePage().props.auth.user.permissions.length
     ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "website-setting.edit"
+        (permission) => permission.name === "setting.edit"
       )
     : false;
 });

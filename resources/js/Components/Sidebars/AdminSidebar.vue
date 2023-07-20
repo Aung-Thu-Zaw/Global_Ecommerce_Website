@@ -1297,10 +1297,7 @@
           </li>
         </ul>
 
-        <hr
-          v-if="websiteSettingMenu || seoSettingMenu"
-          class="my-4 md:min-w-full"
-        />
+        <hr v-if="settingMenu || pageMenu" class="my-4 md:min-w-full" />
 
         <!-- Admin Dashboard Web Control Area Section Title -->
         <h6
@@ -1310,42 +1307,305 @@
         </h6>
 
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
-          <!-- Website Setting -->
-          <li v-if="websiteSettingMenu" class="items-center">
-            <Link
-              :href="route('admin.website-settings.edit')"
-              class="text-xs uppercase py-3 font-bold block"
-              :class="{
-                'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                  '/admin/website-settings'
-                ),
-                'text-slate-700 hover:text-slate-500': !$page.url.startsWith(
-                  '/admin/website-settings'
-                ),
-              }"
-            >
-              <i class="fa-solid fa-gear mr-2 text-sm"></i>
-              {{ __("WEBSITE_SETTINGS") }}
-            </Link>
+          <!-- Settings Section -->
+          <li v-if="settingMenu" class="items-center">
+            <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+              <li class="items-center cursor-pointer">
+                <div
+                  class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+                  @click="settingManageIsHidden = !settingManageIsHidden"
+                >
+                  <span>
+                    <i class="fa-solid fa-gear mr-2 text-sm"></i>
+                    {{ __("SETTINGS") }}
+                  </span>
+                  <i
+                    v-if="settingManageIsHidden"
+                    class="fa-solid fa-chevron-right"
+                  ></i>
+                  <i
+                    v-if="!settingManageIsHidden"
+                    class="fa-solid fa-chevron-down"
+                  ></i>
+                </div>
+
+                <ul
+                  v-if="!settingManageIsHidden || settingManage"
+                  class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+                >
+                  <!-- Website Setting Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/website-settings'
+                      ),
+                    }"
+                  >
+                    <Link :href="route('admin.website-settings.edit')">
+                      {{ __("WEBSITE_SETTING") }}
+                    </Link>
+                  </li>
+
+                  <!-- SEO Setting Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/seo-settings'
+                      ),
+                    }"
+                  >
+                    <Link :href="route('admin.seo-settings.edit')">
+                      {{ __("SEO_SETTING") }}
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+            </ul>
           </li>
 
-          <!-- SEO Setting -->
-          <li v-if="seoSettingMenu" class="items-center">
-            <Link
-              :href="route('admin.seo-settings.edit')"
-              class="text-xs uppercase py-3 font-bold block"
-              :class="{
-                'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                  '/admin/seo-settings'
-                ),
-                'text-slate-700 hover:text-slate-500': !$page.url.startsWith(
-                  '/admin/seo-settings'
-                ),
-              }"
-            >
-              <i class="fa-brands fa-searchengin mr-2 text-sm"></i>
-              {{ __("SEO_SETTING") }}
-            </Link>
+          <!-- Pages Section -->
+          <li v-if="pageMenu" class="items-center">
+            <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+              <li class="items-center cursor-pointer">
+                <div
+                  class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+                  @click="pageManageIsHidden = !pageManageIsHidden"
+                >
+                  <span>
+                    <i class="fa-solid fa-file-lines mr-2 text-sm"></i>
+                    {{ __("PAGE_MANAGE") }}
+                  </span>
+                  <i
+                    v-if="pageManageIsHidden"
+                    class="fa-solid fa-chevron-right"
+                  ></i>
+                  <i
+                    v-if="!pageManageIsHidden"
+                    class="fa-solid fa-chevron-down"
+                  ></i>
+                </div>
+
+                <ul
+                  v-if="!pageManageIsHidden || pageManage"
+                  class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+                >
+                  <!-- About Us Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/return-order-manage/requested-return'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.return-orders.requested.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: 'id',
+                        direction: 'desc',
+                      }"
+                    >
+                      {{ __("ABOUT_US") }}
+                    </Link>
+                  </li>
+                  <!-- Our History Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/return-order-manage/requested-return'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.return-orders.requested.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: 'id',
+                        direction: 'desc',
+                      }"
+                    >
+                      {{ __("OUR_HISTORY") }}
+                    </Link>
+                  </li>
+                  <!-- Our Team Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/return-order-manage/requested-return'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.return-orders.requested.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: 'id',
+                        direction: 'desc',
+                      }"
+                    >
+                      {{ __("OUR_TEAM") }}
+                    </Link>
+                  </li>
+                  <!-- Offices Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/return-order-manage/requested-return'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.return-orders.requested.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: 'id',
+                        direction: 'desc',
+                      }"
+                    >
+                      {{ __("OFFICES") }}
+                    </Link>
+                  </li>
+                  <!-- FAQs Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/return-order-manage/requested-return'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.return-orders.requested.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: 'id',
+                        direction: 'desc',
+                      }"
+                    >
+                      {{ __("FAQS") }}
+                    </Link>
+                  </li>
+                  <!-- Our Terms And Conditions Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/return-order-manage/requested-return'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.return-orders.requested.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: 'id',
+                        direction: 'desc',
+                      }"
+                    >
+                      {{ __("OUR_TERMS") }}
+                    </Link>
+                  </li>
+                  <!-- Privacy And Policy Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/return-order-manage/requested-return'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.return-orders.requested.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: 'id',
+                        direction: 'desc',
+                      }"
+                    >
+                      {{ __("PRIVACY_POLICY") }}
+                    </Link>
+                  </li>
+                  <!-- Returns And Refunds Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/return-order-manage/requested-return'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.return-orders.requested.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: 'id',
+                        direction: 'desc',
+                      }"
+                    >
+                      {{ __("RETURNS_AND_REFUNDS") }}
+                    </Link>
+                  </li>
+
+                  <!-- Approved Return Order Section -->
+                  <!-- <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/return-order-manage/approved-return'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.return-orders.approved.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: 'id',
+                        direction: 'desc',
+                      }"
+                    >
+                      {{ __("APPROVED_RETURNS") }}
+                    </Link>
+                  </li> -->
+
+                  <!-- Refunded Return Order Section -->
+                  <!-- <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/return-order-manage/refunded-return'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.return-orders.refunded.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: 'id',
+                        direction: 'desc',
+                      }"
+                    >
+                      {{ __("REFUNDED_RETURNS") }}
+                    </Link>
+                  </li> -->
+                </ul>
+              </li>
+            </ul>
           </li>
         </ul>
 
@@ -1455,6 +1715,8 @@ export default {
       vendorManageIsHidden: true,
       userManageIsHidden: true,
       orderManageIsHidden: true,
+      settingManageIsHidden: true,
+      pageManageIsHidden: true,
       returnOrderManageIsHidden: true,
       cancelOrderManageIsHidden: true,
       shopReviewManageIsHidden: true,
@@ -1497,6 +1759,22 @@ export default {
         this.$page.url.startsWith("/admin/order-manage/delivered-orders")
       ) {
         return (this.orderManageIsHidden = false);
+      }
+    },
+    settingManage() {
+      if (
+        this.$page.url.startsWith("/admin/website-settings") ||
+        this.$page.url.startsWith("/admin/seo-settings")
+      ) {
+        return (this.settingManageIsHidden = false);
+      }
+    },
+    pageManage() {
+      if (
+        this.$page.url.startsWith("/admin/website-settings") ||
+        this.$page.url.startsWith("/admin/seo-settings")
+      ) {
+        return (this.settingManageIsHidden = false);
       }
     },
     returnOrderManage() {
@@ -1735,18 +2013,17 @@ export default {
         : false;
     },
 
-    websiteSettingMenu() {
+    settingMenu() {
       return this.permissions.length
         ? this.permissions.some(
-            (permission) => permission.name === "website-setting.menu"
+            (permission) => permission.name === "setting.menu"
           )
         : false;
     },
-    seoSettingMenu() {
+
+    pageMenu() {
       return this.permissions.length
-        ? this.permissions.some(
-            (permission) => permission.name === "seo-setting.menu"
-          )
+        ? this.permissions.some((permission) => permission.name === "page.menu")
         : false;
     },
 

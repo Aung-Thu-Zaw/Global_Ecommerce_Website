@@ -62,7 +62,7 @@ const handleEditSeoSetting = async () => {
 const seoSettingEdit = computed(() => {
   return usePage().props.auth.user.permissions.length
     ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "seo-setting.edit"
+        (permission) => permission.name === "setting.edit"
       )
     : false;
 });

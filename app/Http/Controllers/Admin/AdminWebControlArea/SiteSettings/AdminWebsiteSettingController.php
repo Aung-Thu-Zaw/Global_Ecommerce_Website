@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\SiteSettings;
+namespace App\Http\Controllers\Admin\AdminWebControlArea\SiteSettings;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WebsiteSettingRequest;

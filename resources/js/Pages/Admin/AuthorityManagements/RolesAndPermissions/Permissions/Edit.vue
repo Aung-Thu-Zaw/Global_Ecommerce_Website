@@ -261,17 +261,11 @@ const handleEditPermission = async () => {
               <option value="blog-post" :selected="form.group == 'blog-post'">
                 Blog Post
               </option>
-              <option
-                value="website-setting"
-                :selected="form.group == 'website-setting'"
-              >
-                Website Setting
+              <option value="setting" :selected="form.group == 'setting'">
+                Setting
               </option>
-              <option
-                value="seo-setting"
-                :selected="form.group == 'seo-setting'"
-              >
-                Seo Setting
+              <option value="page" :selected="form.group == 'page'">
+                Page
               </option>
 
               <option value="suggestion" :selected="form.group == 'suggestion'">
@@ -281,7 +275,7 @@ const handleEditPermission = async () => {
                 value="website-feedback"
                 :selected="form.group == 'website-feedback'"
               >
-                Feedback
+                Website Feedback
               </option>
               <option value="subscriber" :selected="form.group == 'subscriber'">
                 Subscriber

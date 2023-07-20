@@ -161,8 +161,8 @@ const handleCreatePermission = async () => {
               <option value="role-in-permissions">Role In Permissions</option>
               <option value="blog-category">Blog Category</option>
               <option value="blog-post">Blog Post</option>
-              <option value="website-setting">Website Setting</option>
-              <option value="seo-setting">Seo Setting</option>
+              <option value="setting">Setting</option>
+              <option value="page">Page</option>
               <option value="suggestion">Suggestion</option>
               <option value="website-feedback">Website Feedback</option>
               <option value="subscriber">Subscriber</option>
