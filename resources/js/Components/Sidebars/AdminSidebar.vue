@@ -1391,48 +1391,6 @@
                   v-if="!pageManageIsHidden || pageManage"
                   class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
                 >
-                  <!-- About Us Section -->
-                  <li
-                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                    :class="{
-                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                        '/admin/return-order-manage/requested-return'
-                      ),
-                    }"
-                  >
-                    <Link
-                      :href="route('admin.return-orders.requested.index')"
-                      :data="{
-                        page: 1,
-                        per_page: 10,
-                        sort: 'id',
-                        direction: 'desc',
-                      }"
-                    >
-                      {{ __("ABOUT_US") }}
-                    </Link>
-                  </li>
-                  <!-- Our History Section -->
-                  <li
-                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                    :class="{
-                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                        '/admin/return-order-manage/requested-return'
-                      ),
-                    }"
-                  >
-                    <Link
-                      :href="route('admin.return-orders.requested.index')"
-                      :data="{
-                        page: 1,
-                        per_page: 10,
-                        sort: 'id',
-                        direction: 'desc',
-                      }"
-                    >
-                      {{ __("OUR_HISTORY") }}
-                    </Link>
-                  </li>
                   <!-- Our Team Section -->
                   <li
                     class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
@@ -1472,7 +1430,7 @@
                         direction: 'desc',
                       }"
                     >
-                      {{ __("OFFICES") }}
+                      {{ __("OUR_OFFICES") }}
                     </Link>
                   </li>
                   <!-- FAQs Section -->
@@ -1526,15 +1484,7 @@
                       ),
                     }"
                   >
-                    <Link
-                      :href="route('admin.return-orders.requested.index')"
-                      :data="{
-                        page: 1,
-                        per_page: 10,
-                        sort: 'id',
-                        direction: 'desc',
-                      }"
-                    >
+                    <Link :href="route('admin.pages.privacy.edit')">
                       {{ __("PRIVACY_POLICY") }}
                     </Link>
                   </li>
@@ -1559,50 +1509,6 @@
                       {{ __("RETURNS_AND_REFUNDS") }}
                     </Link>
                   </li>
-
-                  <!-- Approved Return Order Section -->
-                  <!-- <li
-                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                    :class="{
-                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                        '/admin/return-order-manage/approved-return'
-                      ),
-                    }"
-                  >
-                    <Link
-                      :href="route('admin.return-orders.approved.index')"
-                      :data="{
-                        page: 1,
-                        per_page: 10,
-                        sort: 'id',
-                        direction: 'desc',
-                      }"
-                    >
-                      {{ __("APPROVED_RETURNS") }}
-                    </Link>
-                  </li> -->
-
-                  <!-- Refunded Return Order Section -->
-                  <!-- <li
-                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                    :class="{
-                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                        '/admin/return-order-manage/refunded-return'
-                      ),
-                    }"
-                  >
-                    <Link
-                      :href="route('admin.return-orders.refunded.index')"
-                      :data="{
-                        page: 1,
-                        per_page: 10,
-                        sort: 'id',
-                        direction: 'desc',
-                      }"
-                    >
-                      {{ __("REFUNDED_RETURNS") }}
-                    </Link>
-                  </li> -->
                 </ul>
               </li>
             </ul>

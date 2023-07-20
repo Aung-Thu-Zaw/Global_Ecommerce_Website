@@ -16,7 +16,7 @@ class AdminWebsiteSettingController extends Controller
     {
         $websiteSetting=WebsiteSetting::findOrFail(1);
 
-        return inertia("Admin/Settings/WebsiteSettings/Edit", compact("websiteSetting"));
+        return inertia("Admin/AdminWebControlArea/Settings/WebsiteSettings/Edit", compact("websiteSetting"));
     }
 
     public function update(WebsiteSettingRequest $request, WebsiteSetting $websiteSetting, WebsiteSettingImageUploadService $websiteSettingImageUploadService): RedirectResponse

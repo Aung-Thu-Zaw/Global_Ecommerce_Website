@@ -70,7 +70,7 @@ import { Link } from "@inertiajs/vue3";
               </li>
               <li>
                 <Link href="#" class="opacity-70 hover:opacity-100">
-                  {{ __("OFFICES") }}
+                  {{ __("OUR_OFFICES") }}
                 </Link>
               </li>
             </ul>
@@ -96,7 +96,10 @@ import { Link } from "@inertiajs/vue3";
                 </Link>
               </li>
               <li>
-                <Link href="#" class="opacity-70 hover:opacity-100">
+                <Link
+                  :href="route('privacy-policy')"
+                  class="opacity-70 hover:opacity-100"
+                >
                   {{ __("PRIVACY_POLICY") }}
                 </Link>
               </li>

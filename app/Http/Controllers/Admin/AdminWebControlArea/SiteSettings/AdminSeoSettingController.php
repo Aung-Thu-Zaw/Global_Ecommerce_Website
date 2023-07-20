@@ -15,7 +15,7 @@ class AdminSeoSettingController extends Controller
     {
         $seoSetting=SeoSetting::find(1);
 
-        return inertia("Admin/Settings/SeoSettings/Edit", compact("seoSetting"));
+        return inertia("Admin/AdminWebControlArea/Settings/SeoSettings/Edit", compact("seoSetting"));
     }
 
     public function update(SeoSettingRequest $request, SeoSetting $seoSetting): RedirectResponse

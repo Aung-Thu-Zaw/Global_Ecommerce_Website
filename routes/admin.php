@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AuthorityManagements\AdminRoleInPermissionController;
 use App\Http\Controllers\Admin\AdminWebControlArea\SiteSettings\AdminSeoSettingController;
 use App\Http\Controllers\Admin\AdminWebControlArea\SiteSettings\AdminWebsiteSettingController;
+use App\Http\Controllers\Admin\AdminWebControlArea\WebsitePages\AdminPrivacyPolicyController;
 use App\Http\Controllers\Admin\Banners\AdminSliderBannerController;
 use App\Http\Controllers\Admin\BlogManagements\AdminBlogCategoryController;
 use App\Http\Controllers\Admin\BlogManagements\AdminBlogPostController;
@@ -585,6 +586,15 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::post("/{role}", "update")->middleware('permission:role-in-permissions.edit')->name("update");
                     Route::delete("/{role}", "destroy")->middleware('permission:role-in-permissions.delete')->name("destroy");
                 });
+
+           // Admin Privacy And Policy Section
+           Route::controller(AdminPrivacyPolicyController::class)
+           ->prefix("/pages/privacy-and-policy")
+           ->name("pages.privacy.")
+           ->group(function () {
+               Route::get("/", "edit")->middleware('permission:page.menu')->name("edit");
+               Route::post("/{page}", "update")->middleware('permission:page.edit')->name("update");
+           });
 
 
 
