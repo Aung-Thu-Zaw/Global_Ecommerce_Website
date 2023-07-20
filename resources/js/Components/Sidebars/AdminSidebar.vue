@@ -1375,7 +1375,7 @@
                 >
                   <span>
                     <i class="fa-solid fa-file-lines mr-2 text-sm"></i>
-                    {{ __("PAGE_MANAGE") }}
+                    {{ __("PAGES") }}
                   </span>
                   <i
                     v-if="pageManageIsHidden"

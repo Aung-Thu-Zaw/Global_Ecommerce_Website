@@ -33,6 +33,7 @@ use App\Http\Controllers\Ecommerce\UserProductInteractionController;
 use App\Http\Controllers\User\MyAccountController;
 use App\Http\Controllers\User\MyWatchlistController;
 use App\Http\Controllers\Ecommerce\WebsiteFeedbackController;
+use App\Http\Controllers\Ecommerce\WebsitePages\AboutUsController;
 use App\Http\Controllers\User\MyOrderController;
 use App\Http\Controllers\User\TrackMyOrderController;
 use Illuminate\Support\Facades\Route;
@@ -63,6 +64,8 @@ Route::controller(ProductController::class)
          Route::get('/hot-deal-products', "hotDealProducts")->name("hot-deal");
          Route::get('/{product}', "show")->name("show");
      });
+
+Route::get("/about-us", [AboutUsController::class,"index"])->name("about-us");
 
 Route::post('/search/histories/{search_history}', [SearchHistoryController::class,"update"])->name("user.search.history.update");
 

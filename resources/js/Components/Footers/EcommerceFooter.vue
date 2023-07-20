@@ -30,7 +30,7 @@ import { Link } from "@inertiajs/vue3";
                   :href="route('shop.index')"
                   class="opacity-70 hover:opacity-100"
                 >
-                  {{ __("FIND_STORE") }}
+                  {{ __("FIND_SHOP") }}
                 </Link>
               </li>
               <li>
@@ -51,7 +51,10 @@ import { Link } from "@inertiajs/vue3";
             </h3>
             <ul class="mt-2 space-y-1">
               <li>
-                <Link href="#" class="opacity-70 hover:opacity-100">
+                <Link
+                  :href="route('about-us')"
+                  class="opacity-70 hover:opacity-100"
+                >
                   {{ __("ABOUT_US") }}
                 </Link>
               </li>
