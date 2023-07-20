@@ -59,7 +59,10 @@ import { Link } from "@inertiajs/vue3";
                 </Link>
               </li>
               <li>
-                <Link href="#" class="opacity-70 hover:opacity-100">
+                <Link
+                  :href="route('our-history')"
+                  class="opacity-70 hover:opacity-100"
+                >
                   {{ __("OUR_HISTORY") }}
                 </Link>
               </li>

@@ -6,10 +6,10 @@ use App\Http\Controllers\Controller;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
-class AboutUsController extends Controller
+class OurHistoryController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        return inertia("Ecommerce/WebsitePages/AboutUs/Index");
+        return inertia("Ecommerce/WebsitePages/OurHistory/Index");
     }
 }

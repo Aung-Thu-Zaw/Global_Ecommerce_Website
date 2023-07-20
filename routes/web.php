@@ -34,6 +34,7 @@ use App\Http\Controllers\User\MyAccountController;
 use App\Http\Controllers\User\MyWatchlistController;
 use App\Http\Controllers\Ecommerce\WebsiteFeedbackController;
 use App\Http\Controllers\Ecommerce\WebsitePages\AboutUsController;
+use App\Http\Controllers\Ecommerce\WebsitePages\OurHistoryController;
 use App\Http\Controllers\Ecommerce\WebsitePages\PrivacyPolicyController;
 use App\Http\Controllers\Ecommerce\WebsitePages\TermsAndConditionsController;
 use App\Http\Controllers\User\MyOrderController;
@@ -68,6 +69,8 @@ Route::controller(ProductController::class)
      });
 
 Route::get("/about-us", [AboutUsController::class,"index"])->name("about-us");
+
+Route::get("/our-history", [OurHistoryController::class,"index"])->name("our-history");
 
 Route::get("/privacy-policy", [PrivacyPolicyController::class,"index"])->name("privacy-policy");
 
