@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\AuthorityManagements\AdminRoleInPermissionControl
 use App\Http\Controllers\Admin\AdminWebControlArea\SiteSettings\AdminSeoSettingController;
 use App\Http\Controllers\Admin\AdminWebControlArea\SiteSettings\AdminWebsiteSettingController;
 use App\Http\Controllers\Admin\AdminWebControlArea\WebsitePages\AdminPrivacyPolicyController;
+use App\Http\Controllers\Admin\AdminWebControlArea\WebsitePages\AdminTermsAndConditionsController;
 use App\Http\Controllers\Admin\Banners\AdminSliderBannerController;
 use App\Http\Controllers\Admin\BlogManagements\AdminBlogCategoryController;
 use App\Http\Controllers\Admin\BlogManagements\AdminBlogPostController;
@@ -589,8 +590,17 @@ Route::middleware(["admin","verified","user.role:admin"])
 
            // Admin Privacy And Policy Section
            Route::controller(AdminPrivacyPolicyController::class)
-           ->prefix("/pages/privacy-and-policy")
-           ->name("pages.privacy.")
+           ->prefix("/pages/privacy-policy")
+           ->name("pages.privacy-policy.")
+           ->group(function () {
+               Route::get("/", "edit")->middleware('permission:page.menu')->name("edit");
+               Route::post("/{page}", "update")->middleware('permission:page.edit')->name("update");
+           });
+
+           // Admin Terms And Conditions Section
+           Route::controller(AdminTermsAndConditionsController::class)
+           ->prefix("/pages/terms-and-conditions")
+           ->name("pages.terms-and-conditions.")
            ->group(function () {
                Route::get("/", "edit")->middleware('permission:page.menu')->name("edit");
                Route::post("/{page}", "update")->middleware('permission:page.edit')->name("update");

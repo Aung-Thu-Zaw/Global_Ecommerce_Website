@@ -35,6 +35,7 @@ use App\Http\Controllers\User\MyWatchlistController;
 use App\Http\Controllers\Ecommerce\WebsiteFeedbackController;
 use App\Http\Controllers\Ecommerce\WebsitePages\AboutUsController;
 use App\Http\Controllers\Ecommerce\WebsitePages\PrivacyPolicyController;
+use App\Http\Controllers\Ecommerce\WebsitePages\TermsAndConditionsController;
 use App\Http\Controllers\User\MyOrderController;
 use App\Http\Controllers\User\TrackMyOrderController;
 use Illuminate\Support\Facades\Route;
@@ -69,6 +70,8 @@ Route::controller(ProductController::class)
 Route::get("/about-us", [AboutUsController::class,"index"])->name("about-us");
 
 Route::get("/privacy-policy", [PrivacyPolicyController::class,"index"])->name("privacy-policy");
+
+Route::get("/terms-and-conditions", [TermsAndConditionsController::class,"index"])->name("terms-and-conditions");
 
 Route::post('/search/histories/{search_history}', [SearchHistoryController::class,"update"])->name("user.search.history.update");
 

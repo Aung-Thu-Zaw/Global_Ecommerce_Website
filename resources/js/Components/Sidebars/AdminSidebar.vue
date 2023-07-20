@@ -1454,25 +1454,19 @@
                       {{ __("FAQS") }}
                     </Link>
                   </li>
-                  <!-- Our Terms And Conditions Section -->
+                  <!-- Terms And Conditions Section -->
                   <li
                     class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
                     :class="{
                       'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                        '/admin/return-order-manage/requested-return'
+                        '/admin/pages/terms-and-conditions'
                       ),
                     }"
                   >
                     <Link
-                      :href="route('admin.return-orders.requested.index')"
-                      :data="{
-                        page: 1,
-                        per_page: 10,
-                        sort: 'id',
-                        direction: 'desc',
-                      }"
+                      :href="route('admin.pages.terms-and-conditions.edit')"
                     >
-                      {{ __("OUR_TERMS") }}
+                      {{ __("TERMS_AND_CONDITIONS") }}
                     </Link>
                   </li>
                   <!-- Privacy And Policy Section -->
@@ -1480,11 +1474,11 @@
                     class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
                     :class="{
                       'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                        '/admin/return-order-manage/requested-return'
+                        '/admin/pages/privacy-policy'
                       ),
                     }"
                   >
-                    <Link :href="route('admin.pages.privacy.edit')">
+                    <Link :href="route('admin.pages.privacy-policy.edit')">
                       {{ __("PRIVACY_POLICY") }}
                     </Link>
                   </li>
@@ -1677,10 +1671,10 @@ export default {
     },
     pageManage() {
       if (
-        this.$page.url.startsWith("/admin/website-settings") ||
-        this.$page.url.startsWith("/admin/seo-settings")
+        this.$page.url.startsWith("/admin/pages/privacy-policy") ||
+        this.$page.url.startsWith("/admin/pages/terms-and-conditions")
       ) {
-        return (this.settingManageIsHidden = false);
+        return (this.pageManageIsHidden = false);
       }
     },
     returnOrderManage() {

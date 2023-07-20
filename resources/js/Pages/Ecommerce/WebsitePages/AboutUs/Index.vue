@@ -57,11 +57,11 @@ import { Head, Link } from "@inertiajs/vue3";
             <div class="w-[700px]">
               <h1 class="font-bold text-2xl mb-5">Our Mission</h1>
               <p class="text-[.9rem]">
-                Our mission is to make it easy to do business anywhere.
-                <br />
-                We do this by giving suppliers the tools necessary to reach a
-                global audience for their products, and by helping buyers find
-                products and suppliers quickly and efficiently.
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quis
+                quia, repellendus praesentium, adipisci at fuga iure itaque
+                mollitia perferendis laboriosam, dolores optio nostrum. A, quis
+                necessitatibus magnam minima placeat provident nemo autem sed
+                non architecto commodi consequuntur velit ipsam aliquid.
               </p>
             </div>
 
@@ -86,9 +86,10 @@ import { Head, Link } from "@inertiajs/vue3";
             <div class="w-[700px]">
               <h1 class="font-bold text-2xl mb-5">Free & Easy Returns</h1>
               <p class="text-[.9rem]">
-                Returns and replacements are easy and free of charge. For
-                further information on the detailed terms, as well as on how to
-                return your product please visit our Returns & Refunds Page.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo
+                cum ipsam doloremque qui distinctio velit! Dolores sapiente
+                voluptate quisquam perspiciatis sed, optio ipsa architecto
+                libero unde sint nihil vitae molestiae?
               </p>
             </div>
           </div>
@@ -101,10 +102,13 @@ import { Head, Link } from "@inertiajs/vue3";
             <div class="w-[700px]">
               <h1 class="font-bold text-2xl mb-5">100% Genuine Products</h1>
               <p class="text-[.9rem]">
-                No fakes and no duplicates. We have made it to our mission to
-                offer only 100% genuine products in the original packaging on
-                Shop. We work hard to provide you with the largest selection of
-                authentic and brand new products at the highest quality.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Perspiciatis sed non perferendis molestiae quae hic cum laborum
+                provident, exercitationem nesciunt eaque modi similique expedita
+                beatae iste! Atque, animi laboriosam autem et magni ut corporis
+                minus repellendus quos. Architecto ipsum voluptatum earum
+                debitis quam corrupti, nihil non, amet, delectus ratione
+                deserunt.
               </p>
             </div>
 
@@ -127,13 +131,20 @@ import { Head, Link } from "@inertiajs/vue3";
             />
 
             <div class="w-[700px]">
-              <h1 class="font-bold text-2xl">Anytime, Anywhere</h1>
+              <h1 class="font-bold text-2xl mb-5">Anytime, Anywhere</h1>
               <p class="text-[.9rem]">
-                As a platform, we continue to develop services to help
-                businesses do more and discover new opportunities. Whether it’s
-                sourcing from your mobile phone or contacting suppliers in their
-                local language, turn to globalecommerce.com for all your global
-                business needs.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos
+                explicabo sunt delectus temporibus qui similique earum magni,
+                maxime nam provident fugiat nisi atque voluptates optio et quae
+                velit blanditiis assumenda libero accusamus exercitationem omnis
+                placeat id. Alias id obcaecati atque. Nemo officia porro tempora
+                aperiam fuga minima facere dolores molestias illo accusantium
+                quo molestiae cumque placeat quasi dicta doloribus modi sit
+                iste, rem odit culpa cupiditate, nobis fugiat! Laudantium
+                exercitationem architecto vitae modi ducimus culpa iste esse
+                obcaecati pariatur nobis quod saepe, repellat soluta veritatis
+                aut suscipit, numquam alias maiores asperiores ad voluptatum
+                dolorum mollitia cumque? Eum voluptates aliquam modi!
               </p>
             </div>
           </div>

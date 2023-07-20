@@ -13,7 +13,7 @@ import "vue3-toastify/dist/index.css";
 
 // Define the props
 const props = defineProps({
-  privacyPolicy: Object,
+  termsAndConditions: Object,
 });
 
 // Define Variables
@@ -22,24 +22,24 @@ const processing = ref(false);
 
 // Privacy Policy Edit Form Data
 const form = useForm({
-  title: props.privacyPolicy?.title,
-  description: props.privacyPolicy?.description,
+  title: props.termsAndConditions?.title,
+  description: props.termsAndConditions?.description,
   captcha_token: null,
 });
 
 // Destructing ReCaptcha
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 
-// Handle Edit Privacy Policy
-const handleEditPrivacyPolicy = async () => {
+// Handle Edit Terms And Conditions
+const handleEditTermsAndConditions = async () => {
   await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("edit_privacy_policy");
+  form.captcha_token = await executeRecaptcha("edit_terms_and_conditions");
 
   processing.value = true;
 
   form.post(
-    route("admin.pages.privacy-policy.update", {
-      page: props.privacyPolicy.id,
+    route("admin.pages.terms-and-conditions.update", {
+      page: props.termsAndConditions.id,
     }),
     {
       replace: true,
@@ -58,8 +58,8 @@ const handleEditPrivacyPolicy = async () => {
   );
 };
 
-// Privacy Policy Edit Permission
-const privacyPolicyEdit = computed(() => {
+// Terms And Conditions Edit Permission
+const termsAndConditionsEdit = computed(() => {
   return usePage().props.auth.user.permissions.length
     ? usePage().props.auth.user.permissions.some(
         (permission) => permission.name === "page.edit"
@@ -70,7 +70,7 @@ const privacyPolicyEdit = computed(() => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Privacy Policy" />
+    <Head title="Terms And Conditions" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
         <!-- Breadcrumb -->
@@ -92,7 +92,7 @@ const privacyPolicyEdit = computed(() => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400 dark:hover:text-white"
-                >Privacy Policy</span
+                >Terms And Conditions</span
               >
             </div>
           </li>
@@ -100,7 +100,7 @@ const privacyPolicyEdit = computed(() => {
       </div>
 
       <div class="border shadow-md p-10">
-        <form @submit.prevent="handleEditPrivacyPolicy">
+        <form @submit.prevent="handleEditTermsAndConditions">
           <!-- Title Input -->
           <div class="mb-6">
             <InputLabel for="title" value="Title *" />
@@ -127,7 +127,7 @@ const privacyPolicyEdit = computed(() => {
           </div>
 
           <!-- Handle Button -->
-          <div v-if="privacyPolicyEdit" class="mb-6">
+          <div v-if="termsAndConditionsEdit" class="mb-6">
             <button
               class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"
             >
