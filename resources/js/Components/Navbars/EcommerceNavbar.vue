@@ -159,13 +159,13 @@ const handleRemoveSearchHistory = (index, historyId) => {
       <span class="text-sm font-bold">GLOBAL E-COMMERCE WEBSITE</span>
       <!-- Menus -->
       <nav class="hidden lg:flex flex-1 items-center justify-end py-1">
-        <a
+        <Link
           class="text-sm font-bold px-3 py-2 hover:text-gray-300 uppercase"
-          href="#"
+          :href="route('help-center')"
         >
           <i class="fa-solid fa-circle-info"></i>
           {{ __("HELP_CENTER") }}
-        </a>
+        </Link>
         <span>|</span>
 
         <Link

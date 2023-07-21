@@ -68,11 +68,6 @@ import { Link } from "@inertiajs/vue3";
               </li>
               <li>
                 <Link href="#" class="opacity-70 hover:opacity-100">
-                  {{ __("OUR_TEAM") }}
-                </Link>
-              </li>
-              <li>
-                <Link href="#" class="opacity-70 hover:opacity-100">
                   {{ __("OUR_OFFICES") }}
                 </Link>
               </li>

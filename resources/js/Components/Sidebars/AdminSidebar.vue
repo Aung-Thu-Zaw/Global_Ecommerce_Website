@@ -1391,27 +1391,6 @@
                   v-if="!pageManageIsHidden || pageManage"
                   class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
                 >
-                  <!-- Our Team Section -->
-                  <li
-                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                    :class="{
-                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                        '/admin/return-order-manage/requested-return'
-                      ),
-                    }"
-                  >
-                    <Link
-                      :href="route('admin.return-orders.requested.index')"
-                      :data="{
-                        page: 1,
-                        per_page: 10,
-                        sort: 'id',
-                        direction: 'desc',
-                      }"
-                    >
-                      {{ __("OUR_TEAM") }}
-                    </Link>
-                  </li>
                   <!-- Offices Section -->
                   <li
                     class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"

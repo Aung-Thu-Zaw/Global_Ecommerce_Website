@@ -10,6 +10,7 @@ use App\Http\Controllers\Ecommerce\ProductController;
 use App\Http\Controllers\Ecommerce\CheckoutController;
 use App\Http\Controllers\Ecommerce\ConversationController;
 use App\Http\Controllers\Ecommerce\DeliveryInformationController;
+use App\Http\Controllers\Ecommerce\HelpCenterController;
 use App\Http\Controllers\Ecommerce\LanguageController;
 use App\Http\Controllers\User\FollowedShopController;
 use App\Http\Controllers\Ecommerce\MessageController;
@@ -75,6 +76,8 @@ Route::get("/our-history", [OurHistoryController::class,"index"])->name("our-his
 Route::get("/privacy-policy", [PrivacyPolicyController::class,"index"])->name("privacy-policy");
 
 Route::get("/terms-and-conditions", [TermsAndConditionsController::class,"index"])->name("terms-and-conditions");
+
+Route::get("/help-center", [HelpCenterController::class,"index"])->name("help-center");
 
 Route::post('/search/histories/{search_history}', [SearchHistoryController::class,"update"])->name("user.search.history.update");
 
