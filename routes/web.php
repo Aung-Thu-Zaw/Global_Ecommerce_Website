@@ -35,6 +35,7 @@ use App\Http\Controllers\User\MyAccountController;
 use App\Http\Controllers\User\MyWatchlistController;
 use App\Http\Controllers\Ecommerce\WebsiteFeedbackController;
 use App\Http\Controllers\Ecommerce\WebsitePages\AboutUsController;
+use App\Http\Controllers\Ecommerce\WebsitePages\FaqController;
 use App\Http\Controllers\Ecommerce\WebsitePages\OurHistoryController;
 use App\Http\Controllers\Ecommerce\WebsitePages\PrivacyPolicyController;
 use App\Http\Controllers\Ecommerce\WebsitePages\TermsAndConditionsController;
@@ -76,6 +77,8 @@ Route::get("/our-history", [OurHistoryController::class,"index"])->name("our-his
 Route::get("/privacy-policy", [PrivacyPolicyController::class,"index"])->name("privacy-policy");
 
 Route::get("/terms-and-conditions", [TermsAndConditionsController::class,"index"])->name("terms-and-conditions");
+
+Route::get("/faqs", [FaqController::class,"index"])->name("faq");
 
 Route::get("/help-center", [HelpCenterController::class,"index"])->name("help-center");
 
