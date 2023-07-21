@@ -1338,7 +1338,7 @@
                     class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
                     :class="{
                       'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                        '/admin/website-settings'
+                        '/admin/settings/website-settings'
                       ),
                     }"
                   >
@@ -1352,7 +1352,7 @@
                     class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
                     :class="{
                       'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                        '/admin/seo-settings'
+                        '/admin/settings/seo-settings'
                       ),
                     }"
                   >
@@ -1412,27 +1412,7 @@
                       {{ __("OUR_OFFICES") }}
                     </Link>
                   </li>
-                  <!-- FAQs Section -->
-                  <li
-                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                    :class="{
-                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                        '/admin/return-order-manage/requested-return'
-                      ),
-                    }"
-                  >
-                    <Link
-                      :href="route('admin.return-orders.requested.index')"
-                      :data="{
-                        page: 1,
-                        per_page: 10,
-                        sort: 'id',
-                        direction: 'desc',
-                      }"
-                    >
-                      {{ __("FAQS") }}
-                    </Link>
-                  </li>
+
                   <!-- Terms And Conditions Section -->
                   <li
                     class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
@@ -1480,6 +1460,80 @@
                       }"
                     >
                       {{ __("RETURNS_AND_REFUNDS") }}
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+
+          <!-- FAQ Categories Section -->
+          <li v-if="faqCategoryMenu" class="items-center">
+            <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+              <li class="items-center cursor-pointer">
+                <div
+                  class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
+                  @click="faqCategoriesIsHidden = !faqCategoriesIsHidden"
+                >
+                  <span>
+                    <i class="fa-solid fa-clipboard-list mr-2 text-sm"></i>
+                    {{ __("FAQ_CATEGORIES") }}
+                  </span>
+                  <i
+                    v-if="faqCategoriesIsHidden"
+                    class="fa-solid fa-chevron-right"
+                  ></i>
+                  <i
+                    v-if="!faqCategoriesIsHidden"
+                    class="fa-solid fa-chevron-down"
+                  ></i>
+                </div>
+
+                <ul
+                  v-if="!faqCategoriesIsHidden || faqCategoryMange"
+                  class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+                >
+                  <!-- Faq Category Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/faq-categories/categories'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.faq-categories.categories.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: 'id',
+                        direction: 'desc',
+                      }"
+                    >
+                      {{ __("CATEGORIES") }}
+                    </Link>
+                  </li>
+
+                  <!-- Faq Sub Category Section -->
+                  <li
+                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
+                    :class="{
+                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                        '/admin/faq-categories/sub-categories'
+                      ),
+                    }"
+                  >
+                    <Link
+                      :href="route('admin.faq-categories.sub-categories.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: 'id',
+                        direction: 'desc',
+                      }"
+                    >
+                      {{ __("SUBCATEGORIES") }}
                     </Link>
                   </li>
                 </ul>
@@ -1597,6 +1651,7 @@ export default {
       settingManageIsHidden: true,
       pageManageIsHidden: true,
       returnOrderManageIsHidden: true,
+      faqCategoriesIsHidden: true,
       cancelOrderManageIsHidden: true,
       shopReviewManageIsHidden: true,
       productReviewManageIsHidden: true,
@@ -1654,6 +1709,14 @@ export default {
         this.$page.url.startsWith("/admin/pages/terms-and-conditions")
       ) {
         return (this.pageManageIsHidden = false);
+      }
+    },
+    faqCategoryMange() {
+      if (
+        this.$page.url.startsWith("/admin/faq-categories/categories") ||
+        this.$page.url.startsWith("/admin/faq-categories/sub-categories")
+      ) {
+        return (this.faqCategoriesIsHidden = false);
       }
     },
     returnOrderManage() {
@@ -1903,6 +1966,22 @@ export default {
     pageMenu() {
       return this.permissions.length
         ? this.permissions.some((permission) => permission.name === "page.menu")
+        : false;
+    },
+
+    faqCategoryMenu() {
+      return this.permissions.length
+        ? this.permissions.some(
+            (permission) => permission.name === "faq-category.menu"
+          )
+        : false;
+    },
+
+    faqPostMenu() {
+      return this.permissions.length
+        ? this.permissions.some(
+            (permission) => permission.name === "faq-post.menu"
+          )
         : false;
     },
 

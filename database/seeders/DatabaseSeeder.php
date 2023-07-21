@@ -42,7 +42,9 @@ class DatabaseSeeder extends Seeder
                 SearchHistorySeeder::class,
                 SocialTrafficSeeder::class,
                 VendorDashboardGuideSeeder::class,
-                PageSeeder::class
+                PageSeeder::class,
+                FaqCategorySeeder::class,
+                FaqSubCategorySeeder::class
             ]
         );
     }

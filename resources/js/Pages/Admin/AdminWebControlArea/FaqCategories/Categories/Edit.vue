@@ -3,39 +3,42 @@ import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/RoleAndPermissionBreadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/BlogCategoryBreadcrumb.vue";
+import { ref } from "vue";
 import { Link, useForm, Head } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
-import { ref } from "vue";
 
 // Define the props
 const props = defineProps({
-  paginate: Array,
-  permission: Object,
+  queryStringParams: Array,
+  faqCategory: Object,
 });
 
 // Define Variables
 const processing = ref(false);
 
-// Permission Edit Form Data
+// Faq Category Edit Form Data
 const form = useForm({
-  name: props.permission.name,
-  group: props.permission.group,
+  name: props.faqCategory.name,
   captcha_token: null,
 });
 
 // Destructing ReCaptcha
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 
-// Handle Edit Permission
-const handleEditPermission = async () => {
+// Handle Edit Faq Category
+const handleEditFaqCatrgory = async () => {
   await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("edit_permission");
+  form.captcha_token = await executeRecaptcha("edit_faq_category");
 
   processing.value = true;
   form.post(
-    route("admin.permissions.update", props.permission.id, {
-      per_page: props.per_page,
+    route("admin.faq-categories.categories.update", {
+      blog_category: props.faqCategory.slug,
+      page: props.queryStringParams.page,
+      per_page: props.queryStringParams.per_page,
+      sort: props.queryStringParams.sort,
+      direction: props.queryStringParams.direction,
     }),
     {
       replace: true,
@@ -50,7 +53,7 @@ const handleEditPermission = async () => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Edit Permission" />
+    <Head title="Edit Faq Category" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
         <!-- Breadcrumb -->
@@ -72,8 +75,9 @@ const handleEditPermission = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Permissions</span
               >
+                Categories
+              </span>
             </div>
           </li>
           <li aria-current="page">
@@ -93,8 +97,8 @@ const handleEditPermission = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >{{ permission.name }}</span
-              >
+                >{{ faqCategory.name }}
+              </span>
             </div>
           </li>
           <li aria-current="page">
@@ -124,10 +128,12 @@ const handleEditPermission = async () => {
         <div>
           <Link
             as="button"
-            :href="route('admin.permissions.index')"
+            :href="route('admin.faq-categories.categories.index')"
             :data="{
-              page: paginate.page,
-              per_page: paginate.per_page,
+              page: props.queryStringParams.page,
+              per_page: props.queryStringParams.per_page,
+              sort: props.queryStringParams.sort,
+              direction: props.queryStringParams.direction,
             }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
@@ -138,10 +144,10 @@ const handleEditPermission = async () => {
       </div>
 
       <div class="border shadow-md p-10">
-        <form @submit.prevent="handleEditPermission">
-          <!-- Permission Name Input -->
+        <form @submit.prevent="handleEditFaqCatrgory">
+          <!-- Faq Category Name Input -->
           <div class="mb-6">
-            <InputLabel for="name" value="Permission Name *" />
+            <InputLabel for="name" value="Faq Category Name *" />
 
             <TextInput
               id="name"
@@ -149,148 +155,10 @@ const handleEditPermission = async () => {
               class="mt-1 block w-full"
               v-model="form.name"
               required
-              placeholder="Enter Permission Name"
+              placeholder="Enter Category Name"
             />
 
             <InputError class="mt-2" :message="form.errors.name" />
-          </div>
-
-          <!-- Group Select Box -->
-          <div class="mb-6">
-            <InputLabel for="group" value="Group *" />
-
-            <select
-              class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-              v-model="form.group"
-            >
-              <option value="" selected disabled>Select Group</option>
-              <option value="brand" :selected="form.group == 'brand'">
-                Brand
-              </option>
-              <option value="collection" :selected="form.group == 'collection'">
-                Collection
-              </option>
-              <option value="category" :selected="form.group == 'category'">
-                Category
-              </option>
-              <option value="product" :selected="form.group == 'product'">
-                Product
-              </option>
-              <option value="coupon" :selected="form.group == 'coupon'">
-                Coupon
-              </option>
-              <option value="banner" :selected="form.group == 'banner'">
-                Banner
-              </option>
-              <option
-                value="shipping-area"
-                :selected="form.group == 'shipping-area'"
-              >
-                Shipping Area
-              </option>
-              <option value="language" :selected="form.group == 'language'">
-                Language
-              </option>
-              <option
-                value="order-manage"
-                :selected="form.group == 'order-manage'"
-              >
-                Order Manage
-              </option>
-              <option
-                value="return-order-manage"
-                :selected="form.group == 'return-order-manage'"
-              >
-                Return Order Manage
-              </option>
-              <option
-                value="cancel-order-manage"
-                :selected="form.group == 'cancel-order-manage'"
-              >
-                Cancel Order Manage
-              </option>
-
-              <option
-                value="shop-review"
-                :selected="form.group == 'shop-review'"
-              >
-                Shop Review
-              </option>
-              <option
-                value="product-review"
-                :selected="form.group == 'product-review'"
-              >
-                Product Review
-              </option>
-              <option
-                value="vendor-manage"
-                :selected="form.group == 'vendor-manage'"
-              >
-                Vendor Manage
-              </option>
-              <option
-                value="user-manage"
-                :selected="form.group == 'user-manage'"
-              >
-                User Manage
-              </option>
-              <option
-                value="admin-manage"
-                :selected="form.group == 'admin-manage'"
-              >
-                Admin Manage
-              </option>
-              <option
-                value="role-and-permission"
-                :selected="form.group == 'role-and-permission'"
-              >
-                Role And Permission
-              </option>
-              <option
-                value="role-in-permissions"
-                :selected="form.group == 'role-in-permissions'"
-              >
-                Role In Permissions
-              </option>
-              <option
-                value="blog-category"
-                :selected="form.group == 'blog-category'"
-              >
-                Blog Category
-              </option>
-              <option value="blog-post" :selected="form.group == 'blog-post'">
-                Blog Post
-              </option>
-              <option value="setting" :selected="form.group == 'setting'">
-                Setting
-              </option>
-              <option value="page" :selected="form.group == 'page'">
-                Page
-              </option>
-              <option
-                value="faq-category"
-                :selected="form.group == 'faq-category'"
-              >
-                Faq Category
-              </option>
-              <option value="faq-post" :selected="form.group == 'faq-post'">
-                Faq Post
-              </option>
-              <option value="suggestion" :selected="form.group == 'suggestion'">
-                Suggestion
-              </option>
-              <option
-                value="website-feedback"
-                :selected="form.group == 'website-feedback'"
-              >
-                Website Feedback
-              </option>
-              <option value="subscriber" :selected="form.group == 'subscriber'">
-                Subscriber
-              </option>
-            </select>
-
-            <InputError class="mt-2" :message="form.errors.group" />
           </div>
 
           <!-- Edit Button -->

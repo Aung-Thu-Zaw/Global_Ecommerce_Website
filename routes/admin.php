@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\Banners\AdminProductBannerController;
 use App\Http\Controllers\Admin\UserManagements\VendorManage\AdminActiveVendorController;
 use App\Http\Controllers\Admin\UserManagements\VendorManage\AdminInactiveVendorController;
 use App\Http\Controllers\Admin\AdminProductController;
+use App\Http\Controllers\Admin\AdminWebControlArea\FaqCategories\AdminFaqCategoryController;
+use App\Http\Controllers\Admin\AdminWebControlArea\FaqCategories\AdminFaqSubCategoryController;
 use App\Http\Controllers\Admin\AuthorityManagements\AdminRoleInPermissionController;
 use App\Http\Controllers\Admin\AdminWebControlArea\SiteSettings\AdminSeoSettingController;
 use App\Http\Controllers\Admin\AdminWebControlArea\SiteSettings\AdminWebsiteSettingController;
@@ -616,6 +618,38 @@ Route::middleware(["admin","verified","user.role:admin"])
 
 
 
+           // Admin Faq Category Section
+           Route::controller(AdminFaqCategoryController::class)
+           ->prefix("/faq-categories/categories")
+           ->name("faq-categories.categories.")
+           ->group(function () {
+               Route::get("/", "index")->middleware('permission:faq-category.menu')->name("index");
+               Route::get("/create", "create")->middleware('permission:faq-category.add')->name("create");
+               Route::post("/", "store")->middleware('permission:faq-category.add')->name("store");
+               Route::get("/{blog_category}/edit", "edit")->middleware('permission:faq-category.edit')->name("edit");
+               Route::post("/{blog_category}", "update")->middleware('permission:faq-category.edit')->name("update");
+               Route::delete("/{blog_category}", "destroy")->middleware('permission:faq-category.delete')->name("destroy");
+               Route::get("/trash", "trash")->middleware('permission:faq-category.trash.list')->name("trash");
+               Route::post("/{blog_category}/restore", "restore")->middleware('permission:faq-category.trash.restore')->name("restore");
+               Route::delete("/{blog_category}/force-delete", "forceDelete")->middleware('permission:faq-category.trash.delete')->name("force.delete");
+               Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:faq-category.trash.delete')->name("permanently.delete");
+           });
+           // Admin Faq Sub Category Section
+           Route::controller(AdminFaqSubCategoryController::class)
+           ->prefix("/faq-categories/sub-categories")
+           ->name("faq-categories.sub-categories.")
+           ->group(function () {
+               Route::get("/", "index")->middleware('permission:faq-category.menu')->name("index");
+               Route::get("/create", "create")->middleware('permission:faq-category.add')->name("create");
+               Route::post("/", "store")->middleware('permission:faq-category.add')->name("store");
+               Route::get("/{blog_category}/edit", "edit")->middleware('permission:faq-category.edit')->name("edit");
+               Route::post("/{blog_category}", "update")->middleware('permission:faq-category.edit')->name("update");
+               Route::delete("/{blog_category}", "destroy")->middleware('permission:faq-category.delete')->name("destroy");
+               Route::get("/trash", "trash")->middleware('permission:faq-category.trash.list')->name("trash");
+               Route::post("/{blog_category}/restore", "restore")->middleware('permission:faq-category.trash.restore')->name("restore");
+               Route::delete("/{blog_category}/force-delete", "forceDelete")->middleware('permission:faq-category.trash.delete')->name("force.delete");
+               Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:faq-category.trash.delete')->name("permanently.delete");
+           });
 
 
 
@@ -672,7 +706,7 @@ Route::middleware(["admin","verified","user.role:admin"])
 
            // Admin Website Setting Section
            Route::controller(AdminWebsiteSettingController::class)
-                ->prefix("/website-settings")
+                ->prefix("/settings/website-settings")
                 ->name("website-settings.")
                 ->group(function () {
                     Route::get("/", "edit")->middleware('permission:setting.menu')->name("edit");
@@ -681,7 +715,7 @@ Route::middleware(["admin","verified","user.role:admin"])
 
            // Admin Seo Setting Section
            Route::controller(AdminSeoSettingController::class)
-                ->prefix("/seo-settings")
+                ->prefix("/settings/seo-settings")
                 ->name("seo-settings.")
                 ->group(function () {
                     Route::get("/", "edit")->middleware('permission:setting.menu')->name("edit");

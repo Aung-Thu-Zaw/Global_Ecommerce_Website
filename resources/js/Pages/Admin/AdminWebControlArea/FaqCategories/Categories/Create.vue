@@ -3,10 +3,10 @@ import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/RoleAndPermissionBreadcrumb.vue";
-import { ref } from "vue";
+import Breadcrumb from "@/Components/Breadcrumbs/FaqCategoryBreadcrumb.vue";
 import { Link, useForm, Head } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
+import { ref } from "vue";
 
 // Define the props
 const props = defineProps({
@@ -16,24 +16,23 @@ const props = defineProps({
 // Define Variables
 const processing = ref(false);
 
-// Permission Create Form Data
+// Faq Category Create Form Data
 const form = useForm({
   name: "",
-  group: "",
   captcha_token: null,
 });
 
 // Destructing ReCaptcha
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 
-// Handle Create Permission
-const handleCreatePermission = async () => {
+// Handle Create Faq Category
+const handleCreateFaqCatrgory = async () => {
   await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("create_permission");
+  form.captcha_token = await executeRecaptcha("create_faq_category");
 
   processing.value = true;
   form.post(
-    route("admin.permissions.store", {
+    route("admin.faq-categories.categories.store", {
       per_page: props.per_page,
     }),
     {
@@ -49,7 +48,7 @@ const handleCreatePermission = async () => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Create Permission" />
+    <Head title="Create Faq Category" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
         <!-- Breadcrumb -->
@@ -71,7 +70,7 @@ const handleCreatePermission = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Permissions</span
+                >Categories</span
               >
             </div>
           </li>
@@ -102,7 +101,7 @@ const handleCreatePermission = async () => {
         <div>
           <Link
             as="button"
-            :href="route('admin.permissions.index')"
+            :href="route('admin.faq-categories.categories.index')"
             :data="{
               per_page: props.per_page,
             }"
@@ -115,10 +114,10 @@ const handleCreatePermission = async () => {
       </div>
 
       <div class="border shadow-md p-10">
-        <form @submit.prevent="handleCreatePermission">
-          <!-- Permission Name Input -->
+        <form @submit.prevent="handleCreateFaqCatrgory">
+          <!-- Faq Category Name Input -->
           <div class="mb-6">
-            <InputLabel for="name" value="Permission Name *" />
+            <InputLabel for="name" value="Faq Category Name *" />
 
             <TextInput
               id="name"
@@ -126,51 +125,10 @@ const handleCreatePermission = async () => {
               class="mt-1 block w-full"
               v-model="form.name"
               required
-              placeholder="Enter Permission Name"
+              placeholder="Enter Category Name"
             />
 
             <InputError class="mt-2" :message="form.errors.name" />
-          </div>
-
-          <!-- Group Select Box -->
-          <div class="mb-6">
-            <InputLabel for="group" value="Group *" />
-
-            <select
-              class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-              v-model="form.group"
-            >
-              <option value="" selected disabled>Select Group</option>
-              <option value="brand">Brand</option>
-              <option value="collection">Collection</option>
-              <option value="category">Category</option>
-              <option value="product">Product</option>
-              <option value="coupon">Coupon</option>
-              <option value="banner">Banner</option>
-              <option value="shipping-area">Shipping Area</option>
-              <option value="language">Language</option>
-              <option value="order-manage">Order Manage</option>
-              <option value="return-order-manage">Return Order Manage</option>
-              <option value="cancel-order-manage">Cancel Order Manage</option>
-              <option value="shop-review">Shop Review</option>
-              <option value="product-review">Product Review</option>
-              <option value="vendor-manage">Vendor Manage</option>
-              <option value="user-manage">User Manage</option>
-              <option value="admin-manage">Admin Manage</option>
-              <option value="role-and-permission">Role And Permission</option>
-              <option value="role-in-permissions">Role In Permissions</option>
-              <option value="blog-category">Blog Category</option>
-              <option value="blog-post">Blog Post</option>
-              <option value="setting">Setting</option>
-              <option value="page">Page</option>
-              <option value="faq-category">Faq Category</option>
-              <option value="faq-post">Faq Post</option>
-              <option value="suggestion">Suggestion</option>
-              <option value="website-feedback">Website Feedback</option>
-              <option value="subscriber">Subscriber</option>
-            </select>
-
-            <InputError class="mt-2" :message="form.errors.group" />
           </div>
 
           <!-- Create Button -->
