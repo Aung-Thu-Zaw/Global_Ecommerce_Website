@@ -14,67 +14,59 @@ import VendorDashboardLayout from "@/Layouts/VendorDashboardLayout.vue";
 import { Link, Head, router, usePage } from "@inertiajs/vue3";
 import { reactive, watch, inject } from "vue";
 
+// Define the props
 const props = defineProps({
   products: Object,
 });
 
+// Define Alert Variables
 const swal = inject("$swal");
 
-const handleSearchBox = () => {
-  params.search = "";
-};
-
+// Query String Parameteres
 const params = reactive({
-  search: null,
-  page: props.products.current_page ? props.products.current_page : 1,
-  per_page: props.products.per_page ? props.products.per_page : 10,
-  sort: "id",
-  direction: "desc",
+  search: usePage().props.ziggy.query?.search,
+  page: usePage().props.ziggy.query?.page,
+  per_page: usePage().props.ziggy.query?.per_page,
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
 });
 
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("vendor.products.index"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("vendor.products.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("vendor.products.index"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("vendor.products.index"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("vendor.products.index"),
     {
@@ -84,11 +76,43 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
-const handleDelete = async (productSlug) => {
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
+};
+
+// Handle Delete Product
+const handleDeleteProduct = async (productSlug) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete this product?",
@@ -107,14 +131,20 @@ const handleDelete = async (productSlug) => {
         product: productSlug,
         page: params.page,
         per_page: params.per_page,
-      })
+        sort: params.sort,
+        direction: params.direction,
+      }),
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
@@ -125,7 +155,6 @@ if (usePage().props.flash.successMessage) {
   });
 }
 </script>
-
 
 
 <template>
@@ -141,6 +170,12 @@ if (usePage().props.flash.successMessage) {
           <Link
             as="button"
             :href="route('vendor.products.trash')"
+            :data="{
+              page: 1,
+              per_page: 10,
+              sort: 'id',
+              direction: 'desc',
+            }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
           >
             <i class="fa-solid fa-trash"></i>
@@ -180,7 +215,7 @@ if (usePage().props.flash.successMessage) {
             ></i>
           </form>
 
-          <!-- PerPage Dropdown  -->
+          <!-- Perpage Select Box -->
           <div class="ml-5">
             <select
               class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
@@ -386,6 +421,7 @@ if (usePage().props.flash.successMessage) {
         <tbody v-if="products.data.length">
           <Tr v-for="product in products.data" :key="product.id">
             <BodyTh>{{ product.id }}</BodyTh>
+
             <Td>
               <img
                 :src="product.image"
@@ -393,13 +429,21 @@ if (usePage().props.flash.successMessage) {
                 alt=""
               />
             </Td>
-            <Td>{{ product.name }}</Td>
-            <Td>{{ product.qty }}</Td>
-            <Td>$ {{ product.price }}</Td>
+
+            <Td>
+              {{ product.name }}
+            </Td>
+
+            <Td>
+              {{ product.qty }}
+            </Td>
+
+            <Td> $ {{ product.price }} </Td>
+
             <Td>
               <span
                 v-if="product.discount"
-                class="bg-green-200 text-green-600 py-1 px-3 rounded-md"
+                class="bg-green-200 text-green-600 py-1 px-3 rounded-full"
               >
                 {{
                   (
@@ -410,11 +454,12 @@ if (usePage().props.flash.successMessage) {
               </span>
               <span
                 v-if="!product.discount"
-                class="bg-blue-200 text-blue-600 py-1 px-3 rounded-md"
+                class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full"
               >
                 No Discount
               </span>
             </Td>
+
             <Td>
               <ActiveStatus v-if="product.status == 'active'">
                 {{ product.status }}
@@ -423,27 +468,20 @@ if (usePage().props.flash.successMessage) {
                 {{ product.status }}
               </InactiveStatus>
             </Td>
-            <Td>{{ product.created_at }}</Td>
-            <Td>
-              <!-- <Link
-                as="button"
-                :href="route('vendor.products.show', product.slug)"
-                :data="{
-               page: params.page,
-                  per_page: params.per_page,
-                }"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-emerald-600 text-white hover:bg-emerald-700 my-1"
-              >
-                <i class="fa-solid fa-eye"></i>
-                Details
-              </Link> -->
 
+            <Td>
+              {{ product.created_at }}
+            </Td>
+
+            <Td>
               <Link
                 as="button"
                 :href="route('vendor.products.edit', product.slug)"
                 :data="{
                   page: params.page,
                   per_page: params.per_page,
+                  sort: params.sort,
+                  direction: params.direction,
                 }"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
@@ -452,19 +490,25 @@ if (usePage().props.flash.successMessage) {
               </Link>
 
               <button
-                @click="handleDelete(product.slug)"
+                @click="handleDeleteProduct(product.slug)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>
                 Delete
               </button>
 
-              <button
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1 mr-3"
+              <Link
+                as="button"
+                :href="route('vendor.products.show', product.slug)"
+                :data="{
+                  page: params.page,
+                  per_page: params.per_page,
+                }"
+                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
               >
                 <i class="fa-solid fa-eye"></i>
                 Details
-              </button>
+              </Link>
             </Td>
           </Tr>
         </tbody>
@@ -474,7 +518,7 @@ if (usePage().props.flash.successMessage) {
       <NotAvaliableData v-if="!products.data.length" />
 
       <!-- Pagination -->
-      <pagination class="mt-6" :links="products.links" />
+      <Pagination class="mt-6" :links="products.links" />
     </div>
   </VendorDashboardLayout>
 </template>

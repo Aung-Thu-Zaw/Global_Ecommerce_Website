@@ -13,6 +13,7 @@ use App\Http\Controllers\Vendor\VendorShopReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("vendor/register", [VendorAuthController::class,"register"])->middleware("guest")->name("vendor.register");
+
 Route::get("vendor/login", [VendorAuthController::class,"login"])->middleware("guest")->name("vendor.login");
 
 Route::middleware(["vendor","user.role:vendor"])
@@ -32,6 +33,7 @@ Route::middleware(["vendor","user.role:vendor"])
               ->name("products.")
               ->group(function () {
                   Route::get("/", "index")->name("index");
+                  Route::get("/{product}", "show")->name("show");
                   Route::get("/create", "create")->name("create");
                   Route::post("/", "store")->name("store");
                   Route::get("/{product}/edit", "edit")->name("edit");
@@ -44,6 +46,93 @@ Route::middleware(["vendor","user.role:vendor"])
               });
 
          Route::delete('products/{product_id}/images/{image_id}', [MultiImageController::class,"destroy"])->name("image.destroy");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
          // Vendor Product Banners Section
          Route::controller(VendorProductBannerController::class)
@@ -58,10 +147,10 @@ Route::middleware(["vendor","user.role:vendor"])
                   Route::delete("/{vendor_product_banner}", "destroy")->name("destroy");
                   Route::get("/trash", "trash")->name("trash");
                   Route::post("/{vendor_product_banner}/restore", "restore")->name("restore");
-                  Route::delete("/{vendor_product_banner}/force-delete", "forceDelete")->name("forceDelete");
+                  Route::delete("/{vendor_product_banner}/force-delete", "forceDelete")->name("force.delete");
                   Route::post("/{vendor_product_banner}/show", "handleShow")->name("show");
                   Route::post("/{vendor_product_banner}/hide", "handleHide")->name("hide");
-                  Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
+                  Route::get("/permanently-delete", "permanentlyDelete")->name("permanently.delete");
               });
 
          // Vendor Product Reviews Section
@@ -102,7 +191,7 @@ Route::middleware(["vendor","user.role:vendor"])
              //    Route::delete("/{id}", "destroy")->name("destroy");
              //    Route::get("/trash", "trash")->name("trash");
              //    Route::post("/{id}/restore", "restore")->name("restore");
-             //    Route::delete("/{id}/force-delete", "forceDelete")->name("forceDelete");
-             //    Route::get("/permanently-delete", "permanentlyDelete")->name("permanentlyDelete");
+             //    Route::delete("/{id}/force-delete", "forceDelete")->name("force.delete");
+             //    Route::get("/permanently-delete", "permanentlyDelete")->name("permanently.delete");
          });
      });

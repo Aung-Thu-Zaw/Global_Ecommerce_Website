@@ -117,7 +117,8 @@ class VendorProductBannerController extends Controller
             $vendorProductBanner->update(["status"=>"hide"]);
         }
 
-        return to_route('vendor.product-banners.index', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product Banner has been successfully hidden.");
+        return to_route('vendor.product-banners.index', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
+             ->with("success", "Product Banner has been successfully hidden.");
     }
 
 
@@ -130,6 +131,7 @@ class VendorProductBannerController extends Controller
             $vendorProductBanner->forceDelete();
         });
 
-        return to_route('vendor.product-banners.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product Banners have been successfully deleted.");
+        return to_route('vendor.product-banners.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
+             ->with("success", "Product Banners have been successfully deleted.");
     }
 }

@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
-use App\Models\Collection;
 use App\Models\Image;
 use App\Models\Product;
 use App\Services\ProductImageUploadService;
@@ -30,6 +29,16 @@ class VendorProductController extends Controller
 
         return inertia("Vendor/Products/Index", compact("products"));
     }
+
+    public function show(Product $product): Response|ResponseFactory
+    {
+        $queryStringParams=["page"=>request("page"),"per_page"=>request("per_page")];
+
+        $product->load("brand:id,name", "shop:id,shop_name", "images");
+
+        return inertia("Vendor/Products/Details", compact("product", "queryStringParams"));
+    }
+
 
     public function create(): Response|ResponseFactory
     {
@@ -58,7 +67,7 @@ class VendorProductController extends Controller
 
     public function edit(Product $product): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $queryStringParams=[ "page"=>request("page"),"per_page"=>request("per_page"),"sort"=>request("sort"),"direction"=>request("direction")];
 
         $brands=Brand::all();
 
@@ -66,7 +75,7 @@ class VendorProductController extends Controller
 
         $product->load(["sizes","colors","images"]);
 
-        return inertia("Vendor/Products/Edit", compact("product", "paginate", "brands", "categories"));
+        return inertia("Vendor/Products/Edit", compact("product", "queryStringParams", "brands", "categories"));
     }
 
     public function update(ProductRequest $request, Product $product, ProductImageUploadService $productImageUploadService, ProductMultiImageUploadService $productMultiImageUploadService): RedirectResponse

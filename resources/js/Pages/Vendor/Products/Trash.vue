@@ -14,66 +14,59 @@ import VendorDashboardLayout from "@/Layouts/VendorDashboardLayout.vue";
 import { Link, Head, router, usePage } from "@inertiajs/vue3";
 import { inject, reactive, watch } from "vue";
 
+// Define the Props
 const props = defineProps({
   trashProducts: Object,
 });
 
+// Define Alert Variables
 const swal = inject("$swal");
-const handleSearchBox = () => {
-  params.search = "";
-};
 
+// Query String Parameteres
 const params = reactive({
-  search: null,
-  page: props.trashProducts.current_page ? props.trashProducts.current_page : 1,
-  per_page: props.trashProducts.per_page ? props.trashProducts.per_page : 10,
-  sort: "id",
-  direction: "desc",
+  search: usePage().props.ziggy.query?.search,
+  page: usePage().props.ziggy.query?.page,
+  per_page: usePage().props.ziggy.query?.per_page,
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
 });
 
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("vendor.products.trash"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("vendor.products.trash"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("vendor.products.trash"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("vendor.products.trash"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("vendor.products.trash"),
     {
@@ -83,11 +76,43 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
-const handleRestore = async (trashProductId) => {
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
+};
+
+// Handle Vendor Trash Product Restore
+const handleRestoreTrashProduct = async (trashProductId) => {
   const result = await swal({
     icon: "info",
     title: "Are you sure you want to restore this product?",
@@ -98,25 +123,32 @@ const handleRestore = async (trashProductId) => {
     timerProgressBar: true,
     reverseButtons: true,
   });
-
   if (result.isConfirmed) {
     router.post(
       route("vendor.products.restore", {
-        id: trashProductId,
+        product: trashProductId,
         page: params.page,
         per_page: params.per_page,
-      })
+        sort: params.sort,
+        direction: params.direction,
+      }),
+      {},
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
-const handleDelete = async (trashProductId) => {
+// Handle Vendor Trash Product Delete
+const handleDeleteTrashProduct = async (trashProductId) => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
@@ -131,26 +163,33 @@ const handleDelete = async (trashProductId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("vendor.products.forceDelete", {
-        id: trashProductId,
+      route("vendor.products.force.delete", {
+        product: trashProductId,
         page: params.page,
         per_page: params.per_page,
-      })
+        sort: params.sort,
+        direction: params.direction,
+      }),
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
-const handlePermanentlyDelete = async () => {
+// Handle Vendor Trash Product Delete Permanently
+const handlePermanentlyDeleteTrashProduct = async () => {
   const result = await swal({
     icon: "warning",
     title: "Are you sure you want to delete it from the trash?",
-    text: "All products in the trash will be permanetly deleted! You can't get it back.",
+    text: "All blog posts in the trash will be permanetly deleted! You can't get it back.",
     showCancelButton: true,
     confirmButtonText: "Yes, delete it !",
     confirmButtonColor: "#ef4444",
@@ -161,17 +200,24 @@ const handlePermanentlyDelete = async () => {
 
   if (result.isConfirmed) {
     router.get(
-      route("vendor.products.permanentlyDelete", {
+      route("vendor.products.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
-      })
+        sort: params.sort,
+        direction: params.direction,
+      }),
+      {},
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 </script>
@@ -211,6 +257,12 @@ const handlePermanentlyDelete = async () => {
         <div>
           <Link
             :href="route('vendor.products.index')"
+            :data="{
+              page: 1,
+              per_page: 10,
+              sort: 'id',
+              direction: 'desc',
+            }"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
             <i class="fa-solid fa-arrow-left"></i>
@@ -256,7 +308,7 @@ const handlePermanentlyDelete = async () => {
       <p class="text-left text-sm font-bold mb-2 text-warning-600">
         Products in the Trash will be automatically deleted after 60 days.
         <button
-          @click="handlePermanentlyDelete"
+          @click="handlePermanentlyDeleteTrashProduct"
           class="text-primary-500 rounded-md px-2 py-1 hover:bg-primary-200 hover:text-primary-600 transition-all hover:animate-bounce"
         >
           Empty the trash now
@@ -464,7 +516,7 @@ const handlePermanentlyDelete = async () => {
             <Td>
               <span
                 v-if="trashProduct.discount"
-                class="bg-green-200 text-green-600 py-1 px-3 rounded-md"
+                class="bg-green-200 text-green-600 py-1 px-3 rounded-full"
               >
                 {{
                   (
@@ -476,7 +528,7 @@ const handlePermanentlyDelete = async () => {
               </span>
               <span
                 v-if="!trashProduct.discount"
-                class="bg-blue-200 text-blue-600 py-1 px-3 rounded-md"
+                class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full"
               >
                 No Discount
               </span>
@@ -492,14 +544,14 @@ const handlePermanentlyDelete = async () => {
             <Td>{{ trashProduct.created_at }}</Td>
             <Td>
               <button
-                @click="handleRestore(trashProduct.id)"
+                @click="handleRestoreTrashProduct(trashProduct.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-recycle"></i>
                 Restore
               </button>
               <button
-                @click="handleDelete(trashProduct.id)"
+                @click="handleDeleteTrashProduct(trashProduct.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-trash"></i>
