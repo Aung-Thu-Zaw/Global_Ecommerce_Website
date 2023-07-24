@@ -6,8 +6,53 @@
     .social-btn {
         @apply flex items-center justify-center border border-gray-300 p-3 w-full my-2 rounded-md md:w-[200px] hover:-translate-y-2 hover:shadow-md duration-150;
     }
+
+    .trash-btn {
+        @apply text-sm px-5 py-2.5 shadow-md font-semibold rounded-[4px] bg-red-600 text-white hover:bg-red-700;
+    }
+
+    .goback-btn {
+        @apply text-sm px-5 py-2.5 font-semibold rounded-[4px] bg-blue-600 text-white hover:bg-blue-700;
+    }
+
+    .add-btn {
+        @apply text-sm px-4 shadow-md py-3 font-semibold rounded-[4px] bg-blue-600 text-white hover:bg-blue-700;
+    }
+
+    .edit-btn {
+        @apply text-sm px-5 py-2 border-[3px] border-blue-700 font-semibold rounded-[4px] shadow-md bg-blue-600 text-white transition-all hover:bg-blue-700 mr-3 my-1;
+    }
+
+    .delete-btn {
+        @apply text-sm px-5 py-2 border-[3px]  border-red-700 font-semibold rounded-[4px] shadow-md bg-red-600 text-white  transition-all hover:bg-red-700 mr-3 my-1;
+    }
+
+    .save-btn {
+        @apply py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all;
+    }
+
+    .search-input {
+        @apply rounded-md border border-gray-300 focus:ring-0 focus:border-gray-300 text-sm p-3 w-full;
+    }
+
+    .remove-search {
+        @apply absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600;
+    }
+
+    .preview-img {
+        @apply h-[100px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300;
+    }
+
+    .select-box {
+        @apply p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm;
+    }
+
+    .file-input {
+        @apply relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-neutral-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out file:-mx-3 file:-my-1.5 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-1.5 file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[margin-inline-end:0.75rem] file:[border-inline-end-width:1px] hover:file:bg-neutral-200 focus:border-primary focus:bg-white focus:text-neutral-700 focus:shadow-[0_0_0_1px] focus:shadow-primary focus:outline-none;
+    }
 }
 
 .arrow-icon {
     font-size: 0.6rem;
+    cursor: pointer;
 }

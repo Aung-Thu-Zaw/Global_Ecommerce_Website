@@ -87,8 +87,8 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::post("/{brand}", "update")->middleware('permission:brand.edit')->name("update");
                     Route::delete("/{brand}", "destroy")->middleware('permission:brand.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:brand.trash.list')->name("trash");
-                    Route::post("/{brand}/restore", "restore")->middleware('permission:brand.trash.restore')->name("restore");
-                    Route::delete("/{brand}/force-delete", "forceDelete")->middleware('permission:brand.trash.delete')->name("force.delete");
+                    Route::post("/{trash_brand_id}/restore", "restore")->middleware('permission:brand.trash.restore')->name("restore");
+                    Route::delete("/{trash_brand_id}/force-delete", "forceDelete")->middleware('permission:brand.trash.delete')->name("force.delete");
                     Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:brand.trash.delete')->name("permanently.delete");
                 });
 

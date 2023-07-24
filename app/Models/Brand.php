@@ -49,6 +49,7 @@ class Brand extends Model
         ];
     }
 
+
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Brand, never>
     */
@@ -95,10 +96,10 @@ class Brand extends Model
         return $this->hasMany(Product::class);
     }
 
-    public static function deleteImage(Brand $brand): void
+    public static function deleteImage(string $brandImage): void
     {
-        if (!empty($brand->image) && file_exists(storage_path("app/public/brands/".pathinfo($brand->image, PATHINFO_BASENAME)))) {
-            unlink(storage_path("app/public/brands/".pathinfo($brand->image, PATHINFO_BASENAME)));
+        if (!empty($brandImage) && file_exists(storage_path("app/public/brands/".pathinfo($brandImage, PATHINFO_BASENAME)))) {
+            unlink(storage_path("app/public/brands/".pathinfo($brandImage, PATHINFO_BASENAME)));
         }
     }
 }

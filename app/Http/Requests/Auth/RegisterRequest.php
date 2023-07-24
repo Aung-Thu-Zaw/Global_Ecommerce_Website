@@ -67,7 +67,6 @@ class RegisterRequest extends FormRequest
             "role.in"=>"The selected role is invalid.",
             "status.in"=>"The selected status is invalid.",
             "captcha_token.required"=>"The captcha token is required",
-
         ];
     }
 

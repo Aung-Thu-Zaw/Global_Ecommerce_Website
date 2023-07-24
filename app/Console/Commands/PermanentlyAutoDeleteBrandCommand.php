@@ -33,7 +33,7 @@ class PermanentlyAutoDeleteBrandCommand extends Command
 
         $brands->each(function ($brand) {
 
-            Brand::deleteImage($brand);
+            Brand::deleteImage($brand->image);
 
             $brand->forceDelete();
 

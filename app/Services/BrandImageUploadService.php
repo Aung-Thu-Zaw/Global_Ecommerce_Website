@@ -3,52 +3,37 @@
 namespace App\Services;
 
 use App\Models\Brand;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
 
 class BrandImageUploadService
 {
-    public function createImage(Request $request): string
+    public function createImage(UploadedFile $image): string
     {
-        $request->validate([
-            "image"=>["required","image","mimes:png,jpg,jpeg,svg,webp,gif"]
-        ]);
+        $originalName=$image->getClientOriginalName();
 
+        $image->move(storage_path("app/public/brands/"), $originalName);
 
-        $file=$request->file("image");
-
-        /** @var \Illuminate\Http\UploadedFile $file */
-
-        $extension=$file->extension();
-
-        $finalName= Str::slug($request->name, '-')."."."$extension";
-
-        $file->move(storage_path("app/public/brands/"), $finalName);
-
-        return $finalName;
+        return $originalName;
     }
 
-    public function updateImage(Request $request, Brand $brand): string
+    public function updateImage(UploadedFile|string $image, string $brandImage): string
     {
-        if ($request->hasFile("image")) {
-            $request->validate([
-                "image"=>["required","image","mimes:png,jpg,jpeg,svg,webp,gif"]
-            ]);
+        if($image && is_string($image)) {
 
-            Brand::deleteImage($brand);
+            return $image;
 
-            $file=$request->file("image");
+        } elseif($image && is_uploaded_file($image)) {
 
-            /** @var \Illuminate\Http\UploadedFile $file */
+            Brand::deleteImage($brandImage);
 
-            $extension=$file->extension();
-            $finalName= Str::slug($request->name, '-')."."."$extension";
+            $originalName=$image->getClientOriginalName();
 
-            $file->move(storage_path("app/public/brands/"), $finalName);
+            $image->move(storage_path("app/public/brands/"), $originalName);
 
-            return $finalName;
-        } else {
-            return $brand->image;
+            return $originalName;
+
         }
+
+        return "";
     }
 }

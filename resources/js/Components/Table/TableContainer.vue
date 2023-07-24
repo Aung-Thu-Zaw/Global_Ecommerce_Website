@@ -1,9 +1,7 @@
 <template>
-  <div
-    class="relative overflow-x-auto shadow-md overflow-auto scrollbar border-2"
-  >
+  <div class="relative">
     <table
-      class="text-sm text-left text-gray-500 w-auto min-w-[1800px] max-w-[2500px]"
+      class="text-sm text-left text-gray-500 w-auto min-w-[1600px] max-w-[2500px] border border-gray-200 shadow-md overflow-auto overflow-x-scroll scrollbar"
     >
       <slot />
     </table>
