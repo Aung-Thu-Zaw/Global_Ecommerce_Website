@@ -389,7 +389,7 @@ if (usePage().props.flash.successMessage) {
       <NotAvaliableData v-if="!brands.data.length" />
 
       <!-- Pagination -->
-      <div class="mt-6">
+      <div v-if="brands.data.length" class="mt-6">
         <p class="text-center text-sm text-gray-600 mb-3 font-bold">
           Showing {{ brands.from }} - {{ brands.to }} of {{ brands.total }}
         </p>

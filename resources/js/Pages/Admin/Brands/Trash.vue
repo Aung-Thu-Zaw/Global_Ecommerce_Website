@@ -339,7 +339,7 @@ const brandTrashDelete = computed(() => {
         Brands in the Trash will be automatically deleted after 60 days.
         <button
           @click="handlePermanentlyDeleteTrashBrands"
-          class="text-primary-500 rounded-md px-2 py-1 hover:bg-primary-200 hover:text-primary-600 transition-all hover:animate-bounce"
+          class="empty-trash-btn"
         >
           Empty the trash now
         </button>
@@ -441,7 +441,7 @@ const brandTrashDelete = computed(() => {
       <NotAvaliableData v-if="!trashBrands.data.length" />
 
       <!-- Pagination -->
-      <div class="mt-6">
+      <div v-if="trashBrands.data.length" class="mt-6">
         <p class="text-center text-sm text-gray-600 mb-3 font-bold">
           Showing {{ trashBrands.from }} - {{ trashBrands.to }} of
           {{ trashBrands.total }}

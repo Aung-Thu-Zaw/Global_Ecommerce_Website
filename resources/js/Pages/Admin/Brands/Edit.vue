@@ -140,12 +140,7 @@ const handleEditBrand = async () => {
       <div class="border shadow-md p-10">
         <!-- Preview Image -->
         <div class="mb-6">
-          <img
-            ref="previewPhoto"
-            :src="form.image"
-            alt=""
-            class="preview-img"
-          />
+          <img ref="previewPhoto" :src="form.image" class="preview-img" />
         </div>
         <form @submit.prevent="handleEditBrand">
           <!-- Brand Name Input -->

@@ -362,7 +362,7 @@ if (usePage().props.flash.successMessage) {
       <NotAvaliableData v-if="!collections.data.length" />
 
       <!-- Pagination -->
-      <div class="mt-6">
+      <div v-if="collections.data.length" class="mt-6">
         <p class="text-center text-sm text-gray-600 mb-3 font-bold">
           Showing {{ collections.from }} - {{ collections.to }} of
           {{ collections.total }}
