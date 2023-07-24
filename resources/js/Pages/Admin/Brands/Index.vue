@@ -253,8 +253,10 @@ if (usePage().props.flash.successMessage) {
           }"
           class="add-btn"
         >
-          <i class="fa-solid fa-file-circle-plus"></i>
-          Add Brand
+          <span>
+            <i class="fa-solid fa-file-circle-plus"></i>
+            Add Brand
+          </span>
         </Link>
 
         <div class="flex items-center ml-auto">
