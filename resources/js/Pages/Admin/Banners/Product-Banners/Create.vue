@@ -145,7 +145,7 @@ const handleCreateProductBanner = async () => {
               class="mt-1 block w-full"
               v-model="form.url"
               required
-              placeholder="Enter banner url"
+              placeholder="Enter url"
             />
 
             <InputError class="mt-2" :message="form.errors.url" />
