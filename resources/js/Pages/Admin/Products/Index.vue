@@ -385,6 +385,8 @@ if (usePage().props.flash.successMessage) {
                 :data="{
                   page: params.page,
                   per_page: params.per_page,
+                  sort: params.sort,
+                  direction: params.direction,
                 }"
                 class="detail-btn group"
               >
