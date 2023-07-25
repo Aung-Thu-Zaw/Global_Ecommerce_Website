@@ -3,6 +3,7 @@ import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ProductBreadcrumb.vue";
 import { Link, Head } from "@inertiajs/vue3";
 
+// Define the props
 const props = defineProps({
   paginate: Object,
   product: Object,
@@ -11,11 +12,34 @@ const props = defineProps({
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Product Details" />
+    <Head :title="product.name" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span
+                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+              >
+                {{ product.name }}
+              </span>
+            </div>
+          </li>
           <li aria-current="page">
             <div class="flex items-center">
               <svg
@@ -38,6 +62,8 @@ const props = defineProps({
             </div>
           </li>
         </Breadcrumb>
+
+        <!-- Go Back button -->
         <div>
           <Link
             as="button"
@@ -46,14 +72,17 @@ const props = defineProps({
               page: props.paginate.page,
               per_page: props.paginate.per_page,
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+            class="goback-btn"
           >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
+            </span>
           </Link>
         </div>
       </div>
 
+      <!-- Product Detail -->
       <div class="p-5 border shadow-md rounded-sm my-5">
         <h1 class="font-bold text-slate-700 text-2xl border-b-4 px-10 py-3">
           Product Details
@@ -237,9 +266,7 @@ const props = defineProps({
                 >
                   Product Description
                 </span>
-                <span class="w-1/2 block">
-                  {{ product.description }}
-                </span>
+                <span v-html="product.description" class="w-1/2 block"> </span>
               </div>
             </div>
           </div>

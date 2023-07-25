@@ -333,10 +333,7 @@ const couponTrashDelete = computed(() => {
           ></i>
         </form>
         <div class="ml-5">
-          <select
-            class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-            v-model="params.per_page"
-          >
+          <select class="perpage-selectbox" v-model="params.per_page">
             <option value="" selected disabled>Select</option>
             <option value="5">5</option>
             <option value="10">10</option>

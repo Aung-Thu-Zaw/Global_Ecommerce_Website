@@ -1,14 +1,15 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, useForm, Head } from "@inertiajs/vue3";
-import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ProductBreadcrumb.vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { Link, useForm, Head } from "@inertiajs/vue3";
+import { useReCaptcha } from "vue-recaptcha-v3";
 import { ref } from "vue";
 
+// Define the props
 const props = defineProps({
   per_page: String,
   brands: Object,
@@ -17,8 +18,15 @@ const props = defineProps({
   vendors: Object,
 });
 
+// Define Variables
+const editor = ClassicEditor;
 const processing = ref(false);
+const previewPhoto = ref("");
+const size = ref("");
+const color = ref("");
+const multiPreviewPhotos = ref([]);
 
+// Product Create Form Data
 const form = useForm({
   name: "",
   sizes: [],
@@ -37,18 +45,15 @@ const form = useForm({
   hot_deal: false,
   special_offer: false,
   featured: false,
-  status: "",
   captcha_token: null,
 });
 
-const editor = ClassicEditor;
-
-const previewPhoto = ref("");
+// Handle Preview Image
 const getPreviewPhotoPath = (path) => {
   previewPhoto.value.src = URL.createObjectURL(path);
 };
 
-const multiPreviewPhotos = ref([]);
+// Handle Multi Preview Image
 const getMultiPreviewPhotoPath = (paths) => {
   paths.forEach((path) => {
     multiPreviewPhotos.value.push(URL.createObjectURL(path));
@@ -60,6 +65,7 @@ const handleMultiplePhotoChange = (files) => {
   getMultiPreviewPhotoPath(paths);
 };
 
+// Handle Remove Preview Image
 const removeImage = (index) => {
   multiPreviewPhotos.value.splice(index, 1);
 
@@ -67,7 +73,7 @@ const removeImage = (index) => {
   form.multi_image.splice(index, 1);
 };
 
-const size = ref("");
+// Handle Size Tags
 const createSize = (e) => {
   if (e.key === ",") {
     size.value = size.value.split(",").join("").toLowerCase();
@@ -76,13 +82,15 @@ const createSize = (e) => {
   }
   form.sizes = [...new Set(form.sizes)];
 };
+
+// Handle Remove Size
 const removeSize = (removeSize) => {
   form.sizes = form.sizes.filter((size) => {
     return size !== removeSize;
   });
 };
 
-const color = ref("");
+// Handle Color Tags
 const createColor = (e) => {
   if (e.key === ",") {
     color.value = color.value.split(",").join("").toLowerCase();
@@ -92,20 +100,22 @@ const createColor = (e) => {
 
   form.colors = [...new Set(form.colors)];
 };
+
+// Handle Remove Color
 const removeColor = (removeColor) => {
   form.colors = form.colors.filter((color) => {
     return color !== removeColor;
   });
 };
 
+// Destructing ReCaptcha
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+
+// Handle Create Product
 const handleCreateProduct = async () => {
   await recaptchaLoaded();
   form.captcha_token = await executeRecaptcha("create_product");
-  submit();
-};
 
-const submit = () => {
   processing.value = true;
 
   form.post(
@@ -128,6 +138,7 @@ const submit = () => {
     <Head title="Create Product" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -158,11 +169,15 @@ const submit = () => {
             :href="route('admin.products.index')"
             :data="{
               per_page: props.per_page,
+              sort: 'id',
+              direction: 'desc',
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+            class="goback-btn"
           >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
+            </span>
           </Link>
         </div>
       </div>
@@ -255,28 +270,12 @@ const submit = () => {
                   <InputError class="mt-2" :message="form.errors.description" />
                 </div>
 
-                <!-- Product Status Field -->
-                <div class="mb-6">
-                  <InputLabel for="status" value="Status *" />
-
-                  <select
-                    class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-                    v-model="form.status"
-                  >
-                    <option value="" selected disabled>Select Status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                  </select>
-
-                  <InputError class="mt-2" :message="form.errors.status" />
-                </div>
-
                 <!-- Product Single Image Field -->
                 <div class="mb-6">
                   <InputLabel for="image" value="Product Image ( Main ) *" />
 
                   <input
-                    class="relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-neutral-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out file:-mx-3 file:-my-1.5 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-1.5 file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[margin-inline-end:0.75rem] file:[border-inline-end-width:1px] hover:file:bg-neutral-200 focus:border-primary focus:bg-white focus:text-neutral-700 focus:shadow-[0_0_0_1px] focus:shadow-primary focus:outline-none dark:bg-transparent dark:text-neutral-200 dark:focus:bg-transparent"
+                    class="file-input"
                     type="file"
                     id="image"
                     required
@@ -285,7 +284,7 @@ const submit = () => {
                   />
 
                   <span class="text-xs text-gray-500">
-                    SVG, PNG, JPG, JPEG, WEBP or GIF
+                    SVG, PNG, JPG, JPEG, WEBP or GIF (Max File size : 5 MB)
                   </span>
 
                   <InputError class="mt-2" :message="form.errors.image" />
@@ -299,7 +298,7 @@ const submit = () => {
                   />
 
                   <input
-                    class="relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-neutral-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out file:-mx-3 file:-my-1.5 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-1.5 file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[margin-inline-end:0.75rem] file:[border-inline-end-width:1px] hover:file:bg-neutral-200 focus:border-primary focus:bg-white focus:text-neutral-700 focus:shadow-[0_0_0_1px] focus:shadow-primary focus:outline-none dark:bg-transparent dark:text-neutral-200 dark:focus:bg-transparent"
+                    class="file-input"
                     type="file"
                     id="multiImage"
                     multiple
@@ -308,7 +307,7 @@ const submit = () => {
                   />
 
                   <span class="text-xs text-gray-500">
-                    SVG, PNG, JPG, JPEG, WEBP or GIF
+                    SVG, PNG, JPG, JPEG, WEBP or GIF (Max File size : 5 MB)
                   </span>
 
                   <InputError class="mt-2" :message="form.errors.multi_image" />
@@ -501,7 +500,7 @@ const submit = () => {
                         type="checkbox"
                         name="bordered-checkbox"
                         v-model="form.hot_deal"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <label
                         for="bordered-checkbox-2"
@@ -520,7 +519,7 @@ const submit = () => {
                         type="checkbox"
                         v-model="form.special_offer"
                         name="bordered-checkbox"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <label
                         for="bordered-checkbox-2"
@@ -539,7 +538,7 @@ const submit = () => {
                         type="checkbox"
                         v-model="form.featured"
                         name="bordered-checkbox"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <label
                         for="bordered-checkbox-2"
@@ -561,8 +560,7 @@ const submit = () => {
                     <img
                       ref="previewPhoto"
                       src="https://media.istockphoto.com/id/1357365823/vector/default-image-icon-vector-missing-picture-page-for-website-design-or-mobile-app-no-photo.jpg?s=612x612&w=0&k=20&c=PM_optEhHBTZkuJQLlCjLz-v3zzxp-1mpNQZsdjrbns="
-                      alt=""
-                      class="h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300"
+                      class="preview-img"
                     />
                   </div>
                   <div v-if="multiPreviewPhotos.length" class="mb-4">
@@ -575,11 +573,7 @@ const submit = () => {
                         v-for="(multiPreviewPhoto, index) in multiPreviewPhotos"
                         :key="index"
                       >
-                        <img
-                          :src="multiPreviewPhoto"
-                          alt=""
-                          class="h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300 mr-6"
-                        />
+                        <img :src="multiPreviewPhoto" class="preview-img" />
                         <span
                           class="absolute top-0 right-4 bg-slate-300 text-slate-600 w-5 h-5 flex items-center justify-center rounded-full hover:bg-slate-500 hover:text-slate-300 transition-all"
                           @click="removeImage(index)"
@@ -593,10 +587,9 @@ const submit = () => {
               </div>
             </div>
 
+            <!-- Create Button -->
             <div class="mb-6">
-              <button
-                class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"
-              >
+              <button class="save-btn">
                 <svg
                   v-if="processing"
                   aria-hidden="true"
