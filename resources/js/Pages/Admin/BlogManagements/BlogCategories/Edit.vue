@@ -136,6 +136,7 @@ const handleEditBlogCatrgory = async () => {
         <div class="mb-6">
           <img ref="previewPhoto" :src="form.image" class="preview-img" />
         </div>
+        
         <form @submit.prevent="handleEditBlogCatrgory">
           <!-- Blog Category Name Input -->
           <div class="mb-6">

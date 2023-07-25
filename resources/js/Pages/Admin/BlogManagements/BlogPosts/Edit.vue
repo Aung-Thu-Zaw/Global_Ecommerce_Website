@@ -28,14 +28,14 @@ const getPreviewPhotoPath = (path) => {
 
 // Blog Post Edit Form Data
 const form = useForm({
-  blog_category_id: props.blogPost.blog_category_id,
+  blog_category_id: props.blogPost?.blog_category_id,
   author_id:
     usePage().props.auth.user && usePage().props.auth.user.role === "admin"
       ? usePage().props.auth.user.id
       : null,
-  title: props.blogPost.title,
-  description: props.blogPost.description,
-  image: props.blogPost.image,
+  title: props.blogPost?.title,
+  description: props.blogPost?.description,
+  image: props.blogPost?.image,
   captcha_token: null,
 });
 
@@ -129,10 +129,12 @@ const handleEditBlogPost = async () => {
               sort: props.queryStringParams.sort,
               direction: props.queryStringParams.direction,
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+            class="goback-btn"
           >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
+            </span>
           </Link>
         </div>
       </div>
@@ -140,12 +142,7 @@ const handleEditBlogPost = async () => {
       <div class="border shadow-md p-10">
         <!-- Preview Image -->
         <div class="mb-6">
-          <img
-            ref="previewPhoto"
-            :src="form.image"
-            alt=""
-            class="w-[100px] h-[100px] object-cover rounded-full shadow-md my-3 ring-2 ring-slate-300"
-          />
+          <img ref="previewPhoto" :src="form.image" class="preview-img" />
         </div>
 
         <form @submit.prevent="handleEditBlogPost">
@@ -201,7 +198,7 @@ const handleEditBlogPost = async () => {
             <InputLabel for="image" value="Image *" />
 
             <input
-              class="relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-neutral-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out file:-mx-3 file:-my-1.5 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-1.5 file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[margin-inline-end:0.75rem] file:[border-inline-end-width:1px] hover:file:bg-neutral-200 focus:border-primary focus:bg-white focus:text-neutral-700 focus:shadow-[0_0_0_1px] focus:shadow-primary focus:outline-none dark:bg-transparent dark:text-neutral-200 dark:focus:bg-transparent"
+              class="file-input"
               type="file"
               id="image"
               @input="form.image = $event.target.files[0]"
@@ -209,7 +206,7 @@ const handleEditBlogPost = async () => {
             />
 
             <span class="text-xs text-gray-500">
-              SVG, PNG, JPG, JPEG, WEBP or GIF
+              SVG, PNG, JPG, JPEG, WEBP or GIF (Max File size : 5 MB)
             </span>
 
             <InputError class="mt-2" :message="form.errors.image" />
@@ -217,9 +214,7 @@ const handleEditBlogPost = async () => {
 
           <!-- Edit Button -->
           <div class="mb-6">
-            <button
-              class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"
-            >
+            <button class="save-btn">
               <svg
                 v-if="processing"
                 aria-hidden="true"
