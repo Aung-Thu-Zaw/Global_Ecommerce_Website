@@ -1,11 +1,11 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, useForm, Head } from "@inertiajs/vue3";
-import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/BannerBreadcrumb.vue";
+import { Link, useForm, Head } from "@inertiajs/vue3";
+import { useReCaptcha } from "vue-recaptcha-v3";
 import { ref } from "vue";
 
 // Define the props

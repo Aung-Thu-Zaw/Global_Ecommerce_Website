@@ -441,6 +441,7 @@ if (usePage().props.flash.successMessage) {
                 v-if="sliderBanner.status == 'hide' && bannerControl"
                 @click="handleShow(sliderBanner.id)"
                 class="show-btn group"
+                type="button"
               >
                 <span class="group-hover:animate-pulse">
                   <i class="fa-solid fa-eye-slash"></i>
@@ -453,6 +454,7 @@ if (usePage().props.flash.successMessage) {
                 v-if="sliderBanner.status == 'show' && bannerControl"
                 @click="handleHide(sliderBanner.id)"
                 class="hide-btn group"
+                type="button"
               >
                 <span class="group-hover:animate-pulse">
                   <i class="fa-solid fa-eye-slash"></i>
