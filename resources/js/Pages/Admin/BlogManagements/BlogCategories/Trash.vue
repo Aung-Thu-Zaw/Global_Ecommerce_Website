@@ -1,5 +1,6 @@
 <script setup>
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
+import SortingArrows from "@/Components/Table/SortingArrows.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -110,13 +111,14 @@ const updateSorting = (sort = "id") => {
 };
 
 // Handle Trash Blog Category Restore
-const handleBlogCategoryRestore = async (trashBlogCategoryId) => {
+const handleRestoreTrashBlogCategory = async (trashBlogCategoryId) => {
   const result = await swal({
-    icon: "info",
+    icon: "question",
     title: "Are you sure you want to restore this blog category?",
     showCancelButton: true,
-    confirmButtonText: "Yes, restore",
-    confirmButtonColor: "#4d9be9",
+    confirmButtonText: "Yes, Restore It",
+    confirmButtonColor: "#2562c4",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -125,7 +127,7 @@ const handleBlogCategoryRestore = async (trashBlogCategoryId) => {
   if (result.isConfirmed) {
     router.post(
       route("admin.blogs.categories.restore", {
-        blog_category: trashBlogCategoryId,
+        trash_blog_category_id: trashBlogCategoryId,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
@@ -149,12 +151,13 @@ const handleBlogCategoryRestore = async (trashBlogCategoryId) => {
 // Handle Trash Blog Category Delete
 const handleDeleteTrashBlogCategory = async (trashBlogCategoryId) => {
   const result = await swal({
-    icon: "warning",
+    icon: "question",
     title: "Are you sure you want to delete it from the trash?",
     text: "Blog category in the trash will be permanetly deleted! You can't get it back.",
     showCancelButton: true,
-    confirmButtonText: "Yes, delete it !",
-    confirmButtonColor: "#ef4444",
+    confirmButtonText: "Yes, Delete it !",
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -163,7 +166,7 @@ const handleDeleteTrashBlogCategory = async (trashBlogCategoryId) => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.blogs.categories.force.delete", {
-        blog_category: trashBlogCategoryId,
+        trash_blog_category_id: trashBlogCategoryId,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
@@ -184,14 +187,15 @@ const handleDeleteTrashBlogCategory = async (trashBlogCategoryId) => {
 };
 
 // Handle Trash Blog Category Delete Permanently
-const handlePermanentlyDeleteTrashBlogCategory = async () => {
+const handlePermanentlyDeleteTrashBlogCategories = async () => {
   const result = await swal({
-    icon: "warning",
+    icon: "question",
     title: "Are you sure you want to delete it from the trash?",
     text: "All blog categories in the trash will be permanetly deleted! You can't get it back.",
     showCancelButton: true,
-    confirmButtonText: "Yes, delete it !",
-    confirmButtonColor: "#ef4444",
+    confirmButtonText: "Yes, Delete it !",
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -284,10 +288,12 @@ const blogCategoryTrashDelete = computed(() => {
               sort: 'id',
               direction: 'desc',
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+            class="goback-btn"
           >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
+            </span>
           </Link>
         </div>
       </div>
@@ -297,24 +303,20 @@ const blogCategoryTrashDelete = computed(() => {
         <form class="w-[350px] relative">
           <input
             type="text"
-            class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
+            class="search-input"
             placeholder="Search by name"
             v-model="params.search"
           />
 
           <i
             v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+            class="fa-solid fa-xmark remove-search"
             @click="removeSearch"
           ></i>
         </form>
-
         <!-- Perpage Select Box -->
         <div class="ml-5">
-          <select
-            class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-            v-model="params.per_page"
-          >
+          <select class="perpage-selectbox" v-model="params.per_page">
             <option value="" selected disabled>Select</option>
             <option value="5">5</option>
             <option value="10">10</option>
@@ -334,92 +336,33 @@ const blogCategoryTrashDelete = computed(() => {
         Blog categories in the Trash will be automatically deleted after 60
         days.
         <button
-          @click="handlePermanentlyDeleteTrashBlogCategory"
-          class="text-primary-500 rounded-md px-2 py-1 hover:bg-primary-200 hover:text-primary-600 transition-all hover:animate-bounce"
+          @click="handlePermanentlyDeleteTrashBlogCategories"
+          class="empty-trash-btn"
         >
           Empty the trash now
         </button>
       </p>
 
-      <!-- Blog Category Table Start -->
+      <!-- Trash Blog Category Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="id" />
           </HeaderTh>
+
           <HeaderTh> Image </HeaderTh>
+
           <HeaderTh @click="updateSorting('name')">
             Name
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'name',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'name',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="name" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('deleted_at')">
             Deleted At
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'deleted_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'deleted_at',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'deleted_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'deleted_at',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="deleted_at" />
           </HeaderTh>
+
           <HeaderTh v-if="blogCategoryTrashRestore || blogCategoryTrashDelete">
             Action
           </HeaderTh>
@@ -435,11 +378,7 @@ const blogCategoryTrashDelete = computed(() => {
             </BodyTh>
 
             <Td>
-              <img
-                :src="trashBlogCategory.image"
-                class="w-[50px] h-[50px] rounded-full object-cover shadow-lg ring-2 ring-slate-300"
-                alt=""
-              />
+              <img :src="trashBlogCategory.image" class="image" />
             </Td>
 
             <Td>
@@ -451,33 +390,49 @@ const blogCategoryTrashDelete = computed(() => {
             </Td>
 
             <Td v-if="blogCategoryTrashRestore || blogCategoryTrashDelete">
+              <!-- Restore Button -->
               <button
                 v-if="blogCategoryTrashRestore"
-                @click="handleBlogCategoryRestore(trashBlogCategory.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
+                @click="handleRestoreTrashBlogCategory(trashBlogCategory.id)"
+                class="edit-btn group"
+                type="button"
               >
-                <i class="fa-solid fa-recycle"></i>
-                Restore
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-recycle"></i>
+                  Restore
+                </span>
               </button>
+
+              <!-- Delete Button -->
               <button
                 v-if="blogCategoryTrashDelete"
                 @click="handleDeleteTrashBlogCategory(trashBlogCategory.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
+                class="delete-btn group"
+                type="button"
               >
-                <i class="fa-solid fa-trash"></i>
-                Delete Forever
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-trash-can"></i>
+                  Delete Forever
+                </span>
               </button>
             </Td>
           </Tr>
         </tbody>
       </TableContainer>
-      <!-- Blog Category Table End -->
+      <!-- Trash Blog Category Table End -->
 
       <!-- No Data Row -->
       <NotAvaliableData v-if="!trashBlogCategories.data.length" />
 
       <!-- Pagination -->
-      <Pagination class="mt-6" :links="trashBlogCategories.links" />
+      <div v-if="trashBlogCategories.data.length" class="mt-6">
+        <p class="text-center text-sm text-gray-600 mb-3 font-bold">
+          Showing {{ trashBlogCategories.from }} -
+          {{ trashBlogCategories.to }} of
+          {{ trashBlogCategories.total }}
+        </p>
+        <Pagination :links="trashBlogCategories.links" />
+      </div>
     </div>
   </AdminDashboardLayout>
 </template>
