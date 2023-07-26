@@ -103,11 +103,15 @@ const handleCreateRoleInPermissions = async () => {
             :href="route('admin.role-in-permissions.index')"
             :data="{
               per_page: props.per_page,
+              sort: 'id',
+              direction: 'desc',
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+            class="goback-btn"
           >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
+            </span>
           </Link>
         </div>
       </div>
@@ -211,9 +215,7 @@ const handleCreateRoleInPermissions = async () => {
 
           <!-- Create Button -->
           <div class="mb-6">
-            <button
-              class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"
-            >
+            <button class="save-btn">
               <svg
                 v-if="processing"
                 aria-hidden="true"
