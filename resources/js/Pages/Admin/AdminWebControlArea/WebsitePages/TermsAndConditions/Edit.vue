@@ -126,11 +126,9 @@ const termsAndConditionsEdit = computed(() => {
             <InputError class="mt-2" :message="form.errors.description" />
           </div>
 
-          <!-- Handle Button -->
+          <!-- Edit Button -->
           <div v-if="termsAndConditionsEdit" class="mb-6">
-            <button
-              class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"
-            >
+            <button class="save-btn">
               <svg
                 v-if="processing"
                 aria-hidden="true"
