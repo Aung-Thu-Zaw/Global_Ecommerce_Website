@@ -1,5 +1,6 @@
 <script setup>
 import Breadcrumb from "@/Components/Breadcrumbs/VendorManageBreadcrumb.vue";
+import SortingArrows from "@/Components/Table/SortingArrows.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
@@ -13,103 +14,59 @@ import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link, usePage, Head, router } from "@inertiajs/vue3";
 import { inject, reactive, watch, computed } from "vue";
 
+// Define the props
 const props = defineProps({
   inactiveVendors: Object,
 });
 
+// Define Alert Variables
 const swal = inject("$swal");
 
-const vendorManageControl = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "vendor-manage.control"
-      )
-    : false;
-});
-
-const vendorManageDetail = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "vendor-manage.detail"
-      )
-    : false;
-});
-
-const vendorManageDelete = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "vendor-manage.delete"
-      )
-    : false;
-});
-
-const vendorManageTrashList = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "vendor-manage.trash.list"
-      )
-    : false;
-});
-
+// Query String Parameteres
 const params = reactive({
-  search: null,
-  page: props.inactiveVendors.current_page
-    ? props.inactiveVendors.current_page
-    : 1,
-  per_page: props.inactiveVendors.per_page
-    ? props.inactiveVendors.per_page
-    : 10,
-  sort: "id",
-  direction: "desc",
+  search: usePage().props.ziggy.query?.search,
+  page: usePage().props.ziggy.query?.page,
+  per_page: usePage().props.ziggy.query?.per_page,
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
 });
 
-const handleSearchBox = () => {
-  params.search = "";
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.vendors.inactive.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.vendors.inactive.index"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.vendors.inactive.index"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.vendors.inactive.index"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("admin.vendors.inactive.index"),
     {
@@ -119,17 +76,50 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
+};
+
+// Handle Vendor Active
 const handleActive = async (inactiveVendorId) => {
   const result = await swal({
-    icon: "info",
+    icon: "question",
     title: "Are you sure you want to active this vendor?",
     showCancelButton: true,
-    confirmButtonText: "Yes, active!",
-    confirmButtonColor: "#027e00",
+    confirmButtonText: "Yes, Active!",
+    confirmButtonColor: "#2562c4",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -138,28 +128,37 @@ const handleActive = async (inactiveVendorId) => {
   if (result.isConfirmed) {
     router.post(
       route("admin.vendors.inactive.update", {
-        id: inactiveVendorId,
+        vendor: inactiveVendorId,
         page: params.page,
         per_page: params.per_page,
-      })
+        sort: params.sort,
+        direction: params.direction,
+      }),
+      {},
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
-const handleDelete = async (inactiveVendorId) => {
+// Handle Delete Inactive Vendor
+const handleDeleteInactiveVendor = async (inactiveVendorId) => {
   const result = await swal({
-    icon: "warning",
+    icon: "question",
     title: "Are you sure you want to move it to the trash?",
     text: "You will be able to revert this action!",
     showCancelButton: true,
-    confirmButtonText: "Yes, remove it!",
-    confirmButtonColor: "#ef4444",
+    confirmButtonText: "Yes, Delete it!",
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -168,19 +167,71 @@ const handleDelete = async (inactiveVendorId) => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.vendors.inactive.destroy", {
-        id: inactiveVendorId,
+        vendor: inactiveVendorId,
         page: params.page,
         per_page: params.per_page,
-      })
+        sort: params.sort,
+        direction: params.direction,
+      }),
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
+
+// Define Permissions Variables
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
+
+// Vendor Manage Control Permission
+const vendorManageControl = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "vendor-manage.control"
+      )
+    : false;
+});
+
+// Vendor Manage Detail Permission
+const vendorManageDetail = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "vendor-manage.detail"
+      )
+    : false;
+});
+
+// Vendor Manage Delete Permission
+const vendorManageDelete = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "vendor-manage.delete"
+      )
+    : false;
+});
+
+// Vendor Manage Trash List Permission
+const vendorManageTrashList = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "vendor-manage.trash.list"
+      )
+    : false;
+});
+
+if (usePage().props.flash.successMessage) {
+  swal({
+    icon: "success",
+    title: usePage().props.flash.successMessage,
+  });
+}
 </script>
 
 
@@ -190,6 +241,7 @@ const handleDelete = async (inactiveVendorId) => {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -214,6 +266,7 @@ const handleDelete = async (inactiveVendorId) => {
           </li>
         </Breadcrumb>
 
+        <!-- Trash Button -->
         <div v-if="vendorManageTrashList">
           <Link
             as="button"
@@ -224,37 +277,36 @@ const handleDelete = async (inactiveVendorId) => {
               sort: 'id',
               direction: 'desc',
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
+            class="trash-btn group"
           >
-            <i class="fa-solid fa-trash"></i>
-
-            Trash
+            <span class="group-hover:animate-pulse">
+              <i class="fa-solid fa-trash-can-arrow-up"></i>
+              Trash
+            </span>
           </Link>
         </div>
       </div>
 
       <div class="flex items-center justify-end mb-5 ml-auto">
+        <!-- Search Box -->
         <form class="w-[350px] relative">
           <input
             type="text"
-            class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-            placeholder="Search"
+            class="search-input"
+            placeholder="Search by name"
             v-model="params.search"
           />
-
           <i
             v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-            @click="handleSearchBox"
+            class="fa-solid fa-xmark remove-search"
+            @click="removeSearch"
           ></i>
         </form>
 
+        <!-- Perpage Select Box -->
         <div class="ml-5">
-          <select
-            class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-            v-model="params.per_page"
-          >
-            <option value="" selected disabled>Select</option>
+          <select class="perpage-selectbox" v-model="params.per_page">
+            <option value="" disabled>Select</option>
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="25">25</option>
@@ -269,105 +321,26 @@ const handleDelete = async (inactiveVendorId) => {
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="id" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('name')">
             Username
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'name',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'name',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="name" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('email')">
             Email Address
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'email',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'email',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'email',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'email',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="email" />
           </HeaderTh>
+
           <HeaderTh> Status </HeaderTh>
+
           <HeaderTh @click="updateSorting('created_at')">
             Created At
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'created_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'created_at',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'created_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'created_at',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="created_at" />
           </HeaderTh>
+
           <HeaderTh
             v-if="
               vendorManageControl || vendorManageDelete || vendorManageDetail
@@ -382,35 +355,58 @@ const handleDelete = async (inactiveVendorId) => {
             v-for="inactiveVendor in inactiveVendors.data"
             :key="inactiveVendor.id"
           >
-            <BodyTh>{{ inactiveVendor.id }}</BodyTh>
-            <Td>{{ inactiveVendor.name }}</Td>
-            <Td>{{ inactiveVendor.email }}</Td>
+            <BodyTh>
+              {{ inactiveVendor.id }}
+            </BodyTh>
+
+            <Td>
+              {{ inactiveVendor.name }}
+            </Td>
+
+            <Td>
+              {{ inactiveVendor.email }}
+            </Td>
+
             <Td>
               <InactiveStatus> {{ inactiveVendor.status }} </InactiveStatus>
             </Td>
-            <Td>{{ inactiveVendor.created_at }}</Td>
+
+            <Td>
+              {{ inactiveVendor.created_at }}
+            </Td>
+
             <Td
               v-if="
                 vendorManageControl || vendorManageDelete || vendorManageDetail
               "
             >
+              <!-- Active Button -->
               <button
                 v-if="vendorManageControl"
                 @click="handleActive(inactiveVendor.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-green-600 text-white hover:bg-green-700 mr-3 my-1"
+                class="active-btn group"
+                type="button"
               >
-                <i class="fa-solid fa-check"></i>
-                Active
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-check"></i>
+                  Active
+                </span>
               </button>
 
+              <!-- Delete Button -->
               <button
                 v-if="vendorManageDelete"
-                @click="handleDelete(inactiveVendor.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
+                @click="handleDeleteInactiveVendor(inactiveVendor.id)"
+                class="delete-btn group"
+                type="button"
               >
-                <i class="fa-solid fa-minus"></i>
-                Remove
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-trash-can"></i>
+                  Delete
+                </span>
               </button>
+
+              <!-- Detail Button -->
               <Link
                 v-if="vendorManageDetail"
                 as="button"
@@ -418,20 +414,32 @@ const handleDelete = async (inactiveVendorId) => {
                 :data="{
                   page: params.page,
                   per_page: params.per_page,
+                  sort: params.sort,
+                  direction: params.direction,
                 }"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
+                class="detail-btn group"
               >
-                <i class="fa-solid fa-eye"></i>
-                Details
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-eye"></i>
+                  Details
+                </span>
               </Link>
             </Td>
           </Tr>
         </tbody>
       </TableContainer>
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!inactiveVendors.data.length" />
 
-      <Pagination class="mt-6" :links="inactiveVendors.links" />
+      <!-- Pagination -->
+      <div v-if="inactiveVendors.data.length" class="mt-6">
+        <p class="text-center text-sm text-gray-600 mb-3 font-bold">
+          Showing {{ inactiveVendors.from }} - {{ inactiveVendors.to }} of
+          {{ inactiveVendors.total }}
+        </p>
+        <Pagination :links="inactiveVendors.links" />
+      </div>
     </div>
   </AdminDashboardLayout>
 </template>

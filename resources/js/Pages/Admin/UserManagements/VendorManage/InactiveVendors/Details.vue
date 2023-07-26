@@ -18,6 +18,7 @@ const props = defineProps({
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -71,14 +72,17 @@ const props = defineProps({
               page: props.paginate.page,
               per_page: props.paginate.per_page,
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+            class="goback-btn"
           >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
+            </span>
           </Link>
         </div>
       </div>
 
+      <!-- Inactive Vendor Detail -->
       <div class="border shadow-md p-10">
         <div class="mb-10 flex items-center justify-between">
           <img

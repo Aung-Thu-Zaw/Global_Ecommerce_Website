@@ -1,5 +1,6 @@
 <script setup>
 import Breadcrumb from "@/Components/Breadcrumbs/VendorManageBreadcrumb.vue";
+import SortingArrows from "@/Components/Table/SortingArrows.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import ActiveStatus from "@/Components/Status/ActiveStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
@@ -10,84 +11,62 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject, computed } from "vue";
+import { reactive, watch, inject, computed, ref } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
+// Define the props
 const props = defineProps({
   activeVendors: Object,
 });
 
+// Define Alert Variables
+const swal = inject("$swal");
+
+// Query String Parameteres
 const params = reactive({
-  search: null,
-  page: props.activeVendors.current_page ? props.activeVendors.current_page : 1,
-  per_page: props.activeVendors.per_page ? props.activeVendors.per_page : 10,
-  sort: "id",
-  direction: "desc",
+  search: usePage().props.ziggy.query?.search,
+  page: usePage().props.ziggy.query?.page,
+  per_page: usePage().props.ziggy.query?.per_page,
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
 });
 
-const vendorManageControl = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "vendor-manage.control"
-      )
-    : false;
-});
-
-const vendorManageDetail = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "vendor-manage.detail"
-      )
-    : false;
-});
-
-const handleSearchBox = () => {
-  params.search = "";
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.vendors.active.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.vendors.active.index"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.vendors.active.index"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.vendors.active.index"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
   router.get(
     route("admin.vendors.active.index"),
     {
@@ -97,19 +76,50 @@ const updateSorting = (sort = "id") => {
       sort: params.sort,
       direction: params.direction,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
-const swal = inject("$swal");
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
 
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
+};
+
+// Handle Vendor Inactive
 const handleInactive = async (activeVendorId) => {
   const result = await swal({
-    icon: "info",
+    icon: "question",
     title: "Are you sure you want to inactive this vendor?",
     showCancelButton: true,
-    confirmButtonText: "Yes, inactive!",
-    confirmButtonColor: "#027e00",
+    confirmButtonText: "Yes, Inactive!",
+    confirmButtonColor: "#2562c4",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -118,24 +128,32 @@ const handleInactive = async (activeVendorId) => {
   if (result.isConfirmed) {
     router.post(
       route("admin.vendors.active.update", {
-        id: activeVendorId,
+        vendor: activeVendorId,
+        status: "inactive",
         page: params.page,
         per_page: params.per_page,
-        status: "inactive",
-      })
+        sort: params.sort,
+        direction: params.direction,
+      }),
+      {},
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
+// Handle Offical Or UnOffical
 const handleOffical = async (activeVendor) => {
   const result = await swal({
-    icon: "info",
+    icon: "question",
     title: `Are you sure you want to set ${
       activeVendor.offical ? "unoffical" : "offical"
     } this vendor?`,
@@ -143,7 +161,8 @@ const handleOffical = async (activeVendor) => {
     confirmButtonText: `Yes, ${
       activeVendor.offical ? "unoffical" : "offical"
     }!`,
-    confirmButtonColor: "#027e00",
+    confirmButtonColor: "#2562c4",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -152,20 +171,55 @@ const handleOffical = async (activeVendor) => {
   if (result.isConfirmed) {
     router.post(
       route("admin.vendors.active.update", {
-        id: activeVendor.id,
+        vendor: activeVendor.id,
+        offical: activeVendor.offical ? false : true,
         page: params.page,
         per_page: params.per_page,
-        offical: activeVendor.offical ? false : true,
-      })
+        sort: params.sort,
+        direction: params.direction,
+      }),
+      {},
+      {
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
+
+// Define Permissions Variables
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
+
+// Vendor Manage Control Permission
+const vendorManageControl = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "vendor-manage.control"
+      )
+    : false;
+});
+
+// Vendor Manage Detail Permission
+const vendorManageDetail = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "vendor-manage.detail"
+      )
+    : false;
+});
+
+if (usePage().props.flash.successMessage) {
+  swal({
+    icon: "success",
+    title: usePage().props.flash.successMessage,
+  });
+}
 </script>
 
 <template>
@@ -173,6 +227,7 @@ const handleOffical = async (activeVendor) => {
     <Head title="Active Vendors" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
+      <!-- Breadcrumb -->
       <Breadcrumb>
         <li aria-current="page">
           <div class="flex items-center">
@@ -197,27 +252,25 @@ const handleOffical = async (activeVendor) => {
       </Breadcrumb>
 
       <div class="flex items-center justify-end mb-5 ml-auto">
+        <!-- Search Box -->
         <form class="w-[350px] relative">
           <input
             type="text"
-            class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-            placeholder="Search"
+            class="search-input"
+            placeholder="Search by name"
             v-model="params.search"
           />
-
           <i
             v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-            @click="handleSearchBox"
+            class="fa-solid fa-xmark remove-search"
+            @click="removeSearch"
           ></i>
         </form>
 
+        <!-- Perpage Select Box -->
         <div class="ml-5">
-          <select
-            class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-            v-model="params.per_page"
-          >
-            <option value="" selected disabled>Select</option>
+          <select class="perpage-selectbox" v-model="params.per_page">
+            <option value="" disabled>Select</option>
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="25">25</option>
@@ -228,109 +281,31 @@ const handleOffical = async (activeVendor) => {
         </div>
       </div>
 
+      <!-- Active Vendor Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="id" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('shop_name')">
             Shop Name
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'shop_name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'shop_name',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'shop_name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'shop_name',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="shop_name" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('email')">
             Email Address
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'email',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'email',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'email',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'email',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="email" />
           </HeaderTh>
+
           <HeaderTh> Status </HeaderTh>
+
           <HeaderTh @click="updateSorting('created_at')">
             Created At
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'created_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'created_at',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'created_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'created_at',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="created_at" />
           </HeaderTh>
+
           <HeaderTh v-if="vendorManageControl || vendorManageDetail">
             Action
           </HeaderTh>
@@ -338,45 +313,66 @@ const handleOffical = async (activeVendor) => {
 
         <tbody v-if="activeVendors.data.length">
           <Tr v-for="activeVendor in activeVendors.data" :key="activeVendor.id">
-            <BodyTh>{{ activeVendor.id }}</BodyTh>
-            <Td class="flex items-center"
-              >{{ activeVendor.shop_name }}
+            <BodyTh>
+              {{ activeVendor.id }}
+            </BodyTh>
+
+            <Td class="flex items-center">
+              {{ activeVendor.shop_name }}
 
               <i
                 v-if="activeVendor.offical"
                 class="fas fa-check arrow-icon ml-1 bg-green-500 p-1 rounded-full text-white"
               ></i>
             </Td>
-            <Td>{{ activeVendor.email }}</Td>
             <Td>
-              <ActiveStatus> {{ activeVendor.status }} </ActiveStatus>
+              {{ activeVendor.email }}
             </Td>
-            <Td>{{ activeVendor.created_at }}</Td>
+
+            <Td>
+              <ActiveStatus>
+                {{ activeVendor.status }}
+              </ActiveStatus>
+            </Td>
+
+            <Td>
+              {{ activeVendor.created_at }}
+            </Td>
+
             <Td v-if="vendorManageControl || vendorManageDetail">
+              <!-- Offical Button -->
               <button
                 v-if="vendorManageControl"
                 @click="handleOffical(activeVendor)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md mr-3"
+                class="offical-btn group"
+                type="button"
                 :class="{
-                  'bg-slate-600 text-white hover:bg-slate-700 ':
+                  'bg-slate-600  hover:bg-slate-700 border-slate-700':
                     !activeVendor.offical,
-                  'bg-emerald-600 text-white hover:bg-emerald-700 ':
+                  'bg-emerald-600  hover:bg-emerald-700 border-emerald-700':
                     activeVendor.offical,
                 }"
               >
-                <i class="fa-solid fa-award"></i>
-
-                {{ activeVendor.offical ? "Unoffical" : "Offical" }}
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-award"></i>
+                  {{ activeVendor.offical ? "Unoffical" : "Offical" }}
+                </span>
               </button>
+
+              <!-- Inactive Button -->
               <button
                 v-if="vendorManageControl"
                 @click="handleInactive(activeVendor.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3"
+                class="delete-btn group"
+                type="button"
               >
-                <i class="fa-solid fa-xmark"></i>
-                Inactive
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-trash"></i>
+                  Inactive
+                </span>
               </button>
 
+              <!-- Detail Button -->
               <Link
                 v-if="vendorManageDetail"
                 as="button"
@@ -384,20 +380,33 @@ const handleOffical = async (activeVendor) => {
                 :data="{
                   page: params.page,
                   per_page: params.per_page,
+                  sort: params.sort,
+                  direction: params.direction,
                 }"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700"
+                class="detail-btn group"
               >
-                <i class="fa-solid fa-eye"></i>
-                Details
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-eye"></i>
+                  Details
+                </span>
               </Link>
             </Td>
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Active Vendor Table End -->
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!activeVendors.data.length" />
 
-      <Pagination class="mt-6" :links="activeVendors.links" />
+      <!-- Pagination -->
+      <div v-if="activeVendors.data.length" class="mt-6">
+        <p class="text-center text-sm text-gray-600 mb-3 font-bold">
+          Showing {{ activeVendors.from }} - {{ activeVendors.to }} of
+          {{ activeVendors.total }}
+        </p>
+        <Pagination :links="activeVendors.links" />
+      </div>
     </div>
   </AdminDashboardLayout>
 </template>
