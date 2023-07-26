@@ -142,6 +142,7 @@ const handleEditBrand = async () => {
         <div class="mb-6">
           <img ref="previewPhoto" :src="form.image" class="preview-img" />
         </div>
+
         <form @submit.prevent="handleEditBrand">
           <!-- Brand Name Input -->
           <div class="mb-6">

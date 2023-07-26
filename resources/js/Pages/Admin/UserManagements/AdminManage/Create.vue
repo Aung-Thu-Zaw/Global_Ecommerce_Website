@@ -112,11 +112,15 @@ const handleCreateAdminUser = async () => {
             :href="route('admin.admin-manage.index')"
             :data="{
               per_page: props.per_page,
+              sort: 'id',
+              direction: 'desc',
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+            class="goback-btn"
           >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
+            </span>
           </Link>
         </div>
       </div>
@@ -127,8 +131,7 @@ const handleCreateAdminUser = async () => {
           <img
             ref="previewPhoto"
             src="https://media.istockphoto.com/id/1357365823/vector/default-image-icon-vector-missing-picture-page-for-website-design-or-mobile-app-no-photo.jpg?s=612x612&w=0&k=20&c=PM_optEhHBTZkuJQLlCjLz-v3zzxp-1mpNQZsdjrbns="
-            alt=""
-            class="w-[150px] h-[150px] object-cover rounded-full shadow-md my-3 ring-2 ring-slate-300"
+            class="preview-img"
           />
         </div>
         <form @submit.prevent="handleCreateAdminUser">
@@ -167,7 +170,7 @@ const handleCreateAdminUser = async () => {
           </div>
 
           <div class="grid grid-cols-2 gap-5">
-              <!-- Phone Input -->
+            <!-- Phone Input -->
             <div class="mb-6">
               <InputLabel for="phone" value="Phone No *" />
 
@@ -286,7 +289,7 @@ const handleCreateAdminUser = async () => {
             <InputLabel for="image" value="Avatar" />
 
             <input
-              class="relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-neutral-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out file:-mx-3 file:-my-1.5 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-1.5 file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[margin-inline-end:0.75rem] file:[border-inline-end-width:1px] hover:file:bg-neutral-200 focus:border-primary focus:bg-white focus:text-neutral-700 focus:shadow-[0_0_0_1px] focus:shadow-primary focus:outline-none dark:bg-transparent dark:text-neutral-200 dark:focus:bg-transparent"
+              class="file-input"
               type="file"
               id="image"
               @input="form.avatar = $event.target.files[0]"
@@ -294,7 +297,7 @@ const handleCreateAdminUser = async () => {
             />
 
             <span class="text-xs text-gray-500">
-              SVG, PNG, JPG, JPEG, WEBP or GIF
+              SVG, PNG, JPG, JPEG, WEBP or GIF (Max File size : 5 MB)
             </span>
 
             <InputError class="mt-2" :message="form.errors.avatar" />
@@ -302,9 +305,7 @@ const handleCreateAdminUser = async () => {
 
           <!-- Create Button -->
           <div class="mb-6">
-            <button
-              class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"
-            >
+            <button class="save-btn">
               <svg
                 v-if="processing"
                 aria-hidden="true"

@@ -1,5 +1,10 @@
 <script setup>
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
+import ActiveStatus from "@/Components/Status/ActiveStatus.vue";
+import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
+import RoleStatus from "@/Components/Status/RoleStatus.vue";
+import NoRoleStatus from "@/Components/Status/NoRoleStatus.vue";
+import SortingArrows from "@/Components/Table/SortingArrows.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -123,12 +128,13 @@ const updateSorting = (sort = "id") => {
 // Handle Admin Delete
 const handleAdminDelete = async (admin) => {
   const result = await swal({
-    icon: "warning",
+    icon: "question",
     title: "Are you sure you want to delete this admin user?",
     text: "You will be able to restore this admin user in the trash!",
     showCancelButton: true,
-    confirmButtonText: "Yes, delete it!",
-    confirmButtonColor: "#ef4444",
+    confirmButtonText: "Yes, Delete it!",
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -140,6 +146,8 @@ const handleAdminDelete = async (admin) => {
         user: admin,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {
         onSuccess: () => {
@@ -231,11 +239,12 @@ if (usePage().props.flash.successMessage) {
               sort: 'id',
               direction: 'desc',
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
+            class="trash-btn group"
           >
-            <i class="fa-solid fa-trash"></i>
-
-            Trash
+            <span class="group-hover:animate-pulse">
+              <i class="fa-solid fa-trash-can-arrow-up"></i>
+              Trash
+            </span>
           </Link>
         </div>
       </div>
@@ -249,34 +258,33 @@ if (usePage().props.flash.successMessage) {
           :data="{
             per_page: params.per_page,
           }"
-          class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700"
+          class="add-btn"
         >
-          <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
-          Add Admin</Link
-        >
+          <span>
+            <i class="fa-solid fa-file-circle-plus"></i>
+            Add Admin
+          </span>
+        </Link>
+
         <div class="flex items-center ml-auto">
           <!-- Search Box -->
           <form class="w-[350px] relative">
             <input
               type="text"
-              class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-              placeholder="Search"
+              class="search-input"
+              placeholder="Search by name"
               v-model="params.search"
             />
-
             <i
               v-if="params.search"
-              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+              class="fa-solid fa-xmark remove-search"
               @click="removeSearch"
             ></i>
           </form>
 
           <!-- Perpage Select Box -->
           <div class="ml-5">
-            <select
-              class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-              v-model="params.per_page"
-            >
+            <select class="perpage-selectbox" v-model="params.per_page">
               <option value="" disabled>Select</option>
               <option value="5">5</option>
               <option value="10">10</option>
@@ -294,132 +302,35 @@ if (usePage().props.flash.successMessage) {
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="id" />
           </HeaderTh>
+
           <HeaderTh>Avatar</HeaderTh>
+
           <HeaderTh @click="updateSorting('name')">
             Name
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'name',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'name',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="name" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('email')">
             Email Address
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'email',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'email',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'email',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'email',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="email" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('phone')">
             Phone
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'phone',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'phone',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'phone',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'phone',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="phone" />
           </HeaderTh>
+
           <HeaderTh> Admin Role </HeaderTh>
+
           <HeaderTh> Status </HeaderTh>
+
           <HeaderTh @click="updateSorting('created_at')">
             Created At
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'created_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'created_at',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'created_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'created_at',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="created_at" />
           </HeaderTh>
+
           <HeaderTh
             v-if="adminManageEdit || adminManageDelete || adminManageDetail"
           >
@@ -434,11 +345,7 @@ if (usePage().props.flash.successMessage) {
             </BodyTh>
 
             <Td>
-              <img
-                :src="admin.avatar"
-                alt=""
-                class="h-[50px] w-[50px] ring-2 ring-slate-300 object-cover rounded-full"
-              />
+              <img :src="admin.avatar" class="image" />
             </Td>
 
             <Td>{{ admin.name }}</Td>
@@ -448,33 +355,21 @@ if (usePage().props.flash.successMessage) {
             <Td>{{ admin.phone }}</Td>
 
             <Td>
-              <span
-                v-if="admin.roles.length"
-                class="capitalize bg-sky-200 text-sky-500 px-3 py-1 font-bold text-sm rounded-md"
-              >
+              <RoleStatus v-if="admin.roles.length">
                 {{ admin.roles[0].name }}
-              </span>
-              <span
-                v-else
-                class="capitalize bg-slate-200 text-slate-500 px-3 py-1 font-bold text-sm rounded-md"
-              >
-                No Role
-              </span>
+              </RoleStatus>
+
+              <NoRoleStatus v-else />
             </Td>
 
             <Td>
-              <span
-                class="capitalize px-3 py-1 font-bold text-sm rounded-md"
-                :class="{
-                  'bg-green-200 text-green-500':
-                    status(admin.last_activity) == 'active',
-                  'bg-red-200 text-red-500':
-                    status(admin.last_activity) == 'offline',
-                }"
-              >
-                <i class="fa-solid fa-circle animate-pulse text-[.6rem]"></i>
+              <ActiveStatus v-if="status(admin.last_activity) == 'active'">
                 {{ status(admin.last_activity) }}
-              </span>
+              </ActiveStatus>
+
+              <InactiveStatus v-if="status(admin.last_activity) == 'offline'">
+                {{ status(admin.last_activity) }}
+              </InactiveStatus>
             </Td>
 
             <Td>{{ admin.created_at }}</Td>
@@ -482,6 +377,7 @@ if (usePage().props.flash.successMessage) {
             <Td
               v-if="adminManageEdit || adminManageDelete || adminManageDetail"
             >
+              <!-- Edit Button -->
               <Link
                 v-if="adminManageEdit"
                 as="button"
@@ -489,20 +385,31 @@ if (usePage().props.flash.successMessage) {
                 :data="{
                   page: params.page,
                   per_page: params.per_page,
+                  sort: params.sort,
+                  direction: params.direction,
                 }"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
+                class="edit-btn group"
               >
-                <i class="fa-solid fa-edit"></i>
-                Edit
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-edit"></i>
+                  Edit
+                </span>
               </Link>
+
+              <!-- Delete Button -->
               <button
                 v-if="adminManageDelete"
                 @click="handleAdminDelete(admin.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
+                class="delete-btn group"
+                type="button"
               >
-                <i class="fa-solid fa-xmark"></i>
-                Delete
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-trash-can"></i>
+                  Delete
+                </span>
               </button>
+
+              <!-- Detail Button -->
               <Link
                 v-if="adminManageDetail"
                 as="button"
@@ -510,11 +417,15 @@ if (usePage().props.flash.successMessage) {
                 :data="{
                   page: params.page,
                   per_page: params.per_page,
+                  sort: params.sort,
+                  direction: params.direction,
                 }"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700"
+                class="detail-btn group"
               >
-                <i class="fa-solid fa-eye"></i>
-                Details
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-eye"></i>
+                  Details
+                </span>
               </Link>
             </Td>
           </Tr>
@@ -526,7 +437,13 @@ if (usePage().props.flash.successMessage) {
       <NotAvaliableData v-if="!admins.data.length" />
 
       <!-- Pagination -->
-      <Pagination class="mt-6" :links="admins.links" />
+      <div v-if="admins.data.length" class="mt-6">
+        <p class="text-center text-sm text-gray-600 mb-3 font-bold">
+          Showing {{ admins.from }} - {{ admins.to }} of
+          {{ admins.total }}
+        </p>
+        <Pagination :links="admins.links" />
+      </div>
     </div>
   </AdminDashboardLayout>
 </template>

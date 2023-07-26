@@ -73,14 +73,17 @@ const props = defineProps({
               page: props.paginate.page,
               per_page: props.paginate.per_page,
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+            class="goback-btn"
           >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
+            </span>
           </Link>
         </div>
       </div>
 
+      <!-- Admin Detail -->
       <div class="border shadow-md p-10">
         <div class="mb-5 flex items-center justify-center">
           <img
