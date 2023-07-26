@@ -127,7 +127,7 @@ const handleRestoreTrashSubscriber = async (trashSubscriberId) => {
   if (result.isConfirmed) {
     router.post(
       route("admin.subscribers.restore", {
-        subscriber: trashSubscriberId,
+        trash_subscriber_id: trashSubscriberId,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
@@ -166,7 +166,7 @@ const handleDeleteTrashSubscriber = async (trashSubscriberId) => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.subscribers.force.delete", {
-        subscriber: trashSubscriberId,
+        trash_subscriber_id: trashSubscriberId,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
@@ -342,7 +342,7 @@ const subscriberTrashDelete = computed(() => {
         </button>
       </p>
 
-      <!-- Table -->
+      <!-- Trash Subscriber Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -412,6 +412,7 @@ const subscriberTrashDelete = computed(() => {
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Trash Subscriber Table End -->
 
       <!-- No Avaliable Data Row -->
       <NotAvaliableData v-if="!trashSubscribers.data.length" />

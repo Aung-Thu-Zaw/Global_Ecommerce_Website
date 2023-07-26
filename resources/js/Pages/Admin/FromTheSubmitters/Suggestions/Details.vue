@@ -8,7 +8,8 @@ const props = defineProps({
   suggestion: Object,
 });
 
-const formatSuggestionType = (suggestionType) => {
+// Formatted Suggestion Type
+const formattedSuggestionType = (suggestionType) => {
   const words = suggestionType.split("_");
   const capitalizedWords = words.map(
     (word) => word.charAt(0).toUpperCase() + word.slice(1)
@@ -21,7 +22,7 @@ const formatSuggestionType = (suggestionType) => {
 
 <template>
   <AdminDashboardLayout>
-    <Head :title="formatSuggestionType(suggestion.type)" />
+    <Head :title="formattedSuggestionType(suggestion.type)" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -45,7 +46,7 @@ const formatSuggestionType = (suggestionType) => {
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
               >
-                {{ formatSuggestionType(suggestion.type) }}
+                {{ formattedSuggestionType(suggestion.type) }}
               </span>
             </div>
           </li>
@@ -95,11 +96,7 @@ const formatSuggestionType = (suggestionType) => {
         <div v-if="suggestion" class="my-3">
           <div class="flex items-center flex-wrap">
             <div v-for="image in suggestion.images" :key="image.id" class="m-3">
-              <img
-                :src="image.img_path"
-                alt=""
-                class="h-[200px] object-cover border-2 border-slate-300 shadow-md"
-              />
+              <img :src="image.img_path" class="image" />
             </div>
           </div>
           <div
@@ -125,7 +122,7 @@ const formatSuggestionType = (suggestionType) => {
                   Suggestion Type
                 </span>
                 <span class="w-1/2 block capitalize">
-                  {{ formatSuggestionType(suggestion.type) }}
+                  {{ formattedSuggestionType(suggestion.type) }}
                 </span>
               </div>
               <div

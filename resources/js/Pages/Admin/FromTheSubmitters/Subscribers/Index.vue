@@ -232,7 +232,7 @@ const subscriberDelete = computed(() => {
         </div>
       </div>
 
-      <!-- Table -->
+      <!-- Subscriber Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -284,6 +284,7 @@ const subscriberDelete = computed(() => {
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Subscriber Table End -->
 
       <!-- No Avaliable Data Row -->
       <NotAvaliableData v-if="!subscribers.data.length" />
