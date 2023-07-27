@@ -57,11 +57,11 @@ class BrandRequest extends FormRequest
             "name.unique" =>'The name has already been taken.',
             "description.required" =>  "The description field is required.",
             "description.string" =>  "The description must be a string.",
-            "captcha_token.required"=>"The captcha token is required",
             "image.required"=>"The image field is required.",
             "image.image"=>"The image must be an image.",
             "image.mimes"=>"The image must be a file of type: png,jpg,jpeg,svg,webp or gif.",
-            "image.max"=>"The image must not be greater than 5120 kilobytes.'"
+            "image.max"=>"The image must not be greater than 5120 kilobytes.'",
+            "captcha_token.required"=>"The captcha token is required",
         ];
     }
 }

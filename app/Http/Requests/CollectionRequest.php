@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\RecaptchaRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -27,6 +28,7 @@ class CollectionRequest extends FormRequest
         $rules= [
             "title"=>["required","string",Rule::unique("collections", "title")],
             "description"=>["required","string"],
+            'captcha_token'  => ['required',new RecaptchaRule()],
         ];
 
         $route = $this->route();
@@ -49,6 +51,7 @@ class CollectionRequest extends FormRequest
             "title.unique" =>'The title has already been taken.',
             "description.required" => "The description field is required.",
             "description.string" => "The description must be a string.",
+            "captcha_token.required"=>"The captcha token is required",
         ];
     }
 }
