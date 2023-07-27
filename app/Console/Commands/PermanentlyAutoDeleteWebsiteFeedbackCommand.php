@@ -6,7 +6,7 @@ use App\Models\WebsiteFeedback;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
-class PermanentlyAutoDeleteFeedbackCommand extends Command
+class PermanentlyAutoDeleteWebsiteFeedbackCommand extends Command
 {
     /**
      * The name and signature of the console command.

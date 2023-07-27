@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin\FromTheSubmitters;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\WebsiteFeedback;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
@@ -23,17 +22,18 @@ class AdminWebsiteFeedbackController extends Controller
 
     public function show(WebsiteFeedback $websiteFeedback): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $queryParameters=["page"=>request("page"),"per_page"=>request("per_page"),"sort"=>request("sort"),"direction"=>request("direction")];
 
-        return inertia("Admin/FromTheSubmitters/WebsiteFeedbacks/Details", compact("websiteFeedback", "paginate"));
+        return inertia("Admin/FromTheSubmitters/WebsiteFeedbacks/Details", compact("websiteFeedback", "queryParameters"));
     }
 
-    public function destroy(Request $request, WebsiteFeedback $websiteFeedback): RedirectResponse
+    public function destroy(WebsiteFeedback $websiteFeedback): RedirectResponse
     {
         $websiteFeedback->delete();
 
-        return to_route("admin.website-feedbacks.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
-             ->with("success", "Website Feedback has been successfully deleted.");
+        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+
+        return to_route("admin.website-feedbacks.index", $urlStringQuery)->with("success", "Website Feedback has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -47,27 +47,29 @@ class AdminWebsiteFeedbackController extends Controller
         return inertia("Admin/FromTheSubmitters/WebsiteFeedbacks/Trash", compact("trashWebsiteFeedbacks"));
     }
 
-    public function restore(Request $request, int $websiteFeedbackId): RedirectResponse
+    public function restore(int $websiteFeedbackId): RedirectResponse
     {
         $websiteFeedback = WebsiteFeedback::onlyTrashed()->findOrFail($websiteFeedbackId);
 
         $websiteFeedback->restore();
 
-        return to_route('admin.website-feedbacks.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
-             ->with("success", "Website Feedback has been successfully restored.");
+        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+
+        return to_route('admin.website-feedbacks.trash', $urlStringQuery)->with("success", "Website Feedback has been successfully restored.");
     }
 
-    public function forceDelete(Request $request, int $websiteFeedbackId): RedirectResponse
+    public function forceDelete(int $websiteFeedbackId): RedirectResponse
     {
         $websiteFeedback = WebsiteFeedback::onlyTrashed()->findOrFail($websiteFeedbackId);
 
         $websiteFeedback->forceDelete();
 
-        return to_route('admin.website-feedbacks.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
-             ->with("success", "Website Feedback has been permanently deleted.");
+        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+
+        return to_route('admin.website-feedbacks.trash', $urlStringQuery)->with("success", "Website Feedback has been permanently deleted.");
     }
 
-    public function permanentlyDelete(Request $request): RedirectResponse
+    public function permanentlyDelete(): RedirectResponse
     {
         $websiteFeedbacks = WebsiteFeedback::onlyTrashed()->get();
 
@@ -76,7 +78,9 @@ class AdminWebsiteFeedbackController extends Controller
             $websiteFeedback->forceDelete();
 
         });
-        return to_route('admin.website-feedbacks.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
-             ->with("success", "Website Feedbacks have been successfully deleted.");
+
+        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+
+        return to_route('admin.website-feedbacks.trash', $urlStringQuery)->with("success", "Website Feedbacks have been successfully deleted.");
     }
 }

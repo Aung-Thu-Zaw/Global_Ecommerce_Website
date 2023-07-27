@@ -305,7 +305,7 @@ const websiteFeedbackTrashDelete = computed(() => {
           <input
             type="text"
             class="search-input"
-            placeholder="Search by name"
+            placeholder="Search by email"
             v-model="params.search"
           />
 

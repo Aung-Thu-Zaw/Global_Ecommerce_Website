@@ -50,7 +50,7 @@ class AdminBrandController extends Controller
     {
         $categories=Category::all();
 
-        $queryStringParams=[ "page"=>request("page"),"per_page"=>request("per_page"),"sort"=>request("sort"),"direction"=>request("direction")];
+        $queryStringParams=["page"=>request("page"),"per_page"=>request("per_page"),"sort"=>request("sort"),"direction"=>request("direction")];
 
         return inertia("Admin/Brands/Edit", compact("brand", "categories", "queryStringParams"));
     }

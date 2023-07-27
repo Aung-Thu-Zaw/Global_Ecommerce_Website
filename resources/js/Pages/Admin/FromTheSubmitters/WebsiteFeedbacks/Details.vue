@@ -5,7 +5,7 @@ import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
 import { Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
-  paginate: Object,
+  queryParameters: Object,
   websiteFeedback: Object,
 });
 </script>
@@ -68,15 +68,17 @@ const props = defineProps({
             as="button"
             :href="route('admin.website-feedbacks.index')"
             :data="{
-              page: props.paginate.page,
-              per_page: props.paginate.per_page,
-              sort: 'id',
-              direction: 'desc',
+              page: props.queryParameters.page,
+              per_page: props.queryParameters.per_page,
+              sort: props.queryParameters.sort,
+              direction: props.queryParameters.direction,
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+            class="goback-btn"
           >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
+            </span>
           </Link>
         </div>
       </div>
