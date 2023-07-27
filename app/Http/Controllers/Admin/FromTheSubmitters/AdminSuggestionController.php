@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Image;
 use App\Models\Suggestion;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -24,19 +23,20 @@ class AdminSuggestionController extends Controller
 
     public function show(Suggestion $suggestion): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $queryParameters=["page"=>request("page"),"per_page"=>request("per_page"),"sort"=>request("sort"),"direction"=>request("direction")];
 
         $suggestion->load("images");
 
-        return inertia("Admin/FromTheSubmitters/Suggestions/Details", compact("suggestion", "paginate"));
+        return inertia("Admin/FromTheSubmitters/Suggestions/Details", compact("suggestion", "queryParameters"));
     }
 
-    public function destroy(Request $request, Suggestion $suggestion): RedirectResponse
+    public function destroy(Suggestion $suggestion): RedirectResponse
     {
         $suggestion->delete();
 
-        return to_route("admin.suggestions.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
-             ->with("success", "Suggestion has been successfully deleted.");
+        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+
+        return to_route("admin.suggestions.index", $urlStringQuery)->with("success", "Suggestion has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -50,17 +50,18 @@ class AdminSuggestionController extends Controller
         return inertia("Admin/FromTheSubmitters/Suggestions/Trash", compact("trashSuggestions"));
     }
 
-    public function restore(Request $request, int $suggestionId): RedirectResponse
+    public function restore(int $suggestionId): RedirectResponse
     {
         $suggestion = Suggestion::onlyTrashed()->findOrFail($suggestionId);
 
         $suggestion->restore();
 
-        return to_route('admin.suggestions.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
-             ->with("success", "Suggestion has been successfully restored.");
+        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+
+        return to_route('admin.suggestions.trash', $urlStringQuery)->with("success", "Suggestion has been successfully restored.");
     }
 
-    public function forceDelete(Request $request, int $suggestionId): RedirectResponse
+    public function forceDelete(int $suggestionId): RedirectResponse
     {
         $suggestion = Suggestion::onlyTrashed()->findOrFail($suggestionId);
 
@@ -72,11 +73,12 @@ class AdminSuggestionController extends Controller
 
         $suggestion->forceDelete();
 
-        return to_route('admin.suggestions.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
-             ->with("success", "Suggestion has been permanently deleted.");
+        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+
+        return to_route('admin.suggestions.trash', $urlStringQuery)->with("success", "Suggestion has been permanently deleted.");
     }
 
-    public function permanentlyDelete(Request $request): RedirectResponse
+    public function permanentlyDelete(): RedirectResponse
     {
         $suggestions = Suggestion::onlyTrashed()->get();
 
@@ -91,7 +93,9 @@ class AdminSuggestionController extends Controller
             $suggestion->forceDelete();
 
         });
-        return to_route('admin.suggestions.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
-             ->with("success", "Suggestions have been successfully deleted.");
+
+        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+
+        return to_route('admin.suggestions.trash', $urlStringQuery)->with("success", "Suggestions have been successfully deleted.");
     }
 }
