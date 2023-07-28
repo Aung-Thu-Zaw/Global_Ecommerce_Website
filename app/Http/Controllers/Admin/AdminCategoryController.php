@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Admin\Categories\CreateCategoryAction;
+use App\Actions\Admin\Categories\UpdateCategoryAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
@@ -36,34 +38,40 @@ class AdminCategoryController extends Controller
         return inertia("Admin/Categories/Create", compact("per_page", "categories"));
     }
 
-    public function store(CategoryRequest $request, CategoryImageUploadService $categoryImageUploadService): RedirectResponse
+    public function store(CategoryRequest $request): RedirectResponse
     {
-        Category::create($request->validated()+["image"=>$categoryImageUploadService->createImage($request)]);
+        (new CreateCategoryAction())->handle($request->validated());
 
-        return to_route("admin.categories.index", "per_page=$request->per_page")->with("success", "Category has been successfully created.");
+        $urlStringQuery="page=1&per_page=$request->per_page&sort=id&direction=desc";
+
+        return to_route("admin.categories.index", $urlStringQuery)->with("success", "Category has been successfully created.");
     }
 
     public function edit(Category $category): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $queryStringParams=["page"=>request("page"),"per_page"=>request("per_page"),"sort"=>request("sort"),"direction"=>request("direction")];
 
         $categories=Category::select("id", "parent_id", "name")->get();
 
-        return inertia("Admin/Categories/Edit", compact("category", "paginate", "categories"));
+        return inertia("Admin/Categories/Edit", compact("category", "queryStringParams", "categories"));
     }
 
-    public function update(CategoryRequest $request, Category $category, CategoryImageUploadService $categoryImageUploadService): RedirectResponse
+    public function update(CategoryRequest $request, Category $category): RedirectResponse
     {
-        $category->update($request->validated()+["image"=>$categoryImageUploadService->updateImage($request, $category)]);
+        (new UpdateCategoryAction())->handle($request->validated(), $category);
 
-        return to_route("admin.categories.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Category has been successfully updated.");
+        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+
+        return to_route("admin.categories.index", $urlStringQuery)->with("success", "Category has been successfully updated.");
     }
 
-    public function destroy(Request $request, Category $category): RedirectResponse
+    public function destroy(Category $category): RedirectResponse
     {
         $category->delete();
 
-        return to_route("admin.categories.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Category has been successfully deleted.");
+        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+
+        return to_route("admin.categories.index", $urlStringQuery)->with("success", "Category has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -77,38 +85,44 @@ class AdminCategoryController extends Controller
         return inertia("Admin/Categories/Trash", compact("trashCategories"));
     }
 
-    public function restore(Request $request, int $id): RedirectResponse
+    public function restore(int $trashCategoryId): RedirectResponse
     {
-        $category = Category::onlyTrashed()->findOrFail($id);
+        $category = Category::onlyTrashed()->findOrFail($trashCategoryId);
 
         $category->restore();
 
-        return to_route('admin.categories.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Category has been successfully restored.");
+        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+
+        return to_route('admin.categories.trash', $urlStringQuery)->with("success", "Category has been successfully restored.");
     }
 
-    public function forceDelete(Request $request, int $id): RedirectResponse
+    public function forceDelete(int $trashCategoryId): RedirectResponse
     {
-        $category = Category::onlyTrashed()->findOrFail($id);
+        $category = Category::onlyTrashed()->findOrFail($trashCategoryId);
 
-        Category::deleteImage($category);
+        Category::deleteImage($category->image);
 
         $category->forceDelete();
 
-        return to_route('admin.categories.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The category has been permanently deleted.");
+        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+
+        return to_route('admin.categories.trash', $urlStringQuery)->with("success", "The category has been permanently deleted.");
     }
 
-    public function permanentlyDelete(Request $request): RedirectResponse
+    public function permanentlyDelete(): RedirectResponse
     {
         $categories = Category::onlyTrashed()->get();
 
         $categories->each(function ($category) {
 
-            Category::deleteImage($category);
+            Category::deleteImage($category->image);
 
             $category->forceDelete();
 
         });
 
-        return to_route('admin.categories.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Categories have been successfully deleted.");
+        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+
+        return to_route('admin.categories.trash', $urlStringQuery)->with("success", "Categories have been successfully deleted.");
     }
 }

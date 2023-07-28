@@ -3,55 +3,38 @@
 namespace App\Services;
 
 use App\Models\Category;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
 
 class CategoryImageUploadService
 {
-    public function createImage(Request $request): ?string
+    public function createImage(UploadedFile $image): ?string
     {
-        if ($request->hasFile("image")) {
-            $request->validate([
-                "image"=>["required","image","mimes:png,jpg,jpeg,svg,webp,gif"]
-            ]);
+        $originalName=$image->getClientOriginalName();
 
+        $image->move(storage_path("app/public/categories/"), $originalName);
 
-            $file=$request->file("image");
+        return $originalName;
 
-            /** @var \Illuminate\Http\UploadedFile $file */
-
-            $extension=$file->extension();
-            $finalName= Str::slug($request->name, '-')."."."$extension";
-
-            $file->move(storage_path("app/public/categories/"), $finalName);
-
-            return $finalName;
-        } else {
-            return null;
-        }
     }
 
-    public function updateImage(Request $request, Category $category): string
+    public function updateImage(?UploadedFile $image, string $categoryImage): ?string
     {
-        if ($request->hasFile("image")) {
-            $request->validate([
-                "image"=>["required","image","mimes:png,jpg,jpeg,svg,webp,gif"]
-            ]);
+        if($image && is_uploaded_file($image)) {
 
-            Category::deleteImage($category);
+            Category::deleteImage($categoryImage);
 
-            $file=$request->file("image");
+            $originalName=$image->getClientOriginalName();
 
-            /** @var \Illuminate\Http\UploadedFile $file */
+            $image->move(storage_path("app/public/categories/"), $originalName);
 
-            $extension=$file->extension();
-            $finalName= Str::slug($request->name, '-')."."."$extension";
+            return $originalName;
 
-            $file->move(storage_path("app/public/categories/"), $finalName);
-
-            return $finalName;
         } else {
-            return $category->image;
+
+            return $categoryImage;
+
         }
+
     }
+
 }

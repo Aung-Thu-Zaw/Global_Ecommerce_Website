@@ -79,9 +79,9 @@ class AdminCollectionController extends Controller
         return inertia("Admin/Collections/Trash", compact("trashCollections"));
     }
 
-    public function restore(int $collectionId): RedirectResponse
+    public function restore(int $trashCollectionId): RedirectResponse
     {
-        $collection = Collection::onlyTrashed()->findOrFail($collectionId);
+        $collection = Collection::onlyTrashed()->findOrFail($trashCollectionId);
 
         $collection->restore();
 
@@ -90,9 +90,9 @@ class AdminCollectionController extends Controller
         return to_route('admin.collections.trash', $urlStringQuery)->with("success", "Collection has been successfully restored.");
     }
 
-    public function forceDelete(int $collectionId): RedirectResponse
+    public function forceDelete(int $trashCollectionId): RedirectResponse
     {
-        $collection = Collection::onlyTrashed()->findOrFail($collectionId);
+        $collection = Collection::onlyTrashed()->findOrFail($trashCollectionId);
 
         $collection->forceDelete();
 

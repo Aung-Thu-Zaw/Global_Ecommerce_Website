@@ -33,7 +33,7 @@ class PermanentlyAutoDeleteCategoryCommand extends Command
 
         $categories->each(function ($category) {
 
-            Category::deleteImage($category);
+            Category::deleteImage($category->image);
 
             $category->forceDelete();
 

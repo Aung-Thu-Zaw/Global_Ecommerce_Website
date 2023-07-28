@@ -64,7 +64,6 @@ class Category extends Model
                     return null;
                 }
             },
-            get:fn ($value) => $value ?? "https://media.istockphoto.com/id/1357365823/vector/default-image-icon-vector-missing-picture-page-for-website-design-or-mobile-app-no-photo.jpg?s=612x612&w=0&k=20&c=PM_optEhHBTZkuJQLlCjLz-v3zzxp-1mpNQZsdjrbns="
         );
     }
 
@@ -112,10 +111,10 @@ class Category extends Model
         return $this->hasMany(Brand::class);
     }
 
-    public static function deleteImage(Category $category): void
+    public static function deleteImage(string $categoryImage): void
     {
-        if (!empty($category->image) && file_exists(storage_path("app/public/categories/".pathinfo($category->image, PATHINFO_BASENAME)))) {
-            unlink(storage_path("app/public/categories/".pathinfo($category->image, PATHINFO_BASENAME)));
+        if (!empty($categoryImage) && file_exists(storage_path("app/public/categories/".pathinfo($categoryImage, PATHINFO_BASENAME)))) {
+            unlink(storage_path("app/public/categories/".pathinfo($categoryImage, PATHINFO_BASENAME)));
         }
     }
 }

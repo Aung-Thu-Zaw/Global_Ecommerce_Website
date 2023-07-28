@@ -136,7 +136,17 @@ const handleEditCategory = async () => {
       <div class="border shadow-md p-10">
         <!-- Preview Image -->
         <div class="mb-6">
-          <img ref="previewPhoto" :src="form.image" class="preview-img" />
+          <img
+            v-if="form.image"
+            ref="previewPhoto"
+            :src="form.image"
+            class="preview-img"
+          />
+          <img
+            v-else
+            src="https://media.istockphoto.com/id/1357365823/vector/default-image-icon-vector-missing-picture-page-for-website-design-or-mobile-app-no-photo.jpg?s=612x612&w=0&k=20&c=PM_optEhHBTZkuJQLlCjLz-v3zzxp-1mpNQZsdjrbns="
+            class="preview-img"
+          />
         </div>
         <form @submit.prevent="handleEditCategory">
           <!-- Category Name Input -->

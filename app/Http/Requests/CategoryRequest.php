@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\RecaptchaRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -27,8 +28,13 @@ class CategoryRequest extends FormRequest
         $rules= [
             "parent_id"=>["nullable",Rule::exists("categories", "id")],
             "name"=>["required","string","max:255",Rule::unique("categories", "name")],
-            "status"=>["required","string",Rule::in(["show","hide"])]
+            "status"=>["required","string",Rule::in(["show","hide"])],
+            'captcha_token'  => ['required',new RecaptchaRule()],
         ];
+
+        if ($this->hasFile("image")) {
+            $rules["image"]=["required","image","mimes:png,jpg,jpeg,svg,webp,gif","max:5120"];
+        }
 
         $route = $this->route();
         if ($route&&in_array($this->method(), ['POST','PUT', 'PATCH'])) {
@@ -53,6 +59,11 @@ class CategoryRequest extends FormRequest
             "status.required" => "The status field is required.",
             "status.string" => "The status must be a string.",
             "status.in"=>"The selected status is invalid.",
+            "image.required"=>"The image field is required.",
+            "image.image"=>"The image must be an image.",
+            "image.mimes"=>"The image must be a file of type: png,jpg,jpeg,svg,webp or gif.",
+            "image.max"=>"The image must not be greater than 5120 kilobytes.'",
+            "captcha_token.required"=>"The captcha token is required",
         ];
     }
 }
