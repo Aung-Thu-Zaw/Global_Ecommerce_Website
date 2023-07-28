@@ -12,7 +12,7 @@ class UpdateCategoryAction
      */
     public function handle(array $data, Category $category): void
     {
-        $image = (new CategoryImageUploadService())->updateImage($data["image"] ?? null, $category->image);
+        $image = isset($data["image"]) ? (new CategoryImageUploadService())->updateImage($data["image"], $category->image) : $category->image;
 
         $category->update([
             "parent_id" => $data["parent_id"],

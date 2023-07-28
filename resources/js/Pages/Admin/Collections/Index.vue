@@ -112,7 +112,7 @@ const updateSorting = (sort = "id") => {
 // Handle Delete Collection
 const handleDeleteCollection = async (collection) => {
   const result = await swal({
-    icon: "warning",
+    icon: "question",
     title: "Are you sure you want to delete this collection?",
     text: "You will be able to restore this collection in the trash!",
     showCancelButton: true,

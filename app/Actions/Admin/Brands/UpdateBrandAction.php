@@ -12,7 +12,7 @@ class UpdateBrandAction
      */
     public function handle(array $data, Brand $brand): void
     {
-        $image=(new BrandImageUploadService())->updateImage($data["image"] ?? $brand->image, $brand->image);
+        $image = isset($data["image"]) ? (new BrandImageUploadService())->updateImage($data["image"], $brand->image) : $brand->image;
 
         $brand->update([
             "category_id"=>$data["category_id"],

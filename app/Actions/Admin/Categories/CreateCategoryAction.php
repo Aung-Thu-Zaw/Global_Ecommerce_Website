@@ -12,12 +12,7 @@ class CreateCategoryAction
      */
     public function handle(array $data): void
     {
-        $image=null;
-
-        if(isset($data["image"])) {
-
-            $image=(new CategoryImageUploadService())->createImage($data["image"]);
-        }
+        $image = isset($data["image"]) ? (new CategoryImageUploadService())->createImage($data["image"]) : null;
 
         Category::create([
             "parent_id"=>$data["parent_id"],

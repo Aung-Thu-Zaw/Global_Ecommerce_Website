@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class AdminCollectionController extends Controller
 {
@@ -43,9 +44,9 @@ class AdminCollectionController extends Controller
         return to_route("admin.collections.index", $urlStringQuery)->with("success", "Collection has been successfully created.");
     }
 
-    public function edit(Collection $collection): Response|ResponseFactory
+    public function edit(Request $request, Collection $collection): Response|ResponseFactory
     {
-        $queryStringParams=["page"=>request("page"),"per_page"=>request("per_page"),"sort"=>request("sort"),"direction"=>request("direction")];
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
         return inertia("Admin/Collections/Edit", compact("collection", "queryStringParams"));
     }
@@ -54,16 +55,16 @@ class AdminCollectionController extends Controller
     {
         (new UpdateCollectionAction())->handle($request->validated(), $collection);
 
-        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
 
         return to_route("admin.collections.index", $urlStringQuery)->with("success", "Collection has been successfully updated.");
     }
 
-    public function destroy(Collection $collection): RedirectResponse
+    public function destroy(Request $request, Collection $collection): RedirectResponse
     {
         $collection->delete();
 
-        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
 
         return to_route("admin.collections.index", $urlStringQuery)->with("success", "Collection has been successfully deleted.");
     }
@@ -79,29 +80,29 @@ class AdminCollectionController extends Controller
         return inertia("Admin/Collections/Trash", compact("trashCollections"));
     }
 
-    public function restore(int $trashCollectionId): RedirectResponse
+    public function restore(Request $request, int $trashCollectionId): RedirectResponse
     {
         $collection = Collection::onlyTrashed()->findOrFail($trashCollectionId);
 
         $collection->restore();
 
-        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
 
         return to_route('admin.collections.trash', $urlStringQuery)->with("success", "Collection has been successfully restored.");
     }
 
-    public function forceDelete(int $trashCollectionId): RedirectResponse
+    public function forceDelete(Request $request, int $trashCollectionId): RedirectResponse
     {
         $collection = Collection::onlyTrashed()->findOrFail($trashCollectionId);
 
         $collection->forceDelete();
 
-        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
 
         return to_route('admin.collections.trash', $urlStringQuery)->with("success", "The collection has been permanently deleted");
     }
 
-    public function permanentlyDelete(): RedirectResponse
+    public function permanentlyDelete(Request $request): RedirectResponse
     {
         $collections = Collection::onlyTrashed()->get();
 
@@ -111,7 +112,7 @@ class AdminCollectionController extends Controller
 
         });
 
-        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
 
         return to_route('admin.collections.trash', $urlStringQuery)->with("success", "Collections have been successfully deleted.");
     }

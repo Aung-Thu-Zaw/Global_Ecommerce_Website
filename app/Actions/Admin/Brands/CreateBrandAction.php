@@ -12,7 +12,7 @@ class CreateBrandAction
      */
     public function handle(array $data): void
     {
-        $image=(new BrandImageUploadService())->createImage($data["image"]);
+        $image = isset($data["image"]) ? (new BrandImageUploadService())->createImage($data["image"]) : null;
 
         Brand::create([
             "category_id"=>$data["category_id"],

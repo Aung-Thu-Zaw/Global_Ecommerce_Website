@@ -11,30 +11,26 @@ class CategoryImageUploadService
     {
         $originalName=$image->getClientOriginalName();
 
-        $image->move(storage_path("app/public/categories/"), $originalName);
+        $finalName=time()."-".$originalName;
 
-        return $originalName;
+        $image->move(storage_path("app/public/categories/"), $finalName);
 
+        return $finalName;
     }
 
-    public function updateImage(?UploadedFile $image, string $categoryImage): ?string
+    public function updateImage(UploadedFile $image, string|null $categoryImage): string
     {
-        if($image && is_uploaded_file($image)) {
+        if(is_string($categoryImage)) {
 
             Category::deleteImage($categoryImage);
-
-            $originalName=$image->getClientOriginalName();
-
-            $image->move(storage_path("app/public/categories/"), $originalName);
-
-            return $originalName;
-
-        } else {
-
-            return $categoryImage;
-
         }
 
-    }
+        $originalName=$image->getClientOriginalName();
 
+        $finalName=time()."-".$originalName;
+
+        $image->move(storage_path("app/public/categories/"), $finalName);
+
+        return $finalName;
+    }
 }

@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class AdminBrandController extends Controller
 {
@@ -46,11 +47,11 @@ class AdminBrandController extends Controller
         return to_route("admin.brands.index", $urlStringQuery)->with("success", "Brand has been successfully created.");
     }
 
-    public function edit(Brand $brand): Response|ResponseFactory
+    public function edit(Request $request, Brand $brand): Response|ResponseFactory
     {
         $categories=Category::all();
 
-        $queryStringParams=["page"=>request("page"),"per_page"=>request("per_page"),"sort"=>request("sort"),"direction"=>request("direction")];
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
         return inertia("Admin/Brands/Edit", compact("brand", "categories", "queryStringParams"));
     }
@@ -59,16 +60,16 @@ class AdminBrandController extends Controller
     {
         (new UpdateBrandAction())->handle($request->validated(), $brand);
 
-        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
 
         return to_route("admin.brands.index", $urlStringQuery)->with("success", "Brand has been successfully updated.");
     }
 
-    public function destroy(Brand $brand): RedirectResponse
+    public function destroy(Request $request, Brand $brand): RedirectResponse
     {
         $brand->delete();
 
-        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
 
         return to_route("admin.brands.index", $urlStringQuery)->with("success", "Brand has been successfully deleted.");
     }
@@ -84,18 +85,18 @@ class AdminBrandController extends Controller
         return inertia("Admin/Brands/Trash", compact("trashBrands"));
     }
 
-    public function restore(int $trashBrandId): RedirectResponse
+    public function restore(Request $request, int $trashBrandId): RedirectResponse
     {
         $brand = Brand::onlyTrashed()->findOrFail($trashBrandId);
 
         $brand->restore();
 
-        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
 
         return to_route('admin.brands.trash', $urlStringQuery)->with("success", "Brand has been successfully restored.");
     }
 
-    public function forceDelete(int $trashBrandId): RedirectResponse
+    public function forceDelete(Request $request, int $trashBrandId): RedirectResponse
     {
         $brand = Brand::onlyTrashed()->findOrFail($trashBrandId);
 
@@ -103,12 +104,12 @@ class AdminBrandController extends Controller
 
         $brand->forceDelete();
 
-        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
 
         return to_route('admin.brands.trash', $urlStringQuery)->with("success", "The brand has been permanently deleted");
     }
 
-    public function permanentlyDelete(): RedirectResponse
+    public function permanentlyDelete(Request $request): RedirectResponse
     {
         $brands = Brand::onlyTrashed()->get();
 
@@ -120,7 +121,7 @@ class AdminBrandController extends Controller
 
         });
 
-        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
 
         return to_route('admin.brands.trash', $urlStringQuery)->with("success", "Brands have been successfully deleted.");
     }

@@ -11,29 +11,26 @@ class BrandImageUploadService
     {
         $originalName=$image->getClientOriginalName();
 
-        $image->move(storage_path("app/public/brands/"), $originalName);
+        $finalName=time()."-".$originalName;
 
-        return $originalName;
+        $image->move(storage_path("app/public/brands/"), $finalName);
+
+        return $finalName;
     }
 
     public function updateImage(UploadedFile|string $image, string $brandImage): string
     {
-        if($image && is_string($image)) {
-
-            return $image;
-
-        } elseif($image && is_uploaded_file($image)) {
+        if(is_string($brandImage)) {
 
             Brand::deleteImage($brandImage);
-
-            $originalName=$image->getClientOriginalName();
-
-            $image->move(storage_path("app/public/brands/"), $originalName);
-
-            return $originalName;
-
         }
 
-        return "";
+        $originalName=$image->getClientOriginalName();
+
+        $finalName=time()."-".$originalName;
+
+        $image->move(storage_path("app/public/brands/"), $finalName);
+
+        return $finalName;
     }
 }
