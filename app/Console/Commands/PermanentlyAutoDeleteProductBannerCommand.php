@@ -33,7 +33,7 @@ class PermanentlyAutoDeleteProductBannerCommand extends Command
 
         $productBanners->each(function ($productBanner) {
 
-            ProductBanner::deleteImage($productBanner);
+            ProductBanner::deleteImage($productBanner->image);
 
             $productBanner->forceDelete();
 

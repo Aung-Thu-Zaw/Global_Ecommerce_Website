@@ -15,7 +15,7 @@ class SliderBanner extends Model
     use Searchable;
 
     protected $guarded=[];
-    
+
     /**
     *     @return array<string>
     */
@@ -56,10 +56,10 @@ class SliderBanner extends Model
         );
     }
 
-    public static function deleteImage(SliderBanner $sliderBanner): void
+    public static function deleteImage(string $sliderBannerImage): void
     {
-        if (!empty($sliderBanner->image) && file_exists(storage_path("app/public/slider-banners/".pathinfo($sliderBanner->image, PATHINFO_BASENAME)))) {
-            unlink(storage_path("app/public/slider-banners/".pathinfo($sliderBanner->image, PATHINFO_BASENAME)));
+        if (!empty($sliderBannerImage) && file_exists(storage_path("app/public/slider-banners/".pathinfo($sliderBannerImage, PATHINFO_BASENAME)))) {
+            unlink(storage_path("app/public/slider-banners/".pathinfo($sliderBannerImage, PATHINFO_BASENAME)));
         }
     }
 }

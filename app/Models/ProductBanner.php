@@ -15,7 +15,7 @@ class ProductBanner extends Model
     use Searchable;
 
     protected $guarded=[];
-    
+
     /**
     *     @return array<string>
     */
@@ -56,10 +56,10 @@ class ProductBanner extends Model
         );
     }
 
-    public static function deleteImage(ProductBanner $productBanner): void
+    public static function deleteImage(string $productBannerImage): void
     {
-        if (!empty($productBanner->image) && file_exists(storage_path("app/public/product-banners/".pathinfo($productBanner->image, PATHINFO_BASENAME)))) {
-            unlink(storage_path("app/public/product-banners/".pathinfo($productBanner->image, PATHINFO_BASENAME)));
+        if (!empty($productBannerImage) && file_exists(storage_path("app/public/product-banners/".pathinfo($productBannerImage, PATHINFO_BASENAME)))) {
+            unlink(storage_path("app/public/product-banners/".pathinfo($productBannerImage, PATHINFO_BASENAME)));
         }
     }
 }

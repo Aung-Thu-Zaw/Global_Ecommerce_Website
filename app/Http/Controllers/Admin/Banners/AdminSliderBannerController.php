@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Banners;
 
+use App\Actions\Admin\Banners\SliderBanners\CreateSliderBannerAction;
+use App\Actions\Admin\Banners\SliderBanners\UpdateSliderBannerAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SliderBannerRequest;
 use App\Models\SliderBanner;
-use App\Services\SliderBannerImageUploadService;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
@@ -30,32 +31,38 @@ class AdminSliderBannerController extends Controller
         return inertia("Admin/Banners/Slider-Banners/Create", compact("per_page"));
     }
 
-    public function store(SliderBannerRequest $request, SliderBannerImageUploadService $sliderBannerImageUploadService): RedirectResponse
+    public function store(SliderBannerRequest $request): RedirectResponse
     {
-        SliderBanner::create($request->validated()+["image"=>$sliderBannerImageUploadService->createImage($request),"status"=>"hide"]);
+        (new CreateSliderBannerAction())->handle($request->validated());
 
-        return to_route("admin.slider-banners.index", "per_page=$request->per_page")->with("success", "Slider Banner has been successfully created.");
+        $urlStringQuery="page=1&per_page=$request->per_page&sort=id&direction=desc";
+
+        return to_route("admin.slider-banners.index", $urlStringQuery)->with("success", "Slider Banner has been successfully created.");
     }
 
-    public function edit(SliderBanner $sliderBanner): Response|ResponseFactory
+    public function edit(Request $request, SliderBanner $sliderBanner): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return inertia("Admin/Banners/Slider-Banners/Edit", compact("sliderBanner", "paginate"));
+        return inertia("Admin/Banners/Slider-Banners/Edit", compact("sliderBanner", "queryStringParams"));
     }
 
-    public function update(SliderBannerRequest $request, SliderBanner $sliderBanner, SliderBannerImageUploadService $sliderBannerImageUploadService): RedirectResponse
+    public function update(SliderBannerRequest $request, SliderBanner $sliderBanner): RedirectResponse
     {
-        $sliderBanner->update($request->validated()+["image"=>$sliderBannerImageUploadService->updateImage($request, $sliderBanner),"status"=>$sliderBanner->status]);
+        (new UpdateSliderBannerAction())->handle($request->validated(), $sliderBanner);
 
-        return to_route("admin.slider-banners.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Slider Banner has been successfully updated.");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+
+        return to_route("admin.slider-banners.index", $urlStringQuery)->with("success", "Slider Banner has been successfully updated.");
     }
 
     public function destroy(Request $request, SliderBanner $sliderBanner): RedirectResponse
     {
         $sliderBanner->delete();
 
-        return to_route("admin.slider-banners.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Slider Banner has been successfully deleted.");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+
+        return to_route("admin.slider-banners.index", $urlStringQuery)->with("success", "Slider Banner has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -69,64 +76,80 @@ class AdminSliderBannerController extends Controller
         return inertia("Admin/Banners/Slider-Banners/Trash", compact("trashSliderBanners"));
     }
 
-    public function restore(Request $request, int $id): RedirectResponse
+    public function restore(Request $request, int $trashSliderBannerId): RedirectResponse
     {
-        $sliderBanner = SliderBanner::onlyTrashed()->findOrFail($id);
+        $sliderBanner = SliderBanner::onlyTrashed()->findOrFail($trashSliderBannerId);
 
         $sliderBanner->restore();
 
-        return to_route('admin.slider-banners.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Slider Banner has been successfully restored.");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+
+        return to_route('admin.slider-banners.trash', $urlStringQuery)->with("success", "Slider Banner has been successfully restored.");
     }
 
-    public function forceDelete(Request $request, int $id): RedirectResponse
+    public function forceDelete(Request $request, int $trashSliderBannerId): RedirectResponse
     {
-        $sliderBanner = SliderBanner::onlyTrashed()->findOrFail($id);
+        $sliderBanner = SliderBanner::onlyTrashed()->findOrFail($trashSliderBannerId);
 
-        SliderBanner::deleteImage($sliderBanner);
+        SliderBanner::deleteImage($sliderBanner->image);
 
         $sliderBanner->forceDelete();
 
-        return to_route('admin.slider-banners.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Slider Banner has been permanently deleted.");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+
+        return to_route('admin.slider-banners.trash', $urlStringQuery)->with("success", "Slider Banner has been permanently deleted.");
     }
 
-    public function handleShow(Request $request, int $id): RedirectResponse
+    public function handleShow(Request $request, int $sliderBannerId): RedirectResponse
     {
         $countsliderBanner=SliderBanner::where("status", "show")->count();
 
         if ($countsliderBanner >= 6) {
-            return to_route('admin.slider-banners.index', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("error", "You can't display the slider banner. Only 6 slider banners are allowed.");
+
+            $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+
+            return to_route('admin.slider-banners.index', $urlStringQuery)->with("error", "You can't display the slider banner. Only 6 slider banners are allowed.");
         }
 
-        $sliderBanner = SliderBanner::where([["id", $id],["status","hide"]])->first();
+        $sliderBanner = SliderBanner::where([["id", $sliderBannerId],["status","hide"]])->first();
 
         if($sliderBanner) {
+
             $sliderBanner->update(["status"=>"show"]);
         }
 
-        return to_route('admin.slider-banners.index', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Slider Banner has been successfully displayed.");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+
+        return to_route('admin.slider-banners.index', $urlStringQuery)->with("success", "Slider Banner has been successfully displayed.");
     }
 
-    public function handleHide(Request $request, int $id): RedirectResponse
+    public function handleHide(Request $request, int $sliderBannerId): RedirectResponse
     {
-        $sliderBanner = SliderBanner::where([["id", $id],["status","show"]])->first();
+        $sliderBanner = SliderBanner::where([["id", $sliderBannerId],["status","show"]])->first();
 
         if($sliderBanner) {
+
             $sliderBanner->update(["status"=>"hide"]);
         }
 
-        return to_route('admin.slider-banners.index', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Slider Banner has been successfully hidden.");
-    }
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
 
+        return to_route('admin.slider-banners.index', $urlStringQuery)->with("success", "Slider Banner has been successfully hidden.");
+    }
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
         $sliderBanners = SliderBanner::onlyTrashed()->get();
 
         $sliderBanners->each(function ($sliderBanner) {
-            SliderBanner::deleteImage($sliderBanner);
+
+            SliderBanner::deleteImage($sliderBanner->image);
+
             $sliderBanner->forceDelete();
         });
 
-        return to_route('admin.slider-banners.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Slider Banners have been successfully deleted.");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+
+        return to_route('admin.slider-banners.trash', $urlStringQuery)->with("success", "Slider Banners have been successfully deleted.");
     }
 }

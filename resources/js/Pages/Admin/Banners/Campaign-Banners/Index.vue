@@ -137,6 +137,7 @@ const handleShow = async (hideCampaignBannerId) => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -175,6 +176,7 @@ const handleHide = async (showCampaignBannerId) => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -213,6 +215,7 @@ const handleDeleteCampaignBanner = async (campaignBannerId) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -343,7 +346,7 @@ if (usePage().props.flash.successMessage) {
         >
           <span>
             <i class="fa-solid fa-file-circle-plus"></i>
-            Add Slider Banner
+            Add Campaign Banner
           </span>
         </Link>
 
@@ -447,7 +450,7 @@ if (usePage().props.flash.successMessage) {
                 type="button"
               >
                 <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-eye-slash"></i>
+                  <i class="fa-solid fa-eye"></i>
                   Show
                 </span>
               </button>

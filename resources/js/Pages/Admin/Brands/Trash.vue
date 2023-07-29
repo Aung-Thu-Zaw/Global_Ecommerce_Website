@@ -135,6 +135,7 @@ const handleRestoreTrashBrand = async (trashBrandId) => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -173,6 +174,7 @@ const handleDeleteTrashBrand = async (trashBrandId) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -211,6 +213,7 @@ const handlePermanentlyDeleteTrashBrands = async () => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({

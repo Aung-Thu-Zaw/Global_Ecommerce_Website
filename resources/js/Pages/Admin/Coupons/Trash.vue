@@ -156,6 +156,7 @@ const handleRestoreTrashCoupon = async (trashCouponId) => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -194,6 +195,7 @@ const handleDeleteTrashCoupon = async (trashCouponId) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -232,6 +234,7 @@ const handlePermanentlyDeleteTrashCoupons = async () => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({

@@ -33,7 +33,7 @@ class PermanentlyAutoDeleteCampaignBannerCommand extends Command
 
         $campaignBanners->each(function ($campaignBanner) {
 
-            CampaignBanner::deleteImage($campaignBanner);
+            CampaignBanner::deleteImage($campaignBanner->image);
 
             $campaignBanner->forceDelete();
 

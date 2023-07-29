@@ -134,6 +134,7 @@ const handleDeleteCollection = async (collection) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({

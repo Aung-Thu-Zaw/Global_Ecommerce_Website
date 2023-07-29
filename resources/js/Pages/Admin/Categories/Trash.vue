@@ -137,6 +137,7 @@ const handleRestoreTrashCategory = async (trashCategoryId) => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -175,6 +176,7 @@ const handleDeleteTrashCategory = async (trashCategoryId) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -213,6 +215,7 @@ const handlePermanentlyDeleteTrashCategories = async () => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({

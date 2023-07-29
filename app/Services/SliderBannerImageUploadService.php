@@ -3,54 +3,34 @@
 namespace App\Services;
 
 use App\Models\SliderBanner;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
 
 class SliderBannerImageUploadService
 {
-    public function createImage(Request $request): string
+    public function createImage(UploadedFile $image): string
     {
-        $request->validate([
-            "image"=>["required","image","mimes:png,jpg,jpeg,svg,webp,gif"]
-        ]);
+        $originalName=$image->getClientOriginalName();
 
-        $file=$request->file("image");
+        $finalName=time()."-".$originalName;
 
-        /** @var \Illuminate\Http\UploadedFile $file */
-
-        $originalName=$file->getClientOriginalName();
-
-
-        $extension=$file->extension();
-        $finalName= Str::slug(pathinfo($originalName, PATHINFO_FILENAME), '-')."."."$extension";
-
-        $file->move(storage_path("app/public/slider-banners/"), $finalName);
+        $image->move(storage_path("app/public/slider-banners/"), $finalName);
 
         return $finalName;
     }
 
-    public function updateImage(Request $request, SliderBanner $sliderBanner): string
+    public function updateImage(UploadedFile $image, string $sliderBannerImage): string
     {
-        if ($request->hasFile("image")) {
-            $request->validate([
-                "image"=>["required","image","mimes:png,jpg,jpeg,svg,webp,gif"]
-            ]);
+        if(is_string($sliderBannerImage)) {
 
-            SliderBanner::deleteImage($sliderBanner);
-
-            $file=$request->file("image");
-
-            /** @var \Illuminate\Http\UploadedFile $file */
-
-            $originalName=$file->getClientOriginalName();
-            $extension=$file->extension();
-            $finalName= Str::slug(pathinfo($originalName, PATHINFO_FILENAME), '-')."."."$extension";
-
-            $file->move(storage_path("app/public/slider-banners/"), $finalName);
-
-            return $finalName;
-        } else {
-            return $sliderBanner->image;
+            SliderBanner::deleteImage($sliderBannerImage);
         }
+
+        $originalName=$image->getClientOriginalName();
+
+        $finalName=time()."-".$originalName;
+
+        $image->move(storage_path("app/public/slider-banners/"), $finalName);
+
+        return $finalName;
     }
 }

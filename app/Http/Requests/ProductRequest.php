@@ -42,7 +42,7 @@ class ProductRequest extends FormRequest
             "sizes"=>["nullable","array"],
             "colors"=>["nullable","array"],
             "types"=>["nullable","array"],
-            "status"=>["required",Rule::in(["pending","approved"])],
+            "status"=>["required","status",Rule::in(["pending","approved"])],
             "captcha_token"=> ["required",new RecaptchaRule()],
         ];
 
@@ -78,6 +78,8 @@ class ProductRequest extends FormRequest
             "discount.numeric" => "Product discount must be numeric.",
             "description.required" => "Product description is required.",
             "status.required" => "Product status is required.",
+            "status.string" => "The status must be a string.",
+            "status.in"=>"The selected status is invalid.",
             "image.required"=>"The image field is required.",
             "image.image"=>"The image must be an image.",
             "image.mimes"=>"The image must be a file of type: png,jpg,jpeg,svg,webp or gif.",

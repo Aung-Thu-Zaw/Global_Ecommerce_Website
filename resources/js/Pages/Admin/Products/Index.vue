@@ -193,6 +193,7 @@ const handleProductDelete = async (productSlug) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({

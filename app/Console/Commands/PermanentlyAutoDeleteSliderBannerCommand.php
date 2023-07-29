@@ -33,7 +33,7 @@ class PermanentlyAutoDeleteSliderBannerCommand extends Command
 
         $sliderBanners->each(function ($sliderBanner) {
 
-            SliderBanner::deleteImage($sliderBanner);
+            SliderBanner::deleteImage($sliderBanner->image);
 
             $sliderBanner->forceDelete();
 

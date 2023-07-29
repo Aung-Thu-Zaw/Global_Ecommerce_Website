@@ -27,6 +27,7 @@ const getPreviewPhotoPath = (path) => {
 const form = useForm({
   url: props.productBanner.url,
   image: props.productBanner.image,
+  status: props.productBanner.status,
   captcha_token: null,
 });
 
@@ -42,8 +43,10 @@ const handleEditProductBanner = async () => {
   form.post(
     route("admin.product-banners.update", {
       product_banner: props.productBanner.id,
-      page: props.paginate.page,
-      per_page: props.paginate.per_page,
+      page: props.queryStringParams.page,
+      per_page: props.queryStringParams.per_page,
+      sort: props.queryStringParams.sort,
+      direction: props.queryStringParams.direction,
     }),
     {
       replace: true,

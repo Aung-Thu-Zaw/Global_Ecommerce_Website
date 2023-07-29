@@ -12,7 +12,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/BannerBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject, computed } from "vue";
+import { reactive, watch, inject, computed, ref } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 // Define the props
@@ -132,14 +132,23 @@ const handleShow = async (hideProductBannerId) => {
         product_banner: hideProductBannerId,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
               icon: "success",
               title: usePage().props.flash.successMessage,
+            });
+          }
+          if (usePage().props.flash.errorMessage) {
+            swal({
+              icon: "error",
+              title: usePage().props.flash.errorMessage,
             });
           }
         },
@@ -173,6 +182,7 @@ const handleHide = async (showProductBannerId) => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -211,6 +221,7 @@ const handleDeleteProductBanner = async (productBannerId) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -341,7 +352,7 @@ if (usePage().props.flash.successMessage) {
         >
           <span>
             <i class="fa-solid fa-file-circle-plus"></i>
-            Add Slider Banner
+            Add Product Banner
           </span>
         </Link>
 
@@ -444,7 +455,7 @@ if (usePage().props.flash.successMessage) {
                 type="button"
               >
                 <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-eye-slash"></i>
+                  <i class="fa-solid fa-eye"></i>
                   Show
                 </span>
               </button>

@@ -27,6 +27,7 @@ const getPreviewPhotoPath = (path) => {
 const form = useForm({
   url: props.sliderBanner.url,
   image: props.sliderBanner.image,
+  status: props.sliderBanner.status,
   captcha_token: null,
 });
 

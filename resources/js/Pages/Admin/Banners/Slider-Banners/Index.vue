@@ -137,11 +137,18 @@ const handleShow = async (hideSliderBannerId) => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
               icon: "success",
               title: usePage().props.flash.successMessage,
+            });
+          }
+          if (usePage().props.flash.errorMessage) {
+            swal({
+              icon: "error",
+              title: usePage().props.flash.errorMessage,
             });
           }
         },
@@ -175,6 +182,7 @@ const handleHide = async (showSliderBannerId) => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -213,6 +221,7 @@ const handleDeleteSliderBanner = async (sliderBannerId) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -422,7 +431,7 @@ if (usePage().props.flash.successMessage) {
               {{ sliderBanner.url }}
             </Td>
 
-            <Td>
+            <Td class="w-[150px]">
               <ActiveStatus v-if="sliderBanner.status == 'show'">
                 {{ sliderBanner.status }}
               </ActiveStatus>
@@ -431,11 +440,14 @@ if (usePage().props.flash.successMessage) {
               </InactiveStatus>
             </Td>
 
-            <Td>
+            <Td class="w-[200px]">
               {{ sliderBanner.created_at }}
             </Td>
 
-            <Td v-if="bannerEdit || bannerDelete || bannerControl">
+            <Td
+              v-if="bannerEdit || bannerDelete || bannerControl"
+              class="w-[400px]"
+            >
               <!-- Show Button -->
               <button
                 v-if="sliderBanner.status == 'hide' && bannerControl"
@@ -444,7 +456,7 @@ if (usePage().props.flash.successMessage) {
                 type="button"
               >
                 <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-eye-slash"></i>
+                  <i class="fa-solid fa-eye"></i>
                   Show
                 </span>
               </button>

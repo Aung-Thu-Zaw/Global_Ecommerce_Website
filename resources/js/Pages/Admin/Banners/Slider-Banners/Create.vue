@@ -26,6 +26,7 @@ const getPreviewPhotoPath = (path) => {
 const form = useForm({
   image: "",
   url: "",
+  status: "hide",
   captcha_token: null,
 });
 
