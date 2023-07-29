@@ -26,10 +26,10 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         $rules= [
-            "brand_id"=>["required","numeric",Rule::exists("brands", "id")],
+            "brand_id"=>["nullable","numeric",Rule::exists("brands", "id")],
             "category_id"=>["required","numeric",Rule::exists("categories", "id")],
             "user_id"=>["required","numeric",Rule::exists("users", "id")],
-            "collection_id"=>["required","numeric",Rule::exists("collections", "id")],
+            "collection_id"=>["nullable","numeric",Rule::exists("collections", "id")],
             "name"=>["required","string"],
             "code"=>["required","string"],
             "qty"=>["required","numeric"],
@@ -41,6 +41,7 @@ class ProductRequest extends FormRequest
             "special_offer"=>["nullable","boolean"],
             "sizes"=>["nullable","array"],
             "colors"=>["nullable","array"],
+            "types"=>["nullable","array"],
             "status"=>["required",Rule::in(["pending","approved"])],
             "captcha_token"=> ["required",new RecaptchaRule()],
         ];
@@ -62,13 +63,11 @@ class ProductRequest extends FormRequest
     public function messages(): array
     {
         return [
-            "brand_id.required" => "Brand is required.",
             "brand_id.exists" => "Brand does not exist",
             "category_id.required" => "Category is required.",
             "category_id.exists" => "Category does not exist.",
             "user_id.required" => "User is required.",
             "user_id.exists" => "User does not exist.",
-            "collection_id.required" => "Collection is required.",
             "collection_id.exists" => "Collection does not exist.",
             "name.required" => "Product name is required.",
             "code.required" => "Product code is required.",

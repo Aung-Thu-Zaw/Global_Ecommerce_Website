@@ -7,6 +7,7 @@ use App\Services\ProductImageUploadService;
 use App\Services\ProductMultiImageUploadService;
 use App\Services\Products\HandleProductColorService;
 use App\Services\Products\HandleProductSizeService;
+use App\Services\Products\HandleProductTypeService;
 
 class CreateProductAction
 {
@@ -44,6 +45,12 @@ class CreateProductAction
         if(isset($data["colors"])) {
 
             (new HandleProductColorService())->handle($data["colors"], $product);
+
+        }
+
+        if(isset($data["types"])) {
+
+            (new HandleProductTypeService())->handle($data["types"], $product);
 
         }
 

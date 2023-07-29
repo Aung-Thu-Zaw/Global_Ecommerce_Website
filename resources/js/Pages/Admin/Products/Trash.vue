@@ -13,7 +13,7 @@ import Breadcrumb from "@/Components/Breadcrumbs/ProductBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link, Head, router, usePage } from "@inertiajs/vue3";
-import { inject, reactive, watch, computed } from "vue";
+import { inject, reactive, watch, computed, ref } from "vue";
 
 // Define the Props
 const props = defineProps({
@@ -403,7 +403,7 @@ const productTrashDelete = computed(() => {
               {{ trashProduct.name }}
             </Td>
 
-            <Td> $ {{ formattedAmount(product.price) }} </Td>
+            <Td> $ {{ formattedAmount(trashProduct.price) }} </Td>
 
             <Td>
               <DiscountStatus

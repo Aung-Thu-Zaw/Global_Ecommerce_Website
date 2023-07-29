@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Size extends Model
+class Type extends Model
 {
     use HasFactory;
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Size, never>
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Type, never>
     */
     protected function name(): Attribute
     {
@@ -26,6 +26,6 @@ class Size extends Model
     */
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class, "product_size");
+        return $this->belongsToMany(Product::class, "product_type");
     }
 }

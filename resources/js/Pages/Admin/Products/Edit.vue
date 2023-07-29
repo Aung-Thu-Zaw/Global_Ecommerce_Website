@@ -24,17 +24,20 @@ const processing = ref(false);
 const editor = ClassicEditor;
 const size = ref("");
 const color = ref("");
+const type = ref("");
 const previewPhoto = ref("");
 const multiPreviewPhotos = ref([]);
 
 const sizes = computed(() => props.product.sizes.map((size) => size.name));
 const colors = computed(() => props.product.colors.map((color) => color.name));
+const types = computed(() => props.product.types.map((type) => type.name));
 
 // Product Edit Form Data
 const form = useForm({
   name: props.product.name,
   sizes: [...sizes.value],
   colors: [...colors.value],
+  types: [...types.value],
   description: props.product.description,
   image: props.product.image,
   multi_image: [],
@@ -110,6 +113,24 @@ const createColor = (e) => {
 const removeColor = (removeColor) => {
   form.colors = form.colors.filter((color) => {
     return color !== removeColor;
+  });
+};
+
+// Handle Type Tags
+const createType = (e) => {
+  if (e.key === ",") {
+    type.value = type.value.split(",").join("").toLowerCase();
+    form.types.push(type.value);
+    type.value = "";
+  }
+
+  form.types = [...new Set(form.types)];
+};
+
+// Handle Remove Type
+const removeType = (removeType) => {
+  form.types = form.types.filter((type) => {
+    return type !== removeType;
   });
 };
 
@@ -277,7 +298,7 @@ const handleEditProduct = async () => {
 
                 <!-- Product Color Field -->
                 <div class="mb-6">
-                  <InputLabel for="color" value="Product Colors *" />
+                  <InputLabel for="color" value="Product Colors" />
 
                   <TextInput
                     id="color"
@@ -299,6 +320,34 @@ const handleEditProduct = async () => {
                     <i
                       class="fas fa-xmark text-white arrow-icon cursor-pointer"
                       @click="removeColor(color)"
+                    ></i>
+                  </span>
+                </div>
+
+                <!-- Product Type Field -->
+                <div class="mb-6">
+                  <InputLabel for="type" value="Product Types" />
+
+                  <TextInput
+                    id="type"
+                    type="text"
+                    class="mt-1 block w-full mb-2"
+                    v-model="type"
+                    @keyup="createType"
+                    placeholder="Enter Product Type ( Eg. Jeans, Leather, Material, Steel, etc...)"
+                  />
+
+                  <InputError class="mt-2" :message="form.errors.types" />
+
+                  <span
+                    v-for="(type, index) in form.types"
+                    :key="index"
+                    class="bg-blue-600 text-white rounded-sm min-w-[80px] h-auto px-3 py-1 mr-2"
+                  >
+                    <span class="text-sm font-blod mr-5">{{ type }}</span>
+                    <i
+                      class="fas fa-xmark text-white arrow-icon cursor-pointer"
+                      @click="removeType(type)"
                     ></i>
                   </span>
                 </div>
@@ -441,7 +490,7 @@ const handleEditProduct = async () => {
 
                   <!-- Product Brand Field -->
                   <div class="mb-6">
-                    <InputLabel for="name" value="Product Brand *" />
+                    <InputLabel for="name" value="Product Brand" />
 
                     <select
                       v-model="form.brand_id"
@@ -614,7 +663,7 @@ const handleEditProduct = async () => {
                     <span class="text-slate-500 text-sm font-bold"
                       >New Multiple Image</span
                     >
-                    <div class="flex flex-wrap">
+                    <div class="flex flex-wrap space-x-3">
                       <div
                         class="relative"
                         v-for="(multiPreviewPhoto, index) in multiPreviewPhotos"

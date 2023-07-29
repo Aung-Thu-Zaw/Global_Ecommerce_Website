@@ -80,6 +80,16 @@ class Product extends Model
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Product, never>
     */
+    protected function deletedAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => date("j-F-Y", strtotime($value)),
+        );
+    }
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Product, never>
+    */
     protected function hotDeal(): Attribute
     {
         return Attribute::make(
@@ -153,6 +163,14 @@ class Product extends Model
     public function sizes(): BelongsToMany
     {
         return $this->belongsToMany(Size::class);
+    }
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Type>
+    */
+    public function types(): BelongsToMany
+    {
+        return $this->belongsToMany(Type::class);
     }
 
     /**

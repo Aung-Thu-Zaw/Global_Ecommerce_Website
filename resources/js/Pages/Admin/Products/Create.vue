@@ -24,6 +24,7 @@ const processing = ref(false);
 const previewPhoto = ref("");
 const size = ref("");
 const color = ref("");
+const type = ref("");
 const multiPreviewPhotos = ref([]);
 
 // Product Create Form Data
@@ -31,6 +32,7 @@ const form = useForm({
   name: "",
   sizes: [],
   colors: [],
+  types: [],
   description: "",
   image: "",
   multi_image: [],
@@ -106,6 +108,24 @@ const createColor = (e) => {
 const removeColor = (removeColor) => {
   form.colors = form.colors.filter((color) => {
     return color !== removeColor;
+  });
+};
+
+// Handle Type Tags
+const createType = (e) => {
+  if (e.key === ",") {
+    type.value = type.value.split(",").join("").toLowerCase();
+    form.types.push(type.value);
+    type.value = "";
+  }
+
+  form.types = [...new Set(form.types)];
+};
+
+// Handle Remove Type
+const removeType = (removeType) => {
+  form.types = form.types.filter((type) => {
+    return type !== removeType;
   });
 };
 
@@ -233,7 +253,7 @@ const handleCreateProduct = async () => {
 
                 <!-- Product Color Field -->
                 <div class="mb-6">
-                  <InputLabel for="color" value="Product Colors *" />
+                  <InputLabel for="color" value="Product Colors" />
 
                   <TextInput
                     id="color"
@@ -255,6 +275,34 @@ const handleCreateProduct = async () => {
                     <i
                       class="fas fa-xmark text-white arrow-icon cursor-pointer"
                       @click="removeColor(color)"
+                    ></i>
+                  </span>
+                </div>
+
+                <!-- Product Type Field -->
+                <div class="mb-6">
+                  <InputLabel for="type" value="Product Types" />
+
+                  <TextInput
+                    id="type"
+                    type="text"
+                    class="mt-1 block w-full mb-2"
+                    v-model="type"
+                    @keyup="createType"
+                    placeholder="Enter Product Type ( Eg. Jeans, Leather, Material, Steel, etc...)"
+                  />
+
+                  <InputError class="mt-2" :message="form.errors.types" />
+
+                  <span
+                    v-for="(type, index) in form.types"
+                    :key="index"
+                    class="bg-blue-600 text-white rounded-sm min-w-[80px] h-auto px-3 py-1 mr-2"
+                  >
+                    <span class="text-sm font-blod mr-5">{{ type }}</span>
+                    <i
+                      class="fas fa-xmark text-white arrow-icon cursor-pointer"
+                      @click="removeType(type)"
                     ></i>
                   </span>
                 </div>
@@ -349,7 +397,7 @@ const handleCreateProduct = async () => {
                         type="text"
                         class="mt-1 block w-full"
                         v-model="form.discount"
-                        placeholder="Enter Product Discount"
+                        placeholder="Enter Product Discount Price"
                       >
                         <template v-slot:icon>
                           <span class="text-slate-500"> $ </span>
@@ -398,7 +446,7 @@ const handleCreateProduct = async () => {
 
                   <!-- Product Brand Field -->
                   <div class="mb-6">
-                    <InputLabel for="brand" value="Product Brand *" />
+                    <InputLabel for="brand" value="Product Brand" />
 
                     <select
                       v-model="form.brand_id"
@@ -568,13 +616,18 @@ const handleCreateProduct = async () => {
                     <span class="text-slate-500 text-sm font-bold"
                       >Multiple Image</span
                     >
-                    <div class="flex flex-wrap">
+
+                    <div class="flex flex-wrap space-x-3">
                       <div
                         class="relative"
                         v-for="(multiPreviewPhoto, index) in multiPreviewPhotos"
                         :key="index"
                       >
-                        <img :src="multiPreviewPhoto" class="preview-img" />
+                        <img
+                          :src="multiPreviewPhoto"
+                          alt=""
+                          class="h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300 mr-6"
+                        />
                         <span
                           class="absolute top-0 right-4 bg-slate-300 text-slate-600 w-5 h-5 flex items-center justify-center rounded-full hover:bg-slate-500 hover:text-slate-300 transition-all"
                           @click="removeImage(index)"
@@ -622,7 +675,7 @@ const handleCreateProduct = async () => {
 
 <style>
 .ck-editor__editable_inline {
-  min-height: 250px;
+  min-height: 400px;
   border-radius: 200px;
 }
 

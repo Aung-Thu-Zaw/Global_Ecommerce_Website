@@ -142,7 +142,7 @@ const formattedAmount = (amount) => {
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
-                  Avaliable Product Size
+                  Avaliable Product Sizes
                 </span>
                 <span class="w-1/2 block space-x-3">
                   <span
@@ -155,13 +155,32 @@ const formattedAmount = (amount) => {
                 </span>
               </div>
               <div
+                v-if="product.types.length"
+                class="border-b py-3 bg-gray-50 flex items-center"
+              >
+                <span
+                  class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
+                >
+                  Avaliable Product Types
+                </span>
+                <span class="w-1/2 block space-x-3">
+                  <span
+                    v-for="productType in product.types"
+                    :key="productType.id"
+                    class="px-3 py-1 text-xs font-bold text-white bg-blue-600 rounded-sm"
+                  >
+                    {{ productType.name }}
+                  </span>
+                </span>
+              </div>
+              <div
                 v-if="product.colors.length"
                 class="bg-white border-b py-3 flex items-center"
               >
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
-                  Avaliable Product Color
+                  Avaliable Product Colors
                 </span>
                 <span class="w-1/2 block space-x-3">
                   <span

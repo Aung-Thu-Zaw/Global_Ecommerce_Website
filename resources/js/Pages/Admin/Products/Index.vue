@@ -399,7 +399,7 @@ if (usePage().props.flash.successMessage) {
               {{ product.name }}
             </Td>
 
-            <Td class="w-[100px]"> $ {{ formattedAmount(product.price) }} </Td>
+            <Td class="w-[110px]"> $ {{ formattedAmount(product.price) }} </Td>
 
             <Td class="w-[150px]">
               <DiscountStatus

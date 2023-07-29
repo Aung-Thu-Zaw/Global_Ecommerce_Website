@@ -33,7 +33,7 @@ class AdminProductController extends Controller
     {
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        $product->load("brand:id,name", "shop:id,shop_name", "images", "colors", "sizes");
+        $product->load("brand:id,name", "shop:id,shop_name", "images", "colors", "sizes", "types");
 
         return inertia("Admin/Products/Details", compact("product", "queryStringParams"));
     }
@@ -72,7 +72,7 @@ class AdminProductController extends Controller
 
         $vendors=User::where([["status","active"],["role","vendor"]])->get();
 
-        $product->load(["sizes","colors","images"]);
+        $product->load(["sizes","colors","types","images"]);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
