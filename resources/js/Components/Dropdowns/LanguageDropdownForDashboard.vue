@@ -34,7 +34,7 @@ const handleChangeLanguage = (language) => {
           aria-labelledby="dropdownMenuButton2"
           data-te-dropdown-menu-ref
         >
-          <li v-for="language in $page.props.languages" :key="language.id">
+          <li v-for="language in $page.props.languages.data" :key="language.id">
             <div
               @click="handleChangeLanguage(language.short_name)"
               class="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 cursor-pointer"
@@ -44,6 +44,12 @@ const handleChangeLanguage = (language) => {
 
               <span
                 v-if="language.short_name === $page.props.locale"
+                class="ml-1"
+              >
+                <i class="fa-solid fa-check"></i>
+              </span>
+              <span
+                v-else-if="!$page.props.locale && language.short_name === 'en'"
                 class="ml-1"
               >
                 <i class="fa-solid fa-check"></i>

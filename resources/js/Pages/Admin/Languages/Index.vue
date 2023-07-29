@@ -327,7 +327,7 @@ if (usePage().props.flash.successMessage) {
             <Td v-if="languageEdit || languageDelete || languageDetail">
               <!-- Edit Button -->
               <Link
-                v-if="languageEdit"
+                v-if="languageEdit && language.id !== 1"
                 as="button"
                 :href="route('admin.languages.edit', language.id)"
                 :data="{
@@ -346,7 +346,7 @@ if (usePage().props.flash.successMessage) {
 
               <!-- Delete Button -->
               <button
-                v-if="languageDelete"
+                v-if="languageDelete && language.id !== 1"
                 @click="handleDeleteLanguage(language.id)"
                 class="delete-btn group"
                 type="button"

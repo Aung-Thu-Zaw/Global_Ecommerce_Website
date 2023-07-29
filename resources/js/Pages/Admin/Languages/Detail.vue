@@ -1,14 +1,31 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ProductBreadcrumb.vue";
-import { Link, Head } from "@inertiajs/vue3";
+import Tr from "@/Components/Table/Tr.vue";
+import Td from "@/Components/Table/Td.vue";
+import HeaderTh from "@/Components/Table/HeaderTh.vue";
+import TableHeader from "@/Components/Table/TableHeader.vue";
+import TableContainer from "@/Components/Table/TableContainer.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import { Link, Head, useForm } from "@inertiajs/vue3";
+import { onMounted } from "vue";
 
 // Define the props
 const props = defineProps({
-  paginate: Object,
+  queryStringParams: Object,
   language: Object,
-  jsonData: Object,
+  jsonData: Array,
 });
+
+const form = useForm({
+  key: [],
+  value: [],
+  captcha_token: null,
+});
+
+const formValue = (value) => {
+  form.value = value;
+};
 </script>
 
 <template>
@@ -69,8 +86,10 @@ const props = defineProps({
             as="button"
             :href="route('admin.languages.index')"
             :data="{
-              page: props.paginate.page,
-              per_page: props.paginate.per_page,
+              page: props.queryStringParams.page,
+              per_page: props.queryStringParams.per_page,
+              sort: props.queryStringParams.sort,
+              direction: props.queryStringParams.direction,
             }"
             class="goback-btn"
           >
@@ -82,11 +101,39 @@ const props = defineProps({
         </div>
       </div>
 
-      <div class="p-5 border shadow-md rounded-sm my-5">
-        <h1 class="font-bold text-slate-700 text-2xl border-b-4 px-10 py-3">
-          Language Details
-        </h1>
-      </div>
+      <!-- Language Table Start -->
+      <TableContainer>
+        <TableHeader>
+          <HeaderTh> Key </HeaderTh>
+
+          <HeaderTh> Value </HeaderTh>
+        </TableHeader>
+
+        <tbody>
+          <Tr v-for="(json, index) in jsonData" :key="index">
+            <Td class="max-w-[280px] border-r">
+              <!-- class= border-transparent bg-white outline-none focus:border-transparent focus:ring-0 placeholder:text-gray-400 placeholder:text-sm" -->
+              <span
+                class="w-full block border px-2 py-[14px] bg-white rounded-md border-gray-300 overflow-x-scroll"
+              >
+                {{ index }}
+              </span>
+            </Td>
+            <Td class="max-w-[500px]">
+              <!-- <input type="text" v-model="form.key" /> -->
+              <!-- <input
+                type="text"
+                class="w-full block border px-2 py-[12px] bg-white rounded-md border-gray-300 overflow-x-scroll focus:ring-0 focus:border-gray-300"
+                v-model="form.value"
+              /> -->
+
+              {{ json }}
+            </Td>
+          </Tr>
+        </tbody>
+      </TableContainer>
+
+      <!-- Language Table End -->
     </div>
   </AdminDashboardLayout>
 </template>

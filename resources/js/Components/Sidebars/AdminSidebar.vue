@@ -421,8 +421,8 @@
               :data="{
                 page: 1,
                 per_page: 10,
-                sort: id,
-                direction: desc,
+                sort: 'id',
+                direction: 'desc',
               }"
               class="text-xs uppercase py-3 font-bold block"
               :class="{
