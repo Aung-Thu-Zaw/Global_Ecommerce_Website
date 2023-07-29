@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Image;
 use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -33,7 +34,15 @@ class PermanentlyAutoDeleteProductCommand extends Command
 
         $products->each(function ($product) {
 
-            Product::deleteImage($product);
+            $multiImages=Image::where("product_id", $product->id)->get();
+
+            $multiImages->each(function ($image) {
+
+                Image::deleteImage($image);
+
+            });
+
+            Product::deleteImage($product->image);
 
             $product->forceDelete();
 

@@ -112,6 +112,16 @@ const updateSorting = (sort = "id") => {
   handleQueryStringParameter();
 };
 
+// Formatted Amount
+const formattedAmount = (amount) => {
+  const totalAmount = parseFloat(amount);
+  if (Number.isInteger(totalAmount)) {
+    return totalAmount.toFixed(0);
+  } else {
+    return totalAmount.toFixed(2);
+  }
+};
+
 // Handle Trash Product Restore
 const handleRestoreTrashProduct = async (trashProductId) => {
   const result = await swal({

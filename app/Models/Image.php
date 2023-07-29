@@ -41,17 +41,19 @@ class Image extends Model
 
     public static function deleteImage(Image $image): void
     {
-        if (!empty($image->img_path) && file_exists(storage_path("app/public/products/".pathinfo($image->img_path, PATHINFO_BASENAME)))) {
 
-            if($image->product_id) {
+        if($image->product_id) {
 
+            if (!empty($image->img_path) && file_exists(storage_path("app/public/products/".pathinfo($image->img_path, PATHINFO_BASENAME)))) {
                 unlink(storage_path("app/public/products/".pathinfo($image->img_path, PATHINFO_BASENAME)));
-
-            } else {
-
-                unlink(storage_path("app/public/suggestions/".pathinfo($image->img_path, PATHINFO_BASENAME)));
-
             }
+
+        } else {
+
+            if (!empty($image->img_path) && file_exists(storage_path("app/public/suggestions/".pathinfo($image->img_path, PATHINFO_BASENAME)))) {
+                unlink(storage_path("app/public/suggestions/".pathinfo($image->img_path, PATHINFO_BASENAME)));
+            }
+
         }
     }
 }

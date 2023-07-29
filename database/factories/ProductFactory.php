@@ -33,7 +33,7 @@ class ProductFactory extends Factory
             // "featured"=>fake()->randomElement([true,false]),
             // "special_offer"=>fake()->randomElement([true,false]),
             // "status"=>fake()->randomElement(["active","inactive"]),
-            "status"=>"active",
+            "status"=>"pending",
             "created_at"=>fake()->dateTimeBetween("-4 months", now()),
     ];
     }

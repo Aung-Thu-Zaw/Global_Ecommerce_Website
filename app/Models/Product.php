@@ -203,10 +203,10 @@ class Product extends Model
         return $this->hasMany(ProductReview::class);
     }
 
-    public static function deleteImage(Product $product): void
+    public static function deleteImage(string $productImage): void
     {
-        if (!empty($product->image) && file_exists(storage_path("app/public/products/".pathinfo($product->image, PATHINFO_BASENAME)))) {
-            unlink(storage_path("app/public/products/".pathinfo($product->image, PATHINFO_BASENAME)));
+        if (!empty($productImage) && file_exists(storage_path("app/public/products/".pathinfo($productImage, PATHINFO_BASENAME)))) {
+            unlink(storage_path("app/public/products/".pathinfo($productImage, PATHINFO_BASENAME)));
         }
     }
 

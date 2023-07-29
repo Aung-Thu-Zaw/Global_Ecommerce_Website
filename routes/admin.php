@@ -55,7 +55,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get("/admin/login", [AdminAuthController::class,"login"])->middleware("guest")->name("admin.login");
 
-Route::middleware(["admin","verified","user.role:admin"])
+Route::middleware(["auth","verified","user.role:admin"])
        ->prefix("admin")
        ->name("admin.")
        ->group(function () {
@@ -137,6 +137,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::post("/", "store")->middleware('permission:product.add')->name("store");
                     Route::get("/{product}/edit", "edit")->middleware('permission:product.edit')->name("edit");
                     Route::post("/{product}", "update")->middleware('permission:product.edit')->name("update");
+                    Route::post("/{product}/status", "handleStatus")->middleware('permission:product.control')->name("handle.status");
                     Route::delete("/{product}", "destroy")->middleware('permission:product.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:product.trash.list')->name("trash");
                     Route::post("/{trash_product_id}/restore", "restore")->middleware('permission:product.trash.restore')->name("restore");

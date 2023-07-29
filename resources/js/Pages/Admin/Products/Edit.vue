@@ -5,7 +5,7 @@ import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ProductBreadcrumb.vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { Link, useForm, Head } from "@inertiajs/vue3";
+import { Link, useForm, Head, router } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import { computed, ref } from "vue";
 
@@ -46,6 +46,7 @@ const form = useForm({
   category_id: props.product.category_id,
   collection_id: props.product.collection_id,
   user_id: props.product.user_id,
+  status: props.product.status,
   hot_deal: props.product.hot_deal,
   special_offer: props.product.special_offer,
   featured: props.product.featured,
@@ -110,6 +111,19 @@ const removeColor = (removeColor) => {
   form.colors = form.colors.filter((color) => {
     return color !== removeColor;
   });
+};
+
+// Handle Delete Product Multi Image
+const handleDeleteProductMultiImage = (imageId) => {
+  router.delete(
+    route("admin.image.destroy", {
+      product_id: props.product.id,
+      image_id: imageId,
+    }),
+    {
+      preserveScroll: true,
+    }
+  );
 };
 
 // Destructing ReCaptcha
@@ -621,11 +635,11 @@ const handleEditProduct = async () => {
                     </div>
                   </div>
                   <!-- {{ props.product.images }} -->
-                  <div v-if="props.product.images" class="mb-4">
+                  <div v-if="props.product.images.length" class="mb-4">
                     <span class="text-slate-500 text-sm font-bold"
                       >Exisiting Multiple Image</span
                     >
-                    <div class="flex flex-wrap">
+                    <div class="flex flex-wrap space-x-3">
                       <div
                         v-for="image in props.product.images"
                         :key="image.id"
@@ -637,19 +651,13 @@ const handleEditProduct = async () => {
                           class="h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300 mx-2"
                         />
 
-                        <Link
-                          :href="
-                            route('admin.image.destroy', {
-                              product_id: props.product.id,
-                              image_id: image.id,
-                            })
-                          "
-                          method="delete"
-                          as="button"
+                        <button
+                          @click="handleDeleteProductMultiImage(image.id)"
+                          type="button"
                           class="bg-red-600 rounded-md px-10 py-2 text-sm text-white hover:bg-red-800 transition-all"
                         >
                           Delete
-                        </Link>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -691,7 +699,7 @@ const handleEditProduct = async () => {
 
 <style>
 .ck-editor__editable_inline {
-  min-height: 250px;
+  min-height: 400px;
   border-radius: 200px;
 }
 

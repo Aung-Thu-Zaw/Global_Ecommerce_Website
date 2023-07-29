@@ -41,6 +41,7 @@ class PermissionSeeder extends Seeder
 
         Permission::create(["name"=>"product.menu","group"=>"product"]);
         Permission::create(["name"=>"product.add","group"=>"product"]);
+        Permission::create(["name"=>"product.control","group"=>"product"]);
         Permission::create(["name"=>"product.edit","group"=>"product"]);
         Permission::create(["name"=>"product.delete","group"=>"product"]);
         Permission::create(["name"=>"product.detail","group"=>"product"]);

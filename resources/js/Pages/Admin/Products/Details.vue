@@ -1,13 +1,27 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ProductBreadcrumb.vue";
+import NoDiscountStatus from "@/Components/Status/NoDiscountStatus.vue";
+import PendingStatus from "@/Components/Status/PendingStatus.vue";
+import ApprovedStatus from "@/Components/Status/ApprovedStatus.vue";
+import DiscountStatus from "@/Components/Status/DiscountStatus.vue";
 import { Link, Head } from "@inertiajs/vue3";
 
 // Define the props
 const props = defineProps({
-  paginate: Object,
+  queryStringParams: Object,
   product: Object,
 });
+
+// Formatted Amount
+const formattedAmount = (amount) => {
+  const totalAmount = parseFloat(amount);
+  if (Number.isInteger(totalAmount)) {
+    return totalAmount.toFixed(0);
+  } else {
+    return totalAmount.toFixed(2);
+  }
+};
 </script>
 
 <template>
@@ -69,8 +83,10 @@ const props = defineProps({
             as="button"
             :href="route('admin.products.index')"
             :data="{
-              page: props.paginate.page,
-              per_page: props.paginate.per_page,
+              page: props.queryStringParams.page,
+              per_page: props.queryStringParams.per_page,
+              sort: props.queryStringParams.sort,
+              direction: props.queryStringParams.direction,
             }"
             class="goback-btn"
           >
@@ -109,9 +125,7 @@ const props = defineProps({
             class="w-full text-sm text-left text-gray-500 border overflow-hidden shadow rounded-md my-5"
           >
             <div>
-              <div
-                class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
-              >
+              <div class="bg-white border-b py-3 flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
@@ -119,6 +133,44 @@ const props = defineProps({
                 </span>
                 <span class="w-1/2 block">
                   {{ product.name }}
+                </span>
+              </div>
+              <div
+                v-if="product.sizes.length"
+                class="border-b py-3 bg-gray-50 flex items-center"
+              >
+                <span
+                  class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
+                >
+                  Avaliable Product Size
+                </span>
+                <span class="w-1/2 block space-x-3">
+                  <span
+                    v-for="size in product.sizes"
+                    :key="size.id"
+                    class="px-3 py-1 text-xs font-bold text-white bg-blue-600 rounded-sm"
+                  >
+                    {{ size.name }}
+                  </span>
+                </span>
+              </div>
+              <div
+                v-if="product.colors.length"
+                class="bg-white border-b py-3 flex items-center"
+              >
+                <span
+                  class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
+                >
+                  Avaliable Product Color
+                </span>
+                <span class="w-1/2 block space-x-3">
+                  <span
+                    v-for="color in product.colors"
+                    :key="color.id"
+                    class="px-3 py-1 text-xs font-bold text-white bg-blue-600 rounded-sm"
+                  >
+                    {{ color.name }}
+                  </span>
                 </span>
               </div>
               <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -131,9 +183,7 @@ const props = defineProps({
                   {{ product.code }}
                 </span>
               </div>
-              <div
-                class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
-              >
+              <div class="bg-white border-b py-3 flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
@@ -149,11 +199,11 @@ const props = defineProps({
                 >
                   Product Price
                 </span>
-                <span class="w-1/2 block"> $ {{ product.price }} </span>
+                <span class="w-1/2 block">
+                  $ {{ formattedAmount(product.price) }}
+                </span>
               </div>
-              <div
-                class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
-              >
+              <div class="bg-white border-b py-3 flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
@@ -161,30 +211,19 @@ const props = defineProps({
                 </span>
                 <span class="w-1/2 block">
                   <span v-if="product.discount">
-                    $ {{ product.discount }}
+                    $ {{ formattedAmount(product.discount) }}
 
-                    <span
-                      class="rounded-full px-3 py-1 bg-green-200 text-green-600 font-bold ml-5"
-                    >
-                      {{
-                        (
-                          ((product.price - product.discount) / product.price) *
-                          100
-                        ).toFixed(1)
-                      }}%
-                    </span>
+                    <DiscountStatus
+                      :price="product.price"
+                      :discount="product.discount"
+                      class="ml-5"
+                    />
                   </span>
-                  <span
-                    v-else
-                    class="rounded-full px-3 py-1 bg-sky-200 text-sky-600 font-bold"
-                  >
-                    No Discount
-                  </span>
+
+                  <NoDiscountStatus v-else />
                 </span>
               </div>
-              <div
-                class="bg-gray-50 border-b py-3 dark:bg-gray-900 flex items-center"
-              >
+              <div class="bg-gray-50 border-b py-3 flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
@@ -204,9 +243,7 @@ const props = defineProps({
                   {{ product.featured ? "Yes" : "No" }}
                 </span>
               </div>
-              <div
-                class="bg-gray-50 border-b py-3 dark:bg-gray-900 flex items-center"
-              >
+              <div class="bg-gray-50 border-b py-3 flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
@@ -223,23 +260,16 @@ const props = defineProps({
                   Status
                 </span>
                 <span class="w-1/2 block capitalize">
-                  <span
-                    v-if="product.status == active"
-                    class="rounded-full bg-green-200 text-green-600 px-3 py-1 font-bold"
-                  >
+                  <PendingStatus v-if="product.status === 'pending'">
                     {{ product.status }}
-                  </span>
-                  <span
-                    v-else
-                    class="rounded-full bg-red-200 text-red-600 px-3 py-1 font-bold"
-                  >
+                  </PendingStatus>
+
+                  <ApprovedStatus v-else>
                     {{ product.status }}
-                  </span>
+                  </ApprovedStatus>
                 </span>
               </div>
-              <div
-                class="bg-gray-50 border-b py-3 dark:bg-gray-900 flex items-center"
-              >
+              <div class="bg-gray-50 border-b py-3 flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
@@ -260,13 +290,14 @@ const props = defineProps({
                   {{ product.shop.shop_name }}
                 </span>
               </div>
-              <div class="border-b py-3 bg-gray-50 flex items-center">
+              <div class="border-b py-3 bg-gray-50 flex items-start">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
                   Product Description
                 </span>
-                <span v-html="product.description" class="w-1/2 block"> </span>
+                <span v-html="product.description" class="w-1/2 block pr-5">
+                </span>
               </div>
             </div>
           </div>

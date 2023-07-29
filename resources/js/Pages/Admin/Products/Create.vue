@@ -42,6 +42,7 @@ const form = useForm({
   collection_id: "",
   category_id: "",
   user_id: "",
+  status: "pending",
   hot_deal: false,
   special_offer: false,
   featured: false,

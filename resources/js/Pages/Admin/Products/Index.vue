@@ -1,5 +1,7 @@
 <script setup>
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
+import PendingStatus from "@/Components/Status/PendingStatus.vue";
+import ApprovedStatus from "@/Components/Status/ApprovedStatus.vue";
 import NoDiscountStatus from "@/Components/Status/NoDiscountStatus.vue";
 import DiscountStatus from "@/Components/Status/DiscountStatus.vue";
 import SortingArrows from "@/Components/Table/SortingArrows.vue";
@@ -13,7 +15,7 @@ import Breadcrumb from "@/Components/Breadcrumbs/ProductBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link, Head, router, usePage } from "@inertiajs/vue3";
-import { reactive, watch, inject, computed } from "vue";
+import { reactive, watch, inject, computed, ref } from "vue";
 
 // Define the props
 const props = defineProps({
@@ -112,6 +114,60 @@ const updateSorting = (sort = "id") => {
   handleQueryStringParameter();
 };
 
+// Formatted Amount
+const formattedAmount = (amount) => {
+  const totalAmount = parseFloat(amount);
+  if (Number.isInteger(totalAmount)) {
+    return totalAmount.toFixed(0);
+  } else {
+    return totalAmount.toFixed(2);
+  }
+};
+
+// Handle Offical Or UnOffical
+const handleStatus = async (product) => {
+  const result = await swal({
+    icon: "question",
+    title: `Are you sure you want to set ${
+      product.status === "pending" ? "approve" : "disapprove"
+    } this product?`,
+    showCancelButton: true,
+    confirmButtonText: `Yes, ${
+      product.status === "pending" ? "Approve" : "Disapprove"
+    }!`,
+    confirmButtonColor: "#2562c4",
+    cancelButtonColor: "#626262",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.post(
+      route("admin.products.handle.status", {
+        product: product.slug,
+        status: product.status === "pending" ? "approved" : "pending",
+        page: params.page,
+        per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
+      }),
+      {},
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
+    );
+  }
+};
+
 // Handle Product Delete
 const handleProductDelete = async (productSlug) => {
   const result = await swal({
@@ -194,6 +250,15 @@ const productTrashList = computed(() => {
     : false;
 });
 
+// Product Control Permission
+const productControl = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "product.control"
+      )
+    : false;
+});
+
 if (usePage().props.flash.successMessage) {
   swal({
     icon: "success",
@@ -261,7 +326,7 @@ if (usePage().props.flash.successMessage) {
             <i
               v-if="params.search"
               class="fa-solid fa-xmark remove-search"
-              @click="handleSearchBox"
+              @click="removeSearch"
             ></i>
           </form>
 
@@ -305,6 +370,11 @@ if (usePage().props.flash.successMessage) {
             <SortingArrows :params="params" sort="discount" />
           </HeaderTh>
 
+          <HeaderTh @click="updateSorting('status')">
+            Status
+            <SortingArrows :params="params" sort="status" />
+          </HeaderTh>
+
           <HeaderTh @click="updateSorting('created_at')">
             Created At
             <SortingArrows :params="params" sort="created_at" />
@@ -325,13 +395,13 @@ if (usePage().props.flash.successMessage) {
               <img :src="product.image" class="image" />
             </Td>
 
-            <Td>
+            <Td class="line-clamp-1">
               {{ product.name }}
             </Td>
 
-            <Td> $ {{ formattedAmount(product.price) }} </Td>
+            <Td class="w-[100px]"> $ {{ formattedAmount(product.price) }} </Td>
 
-            <Td>
+            <Td class="w-[150px]">
               <DiscountStatus
                 :price="product.price"
                 :discount="product.discount"
@@ -340,11 +410,52 @@ if (usePage().props.flash.successMessage) {
               <NoDiscountStatus v-if="!product.discount" />
             </Td>
 
-            <Td>
+            <Td class="w-[180px]">
+              <PendingStatus v-if="product.status === 'pending'">
+                {{ product.status }}
+              </PendingStatus>
+
+              <ApprovedStatus v-else>
+                {{ product.status }}
+              </ApprovedStatus>
+            </Td>
+
+            <Td class="w-[140px]">
               {{ product.created_at }}
             </Td>
 
-            <Td v-if="productEdit || productDelete || productDetail">
+            <Td
+              class="w-[550px]"
+              v-if="
+                productEdit || productDelete || productDetail || productControl
+              "
+            >
+              <!-- Delete Button -->
+              <button
+                v-if="productControl"
+                @click="handleStatus(product)"
+                class="offical-btn group"
+                type="button"
+                :class="{
+                  'bg-green-600  hover:bg-green-700 border-green-700':
+                    product.status === 'pending',
+                  'bg-orange-600  hover:bg-orange-700 border-orange-700':
+                    product.status === 'approved',
+                }"
+              >
+                <span
+                  v-if="product.status === 'pending'"
+                  class="group-hover:animate-pulse"
+                >
+                  <i class="fa-solid fa-check"></i>
+                  Approve
+                </span>
+                <span v-else class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-xmark"></i>
+                  Disapprove
+                </span>
+              </button>
+
               <!-- Edit Button -->
               <Link
                 v-if="productEdit"

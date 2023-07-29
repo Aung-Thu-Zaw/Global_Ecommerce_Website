@@ -17,28 +17,31 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('brand:delete')->daily();
-        $schedule->command('campaign_banner:delete')->daily();
-        $schedule->command('product_banner:delete')->daily();
-        $schedule->command('vendor_product_banner:delete')->daily();
-        $schedule->command('slider_banner:delete')->daily();
+        $schedule->command('collection:delete')->daily();
         $schedule->command('category:delete')->daily();
         $schedule->command('product:delete')->daily();
-        $schedule->command('inactive_vendor:delete')->daily();
-        $schedule->command('collection:delete')->daily();
         $schedule->command('coupon:delete')->daily();
+        $schedule->command('slider_banner:delete')->daily();
+        $schedule->command('campaign_banner:delete')->daily();
+        $schedule->command('product_banner:delete')->daily();
         $schedule->command('country:delete')->daily();
         $schedule->command('region:delete')->daily();
         $schedule->command('city:delete')->daily();
         $schedule->command('township:delete')->daily();
-        $schedule->command('blog_category:delete')->daily();
-        $schedule->command('blog_post:delete')->daily();
+        $schedule->command('language:delete')->daily();
+        // Reviews Managements
+        $schedule->command('inactive_vendor:delete')->daily();
+        $schedule->command('user:delete')->daily();
         $schedule->command('role:delete')->daily();
         $schedule->command('permission:delete')->daily();
-        $schedule->command('user:delete')->daily();
+        $schedule->command('blog_category:delete')->daily();
+        $schedule->command('blog_post:delete')->daily();
+        // Admin Web Control Area
         $schedule->command('subscriber:delete')->daily();
-        $schedule->command('website_feedback:delete')->daily();
         $schedule->command('suggestion:delete')->daily();
-        $schedule->command('language:delete')->daily();
+        $schedule->command('website_feedback:delete')->daily();
+
+        $schedule->command('vendor_product_banner:delete')->daily();
     }
 
     /**

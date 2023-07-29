@@ -18,7 +18,7 @@ class BrandImageUploadService
         return $finalName;
     }
 
-    public function updateImage(UploadedFile|string $image, string $brandImage): string
+    public function updateImage(UploadedFile $image, string $brandImage): string
     {
         if(is_string($brandImage)) {
 
