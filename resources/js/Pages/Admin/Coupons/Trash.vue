@@ -29,7 +29,7 @@ const formattedAmount = (amount) => {
 };
 
 // Formatted Discount Type
-const formatDiscountType = (suggestionType) => {
+const formattedDiscountType = (suggestionType) => {
   const words = suggestionType.split("_");
   const capitalizedWords = words.map(
     (word) => word.charAt(0).toUpperCase() + word.slice(1)
@@ -322,7 +322,7 @@ const couponTrashDelete = computed(() => {
           <input
             type="text"
             class="search-input"
-            placeholder="Search"
+            placeholder="Search by code"
             v-model="params.search"
           />
 
@@ -414,16 +414,19 @@ const couponTrashDelete = computed(() => {
             </Td>
 
             <Td>
-              {{ formatDiscountType(trashCoupon.discount_type) }}
+              {{ formattedDiscountType(trashCoupon.discount_type) }}
             </Td>
 
             <Td>
-              {{ formattedAmount(trashCoupon.discount_amount) }}
+              <span v-if="trashCoupon.discount_type === 'fixed_amount'">
+                $ {{ formattedAmount(trashCoupon.discount_amount) }}
+              </span>
+              <span v-if="trashCoupon.discount_type === 'percentage'">
+                % {{ formattedAmount(trashCoupon.discount_amount) }}
+              </span>
             </Td>
 
-            <Td>
-              {{ formattedAmount(trashCoupon.min_spend) }}
-            </Td>
+            <Td> $ {{ formattedAmount(trashCoupon.min_spend) }} </Td>
 
             <Td>
               {{ trashCoupon.max_uses }}

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\RecaptchaRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -33,6 +34,7 @@ class CouponRequest extends FormRequest
             "start_date"=>["required","date"],
             "end_date"=>["required","date"],
             "max_uses"=>["required","numeric"],
+            'captcha_token'  => ['required',new RecaptchaRule()],
         ];
 
         $route = $this->route();
@@ -65,6 +67,7 @@ class CouponRequest extends FormRequest
             "end_date.date" => "The end date is not a valid date.",
             "max_uses.required" => "The max uses field is required.",
             "max_uses.numeric" => "The max uses must be a number.",
+            "captcha_token.required"=>"The captcha token is required",
         ];
     }
 }

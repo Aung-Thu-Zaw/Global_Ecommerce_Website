@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Admin\Coupons\CreateCouponAction;
+use App\Actions\Admin\Coupons\UpdateCouponAction;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\CouponRequest;
@@ -31,30 +33,36 @@ class AdminCouponController extends Controller
 
     public function store(CouponRequest $request): RedirectResponse
     {
-        Coupon::create($request->validated());
+        (new CreateCouponAction())->handle($request->validated());
 
-        return to_route("admin.coupons.index", "per_page=$request->per_page")->with("success", "Coupon has been successfully created.");
+        $urlStringQuery="page=1&per_page=$request->per_page&sort=id&direction=desc";
+
+        return to_route("admin.coupons.index", $urlStringQuery)->with("success", "Coupon has been successfully created.");
     }
 
-    public function edit(Coupon $coupon): Response|ResponseFactory
+    public function edit(Request $request, Coupon $coupon): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return inertia("Admin/Coupons/Edit", compact("coupon", "paginate"));
+        return inertia("Admin/Coupons/Edit", compact("coupon", "queryStringParams"));
     }
 
     public function update(CouponRequest $request, Coupon $coupon): RedirectResponse
     {
-        $coupon->update($request->validated());
+        (new UpdateCouponAction())->handle($request->validated(), $coupon);
 
-        return to_route("admin.coupons.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Coupon has been successfully updated.");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+
+        return to_route("admin.coupons.index", $urlStringQuery)->with("success", "Coupon has been successfully updated.");
     }
 
     public function destroy(Request $request, Coupon $coupon): RedirectResponse
     {
         $coupon->delete();
 
-        return to_route("admin.coupons.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Coupon has been successfully deleted.");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+
+        return to_route("admin.coupons.index", $urlStringQuery)->with("success", "Coupon has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -68,22 +76,26 @@ class AdminCouponController extends Controller
         return inertia("Admin/Coupons/Trash", compact("trashCoupons"));
     }
 
-    public function restore(Request $request, int $id): RedirectResponse
+    public function restore(Request $request, int $trashCouponId): RedirectResponse
     {
-        $coupon =Coupon::onlyTrashed()->findOrFail($id);
+        $coupon =Coupon::onlyTrashed()->findOrFail($trashCouponId);
 
         $coupon->restore();
 
-        return to_route('admin.coupons.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Coupon has been successfully restored.");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+
+        return to_route('admin.coupons.trash', $urlStringQuery)->with("success", "Coupon has been successfully restored.");
     }
 
-    public function forceDelete(Request $request, int $id): RedirectResponse
+    public function forceDelete(Request $request, int $trashCouponId): RedirectResponse
     {
-        $coupon = Coupon::onlyTrashed()->findOrFail($id);
+        $coupon = Coupon::onlyTrashed()->findOrFail($trashCouponId);
 
         $coupon->forceDelete();
 
-        return to_route('admin.coupons.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The coupon has been permanently deleted");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+
+        return to_route('admin.coupons.trash', $urlStringQuery)->with("success", "The coupon has been permanently deleted.");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -91,9 +103,13 @@ class AdminCouponController extends Controller
         $coupons = Coupon::onlyTrashed()->get();
 
         $coupons->each(function ($coupon) {
+
             $coupon->forceDelete();
+
         });
 
-        return to_route('admin.coupons.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Coupons have been successfully deleted.");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+
+        return to_route('admin.coupons.trash', $urlStringQuery)->with("success", "Coupons have been successfully deleted.");
     }
 }

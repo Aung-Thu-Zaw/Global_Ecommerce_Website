@@ -32,7 +32,7 @@ const formattedAmount = (amount) => {
 };
 
 // Formatted Discount Type
-const formatDiscountType = (suggestionType) => {
+const formattedDiscountType = (suggestionType) => {
   const words = suggestionType.split("_");
   const capitalizedWords = words.map(
     (word) => word.charAt(0).toUpperCase() + word.slice(1)
@@ -265,7 +265,7 @@ if (usePage().props.flash.successMessage) {
             <input
               type="text"
               class="search-input"
-              placeholder="Search"
+              placeholder="Search by code"
               v-model="params.search"
             />
 
@@ -345,7 +345,7 @@ if (usePage().props.flash.successMessage) {
             </Td>
 
             <Td>
-              {{ formatDiscountType(coupon.discount_type) }}
+              {{ formattedDiscountType(coupon.discount_type) }}
             </Td>
 
             <Td>
@@ -353,7 +353,7 @@ if (usePage().props.flash.successMessage) {
                 $ {{ formattedAmount(coupon.discount_amount) }}
               </span>
               <span v-if="coupon.discount_type === 'percentage'">
-                % {{ coupon.discount_amount }}
+                % {{ formattedAmount(coupon.discount_amount) }}
               </span>
             </Td>
 
