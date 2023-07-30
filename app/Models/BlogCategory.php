@@ -92,10 +92,10 @@ class BlogCategory extends Model
         );
     }
 
-    public static function deleteImage(BlogCategory $blogCategory): void
+    public static function deleteImage(string $blogCategoryImage): void
     {
-        if (!empty($blogCategory->image) && file_exists(storage_path("app/public/blog-categories/".pathinfo($blogCategory->image, PATHINFO_BASENAME)))) {
-            unlink(storage_path("app/public/blog-categories/".pathinfo($blogCategory->image, PATHINFO_BASENAME)));
+        if (!empty($blogCategoryImage) && file_exists(storage_path("app/public/blog-categories/".pathinfo($blogCategoryImage, PATHINFO_BASENAME)))) {
+            unlink(storage_path("app/public/blog-categories/".pathinfo($blogCategoryImage, PATHINFO_BASENAME)));
         }
     }
 }

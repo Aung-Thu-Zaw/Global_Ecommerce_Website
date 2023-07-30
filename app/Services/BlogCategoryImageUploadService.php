@@ -3,55 +3,34 @@
 namespace App\Services;
 
 use App\Models\BlogCategory;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
 
 class BlogCategoryImageUploadService
 {
-    public function createImage(Request $request): ?string
+    public function createImage(UploadedFile $image): string
     {
-        if ($request->hasFile("image")) {
-            $request->validate([
-                "image"=>["required","image","mimes:png,jpg,jpeg,svg,webp,gif"]
-            ]);
+        $originalName=$image->getClientOriginalName();
 
+        $finalName=time()."-".$originalName;
 
-            $file=$request->file("image");
+        $image->move(storage_path("app/public/blog-categories/"), $finalName);
 
-            /** @var \Illuminate\Http\UploadedFile $file */
-
-            $extension=$file->extension();
-            $finalName= Str::slug($request->name, '-')."."."$extension";
-
-            $file->move(storage_path("app/public/blog-categories/"), $finalName);
-
-            return $finalName;
-        } else {
-            return null;
-        }
+        return $finalName;
     }
 
-    public function updateImage(Request $request, BlogCategory $blogCategory): string
+    public function updateImage(UploadedFile $image, string|null $blogCategoryImage): string
     {
-        if ($request->hasFile("image")) {
-            $request->validate([
-                "image"=>["required","image","mimes:png,jpg,jpeg,svg,webp,gif"]
-            ]);
+        if(is_string($blogCategoryImage)) {
 
-            BlogCategory::deleteImage($blogCategory);
-
-            $file=$request->file("image");
-
-            /** @var \Illuminate\Http\UploadedFile $file */
-
-            $extension=$file->extension();
-            $finalName= Str::slug($request->name, '-')."."."$extension";
-
-            $file->move(storage_path("app/public/blog-categories/"), $finalName);
-
-            return $finalName;
-        } else {
-            return $blogCategory->image;
+            BlogCategory::deleteImage($blogCategoryImage);
         }
+
+        $originalName=$image->getClientOriginalName();
+
+        $finalName=time()."-".$originalName;
+
+        $image->move(storage_path("app/public/blog-categories/"), $finalName);
+
+        return $finalName;
     }
 }

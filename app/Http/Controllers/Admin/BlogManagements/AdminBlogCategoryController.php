@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin\BlogManagements;
 
+use App\Actions\Admin\BlogManagements\BlogCategories\CreateBlogCategoryAction;
+use App\Actions\Admin\BlogManagements\BlogCategories\UpdateBlogCategoryAction;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\BlogCategoryRequest;
 use App\Models\BlogCategory;
-use App\Services\BlogCategoryImageUploadService;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
@@ -30,34 +31,38 @@ class AdminBlogCategoryController extends Controller
         return inertia("Admin/BlogManagements/BlogCategories/Create", compact("per_page"));
     }
 
-    public function store(BlogCategoryRequest $request, BlogCategoryImageUploadService $blogCategoryImageUploadService): RedirectResponse
+    public function store(BlogCategoryRequest $request): RedirectResponse
     {
-        BlogCategory::create($request->validated()+["image"=>$blogCategoryImageUploadService->createImage($request)]);
+        (new CreateBlogCategoryAction())->handle($request->validated());
 
-        return to_route("admin.blogs.categories.index", "per_page=$request->per_page")->with("success", "Blog category has been successfully created.");
+        $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
+
+        return to_route("admin.blogs.categories.index", $queryStringParams)->with("success", "Blog category has been successfully created.");
     }
 
-    public function edit(BlogCategory $blogCategory): Response|ResponseFactory
+    public function edit(Request $request, BlogCategory $blogCategory): Response|ResponseFactory
     {
-        $queryStringParams=[ "page"=>request("page"),"per_page"=>request("per_page"),"sort"=>request("sort"),"direction"=>request("direction")];
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
         return inertia("Admin/BlogManagements/BlogCategories/Edit", compact("blogCategory", "queryStringParams"));
     }
 
-    public function update(BlogCategoryRequest $request, BlogCategory $blogCategory, BlogCategoryImageUploadService $blogCategoryImageUploadService): RedirectResponse
+    public function update(BlogCategoryRequest $request, BlogCategory $blogCategory): RedirectResponse
     {
-        $blogCategory->update($request->validated()+["image"=>$blogCategoryImageUploadService->updateImage($request, $blogCategory)]);
+        (new UpdateBlogCategoryAction())->handle($request->validated(), $blogCategory);
 
-        return to_route("admin.blogs.categories.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
-             ->with("success", "Blog category has been successfully updated.");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route("admin.blogs.categories.index", $queryStringParams)->with("success", "Blog category has been successfully updated.");
     }
 
     public function destroy(Request $request, BlogCategory $blogCategory): RedirectResponse
     {
         $blogCategory->delete();
 
-        return to_route("admin.blogs.categories.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
-             ->with("success", "Blog category has been successfully deleted.");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route("admin.blogs.categories.index", $queryStringParams)->with("success", "Blog category has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -71,26 +76,28 @@ class AdminBlogCategoryController extends Controller
         return inertia("Admin/BlogManagements/BlogCategories/Trash", compact("trashBlogCategories"));
     }
 
-    public function restore(Request $request, int $blogCategoryId): RedirectResponse
+    public function restore(Request $request, int $trashBlogCategoryId): RedirectResponse
     {
-        $blogCategory = BlogCategory::onlyTrashed()->findOrFail($blogCategoryId);
+        $blogCategory = BlogCategory::onlyTrashed()->findOrFail($trashBlogCategoryId);
 
         $blogCategory->restore();
 
-        return to_route('admin.blogs.categories.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
-             ->with("success", "Blog category has been successfully restored.");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route('admin.blogs.categories.trash', $queryStringParams)->with("success", "Blog category has been successfully restored.");
     }
 
-    public function forceDelete(Request $request, int $blogCategoryId): RedirectResponse
+    public function forceDelete(Request $request, int $trashBlogCategoryId): RedirectResponse
     {
-        $blogCategory = BlogCategory::onlyTrashed()->findOrFail($blogCategoryId);
+        $blogCategory = BlogCategory::onlyTrashed()->findOrFail($trashBlogCategoryId);
 
-        BlogCategory::deleteImage($blogCategory);
+        BlogCategory::deleteImage($blogCategory->image);
 
         $blogCategory->forceDelete();
 
-        return to_route('admin.blogs.categories.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
-             ->with("success", "The blog category has been permanently deleted.");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route('admin.blogs.categories.trash', $queryStringParams)->with("success", "The blog category has been permanently deleted.");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -99,13 +106,14 @@ class AdminBlogCategoryController extends Controller
 
         $blogCategories->each(function ($blogCategory) {
 
-            BlogCategory::deleteImage($blogCategory);
+            BlogCategory::deleteImage($blogCategory->image);
 
             $blogCategory->forceDelete();
 
         });
 
-        return to_route('admin.blogs.categories.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
-             ->with("success", "Blog categories have been successfully deleted.");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route('admin.blogs.categories.trash', $queryStringParams)->with("success", "Blog categories have been successfully deleted.");
     }
 }
