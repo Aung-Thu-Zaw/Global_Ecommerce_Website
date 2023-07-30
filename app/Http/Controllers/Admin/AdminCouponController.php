@@ -35,9 +35,9 @@ class AdminCouponController extends Controller
     {
         (new CreateCouponAction())->handle($request->validated());
 
-        $urlStringQuery="page=1&per_page=$request->per_page&sort=id&direction=desc";
+        $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
 
-        return to_route("admin.coupons.index", $urlStringQuery)->with("success", "Coupon has been successfully created.");
+        return to_route("admin.coupons.index", $queryStringParams)->with("success", "Coupon has been successfully created.");
     }
 
     public function edit(Request $request, Coupon $coupon): Response|ResponseFactory
@@ -51,18 +51,18 @@ class AdminCouponController extends Controller
     {
         (new UpdateCouponAction())->handle($request->validated(), $coupon);
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.coupons.index", $urlStringQuery)->with("success", "Coupon has been successfully updated.");
+        return to_route("admin.coupons.index", $queryStringParams)->with("success", "Coupon has been successfully updated.");
     }
 
     public function destroy(Request $request, Coupon $coupon): RedirectResponse
     {
         $coupon->delete();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.coupons.index", $urlStringQuery)->with("success", "Coupon has been successfully deleted.");
+        return to_route("admin.coupons.index", $queryStringParams)->with("success", "Coupon has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -82,9 +82,9 @@ class AdminCouponController extends Controller
 
         $coupon->restore();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.coupons.trash', $urlStringQuery)->with("success", "Coupon has been successfully restored.");
+        return to_route('admin.coupons.trash', $queryStringParams)->with("success", "Coupon has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $trashCouponId): RedirectResponse
@@ -93,9 +93,9 @@ class AdminCouponController extends Controller
 
         $coupon->forceDelete();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.coupons.trash', $urlStringQuery)->with("success", "The coupon has been permanently deleted.");
+        return to_route('admin.coupons.trash', $queryStringParams)->with("success", "The coupon has been permanently deleted.");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -108,8 +108,8 @@ class AdminCouponController extends Controller
 
         });
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.coupons.trash', $urlStringQuery)->with("success", "Coupons have been successfully deleted.");
+        return to_route('admin.coupons.trash', $queryStringParams)->with("success", "Coupons have been successfully deleted.");
     }
 }

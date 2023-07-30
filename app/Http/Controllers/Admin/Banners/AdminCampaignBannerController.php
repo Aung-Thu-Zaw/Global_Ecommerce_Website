@@ -37,9 +37,9 @@ class AdminCampaignBannerController extends Controller
     {
         (new CreateCampaignBannerAction())->handle($request->validated());
 
-        $urlStringQuery="page=1&per_page=$request->per_page&sort=id&direction=desc";
+        $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
 
-        return to_route("admin.campaign-banners.index", $urlStringQuery)->with("success", "Campaign Banner has been successfully created.");
+        return to_route("admin.campaign-banners.index", $queryStringParams)->with("success", "Campaign Banner has been successfully created.");
     }
 
     public function edit(Request $request, CampaignBanner $campaignBanner): Response|ResponseFactory
@@ -53,18 +53,18 @@ class AdminCampaignBannerController extends Controller
     {
         (new UpdateCampaignBannerAction())->handle($request->validated(), $campaignBanner);
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.campaign-banners.index", $urlStringQuery)->with("success", "Campaign Banner has been successfully updated.");
+        return to_route("admin.campaign-banners.index", $queryStringParams)->with("success", "Campaign Banner has been successfully updated.");
     }
 
     public function destroy(Request $request, CampaignBanner $campaignBanner): RedirectResponse
     {
         $campaignBanner->delete();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.campaign-banners.index", $urlStringQuery)->with("success", "Campaign Banner has been successfully deleted.");
+        return to_route("admin.campaign-banners.index", $queryStringParams)->with("success", "Campaign Banner has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -84,9 +84,9 @@ class AdminCampaignBannerController extends Controller
 
         $campaignBanner->restore();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.campaign-banners.trash', $urlStringQuery)->with("success", "Campaign Banner has been successfully restored.");
+        return to_route('admin.campaign-banners.trash', $queryStringParams)->with("success", "Campaign Banner has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $trashCampaignBannerId): RedirectResponse
@@ -97,9 +97,9 @@ class AdminCampaignBannerController extends Controller
 
         $campaignBanner->forceDelete();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.campaign-banners.trash', $urlStringQuery)->with("success", "Campaign Banner has been permanently deleted.");
+        return to_route('admin.campaign-banners.trash', $queryStringParams)->with("success", "Campaign Banner has been permanently deleted.");
     }
 
     public function handleShow(Request $request, int $campaignBannerId): RedirectResponse
@@ -113,9 +113,9 @@ class AdminCampaignBannerController extends Controller
             $campaignBanner->update(["status"=>"show"]);
         }
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.campaign-banners.index', $urlStringQuery)->with("success", "The campaign banner has been successfully displayed.");
+        return to_route('admin.campaign-banners.index', $queryStringParams)->with("success", "The campaign banner has been successfully displayed.");
     }
 
     public function handleHide(Request $request, int $campaignBannerId): RedirectResponse
@@ -127,9 +127,9 @@ class AdminCampaignBannerController extends Controller
             $campaignBanner->update(["status"=>"hide"]);
         }
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.campaign-banners.index', $urlStringQuery)->with("success", "The campaign banner has been successfully hidden.");
+        return to_route('admin.campaign-banners.index', $queryStringParams)->with("success", "The campaign banner has been successfully hidden.");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -144,8 +144,8 @@ class AdminCampaignBannerController extends Controller
 
         });
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.campaign-banners.trash', $urlStringQuery)->with("success", "Campaign Banners have been successfully deleted.");
+        return to_route('admin.campaign-banners.trash', $queryStringParams)->with("success", "Campaign Banners have been successfully deleted.");
     }
 }

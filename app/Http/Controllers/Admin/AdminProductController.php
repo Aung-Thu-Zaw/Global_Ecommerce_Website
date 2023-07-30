@@ -57,9 +57,9 @@ class AdminProductController extends Controller
     {
         (new CreateProductAction())->handle($request->validated());
 
-        $urlStringQuery="page=1&per_page=$request->per_page&sort=id&direction=desc";
+        $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
 
-        return to_route("admin.products.index", $urlStringQuery)->with("success", "Product has been successfully created.");
+        return to_route("admin.products.index", $queryStringParams)->with("success", "Product has been successfully created.");
     }
 
     public function edit(Request $request, Product $product): Response|ResponseFactory
@@ -83,18 +83,18 @@ class AdminProductController extends Controller
     {
         (new UpdateProductAction())->handle($request->validated(), $product);
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.products.index", $urlStringQuery)->with("success", "Product has been successfully updated.");
+        return to_route("admin.products.index", $queryStringParams)->with("success", "Product has been successfully updated.");
     }
 
     public function destroy(Request $request, Product $product): RedirectResponse
     {
         $product->delete();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.products.index", $urlStringQuery)->with("success", "Product has been successfully deleted.");
+        return to_route("admin.products.index", $queryStringParams)->with("success", "Product has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -114,9 +114,9 @@ class AdminProductController extends Controller
 
         $product->restore();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.products.trash', $urlStringQuery)->with("success", "Product has been successfully restored.");
+        return to_route('admin.products.trash', $queryStringParams)->with("success", "Product has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $trashProductId): RedirectResponse
@@ -135,9 +135,9 @@ class AdminProductController extends Controller
 
         $product->forceDelete();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.products.trash', $urlStringQuery)->with("success", "Product has been permanently deleted.");
+        return to_route('admin.products.trash', $queryStringParams)->with("success", "Product has been permanently deleted.");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -160,20 +160,20 @@ class AdminProductController extends Controller
 
         });
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.products.trash', $urlStringQuery)->with("success", "Products have been successfully deleted.");
+        return to_route('admin.products.trash', $queryStringParams)->with("success", "Products have been successfully deleted.");
     }
 
     public function handleStatus(Request $request, Product $product): RedirectResponse
     {
         $product->update(["status"=>$request->status]);
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
         $message=$request->status==="pending" ? "Product has been successfully disapproved" : "Product has been successfully approved";
 
-        return to_route('admin.products.index', $urlStringQuery)->with("success", $message);
+        return to_route('admin.products.index', $queryStringParams)->with("success", $message);
 
     }
 }

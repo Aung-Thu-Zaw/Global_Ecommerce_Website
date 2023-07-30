@@ -41,9 +41,9 @@ class AdminCategoryController extends Controller
     {
         (new CreateCategoryAction())->handle($request->validated());
 
-        $urlStringQuery="page=1&per_page=$request->per_page&sort=id&direction=desc";
+        $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
 
-        return to_route("admin.categories.index", $urlStringQuery)->with("success", "Category has been successfully created.");
+        return to_route("admin.categories.index", $queryStringParams)->with("success", "Category has been successfully created.");
     }
 
     public function edit(Request $request, Category $category): Response|ResponseFactory
@@ -59,18 +59,18 @@ class AdminCategoryController extends Controller
     {
         (new UpdateCategoryAction())->handle($request->validated(), $category);
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.categories.index", $urlStringQuery)->with("success", "Category has been successfully updated.");
+        return to_route("admin.categories.index", $queryStringParams)->with("success", "Category has been successfully updated.");
     }
 
     public function destroy(Request $request, Category $category): RedirectResponse
     {
         $category->delete();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.categories.index", $urlStringQuery)->with("success", "Category has been successfully deleted.");
+        return to_route("admin.categories.index", $queryStringParams)->with("success", "Category has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -90,9 +90,9 @@ class AdminCategoryController extends Controller
 
         $category->restore();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.categories.trash', $urlStringQuery)->with("success", "Category has been successfully restored.");
+        return to_route('admin.categories.trash', $queryStringParams)->with("success", "Category has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $trashCategoryId): RedirectResponse
@@ -103,9 +103,9 @@ class AdminCategoryController extends Controller
 
         $category->forceDelete();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.categories.trash', $urlStringQuery)->with("success", "The category has been permanently deleted.");
+        return to_route('admin.categories.trash', $queryStringParams)->with("success", "The category has been permanently deleted.");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -120,8 +120,8 @@ class AdminCategoryController extends Controller
 
         });
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.categories.trash', $urlStringQuery)->with("success", "Categories have been successfully deleted.");
+        return to_route('admin.categories.trash', $queryStringParams)->with("success", "Categories have been successfully deleted.");
     }
 }

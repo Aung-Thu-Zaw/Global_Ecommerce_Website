@@ -35,9 +35,9 @@ class AdminProductBannerController extends Controller
     {
         (new CreateProductBannerAction())->handle($request->validated());
 
-        $urlStringQuery="page=1&per_page=$request->per_page&sort=id&direction=desc";
+        $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
 
-        return to_route("admin.product-banners.index", $urlStringQuery)->with("success", "Product Banner has been successfully created.");
+        return to_route("admin.product-banners.index", $queryStringParams)->with("success", "Product Banner has been successfully created.");
     }
 
     public function edit(Request $request, ProductBanner $productBanner): Response|ResponseFactory
@@ -51,18 +51,18 @@ class AdminProductBannerController extends Controller
     {
         (new UpdateProductBannerAction())->handle($request->validated(), $productBanner);
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.product-banners.index", $urlStringQuery)->with("success", "Product Banner has been successfully updated.");
+        return to_route("admin.product-banners.index", $queryStringParams)->with("success", "Product Banner has been successfully updated.");
     }
 
     public function destroy(Request $request, ProductBanner $productBanner): RedirectResponse
     {
         $productBanner->delete();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.product-banners.index", $urlStringQuery)->with("success", "Product Banner has been successfully deleted.");
+        return to_route("admin.product-banners.index", $queryStringParams)->with("success", "Product Banner has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -82,9 +82,9 @@ class AdminProductBannerController extends Controller
 
         $productBanner->restore();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.product-banners.trash', $urlStringQuery)->with("success", "Product Banner has been successfully restored.");
+        return to_route('admin.product-banners.trash', $queryStringParams)->with("success", "Product Banner has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $trashProductBannerId): RedirectResponse
@@ -95,9 +95,9 @@ class AdminProductBannerController extends Controller
 
         $productBanner->forceDelete();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.product-banners.trash', $urlStringQuery)->with("success", "Product Banner has been permanently deleted.");
+        return to_route('admin.product-banners.trash', $queryStringParams)->with("success", "Product Banner has been permanently deleted.");
     }
 
     public function handleShow(Request $request, int $productBannerId): RedirectResponse
@@ -106,9 +106,9 @@ class AdminProductBannerController extends Controller
 
         if ($countProductBanners >= 3) {
 
-            $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+            $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-            return to_route('admin.product-banners.index', $urlStringQuery)->with("error", "You can't display the product banner. Only 3 product banners are allowed.");
+            return to_route('admin.product-banners.index', $queryStringParams)->with("error", "You can't display the product banner. Only 3 product banners are allowed.");
 
         }
 
@@ -119,9 +119,9 @@ class AdminProductBannerController extends Controller
             $productBanner->update(["status"=>"show"]);
         }
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.product-banners.index', $urlStringQuery)->with("success", "Product Banner has been successfully displayed.");
+        return to_route('admin.product-banners.index', $queryStringParams)->with("success", "Product Banner has been successfully displayed.");
     }
 
     public function handleHide(Request $request, int $productBannerId): RedirectResponse
@@ -133,9 +133,9 @@ class AdminProductBannerController extends Controller
             $productBanner->update(["status"=>"hide"]);
         }
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.product-banners.index', $urlStringQuery)->with("success", "Product Banner has been successfully hidden.");
+        return to_route('admin.product-banners.index', $queryStringParams)->with("success", "Product Banner has been successfully hidden.");
     }
 
 
@@ -151,8 +151,8 @@ class AdminProductBannerController extends Controller
 
         });
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.product-banners.trash', $urlStringQuery)->with("success", "Product Banners have been successfully deleted.");
+        return to_route('admin.product-banners.trash', $queryStringParams)->with("success", "Product Banners have been successfully deleted.");
     }
 }

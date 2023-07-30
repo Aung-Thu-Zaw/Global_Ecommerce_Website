@@ -35,9 +35,9 @@ class AdminLanguageController extends Controller
     {
         (new CreateLanguageAction())->handle($request->validated());
 
-        $urlStringQuery="page=1&per_page=$request->per_page&sort=id&direction=desc";
+        $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
 
-        return to_route("admin.languages.index", $urlStringQuery)->with("success", "Language has been successfully created.");
+        return to_route("admin.languages.index", $queryStringParams)->with("success", "Language has been successfully created.");
     }
 
     public function edit(Request $request, Language $language): Response|ResponseFactory
@@ -51,18 +51,18 @@ class AdminLanguageController extends Controller
     {
         (new UpdateLanguageAction())->handle($request->validated(), $language);
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.languages.index", $urlStringQuery)->with("success", "Language has been successfully updated.");
+        return to_route("admin.languages.index", $queryStringParams)->with("success", "Language has been successfully updated.");
     }
 
     public function destroy(Request $request, Language $language): RedirectResponse
     {
         $language->delete();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.languages.index", $urlStringQuery)->with("success", "Language has been successfully deleted.");
+        return to_route("admin.languages.index", $queryStringParams)->with("success", "Language has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -82,9 +82,9 @@ class AdminLanguageController extends Controller
 
         $language->restore();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.languages.trash', $urlStringQuery)->with("success", "Language has been successfully restored.");
+        return to_route('admin.languages.trash', $queryStringParams)->with("success", "Language has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $trashLanguageId): RedirectResponse
@@ -95,9 +95,9 @@ class AdminLanguageController extends Controller
 
         $language->forceDelete();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.languages.trash', $urlStringQuery)->with("success", "The language has been permanently deleted");
+        return to_route('admin.languages.trash', $queryStringParams)->with("success", "The language has been permanently deleted");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -112,9 +112,9 @@ class AdminLanguageController extends Controller
 
         });
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.languages.trash', $urlStringQuery)->with("success", "Languages have been successfully deleted.");
+        return to_route('admin.languages.trash', $queryStringParams)->with("success", "Languages have been successfully deleted.");
     }
 
     public function languageDetail(Request $request, Language $language): Response|ResponseFactory

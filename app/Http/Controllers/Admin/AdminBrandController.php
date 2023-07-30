@@ -42,9 +42,9 @@ class AdminBrandController extends Controller
     {
         (new CreateBrandAction())->handle($request->validated());
 
-        $urlStringQuery="page=1&per_page=$request->per_page&sort=id&direction=desc";
+        $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
 
-        return to_route("admin.brands.index", $urlStringQuery)->with("success", "Brand has been successfully created.");
+        return to_route("admin.brands.index", $queryStringParams)->with("success", "Brand has been successfully created.");
     }
 
     public function edit(Request $request, Brand $brand): Response|ResponseFactory
@@ -60,18 +60,18 @@ class AdminBrandController extends Controller
     {
         (new UpdateBrandAction())->handle($request->validated(), $brand);
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.brands.index", $urlStringQuery)->with("success", "Brand has been successfully updated.");
+        return to_route("admin.brands.index", $queryStringParams)->with("success", "Brand has been successfully updated.");
     }
 
     public function destroy(Request $request, Brand $brand): RedirectResponse
     {
         $brand->delete();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.brands.index", $urlStringQuery)->with("success", "Brand has been successfully deleted.");
+        return to_route("admin.brands.index", $queryStringParams)->with("success", "Brand has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -91,9 +91,9 @@ class AdminBrandController extends Controller
 
         $brand->restore();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.brands.trash', $urlStringQuery)->with("success", "Brand has been successfully restored.");
+        return to_route('admin.brands.trash', $queryStringParams)->with("success", "Brand has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $trashBrandId): RedirectResponse
@@ -104,9 +104,9 @@ class AdminBrandController extends Controller
 
         $brand->forceDelete();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.brands.trash', $urlStringQuery)->with("success", "The brand has been permanently deleted");
+        return to_route('admin.brands.trash', $queryStringParams)->with("success", "The brand has been permanently deleted");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -121,8 +121,8 @@ class AdminBrandController extends Controller
 
         });
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.brands.trash', $urlStringQuery)->with("success", "Brands have been successfully deleted.");
+        return to_route('admin.brands.trash', $queryStringParams)->with("success", "Brands have been successfully deleted.");
     }
 }

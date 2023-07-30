@@ -47,9 +47,9 @@ class AdminRoleInPermissionController extends Controller
     {
         (new CreateRoleInPermissionsAction())->handle($request->validated());
 
-        $urlStringQuery="page=1&per_page=$request->per_page&sort=id&direction=desc";
+        $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
 
-        return to_route("admin.role-in-permissions.index", $urlStringQuery)->with("success", "Role in permissions has been successfully created.");
+        return to_route("admin.role-in-permissions.index", $queryStringParams)->with("success", "Role in permissions has been successfully created.");
     }
 
     public function edit(Request $request, Role $role): Response|ResponseFactory
@@ -69,17 +69,17 @@ class AdminRoleInPermissionController extends Controller
     {
         (new UpdateRoleInPermissionsAction())->handle($request->validated(), $role);
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.role-in-permissions.index", $urlStringQuery)->with("success", "Role in permissions has been successfully updated.");
+        return to_route("admin.role-in-permissions.index", $queryStringParams)->with("success", "Role in permissions has been successfully updated.");
     }
 
     public function destroy(Request $request, Role $role): RedirectResponse
     {
         $role->permissions()->detach();
 
-        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.role-in-permissions.index", $urlStringQuery)->with("success", "Role in permissions has been successfully deleted.");
+        return to_route("admin.role-in-permissions.index", $queryStringParams)->with("success", "Role in permissions has been successfully deleted.");
     }
 }
