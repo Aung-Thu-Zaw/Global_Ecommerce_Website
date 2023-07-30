@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\RecaptchaRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TermsAndConditionsRequest extends FormRequest
@@ -25,7 +26,8 @@ class TermsAndConditionsRequest extends FormRequest
     {
         return [
             "title"=>["required","string"],
-            "description"=>["required","string"]
+            "description"=>["required","string"],
+            "captcha_token"  => ["required",new RecaptchaRule()],
         ];
     }
 
@@ -39,6 +41,7 @@ class TermsAndConditionsRequest extends FormRequest
             "title.string" =>  "The title must be a string.",
             "description.required" =>  "The description field is required.",
             "description.string" =>  "The description must be a string.",
+            "captcha_token.required"=>"The captcha token is required",
         ];
     }
 }

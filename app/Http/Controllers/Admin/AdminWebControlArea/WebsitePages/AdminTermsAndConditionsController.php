@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\AdminWebControlArea\WebsitePages;
 
+use App\Actions\Admin\AdminWebControlArea\WebsitePages\TermsAndConditions\UpdateTermsAndConditionsAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TermsAndConditionsRequest;
 use App\Models\Page;
@@ -20,7 +21,7 @@ class AdminTermsAndConditionsController extends Controller
 
     public function update(TermsAndConditionsRequest $request, Page $page): RedirectResponse
     {
-        $page->update($request->validated());
+        (new UpdateTermsAndConditionsAction())->handle($request->validated(), $page);
 
         return back()->with("success", "Terms and conditions has been successfully updated.");
     }

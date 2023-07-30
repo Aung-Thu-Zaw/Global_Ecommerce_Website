@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\AdminWebControlArea\WebsitePages;
 
+use App\Actions\Admin\AdminWebControlArea\WebsitePages\PrivacyPolicy\UpdatePrivacyPolicyAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PrivacyPolicyRequest;
 use App\Models\Page;
@@ -20,7 +21,7 @@ class AdminPrivacyPolicyController extends Controller
 
     public function update(PrivacyPolicyRequest $request, Page $page): RedirectResponse
     {
-        $page->update($request->validated());
+        (new UpdatePrivacyPolicyAction())->handle($request->validated(), $page);
 
         return back()->with("success", "Privacy policy has been successfully updated.");
     }

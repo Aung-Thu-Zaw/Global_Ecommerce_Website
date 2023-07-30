@@ -1398,7 +1398,7 @@
                   class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
                 >
                   <!-- Offices Section -->
-                  <li
+                  <!-- <li
                     class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
                     :class="{
                       'text-blue-500 hover:text-blue-600': $page.url.startsWith(
@@ -1417,7 +1417,7 @@
                     >
                       {{ __("OUR_OFFICES") }}
                     </Link>
-                  </li>
+                  </li> -->
 
                   <!-- Terms And Conditions Section -->
                   <li
@@ -1448,7 +1448,7 @@
                     </Link>
                   </li>
                   <!-- Returns And Refunds Section -->
-                  <li
+                  <!-- <li
                     class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
                     :class="{
                       'text-blue-500 hover:text-blue-600': $page.url.startsWith(
@@ -1467,7 +1467,7 @@
                     >
                       {{ __("RETURNS_AND_REFUNDS") }}
                     </Link>
-                  </li>
+                  </li> -->
                 </ul>
               </li>
             </ul>
