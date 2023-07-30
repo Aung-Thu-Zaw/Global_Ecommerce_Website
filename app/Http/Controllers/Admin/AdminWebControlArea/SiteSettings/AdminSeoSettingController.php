@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\AdminWebControlArea\SiteSettings;
 
+use App\Actions\Admin\AdminWebControlArea\Settings\SeoSetting\UpdateSeoSettingAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SeoSettingRequest;
 use App\Models\SeoSetting;
@@ -20,7 +21,7 @@ class AdminSeoSettingController extends Controller
 
     public function update(SeoSettingRequest $request, SeoSetting $seoSetting): RedirectResponse
     {
-        $seoSetting->update($request->validated());
+        (new UpdateSeoSettingAction())->handle($request->validated(), $seoSetting);
 
         return back()->with("success", "SEO Setting has been successfully updated.");
     }

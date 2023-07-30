@@ -3,65 +3,39 @@
 namespace App\Services;
 
 use App\Models\WebsiteSetting;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
 
 class WebsiteSettingImageUploadService
 {
-    public function uploadLogo(Request $request, WebsiteSetting $websiteSetting): string
+    public function uploadLogo(UploadedFile $image, string|null $logoImage): string
     {
-        if ($request->hasFile("logo")) {
+        if(is_string($logoImage)) {
 
-            $request->validate([
-                "logo"=>["nullable","image","mimes:png,jpg,jpeg,webp,gif"],
-            ]);
-
-            WebsiteSetting::deleteLogo($websiteSetting);
-
-
-            /** @var \Illuminate\Http\UploadedFile $file */
-
-            $file=$request->file("logo");
-
-            $originalName=$file->getClientOriginalName();
-
-            $extension=$file->extension();
-
-            $finalName= Str::slug(pathinfo($originalName, PATHINFO_FILENAME), '-')."."."$extension";
-
-            $file->move(storage_path("app/public/website-settings/"), $finalName);
-
-            return $finalName;
-        } else {
-            return $websiteSetting->logo;
+            WebsiteSetting::deleteLogo($logoImage);
         }
+
+        $originalName=$image->getClientOriginalName();
+
+        $finalName=time()."-".$originalName;
+
+        $image->move(storage_path("app/public/website-settings/"), $finalName);
+
+        return $finalName;
     }
 
-
-    public function uploadFavicon(Request $request, WebsiteSetting $websiteSetting): string
+    public function uploadFavicon(UploadedFile $image, string|null $faviconImage): string
     {
-        if ($request->hasFile("favicon")) {
-            $request->validate([
-                "favicon"=>["nullable","image","mimes:png,jpg,jpeg,webp,gif"],
-            ]);
+        if(is_string($faviconImage)) {
 
-            WebsiteSetting::deleteFavicon($websiteSetting);
-
-            /** @var \Illuminate\Http\UploadedFile $file */
-            $file=$request->file("favicon");
-
-
-            $originalName=$file->getClientOriginalName();
-
-            $extension=$file->extension();
-
-            $finalName= Str::slug(pathinfo($originalName, PATHINFO_FILENAME), '-')."."."$extension";
-
-            $file->move(storage_path("app/public/website-settings/"), $finalName);
-
-            return $finalName;
-        } else {
-            return $websiteSetting->favicon;
+            WebsiteSetting::deleteFavicon($faviconImage);
         }
+
+        $originalName=$image->getClientOriginalName();
+
+        $finalName=time()."-".$originalName;
+
+        $image->move(storage_path("app/public/website-settings/"), $finalName);
+
+        return $finalName;
     }
 }

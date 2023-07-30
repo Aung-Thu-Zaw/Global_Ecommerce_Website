@@ -34,17 +34,17 @@ class WebsiteSetting extends Model
         );
     }
 
-    public static function deleteLogo(WebsiteSetting $websiteSetting): void
+    public static function deleteLogo(string $logoImage): void
     {
-        if (!empty($websiteSetting->logo) && file_exists(storage_path("app/public/website-settings/".pathinfo($websiteSetting->logo, PATHINFO_BASENAME)))) {
-            unlink(storage_path("app/public/website-settings/".pathinfo($websiteSetting->logo, PATHINFO_BASENAME)));
+        if (!empty($logoImage) && file_exists(storage_path("app/public/website-settings/".pathinfo($logoImage, PATHINFO_BASENAME)))) {
+            unlink(storage_path("app/public/website-settings/".pathinfo($logoImage, PATHINFO_BASENAME)));
         }
     }
 
-    public static function deleteFavicon(WebsiteSetting $websiteSetting): void
+    public static function deleteFavicon(string $faviconImage): void
     {
-        if (!empty($websiteSetting->favicon) && file_exists(storage_path("app/public/website-settings/".pathinfo($websiteSetting->favicon, PATHINFO_BASENAME)))) {
-            unlink(storage_path("app/public/website-settings/".pathinfo($websiteSetting->favicon, PATHINFO_BASENAME)));
+        if (!empty($faviconImage) && file_exists(storage_path("app/public/website-settings/".pathinfo($faviconImage, PATHINFO_BASENAME)))) {
+            unlink(storage_path("app/public/website-settings/".pathinfo($faviconImage, PATHINFO_BASENAME)));
         }
     }
 }

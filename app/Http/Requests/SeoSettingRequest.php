@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\RecaptchaRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SeoSettingRequest extends FormRequest
@@ -28,10 +29,11 @@ class SeoSettingRequest extends FormRequest
             "meta_author"=>["nullable","string"],
             "meta_keyword"=>["nullable","string"],
             "meta_description"=>["nullable","string"],
+            "captcha_token"  => ["required",new RecaptchaRule()],
         ];
     }
 
-        /**
+    /**
     *     @return array<string>
     */
     public function messages(): array
@@ -41,7 +43,7 @@ class SeoSettingRequest extends FormRequest
             "meta_author.string" => "The meta author must be a string.",
             "meta_keyword.string" => "The meta keyword must be a string.",
             "meta_description.string" => "The meta description must be a string.",
-
+            "captcha_token.required"=>"The captcha token is required",
         ];
     }
 }

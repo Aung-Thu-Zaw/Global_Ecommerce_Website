@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin\AdminWebControlArea\SiteSettings;
 
+use App\Actions\Admin\AdminWebControlArea\Settings\WebsiteSettings\UpdateWebsiteSettingAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WebsiteSettingRequest;
 use App\Models\WebsiteSetting;
-use App\Services\WebsiteSettingImageUploadService;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
@@ -19,12 +19,9 @@ class AdminWebsiteSettingController extends Controller
         return inertia("Admin/AdminWebControlArea/Settings/WebsiteSettings/Edit", compact("websiteSetting"));
     }
 
-    public function update(WebsiteSettingRequest $request, WebsiteSetting $websiteSetting, WebsiteSettingImageUploadService $websiteSettingImageUploadService): RedirectResponse
+    public function update(WebsiteSettingRequest $request, WebsiteSetting $websiteSetting): RedirectResponse
     {
-        $websiteSetting->update($request->validated()+[
-            "logo"=>$websiteSettingImageUploadService->uploadLogo($request, $websiteSetting),
-            "favicon"=>$websiteSettingImageUploadService->uploadFavicon($request, $websiteSetting)
-        ]);
+        (new UpdateWebsiteSettingAction())->handle($request->validated(), $websiteSetting);
 
         return back()->with("success", "Website Setting has been successfully updated.");
     }
