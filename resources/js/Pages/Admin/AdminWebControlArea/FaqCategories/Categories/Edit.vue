@@ -3,7 +3,7 @@ import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/BlogCategoryBreadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/FaqCategoryBreadcrumb.vue";
 import { ref } from "vue";
 import { Link, useForm, Head } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
@@ -130,15 +130,17 @@ const handleEditFaqCatrgory = async () => {
             as="button"
             :href="route('admin.faq-categories.categories.index')"
             :data="{
-              page: props.queryStringParams.page,
-              per_page: props.queryStringParams.per_page,
-              sort: props.queryStringParams.sort,
-              direction: props.queryStringParams.direction,
+              page: queryStringParams.page,
+              per_page: queryStringParams.per_page,
+              sort: queryStringParams.sort,
+              direction: queryStringParams.direction,
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+            class="goback-btn"
           >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
+            </span>
           </Link>
         </div>
       </div>
@@ -163,9 +165,7 @@ const handleEditFaqCatrgory = async () => {
 
           <!-- Edit Button -->
           <div class="mb-6">
-            <button
-              class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"
-            >
+            <button class="save-btn">
               <svg
                 v-if="processing"
                 aria-hidden="true"

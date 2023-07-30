@@ -2,13 +2,12 @@
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
-import ActiveStatus from "@/Components/Status/ActiveStatus.vue";
-import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
+import SortingArrows from "@/Components/Table/SortingArrows.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
 import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/CategoryBreadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/FaqCategoryBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { inject, reactive, watch, computed, ref } from "vue";
@@ -112,13 +111,14 @@ const updateSorting = (sort = "id") => {
 };
 
 // Handle Trash Category Restore
-const handleFaqCategoryRestore = async (trashFaqCategoryId) => {
+const handleRestoreTrashFaqCategory = async (trashFaqCategoryId) => {
   const result = await swal({
-    icon: "info",
+    icon: "question",
     title: "Are you sure you want to restore this faq category?",
     showCancelButton: true,
-    confirmButtonText: "Yes, restore",
-    confirmButtonColor: "#4d9be9",
+    confirmButtonText: "Yes, Restore It",
+    confirmButtonColor: "#2562c4",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -127,7 +127,7 @@ const handleFaqCategoryRestore = async (trashFaqCategoryId) => {
   if (result.isConfirmed) {
     router.post(
       route("admin.faq-categories.categories.restore", {
-        faq_category: trashFaqCategoryId,
+        trash_faq_category_id: trashFaqCategoryId,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
@@ -135,6 +135,7 @@ const handleFaqCategoryRestore = async (trashFaqCategoryId) => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -149,14 +150,15 @@ const handleFaqCategoryRestore = async (trashFaqCategoryId) => {
 };
 
 // Handle Trash Category Delete
-const handleFaqCategoryDelete = async (trashFaqCategoryId) => {
+const handleDeleteTrashFaqCategory = async (trashFaqCategoryId) => {
   const result = await swal({
-    icon: "warning",
+    icon: "question",
     title: "Are you sure you want to delete it from the trash?",
     text: "Faq Category in the trash will be permanetly deleted! You can't get it back.",
     showCancelButton: true,
-    confirmButtonText: "Yes, delete it !",
-    confirmButtonColor: "#ef4444",
+    confirmButtonText: "Yes, Delete it !",
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -165,13 +167,14 @@ const handleFaqCategoryDelete = async (trashFaqCategoryId) => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.faq-categories.categories.force.delete", {
-        faq_category: trashFaqCategoryId,
+        trash_faq_category_id: trashFaqCategoryId,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -186,14 +189,15 @@ const handleFaqCategoryDelete = async (trashFaqCategoryId) => {
 };
 
 // Handle Trash Category Delete Permanently
-const handlePermanentlyDelete = async () => {
+const handlePermanentlyDeleteTrashFaqCategoires = async () => {
   const result = await swal({
-    icon: "warning",
+    icon: "question",
     title: "Are you sure you want to delete it from the trash?",
     text: "All faq categories in the trash will be permanetly deleted! You can't get it back.",
     showCancelButton: true,
-    confirmButtonText: "Yes, delete it !",
-    confirmButtonColor: "#ef4444",
+    confirmButtonText: "Yes, Delete it !",
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -209,6 +213,7 @@ const handlePermanentlyDelete = async () => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -250,6 +255,7 @@ const faqCategoryTrashDelete = computed(() => {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li>
             <div class="flex items-center">
@@ -268,11 +274,11 @@ const faqCategoryTrashDelete = computed(() => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400 dark:hover:text-white"
-                >Faq Categories</span
+                >Categories</span
               >
             </div>
           </li>
-          <li aria-current="page">
+          <li>
             <div class="flex items-center">
               <svg
                 aria-hidden="true"
@@ -288,7 +294,7 @@ const faqCategoryTrashDelete = computed(() => {
                 ></path>
               </svg>
               <span
-                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400 dark:hover:text-white"
                 >Trash</span
               >
             </div>
@@ -306,10 +312,12 @@ const faqCategoryTrashDelete = computed(() => {
               sort: 'id',
               direction: 'desc',
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+            class="goback-btn"
           >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
+            </span>
           </Link>
         </div>
       </div>
@@ -319,24 +327,20 @@ const faqCategoryTrashDelete = computed(() => {
         <form class="w-[350px] relative">
           <input
             type="text"
-            class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
+            class="search-input"
             placeholder="Search by name"
             v-model="params.search"
           />
 
           <i
             v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+            class="fa-solid fa-xmark remove-search"
             @click="removeSearch"
           ></i>
         </form>
-
         <!-- Perpage Select Box -->
         <div class="ml-5">
-          <select
-            class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-            v-model="params.per_page"
-          >
+          <select class="perpage-selectbox" v-model="params.per_page">
             <option value="" selected disabled>Select</option>
             <option value="5">5</option>
             <option value="10">10</option>
@@ -355,91 +359,31 @@ const faqCategoryTrashDelete = computed(() => {
       >
         Faq Categories in the Trash will be automatically deleted after 60 days.
         <button
-          @click="handlePermanentlyDelete"
-          class="text-primary-500 rounded-md px-2 py-1 hover:bg-primary-200 hover:text-primary-600 transition-all hover:animate-bounce"
+          @click="handlePermanentlyDeleteTrashFaqCategoires"
+          class="empty-trash-btn"
         >
           Empty the trash now
         </button>
       </p>
 
-      <!-- Category Table Start -->
+      <!-- Trash Faq Category Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="id" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('name')">
             Name
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'name',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'name',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="name" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('deleted_at')">
             Deleted At
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'deleted_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'deleted_at',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'deleted_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'deleted_at',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="deleted_at" />
           </HeaderTh>
+
           <HeaderTh v-if="faqCategoryTrashRestore || faqCategoryTrashDelete">
             Action
           </HeaderTh>
@@ -463,33 +407,48 @@ const faqCategoryTrashDelete = computed(() => {
             </Td>
 
             <Td v-if="faqCategoryTrashRestore || faqCategoryTrashDelete">
+              <!-- Restore Button -->
               <button
                 v-if="faqCategoryTrashDelete"
-                @click="handleFaqCategoryRestore(trashFaqCategory.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
+                @click="handleRestoreTrashFaqCategory(trashFaqCategory.id)"
+                class="edit-btn group"
+                type="button"
               >
-                <i class="fa-solid fa-recycle"></i>
-                Restore
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-recycle"></i>
+                  Restore
+                </span>
               </button>
+
+              <!-- Delete Button -->
               <button
                 v-if="faqCategoryTrashDelete"
-                @click="handleFaqCategoryDelete(trashFaqCategory.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
+                @click="handleDeleteTrashFaqCategory(trashFaqCategory.id)"
+                class="delete-btn group"
+                type="button"
               >
-                <i class="fa-solid fa-trash"></i>
-                Delete Forever
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-trash-can"></i>
+                  Delete Forever
+                </span>
               </button>
             </Td>
           </Tr>
         </tbody>
       </TableContainer>
-      <!-- Category Table End -->
+      <!-- Trash Faq Category Table End -->
 
       <!-- No Data Row -->
       <NotAvaliableData v-if="!trashFaqCategories.data.length" />
 
       <!-- Pagination -->
-      <Pagination class="mt-6" :links="trashFaqCategories.links" />
+      <div v-if="trashFaqCategories.data.length" class="mt-6">
+        <p class="text-center text-sm text-gray-600 mb-3 font-bold">
+          Showing {{ trashFaqCategories.from }} - {{ trashFaqCategories.to }} of
+          {{ trashFaqCategories.total }}
+        </p>
+        <Pagination :links="trashFaqCategories.links" />
+      </div>
     </div>
   </AdminDashboardLayout>
 </template>

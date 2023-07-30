@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\RecaptchaRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class FaqSubCategoryRequest extends FormRequest
 {
@@ -13,7 +15,7 @@ class FaqSubCategoryRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +26,25 @@ class FaqSubCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "faq_category_id"=>["required",Rule::exists("faq_categories", "id")],
+            "name"=>["required","string","max:255",Rule::unique("faq_categories", "name")],
+            'captcha_token'  => ['required',new RecaptchaRule()],
+        ];
+    }
+
+    /**
+    *     @return array<string>
+    */
+    public function messages(): array
+    {
+        return [
+            "faq_category_id.required" =>  "The faq category id is required.",
+            "faq_category_id.exists" =>  "The selected faq category id is invalid.",
+            "name.required" => "The name field is required.",
+            "name.string" => "The name must be a string.",
+            "name.max" => "The name must not be greater than 255 characters.",
+            "name.unique" =>'The name has already been taken.',
+            "captcha_token.required"=>"The captcha token is required",
         ];
     }
 }

@@ -1,5 +1,6 @@
 <script setup>
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
+import SortingArrows from "@/Components/Table/SortingArrows.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -110,7 +111,7 @@ const updateSorting = (sort = "id") => {
 };
 
 // Handle Delete Faq Category
-const handleDeleteFaqCategory = async (faqCategory) => {
+const handleDelete = async (faqCategory) => {
   router.delete(
     route("admin.faq-categories.categories.destroy", {
       faq_category: faqCategory,
@@ -120,6 +121,7 @@ const handleDeleteFaqCategory = async (faqCategory) => {
       direction: params.direction,
     }),
     {
+      preserveScroll: true,
       onSuccess: () => {
         if (usePage().props.flash.successMessage) {
           swal({
@@ -133,7 +135,7 @@ const handleDeleteFaqCategory = async (faqCategory) => {
 };
 
 // Handle Delete Faq Category
-const handleDelete = async (faqCategory) => {
+const handleDeleteFaqCategory = async (faqCategory) => {
   if (faqCategory.faqSubCategories.length > 0) {
     const result = await swal({
       icon: "error",
@@ -142,29 +144,31 @@ const handleDelete = async (faqCategory) => {
       text: "If you click 'Delete, whatever!' button faq subcategory will be automatically deleted.You will be able to restore this faq category in the trash!",
       showCancelButton: true,
       confirmButtonText: "Delete, whatever!",
-      confirmButtonColor: "#ef4444",
+      confirmButtonColor: "#d52222",
+      cancelButtonColor: "#626262",
       timer: 20000,
       timerProgressBar: true,
       reverseButtons: true,
     });
     if (result.isConfirmed) {
-      handleDeleteFaqCategory(faqCategory.slug);
+      handleDelete(faqCategory.slug);
     }
   } else {
     const result = await swal({
-      icon: "warning",
+      icon: "question",
       title: "Are you sure you want to delete this faq category?",
       text: "You will be able to restore this faq category in the trash!",
       showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      confirmButtonColor: "#ef4444",
+      confirmButtonText: "Yes, Delete it!",
+      confirmButtonColor: "#d52222",
+      cancelButtonColor: "#626262",
       timer: 20000,
       timerProgressBar: true,
       reverseButtons: true,
     });
 
     if (result.isConfirmed) {
-      handleDeleteFaqCategory(faqCategory.slug);
+      handleDelete(faqCategory.slug);
     }
   }
 };
@@ -241,7 +245,7 @@ if (usePage().props.flash.successMessage) {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400 dark:hover:text-white"
-                >Faq Categories</span
+                >Categories</span
               >
             </div>
           </li>
@@ -258,10 +262,12 @@ if (usePage().props.flash.successMessage) {
               sort: 'id',
               direction: 'desc',
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
+            class="trash-btn group"
           >
-            <i class="fa-solid fa-trash"></i>
-            Trash
+            <span class="group-hover:animate-pulse">
+              <i class="fa-solid fa-trash-can-arrow-up"></i>
+              Trash
+            </span>
           </Link>
         </div>
       </div>
@@ -275,34 +281,33 @@ if (usePage().props.flash.successMessage) {
           :data="{
             per_page: params.per_page,
           }"
-          class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700"
+          class="add-btn"
         >
-          <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
-          Add Faq Category</Link
-        >
+          <span>
+            <i class="fa-solid fa-file-circle-plus"></i>
+            Add Faq Category
+          </span>
+        </Link>
+
         <div class="flex items-center ml-auto">
           <!-- Search Box -->
           <form class="w-[350px] relative">
             <input
               type="text"
-              class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
+              class="search-input"
               placeholder="Search by name"
               v-model="params.search"
             />
-
             <i
               v-if="params.search"
-              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+              class="fa-solid fa-xmark remove-search"
               @click="removeSearch"
             ></i>
           </form>
 
           <!-- Perpage Select Box -->
           <div class="ml-5">
-            <select
-              class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-              v-model="params.per_page"
-            >
+            <select class="perpage-selectbox" v-model="params.per_page">
               <option value="" disabled>Select</option>
               <option value="5">5</option>
               <option value="10">10</option>
@@ -320,79 +325,19 @@ if (usePage().props.flash.successMessage) {
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="id" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('name')">
             Name
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'name',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'name',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="name" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('created_at')">
             Created At
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'created_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'created_at',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'created_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'created_at',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="created_at" />
           </HeaderTh>
+
           <HeaderTh v-if="faqCategoryEdit || faqCategoryDelete">
             Action
           </HeaderTh>
@@ -413,6 +358,7 @@ if (usePage().props.flash.successMessage) {
             </Td>
 
             <Td v-if="faqCategoryEdit || faqCategoryDelete">
+              <!-- Edit Button -->
               <Link
                 v-if="faqCategoryEdit"
                 as="button"
@@ -428,18 +374,25 @@ if (usePage().props.flash.successMessage) {
                   sort: params.sort,
                   direction: params.direction,
                 }"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
+                class="edit-btn group"
               >
-                <i class="fa-solid fa-edit"></i>
-                Edit
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-edit"></i>
+                  Edit
+                </span>
               </Link>
+
+              <!-- Delete Button -->
               <button
                 v-if="faqCategoryDelete"
-                @click="handleDelete(faqCategory)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
+                @click="handleDeleteFaqCategory(faqCategory)"
+                class="delete-btn group"
+                type="button"
               >
-                <i class="fa-solid fa-xmark"></i>
-                Delete
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-trash-can"></i>
+                  Delete
+                </span>
               </button>
             </Td>
           </Tr>
@@ -451,7 +404,13 @@ if (usePage().props.flash.successMessage) {
       <NotAvaliableData v-if="!faqCategories.data.length" />
 
       <!-- Pagination -->
-      <Pagination class="mt-6" :links="faqCategories.links" />
+      <div v-if="faqCategories.data.length" class="mt-6">
+        <p class="text-center text-sm text-gray-600 mb-3 font-bold">
+          Showing {{ faqCategories.from }} - {{ faqCategories.to }} of
+          {{ faqCategories.total }}
+        </p>
+        <Pagination :links="faqCategories.links" />
+      </div>
     </div>
   </AdminDashboardLayout>
 </template>
