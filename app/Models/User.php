@@ -50,6 +50,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function toSearchableArray(): array
     {
         return [
+            'name'=>$this->name,
             'shop_name'=>$this->shop_name,
         ];
     }
@@ -186,10 +187,10 @@ class User extends Authenticatable implements MustVerifyEmail
         }
     }
 
-    public static function deleteUserAvatar(User $user): void
+    public static function deleteUserAvatar(string $avatar): void
     {
-        if (!empty($user->avatar) && file_exists(storage_path("app/public/avatars/".pathinfo($user->avatar, PATHINFO_BASENAME)))) {
-            unlink(storage_path("app/public/avatars/".pathinfo($user->avatar, PATHINFO_BASENAME)));
+        if (!empty($avatar) && file_exists(storage_path("app/public/avatars/".pathinfo($avatar, PATHINFO_BASENAME)))) {
+            unlink(storage_path("app/public/avatars/".pathinfo($avatar, PATHINFO_BASENAME)));
         }
     }
 

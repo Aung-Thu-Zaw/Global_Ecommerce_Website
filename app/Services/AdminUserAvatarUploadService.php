@@ -3,55 +3,35 @@
 namespace App\Services;
 
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
 
 class AdminUserAvatarUploadService
 {
-    public function createImage(Request $request): ?string
+    public function createImage(UploadedFile $image): string
     {
-        if ($request->hasFile("avatar")) {
-            $request->validate([
-                "avatar"=>["required","image","mimes:png,jpg,jpeg,svg,webp,gif"]
-            ]);
+        $originalName=$image->getClientOriginalName();
 
+        $finalName=time()."-".$originalName;
 
-            $file=$request->file("avatar");
+        $image->move(storage_path("app/public/avatars/"), $finalName);
 
-            /** @var \Illuminate\Http\UploadedFile $file */
-
-            $extension=$file->extension();
-            $finalName= Str::slug($request->name, '-')."."."$extension";
-
-            $file->move(storage_path("app/public/avatars/"), $finalName);
-
-            return $finalName;
-        } else {
-            return null;
-        }
+        return $finalName;
     }
 
-    public function updateImage(Request $request, User $user): string
+    public function updateImage(UploadedFile $image, string $avatar): string
     {
-        if ($request->hasFile("avatar")) {
-            $request->validate([
-                "avatar"=>["required","image","mimes:png,jpg,jpeg,svg,webp,gif"]
-            ]);
+        if(is_string($avatar)) {
 
-            User::deleteUserAvatar($user);
+            User::deleteUserAvatar($avatar);
 
-            $file=$request->file("avatar");
-
-            /** @var \Illuminate\Http\UploadedFile $file */
-
-            $extension=$file->extension();
-            $finalName= Str::slug($request->name, '-')."."."$extension";
-
-            $file->move(storage_path("app/public/avatars/"), $finalName);
-
-            return $finalName;
-        } else {
-            return $user->avatar;
         }
+
+        $originalName=$image->getClientOriginalName();
+
+        $finalName=time()."-".$originalName;
+
+        $image->move(storage_path("app/public/avatars/"), $finalName);
+
+        return $finalName;
     }
 }

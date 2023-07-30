@@ -37,8 +37,14 @@ class AdminManageRequest extends FormRequest
             "password" => ["required", Password::defaults()],
             "status"=>["nullable",Rule::in(["active","inactive"])],
             "birthday"=>["nullable","date"],
+            "uuid"=>["nullable","string"],
             "role"=>["nullable",Rule::in(["admin","vendor","user"])],
+            "captcha_token"  => ["required",new RecaptchaRule()],
         ];
+
+        if ($this->hasFile("avatar")) {
+            $rules["avatar"]=["required","image","mimes:png,jpg,jpeg,svg,webp,gif","max:5120"];
+        }
 
         $route = $this->route();
         if ($route&&in_array($this->method(), ['POST','PUT', 'PATCH'])) {
@@ -67,6 +73,7 @@ class AdminManageRequest extends FormRequest
             "email.unique" =>'The email has already been taken.',
             "phone.required" => "The phone field is required.",
             "phone.string" => "The phone must be a string.",
+            "uuid.string" => "The uuid must be a string.",
             "phone.unique" =>'The phone has already been taken.',
             "about.string" => "The about must be a string.",
             "address.string" => "The address must be a string.",
@@ -75,6 +82,11 @@ class AdminManageRequest extends FormRequest
             "status.in"=>"The selected status is invalid.",
             "birthday.date" => "The birthday is not a valid date.",
             "role.in"=>"The selected role is invalid.",
+            "avatar.required"=>"The avatar field is required.",
+            "avatar.image"=>"The avatar must be an image.",
+            "avatar.mimes"=>"The image must be a file of type: png,jpg,jpeg,svg,webp or gif.",
+            "avatar.max"=>"The image must not be greater than 5120 kilobytes.",
+            "captcha_token.required"=>"The captcha token is required",
         ];
     }
 }

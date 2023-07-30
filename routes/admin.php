@@ -532,12 +532,12 @@ Route::middleware(["auth","verified","user.role:admin"])
                 ->name("admin-manage.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:admin-manage.menu')->name("index");
-                    Route::get("/{user}", "show")->middleware('permission:admin-manage.detail')->name("show");
+                    Route::get("/{user}/details", "show")->middleware('permission:admin-manage.detail')->name("show");
                     Route::get("/create", "create")->middleware('permission:admin-manage.add')->name("create");
                     Route::post("/", "store")->middleware('permission:admin-manage.add')->name("store");
-                    Route::get("/{user}/edit", "edit")->middleware('permission:admin-manage.edit')->name("edit");
-                    Route::post("/{user}", "update")->middleware('permission:admin-manage.edit')->name("update");
-                    Route::delete("/{user}", "destroy")->middleware('permission:admin-manage.delete')->name("destroy");
+                    Route::get("/{user}/edit", "edit")->middleware(['permission:admin-manage.edit','restrict.superadmin.data'])->name("edit");
+                    Route::post("/{user}", "update")->middleware(['permission:admin-manage.edit','restrict.superadmin.data'])->name("update");
+                    Route::delete("/{user}", "destroy")->middleware(['permission:admin-manage.delete','restrict.superadmin.data'])->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:admin-manage.trash.list')->name("trash");
                     Route::post("/{trash_admin_id}/restore", "restore")->middleware('permission:admin-manage.trash.restore')->name("restore");
                     Route::delete("/{trash_admin_id}/force-delete", "forceDelete")->middleware('permission:admin-manage.trash.delete')->name("force.delete");

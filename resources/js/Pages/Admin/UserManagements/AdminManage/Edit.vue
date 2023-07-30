@@ -204,7 +204,6 @@ const handleEditAdminUser = async () => {
 
               <InputError class="mt-2" :message="form.errors.phone" />
             </div>
-
             <!-- Password Input -->
             <div class="mb-6">
               <InputLabel for="password" value="Password *" />

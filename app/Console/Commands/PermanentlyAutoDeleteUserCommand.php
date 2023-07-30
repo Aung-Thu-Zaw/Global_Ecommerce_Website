@@ -33,7 +33,7 @@ class PermanentlyAutoDeleteUserCommand extends Command
 
         $users->each(function ($user) {
 
-            User::deleteUserAvatar($user);
+            User::deleteUserAvatar($user->avatar);
 
             $user->forceDelete();
 

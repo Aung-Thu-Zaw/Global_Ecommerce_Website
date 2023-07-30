@@ -1,5 +1,8 @@
 <script setup>
+import RoleStatus from "@/Components/Status/RoleStatus.vue";
+import NoRoleStatus from "@/Components/Status/NoRoleStatus.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
+import SortingArrows from "@/Components/Table/SortingArrows.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -110,13 +113,14 @@ const updateSorting = (sort = "id") => {
 };
 
 // Handle Trash Admin Restore
-const handleAdminRestore = async (trashAdminId) => {
+const handleRestoreTrashAdmin = async (trashAdminId) => {
   const result = await swal({
-    icon: "info",
+    icon: "question",
     title: "Are you sure you want to restore this admin user?",
     showCancelButton: true,
-    confirmButtonText: "Yes, restore",
-    confirmButtonColor: "#4d9be9",
+    confirmButtonText: "Yes, Restore It",
+    confirmButtonColor: "#2562c4",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -125,7 +129,7 @@ const handleAdminRestore = async (trashAdminId) => {
   if (result.isConfirmed) {
     router.post(
       route("admin.admin-manage.restore", {
-        admin: trashAdminId,
+        trash_admin_id: trashAdminId,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
@@ -133,6 +137,7 @@ const handleAdminRestore = async (trashAdminId) => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -147,14 +152,15 @@ const handleAdminRestore = async (trashAdminId) => {
 };
 
 // Handle Trash Admin Delete
-const handleAdminDelete = async (trashAdminId) => {
+const handleDeleteTrashAdmin = async (trashAdminId) => {
   const result = await swal({
-    icon: "warning",
+    icon: "question",
     title: "Are you sure you want to delete it from the trash?",
     text: "Admin user in the trash will be permanetly deleted! You can't get it back.",
     showCancelButton: true,
-    confirmButtonText: "Yes, delete it !",
-    confirmButtonColor: "#ef4444",
+    confirmButtonText: "Yes, Delete it !",
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -163,13 +169,14 @@ const handleAdminDelete = async (trashAdminId) => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.admin-manage.force.delete", {
-        admin: trashAdminId,
+        trash_admin_id: trashAdminId,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -184,14 +191,15 @@ const handleAdminDelete = async (trashAdminId) => {
 };
 
 // Handle Trash Admin Delete Permanently
-const handlePermanentlyDelete = async () => {
+const handlePermanentlyDeleteTrashAdmins = async () => {
   const result = await swal({
-    icon: "warning",
+    icon: "question",
     title: "Are you sure you want to delete it from the trash?",
     text: "All admin users in the trash will be permanetly deleted! You can't get it back.",
     showCancelButton: true,
-    confirmButtonText: "Yes, delete it !",
-    confirmButtonColor: "#ef4444",
+    confirmButtonText: "Yes, Delete it !",
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -207,6 +215,7 @@ const handlePermanentlyDelete = async () => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -282,34 +291,35 @@ const adminManageTrashDelete = computed(() => {
               sort: 'id',
               direction: 'desc',
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+            class="goback-btn"
           >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
+            </span>
           </Link>
         </div>
       </div>
 
       <div class="flex items-center justify-end mb-5">
+        <!-- Search Box -->
         <form class="w-[350px] relative">
           <input
             type="text"
-            class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-            placeholder="Search"
+            class="search-input"
+            placeholder="Search by name"
             v-model="params.search"
           />
 
           <i
             v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+            class="fa-solid fa-xmark remove-search"
             @click="removeSearch"
           ></i>
         </form>
+        <!-- Perpage Select Box -->
         <div class="ml-5">
-          <select
-            class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-            v-model="params.per_page"
-          >
+          <select class="perpage-selectbox" v-model="params.per_page">
             <option value="" selected disabled>Select</option>
             <option value="5">5</option>
             <option value="10">10</option>
@@ -321,148 +331,52 @@ const adminManageTrashDelete = computed(() => {
         </div>
       </div>
 
+      <!-- Admin users Permanently Delete Button -->
       <p
         v-if="adminManageTrashDelete && trashAdmins.data.length !== 0"
         class="text-left text-sm font-bold mb-2 text-warning-600"
       >
         Admin users in the Trash will be automatically deleted after 60 days.
         <button
-          @click="handlePermanentlyDelete"
-          class="text-primary-500 rounded-md px-2 py-1 hover:bg-primary-200 hover:text-primary-600 transition-all hover:animate-bounce"
+          @click="handlePermanentlyDeleteTrashAdmins"
+          class="empty-trash-btn"
         >
           Empty the trash now
         </button>
       </p>
 
+      <!-- Trash Admin Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="id" />
           </HeaderTh>
+
           <HeaderTh>Avatar</HeaderTh>
+
           <HeaderTh @click="updateSorting('name')">
             Name
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'name',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'name',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="name" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('email')">
             Email Address
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'email',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'email',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'email',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'email',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="email" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('phone')">
             Phone
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'phone',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'phone',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'phone',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'phone',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="phone" />
           </HeaderTh>
+
           <HeaderTh> Admin Role </HeaderTh>
+
           <HeaderTh @click="updateSorting('deleted_at')">
             Deleted At
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'deleted_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'deleted_at',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'deleted_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'deleted_at',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="deleted_at" />
           </HeaderTh>
+
           <HeaderTh v-if="adminManageTrashRestore || adminManageTrashDelete">
             Action
           </HeaderTh>
@@ -471,6 +385,7 @@ const adminManageTrashDelete = computed(() => {
         <tbody v-if="trashAdmins.data.length">
           <Tr v-for="trashAdmin in trashAdmins.data" :key="trashAdmin.id">
             <BodyTh>{{ trashAdmin.id }}</BodyTh>
+
             <Td>
               <img
                 :src="trashAdmin.avatar"
@@ -478,50 +393,74 @@ const adminManageTrashDelete = computed(() => {
                 class="h-[50px] w-[50px] ring-2 ring-slate-300 object-cover rounded-full"
               />
             </Td>
-            <Td>{{ trashAdmin.name }}</Td>
-            <Td>{{ trashAdmin.email }}</Td>
-            <Td>{{ trashAdmin.phone }}</Td>
+
             <Td>
-              <span
-                v-if="trashAdmin.roles.length"
-                class="capitalize bg-sky-200 text-sky-500 px-3 py-1 font-bold text-sm rounded-full"
-              >
-                {{ trashAdmin.roles[0].name }}
-              </span>
-              <span
-                v-else
-                class="capitalize bg-slate-200 text-slate-500 px-3 py-1 font-bold text-sm rounded-full"
-              >
-                No Role
-              </span>
+              {{ trashAdmin.name }}
             </Td>
-            <Td>{{ trashAdmin.deleted_at }}</Td>
+
+            <Td>
+              {{ trashAdmin.email }}
+            </Td>
+
+            <Td>
+              {{ trashAdmin.phone }}
+            </Td>
+
+            <Td>
+              <RoleStatus v-if="trashAdmin.roles.length">
+                {{ trashAdmin.roles[0].name }}
+              </RoleStatus>
+
+              <NoRoleStatus v-else />
+            </Td>
+
+            <Td>
+              {{ trashAdmin.deleted_at }}
+            </Td>
 
             <Td v-if="adminManageTrashRestore || adminManageTrashDelete">
+              <!-- Restore Button -->
               <button
                 v-if="adminManageTrashRestore"
-                @click="handleAdminRestore(trashAdmin.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
+                @click="handleRestoreTrashAdmin(trashAdmin.id)"
+                class="edit-btn group"
+                type="button"
               >
-                <i class="fa-solid fa-recycle"></i>
-                Restore
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-recycle"></i>
+                  Restore
+                </span>
               </button>
+
+              <!-- Delete Button -->
               <button
                 v-if="adminManageTrashDelete"
-                @click="handleAdminDelete(trashAdmin.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
+                @click="handleDeleteTrashAdmin(trashAdmin.id)"
+                class="delete-btn group"
+                type="button"
               >
-                <i class="fa-solid fa-trash"></i>
-                Delete Forever
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-trash-can"></i>
+                  Delete Forever
+                </span>
               </button>
             </Td>
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Trash Admin Table End -->
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!trashAdmins.data.length" />
 
-      <Pagination class="mt-6" :links="trashAdmins.links" />
+      <!-- Pagination -->
+      <div v-if="trashAdmins.data.length" class="mt-6">
+        <p class="text-center text-sm text-gray-600 mb-3 font-bold">
+          Showing {{ trashAdmins.from }} - {{ trashAdmins.to }} of
+          {{ trashAdmins.total }}
+        </p>
+        <Pagination :links="trashAdmins.links" />
+      </div>
     </div>
   </AdminDashboardLayout>
 </template>

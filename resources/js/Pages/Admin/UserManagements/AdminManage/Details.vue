@@ -7,7 +7,7 @@ import TextInput from "@/Components/Forms/TextInput.vue";
 import { Head, Link } from "@inertiajs/vue3";
 
 const props = defineProps({
-  paginate: Object,
+  queryStringParams: Object,
   user: Object,
 });
 </script>
@@ -70,8 +70,10 @@ const props = defineProps({
             as="button"
             :href="route('admin.admin-manage.index')"
             :data="{
-              page: props.paginate.page,
-              per_page: props.paginate.per_page,
+              page: props.queryStringParams.page,
+              per_page: props.queryStringParams.per_page,
+              sort: props.queryStringParams.sort,
+              direction: props.queryStringParams.direction,
             }"
             class="goback-btn"
           >

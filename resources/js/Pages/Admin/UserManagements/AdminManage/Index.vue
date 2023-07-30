@@ -150,6 +150,7 @@ const handleAdminDelete = async (admin) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -215,6 +216,13 @@ if (usePage().props.flash.successMessage) {
   swal({
     icon: "success",
     title: usePage().props.flash.successMessage,
+  });
+}
+
+if (usePage().props.flash.errorMessage) {
+  swal({
+    icon: "error",
+    title: usePage().props.flash.errorMessage,
   });
 }
 </script>
@@ -345,7 +353,10 @@ if (usePage().props.flash.successMessage) {
             </BodyTh>
 
             <Td>
-              <img :src="admin.avatar" class="image" />
+              <img
+                :src="admin.avatar"
+                class="h-[50px] w-[50px] ring-2 ring-slate-300 object-cover rounded-full"
+              />
             </Td>
 
             <Td>{{ admin.name }}</Td>
@@ -372,14 +383,15 @@ if (usePage().props.flash.successMessage) {
               </InactiveStatus>
             </Td>
 
-            <Td>{{ admin.created_at }}</Td>
+            <Td class="">{{ admin.created_at }}</Td>
 
             <Td
               v-if="adminManageEdit || adminManageDelete || adminManageDetail"
+              class=""
             >
               <!-- Edit Button -->
               <Link
-                v-if="adminManageEdit"
+                v-if="adminManageEdit && admin.roles[0].name !== 'Super Admin'"
                 as="button"
                 :href="route('admin.admin-manage.edit', admin.id)"
                 :data="{
@@ -398,7 +410,9 @@ if (usePage().props.flash.successMessage) {
 
               <!-- Delete Button -->
               <button
-                v-if="adminManageDelete"
+                v-if="
+                  adminManageDelete && admin.roles[0].name !== 'Super Admin'
+                "
                 @click="handleAdminDelete(admin.id)"
                 class="delete-btn group"
                 type="button"
