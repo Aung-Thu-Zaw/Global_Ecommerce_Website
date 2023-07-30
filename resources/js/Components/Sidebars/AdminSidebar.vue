@@ -1227,6 +1227,12 @@
                   '/admin/role-in-permissions'
                 ),
               }"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
             >
               <i class="fa-solid fa-user-lock mr-2 text-sm"></i>
               {{ __("ROLE_IN_PERMISSIONS") }}

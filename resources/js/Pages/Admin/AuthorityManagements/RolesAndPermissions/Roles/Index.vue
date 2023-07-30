@@ -135,6 +135,7 @@ const handleDeleteRole = async (role) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -260,7 +261,7 @@ if (usePage().props.flash.successMessage) {
         >
           <span>
             <i class="fa-solid fa-file-circle-plus"></i>
-            Add Brand
+            Add Role
           </span>
         </Link>
 
@@ -270,7 +271,7 @@ if (usePage().props.flash.successMessage) {
             <input
               type="text"
               class="search-input"
-              placeholder="Search by name"
+              placeholder="Search by role name"
               v-model="params.search"
             />
             <i

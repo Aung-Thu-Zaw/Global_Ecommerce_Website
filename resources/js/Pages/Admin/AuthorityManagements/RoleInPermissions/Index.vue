@@ -134,6 +134,7 @@ const handleDeleteRoleInPermissions = async (role) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -183,6 +184,13 @@ if (usePage().props.flash.successMessage) {
     title: usePage().props.flash.successMessage,
   });
 }
+
+if (usePage().props.flash.errorMessage) {
+  swal({
+    icon: "error",
+    title: usePage().props.flash.errorMessage,
+  });
+}
 </script>
 
 <template>
@@ -202,16 +210,13 @@ if (usePage().props.flash.successMessage) {
           as="button"
           :href="route('admin.role-in-permissions.create')"
           :data="{
-            page: 1,
-            per_page: 10,
-            sort: 'id',
-            direction: 'desc',
+            per_page: params.per_page,
           }"
-          class="trash-btn group"
+          class="add-btn"
         >
-          <span class="group-hover:animate-pulse">
-            <i class="fa-solid fa-trash-can-arrow-up"></i>
-            Trash
+          <span>
+            <i class="fa-solid fa-file-circle-plus"></i>
+            Add Role In Permissions
           </span>
         </Link>
 
@@ -221,7 +226,7 @@ if (usePage().props.flash.successMessage) {
             <input
               type="text"
               class="search-input"
-              placeholder="Search by name"
+              placeholder="Search by role name"
               v-model="params.search"
             />
             <i
@@ -280,13 +285,13 @@ if (usePage().props.flash.successMessage) {
               {{ roleWithPermissions.id }}
             </BodyTh>
 
-            <Td v-if="roleWithPermissions.permissions.length">
+            <Td v-if="roleWithPermissions.permissions.length" class="w-[150px]">
               {{ roleWithPermissions.name }}
             </Td>
 
             <Td
               v-if="roleWithPermissions.permissions.length"
-              class="w-[1000px] flex items-start"
+              class="max-w-[800px] max-h-[200px] overflow-y-scroll flex items-start"
             >
               <span
                 v-for="permission in roleWithPermissions.permissions"
@@ -297,7 +302,7 @@ if (usePage().props.flash.successMessage) {
               </span>
             </Td>
 
-            <Td v-if="roleWithPermissions.permissions.length">
+            <Td v-if="roleWithPermissions.permissions.length" class="w-[150px]">
               {{ roleWithPermissions.created_at }}
             </Td>
 
@@ -309,7 +314,10 @@ if (usePage().props.flash.successMessage) {
             >
               <!-- Edit Button -->
               <Link
-                v-if="roleInPermissionsEdit"
+                v-if="
+                  roleInPermissionsEdit &&
+                  roleWithPermissions.name !== 'Super Admin'
+                "
                 as="button"
                 :href="
                   route(
@@ -333,7 +341,10 @@ if (usePage().props.flash.successMessage) {
 
               <!-- Delete Button -->
               <button
-                v-if="roleInPermissionsDelete"
+                v-if="
+                  roleInPermissionsDelete &&
+                  roleWithPermissions.name !== 'Super Admin'
+                "
                 @click="handleDeleteRoleInPermissions(roleWithPermissions.id)"
                 class="delete-btn group"
                 type="button"

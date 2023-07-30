@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin\AuthorityManagements\RolesAndPermissions;
 
+use App\Actions\Admin\AuthorityManagements\RolesAndPermissions\Roles\CreateRoleAction;
+use App\Actions\Admin\AuthorityManagements\RolesAndPermissions\Roles\UpdateRoleAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RoleRequest;
 use Illuminate\Http\Request;
@@ -31,30 +33,36 @@ class AdminRoleController extends Controller
 
     public function store(RoleRequest $request): RedirectResponse
     {
-        Role::create($request->validated());
+        (new CreateRoleAction())->handle($request->validated());
 
-        return to_route("admin.roles.index", "per_page=$request->per_page")->with("success", "Role has been successfully created.");
+        $urlStringQuery="page=1&per_page=$request->per_page&sort=id&direction=desc";
+
+        return to_route("admin.roles.index", $urlStringQuery)->with("success", "Role has been successfully created.");
     }
 
-    public function edit(Role $role): Response|ResponseFactory
+    public function edit(Request $request, Role $role): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return inertia("Admin/AuthorityManagements/RolesAndPermissions/Roles/Edit", compact("role", "paginate"));
+        return inertia("Admin/AuthorityManagements/RolesAndPermissions/Roles/Edit", compact("role", "queryStringParams"));
     }
 
     public function update(RoleRequest $request, Role $role): RedirectResponse
     {
-        $role->update($request->validated());
+        (new UpdateRoleAction())->handle($request->validated(), $role);
 
-        return to_route("admin.roles.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Role has been successfully updated.");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+
+        return to_route("admin.roles.index", $urlStringQuery)->with("success", "Role has been successfully updated.");
     }
 
     public function destroy(Request $request, Role $role): RedirectResponse
     {
         $role->delete();
 
-        return to_route("admin.roles.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Role has been successfully deleted.");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+
+        return to_route("admin.roles.index", $urlStringQuery)->with("success", "Role has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -68,22 +76,26 @@ class AdminRoleController extends Controller
         return inertia("Admin/AuthorityManagements/RolesAndPermissions/Roles/Trash", compact("trashRoles"));
     }
 
-    public function restore(Request $request, int $id): RedirectResponse
+    public function restore(Request $request, int $trashRoleId): RedirectResponse
     {
-        $role = Role::onlyTrashed()->findOrFail($id);
+        $role = Role::onlyTrashed()->findOrFail($trashRoleId);
 
         $role->restore();
 
-        return to_route('admin.roles.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Role has been successfully restored.");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+
+        return to_route('admin.roles.trash', $urlStringQuery)->with("success", "Role has been successfully restored.");
     }
 
-    public function forceDelete(Request $request, int $id): RedirectResponse
+    public function forceDelete(Request $request, int $trashRoleId): RedirectResponse
     {
-        $role = Role::onlyTrashed()->findOrFail($id);
+        $role = Role::onlyTrashed()->findOrFail($trashRoleId);
 
         $role->forceDelete();
 
-        return to_route('admin.roles.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The role has been permanently deleted");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+
+        return to_route('admin.roles.trash', $urlStringQuery)->with("success", "The role has been permanently deleted");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -96,6 +108,8 @@ class AdminRoleController extends Controller
 
         });
 
-        return to_route('admin.roles.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Roles have been successfully deleted.");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+
+        return to_route('admin.roles.trash', $urlStringQuery)->with("success", "Roles have been successfully deleted.");
     }
 }

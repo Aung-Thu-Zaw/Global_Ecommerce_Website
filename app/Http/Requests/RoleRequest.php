@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\RecaptchaRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RoleRequest extends FormRequest
@@ -24,7 +25,8 @@ class RoleRequest extends FormRequest
     public function rules()
     {
         return [
-            "name"=>["required","string"]
+            "name"=>["required","string"],
+            "captcha_token"  => ["required",new RecaptchaRule()],
         ];
     }
 
@@ -36,6 +38,7 @@ class RoleRequest extends FormRequest
         return [
             "name.required" => "The name field is required.",
             "name.string" => "The name must be a string.",
+            "captcha_token.required"=>"The captcha token is required",
         ];
     }
 }

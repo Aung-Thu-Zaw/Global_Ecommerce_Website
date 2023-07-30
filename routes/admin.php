@@ -566,21 +566,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                 });
 
            // Admin Permissions Section
-           Route::controller(AdminPermissionController::class)
-                ->prefix("/roles-and-permissions/permissions")
-                ->name("permissions.")
-                ->group(function () {
-                    Route::get("/", "index")->middleware('permission:role-and-permission.menu')->name("index");
-                    Route::get("/create", "create")->middleware('permission:role-and-permission.add')->name("create");
-                    Route::post("/", "store")->middleware('permission:role-and-permission.add')->name("store");
-                    Route::get("/{permission}/edit", "edit")->middleware('permission:role-and-permission.edit')->name("edit");
-                    Route::post("/{permission}", "update")->middleware('permission:role-and-permission.edit')->name("update");
-                    Route::delete("/{permission}", "destroy")->middleware('permission:role-and-permission.delete')->name("destroy");
-                    Route::get("/trash", "trash")->middleware('permission:role-and-permission.trash.list')->name("trash");
-                    Route::post("/{trash_permission_id}/restore", "restore")->middleware('permission:role-and-permission.trash.restore')->name("restore");
-                    Route::delete("/{trash_permission_id}/force-delete", "forceDelete")->middleware('permission:role-and-permission.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:role-and-permission.trash.delete')->name("permanently.delete");
-                });
+           Route::get('/roles-and-permissions/permissions', [AdminPermissionController::class,"index"])->middleware('permission:role-and-permission.menu')->name("permissions.index");
 
            // Admin Role In Permissions Section
            Route::controller(AdminRoleInPermissionController::class)
@@ -590,9 +576,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::get("/", "index")->middleware('permission:role-in-permissions.menu')->name("index");
                     Route::get("/create", "create")->middleware('permission:role-in-permissions.add')->name("create");
                     Route::post("/", "store")->middleware('permission:role-in-permissions.add')->name("store");
-                    Route::get("/{role}/edit", "edit")->middleware('permission:role-in-permissions.edit')->name("edit");
-                    Route::post("/{role}", "update")->middleware('permission:role-in-permissions.edit')->name("update");
-                    Route::delete("/{role}", "destroy")->middleware('permission:role-in-permissions.delete')->name("destroy");
+                    Route::get("/{role}/edit", "edit")->middleware(['permission:role-in-permissions.edit','restrict.superadmin.data'])->name("edit");
+                    Route::post("/{role}", "update")->middleware(['permission:role-in-permissions.edit','restrict.superadmin.data'])->name("update");
+                    Route::delete("/{role}", "destroy")->middleware(['permission:role-in-permissions.delete','restrict.superadmin.data'])->name("destroy");
                 });
 
            // ******************** Admin Dashboard Blog Managements ********************

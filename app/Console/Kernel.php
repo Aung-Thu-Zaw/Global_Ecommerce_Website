@@ -33,7 +33,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('inactive_vendor:delete')->daily();
         $schedule->command('user:delete')->daily();
         $schedule->command('role:delete')->daily();
-        $schedule->command('permission:delete')->daily();
         $schedule->command('blog_category:delete')->daily();
         $schedule->command('blog_post:delete')->daily();
         // Admin Web Control Area

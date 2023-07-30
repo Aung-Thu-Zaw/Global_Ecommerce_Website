@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin\AuthorityManagements;
 
+use App\Actions\Admin\AuthorityManagements\RoleInPermissions\CreateRoleInPermissionsAction;
+use App\Actions\Admin\AuthorityManagements\RoleInPermissions\UpdateRoleInPermissionsAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RoleInPermissionRequest;
 use Illuminate\Database\Eloquent\Builder;
@@ -43,54 +45,41 @@ class AdminRoleInPermissionController extends Controller
 
     public function store(RoleInPermissionRequest $request): RedirectResponse
     {
-        foreach($request->permission_id as $key => $value) {
+        (new CreateRoleInPermissionsAction())->handle($request->validated());
 
-            DB::table('role_has_permissions')->insert([
+        $urlStringQuery="page=1&per_page=$request->per_page&sort=id&direction=desc";
 
-                "role_id"=>$request->role_id,
-                "permission_id"=>$value
-
-            ]);
-
-        }
-
-        return to_route("admin.role-in-permissions.index", "per_page=$request->per_page")->with("success", "Role in permissions has been successfully created.");
+        return to_route("admin.role-in-permissions.index", $urlStringQuery)->with("success", "Role in permissions has been successfully created.");
     }
 
-    public function edit(Role $role): Response|ResponseFactory
+    public function edit(Request $request, Role $role): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
-
         $permissionGroups = DB::table('permissions')->select('group')->groupBy('group')->get();
 
         $permissions=Permission::get();
 
         $role->load("permissions");
 
-        return inertia("Admin/AuthorityManagements/RoleInPermissions/Edit", compact("paginate", "permissions", "permissionGroups", "role"));
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return inertia("Admin/AuthorityManagements/RoleInPermissions/Edit", compact("queryStringParams", "permissions", "permissionGroups", "role"));
     }
 
     public function update(RoleInPermissionRequest $request, Role $role): RedirectResponse
     {
+        (new UpdateRoleInPermissionsAction())->handle($request->validated(), $role);
 
-        $role->permissions()->detach();
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
 
-        foreach($request->permission_id as $key => $value) {
-            $role->permissions()->attach(["permission_id"=>$value]);
-        }
-
-        $role->users->each(function ($user) use ($role) {
-            $user->syncPermissions($role->permissions);
-        });
-
-
-        return to_route("admin.role-in-permissions.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Role in permissions has been successfully updated.");
+        return to_route("admin.role-in-permissions.index", $urlStringQuery)->with("success", "Role in permissions has been successfully updated.");
     }
 
     public function destroy(Request $request, Role $role): RedirectResponse
     {
         $role->permissions()->detach();
 
-        return to_route("admin.role-in-permissions.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Role in permissions has been successfully deleted.");
+        $urlStringQuery="page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction";
+
+        return to_route("admin.role-in-permissions.index", $urlStringQuery)->with("success", "Role in permissions has been successfully deleted.");
     }
 }

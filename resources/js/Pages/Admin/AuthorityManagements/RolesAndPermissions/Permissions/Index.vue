@@ -10,8 +10,8 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/RoleAndPermissionBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject, computed, ref } from "vue";
-import { router, Link, Head, usePage } from "@inertiajs/vue3";
+import { reactive, watch, inject } from "vue";
+import { router, Head, usePage } from "@inertiajs/vue3";
 
 // Define the props
 const props = defineProps({
@@ -110,81 +110,6 @@ const updateSorting = (sort = "id") => {
   handleQueryStringParameter();
 };
 
-// Handle Delete Permission
-const handleDeletePermission = async (permission) => {
-  const result = await swal({
-    icon: "question",
-    title: "Are you sure you want to delete this permission?",
-    text: "You will be able to restore this permission in the trash!",
-    showCancelButton: true,
-    confirmButtonText: "Yes, Delete it!",
-    confirmButtonColor: "#d52222",
-    cancelButtonColor: "#626262",
-    timer: 20000,
-    timerProgressBar: true,
-    reverseButtons: true,
-  });
-
-  if (result.isConfirmed) {
-    router.delete(
-      route("admin.permissions.destroy", {
-        permission: permission,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      }),
-      {
-        onSuccess: () => {
-          swal({
-            icon: "success",
-            title: usePage().props.flash.successMessage,
-          });
-        },
-      }
-    );
-  }
-};
-
-// Define Permissions Variables
-const globalPermissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
-
-// Create New Permission Permission
-const roleAndPermissionAdd = computed(() => {
-  return globalPermissions.value.length
-    ? globalPermissions.value.some(
-        (permission) => permission.name === "role-and-permission.add"
-      )
-    : false;
-});
-
-// Permission Edit Permission
-const roleAndPermissionEdit = computed(() => {
-  return globalPermissions.value.length
-    ? globalPermissions.value.some(
-        (permission) => permission.name === "role-and-permission.edit"
-      )
-    : false;
-});
-
-// Permission Delete Permission
-const roleAndPermissionDelete = computed(() => {
-  return globalPermissions.value.length
-    ? globalPermissions.value.some(
-        (permission) => permission.name === "role-and-permission.delete"
-      )
-    : false;
-});
-
-// Permission Trash List Permission
-const roleAndPermissionTrashList = computed(() => {
-  return globalPermissions.value.length
-    ? globalPermissions.value.some(
-        (permission) => permission.name === "role-and-permission.trash.list"
-      )
-    : false;
-});
-
 if (usePage().props.flash.successMessage) {
   swal({
     icon: "success",
@@ -223,51 +148,15 @@ if (usePage().props.flash.successMessage) {
             </div>
           </li>
         </Breadcrumb>
-
-        <!-- Trash Button -->
-        <div v-if="roleAndPermissionTrashList">
-          <Link
-            as="button"
-            :href="route('admin.permissions.trash')"
-            :data="{
-              page: 1,
-              per_page: 10,
-              sort: 'id',
-              direction: 'desc',
-            }"
-            class="trash-btn group"
-          >
-            <span class="group-hover:animate-pulse">
-              <i class="fa-solid fa-trash-can-arrow-up"></i>
-              Trash
-            </span>
-          </Link>
-        </div>
       </div>
 
       <div class="mb-5 flex items-center justify-between">
-        <!-- Create Permission Button -->
-        <Link
-          v-if="roleAndPermissionAdd"
-          as="button"
-          :href="route('admin.permissions.create')"
-          :data="{
-            per_page: params.per_page,
-          }"
-          class="add-btn"
-        >
-          <span>
-            <i class="fa-solid fa-file-circle-plus"></i>
-            Add Brand
-          </span>
-        </Link>
-
         <div class="flex items-center ml-auto">
           <form class="w-[350px] relative">
             <input
               type="text"
               class="search-input"
-              placeholder="Search by name"
+              placeholder="Search by permission name"
               v-model="params.search"
             />
             <i
@@ -314,10 +203,6 @@ if (usePage().props.flash.successMessage) {
             Created At
             <SortingArrows :params="params" sort="created_at" />
           </HeaderTh>
-
-          <HeaderTh v-if="roleAndPermissionEdit || roleAndPermissionDelete">
-            Action
-          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="permissions.data.length">
@@ -336,40 +221,6 @@ if (usePage().props.flash.successMessage) {
 
             <Td>
               {{ permission.created_at }}
-            </Td>
-
-            <Td v-if="roleAndPermissionEdit || roleAndPermissionDelete">
-              <!-- Edit Button -->
-              <Link
-                v-if="roleAndPermissionEdit"
-                as="button"
-                :href="route('admin.permissions.edit', permission.id)"
-                :data="{
-                  page: params.page,
-                  per_page: params.per_page,
-                  sort: params.sort,
-                  direction: params.direction,
-                }"
-                class="edit-btn group"
-              >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-edit"></i>
-                  Edit
-                </span>
-              </Link>
-
-              <!-- Delete Button -->
-              <button
-                v-if="roleAndPermissionDelete"
-                @click="handleDeletePermission(permission.id)"
-                class="delete-btn group"
-                type="button"
-              >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-trash-can"></i>
-                  Delete
-                </span>
-              </button>
             </Td>
           </Tr>
         </tbody>

@@ -135,6 +135,7 @@ const handleRestoreTrashRole = async (trashRoleId) => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           swal({
             icon: "success",
@@ -171,6 +172,7 @@ const handleDeleteTrashRole = async (trashRoleId) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -209,6 +211,7 @@ const handlePermanentlyDeleteTrashRoles = async () => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           swal({
             icon: "success",
@@ -321,7 +324,7 @@ const roleAndPermissionTrashDelete = computed(() => {
           <input
             type="text"
             class="search-input"
-            placeholder="Search by name"
+            placeholder="Search by role name"
             v-model="params.search"
           />
 
