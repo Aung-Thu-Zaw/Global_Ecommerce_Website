@@ -716,7 +716,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                 ->name("suggestions.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:suggestion.menu')->name("index");
-                    Route::get("/{suggestion}", "show")->middleware('permission:suggestion.detail')->name("show");
+                    Route::get("/{suggestion}/details", "show")->middleware('permission:suggestion.detail')->name("show");
                     Route::delete("/{suggestion}", "destroy")->middleware('permission:suggestion.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:suggestion.trash.list')->name("trash");
                     Route::post("/{trash_suggestion_id}/restore", "restore")->middleware('permission:suggestion.trash.restore')->name("restore");
@@ -730,7 +730,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                 ->name("website-feedbacks.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:website-feedback.menu')->name("index");
-                    Route::get("/{website_feedback}", "show")->middleware('permission:website-feedback.detail')->name("show");
+                    Route::get("/{website_feedback}/details", "show")->middleware('permission:website-feedback.detail')->name("show");
                     Route::delete("/{website_feedback}", "destroy")->middleware('permission:website-feedback.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:website-feedback.trash.list')->name("trash");
                     Route::post("/{trash_website_feedback_id}/restore", "restore")->middleware('permission:website-feedback.trash.restore')->name("restore");

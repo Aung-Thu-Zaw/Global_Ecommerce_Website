@@ -146,6 +146,7 @@ const handleRestoreTrashSuggestion = async (trashSuggesstionId) => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -184,6 +185,7 @@ const handleDeleteTrashSuggestion = async (trashSuggesstionId) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -222,6 +224,7 @@ const handlePermanentlyDeleteTrashSuggestions = async () => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -315,7 +318,7 @@ const suggestionTrashDelete = computed(() => {
           <input
             type="text"
             class="search-input"
-            placeholder="Search by name"
+            placeholder="Search by email"
             v-model="params.search"
           />
 

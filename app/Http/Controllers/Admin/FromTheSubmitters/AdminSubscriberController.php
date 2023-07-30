@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\FromTheSubmitters;
 use App\Http\Controllers\Controller;
 use App\Models\Subscriber;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -20,13 +21,13 @@ class AdminSubscriberController extends Controller
         return inertia("Admin/FromTheSubmitters/Subscribers/Index", compact("subscribers"));
     }
 
-    public function destroy(Subscriber $subscriber): RedirectResponse
+    public function destroy(Request $request, Subscriber $subscriber): RedirectResponse
     {
         $subscriber->delete();
 
-        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.subscribers.index", $urlStringQuery)->with("success", "Subscriber has been successfully deleted.");
+        return to_route("admin.subscribers.index", $queryStringParams)->with("success", "Subscriber has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -40,29 +41,29 @@ class AdminSubscriberController extends Controller
         return inertia("Admin/FromTheSubmitters/Subscribers/Trash", compact("trashSubscribers"));
     }
 
-    public function restore(int $subscriberId): RedirectResponse
+    public function restore(Request $request, int $trashSubscriberId): RedirectResponse
     {
-        $subscriber = Subscriber::onlyTrashed()->findOrFail($subscriberId);
+        $subscriber = Subscriber::onlyTrashed()->findOrFail($trashSubscriberId);
 
         $subscriber->restore();
 
-        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.subscribers.trash', $urlStringQuery)->with("success", "Subscriber has been successfully restored.");
+        return to_route('admin.subscribers.trash', $queryStringParams)->with("success", "Subscriber has been successfully restored.");
     }
 
-    public function forceDelete(int $subscriberId): RedirectResponse
+    public function forceDelete(Request $request, int $trashSubscriberId): RedirectResponse
     {
-        $subscriber = Subscriber::onlyTrashed()->findOrFail($subscriberId);
+        $subscriber = Subscriber::onlyTrashed()->findOrFail($trashSubscriberId);
 
         $subscriber->forceDelete();
 
-        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.subscribers.trash', $urlStringQuery)->with("success", "The subscriber has been permanently deleted");
+        return to_route('admin.subscribers.trash', $queryStringParams)->with("success", "The subscriber has been permanently deleted");
     }
 
-    public function permanentlyDelete(): RedirectResponse
+    public function permanentlyDelete(Request $request): RedirectResponse
     {
         $subscribers = Subscriber::onlyTrashed()->get();
 
@@ -72,8 +73,8 @@ class AdminSubscriberController extends Controller
 
         });
 
-        $urlStringQuery="page=".request("page")."&per_page=".request("per_page")."&sort=".request("sort")."&direction=".request("direction");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.subscribers.trash', $urlStringQuery)->with("success", "Subscribers have been successfully deleted.");
+        return to_route('admin.subscribers.trash', $queryStringParams)->with("success", "Subscribers have been successfully deleted.");
     }
 }

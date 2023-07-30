@@ -136,6 +136,7 @@ const handleRestoreTrashFeedback = async (trashWebsiteFeedbackId) => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -174,6 +175,7 @@ const handleDeleteTrashFeedback = async (trashWebsiteFeedbackId) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -212,6 +214,7 @@ const handlePermanentlyDeleteTrashFeedbacks = async () => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({

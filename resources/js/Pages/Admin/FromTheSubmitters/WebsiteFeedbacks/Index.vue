@@ -136,6 +136,7 @@ const handleDeleteWebsiteFeedback = async (websiteFeedbackId) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({

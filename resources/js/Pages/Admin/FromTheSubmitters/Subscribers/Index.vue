@@ -135,6 +135,7 @@ const handleDeleteSubscriber = async (subscriberId) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -207,7 +208,7 @@ const subscriberDelete = computed(() => {
             <input
               type="text"
               class="search-input"
-              placeholder="Search by name"
+              placeholder="Search by email"
               v-model="params.search"
             />
             <i

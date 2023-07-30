@@ -146,6 +146,7 @@ const handleDeleteSuggestion = async (suggestionId) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -227,7 +228,7 @@ const suggestionDelete = computed(() => {
             <input
               type="text"
               class="search-input"
-              placeholder="Search by name"
+              placeholder="Search by email"
               v-model="params.search"
             />
             <i

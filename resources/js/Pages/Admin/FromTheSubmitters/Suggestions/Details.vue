@@ -4,7 +4,7 @@ import Breadcrumb from "@/Components/Breadcrumbs/SuggestionBreadcrumb.vue";
 import { Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
-  queryParameters: Object,
+  queryStringParams: Object,
   suggestion: Object,
 });
 
@@ -79,10 +79,10 @@ const formattedSuggestionType = (suggestionType) => {
             as="button"
             :href="route('admin.suggestions.index')"
             :data="{
-              page: props.queryParameters.page,
-              per_page: props.queryParameters.per_page,
-              sort: props.queryParameters.sort,
-              direction: props.queryParameters.direction,
+              page: props.queryStringParams.page,
+              per_page: props.queryStringParams.per_page,
+              sort: props.queryStringParams.sort,
+              direction: props.queryStringParams.direction,
             }"
             class="goback-btn"
           >
@@ -98,7 +98,7 @@ const formattedSuggestionType = (suggestionType) => {
         <div v-if="suggestion" class="my-3">
           <div class="flex items-center flex-wrap">
             <div v-for="image in suggestion.images" :key="image.id" class="m-3">
-              <img :src="image.img_path" class="image" />
+              <img :src="image.img_path" class="image h-[100px]" />
             </div>
           </div>
           <div

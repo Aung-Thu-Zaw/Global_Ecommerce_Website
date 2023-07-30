@@ -135,6 +135,7 @@ const handleRestoreTrashSubscriber = async (trashSubscriberId) => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -173,6 +174,7 @@ const handleDeleteTrashSubscriber = async (trashSubscriberId) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -211,6 +213,7 @@ const handlePermanentlyDeleteTrashSubscribers = async () => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -304,7 +307,7 @@ const subscriberTrashDelete = computed(() => {
           <input
             type="text"
             class="search-input"
-            placeholder="Search by name"
+            placeholder="Search by email"
             v-model="params.search"
           />
 

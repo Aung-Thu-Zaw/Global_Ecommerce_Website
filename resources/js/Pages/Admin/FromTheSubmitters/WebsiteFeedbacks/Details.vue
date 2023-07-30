@@ -5,7 +5,7 @@ import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
 import { Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
-  queryParameters: Object,
+  queryStringParams: Object,
   websiteFeedback: Object,
 });
 </script>
@@ -68,10 +68,10 @@ const props = defineProps({
             as="button"
             :href="route('admin.website-feedbacks.index')"
             :data="{
-              page: props.queryParameters.page,
-              per_page: props.queryParameters.per_page,
-              sort: props.queryParameters.sort,
-              direction: props.queryParameters.direction,
+              page: props.queryStringParams.page,
+              per_page: props.queryStringParams.per_page,
+              sort: props.queryStringParams.sort,
+              direction: props.queryStringParams.direction,
             }"
             class="goback-btn"
           >
