@@ -49,7 +49,7 @@ class FaqCategory extends Model
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Category, never>
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<FaqCategory, never>
     */
     protected function createdAt(): Attribute
     {
@@ -59,7 +59,7 @@ class FaqCategory extends Model
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Category, never>
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<FaqCategory, never>
     */
     protected function deletedAt(): Attribute
     {

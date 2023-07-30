@@ -4,41 +4,38 @@ import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/FaqCategoryBreadcrumb.vue";
-import { ref } from "vue";
 import { Link, useForm, Head } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
+import { ref } from "vue";
 
 // Define the props
 const props = defineProps({
-  queryStringParams: Array,
-  faqCategory: Object,
+  faqCategories: Object,
+  per_page: String,
 });
 
 // Define Variables
 const processing = ref(false);
 
-// Faq Category Edit Form Data
+// Faq SubCategory Create Form Data
 const form = useForm({
-  name: props.faqCategory.name,
+  faq_category_id: "",
+  name: "",
   captcha_token: null,
 });
 
 // Destructing ReCaptcha
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 
-// Handle Edit Faq Category
-const handleEditFaqCatrgory = async () => {
+// Handle Create Faq Category
+const handleCreateFaqSubCategory = async () => {
   await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("edit_faq_category");
+  form.captcha_token = await executeRecaptcha("create_faq_sub_category");
 
   processing.value = true;
   form.post(
-    route("admin.faq-categories.categories.update", {
-      faq_category: props.faqCategory.slug,
-      page: props.queryStringParams.page,
-      per_page: props.queryStringParams.per_page,
-      sort: props.queryStringParams.sort,
-      direction: props.queryStringParams.direction,
+    route("admin.faq-categories.sub-categories.store", {
+      per_page: props.per_page,
     }),
     {
       replace: true,
@@ -53,7 +50,7 @@ const handleEditFaqCatrgory = async () => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Edit Faq Category" />
+    <Head title="Create Faq SubCategory" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
         <!-- Breadcrumb -->
@@ -75,9 +72,8 @@ const handleEditFaqCatrgory = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                >SubCategories</span
               >
-                Categories
-              </span>
             </div>
           </li>
           <li aria-current="page">
@@ -97,28 +93,7 @@ const handleEditFaqCatrgory = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >{{ faqCategory.name }}
-              </span>
-            </div>
-          </li>
-          <li aria-current="page">
-            <div class="flex items-center">
-              <svg
-                aria-hidden="true"
-                class="w-6 h-6 text-gray-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <span
-                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Edit</span
+                >Create</span
               >
             </div>
           </li>
@@ -128,12 +103,11 @@ const handleEditFaqCatrgory = async () => {
         <div>
           <Link
             as="button"
-            :href="route('admin.faq-categories.categories.index')"
+            :href="route('admin.faq-categories.sub-categories.index')"
             :data="{
-              page: queryStringParams.page,
-              per_page: queryStringParams.per_page,
-              sort: queryStringParams.sort,
-              direction: queryStringParams.direction,
+              per_page: props.per_page,
+              sort: 'id',
+              direction: 'desc',
             }"
             class="goback-btn"
           >
@@ -146,10 +120,10 @@ const handleEditFaqCatrgory = async () => {
       </div>
 
       <div class="border shadow-md p-10">
-        <form @submit.prevent="handleEditFaqCatrgory">
-          <!-- Faq Category Name Input -->
+        <form @submit.prevent="handleCreateFaqSubCategory">
+          <!-- Faq SubCategory Name Input -->
           <div class="mb-6">
-            <InputLabel for="name" value="Faq Category Name *" />
+            <InputLabel for="name" value="Faq SubCategory Name *" />
 
             <TextInput
               id="name"
@@ -157,13 +131,34 @@ const handleEditFaqCatrgory = async () => {
               class="mt-1 block w-full"
               v-model="form.name"
               required
-              placeholder="Enter Category Name"
+              placeholder="Enter Sub Category Name"
             />
 
             <InputError class="mt-2" :message="form.errors.name" />
           </div>
 
-          <!-- Edit Button -->
+          <!-- Faq Category Select Box -->
+          <div class="mb-6">
+            <InputLabel for="faq_category" value="Faq Category *" />
+
+            <select
+              v-model="form.faq_category_id"
+              class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+            >
+              <option value="" selected disabled>Select Faq Category</option>
+              <option
+                v-for="faqCategory in faqCategories"
+                :key="faqCategory.id"
+                :value="faqCategory.id"
+              >
+                {{ faqCategory.name }}
+              </option>
+            </select>
+
+            <InputError class="mt-2" :message="form.errors.faq_category_id" />
+          </div>
+
+          <!-- Create Button -->
           <div class="mb-6">
             <button class="save-btn">
               <svg
@@ -184,7 +179,7 @@ const handleEditFaqCatrgory = async () => {
                   fill="currentColor"
                 />
               </svg>
-              {{ processing ? "Processing..." : "Update" }}
+              {{ processing ? "Processing..." : "Save" }}
             </button>
           </div>
         </form>

@@ -15,7 +15,7 @@ import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 // Define the props
 const props = defineProps({
-  faqCategories: Object,
+  faqSubCategories: Object,
 });
 
 // Define Alert Variables
@@ -33,7 +33,7 @@ const params = reactive({
 // Handle Search
 const handleSearch = () => {
   router.get(
-    route("admin.faq-categories.categories.index"),
+    route("admin.faq-categories.sub-categories.index"),
     {
       search: params.search,
       per_page: params.per_page,
@@ -51,7 +51,7 @@ const handleSearch = () => {
 const removeSearch = () => {
   params.search = "";
   router.get(
-    route("admin.faq-categories.categories.index"),
+    route("admin.faq-categories.sub-categories.index"),
     {
       per_page: params.per_page,
       sort: params.sort,
@@ -67,7 +67,7 @@ const removeSearch = () => {
 // Handle Query String Parameter
 const handleQueryStringParameter = () => {
   router.get(
-    route("admin.faq-categories.categories.index"),
+    route("admin.faq-categories.sub-categories.index"),
     {
       search: params.search,
       page: params.page,
@@ -111,65 +111,41 @@ const updateSorting = (sort = "id") => {
 };
 
 // Handle Delete Faq Category
-const handleDelete = async (faqCategory) => {
-  router.delete(
-    route("admin.faq-categories.categories.destroy", {
-      faq_category: faqCategory,
-      page: params.page,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-    }),
-    {
-      preserveScroll: true,
-      onSuccess: () => {
-        if (usePage().props.flash.successMessage) {
-          swal({
-            icon: "success",
-            title: usePage().props.flash.successMessage,
-          });
-        }
-      },
-    }
-  );
-};
+const handleDeleteFaqSubCategory = async (faqSubCategory) => {
+  const result = await swal({
+    icon: "question",
+    title: "Are you sure you want to delete this faq subcategory?",
+    text: "You will be able to restore this faq subcategory in the trash!",
+    showCancelButton: true,
+    confirmButtonText: "Yes, Delete it!",
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
 
-// Handle Delete Faq Category
-const handleDeleteFaqCategory = async (faqCategory) => {
-  if (faqCategory.faq_sub_categories.length > 0) {
-    const result = await swal({
-      icon: "error",
-      title:
-        "You can't delete this faq category because this faq category have faq subcategory?",
-      text: "If you click 'Delete, whatever!' button faq subcategory will be automatically deleted.You will be able to restore this faq category in the trash!",
-      showCancelButton: true,
-      confirmButtonText: "Delete, whatever!",
-      confirmButtonColor: "#d52222",
-      cancelButtonColor: "#626262",
-      timer: 20000,
-      timerProgressBar: true,
-      reverseButtons: true,
-    });
-    if (result.isConfirmed) {
-      handleDelete(faqCategory.slug);
-    }
-  } else {
-    const result = await swal({
-      icon: "question",
-      title: "Are you sure you want to delete this faq category?",
-      text: "You will be able to restore this faq category in the trash!",
-      showCancelButton: true,
-      confirmButtonText: "Yes, Delete it!",
-      confirmButtonColor: "#d52222",
-      cancelButtonColor: "#626262",
-      timer: 20000,
-      timerProgressBar: true,
-      reverseButtons: true,
-    });
-
-    if (result.isConfirmed) {
-      handleDelete(faqCategory.slug);
-    }
+  if (result.isConfirmed) {
+    router.delete(
+      route("admin.faq-categories.sub-categories.destroy", {
+        faq_sub_category: faqSubCategory,
+        page: params.page,
+        per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
+      }),
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
+    );
   }
 };
 
@@ -222,7 +198,7 @@ if (usePage().props.flash.successMessage) {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Faq Categories" />
+    <Head title="Faq SubCategories" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -245,7 +221,7 @@ if (usePage().props.flash.successMessage) {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400 dark:hover:text-white"
-                >Categories</span
+                >SubCategories</span
               >
             </div>
           </li>
@@ -255,7 +231,7 @@ if (usePage().props.flash.successMessage) {
         <div v-if="faqCategoryTrashList">
           <Link
             as="button"
-            :href="route('admin.faq-categories.categories.trash')"
+            :href="route('admin.faq-categories.sub-categories.trash')"
             :data="{
               page: 1,
               per_page: 10,
@@ -277,7 +253,7 @@ if (usePage().props.flash.successMessage) {
         <Link
           v-if="faqCategoryAdd"
           as="button"
-          :href="route('admin.faq-categories.categories.create')"
+          :href="route('admin.faq-categories.sub-categories.create')"
           :data="{
             per_page: params.per_page,
           }"
@@ -285,7 +261,7 @@ if (usePage().props.flash.successMessage) {
         >
           <span>
             <i class="fa-solid fa-file-circle-plus"></i>
-            Add Faq Category
+            Add Faq SubCategory
           </span>
         </Link>
 
@@ -295,7 +271,7 @@ if (usePage().props.flash.successMessage) {
             <input
               type="text"
               class="search-input"
-              placeholder="Search by name"
+              placeholder="Search by subcategory name"
               v-model="params.search"
             />
             <i
@@ -328,8 +304,10 @@ if (usePage().props.flash.successMessage) {
             <SortingArrows :params="params" sort="id" />
           </HeaderTh>
 
+          <HeaderTh> Category Name </HeaderTh>
+
           <HeaderTh @click="updateSorting('name')">
-            Name
+            SubCategory Name
             <SortingArrows :params="params" sort="name" />
           </HeaderTh>
 
@@ -343,18 +321,25 @@ if (usePage().props.flash.successMessage) {
           </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="faqCategories.data.length">
-          <Tr v-for="faqCategory in faqCategories.data" :key="faqCategory.id">
+        <tbody v-if="faqSubCategories.data.length">
+          <Tr
+            v-for="faqSubCategory in faqSubCategories.data"
+            :key="faqSubCategory.id"
+          >
             <BodyTh>
-              {{ faqCategory.id }}
+              {{ faqSubCategory.id }}
             </BodyTh>
 
             <Td>
-              {{ faqCategory.name }}
+              {{ faqSubCategory.faq_category.name }}
             </Td>
 
             <Td>
-              {{ faqCategory.created_at }}
+              {{ faqSubCategory.name }}
+            </Td>
+
+            <Td>
+              {{ faqSubCategory.created_at }}
             </Td>
 
             <Td v-if="faqCategoryEdit || faqCategoryDelete">
@@ -364,8 +349,8 @@ if (usePage().props.flash.successMessage) {
                 as="button"
                 :href="
                   route(
-                    'admin.faq-categories.categories.edit',
-                    faqCategory.slug
+                    'admin.faq-categories.sub-categories.edit',
+                    faqSubCategory.slug
                   )
                 "
                 :data="{
@@ -385,7 +370,7 @@ if (usePage().props.flash.successMessage) {
               <!-- Delete Button -->
               <button
                 v-if="faqCategoryDelete"
-                @click="handleDeleteFaqCategory(faqCategory)"
+                @click="handleDeleteFaqSubCategory(faqSubCategory.slug)"
                 class="delete-btn group"
                 type="button"
               >
@@ -401,15 +386,15 @@ if (usePage().props.flash.successMessage) {
       <!-- Blog Categories Table End -->
 
       <!-- No Data Row -->
-      <NotAvaliableData v-if="!faqCategories.data.length" />
+      <NotAvaliableData v-if="!faqSubCategories.data.length" />
 
       <!-- Pagination -->
-      <div v-if="faqCategories.data.length" class="mt-6">
+      <div v-if="faqSubCategories.data.length" class="mt-6">
         <p class="text-center text-sm text-gray-600 mb-3 font-bold">
-          Showing {{ faqCategories.from }} - {{ faqCategories.to }} of
-          {{ faqCategories.total }}
+          Showing {{ faqSubCategories.from }} - {{ faqSubCategories.to }} of
+          {{ faqSubCategories.total }}
         </p>
-        <Pagination :links="faqCategories.links" />
+        <Pagination :links="faqSubCategories.links" />
       </div>
     </div>
   </AdminDashboardLayout>

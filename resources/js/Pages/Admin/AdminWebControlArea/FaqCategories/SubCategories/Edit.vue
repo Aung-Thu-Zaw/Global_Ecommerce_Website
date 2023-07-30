@@ -11,7 +11,8 @@ import { useReCaptcha } from "vue-recaptcha-v3";
 // Define the props
 const props = defineProps({
   queryStringParams: Array,
-  faqCategory: Object,
+  faqCategories: Object,
+  faqSubCategory: Object,
 });
 
 // Define Variables
@@ -19,7 +20,8 @@ const processing = ref(false);
 
 // Faq Category Edit Form Data
 const form = useForm({
-  name: props.faqCategory.name,
+  faq_category_id: props.faqSubCategory.faq_category_id,
+  name: props.faqSubCategory.name,
   captcha_token: null,
 });
 
@@ -27,14 +29,14 @@ const form = useForm({
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 
 // Handle Edit Faq Category
-const handleEditFaqCatrgory = async () => {
+const handleEditFaqSubCategory = async () => {
   await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("edit_faq_category");
+  form.captcha_token = await executeRecaptcha("edit_faq_sub_category");
 
   processing.value = true;
   form.post(
-    route("admin.faq-categories.categories.update", {
-      faq_category: props.faqCategory.slug,
+    route("admin.faq-categories.sub-categories.update", {
+      faq_sub_category: props.faqSubCategory.slug,
       page: props.queryStringParams.page,
       per_page: props.queryStringParams.per_page,
       sort: props.queryStringParams.sort,
@@ -53,7 +55,7 @@ const handleEditFaqCatrgory = async () => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Edit Faq Category" />
+    <Head title="Edit Faq SubCategory" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
         <!-- Breadcrumb -->
@@ -76,7 +78,7 @@ const handleEditFaqCatrgory = async () => {
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
               >
-                Categories
+                SubCategories
               </span>
             </div>
           </li>
@@ -97,7 +99,7 @@ const handleEditFaqCatrgory = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >{{ faqCategory.name }}
+                >{{ faqSubCategory.name }}
               </span>
             </div>
           </li>
@@ -146,10 +148,10 @@ const handleEditFaqCatrgory = async () => {
       </div>
 
       <div class="border shadow-md p-10">
-        <form @submit.prevent="handleEditFaqCatrgory">
-          <!-- Faq Category Name Input -->
+        <form @submit.prevent="handleEditFaqSubCategory">
+          <!-- Faq SubCategory Name Input -->
           <div class="mb-6">
-            <InputLabel for="name" value="Faq Category Name *" />
+            <InputLabel for="name" value="Faq SubCategory Name *" />
 
             <TextInput
               id="name"
@@ -157,10 +159,32 @@ const handleEditFaqCatrgory = async () => {
               class="mt-1 block w-full"
               v-model="form.name"
               required
-              placeholder="Enter Category Name"
+              placeholder="Enter Sub Category Name"
             />
 
             <InputError class="mt-2" :message="form.errors.name" />
+          </div>
+
+          <!-- Faq Category Select Box -->
+          <div class="mb-6">
+            <InputLabel for="faq_category" value="Faq Category *" />
+
+            <select
+              v-model="form.faq_category_id"
+              class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+            >
+              <option value="" selected disabled>Select Faq Category</option>
+              <option
+                v-for="faqCategory in faqCategories"
+                :key="faqCategory.id"
+                :value="faqCategory.id"
+                :selected="faqCategory.id === form.faq_category_id"
+              >
+                {{ faqCategory.name }}
+              </option>
+            </select>
+
+            <InputError class="mt-2" :message="form.errors.faq_category_id" />
           </div>
 
           <!-- Edit Button -->
