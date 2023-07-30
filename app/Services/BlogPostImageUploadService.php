@@ -3,52 +3,34 @@
 namespace App\Services;
 
 use App\Models\BlogPost;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
 
 class BlogPostImageUploadService
 {
-    public function createImage(Request $request): string
+    public function createImage(UploadedFile $image): string
     {
-        $request->validate([
-            "image"=>["required","image","mimes:png,jpg,jpeg,svg,webp,gif"]
-        ]);
+        $originalName=$image->getClientOriginalName();
 
-        $file=$request->file("image");
+        $finalName=time()."-".$originalName;
 
-        /** @var \Illuminate\Http\UploadedFile $file */
-
-
-        $extension=$file->extension();
-
-        $finalName= Str::slug($request->title, '-')."."."$extension";
-
-        $file->move(storage_path("app/public/blog-posts/"), $finalName);
+        $image->move(storage_path("app/public/blog-posts/"), $finalName);
 
         return $finalName;
     }
 
-    public function updateImage(Request $request, BlogPost $blogPost): string
+    public function updateImage(UploadedFile $image, string $blogPostImage): string
     {
-        if ($request->hasFile("image")) {
-            $request->validate([
-                "image"=>["required","image","mimes:png,jpg,jpeg,svg,webp,gif"]
-            ]);
+        if(is_string($blogPostImage)) {
 
-            BlogPost::deleteImage($blogPost);
-
-            $file=$request->file("image");
-
-            /** @var \Illuminate\Http\UploadedFile $file */
-
-            $extension=$file->extension();
-            $finalName= Str::slug($request->title, '-')."."."$extension";
-
-            $file->move(storage_path("app/public/blog-posts/"), $finalName);
-
-            return $finalName;
-        } else {
-            return $blogPost->image;
+            BlogPost::deleteImage($blogPostImage);
         }
+
+        $originalName=$image->getClientOriginalName();
+
+        $finalName=time()."-".$originalName;
+
+        $image->move(storage_path("app/public/blog-posts/"), $finalName);
+
+        return $finalName;
     }
 }

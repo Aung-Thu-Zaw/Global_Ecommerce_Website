@@ -33,7 +33,7 @@ class PermanentlyAutoDeleteBlogPostCommand extends Command
 
         $blogPosts->each(function ($blogPost) {
 
-            BlogPost::deleteImage($blogPost);
+            BlogPost::deleteImage($blogPost->image);
 
             $blogPost->forceDelete();
 

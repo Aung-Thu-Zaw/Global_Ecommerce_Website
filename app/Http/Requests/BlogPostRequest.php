@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\RecaptchaRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -29,8 +30,13 @@ class BlogPostRequest extends FormRequest
             "blog_category_id"=>["required","numeric",Rule::exists("blog_categories", "id")],
             "author_id"=>["required","numeric",Rule::exists("users", "id")],
             "title"=>["required","string","max:255"],
-            "description"=>["required","string"]
+            "description"=>["required","string"],
+            "captcha_token"  => ["required",new RecaptchaRule()],
         ];
+
+        if ($this->hasFile("image")) {
+            $rules["image"]=["required","image","mimes:png,jpg,jpeg,svg,webp,gif","max:5120"];
+        }
 
         return $rules;
     }
@@ -52,6 +58,11 @@ class BlogPostRequest extends FormRequest
             "title.max" => "The title must not be greater than 255 characters.",
             "description.required" =>  "The description field is required.",
             "description.string" =>  "The description must be a string.",
+            "image.required"=>"The image field is required.",
+            "image.image"=>"The image must be an image.",
+            "image.mimes"=>"The image must be a file of type: png,jpg,jpeg,svg,webp or gif.",
+            "image.max"=>"The image must not be greater than 5120 kilobytes.",
+            "captcha_token.required"=>"The captcha token is required",
         ];
     }
 }

@@ -33,7 +33,7 @@ class PermanentlyAutoDeleteBlogCategoryCommand extends Command
 
         $blogCategories->each(function ($blogCategory) {
 
-            BlogCategory::deleteImage($blogCategory);
+            BlogCategory::deleteImage($blogCategory->image);
 
             $blogCategory->forceDelete();
 

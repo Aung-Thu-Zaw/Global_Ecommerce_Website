@@ -135,6 +135,7 @@ const handleDeleteBlogPost = async (blogPost) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -318,16 +319,16 @@ if (usePage().props.flash.successMessage) {
             <Td>
               <span
                 v-html="blogPost.description"
-                class="line-clamp-1 w-[500px]"
+                class="line-clamp-1 w-[400px]"
               >
               </span>
             </Td>
 
-            <Td>
+            <Td class="w-[150px]">
               {{ blogPost.created_at }}
             </Td>
 
-            <Td v-if="blogPostEdit || blogPostDelete">
+            <Td v-if="blogPostEdit || blogPostDelete" class="w-[300px]">
               <!-- Edit Button -->
               <Link
                 v-if="blogPostEdit"

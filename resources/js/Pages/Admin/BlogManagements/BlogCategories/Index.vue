@@ -137,6 +137,7 @@ const handleDeleteBlogCategory = async (blogCategory) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({

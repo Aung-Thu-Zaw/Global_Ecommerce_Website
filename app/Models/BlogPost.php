@@ -98,10 +98,10 @@ class BlogPost extends Model
         return $this->belongsTo(User::class, "author_id");
     }
 
-    public static function deleteImage(BlogPost $blogPost): void
+    public static function deleteImage(string $blogPostImage): void
     {
-        if (!empty($blogPost->image) && file_exists(storage_path("app/public/blog-posts/".pathinfo($blogPost->image, PATHINFO_BASENAME)))) {
-            unlink(storage_path("app/public/blog-posts/".pathinfo($blogPost->image, PATHINFO_BASENAME)));
+        if (!empty($blogPostImage) && file_exists(storage_path("app/public/blog-posts/".pathinfo($blogPostImage, PATHINFO_BASENAME)))) {
+            unlink(storage_path("app/public/blog-posts/".pathinfo($blogPostImage, PATHINFO_BASENAME)));
         }
     }
 

@@ -135,6 +135,7 @@ const handleRestoreTrashBlogPost = async (trashBlogPostId) => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -173,6 +174,7 @@ const handleDeleteTrashBlogPost = async (trashBlogPostId) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -211,6 +213,7 @@ const handlePermanentlyDeleteBlogPosts = async () => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -386,7 +389,9 @@ const blogPostTrashDelete = computed(() => {
             </Td>
 
             <Td>
-              {{ trashBlogPost.title }}
+              <span class="line-clamp-1">
+                {{ trashBlogPost.title }}
+              </span>
             </Td>
 
             <Td>
@@ -397,11 +402,14 @@ const blogPostTrashDelete = computed(() => {
               </span>
             </Td>
 
-            <Td>
+            <Td class="w-[150px]">
               {{ trashBlogPost.deleted_at }}
             </Td>
 
-            <Td v-if="blogPostTrashRestore || blogPostTrashDelete">
+            <Td
+              v-if="blogPostTrashRestore || blogPostTrashDelete"
+              class="w-[350px]"
+            >
               <!-- Restore Button -->
               <button
                 v-if="blogPostTrashRestore"
