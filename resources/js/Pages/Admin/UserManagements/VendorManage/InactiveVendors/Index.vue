@@ -12,7 +12,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link, usePage, Head, router } from "@inertiajs/vue3";
-import { inject, reactive, watch, computed } from "vue";
+import { inject, reactive, watch, computed, ref } from "vue";
 
 // Define the props
 const props = defineProps({
@@ -128,7 +128,7 @@ const handleActive = async (inactiveVendorId) => {
   if (result.isConfirmed) {
     router.post(
       route("admin.vendors.inactive.update", {
-        vendor: inactiveVendorId,
+        user: inactiveVendorId,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
@@ -136,6 +136,7 @@ const handleActive = async (inactiveVendorId) => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -167,13 +168,14 @@ const handleDeleteInactiveVendor = async (inactiveVendorId) => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.vendors.inactive.destroy", {
-        vendor: inactiveVendorId,
+        user: inactiveVendorId,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -293,7 +295,7 @@ if (usePage().props.flash.successMessage) {
           <input
             type="text"
             class="search-input"
-            placeholder="Search by name"
+            placeholder="Search by shop name"
             v-model="params.search"
           />
           <i
@@ -324,9 +326,9 @@ if (usePage().props.flash.successMessage) {
             <SortingArrows :params="params" sort="id" />
           </HeaderTh>
 
-          <HeaderTh @click="updateSorting('name')">
-            Username
-            <SortingArrows :params="params" sort="name" />
+          <HeaderTh @click="updateSorting('shop_name')">
+            Shop Name
+            <SortingArrows :params="params" sort="shop_name" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('email')">
@@ -360,7 +362,7 @@ if (usePage().props.flash.successMessage) {
             </BodyTh>
 
             <Td>
-              {{ inactiveVendor.name }}
+              {{ inactiveVendor.shop_name }}
             </Td>
 
             <Td>

@@ -128,7 +128,7 @@ const handleInactive = async (activeVendorId) => {
   if (result.isConfirmed) {
     router.post(
       route("admin.vendors.active.update", {
-        vendor: activeVendorId,
+        user: activeVendorId,
         status: "inactive",
         page: params.page,
         per_page: params.per_page,
@@ -137,6 +137,7 @@ const handleInactive = async (activeVendorId) => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -171,7 +172,7 @@ const handleOffical = async (activeVendor) => {
   if (result.isConfirmed) {
     router.post(
       route("admin.vendors.active.update", {
-        vendor: activeVendor.id,
+        user: activeVendor.id,
         offical: activeVendor.offical ? false : true,
         page: params.page,
         per_page: params.per_page,
@@ -180,6 +181,7 @@ const handleOffical = async (activeVendor) => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -257,7 +259,7 @@ if (usePage().props.flash.successMessage) {
           <input
             type="text"
             class="search-input"
-            placeholder="Search by name"
+            placeholder="Search by shop name"
             v-model="params.search"
           />
           <i
@@ -317,7 +319,7 @@ if (usePage().props.flash.successMessage) {
               {{ activeVendor.id }}
             </BodyTh>
 
-            <Td class="flex items-center">
+            <Td>
               {{ activeVendor.shop_name }}
 
               <i

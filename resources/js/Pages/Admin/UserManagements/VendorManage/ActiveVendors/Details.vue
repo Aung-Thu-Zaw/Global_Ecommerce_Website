@@ -7,14 +7,14 @@ import TextInput from "@/Components/Forms/TextInput.vue";
 import { Head, Link } from "@inertiajs/vue3";
 
 const props = defineProps({
-  paginate: Object,
-  activeVendor: Object,
+  queryStringParams: Object,
+  user: Object,
 });
 </script>
 
 <template>
   <AdminDashboardLayout>
-    <Head :title="activeVendor.name + ' Details'" />
+    <Head :title="user.name + ' Details'" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -58,6 +58,27 @@ const props = defineProps({
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                >{{ user.shop_name }}</span
+              >
+            </div>
+          </li>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span
+                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
                 >Details</span
               >
             </div>
@@ -69,8 +90,10 @@ const props = defineProps({
             as="button"
             :href="route('admin.vendors.active.index')"
             :data="{
-              page: props.paginate.page,
-              per_page: props.paginate.per_page,
+              page: props.queryStringParams.page,
+              per_page: props.queryStringParams.per_page,
+              sort: props.queryStringParams.sort,
+              direction: props.queryStringParams.direction,
             }"
             class="goback-btn"
           >
@@ -86,14 +109,14 @@ const props = defineProps({
       <div class="border shadow-md p-10">
         <div class="mb-10 flex items-center justify-between">
           <img
-            :src="activeVendor.avatar"
+            :src="user.avatar"
             alt=""
             class="w-48 h-48 rounded-md object-cover ring-4 mb-5"
           />
           <h2
             class="uppercase text-md text-green-600 font-bold px-3 py-2 bg-green-100 rounded-md"
           >
-            Shop is {{ activeVendor.status }}
+            Shop is {{ user.status }}
           </h2>
         </div>
 
@@ -105,7 +128,7 @@ const props = defineProps({
               id="name"
               type="text"
               class="mt-1 block w-full"
-              v-model="activeVendor.name"
+              v-model="user.name"
               disabled
             >
               <template v-slot:icon>
@@ -123,7 +146,7 @@ const props = defineProps({
                 id="companyName"
                 type="text"
                 class="mt-1 block w-full"
-                v-model="activeVendor.company_name"
+                v-model="user.company_name"
                 disabled
               >
                 <template v-slot:icon>
@@ -141,7 +164,7 @@ const props = defineProps({
                 id="shopName"
                 type="text"
                 class="mt-1 block w-full"
-                v-model="activeVendor.shop_name"
+                v-model="user.shop_name"
                 disabled
               >
                 <template v-slot:icon>
@@ -159,7 +182,7 @@ const props = defineProps({
                 id="email"
                 type="email"
                 class="mt-1 block w-full"
-                v-model="activeVendor.email"
+                v-model="user.email"
                 disabled
               >
                 <template v-slot:icon>
@@ -177,7 +200,7 @@ const props = defineProps({
                 id="email"
                 type="text"
                 class="mt-1 block w-full"
-                v-model="activeVendor.phone"
+                v-model="user.phone"
                 disabled
               >
                 <template v-slot:icon>
@@ -198,7 +221,7 @@ const props = defineProps({
                 rows="10"
                 disabled
                 class="p-2 w-full border-transparent outline-none focus:border-transparent focus:ring-0 placeholder:text-gray-400 placeholder:text-sm"
-                v-model="activeVendor.about"
+                v-model="user.about"
               ></textarea>
             </InputContainer>
           </div>

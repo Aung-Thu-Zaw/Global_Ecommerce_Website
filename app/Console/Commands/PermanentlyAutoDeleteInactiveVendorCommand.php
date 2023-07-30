@@ -34,7 +34,7 @@ class PermanentlyAutoDeleteInactiveVendorCommand extends Command
 
         $inactiveVendors->each(function ($inactiveVendor) {
 
-            User::deleteUserAvatar($inactiveVendor);
+            User::deleteUserAvatar($inactiveVendor->avatar);
 
             $inactiveVendor->forceDelete();
 

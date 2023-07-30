@@ -11,7 +11,7 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { inject, reactive, watch, computed } from "vue";
+import { inject, reactive, watch, computed, ref } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 // Define the Props
@@ -136,6 +136,7 @@ const handleRestoreTrashVendor = async (inactiveVendorId) => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -174,6 +175,7 @@ const handleDeleteTrashVendor = async (inactiveVendorId) => {
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -212,6 +214,7 @@ const handlePermanentlyDeleteTrashVendors = async () => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -326,7 +329,7 @@ const vendorManageTrashDelete = computed(() => {
           <input
             type="text"
             class="search-input"
-            placeholder="Search by name"
+            placeholder="Search by shop name"
             v-model="params.search"
           />
 

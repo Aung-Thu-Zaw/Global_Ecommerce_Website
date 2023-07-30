@@ -477,7 +477,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                 ->name("vendors.inactive.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:vendor-manage.menu')->name("index");
-                    Route::get("/{user}", "show")->middleware('permission:vendor-manage.detail')->name("show");
+                    Route::get("/{user}/details", "show")->middleware('permission:vendor-manage.detail')->name("show");
                     Route::post("/{user}", "update")->middleware('permission:vendor-manage.control')->name("update");
                     Route::delete("/{user}", "destroy")->middleware('permission:vendor-manage.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:vendor-manage.trash.list')->name("trash");
@@ -492,7 +492,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                 ->name("vendors.active.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:vendor-manage.menu')->name("index");
-                    Route::get("/{user}", "show")->middleware('permission:vendor-manage.detail')->name("show");
+                    Route::get("/{user}/details", "show")->middleware('permission:vendor-manage.detail')->name("show");
                     Route::post("/{user}", "update")->middleware('permission:vendor-manage.control')->name("update");
                 });
 
