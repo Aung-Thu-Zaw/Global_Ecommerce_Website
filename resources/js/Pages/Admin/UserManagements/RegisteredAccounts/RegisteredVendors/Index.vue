@@ -1,6 +1,10 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/UserManageBreadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/RegisteredAccountBreadcrumb.vue";
+import SortingArrows from "@/Components/Table/SortingArrows.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
+import ActiveStatus from "@/Components/Status/ActiveStatus.vue";
+import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
+import RoleStatus from "@/Components/Status/RoleStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -42,7 +46,7 @@ const params = reactive({
 // Handle Search
 const handleSearch = () => {
   router.get(
-    route("admin.vendors.register.index"),
+    route("admin.vendors.registered.index"),
     {
       search: params.search,
       per_page: params.per_page,
@@ -60,7 +64,7 @@ const handleSearch = () => {
 const removeSearch = () => {
   params.search = "";
   router.get(
-    route("admin.vendors.register.index"),
+    route("admin.vendors.registered.index"),
     {
       per_page: params.per_page,
       sort: params.sort,
@@ -76,7 +80,7 @@ const removeSearch = () => {
 // Handle Query String Parameter
 const handleQueryStringParameter = () => {
   router.get(
-    route("admin.vendors.register.index"),
+    route("admin.vendors.registered.index"),
     {
       search: params.search,
       page: params.page,
@@ -120,14 +124,15 @@ const updateSorting = (sort = "id") => {
 };
 
 // Handle Vendor Delete
-const handleVendorDelete = async (admin) => {
+const handleDeleteRegisteredVendor = async (vendor) => {
   const result = await swal({
-    icon: "warning",
+    icon: "question",
     title: "Are you sure you want to delete this vendor?",
     text: "You will be able to restore this vendor in the trash!",
     showCancelButton: true,
-    confirmButtonText: "Yes, delete it!",
-    confirmButtonColor: "#ef4444",
+    confirmButtonText: "Yes, Delete it!",
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -135,12 +140,15 @@ const handleVendorDelete = async (admin) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.vendors.register.destroy", {
-        user: admin,
+      route("admin.vendors.registered.destroy", {
+        user: vendor,
         page: params.page,
         per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -157,29 +165,29 @@ const handleVendorDelete = async (admin) => {
 // Define Permissions Variables
 const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
 
-// Vendor Manage Detail Permission
-const vendorManageDetail = computed(() => {
+// Registered Account Detail Permission
+const registeredAccountDetail = computed(() => {
   return permissions.value.length
     ? permissions.value.some(
-        (permission) => permission.name === "vendor-manage.detail"
+        (permission) => permission.name === "registered-account.detail"
       )
     : false;
 });
 
-// Admin Manage Delete Permission
-const vendorManageDelete = computed(() => {
+// Registered Account Delete Permission
+const registeredAccountDelete = computed(() => {
   return permissions.value.length
     ? permissions.value.some(
-        (permission) => permission.name === "vendor-manage.delete"
+        (permission) => permission.name === "registered-account.delete"
       )
     : false;
 });
 
-// Vendor Manage Trash List Permission
-const vendorManageTrashList = computed(() => {
+// Registered Account Trash List Permission
+const registeredAccountTrashList = computed(() => {
   return permissions.value.length
     ? permissions.value.some(
-        (permission) => permission.name === "vendor-manage.trash.list"
+        (permission) => permission.name === "registered-account.trash.list"
       )
     : false;
 });
@@ -187,7 +195,7 @@ const vendorManageTrashList = computed(() => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="All Register Vendors" />
+    <Head title="Registered Vendors" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -208,53 +216,52 @@ const vendorManageTrashList = computed(() => {
                 ></path>
               </svg>
               <span class="ml-1 font-medium text-gray-500 md:ml-2"
-                >All Register Vendors</span
+                >Registered Vendors</span
               >
             </div>
           </li>
         </Breadcrumb>
 
-        <div v-if="vendorManageTrashList">
+        <div v-if="registeredAccountTrashList">
           <Link
             as="button"
-            :href="route('admin.vendors.register.trash')"
+            :href="route('admin.vendors.registered.trash')"
             :data="{
               page: 1,
               per_page: 10,
               sort: 'id',
               direction: 'desc',
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
+            class="trash-btn group"
           >
-            <i class="fa-solid fa-trash"></i>
-
-            Trash
+            <span class="group-hover:animate-pulse">
+              <i class="fa-solid fa-trash-can-arrow-up"></i>
+              Trash
+            </span>
           </Link>
         </div>
       </div>
 
       <div class="flex items-center justify-end mb-5">
+        <!-- Search Box -->
         <form class="w-[350px] relative">
           <input
             type="text"
-            class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-            placeholder="Search"
+            class="search-input"
+            placeholder="Search by name"
             v-model="params.search"
           />
-
           <i
             v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+            class="fa-solid fa-xmark remove-search"
             @click="removeSearch"
           ></i>
         </form>
 
+        <!-- Perpage Select Box -->
         <div class="ml-5">
-          <select
-            class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-            v-model="params.per_page"
-          >
-            <option value="" selected disabled>Select</option>
+          <select class="perpage-selectbox" v-model="params.per_page">
+            <option value="" disabled>Select</option>
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="25">25</option>
@@ -269,176 +276,125 @@ const vendorManageTrashList = computed(() => {
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="id" />
           </HeaderTh>
+
           <HeaderTh>Avatar</HeaderTh>
+
           <HeaderTh @click="updateSorting('name')">
             Name
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'name',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'name',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="name" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('email')">
             Email Address
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'email',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'email',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'email',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'email',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="email" />
           </HeaderTh>
+
           <HeaderTh> Role </HeaderTh>
+
           <HeaderTh> Status </HeaderTh>
+
           <HeaderTh @click="updateSorting('created_at')">
             Created At
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'created_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'created_at',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'created_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'created_at',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="created_at" />
           </HeaderTh>
-          <HeaderTh v-if="vendorManageDelete || vendorManageDetail">
+
+          <HeaderTh v-if="registeredAccountDelete || registeredAccountDetail">
             Action
           </HeaderTh>
         </TableHeader>
 
         <tbody v-if="vendors.data.length">
-          <Tr v-for="user in vendors.data" :key="user.id">
-            <BodyTh>{{ user.id }}</BodyTh>
+          <Tr v-for="vendor in vendors.data" :key="vendor.id">
+            <BodyTh>
+              {{ vendor.id }}
+            </BodyTh>
+
             <Td>
               <img
-                :src="user.avatar"
+                :src="vendor.avatar"
                 alt=""
                 class="h-[50px] w-[50px] ring-2 ring-slate-300 object-cover rounded-full"
               />
             </Td>
-            <Td>{{ user.name }}</Td>
-            <Td>{{ user.email }}</Td>
+
             <Td>
-              <span
-                class="capitalize bg-sky-200 text-sky-500 px-3 py-1 font-bold text-sm rounded-full"
-              >
-                {{ user.role }}
-              </span>
+              {{ vendor.name }}
             </Td>
+
             <Td>
-              <span
-                class="capitalize px-3 py-1 font-bold text-sm rounded-full"
-                :class="{
-                  'bg-green-200 text-green-500':
-                    status(user.last_activity) == 'online',
-                  'bg-red-200 text-red-500':
-                    status(user.last_activity) == 'offline',
-                }"
-              >
-                <i class="fa-solid fa-circle animate-pulse text-[.6rem]"></i>
-                {{ status(user.last_activity) }}
-              </span>
+              {{ vendor.email }}
             </Td>
-            <Td>{{ user.created_at }}</Td>
-            <Td v-if="vendorManageDelete || vendorManageDetail">
+
+            <Td>
+              <RoleStatus>
+                {{ vendor.role }}
+              </RoleStatus>
+            </Td>
+
+            <Td>
+              <ActiveStatus v-if="status(vendor.last_activity) == 'active'">
+                {{ status(vendor.last_activity) }}
+              </ActiveStatus>
+
+              <InactiveStatus v-if="status(vendor.last_activity) == 'offline'">
+                {{ status(vendor.last_activity) }}
+              </InactiveStatus>
+            </Td>
+
+            <Td>
+              {{ vendor.created_at }}
+            </Td>
+
+            <Td v-if="registeredAccountDelete || registeredAccountDetail">
+              <!-- Delete Button -->
               <button
-                v-if="vendorManageDelete"
-                @click="handleVendorDelete(user.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
+                v-if="registeredAccountDelete"
+                @click="handleDeleteRegisteredVendor(vendor.id)"
+                class="delete-btn group"
+                type="button"
               >
-                <i class="fa-solid fa-xmark"></i>
-                Delete
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-trash-can"></i>
+                  Delete
+                </span>
               </button>
+
+              <!-- Detail Button -->
               <Link
-                v-if="vendorManageDetail"
+                v-if="registeredAccountDetail"
                 as="button"
-                :href="route('admin.vendors.register.show', user.id)"
+                :href="route('admin.vendors.registered.show', vendor.id)"
                 :data="{
                   page: params.page,
                   per_page: params.per_page,
+                  sort: params.sort,
+                  direction: params.direction,
                 }"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700"
+                class="detail-btn group"
               >
-                <i class="fa-solid fa-eye"></i>
-                Details
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-eye"></i>
+                  Details
+                </span>
               </Link>
             </Td>
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- User Table End -->
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!vendors.data.length" />
 
-      <Pagination class="mt-6" :links="vendors.links" />
+      <div v-if="vendors.data.length" class="mt-6">
+        <p class="text-center text-sm text-gray-600 mb-3 font-bold">
+          Showing {{ vendors.from }} - {{ vendors.to }} of
+          {{ vendors.total }}
+        </p>
+        <Pagination :links="vendors.links" />
+      </div>
     </div>
   </AdminDashboardLayout>
 </template>

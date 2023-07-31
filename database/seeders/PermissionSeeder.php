@@ -119,12 +119,12 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"vendor-manage.trash.restore","group"=>"vendor-manage"]);
         Permission::create(["name"=>"vendor-manage.trash.delete","group"=>"vendor-manage"]);
 
-        Permission::create(["name"=>"user-manage.menu","group"=>"user-manage"]);
-        Permission::create(["name"=>"user-manage.detail","group"=>"user-manage"]);
-        Permission::create(["name"=>"user-manage.delete","group"=>"user-manage"]);
-        Permission::create(["name"=>"user-manage.trash.list","group"=>"user-manage"]);
-        Permission::create(["name"=>"user-manage.trash.restore","group"=>"user-manage"]);
-        Permission::create(["name"=>"user-manage.trash.delete","group"=>"user-manage"]);
+        Permission::create(["name"=>"registered-account.menu","group"=>"registered-account"]);
+        Permission::create(["name"=>"registered-account.detail","group"=>"registered-account"]);
+        Permission::create(["name"=>"registered-account.delete","group"=>"registered-account"]);
+        Permission::create(["name"=>"registered-account.trash.list","group"=>"registered-account"]);
+        Permission::create(["name"=>"registered-account.trash.restore","group"=>"registered-account"]);
+        Permission::create(["name"=>"registered-account.trash.delete","group"=>"registered-account"]);
 
         Permission::create(["name"=>"admin-manage.menu","group"=>"admin-manage"]);
         Permission::create(["name"=>"admin-manage.detail","group"=>"admin-manage"]);

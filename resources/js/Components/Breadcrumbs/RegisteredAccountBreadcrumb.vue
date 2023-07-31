@@ -38,7 +38,7 @@
             </svg>
             <span
               class="ml-1 font-medium text-gray-500 md:ml-2 dark:hover:text-white"
-              >User Manage</span
+              >Registered Accounts</span
             >
           </div>
         </li>

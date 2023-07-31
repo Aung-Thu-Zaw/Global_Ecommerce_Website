@@ -1,12 +1,14 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/UserManageBreadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/RegisteredAccountBreadcrumb.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import ActiveStatus from "@/Components/Status/ActiveStatus.vue";
+import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import { Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
-  paginate: Object,
+  queryStringParams: Object,
   user: Object,
 });
 
@@ -18,7 +20,7 @@ const status = (last_activity) => {
   const lastActivity = new Date(last_activity);
   const timeDifference = currentTime.getTime() - lastActivity.getTime();
 
-  return timeDifference < threshold ? "online" : "offline";
+  return timeDifference < threshold ? "active" : "offline";
 };
 </script>
 
@@ -46,7 +48,7 @@ const status = (last_activity) => {
                 ></path>
               </svg>
               <span class="ml-1 font-medium text-gray-500 md:ml-2"
-                >All Register Users</span
+                >Registered Users</span
               >
             </div>
           </li>
@@ -98,15 +100,19 @@ const status = (last_activity) => {
         <div>
           <Link
             as="button"
-            :href="route('admin.users.register.index')"
+            :href="route('admin.users.registered.index')"
             :data="{
-              page: props.paginate.page,
-              per_page: props.paginate.per_page,
+              page: props.queryStringParams.page,
+              per_page: props.queryStringParams.per_page,
+              sort: props.queryStringParams.sort,
+              direction: props.queryStringParams.direction,
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+            class="goback-btn"
           >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
+            </span>
           </Link>
         </div>
       </div>
@@ -122,18 +128,13 @@ const status = (last_activity) => {
 
         <p class="text-lg font-bold capitalize mb-5 text-center">
           Online Status -
-          <span
-            class="px-3 py-1 font-bold uppercase text-sm rounded-full"
-            :class="{
-              'bg-green-200 text-green-500':
-                status(user.last_activity) == 'online',
-              'bg-red-200 text-red-500':
-                status(user.last_activity) == 'offline',
-            }"
-          >
-            <i class="fa-solid fa-circle animate-pulse text-[.6rem]"></i>
+          <ActiveStatus v-if="status(user.last_activity) == 'active'">
             {{ status(user.last_activity) }}
-          </span>
+          </ActiveStatus>
+
+          <InactiveStatus v-if="status(user.last_activity) == 'offline'">
+            {{ status(user.last_activity) }}
+          </InactiveStatus>
         </p>
 
         <form>
