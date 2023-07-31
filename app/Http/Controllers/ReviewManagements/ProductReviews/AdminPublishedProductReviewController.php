@@ -15,36 +15,32 @@ class AdminPublishedProductReviewController extends Controller
     public function index(): Response|ResponseFactory
     {
         $publishedProductReviews=ProductReview::search(request("search"))
-
-        ->query(function (Builder $builder) {
-            $builder->with(["product:id,name","user:id,name"]);
-        })
-                              ->where("status", 1)
-                              ->orderBy(request("sort", "id"), request("direction", "desc"))
-                              ->paginate(request("per_page", 10))
-                              ->appends(request()->all());
+                                              ->query(function (Builder $builder) {
+                                                  $builder->with(["product:id,name","user:id,name"]);
+                                              })
+                                              ->where("status", 1)
+                                              ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                              ->paginate(request("per_page", 10))
+                                              ->appends(request()->all());
 
         return inertia("Admin/ReviewManagements/ProductReviews/PublishedReviews/Index", compact("publishedProductReviews"));
     }
 
-    public function show(int $id): Response|ResponseFactory
+    public function show(Request $request, ProductReview $productReview): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        $publishedProductReview=ProductReview::findOrFail($id);
+        $productReview->load(["product:id,name","user:id,name,email"]);
 
-        $publishedProductReview->load(["product:id,name","user:id,name,email"]);
-
-        return inertia("Admin/ReviewManagements/ProductReviews/PublishedReviews/Details", compact("publishedProductReview", "paginate"));
+        return inertia("Admin/ReviewManagements/ProductReviews/PublishedReviews/Details", compact("productReview", "queryStringParams"));
     }
 
-    public function update(Request $request, int $id): RedirectResponse
+    public function update(Request $request, ProductReview $productReview): RedirectResponse
     {
-        $pendingProductReview=ProductReview::findOrFail($id);
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        $pendingProductReview->update(["status"=>false]);
+        $productReview->update(["status"=>false]);
 
-        return to_route('admin.product-reviews.published.index', "page=$request->page&per_page=$request->per_page")->with("success", "Product review has been successfully suspended.");
+        return to_route('admin.product-reviews.published.index', $queryStringParams)->with("success", "Product review has been successfully unpublished.");
     }
-
 }

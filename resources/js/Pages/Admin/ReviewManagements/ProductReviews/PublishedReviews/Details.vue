@@ -6,8 +6,8 @@ import PublishedStatus from "@/Components/Status/PublishedStatus.vue";
 import { Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
-  paginate: Object,
-  publishedProductReviews: Object,
+  queryStringParams: Object,
+  productReview: Object,
 });
 </script>
 
@@ -19,7 +19,7 @@ const props = defineProps({
       <div class="flex items-center justify-between mb-10">
         <!-- Breadcrumb -->
         <Breadcrumb>
-          <!-- <li aria-current="page">
+          <li aria-current="page">
             <div class="flex items-center">
               <svg
                 aria-hidden="true"
@@ -36,9 +36,33 @@ const props = defineProps({
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-              ></span>
+              >
+                Published Reviews
+              </span>
             </div>
-          </li> -->
+          </li>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span
+                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+              >
+                {{ productReview.product.name }}
+              </span>
+            </div>
+          </li>
           <li aria-current="page">
             <div class="flex items-center">
               <svg
@@ -61,26 +85,29 @@ const props = defineProps({
             </div>
           </li>
         </Breadcrumb>
-
         <!-- Go Back Button -->
         <div>
           <Link
             as="button"
             :href="route('admin.product-reviews.published.index')"
             :data="{
-              page: props.paginate.page,
-              per_page: props.paginate.per_page,
+              page: props.queryStringParams.page,
+              per_page: props.queryStringParams.per_page,
+              sort: props.queryStringParams.sort,
+              direction: props.queryStringParams.direction,
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+            class="goback-btn"
           >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
+            </span>
           </Link>
         </div>
       </div>
 
       <div class="p-5 border shadow-md rounded-sm my-5">
-        <div v-if="publishedProductReviews" class="my-3">
+        <div v-if="productReview" class="my-3">
           <div
             class="w-full text-sm text-left text-gray-500 border overflow-hidden shadow rounded-md my-5"
           >
@@ -94,7 +121,7 @@ const props = defineProps({
                   Product Name
                 </span>
                 <span class="w-1/2 block">
-                  {{ publishedProductReviews.product.name }}
+                  {{ productReview.product.name }}
                 </span>
               </div>
               <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -104,7 +131,7 @@ const props = defineProps({
                   Reviewer Name
                 </span>
                 <span class="w-1/2 block capitalize">
-                  {{ publishedProductReviews.user.name }}
+                  {{ productReview.user.name }}
                 </span>
               </div>
 
@@ -117,8 +144,7 @@ const props = defineProps({
                   Reviewer Email
                 </span>
                 <span class="w-1/2 block pr-5">
-                  {{ publishedProductReviews.created_at }}
-                  {{ publishedProductReviews.user.email }}
+                  {{ productReview.user.email }}
                 </span>
               </div>
               <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -128,7 +154,7 @@ const props = defineProps({
                   Review Date
                 </span>
                 <span class="w-1/2 block capitalize">
-                  {{ publishedProductReviews.created_at }}
+                  {{ productReview.created_at }}
                 </span>
               </div>
               <div
@@ -140,7 +166,7 @@ const props = defineProps({
                   Rating
                 </span>
                 <span class="w-1/2 block pr-5">
-                  <TotalRatingStars :rating="publishedProductReviews.rating" />
+                  <TotalRatingStars :rating="productReview.rating" />
                 </span>
               </div>
               <div class="border-b py-3 bg-gray-50 flex items-center">
@@ -149,8 +175,8 @@ const props = defineProps({
                 >
                   Status
                 </span>
-                <span class="w-1/2 block capitalize">
-                  <PublishedStatus v-if="publishedProductReviews.status === 1">
+                <span class="w-1/2 block">
+                  <PublishedStatus v-if="productReview.status === 1">
                     published
                   </PublishedStatus>
                 </span>
@@ -165,7 +191,7 @@ const props = defineProps({
                   Review Text
                 </span>
                 <span class="w-1/2 block pr-5">
-                  {{ publishedProductReviews.review_text }}
+                  {{ productReview.review_text }}
                 </span>
               </div>
             </div>

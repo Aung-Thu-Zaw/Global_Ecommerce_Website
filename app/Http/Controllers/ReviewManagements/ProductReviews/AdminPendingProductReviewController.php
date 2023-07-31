@@ -15,45 +15,42 @@ class AdminPendingProductReviewController extends Controller
     public function index(): Response|ResponseFactory
     {
         $pendingProductReviews=ProductReview::search(request("search"))
-
-        ->query(function (Builder $builder) {
-            $builder->with(["product:id,name","user:id,name"]);
-        })
-                              ->where("status", 0)
-                              ->orderBy(request("sort", "id"), request("direction", "desc"))
-                              ->paginate(request("per_page", 10))
-                              ->appends(request()->all());
+                                            ->query(function (Builder $builder) {
+                                                $builder->with(["product:id,name","user:id,name"]);
+                                            })
+                                            ->where("status", 0)
+                                            ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                            ->paginate(request("per_page", 10))
+                                            ->appends(request()->all());
 
         return inertia("Admin/ReviewManagements/ProductReviews/PendingReviews/Index", compact("pendingProductReviews"));
     }
 
-    public function show(int $id): Response|ResponseFactory
+    public function show(Request $request, ProductReview $productReview): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        $pendingProductReview=ProductReview::findOrFail($id);
+        $productReview->load(["product:id,name","user:id,name,email"]);
 
-        $pendingProductReview->load(["product:id,name","user:id,name,email"]);
-
-        return inertia("Admin/ReviewManagements/ProductReviews/PendingReviews/Details", compact("pendingProductReview", "paginate"));
+        return inertia("Admin/ReviewManagements/ProductReviews/PendingReviews/Details", compact("productReview", "queryStringParams"));
     }
 
-    public function update(Request $request, int $id): RedirectResponse
+    public function update(Request $request, ProductReview $productReview): RedirectResponse
     {
-        $pendingProductReview=ProductReview::findOrFail($id);
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        $pendingProductReview->update(["status"=>true]);
+        $productReview->update(["status"=>true]);
 
-        return to_route('admin.product-reviews.pending.index', "page=$request->page&per_page=$request->per_page")->with("success", "Product review has been successfully published.");
+        return to_route('admin.product-reviews.pending.index', $queryStringParams)->with("success", "Product review has been successfully published.");
     }
 
-    public function destroy(Request $request, int  $id): RedirectResponse
+    public function destroy(Request $request, ProductReview $productReview): RedirectResponse
     {
-        $pendingProductReview=ProductReview::findOrFail($id);
+        $productReview->delete();
 
-        $pendingProductReview->delete();
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.product-reviews.pending.index', "page=$request->page&per_page=$request->per_page")->with("success", "The product review has been successfully moved to the trash.");
+        return to_route('admin.product-reviews.pending.index', $queryStringParams)->with("success", "The product review has been successfully moved to the trash.");
     }
 
     public function trash(): Response|ResponseFactory
@@ -68,25 +65,29 @@ class AdminPendingProductReviewController extends Controller
                                                  ->paginate(request("per_page", 10))
                                                  ->appends(request()->all());
 
-        return inertia("Admin/UserManagements/VendorManage/InactiveVendors/Trash", compact("trashPendingProductReviews"));
+        return inertia("Admin/ReviewManagements/ProductReviews/PendingReviews/Trash", compact("trashPendingProductReviews"));
     }
 
-    public function restore(Request $request, int $id): RedirectResponse
+    public function restore(Request $request, int $trashProductReview): RedirectResponse
     {
-        $pendingProductReview = ProductReview::onlyTrashed()->findOrFail($id);
+        $pendingProductReview = ProductReview::onlyTrashed()->findOrFail($trashProductReview);
 
         $pendingProductReview->restore();
 
-        return to_route('admin.product-reviews.pending.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Product review has been successfully restored.");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route('admin.product-reviews.pending.trash', $queryStringParams)->with("success", "Product review has been successfully restored.");
     }
 
-    public function forceDelete(Request $request, int $id): RedirectResponse
+    public function forceDelete(Request $request, int $trashProductReview): RedirectResponse
     {
-        $pendingProductReview = ProductReview::onlyTrashed()->findOrFail($id);
+        $pendingProductReview = ProductReview::onlyTrashed()->findOrFail($trashProductReview);
 
         $pendingProductReview->forceDelete();
 
-        return to_route('admin.product-reviews.pending.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Product review has been successfully deleted.");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route('admin.product-reviews.pending.trash', $queryStringParams)->with("success", "Product review has been successfully deleted.");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -94,9 +95,13 @@ class AdminPendingProductReviewController extends Controller
         $pendingProductReviews = ProductReview::onlyTrashed()->get();
 
         $pendingProductReviews->each(function ($pendingProductReview) {
+
             $pendingProductReview->forceDelete();
+
         });
 
-        return to_route('admin.product-reviews.pending.trash', "page=$request->page&per_page=$request->per_page")->with("success", "Product reviews have been successfully deleted.");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route('admin.product-reviews.pending.trash', $queryStringParams)->with("success", "Product reviews have been successfully deleted.");
     }
 }

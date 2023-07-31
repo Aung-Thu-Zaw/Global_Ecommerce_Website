@@ -421,7 +421,7 @@ Route::middleware(["auth","verified","user.role:admin"])
                 ->name("product-reviews.pending.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:product-review.menu')->name("index");
-                    Route::get("/{product_review}", "show")->middleware('permission:product-review.detail')->name("show");
+                    Route::get("/{product_review}/details", "show")->middleware('permission:product-review.detail')->name("show");
                     Route::post("/{product_review}", "update")->middleware('permission:product-review.control')->name("update");
                     Route::delete("/{product_review}", "destroy")->middleware('permission:product-review.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:product-review.trash.list')->name("trash");

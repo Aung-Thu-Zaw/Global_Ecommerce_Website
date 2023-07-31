@@ -1,6 +1,8 @@
 <script setup>
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import SortingArrows from "@/Components/Table/SortingArrows.vue";
+import PendingStatus from "@/Components/Status/PendingStatus.vue";
+import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -8,16 +10,14 @@ import BodyTh from "@/Components/Table/BodyTh.vue";
 import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ProductReviewBreadcrumb.vue";
-import PendingStatus from "@/Components/Status/PendingStatus.vue";
-import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject, computed, ref } from "vue";
-import { router, Link, Head, usePage } from "@inertiajs/vue3";
+import { inject, reactive, watch, computed, ref } from "vue";
+import { router, usePage, Link, Head } from "@inertiajs/vue3";
 
-// Define the props
+// Define the Props
 const props = defineProps({
-  pendingProductReviews: Object,
+  trashPendingProductReviews: Object,
 });
 
 // Define Alert Variables
@@ -35,7 +35,7 @@ const params = reactive({
 // Handle Search
 const handleSearch = () => {
   router.get(
-    route("admin.product-reviews.pending.index"),
+    route("admin.product-reviews.pending.trash"),
     {
       search: params.search,
       per_page: params.per_page,
@@ -53,7 +53,7 @@ const handleSearch = () => {
 const removeSearch = () => {
   params.search = "";
   router.get(
-    route("admin.product-reviews.pending.index"),
+    route("admin.product-reviews.pending.trash"),
     {
       per_page: params.per_page,
       sort: params.sort,
@@ -69,7 +69,7 @@ const removeSearch = () => {
 // Handle Query String Parameter
 const handleQueryStringParameter = () => {
   router.get(
-    route("admin.product-reviews.pending.index"),
+    route("admin.product-reviews.pending.trash"),
     {
       search: params.search,
       page: params.page,
@@ -112,13 +112,13 @@ const updateSorting = (sort = "id") => {
   handleQueryStringParameter();
 };
 
-// Handle Product Review Publish
-const handleProductReviewPublish = async (productReview) => {
+// Handle Trash Brand Restore
+const handleRestoreTrashPendingProductReview = async (trashProductReviewId) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to publish this product review?",
+    title: "Are you sure you want to restore this product review?",
     showCancelButton: true,
-    confirmButtonText: "Yes, Publish!",
+    confirmButtonText: "Yes, Restore It",
     confirmButtonColor: "#2562c4",
     cancelButtonColor: "#626262",
     timer: 20000,
@@ -128,8 +128,8 @@ const handleProductReviewPublish = async (productReview) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("admin.product-reviews.pending.update", {
-        product_review: productReview,
+      route("admin.product-reviews.pending.restore", {
+        trash_product_review_id: trashProductReviewId,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
@@ -151,14 +151,14 @@ const handleProductReviewPublish = async (productReview) => {
   }
 };
 
-// Handle Product Review Delete
-const handleDeleteProductReview = async (productReview) => {
+// Handle Trash Brand Delete
+const handleDeleteTrashPendingProductReview = async (trashProductReviewId) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to delete this product review?",
-    text: "You will be able to restore this product review in the trash!",
+    title: "Are you sure you want to delete it from the trash?",
+    text: "Product review in the trash will be permanetly deleted! You can't get it back.",
     showCancelButton: true,
-    confirmButtonText: "Yes, Delete it!",
+    confirmButtonText: "Yes, Delete it !",
     confirmButtonColor: "#d52222",
     cancelButtonColor: "#626262",
     timer: 20000,
@@ -168,8 +168,8 @@ const handleDeleteProductReview = async (productReview) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.product-reviews.pending.destroy", {
-        product_review: productReview,
+      route("admin.product-reviews.pending.force.delete", {
+        trash_product_review_id: trashProductReviewId,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
@@ -190,56 +190,70 @@ const handleDeleteProductReview = async (productReview) => {
   }
 };
 
+// Handle Trash Brand Delete Permanently
+const handlePermanentlyDeletetrashPendingProductReviews = async () => {
+  const result = await swal({
+    icon: "question",
+    title: "Are you sure you want to delete it from the trash?",
+    text: "All product reviews in the trash will be permanetly deleted! You can't get it back.",
+    showCancelButton: true,
+    confirmButtonText: "Yes, Delete it !",
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.get(
+      route("admin.product-reviews.pending.permanently.delete", {
+        page: params.page,
+        per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
+      }),
+      {},
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
+    );
+  }
+};
+
 // Define Permissions Variables
 const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
 
-// Product Review Detail Permission
-const productReviewDetail = computed(() => {
+// Product Review Trash Restore Permission
+const productReviewTrashRestore = computed(() => {
   return permissions.value.length
     ? permissions.value.some(
-        (permission) => permission.name === "product-review.detail"
+        (permission) => permission.name === "product-review.trash.restore"
       )
     : false;
 });
 
-// Product Review Control Permission
-const productReviewControl = computed(() => {
+// Product Review Trash Delete Permission
+const productReviewTrashDelete = computed(() => {
   return permissions.value.length
     ? permissions.value.some(
-        (permission) => permission.name === "product-review.control"
+        (permission) => permission.name === "product-review.trash.delete"
       )
     : false;
 });
-
-// Product Review Delete Permission
-const productReviewDelete = computed(() => {
-  return permissions.value.length
-    ? permissions.value.some(
-        (permission) => permission.name === "product-review.delete"
-      )
-    : false;
-});
-
-// Product Review Trash List Permission
-const productReviewTrashList = computed(() => {
-  return permissions.value.length
-    ? permissions.value.some(
-        (permission) => permission.name === "product-review.trash.list"
-      )
-    : false;
-});
-
-if (usePage().props.flash.successMessage) {
-  swal({
-    icon: "success",
-    title: usePage().props.flash.successMessage,
-  });
-}
 </script>
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Pending Product Reviews" />
+    <Head title="Trash Pending Product Reviews" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -266,62 +280,98 @@ if (usePage().props.flash.successMessage) {
               >
             </div>
           </li>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span
+                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                >Trash</span
+              >
+            </div>
+          </li>
         </Breadcrumb>
 
-        <!-- Trash Button -->
-        <div v-if="productReviewTrashList">
+        <!-- Go Back Button -->
+        <div>
           <Link
             as="button"
-            :href="route('admin.product-reviews.pending.trash')"
+            :href="route('admin.product-reviews.pending.index')"
             :data="{
               page: 1,
               per_page: 10,
               sort: 'id',
               direction: 'desc',
             }"
-            class="trash-btn group"
+            class="goback-btn"
           >
-            <span class="group-hover:animate-pulse">
-              <i class="fa-solid fa-trash-can-arrow-up"></i>
-              Trash
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
             </span>
           </Link>
         </div>
       </div>
 
-      <div class="mb-5 flex items-center justify-between">
-        <div class="flex items-center ml-auto">
-          <!-- Search Box -->
-          <form class="w-[350px] relative">
-            <input
-              type="text"
-              class="search-input"
-              placeholder="Search by review text"
-              v-model="params.search"
-            />
-            <i
-              v-if="params.search"
-              class="fa-solid fa-xmark remove-search"
-              @click="removeSearch"
-            ></i>
-          </form>
+      <div class="flex items-center justify-end mb-5">
+        <!-- Search Box -->
+        <form class="w-[350px] relative">
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Search by review text"
+            v-model="params.search"
+          />
 
-          <!-- Perpage Select Box -->
-          <div class="ml-5">
-            <select class="perpage-selectbox" v-model="params.per_page">
-              <option value="" disabled>Select</option>
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="75">75</option>
-              <option value="100">100</option>
-            </select>
-          </div>
+          <i
+            v-if="params.search"
+            class="fa-solid fa-xmark remove-search"
+            @click="removeSearch"
+          ></i>
+        </form>
+        <!-- Perpage Select Box -->
+        <div class="ml-5">
+          <select class="perpage-selectbox" v-model="params.per_page">
+            <option value="" selected disabled>Select</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="75">75</option>
+            <option value="100">100</option>
+          </select>
         </div>
       </div>
 
-      <!-- Pending Product Review Table Start -->
+      <!-- Brand Permanently Delete Button -->
+      <p
+        v-if="
+          productReviewTrashDelete &&
+          trashPendingProductReviews.data.length !== 0
+        "
+        class="text-left text-sm font-bold mb-2 text-warning-600"
+      >
+        Product Review in the Trash will be automatically deleted after 60 days.
+        <button
+          @click="handlePermanentlyDeletetrashPendingProductReviews"
+          class="empty-trash-btn"
+        >
+          Empty the trash now
+        </button>
+      </p>
+
+      <!-- Trash Product Review Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -346,123 +396,101 @@ if (usePage().props.flash.successMessage) {
           <HeaderTh>Status</HeaderTh>
 
           <HeaderTh
-            v-if="
-              productReviewControl || productReviewDetail || productReviewDelete
-            "
+            v-if="productReviewTrashRestore || productReviewTrashDelete"
           >
             Action
           </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="pendingProductReviews.data.length">
+        <tbody v-if="trashPendingProductReviews.data.length">
           <Tr
-            v-for="pendingProductReview in pendingProductReviews.data"
-            :key="pendingProductReview.id"
+            v-for="trashPendingProductReview in trashPendingProductReviews.data"
+            :key="trashPendingProductReview.id"
           >
             <BodyTh>
-              {{ pendingProductReview.id }}
+              {{ trashPendingProductReview.id }}
             </BodyTh>
 
             <Td>
               <span class="line-clamp-1">
-                {{ pendingProductReview.product.name }}
+                {{ trashPendingProductReview.product.name }}
               </span>
             </Td>
 
             <Td>
-              {{ pendingProductReview.user.name }}
+              {{ trashPendingProductReview.user.name }}
             </Td>
 
             <Td>
               <span class="line-clamp-1 w-[300px]">
-                {{ pendingProductReview.review_text }}
+                {{ trashPendingProductReview.review_text }}
               </span>
             </Td>
 
             <Td>
-              <TotalRatingStars :rating="pendingProductReview.rating" />
+              <TotalRatingStars :rating="trashPendingProductReview.rating" />
             </Td>
 
             <Td>
-              <PendingStatus v-if="pendingProductReview.status === 0">
+              <PendingStatus v-if="trashPendingProductReview.status === 0">
                 pending
               </PendingStatus>
             </Td>
 
-            <Td
-              v-if="
-                productReviewControl ||
-                productReviewDetail ||
-                productReviewDelete
-              "
-            >
-              <!-- Publish Button -->
+            <Td v-if="productReviewTrashRestore || productReviewTrashDelete">
+              <!-- Restore Button -->
               <button
-                v-if="productReviewControl"
-                @click="handleProductReviewPublish(pendingProductReview.id)"
-                class="active-btn group"
+                v-if="productReviewTrashRestore"
+                @click="
+                  handleRestoreTrashPendingProductReview(
+                    trashPendingProductReview.id
+                  )
+                "
+                class="edit-btn group"
                 type="button"
               >
                 <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-arrow-up"></i>
-                  Publish
+                  <i class="fa-solid fa-recycle"></i>
+                  Restore
                 </span>
               </button>
 
               <!-- Delete Button -->
               <button
-                @click="handleDeleteProductReview(pendingProductReview.id)"
-                v-if="productReviewDelete"
+                v-if="productReviewTrashDelete"
+                @click="
+                  handleDeleteTrashPendingProductReview(
+                    trashPendingProductReview.id
+                  )
+                "
                 class="delete-btn group"
                 type="button"
               >
                 <span class="group-hover:animate-pulse">
                   <i class="fa-solid fa-trash-can"></i>
-                  Delete
+                  Delete Forever
                 </span>
               </button>
-
-              <Link
-                v-if="productReviewDetail"
-                :href="
-                  route(
-                    'admin.product-reviews.pending.show',
-                    pendingProductReview.id
-                  )
-                "
-                as="button"
-                :data="{
-                  page: params.page,
-                  per_page: params.per_page,
-                  sort: params.sort,
-                  direction: params.direction,
-                }"
-                class="detail-btn group"
-              >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-eye"></i>
-                  Details
-                </span>
-              </Link>
             </Td>
           </Tr>
         </tbody>
       </TableContainer>
-      <!-- Pending Product Review Review Table End -->
+      <!-- Trash Product Review Table End -->
 
       <!-- No Data Row -->
-      <NotAvaliableData v-if="!pendingProductReviews.data.length" />
+      <NotAvaliableData v-if="!trashPendingProductReviews.data.length" />
 
       <!-- Pagination -->
-      <div v-if="pendingProductReviews.data.length" class="mt-6">
+      <div v-if="trashPendingProductReviews.data.length" class="mt-6">
         <p class="text-center text-sm text-gray-600 mb-3 font-bold">
-          Showing {{ pendingProductReviews.from }} -
-          {{ pendingProductReviews.to }} of
-          {{ pendingProductReviews.total }}
+          Showing {{ trashPendingProductReviews.from }} -
+          {{ trashPendingProductReviews.to }} of
+          {{ trashPendingProductReviews.total }}
         </p>
-        <Pagination :links="pendingProductReviews.links" />
+        <Pagination :links="trashPendingProductReviews.links" />
       </div>
     </div>
   </AdminDashboardLayout>
 </template>
+
 
