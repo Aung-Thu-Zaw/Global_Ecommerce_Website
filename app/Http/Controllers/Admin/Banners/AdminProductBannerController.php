@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Banners;
 
 use App\Actions\Admin\Banners\ProductBanners\CreateProductBannerAction;
+use App\Actions\Admin\Banners\ProductBanners\PermanentlyDeleteAllTrashProductBannerAction;
 use App\Actions\Admin\Banners\ProductBanners\UpdateProductBannerAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductBannerRequest;
@@ -143,13 +144,7 @@ class AdminProductBannerController extends Controller
     {
         $productBanners = ProductBanner::onlyTrashed()->get();
 
-        $productBanners->each(function ($productBanner) {
-
-            ProductBanner::deleteImage($productBanner->image);
-
-            $productBanner->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashProductBannerAction())->handle($productBanners);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 

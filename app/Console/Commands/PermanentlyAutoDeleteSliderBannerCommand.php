@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Admin\Banners\SliderBanners\PermanentlyDeleteAllTrashSliderBannerAction;
 use App\Models\SliderBanner;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -27,16 +28,8 @@ class PermanentlyAutoDeleteSliderBannerCommand extends Command
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $sliderBanners=SliderBanner::onlyTrashed()
-                                   ->where('deleted_at', '<=', $cutoffDate)
-                                   ->get();
+        $sliderBanners=SliderBanner::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
-        $sliderBanners->each(function ($sliderBanner) {
-
-            SliderBanner::deleteImage($sliderBanner->image);
-
-            $sliderBanner->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashSliderBannerAction())->handle($sliderBanners);
     }
 }

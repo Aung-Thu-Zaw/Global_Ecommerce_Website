@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Banners;
 
 use App\Actions\Admin\Banners\CampaignBanners\CreateCampaignBannerAction;
+use App\Actions\Admin\Banners\CampaignBanners\PermanentlyDeleteAllTrashCampaignBannerAction;
 use App\Actions\Admin\Banners\CampaignBanners\UpdateCampaignBannerAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CampaignBannerRequest;
@@ -136,13 +137,7 @@ class AdminCampaignBannerController extends Controller
     {
         $campaignBanners = CampaignBanner::onlyTrashed()->get();
 
-        $campaignBanners->each(function ($campaignBanner) {
-
-            CampaignBanner::deleteImage($campaignBanner->image);
-
-            $campaignBanner->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashCampaignBannerAction())->handle($campaignBanners);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 

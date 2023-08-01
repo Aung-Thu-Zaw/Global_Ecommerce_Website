@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Banners;
 
 use App\Actions\Admin\Banners\SliderBanners\CreateSliderBannerAction;
+use App\Actions\Admin\Banners\SliderBanners\PermanentlyDeleteAllTrashSliderBannerAction;
 use App\Actions\Admin\Banners\SliderBanners\UpdateSliderBannerAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SliderBannerRequest;
@@ -141,12 +142,7 @@ class AdminSliderBannerController extends Controller
     {
         $sliderBanners = SliderBanner::onlyTrashed()->get();
 
-        $sliderBanners->each(function ($sliderBanner) {
-
-            SliderBanner::deleteImage($sliderBanner->image);
-
-            $sliderBanner->forceDelete();
-        });
+        (new PermanentlyDeleteAllTrashSliderBannerAction())->handle($sliderBanners);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 

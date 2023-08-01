@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Admin\Banners\CampaignBanners\PermanentlyDeleteAllTrashCampaignBannerAction;
 use App\Models\CampaignBanner;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -27,16 +28,8 @@ class PermanentlyAutoDeleteCampaignBannerCommand extends Command
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $campaignBanners=CampaignBanner::onlyTrashed()
-                                       ->where('deleted_at', '<=', $cutoffDate)
-                                       ->get();
+        $campaignBanners=CampaignBanner::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
-        $campaignBanners->each(function ($campaignBanner) {
-
-            CampaignBanner::deleteImage($campaignBanner->image);
-
-            $campaignBanner->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashCampaignBannerAction())->handle($campaignBanners);
     }
 }
