@@ -7,7 +7,7 @@ import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
 import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/ProductReviewBreadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/ShopReviewBreadcrumb.vue";
 import PublishedStatus from "@/Components/Status/PublishedStatus.vue";
 import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
@@ -17,7 +17,7 @@ import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 // Define the props
 const props = defineProps({
-  publishedProductReviews: Object,
+  publishedShopReviews: Object,
 });
 
 // Define Alert Variables
@@ -35,7 +35,7 @@ const params = reactive({
 // Handle Search
 const handleSearch = () => {
   router.get(
-    route("admin.product-reviews.published.index"),
+    route("admin.shop-reviews.published.index"),
     {
       search: params.search,
       per_page: params.per_page,
@@ -53,7 +53,7 @@ const handleSearch = () => {
 const removeSearch = () => {
   params.search = "";
   router.get(
-    route("admin.product-reviews.published.index"),
+    route("admin.shop-reviews.published.index"),
     {
       per_page: params.per_page,
       sort: params.sort,
@@ -69,7 +69,7 @@ const removeSearch = () => {
 // Handle Query String Parameter
 const handleQueryStringParameter = () => {
   router.get(
-    route("admin.product-reviews.published.index"),
+    route("admin.shop-reviews.published.index"),
     {
       search: params.search,
       page: params.page,
@@ -112,11 +112,11 @@ const updateSorting = (sort = "id") => {
   handleQueryStringParameter();
 };
 
-// Handle Product Review Publish
-const handleUnPublishProductReview = async (productReview) => {
+// Handle Shop Review Publish
+const handleUnPublishShopReview = async (shopReview) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to unpublish this product review?",
+    title: "Are you sure you want to unpublish this shop review?",
     showCancelButton: true,
     confirmButtonText: "Yes, Unpublish!",
     confirmButtonColor: "#2562c4",
@@ -128,8 +128,8 @@ const handleUnPublishProductReview = async (productReview) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("admin.product-reviews.published.update", {
-        product_review: productReview,
+      route("admin.shop-reviews.published.update", {
+        shop_review: shopReview,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
@@ -154,20 +154,20 @@ const handleUnPublishProductReview = async (productReview) => {
 // Define Permissions Variables
 const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
 
-// Product Review Detail Permission
-const productReviewDetail = computed(() => {
+// Shop Review Detail Permission
+const shopReviewDetail = computed(() => {
   return permissions.value.length
     ? permissions.value.some(
-        (permission) => permission.name === "product-review.detail"
+        (permission) => permission.name === "shop-review.detail"
       )
     : false;
 });
 
-// Product Review Control Permission
-const productReviewControl = computed(() => {
+// Shop Review Control Permission
+const shopReviewControl = computed(() => {
   return permissions.value.length
     ? permissions.value.some(
-        (permission) => permission.name === "product-review.control"
+        (permission) => permission.name === "shop-review.control"
       )
     : false;
 });
@@ -182,7 +182,7 @@ if (usePage().props.flash.successMessage) {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Published Product Reviews" />
+    <Head title="Published Shop Reviews" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -244,7 +244,7 @@ if (usePage().props.flash.successMessage) {
         </div>
       </div>
 
-       <!-- Product Review Table End -->
+      <!-- Shop Review Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -252,7 +252,7 @@ if (usePage().props.flash.successMessage) {
             <SortingArrows :params="params" sort="id" />
           </HeaderTh>
 
-          <HeaderTh> Product Name </HeaderTh>
+          <HeaderTh> Shop Name </HeaderTh>
 
           <HeaderTh> Reviewer Name </HeaderTh>
 
@@ -268,51 +268,51 @@ if (usePage().props.flash.successMessage) {
 
           <HeaderTh>Status</HeaderTh>
 
-          <HeaderTh v-if="productReviewControl || productReviewDetail">
+          <HeaderTh v-if="shopReviewControl || shopReviewDetail">
             Action
           </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="publishedProductReviews.data.length">
+        <tbody v-if="publishedShopReviews.data.length">
           <Tr
-            v-for="publishedProductReview in publishedProductReviews.data"
-            :key="publishedProductReview.id"
+            v-for="publishedShopReview in publishedShopReviews.data"
+            :key="publishedShopReview.id"
           >
             <BodyTh>
-              {{ publishedProductReview.id }}
+              {{ publishedShopReview.id }}
             </BodyTh>
 
             <Td>
               <span class="line-clamp-1">
-                {{ publishedProductReview.product.name }}
+                {{ publishedShopReview.shop.shop_name }}
               </span>
             </Td>
 
             <Td>
-              {{ publishedProductReview.user.name }}
+              {{ publishedShopReview.user.name }}
             </Td>
 
             <Td>
               <span class="line-clamp-1 w-[300px]">
-                {{ publishedProductReview.review_text }}
+                {{ publishedShopReview.review_text }}
               </span>
             </Td>
 
             <Td>
-              <TotalRatingStars :rating="publishedProductReview.rating" />
+              <TotalRatingStars :rating="publishedShopReview.rating" />
             </Td>
 
             <Td>
-              <PublishedStatus v-if="publishedProductReview.status === 1">
+              <PublishedStatus v-if="publishedShopReview.status === 1">
                 published
               </PublishedStatus>
             </Td>
 
-            <Td v-if="productReviewControl || productReviewDetail">
+            <Td v-if="shopReviewControl || shopReviewDetail">
               <!-- Unpublish Button -->
               <button
-                @click="handleUnPublishProductReview(publishedProductReview.id)"
-                v-if="productReviewControl"
+                @click="handleUnPublishShopReview(publishedShopReview.id)"
+                v-if="shopReviewControl"
                 class="hide-btn group"
                 type="button"
               >
@@ -323,11 +323,11 @@ if (usePage().props.flash.successMessage) {
               </button>
 
               <Link
-                v-if="productReviewDetail"
+                v-if="shopReviewDetail"
                 :href="
                   route(
-                    'admin.product-reviews.published.show',
-                    publishedProductReview.id
+                    'admin.shop-reviews.published.show',
+                    publishedShopReview.id
                   )
                 "
                 as="button"
@@ -348,19 +348,19 @@ if (usePage().props.flash.successMessage) {
           </Tr>
         </tbody>
       </TableContainer>
-      <!-- Product Review Table End -->
+      <!-- Shop Review Table End -->
 
       <!-- No Data Row -->
-      <NotAvaliableData v-if="!publishedProductReviews.data.length" />
+      <NotAvaliableData v-if="!publishedShopReviews.data.length" />
 
       <!-- Pagination -->
-      <div v-if="publishedProductReviews.data.length" class="mt-6">
+      <div v-if="publishedShopReviews.data.length" class="mt-6">
         <p class="text-center text-sm text-gray-600 mb-3 font-bold">
-          Showing {{ publishedProductReviews.from }} -
-          {{ publishedProductReviews.to }} of
-          {{ publishedProductReviews.total }}
+          Showing {{ publishedShopReviews.from }} -
+          {{ publishedShopReviews.to }} of
+          {{ publishedShopReviews.total }}
         </p>
-        <Pagination :links="publishedProductReviews.links" />
+        <Pagination :links="publishedShopReviews.links" />
       </div>
     </div>
   </AdminDashboardLayout>
