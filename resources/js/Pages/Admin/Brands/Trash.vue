@@ -204,14 +204,13 @@ const handlePermanentlyDeleteTrashBrands = async () => {
   });
 
   if (result.isConfirmed) {
-    router.get(
+    router.delete(
       route("admin.brands.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
       }),
-      {},
       {
         preserveScroll: true,
         onSuccess: () => {

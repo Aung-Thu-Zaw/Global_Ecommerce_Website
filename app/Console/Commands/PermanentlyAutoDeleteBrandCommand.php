@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Admin\Brands\PermanentlyDeleteAllTrashBrandAction;
 use App\Models\Brand;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -27,16 +28,8 @@ class PermanentlyAutoDeleteBrandCommand extends Command
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $brands=Brand::onlyTrashed()
-                     ->where('deleted_at', '<=', $cutoffDate)
-                     ->get();
+        $brands=Brand::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
-        $brands->each(function ($brand) {
-
-            Brand::deleteImage($brand->image);
-
-            $brand->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashBrandAction())->handle($brands);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Actions\Admin\Brands\CreateBrandAction;
+use App\Actions\Admin\Brands\PermanentlyDeleteAllTrashBrandAction;
 use App\Actions\Admin\Brands\UpdateBrandAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BrandRequest;
@@ -113,13 +114,7 @@ class AdminBrandController extends Controller
     {
         $brands = Brand::onlyTrashed()->get();
 
-        $brands->each(function ($brand) {
-
-            Brand::deleteImage($brand->image);
-
-            $brand->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashBrandAction())->handle($brands);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
