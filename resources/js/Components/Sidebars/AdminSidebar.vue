@@ -1705,8 +1705,8 @@ export default {
     },
     settingManage() {
       if (
-        this.$page.url.startsWith("/admin/website-settings") ||
-        this.$page.url.startsWith("/admin/seo-settings")
+        this.$page.url.startsWith("/admin/settings/website-settings") ||
+        this.$page.url.startsWith("/admin/settings/seo-settings")
       ) {
         return (this.settingManageIsHidden = false);
       }

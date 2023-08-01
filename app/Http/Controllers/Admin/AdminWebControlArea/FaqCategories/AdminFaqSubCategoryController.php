@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\AdminWebControlArea\FaqCategories;
 
 use App\Actions\Admin\AdminWebControlArea\FaqCategories\SubCategories\CreateFaqSubCategoryAction;
+use App\Actions\Admin\AdminWebControlArea\FaqCategories\SubCategories\PermanentlyDeleteAllTrashFaqSubCategoryAction;
 use App\Actions\Admin\AdminWebControlArea\FaqCategories\SubCategories\UpdateFaqSubCategoryAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FaqSubCategoryRequest;
@@ -111,11 +112,7 @@ class AdminFaqSubCategoryController extends Controller
     {
         $faqSubCategories = FaqSubCategory::onlyTrashed()->get();
 
-        $faqSubCategories->each(function ($faqSubCategory) {
-
-            $faqSubCategory->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashFaqSubCategoryAction())->handle($faqSubCategories);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Admin\AdminWebControlArea\FaqCategories\SubCategories\PermanentlyDeleteAllTrashFaqSubCategoryAction;
 use App\Models\FaqSubCategory;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -27,14 +28,8 @@ class PermanentlyAutoDeleteFaqSubCategoryCommand extends Command
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $faqSubCategories=FaqSubCategory::onlyTrashed()
-                                        ->where('deleted_at', '<=', $cutoffDate)
-                                        ->get();
+        $faqSubCategories=FaqSubCategory::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
-        $faqSubCategories->each(function ($faqSubCategory) {
-
-            $faqSubCategory->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashFaqSubCategoryAction())->handle($faqSubCategories);
     }
 }
