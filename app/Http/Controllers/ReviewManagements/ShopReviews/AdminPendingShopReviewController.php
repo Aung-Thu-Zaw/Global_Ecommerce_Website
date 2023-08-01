@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\ReviewManagements\ShopReviews;
 
+use App\Actions\Admin\ReviewManagements\ShopReviews\PermanentlyDeleteAllTrashShopReviewAction;
 use App\Http\Controllers\Controller;
 use App\Models\ShopReview;
 use Illuminate\Http\RedirectResponse;
@@ -94,11 +95,7 @@ class AdminPendingShopReviewController extends Controller
     {
         $pendingShopReviews = ShopReview::onlyTrashed()->get();
 
-        $pendingShopReviews->each(function ($pendingShopReview) {
-
-            $pendingShopReview->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashShopReviewAction())->handle($pendingShopReviews);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
