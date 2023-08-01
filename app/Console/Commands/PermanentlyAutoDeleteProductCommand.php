@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Admin\Products\PermanentlyDeleteAllTrashProductAction;
 use App\Models\Image;
 use App\Models\Product;
 use Carbon\Carbon;
@@ -28,24 +29,8 @@ class PermanentlyAutoDeleteProductCommand extends Command
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $products=Product::onlyTrashed()
-                         ->where('deleted_at', '<=', $cutoffDate)
-                         ->get();
+        $products=Product::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
-        $products->each(function ($product) {
-
-            $multiImages=Image::where("product_id", $product->id)->get();
-
-            $multiImages->each(function ($image) {
-
-                Image::deleteImage($image);
-
-            });
-
-            Product::deleteImage($product->image);
-
-            $product->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashProductAction())->handle($products);
     }
 }

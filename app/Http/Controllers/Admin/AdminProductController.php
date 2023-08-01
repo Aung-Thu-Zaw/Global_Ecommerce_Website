@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Actions\Admin\Products\CreateProductAction;
+use App\Actions\Admin\Products\PermanentlyDeleteAllTrashProductAction;
 use App\Actions\Admin\Products\UpdateProductAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
@@ -31,9 +32,9 @@ class AdminProductController extends Controller
 
     public function show(Request $request, Product $product): Response|ResponseFactory
     {
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
         $product->load("brand:id,name", "shop:id,shop_name", "images", "colors", "sizes", "types");
+
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
         return inertia("Admin/Products/Details", compact("product", "queryStringParams"));
     }
@@ -144,21 +145,7 @@ class AdminProductController extends Controller
     {
         $products = Product::onlyTrashed()->get();
 
-        $products->each(function ($product) {
-
-            $multiImages=Image::where("product_id", $product->id)->get();
-
-            $multiImages->each(function ($image) {
-
-                Image::deleteImage($image);
-
-            });
-
-            Product::deleteImage($product->image);
-
-            $product->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashProductAction())->handle($products);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
@@ -169,9 +156,9 @@ class AdminProductController extends Controller
     {
         $product->update(["status"=>$request->status]);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
         $message=$request->status==="pending" ? "Product has been successfully disapproved" : "Product has been successfully approved";
+
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
         return to_route('admin.products.index', $queryStringParams)->with("success", $message);
 
