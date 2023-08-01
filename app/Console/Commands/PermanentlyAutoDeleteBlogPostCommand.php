@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Admin\BlogManagements\BlogPosts\PermanentlyDeleteAllTrashBlogPostAction;
 use App\Models\BlogPost;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -27,16 +28,8 @@ class PermanentlyAutoDeleteBlogPostCommand extends Command
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $blogPosts=BlogPost::onlyTrashed()
-                           ->where('deleted_at', '<=', $cutoffDate)
-                           ->get();
+        $blogPosts=BlogPost::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
-        $blogPosts->each(function ($blogPost) {
-
-            BlogPost::deleteImage($blogPost->image);
-
-            $blogPost->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashBlogPostAction())->handle($blogPosts);
     }
 }

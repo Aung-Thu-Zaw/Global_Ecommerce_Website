@@ -28,9 +28,7 @@ class PermanentlyAutoDeleteBlogCategoryCommand extends Command
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $blogCategories=BlogCategory::onlyTrashed()
-                                    ->where('deleted_at', '<=', $cutoffDate)
-                                    ->get();
+        $blogCategories=BlogCategory::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
         (new PermanentlyDeleteAllTrashBlogCategoryAction())->handle($blogCategories);
     }

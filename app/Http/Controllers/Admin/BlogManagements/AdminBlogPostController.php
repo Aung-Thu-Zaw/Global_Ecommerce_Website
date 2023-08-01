@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\BlogManagements;
 
 use App\Actions\Admin\BlogManagements\BlogPosts\CreateBlogPostAction;
+use App\Actions\Admin\BlogManagements\BlogPosts\PermanentlyDeleteAllTrashBlogPostAction;
 use App\Actions\Admin\BlogManagements\BlogPosts\UpdateBlogPostAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BlogPostRequest;
@@ -110,13 +111,7 @@ class AdminBlogPostController extends Controller
     {
         $blogPosts = BlogPost::onlyTrashed()->get();
 
-        $blogPosts->each(function ($blogPost) {
-
-            BlogPost::deleteImage($blogPost->image);
-
-            $blogPost->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashBlogPostAction())->handle($blogPosts);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
