@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Admin\Collections\PermanentlyDeleteAllTrashCollectionAction;
 use App\Models\Collection;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -31,10 +32,6 @@ class PermanentlyAutoDeleteCollectionCommand extends Command
                                ->where('deleted_at', '<=', $cutoffDate)
                                ->get();
 
-        $collections->each(function ($collection) {
-
-            $collection->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashCollectionAction())->handle($collections);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Actions\Admin\Collections\CreateCollectionAction;
+use App\Actions\Admin\Collections\PermanentlyDeleteAllTrashCollectionAction;
 use App\Actions\Admin\Collections\UpdateCollectionAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CollectionRequest;
@@ -106,11 +107,7 @@ class AdminCollectionController extends Controller
     {
         $collections = Collection::onlyTrashed()->get();
 
-        $collections->each(function ($collection) {
-
-            $collection->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashCollectionAction())->handle($collections);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
