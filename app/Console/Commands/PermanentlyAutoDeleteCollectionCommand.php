@@ -28,9 +28,7 @@ class PermanentlyAutoDeleteCollectionCommand extends Command
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $collections=Collection::onlyTrashed()
-                               ->where('deleted_at', '<=', $cutoffDate)
-                               ->get();
+        $collections=Collection::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
         (new PermanentlyDeleteAllTrashCollectionAction())->handle($collections);
     }

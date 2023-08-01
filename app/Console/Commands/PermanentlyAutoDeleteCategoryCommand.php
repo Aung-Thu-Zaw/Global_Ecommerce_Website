@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Admin\Categories\PermanentlyDeleteAllTrashCategoryAction;
 use App\Models\Category;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -27,16 +28,8 @@ class PermanentlyAutoDeleteCategoryCommand extends Command
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $categories=Category::onlyTrashed()
-                            ->where('deleted_at', '<=', $cutoffDate)
-                            ->get();
+        $categories=Category::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
-        $categories->each(function ($category) {
-
-            Category::deleteImage($category->image);
-
-            $category->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashCategoryAction())->handle($categories);
     }
 }

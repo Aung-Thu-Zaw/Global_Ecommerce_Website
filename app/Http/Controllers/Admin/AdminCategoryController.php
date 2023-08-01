@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Actions\Admin\Categories\CreateCategoryAction;
 use App\Actions\Admin\Categories\UpdateCategoryAction;
+use App\Actions\Admin\Categories\PermanentlyDeleteAllTrashCategoryAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
@@ -48,11 +49,11 @@ class AdminCategoryController extends Controller
 
     public function edit(Request $request, Category $category): Response|ResponseFactory
     {
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
         $categories=Category::select("id", "parent_id", "name")->get();
 
-        return inertia("Admin/Categories/Edit", compact("category", "queryStringParams", "categories"));
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return inertia("Admin/Categories/Edit", compact("category", "categories", "queryStringParams"));
     }
 
     public function update(CategoryRequest $request, Category $category): RedirectResponse
@@ -112,13 +113,7 @@ class AdminCategoryController extends Controller
     {
         $categories = Category::onlyTrashed()->get();
 
-        $categories->each(function ($category) {
-
-            Category::deleteImage($category->image);
-
-            $category->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashCategoryAction())->handle($categories);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
