@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\UserManagements\RegisteredAccounts;
 
+use App\Actions\Admin\UserManagements\PermanentlyDeleteAllTrashUserAction;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -41,11 +42,11 @@ class AdminRegisteredUserController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashUsers=User::search(request("search"))
-                         ->onlyTrashed()
-                         ->where("role", "user")
-                         ->orderBy(request("sort", "id"), request("direction", "desc"))
-                         ->paginate(request("per_page", 10))
-                         ->appends(request()->all());
+                        ->onlyTrashed()
+                        ->where("role", "user")
+                        ->orderBy(request("sort", "id"), request("direction", "desc"))
+                        ->paginate(request("per_page", 10))
+                        ->appends(request()->all());
 
         return inertia("Admin/UserManagements/RegisteredAccounts/RegisteredUsers/Trash", compact("trashUsers"));
     }
@@ -65,6 +66,8 @@ class AdminRegisteredUserController extends Controller
     {
         $user = User::onlyTrashed()->findOrFail($trashRegisteredUserId);
 
+        User::deleteUserAvatar($user->avatar);
+
         $user->forceDelete();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
@@ -76,12 +79,7 @@ class AdminRegisteredUserController extends Controller
     {
         $users = User::onlyTrashed()->get();
 
-        $users->each(function ($user) {
-
-            User::deleteUserAvatar($user->avatar);
-
-            $user->forceDelete();
-        });
+        (new PermanentlyDeleteAllTrashUserAction())->handle($users);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 

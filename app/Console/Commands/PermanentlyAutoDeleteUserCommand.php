@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Admin\UserManagements\PermanentlyDeleteAllTrashUserAction;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -27,16 +28,8 @@ class PermanentlyAutoDeleteUserCommand extends Command
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $users=User::onlyTrashed()
-                   ->where('deleted_at', '<=', $cutoffDate)
-                   ->get();
+        $users=User::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
-        $users->each(function ($user) {
-
-            User::deleteUserAvatar($user->avatar);
-
-            $user->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashUserAction())->handle($users);
     }
 }

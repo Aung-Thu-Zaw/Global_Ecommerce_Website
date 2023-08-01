@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\UserManagements\RegisteredAccounts;
 
+use App\Actions\Admin\UserManagements\PermanentlyDeleteAllTrashUserAction;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -65,6 +66,8 @@ class AdminRegisteredVendorController extends Controller
     {
         $user = User::onlyTrashed()->findOrFail($trashRegisteredVendorId);
 
+        User::deleteUserAvatar($user->avatar);
+
         $user->forceDelete();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
@@ -76,12 +79,7 @@ class AdminRegisteredVendorController extends Controller
     {
         $users = User::onlyTrashed()->get();
 
-        $users->each(function ($user) {
-
-            User::deleteUserAvatar($user->avatar);
-
-            $user->forceDelete();
-        });
+        (new PermanentlyDeleteAllTrashUserAction())->handle($users);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 

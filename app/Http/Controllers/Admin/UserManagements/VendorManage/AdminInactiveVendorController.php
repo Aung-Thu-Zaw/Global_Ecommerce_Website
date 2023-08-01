@@ -88,7 +88,7 @@ class AdminInactiveVendorController extends Controller
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $inactiveVendors = User::onlyTrashed()->get();
+        $inactiveVendors = User::onlyTrashed()->where("role", "vendor")->get();
 
         (new PermanentlyDeleteAllTrashVendorAction())->handle($inactiveVendors);
 

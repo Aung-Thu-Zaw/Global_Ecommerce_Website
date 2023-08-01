@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\UserManagements\AdminManage;
 
 use App\Actions\Admin\UserManagements\AdminManage\CreateAdminAction;
 use App\Actions\Admin\UserManagements\AdminManage\UpdateAdminAction;
+use App\Actions\Admin\UserManagements\PermanentlyDeleteAllTrashUserAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminManageRequest;
 use Illuminate\Http\Request;
@@ -135,12 +136,7 @@ class AdminManageController extends Controller
     {
         $admins = User::onlyTrashed()->get();
 
-        $admins->each(function ($admin) {
-
-            User::deleteUserAvatar($admin->avatar);
-
-            $admin->forceDelete();
-        });
+        (new PermanentlyDeleteAllTrashUserAction())->handle($admins);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
