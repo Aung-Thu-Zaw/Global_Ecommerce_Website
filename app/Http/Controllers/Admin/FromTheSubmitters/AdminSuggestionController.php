@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\FromTheSubmitters;
 
+use App\Actions\Admin\FromTheSubmitters\Subscribers\PermanentlyDeleteAllTrashSuggestionsAction;
 use App\Http\Controllers\Controller;
 use App\Models\Image;
 use App\Models\Suggestion;
@@ -83,17 +84,7 @@ class AdminSuggestionController extends Controller
     {
         $suggestions = Suggestion::onlyTrashed()->get();
 
-        $suggestions->each(function ($suggestion) {
-
-            $multiImages=Image::where("suggestion_id", $suggestion->id)->get();
-
-            $multiImages->each(function ($image) {
-                Image::deleteImage($image);
-            });
-
-            $suggestion->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashSuggestionsAction())->handle($suggestions);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 

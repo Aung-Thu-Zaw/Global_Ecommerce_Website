@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Admin\FromTheSubmitters\Subscribers\PermanentlyDeleteAllTrashSubscriberAction;
 use App\Models\Subscriber;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -31,10 +32,6 @@ class PermanentlyAutoDeleteSubscriberCommand extends Command
                                ->where('deleted_at', '<=', $cutoffDate)
                                ->get();
 
-        $subscribers->each(function ($subscriber) {
-
-            $subscriber->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashSubscriberAction())->handle($subscribers);
     }
 }

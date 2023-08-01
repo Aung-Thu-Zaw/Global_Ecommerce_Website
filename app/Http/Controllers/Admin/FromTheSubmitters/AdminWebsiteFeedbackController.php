@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\FromTheSubmitters;
 
+use App\Actions\Admin\FromTheSubmitters\Subscribers\PermanentlyDeleteAllTrashWebsiteFeedbackAction;
 use App\Http\Controllers\Controller;
 use App\Models\WebsiteFeedback;
 use Illuminate\Http\RedirectResponse;
@@ -74,11 +75,7 @@ class AdminWebsiteFeedbackController extends Controller
     {
         $websiteFeedbacks = WebsiteFeedback::onlyTrashed()->get();
 
-        $websiteFeedbacks->each(function ($websiteFeedback) {
-
-            $websiteFeedback->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashWebsiteFeedbackAction())->handle($websiteFeedbacks);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 

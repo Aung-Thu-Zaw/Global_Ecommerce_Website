@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\FromTheSubmitters;
 
+use App\Actions\Admin\FromTheSubmitters\Subscribers\PermanentlyDeleteAllTrashSubscriberAction;
 use App\Http\Controllers\Controller;
 use App\Models\Subscriber;
 use Illuminate\Http\RedirectResponse;
@@ -67,11 +68,7 @@ class AdminSubscriberController extends Controller
     {
         $subscribers = Subscriber::onlyTrashed()->get();
 
-        $subscribers->each(function ($subscriber) {
-
-            $subscriber->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashSubscriberAction())->handle($subscribers);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 

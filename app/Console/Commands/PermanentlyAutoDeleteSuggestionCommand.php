@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Admin\FromTheSubmitters\Subscribers\PermanentlyDeleteAllTrashSuggestionsAction;
 use App\Models\Image;
 use App\Models\Suggestion;
 use Carbon\Carbon;
@@ -28,22 +29,8 @@ class PermanentlyAutoDeleteSuggestionCommand extends Command
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $suggestions=Suggestion::onlyTrashed()
-                               ->where('deleted_at', '<=', $cutoffDate)
-                               ->get();
+        $suggestions=Suggestion::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
-        $suggestions->each(function ($suggestion) {
-
-            $multiImages=Image::where("suggestion_id", $suggestion->id)->get();
-
-            $multiImages->each(function ($image) {
-
-                Image::deleteImage($image);
-
-            });
-
-            $suggestion->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashSuggestionsAction())->handle($suggestions);
     }
 }
