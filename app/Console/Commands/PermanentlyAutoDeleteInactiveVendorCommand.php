@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Admin\UserManagements\VendorManage\PermanentlyDeleteAllTrashVendorAction;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -32,12 +33,6 @@ class PermanentlyAutoDeleteInactiveVendorCommand extends Command
                              ->where("role", "vendor")
                              ->get();
 
-        $inactiveVendors->each(function ($inactiveVendor) {
-
-            User::deleteUserAvatar($inactiveVendor->avatar);
-
-            $inactiveVendor->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashVendorAction())->handle($inactiveVendors);
     }
 }

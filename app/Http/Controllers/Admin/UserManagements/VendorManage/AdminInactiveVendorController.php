@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\UserManagements\VendorManage;
 
+use App\Actions\Admin\UserManagements\VendorManage\PermanentlyDeleteAllTrashVendorAction;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Inertia\Response;
@@ -89,13 +90,7 @@ class AdminInactiveVendorController extends Controller
     {
         $inactiveVendors = User::onlyTrashed()->get();
 
-        $inactiveVendors->each(function ($inactiveVendor) {
-
-            User::deleteUserAvatar($inactiveVendor->avatar);
-
-            $inactiveVendor->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashVendorAction())->handle($inactiveVendors);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
