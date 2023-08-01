@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Admin\Coupons\PermanentlyDeleteAllTrashCouponAction;
 use App\Models\Coupon;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -27,14 +28,8 @@ class PermanentlyAutoDeleteCouponCommand extends Command
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $coupons=Coupon::onlyTrashed()
-                       ->where('deleted_at', '<=', $cutoffDate)
-                       ->get();
+        $coupons=Coupon::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
-        $coupons->each(function ($coupon) {
-
-            $coupon->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashCouponAction())->handle($coupons);
     }
 }

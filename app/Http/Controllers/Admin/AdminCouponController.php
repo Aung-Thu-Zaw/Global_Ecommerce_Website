@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Actions\Admin\Coupons\CreateCouponAction;
+use App\Actions\Admin\Coupons\PermanentlyDeleteAllTrashCouponAction;
 use App\Actions\Admin\Coupons\UpdateCouponAction;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -102,11 +103,7 @@ class AdminCouponController extends Controller
     {
         $coupons = Coupon::onlyTrashed()->get();
 
-        $coupons->each(function ($coupon) {
-
-            $coupon->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashCouponAction())->handle($coupons);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
