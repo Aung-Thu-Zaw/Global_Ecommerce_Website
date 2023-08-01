@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Admin\ReviewManagements\ProductReviews\PermanentlyDeleteAllTrashProductReviewAction;
 use App\Models\ProductReview;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -31,10 +32,6 @@ class PermanentlyAutoDeleteProductReviewCommand extends Command
                                      ->where('deleted_at', '<=', $cutoffDate)
                                      ->get();
 
-        $productReviews->each(function ($productReview) {
-
-            $productReview->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashProductReviewAction())->handle($productReviews);
     }
 }

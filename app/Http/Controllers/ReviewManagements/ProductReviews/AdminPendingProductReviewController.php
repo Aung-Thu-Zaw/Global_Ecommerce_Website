@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\ReviewManagements\ProductReviews;
 
+use App\Actions\Admin\ReviewManagements\ProductReviews\PermanentlyDeleteAllTrashProductReviewAction;
 use App\Http\Controllers\Controller;
 use App\Models\ProductReview;
 use Illuminate\Http\RedirectResponse;
@@ -28,18 +29,18 @@ class AdminPendingProductReviewController extends Controller
 
     public function show(Request $request, ProductReview $productReview): Response|ResponseFactory
     {
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
         $productReview->load(["product:id,name","user:id,name,email"]);
+        
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
         return inertia("Admin/ReviewManagements/ProductReviews/PendingReviews/Details", compact("productReview", "queryStringParams"));
     }
 
     public function update(Request $request, ProductReview $productReview): RedirectResponse
     {
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
         $productReview->update(["status"=>true]);
+
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
         return to_route('admin.product-reviews.pending.index', $queryStringParams)->with("success", "Product review has been successfully published.");
     }
@@ -94,11 +95,7 @@ class AdminPendingProductReviewController extends Controller
     {
         $pendingProductReviews = ProductReview::onlyTrashed()->get();
 
-        $pendingProductReviews->each(function ($pendingProductReview) {
-
-            $pendingProductReview->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashProductReviewAction())->handle($pendingProductReviews);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
