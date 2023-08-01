@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Admin\Languages\PermanentlyDeleteAllTrashLanguageAction;
 use App\Models\Language;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -31,12 +32,6 @@ class PermanentlyAutoDeleteLanguageCommand extends Command
                            ->where('deleted_at', '<=', $cutoffDate)
                            ->get();
 
-        $languages->each(function ($language) {
-
-            unlink(resource_path("lang/$language->short_name.json"));
-
-            $language->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashLanguageAction())->handle($languages);
     }
 }

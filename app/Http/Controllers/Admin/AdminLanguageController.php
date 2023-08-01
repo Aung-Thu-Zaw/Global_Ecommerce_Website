@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Admin\Languages\PermanentlyDeleteAllTrashLanguageAction;
 use App\Actions\Admin\Languages\CreateLanguageAction;
 use App\Actions\Admin\Languages\UpdateLanguageAction;
 use App\Http\Controllers\Controller;
@@ -104,13 +105,7 @@ class AdminLanguageController extends Controller
     {
         $languages = Language::onlyTrashed()->get();
 
-        $languages->each(function ($language) {
-
-            unlink(resource_path("lang/$language->short_name.json"));
-
-            $language->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashLanguageAction())->handle($languages);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
