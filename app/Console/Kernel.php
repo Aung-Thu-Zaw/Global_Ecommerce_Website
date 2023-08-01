@@ -29,7 +29,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('city:delete')->daily();
         $schedule->command('township:delete')->daily();
         $schedule->command('language:delete')->daily();
-        // Reviews Managements
+        $schedule->command('product_review:delete')->daily();
+        $schedule->command('shop_review:delete')->daily();
         $schedule->command('inactive_vendor:delete')->daily();
         $schedule->command('user:delete')->daily();
         $schedule->command('role:delete')->daily();

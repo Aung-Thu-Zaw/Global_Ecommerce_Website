@@ -42,14 +42,14 @@ class HomeController extends Controller
 
         $newProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
                             ->with(["productReviews:id,product_id,rating","shop:id,offical"])
-                            ->whereStatus("active")
+                            ->whereStatus("approved")
                             ->orderBy("id", "desc")
                             ->limit(5)
                             ->get();
 
         $hotDealProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
                                 ->with(["productReviews:id,product_id,rating","shop:id,offical"])
-                                ->whereStatus("active")
+                                ->whereStatus("approved")
                                 ->whereHotDeal(1)
                                 ->orderBy("id", "desc")
                                 ->limit(5)
@@ -57,7 +57,7 @@ class HomeController extends Controller
 
         $featuredProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
                                  ->with(["productReviews:id,product_id,rating","shop:id,offical"])
-                                 ->whereStatus("active")
+                                 ->whereStatus("approved")
                                  ->whereFeatured(1)
                                  ->orderBy("id", "desc")
                                  ->limit(5)
@@ -65,7 +65,7 @@ class HomeController extends Controller
 
         $randomProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
                                ->with(["productReviews:id,product_id,rating","shop:id,offical"])
-                               ->whereStatus("active")
+                               ->whereStatus("approved")
                                ->inRandomOrder()
                                ->paginate(25);
 

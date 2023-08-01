@@ -5,7 +5,7 @@ import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
 import { Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
-  queryStringParams: Object,
+  queryStringParams: Array,
   websiteFeedback: Object,
 });
 </script>

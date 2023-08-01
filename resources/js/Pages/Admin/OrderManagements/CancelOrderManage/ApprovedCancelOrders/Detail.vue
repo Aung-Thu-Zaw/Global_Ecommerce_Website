@@ -10,7 +10,7 @@ import { Head, Link } from "@inertiajs/vue3";
 import { computed } from "vue";
 
 const props = defineProps({
-  paginate: Object,
+    queryStringParams: Array,
   deliveryInformation: Object,
   approvedCancelOrderDetail: Object,
   orderItems: Object,

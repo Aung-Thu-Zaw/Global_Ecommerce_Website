@@ -7,7 +7,7 @@ import TextInput from "@/Components/Forms/TextInput.vue";
 import { Head, Link } from "@inertiajs/vue3";
 
 const props = defineProps({
-  queryStringParams: Object,
+  queryStringParams: Array,
   user: Object,
 });
 </script>

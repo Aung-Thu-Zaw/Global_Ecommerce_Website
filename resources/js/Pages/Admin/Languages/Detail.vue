@@ -12,7 +12,7 @@ import { onMounted } from "vue";
 
 // Define the props
 const props = defineProps({
-  queryStringParams: Object,
+  queryStringParams: Array,
   language: Object,
   jsonData: Array,
 });

@@ -4,7 +4,7 @@ import Breadcrumb from "@/Components/Breadcrumbs/SuggestionBreadcrumb.vue";
 import { Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
-  queryStringParams: Object,
+  queryStringParams: Array,
   suggestion: Object,
 });
 

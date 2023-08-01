@@ -19,6 +19,7 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
 const props = defineProps({
+  queryStringParams: Array,
   deliveryInformation: Object,
   approvedReturnOrderDetail: Object,
   orderItems: Object,

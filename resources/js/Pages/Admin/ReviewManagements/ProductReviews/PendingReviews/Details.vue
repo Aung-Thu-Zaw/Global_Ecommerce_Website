@@ -6,7 +6,7 @@ import PendingStatus from "@/Components/Status/PendingStatus.vue";
 import { Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
-  queryStringParams: Object,
+  queryStringParams: Array,
   productReview: Object,
 });
 </script>

@@ -9,7 +9,7 @@ import { Link, Head } from "@inertiajs/vue3";
 
 // Define the Props
 const props = defineProps({
-  queryStringParams: Object,
+  queryStringParams: Array,
   user: Object,
 });
 

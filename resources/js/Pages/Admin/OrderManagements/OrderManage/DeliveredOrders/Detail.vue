@@ -8,7 +8,7 @@ import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Head } from "@inertiajs/vue3";
 
 const props = defineProps({
-  paginate: Object,
+    queryStringParams: Array,
   deliveryInformation: Object,
   deliveredOrderDetail: Object,
   orderItems: Object,
