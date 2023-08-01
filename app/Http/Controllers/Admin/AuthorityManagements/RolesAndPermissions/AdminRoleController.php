@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\AuthorityManagements\RolesAndPermissions;
 
 use App\Actions\Admin\AuthorityManagements\RolesAndPermissions\Roles\CreateRoleAction;
+use App\Actions\Admin\AuthorityManagements\RolesAndPermissions\Roles\PermanentlyDeleteAllTrashRoleAction;
 use App\Actions\Admin\AuthorityManagements\RolesAndPermissions\Roles\UpdateRoleAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RoleRequest;
@@ -102,11 +103,7 @@ class AdminRoleController extends Controller
     {
         $roles = Role::onlyTrashed()->get();
 
-        $roles->each(function ($role) {
-
-            $role->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashRoleAction())->handle($roles);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
