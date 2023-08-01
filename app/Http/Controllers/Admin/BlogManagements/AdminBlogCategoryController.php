@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\BlogManagements;
 
 use App\Actions\Admin\BlogManagements\BlogCategories\CreateBlogCategoryAction;
+use App\Actions\Admin\BlogManagements\BlogCategories\PermanentlyDeleteAllTrashBlogCategoryAction;
 use App\Actions\Admin\BlogManagements\BlogCategories\UpdateBlogCategoryAction;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -104,13 +105,7 @@ class AdminBlogCategoryController extends Controller
     {
         $blogCategories = BlogCategory::onlyTrashed()->get();
 
-        $blogCategories->each(function ($blogCategory) {
-
-            BlogCategory::deleteImage($blogCategory->image);
-
-            $blogCategory->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashBlogCategoryAction())->handle($blogCategories);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Admin\BlogManagements\BlogCategories\PermanentlyDeleteAllTrashBlogCategoryAction;
 use App\Models\BlogCategory;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -31,12 +32,6 @@ class PermanentlyAutoDeleteBlogCategoryCommand extends Command
                                     ->where('deleted_at', '<=', $cutoffDate)
                                     ->get();
 
-        $blogCategories->each(function ($blogCategory) {
-
-            BlogCategory::deleteImage($blogCategory->image);
-
-            $blogCategory->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashBlogCategoryAction())->handle($blogCategories);
     }
 }
