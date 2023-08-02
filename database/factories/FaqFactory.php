@@ -18,7 +18,8 @@ class FaqFactory extends Factory
     {
         return [
             "faq_sub_category_id"=>fake()->numberBetween(1, 18),
-            "question"=>fake()->sentence(),
+            "question"=>fake()->unique()->sentence(),
+            "slug"=>fake()->unique()->slug(),
             "answer"=>fake()->paragraph(),
             "created_at"=>fake()->dateTimeBetween("-9 months", now()),
         ];

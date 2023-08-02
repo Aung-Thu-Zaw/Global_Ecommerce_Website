@@ -5,13 +5,14 @@ import { Head, Link } from "@inertiajs/vue3";
 
 defineProps({
   faqCategories: Object,
-  faqs: Object,
+  faq: Object,
+  relatedFaqs: Object,
 });
 </script>
 
 <template>
   <AppLayout>
-    <Head title="FAQs" />
+    <Head :title="faq.question" />
 
     <div class="min-h-[1400px] h-auto bg-gray-50 mt-40 w-full">
       <div class="container mx-auto py-8">
@@ -68,20 +69,11 @@ defineProps({
                       <button
                         type="button"
                         class="flex items-center w-full p-3 text-base text-gray-900 transition duration-75 group hover:bg-gray-200"
-                        aria-controls="dropdown-example"
-                        data-collapse-toggle="dropdown-example"
+                        :aria-controls="'dropdown-example' + faqCategory.id"
+                        :data-collapse-toggle="
+                          'dropdown-example' + faqCategory.id
+                        "
                       >
-                        <svg
-                          class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="currentColor"
-                          viewBox="0 0 18 21"
-                        >
-                          <path
-                            d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z"
-                          />
-                        </svg>
                         <span
                           class="flex-1 ml-3 text-left text-sm whitespace-nowrap"
                         >
@@ -103,7 +95,10 @@ defineProps({
                           />
                         </svg>
                       </button>
-                      <ul id="dropdown-example" class="hidden py-2">
+                      <ul
+                        :id="'dropdown-example' + faqCategory.id"
+                        class="hidden py-2"
+                      >
                         <li
                           v-for="faqSubCategory in faqCategory.faq_sub_categories"
                           :key="faqSubCategory.id"
@@ -162,7 +157,7 @@ defineProps({
                         Categories
                       </a>
                     </li>
-                    <!-- <li>
+                    <li v-if="faq.faq_sub_category.faq_category">
                       <div class="flex items-center">
                         <svg
                           class="w-3 h-3 text-gray-400 mx-1"
@@ -182,10 +177,34 @@ defineProps({
                         <a
                           href="#"
                           class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white"
-                          >Projects</a
+                          >{{ faq.faq_sub_category.faq_category.name }}</a
                         >
                       </div>
-                    </li> -->
+                    </li>
+                    <li v-if="faq.faq_sub_category">
+                      <div class="flex items-center">
+                        <svg
+                          class="w-3 h-3 text-gray-400 mx-1"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 6 10"
+                        >
+                          <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="m1 9 4-4-4-4"
+                          />
+                        </svg>
+                        <a
+                          href="#"
+                          class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white"
+                          >{{ faq.faq_sub_category.name }}</a
+                        >
+                      </div>
+                    </li>
                     <li aria-current="page">
                       <div class="flex items-center">
                         <svg
@@ -205,32 +224,62 @@ defineProps({
                         </svg>
                         <span
                           class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                          >All</span
+                          >{{ faq.question }}</span
                         >
                       </div>
                     </li>
                   </ol>
                 </nav>
               </div>
-              <div class="w-full">
-                <ul
-                  class="list-disc list-inside space-y-4 text-sm text-gray-700"
+              <div class="w-full mb-14">
+                <h1 class="font-bold text-md text-gray-700 mb-5">
+                  {{ faq.question }}
+                </h1>
+
+                <p v-html="faq.answer" class="text-[.9rem] text-gray-600"></p>
+
+                <div
+                  class="my-5 text-sm text-gray-700 font-semibold text-center"
                 >
+                  <p class="mb-5">Is this helpful for you?</p>
+
+                  <div class="space-x-5">
+                    <button
+                      class="px-5 py-2 group rounded-sm shadow-sm text-gray-600 text-sm border border-blue-600 hover:bg-blue-600 hover:text-white transition-all"
+                    >
+                      <i
+                        class="fa-solid fa-thumbs-up text-blue-600 group-hover:text-white"
+                      ></i>
+                      Yes
+                    </button>
+                    <button
+                      class="px-5 py-2 group rounded-sm shadow-sm text-gray-600 text-sm border border-orange-600 hover:bg-orange-600 hover:text-white transition-all"
+                    >
+                      <i
+                        class="fa-solid fa-thumbs-down text-orange-600 group-hover:text-white"
+                      ></i>
+                      No
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- Related Questions -->
+              <div class="p-6">
+                <h3 class="font-bold text-gray-700 text-md mb-3">
+                  Related Questions :
+                </h3>
+
+                <ul class="list-disc space-y-3">
                   <li
-                    v-for="faq in faqs.data"
-                    :key="faq.id"
-                    class="hover:text-blue-700 text-sm font-medium text-gray-600"
+                    v-for="relatedFaq in relatedFaqs"
+                    :key="relatedFaq.id"
+                    class="hover:text-blue-700 hover:underline text-[.8rem] font-medium text-blue-600"
                   >
-                    <Link :href="route('faqs.show', faq.slug)">
+                    <Link :href="route('faqs.show', relatedFaq.slug)">
                       {{ faq.question }}
                     </Link>
                   </li>
                 </ul>
-              </div>
-
-              <!-- Pagination -->
-              <div class="mt-10 mb-5">
-                <Pagination :links="faqs.links" />
               </div>
             </div>
           </div>

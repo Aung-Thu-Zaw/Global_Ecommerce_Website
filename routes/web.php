@@ -78,7 +78,8 @@ Route::get("/privacy-policy", [PrivacyPolicyController::class,"index"])->name("p
 
 Route::get("/terms-and-conditions", [TermsAndConditionsController::class,"index"])->name("terms-and-conditions");
 
-Route::get("/faqs", [FaqController::class,"index"])->name("faq");
+Route::get("/faqs", [FaqController::class,"index"])->name("faqs.index");
+Route::get("/faqs/{faq}", [FaqController::class,"show"])->name("faqs.show");
 
 Route::get("/help-center", [HelpCenterController::class,"index"])->name("help-center");
 

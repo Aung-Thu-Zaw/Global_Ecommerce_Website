@@ -1,6 +1,11 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/vue3";
+
+defineProps({
+  topQuestions: Object,
+  faqCategories: Object,
+});
 </script>
 
 <template>
@@ -49,58 +54,15 @@ import { Head, Link } from "@inertiajs/vue3";
         </div>
 
         <div class="grid grid-cols-3 gap-y-3 text-sm text-slate-800">
-          <div class="flex items-center justify-center">
+          <Link
+            v-for="topQuestion in topQuestions"
+            :key="topQuestion.id"
+            class="flex items-center justify-start"
+            :href="route('faqs.show', topQuestion.slug)"
+          >
             <i class="fa-solid fa-circle mr-2 text-[.5rem]"></i>
-            <span class="hover:text-blue-700">
-              What refund options are available?</span
-            >
-          </div>
-          <div class="flex items-center justify-center">
-            <i class="fa-solid fa-circle mr-2 text-[.5rem]"></i>
-            <span class="hover:text-blue-700">
-              How do I use a giftcard or a voucher?</span
-            >
-          </div>
-          <div class="flex items-center justify-center">
-            <i class="fa-solid fa-circle mr-2 text-[.5rem]"></i>
-            <span class="hover:text-blue-700"> How do I track my order?</span>
-          </div>
-          <div class="flex items-center justify-center">
-            <i class="fa-solid fa-circle mr-2 text-[.5rem]"></i>
-            <span class="hover:text-blue-700">
-              What is Shop's returns policy?</span
-            >
-          </div>
-          <div class="flex items-center justify-center">
-            <i class="fa-solid fa-circle mr-2 text-[.5rem]"></i>
-            <span class="hover:text-blue-700">
-              What are the refund timelines?</span
-            >
-          </div>
-          <div class="flex items-center justify-center">
-            <i class="fa-solid fa-circle mr-2 text-[.5rem]"></i>
-            <span class="hover:text-blue-700">
-              What are the features for products?</span
-            >
-          </div>
-          <div class="flex items-center justify-center">
-            <i class="fa-solid fa-circle mr-2 text-[.5rem]"></i>
-            <span class="hover:text-blue-700">
-              What can I do if I forgot my password?
-            </span>
-          </div>
-          <div class="flex items-center justify-center">
-            <i class="fa-solid fa-circle mr-2 text-[.5rem]"></i>
-            <span class="hover:text-blue-700">
-              Why cannot I receive the Email verification code?
-            </span>
-          </div>
-          <div class="flex items-center justify-center">
-            <i class="fa-solid fa-circle mr-2 text-[.5rem]"></i>
-            <span class="hover:text-blue-700">
-              When will I receive my order?
-            </span>
-          </div>
+            <span class="hover:text-blue-700"> {{ topQuestion.question }}</span>
+          </Link>
         </div>
       </div>
 
@@ -219,7 +181,9 @@ import { Head, Link } from "@inertiajs/vue3";
         </div>
 
         <div class="grid grid-cols-4 gap-y-4 px-12">
-          <div
+          <Link
+            :href="route('my-account.edit')"
+            :data="{ tab: 'edit-profile' }"
             class="border border-gray-300 cursor-pointer w-[280px] h-[120px] rounded-md hover:shadow-md p-5 flex flex-col items-center justify-center"
           >
             <span
@@ -228,8 +192,11 @@ import { Head, Link } from "@inertiajs/vue3";
               <i class="fa-solid fa-user-gear"></i>
             </span>
             <span class="text-gray-700 font-bold text-sm mt-3">My Account</span>
-          </div>
-          <div
+          </Link>
+
+          <Link
+            :href="route('my-orders.index')"
+            :data="{ tab: 'all-orders' }"
             class="border border-gray-300 cursor-pointer w-[280px] h-[120px] rounded-md hover:shadow-md p-5 flex flex-col items-center justify-center"
           >
             <span
@@ -238,8 +205,11 @@ import { Head, Link } from "@inertiajs/vue3";
               <i class="fa-solid fa-boxes-packing"></i>
             </span>
             <span class="text-gray-700 font-bold text-sm mt-3">My Orders</span>
-          </div>
-          <div
+          </Link>
+
+          <Link
+            :href="route('return-orders.index')"
+            :data="{ tab: 'requested-return-orders' }"
             class="border border-gray-300 cursor-pointer w-[280px] h-[120px] rounded-md hover:shadow-md p-5 flex flex-col items-center justify-center"
           >
             <span
@@ -250,8 +220,11 @@ import { Head, Link } from "@inertiajs/vue3";
             <span class="text-gray-700 font-bold text-sm mt-3"
               >Return Orders And Items</span
             >
-          </div>
-          <div
+          </Link>
+
+          <Link
+            :href="route('cancel-orders.index')"
+            :data="{ tab: 'requested-cancel-orders' }"
             class="border border-gray-300 cursor-pointer w-[280px] h-[120px] rounded-md hover:shadow-md p-5 flex flex-col items-center justify-center"
           >
             <span
@@ -262,7 +235,7 @@ import { Head, Link } from "@inertiajs/vue3";
             <span class="text-gray-700 font-bold text-sm mt-3"
               >Cancel Orders And Items</span
             >
-          </div>
+          </Link>
         </div>
       </div>
 

@@ -84,7 +84,7 @@ import { Link } from "@inertiajs/vue3";
                 </Link>
               </li>
               <li>
-                <Link :href="route('faq')" class="opacity-70 hover:opacity-100">
+                <Link :href="route('faqs.index')" class="opacity-70 hover:opacity-100">
                   {{ __("FAQS") }}
                 </Link>
               </li>

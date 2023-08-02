@@ -16,6 +16,7 @@ return new class () extends Migration {
             $table->id();
             $table->foreignId("faq_sub_category_id")->constrained()->cascadeOnDelete();
             $table->string("question");
+            $table->string("slug");
             $table->text("answer");
             $table->integer('helpful')->default(0);
             $table->integer('unhelpful')->default(0);
