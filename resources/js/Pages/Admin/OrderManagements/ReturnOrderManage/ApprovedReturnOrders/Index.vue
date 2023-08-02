@@ -1,8 +1,8 @@
 <script setup>
 import Breadcrumb from "@/Components/Breadcrumbs/ReturnOrderManageBreadcrumb.vue";
-import SearchForm from "@/Components/Forms/SearchForm.vue";
+import SortingArrows from "@/Components/Table/SortingArrows.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import ConfirmedStatus from "@/Components/Table/ConfirmedStatus.vue";
+import ConfirmedStatus from "@/Components/Status/ConfirmedStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -12,14 +12,103 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link, usePage, Head, router } from "@inertiajs/vue3";
-import { computed, inject, reactive, watch } from "vue";
+import { computed, reactive, watch } from "vue";
 
+// Define the props
 const props = defineProps({
   approvedReturnOrders: Object,
 });
 
-const swal = inject("$swal");
+// Query String Parameteres
+const params = reactive({
+  search: usePage().props.ziggy.query?.search,
+  page: usePage().props.ziggy.query?.page,
+  per_page: usePage().props.ziggy.query?.per_page,
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
+});
 
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.return-orders.approved.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
+
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.return-orders.approved.index"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
+
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
+  router.get(
+    route("admin.return-orders.approved.index"),
+    {
+      search: params.search,
+      page: params.page,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
+
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
+};
+
+// Return Order Detail Permission
 const returnOrderManageDetail = computed(() => {
   return usePage().props.auth.user.permissions.length
     ? usePage().props.auth.user.permissions.some(
@@ -28,135 +117,15 @@ const returnOrderManageDetail = computed(() => {
     : false;
 });
 
-const params = reactive({
-  search: null,
-  page: props.approvedReturnOrders.current_page
-    ? props.approvedReturnOrders.current_page
-    : 1,
-  per_page: props.approvedReturnOrders.per_page
-    ? props.approvedReturnOrders.per_page
-    : 10,
-  sort: "id",
-  direction: "desc",
-});
-const handleSearchBox = () => {
-  params.search = "";
-};
-
-watch(
-  () => params.search,
-  (current, previous) => {
-    router.get(
-      "/admin/return-order-manage/approved-return",
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
+// Formatted Amount
+const formattedAmount = (amount) => {
+  const totalAmount = parseFloat(amount);
+  if (Number.isInteger(totalAmount)) {
+    return totalAmount.toFixed(0);
+  } else {
+    return totalAmount.toFixed(2);
   }
-);
-
-watch(
-  () => params.per_page,
-  (current, previous) => {
-    router.get(
-      "/admin/return-order-manage/approved-return",
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
-  router.get(
-    "/admin/return-order-manage/approved-return",
-    {
-      search: params.search,
-      page: params.page,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-    },
-    { replace: true, preserveState: true }
-  );
 };
-
-// const handleActive = async (inactiveVendorId) => {
-//   const result = await swal({
-//     icon: "info",
-//     title: "Are you sure you want to active this vendor?",
-//     showCancelButton: true,
-//     confirmButtonText: "Yes, active!",
-//     confirmButtonColor: "#027e00",
-//     timer: 20000,
-//     timerProgressBar: true,
-//     reverseButtons: true,
-//   });
-
-//   if (result.isConfirmed) {
-//     router.post(
-//       route("admin.vendors.inactive.update", {
-//         id: inactiveVendorId,
-//         page: props.inactiveVendors.current_page,
-//         per_page: params.per_page,
-//       })
-//     );
-//     setTimeout(() => {
-//       swal({
-//         icon: "success",
-//         title: usePage().props.flash.successMessage,
-//       });
-//     }, 500);
-//   }
-// };
-
-// const handleDelete = async (inactiveVendorId) => {
-//   const result = await swal({
-//     icon: "warning",
-//     title: "Are you sure you want to move it to the trash?",
-//     text: "You will be able to revert this action!",
-//     showCancelButton: true,
-//     confirmButtonText: "Yes, remove it!",
-//     confirmButtonColor: "#ef4444",
-//     timer: 20000,
-//     timerProgressBar: true,
-//     reverseButtons: true,
-//   });
-
-//   if (result.isConfirmed) {
-//     router.delete(
-//       route("admin.vendors.inactive.destroy", {
-//         id: inactiveVendorId,
-//         page: props.inactiveVendors.current_page,
-//         per_page: params.per_page,
-//       })
-//     );
-//     setTimeout(() => {
-//       swal({
-//         icon: "success",
-//         title: usePage().props.flash.successMessage,
-//       });
-//     }, 500);
-//   }
-// };
 </script>
 
 
@@ -165,8 +134,8 @@ const updateSorting = (sort = "id") => {
     <Head title="Approved Return Orders" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Vendor Breadcrumb -->
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -190,43 +159,28 @@ const updateSorting = (sort = "id") => {
             </div>
           </li>
         </Breadcrumb>
-
-        <!-- <div>
-          <Link
-            as="button"
-            :href="route('admin.vendors.inactive.trash')"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
-          >
-            <i class="fa-solid fa-trash"></i>
-
-            Trash
-          </Link>
-        </div> -->
       </div>
 
-      <!-- Search Input Form -->
       <div class="flex items-center justify-end mb-5">
+        <!-- Search Box -->
         <form class="w-[350px] relative">
           <input
             type="text"
-            class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-            placeholder="Search"
+            class="search-input"
+            placeholder="Search by invoice"
             v-model="params.search"
           />
-
           <i
             v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-            @click="handleSearchBox"
+            class="fa-solid fa-xmark remove-search"
+            @click="removeSearch"
           ></i>
         </form>
 
+        <!-- Perpage Select Box -->
         <div class="ml-5">
-          <select
-            class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-            v-model="params.per_page"
-          >
-            <option value="" selected disabled>Select</option>
+          <select class="perpage-selectbox" v-model="params.per_page">
+            <option value="" disabled>Select</option>
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="25">25</option>
@@ -237,134 +191,36 @@ const updateSorting = (sort = "id") => {
         </div>
       </div>
 
+      <!-- Approved Order Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="id" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('invoice_no')">
             Invoice
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'invoice_no',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'invoice_no',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'invoice_no',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'invoice_no',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="invoice_no" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('payment_type')">
             Payment
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'payment_type',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'payment_type',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'payment_type',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'payment_type',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="payment_type" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('total_amount')">
             Amount
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'total_amount',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'total_amount',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'total_amount',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'total_amount',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="total_amount" />
           </HeaderTh>
+
           <HeaderTh> Return Status </HeaderTh>
-          <HeaderTh @click="updateSorting('order_date')">
+
+          <HeaderTh @click="updateSorting('return_date')">
             Return Date
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'order_date',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'order_date',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'order_date',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'order_date',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="return_date" />
           </HeaderTh>
+
           <HeaderTh v-if="returnOrderManageDetail"> Action </HeaderTh>
         </TableHeader>
 
@@ -373,18 +229,35 @@ const updateSorting = (sort = "id") => {
             v-for="approvedReturnOrder in approvedReturnOrders.data"
             :key="approvedReturnOrder.id"
           >
-            <BodyTh>{{ approvedReturnOrder.id }}</BodyTh>
-            <Td>{{ approvedReturnOrder.invoice_no }}</Td>
-            <Td class="capitalize">{{ approvedReturnOrder.payment_type }}</Td>
-            <Td>$ {{ approvedReturnOrder.total_amount }}</Td>
+            <BodyTh>
+              {{ approvedReturnOrder.id }}
+            </BodyTh>
+
+            <Td>
+              {{ approvedReturnOrder.invoice_no }}
+            </Td>
+
+            <Td class="capitalize">
+              {{ approvedReturnOrder.payment_type }}
+            </Td>
+
+            <Td
+              >$
+              {{ formattedAmount(approvedReturnOrder.total_amount) }}
+            </Td>
+
             <Td>
               <ConfirmedStatus>
                 {{ approvedReturnOrder.return_status }}
               </ConfirmedStatus>
             </Td>
-            <Td>{{ approvedReturnOrder.return_date }}</Td>
+
+            <Td>
+              {{ approvedReturnOrder.return_date }}
+            </Td>
 
             <Td v-if="returnOrderManageDetail">
+              <!-- Detail Button -->
               <Link
                 v-if="returnOrderManageDetail"
                 as="button"
@@ -395,24 +268,36 @@ const updateSorting = (sort = "id") => {
                   )
                 "
                 :data="{
-                  page: props.approvedReturnOrders.current_page,
+                  page: params.page,
                   per_page: params.per_page,
+                  sort: params.sort,
+                  direction: params.direction,
                 }"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
+                class="detail-btn group"
               >
-                <i class="fa-solid fa-eye"></i>
-                Details
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-eye"></i>
+                  Details
+                </span>
               </Link>
             </Td>
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Approved Order Table End -->
 
       <!-- Not Avaliable Data -->
       <NotAvaliableData v-if="!approvedReturnOrders.data.length" />
 
       <!-- Pagination -->
-      <pagination class="mt-6" :links="approvedReturnOrders.links" />
+      <div v-if="approvedReturnOrders.data.length" class="mt-6">
+        <p class="text-center text-sm text-gray-600 mb-3 font-bold">
+          Showing {{ approvedReturnOrders.from }} -
+          {{ approvedReturnOrders.to }} of
+          {{ approvedReturnOrders.total }}
+        </p>
+        <Pagination :links="approvedReturnOrders.links" />
+      </div>
     </div>
   </AdminDashboardLayout>
 </template>

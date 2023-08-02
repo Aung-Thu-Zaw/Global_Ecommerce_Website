@@ -1,7 +1,7 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, useForm, usePage } from "@inertiajs/vue3";
-import OrderCartItem from "@/Components/OrderCartItem.vue";
+import OrderCartItem from "@/Components/Items/OrderCartItem.vue";
 import Stepper from "@/Components/Steppers/OrderStepper.vue";
 import { ref } from "vue";
 import PendingStatus from "@/Components/Status/PendingStatus.vue";

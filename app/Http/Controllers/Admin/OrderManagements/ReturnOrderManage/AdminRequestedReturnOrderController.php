@@ -7,6 +7,7 @@ use App\Models\DeliveryInformation;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -15,31 +16,29 @@ class AdminRequestedReturnOrderController extends Controller
     public function index(): Response|ResponseFactory
     {
         $requestedReturnOrders=Order::search(request("search"))
-                                  ->where("return_status", "requested")
-                                  ->where("payment_type", "card")
-                                  ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                  ->paginate(request("per_page", 10))
-                                  ->appends(request()->all());
+                                    ->where("return_status", "requested")
+                                    ->where("payment_type", "card")
+                                    ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                    ->paginate(request("per_page", 10))
+                                    ->appends(request()->all());
 
         return inertia("Admin/OrderManagements/ReturnOrderManage/RequestedReturnOrders/Index", compact("requestedReturnOrders"));
     }
 
-    public function show(int $id): Response|ResponseFactory
+    public function show(Request $request, Order $order): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $deliveryInformation=DeliveryInformation::where("user_id", $order->user_id)->first();
 
-        $requestedReturnOrderDetail=Order::findOrFail($id);
+        $orderItems=OrderItem::with("product.shop")->where("order_id", $order->id)->get();
 
-        $deliveryInformation=DeliveryInformation::where("user_id", $requestedReturnOrderDetail->user_id)->first();
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        $orderItems=OrderItem::with("product.shop")->where("order_id", $requestedReturnOrderDetail->id)->get();
-
-        return inertia("Admin/OrderManagements/ReturnOrderManage/RequestedReturnOrders/Detail", compact("paginate", "requestedReturnOrderDetail", "deliveryInformation", "orderItems"));
+        return inertia("Admin/OrderManagements/ReturnOrderManage/RequestedReturnOrders/Detail", compact("queryStringParams", "order", "deliveryInformation", "orderItems"));
     }
 
-    public function update(int $id): RedirectResponse
+    public function update(Request $request, Order $order): RedirectResponse
     {
-        $order=Order::with(["deliveryInformation","orderItems.product.shop"])->findOrFail($id);
+        $order->load(["deliveryInformation","orderItems.product.shop"]);
 
         $order->update([
             "return_status"=>"approved",
@@ -53,8 +52,10 @@ class AdminRequestedReturnOrderController extends Controller
                 ]);
         });
 
-        // Mail::to($order->deliveryInformation->email)->send(new OrderDeliveredMail($order));
+        // Approved return mail
 
-        return to_route("admin.return-orders.approved.index")->with("success", "Order return is approved.");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route("admin.return-orders.requested.index", $queryStringParams)->with("success", "Order return is approved.");
     }
 }

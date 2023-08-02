@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DeliveryInformation;
 use App\Models\Order;
 use App\Models\OrderItem;
+use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -23,17 +24,15 @@ class AdminRefundedReturnOrderController extends Controller
         return inertia("Admin/OrderManagements/ReturnOrderManage/RefundedReturnOrders/Index", compact("refundedReturnOrders"));
     }
 
-    public function show(int $id): Response|ResponseFactory
+    public function show(Request $request, Order $order): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $deliveryInformation=DeliveryInformation::where("user_id", $order->user_id)->first();
 
-        $refundedReturnOrderDetail=Order::findOrFail($id);
+        $orderItems=OrderItem::with("product.shop")->where("order_id", $order->id)->get();
 
-        $deliveryInformation=DeliveryInformation::where("user_id", $refundedReturnOrderDetail->user_id)->first();
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        $orderItems=OrderItem::with("product.shop")->where("order_id", $refundedReturnOrderDetail->id)->get();
-
-        return inertia("Admin/OrderManagements/ReturnOrderManage/RefundedReturnOrders/Detail", compact("paginate", "refundedReturnOrderDetail", "deliveryInformation", "orderItems"));
+        return inertia("Admin/OrderManagements/ReturnOrderManage/RefundedReturnOrders/Detail", compact("queryStringParams", "order", "deliveryInformation", "orderItems"));
     }
 
 }

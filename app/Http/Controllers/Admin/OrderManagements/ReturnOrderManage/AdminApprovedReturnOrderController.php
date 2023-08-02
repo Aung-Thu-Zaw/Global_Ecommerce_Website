@@ -6,13 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\DeliveryInformation;
 use App\Models\Order;
 use App\Models\OrderItem;
-use Exception;
+use App\Services\Payments\StripePaymentRefundService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
-use Stripe\PaymentIntent;
-use Stripe\Refund;
-use Stripe\Stripe;
 
 class AdminApprovedReturnOrderController extends Controller
 {
@@ -28,52 +26,25 @@ class AdminApprovedReturnOrderController extends Controller
         return inertia("Admin/OrderManagements/ReturnOrderManage/ApprovedReturnOrders/Index", compact("approvedReturnOrders"));
     }
 
-    public function show(int $id): Response|ResponseFactory
+    public function show(Request $request, Order $order): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $deliveryInformation=DeliveryInformation::where("user_id", $order->user_id)->first();
 
-        $approvedReturnOrderDetail=Order::findOrFail($id);
+        $orderItems=OrderItem::with("product.shop")->where("order_id", $order->id)->get();
 
-        $deliveryInformation=DeliveryInformation::where("user_id", $approvedReturnOrderDetail->user_id)->first();
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        $orderItems=OrderItem::with("product.shop")->where("order_id", $approvedReturnOrderDetail->id)->get();
-
-        return inertia("Admin/OrderManagements/ReturnOrderManage/ApprovedReturnOrders/Detail", compact("paginate", "approvedReturnOrderDetail", "deliveryInformation", "orderItems"));
+        return inertia("Admin/OrderManagements/ReturnOrderManage/ApprovedReturnOrders/Detail", compact("queryStringParams", "order", "deliveryInformation", "orderItems"));
     }
 
-    public function update(int $id): RedirectResponse
+    public function update(Request $request, Order $order): RedirectResponse
     {
-        $order=Order::with(["deliveryInformation","orderItems.product.shop"])->findOrFail($id);
+        $order->load(["deliveryInformation","orderItems.product.shop"]);
 
-        try {
+        $message=(new StripePaymentRefundService())->refundPayment($order);
 
-            Stripe::setApiKey(env('STRIPE_SECRET'));
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-            $payment =PaymentIntent::retrieve((string)$order->payment_id);
-
-
-            Refund::create([
-                 'payment_intent' => $payment->id,
-             ]);
-
-            $order->update([
-            "return_status"=>"refunded",
-            "return_refunded_date"=>now()->format("Y-m-d")
-        ]);
-
-            $order->orderItems()->each(function ($orderItem) {
-                $orderItem->update([
-                    "return_status"=>"refunded",
-                    "return_refunded_date"=>now()->format("Y-m-d")
-                    ]);
-            });
-
-            // Mail::to($order->deliveryInformation->email)->send(new OrderDeliveredMail($order));
-            return to_route("admin.return-orders.refunded.index")->with("success", "Order return is refunded.");
-
-        } catch (Exception $e) {
-            return back()->with("error", $e->getMessage());
-        }
+        return to_route("admin.return-orders.approved.index", $queryStringParams)->with("success", $message);
     }
-
 }
