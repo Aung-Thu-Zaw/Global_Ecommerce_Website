@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\DeliveryInformation;
 use App\Models\Order;
 use App\Models\OrderItem;
-use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -24,16 +23,14 @@ class AdminDeliveredOrderController extends Controller
         return inertia("Admin/OrderManagements/OrderManage/DeliveredOrders/Index", compact("deliveredOrders"));
     }
 
-    public function show(int $id): Response|ResponseFactory
+    public function show(Request $request, Order $order): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $deliveryInformation=DeliveryInformation::where("user_id", $order->user_id)->first();
 
-        $deliveredOrderDetail=Order::findOrFail($id);
+        $orderItems=OrderItem::with("product.shop")->where("order_id", $order->id)->get();
 
-        $deliveryInformation=DeliveryInformation::where("user_id", $deliveredOrderDetail->user_id)->first();
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        $orderItems=OrderItem::with("product.shop")->where("order_id", $deliveredOrderDetail->id)->get();
-
-        return inertia("Admin/OrderManagements/OrderManage/DeliveredOrders/Detail", compact("paginate", "deliveredOrderDetail", "deliveryInformation", "orderItems"));
+        return inertia("Admin/OrderManagements/OrderManage/DeliveredOrders/Detail", compact("queryStringParams", "order", "deliveryInformation", "orderItems"));
     }
 }

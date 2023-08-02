@@ -10,31 +10,26 @@ import { inject, ref, computed } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
+// Define the props
 const props = defineProps({
   queryStringParams: Array,
   deliveryInformation: Object,
-  shippedOrderDetail: Object,
+  order: Object,
   orderItems: Object,
 });
 
-const swal = inject("$swal");
+// Define Variables
 const processing = ref(false);
+const swal = inject("$swal");
 
-const orderManageControl = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "order-manage.control"
-      )
-    : false;
-});
-
-const handleDelivered = async (id) => {
+const handleDeliveredOrder = async (id) => {
   const result = await swal({
-    icon: "info",
+    icon: "question",
     title: "Are you sure you want to delivered this order?",
     showCancelButton: true,
-    confirmButtonText: "Yes, delivered!",
-    confirmButtonColor: "#2671c1",
+    confirmButtonText: "Yes, Delivered!",
+    confirmButtonColor: "#2562c4",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -43,7 +38,13 @@ const handleDelivered = async (id) => {
     processing.value = true;
 
     router.post(
-      route("admin.orders.shipped.update", id),
+      route("admin.orders.shipped.update", {
+        order: props.order.id,
+        page: props.queryStringParams.page,
+        per_page: props.queryStringParams.per_page,
+        sort: props.queryStringParams.sort,
+        direction: props.queryStringParams.direction,
+      }),
       {},
       {
         onFinish: () => {
@@ -60,6 +61,15 @@ const handleDelivered = async (id) => {
     );
   }
 };
+
+// Order Control Permission
+const orderManageControl = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "order-manage.control"
+      )
+    : false;
+});
 </script>
 
 
@@ -69,6 +79,7 @@ const handleDelivered = async (id) => {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -113,32 +124,40 @@ const handleDelivered = async (id) => {
             </div>
           </li>
         </Breadcrumb>
+
+        <!-- Go Back button -->
         <div>
           <Link
             as="button"
             :href="route('admin.orders.shipped.index')"
             :data="{
-              page: props.paginate.page,
-              per_page: props.paginate.per_page,
+              page: props.queryStringParams.page,
+              per_page: props.queryStringParams.per_page,
+              sort: props.queryStringParams.sort,
+              direction: props.queryStringParams.direction,
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+            class="goback-btn"
           >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
+            </span>
           </Link>
         </div>
       </div>
 
       <div class="grid grid-cols-2 gap-3 my-5">
+        <!-- Delivery Information Detail  -->
         <DeliveryInformationCard :deliveryInformation="deliveryInformation" />
 
         <div class="p-5 border shadow-md rounded-sm">
+          <!-- Order Detail  -->
           <OrderDetailCard
             :deliveryInformation="deliveryInformation"
-            :order="shippedOrderDetail"
+            :order="order"
           >
             <div
-              v-if="shippedOrderDetail.confirmed_date"
+              v-if="order.confirmed_date"
               class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
             >
               <span
@@ -147,11 +166,11 @@ const handleDelivered = async (id) => {
                 Order Confirmed Date
               </span>
               <span class="w-full block">
-                {{ shippedOrderDetail.confirmed_date }}
+                {{ order.confirmed_date }}
               </span>
             </div>
             <div
-              v-if="shippedOrderDetail.processing_date"
+              v-if="order.processing_date"
               class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
             >
               <span
@@ -160,11 +179,11 @@ const handleDelivered = async (id) => {
                 Order Processing Date
               </span>
               <span class="w-full block">
-                {{ shippedOrderDetail.processing_date }}
+                {{ order.processing_date }}
               </span>
             </div>
             <div
-              v-if="shippedOrderDetail.shipped_date"
+              v-if="order.shipped_date"
               class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
             >
               <span
@@ -173,16 +192,15 @@ const handleDelivered = async (id) => {
                 Order Shipped Date
               </span>
               <span class="w-full block">
-                {{ shippedOrderDetail.shipped_date }}
+                {{ order.shipped_date }}
               </span>
             </div>
           </OrderDetailCard>
+
+          <!-- Delivered Button -->
           <button
-            @click="handleDelivered(shippedOrderDetail.id)"
-            v-if="
-              shippedOrderDetail.order_status === 'shipped' &&
-              orderManageControl
-            "
+            @click="handleDeliveredOrder(order.id)"
+            v-if="order.order_status === 'shipped' && orderManageControl"
             class="bg-slate-600 py-3 w-full rounded-sm font-bold text-white hover:bg-slate-700 transition-all shadow"
           >
             <svg
@@ -207,6 +225,8 @@ const handleDelivered = async (id) => {
           </button>
         </div>
       </div>
+
+      <!-- Order Item Products  -->
       <div class="border shadow rounded-sm">
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table
@@ -239,6 +259,7 @@ const handleDelivered = async (id) => {
                 >
                   {{ orderItem.product.shop.shop_name }}
                 </th>
+
                 <td class="px-6 py-4">
                   <img
                     :src="orderItem.product.image"
@@ -246,17 +267,34 @@ const handleDelivered = async (id) => {
                     class="h-14 object-cover"
                   />
                 </td>
-                <td class="px-6 py-4">{{ orderItem.product.name }}</td>
-                <td class="px-6 py-4">{{ orderItem.product.code }}</td>
-                <td class="px-6 py-4">{{ orderItem.color }}</td>
-                <td class="px-6 py-4">{{ orderItem.size }}</td>
+
+                <td class="px-6 py-4">
+                  {{ orderItem.product.name }}
+                </td>
+
+                <td class="px-6 py-4">
+                  {{ orderItem.product.code }}
+                </td>
+
+                <td class="px-6 py-4">
+                  {{ orderItem.color }}
+                </td>
+
+                <td class="px-6 py-4">
+                  {{ orderItem.size }}
+                </td>
+
                 <td class="px-6 py-4">
                   <span v-if="orderItem.product.discount">
                     $ {{ orderItem.product.discount }}
                   </span>
                   <span v-else> $ {{ orderItem.product.price }} </span>
                 </td>
-                <td class="px-6 py-4">{{ orderItem.qty }}</td>
+
+                <td class="px-6 py-4">
+                  {{ orderItem.qty }}
+                </td>
+
                 <td class="px-6 py-4">$ {{ orderItem.price }}</td>
               </tr>
             </tbody>

@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Admin\OrderManagements\OrderManage;
 
 use App\Http\Controllers\Controller;
-use App\Mail\OrderShippedMail;
+use App\Jobs\Orders\SendShippedOrderEmailToCustomer;
 use App\Models\DeliveryInformation;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Product;
+use App\Services\Products\UpdateProductQuantityService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -26,41 +26,32 @@ class AdminProcessingOrderController extends Controller
         return inertia("Admin/OrderManagements/OrderManage/ProcessingOrders/Index", compact("processingOrders"));
     }
 
-    public function show(int $id): Response|ResponseFactory
+    public function show(Request $request, Order $order): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $deliveryInformation=DeliveryInformation::where("user_id", $order->user_id)->first();
 
-        $processingOrderDetail=Order::findOrFail($id);
+        $orderItems=OrderItem::with("product.shop")->where("order_id", $order->id)->get();
 
-        $deliveryInformation=DeliveryInformation::where("user_id", $processingOrderDetail->user_id)->first();
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        $orderItems=OrderItem::with("product.shop")->where("order_id", $processingOrderDetail->id)->get();
-
-        return inertia("Admin/OrderManagements/OrderManage/ProcessingOrders/Detail", compact("paginate", "processingOrderDetail", "deliveryInformation", "orderItems"));
+        return inertia("Admin/OrderManagements/OrderManage/ProcessingOrders/Detail", compact("queryStringParams", "order", "deliveryInformation", "orderItems"));
     }
 
-    public function update(int $id): RedirectResponse
+    public function update(Request $request, Order $order, UpdateProductQuantityService $updateProductQuantityService): RedirectResponse
     {
-        $orderItems=OrderItem::where("order_id", $id)->get();
+        $updateProductQuantityService->updateQuantity($order);
 
-        $orderItems->each(function ($orderItem) {
-            $product=Product::findOrFail($orderItem->product_id);
-            $product->update(["qty"=>$product->qty - $orderItem->qty]);
-        });
-
-        $order=Order::with(["deliveryInformation","orderItems.product.shop"])->findOrFail($id);
+        $order->load(["orderItems.product.shop"]);
 
         $order->update([
             "order_status"=>"shipped",
             "shipped_date"=>now()->format("Y-m-d")
-    ]);
+        ]);
 
-        $deliveryInformation = $order->deliveryInformation;
+        SendShippedOrderEmailToCustomer::dispatch($order);
 
-        if ($deliveryInformation) {
-            Mail::to($deliveryInformation->email)->send(new OrderShippedMail($order));
-        }
-        return to_route("admin.orders.shipped.index")->with("success", "Order is shipped");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
+        return to_route("admin.orders.processing.index", $queryStringParams)->with("success", "Order is shipped");
     }
 }

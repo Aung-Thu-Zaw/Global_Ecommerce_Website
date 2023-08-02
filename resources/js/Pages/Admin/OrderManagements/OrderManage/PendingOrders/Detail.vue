@@ -10,33 +10,26 @@ import { inject, ref, computed } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
+// Define the props
 const props = defineProps({
-    queryStringParams: Array,
+  queryStringParams: Array,
   deliveryInformation: Object,
-  pendingOrderDetail: Object,
+  order: Object,
   orderItems: Object,
 });
 
+// Define Variables
 const processing = ref(false);
 const swal = inject("$swal");
 
-const orderManageControl = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "order-manage.control"
-      )
-    : false;
-});
-
-
-
-const handleConfirm = async (id) => {
+const handleConfirmOrder = async (id) => {
   const result = await swal({
-    icon: "info",
+    icon: "question",
     title: "Are you sure you want to confirm this order?",
     showCancelButton: true,
-    confirmButtonText: "Yes, confirm!",
-    confirmButtonColor: "#2671c1",
+    confirmButtonText: "Yes, Confirm!",
+    confirmButtonColor: "#2562c4",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -45,9 +38,16 @@ const handleConfirm = async (id) => {
     processing.value = true;
 
     router.post(
-      route("admin.orders.pending.update", id),
+      route("admin.orders.pending.update", {
+        order: props.order.id,
+        page: props.queryStringParams.page,
+        per_page: props.queryStringParams.per_page,
+        sort: props.queryStringParams.sort,
+        direction: props.queryStringParams.direction,
+      }),
       {},
       {
+        preserveScroll: true,
         onFinish: () => {
           processing.value = false;
         },
@@ -62,6 +62,15 @@ const handleConfirm = async (id) => {
     );
   }
 };
+
+// Order Control Permission
+const orderManageControl = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "order-manage.control"
+      )
+    : false;
+});
 </script>
 
 
@@ -71,6 +80,7 @@ const handleConfirm = async (id) => {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -116,36 +126,42 @@ const handleConfirm = async (id) => {
             </div>
           </li>
         </Breadcrumb>
+
+        <!-- Go Back button -->
         <div>
           <Link
             as="button"
             :href="route('admin.orders.pending.index')"
             :data="{
-              page: props.paginate.page,
-              per_page: props.paginate.per_page,
+              page: props.queryStringParams.page,
+              per_page: props.queryStringParams.per_page,
+              sort: props.queryStringParams.sort,
+              direction: props.queryStringParams.direction,
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+            class="goback-btn"
           >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
+            </span>
           </Link>
         </div>
       </div>
 
       <div class="grid grid-cols-2 gap-3 my-5">
+        <!-- Delivery Information Detail  -->
         <DeliveryInformationCard :deliveryInformation="deliveryInformation" />
         <div class="p-5 border shadow-md rounded-sm">
+          <!-- Order Detail  -->
           <OrderDetailCard
             :deliveryInformation="deliveryInformation"
-            :order="pendingOrderDetail"
+            :order="order"
           />
 
+          <!-- Confirm Button -->
           <button
-            @click="handleConfirm(pendingOrderDetail.id)"
-            v-if="
-              pendingOrderDetail.order_status === 'pending' &&
-              orderManageControl
-            "
+            @click="handleConfirmOrder(order.id)"
+            v-if="order.order_status === 'pending' && orderManageControl"
             class="bg-green-600 py-3 w-full rounded-sm font-bold text-white hover:bg-green-700 transition-all shadow"
           >
             <svg
@@ -170,6 +186,8 @@ const handleConfirm = async (id) => {
           </button>
         </div>
       </div>
+
+      <!-- Order Item Products  -->
       <div class="border shadow rounded-sm">
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table
@@ -202,6 +220,7 @@ const handleConfirm = async (id) => {
                 >
                   {{ orderItem.product.shop.shop_name }}
                 </th>
+
                 <td class="px-6 py-4">
                   <img
                     :src="orderItem.product.image"
@@ -209,17 +228,34 @@ const handleConfirm = async (id) => {
                     class="h-14 object-cover"
                   />
                 </td>
-                <td class="px-6 py-4">{{ orderItem.product.name }}</td>
-                <td class="px-6 py-4">{{ orderItem.product.code }}</td>
-                <td class="px-6 py-4">{{ orderItem.color }}</td>
-                <td class="px-6 py-4">{{ orderItem.size }}</td>
+
+                <td class="px-6 py-4">
+                  {{ orderItem.product.name }}
+                </td>
+
+                <td class="px-6 py-4">
+                  {{ orderItem.product.code }}
+                </td>
+
+                <td class="px-6 py-4">
+                  {{ orderItem.color }}
+                </td>
+
+                <td class="px-6 py-4">
+                  {{ orderItem.size }}
+                </td>
+
                 <td class="px-6 py-4">
                   <span v-if="orderItem.product.discount">
                     $ {{ orderItem.product.discount }}
                   </span>
                   <span v-else> $ {{ orderItem.product.price }} </span>
                 </td>
-                <td class="px-6 py-4">{{ orderItem.qty }}</td>
+
+                <td class="px-6 py-4">
+                  {{ orderItem.qty }}
+                </td>
+
                 <td class="px-6 py-4">$ {{ orderItem.price }}</td>
               </tr>
             </tbody>

@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Admin\OrderManagements\OrderManage;
 
 use App\Http\Controllers\Controller;
-use App\Mail\OrderConfirmMail;
+use App\Jobs\Orders\SendConfirmedOrderEmailToCustomer;
 use App\Models\DeliveryInformation;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -25,34 +25,31 @@ class AdminPendingOrderController extends Controller
         return inertia("Admin/OrderManagements/OrderManage/PendingOrders/Index", compact("pendingOrders"));
     }
 
-    public function show(int $id): Response|ResponseFactory
+    public function show(Request $request, Order $order): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $deliveryInformation=DeliveryInformation::where("user_id", $order->user_id)->first();
 
-        $pendingOrderDetail=Order::findOrFail($id);
+        $orderItems=OrderItem::with("product.shop")->where("order_id", $order->id)->get();
 
-        $deliveryInformation=DeliveryInformation::where("user_id", $pendingOrderDetail->user_id)->first();
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        $orderItems=OrderItem::with("product.shop")->where("order_id", $pendingOrderDetail->id)->get();
-
-        return inertia("Admin/OrderManagements/OrderManage/PendingOrders/Detail", compact("paginate", "pendingOrderDetail", "deliveryInformation", "orderItems"));
+        return inertia("Admin/OrderManagements/OrderManage/PendingOrders/Detail", compact("queryStringParams", "order", "deliveryInformation", "orderItems"));
     }
 
-    public function update(int $id): RedirectResponse
+    public function update(Request $request, Order $order): RedirectResponse
     {
-        $order = Order::with(["deliveryInformation", "orderItems.product.shop"])->findOrFail($id);
+        $order->load(["orderItems.product.shop"]);
 
         $order->update([
             "order_status" => "confirmed",
             "confirmed_date" => now()->format("Y-m-d")
         ]);
 
-        $deliveryInformation = $order->deliveryInformation;
-        if ($deliveryInformation) {
-            Mail::to($deliveryInformation->email)->send(new OrderConfirmMail($order));
-        }
+        SendConfirmedOrderEmailToCustomer::dispatch($order);
 
-        return to_route("admin.orders.confirmed.index")->with("success", "Order is confirmed");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route("admin.orders.pending.index", $queryStringParams)->with("success", "Order is confirmed");
     }
 
 }

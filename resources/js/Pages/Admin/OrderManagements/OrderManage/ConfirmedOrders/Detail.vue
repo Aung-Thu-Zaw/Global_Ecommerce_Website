@@ -10,31 +10,26 @@ import { inject, ref, computed } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
+// Define the props
 const props = defineProps({
-    queryStringParams: Array,
+  queryStringParams: Array,
   deliveryInformation: Object,
-  confirmedOrderDetail: Object,
+  order: Object,
   orderItems: Object,
 });
 
+// Define Variables
 const processing = ref(false);
 const swal = inject("$swal");
 
-const orderManageControl = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "order-manage.control"
-      )
-    : false;
-});
-
-const handleProcessing = async (id) => {
+const handleProcessingOrder = async (id) => {
   const result = await swal({
-    icon: "info",
+    icon: "question",
     title: "Are you sure you want to processing this order?",
     showCancelButton: true,
-    confirmButtonText: "Yes, process!",
-    confirmButtonColor: "#2671c1",
+    confirmButtonText: "Yes, Process!",
+    confirmButtonColor: "#2562c4",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -43,9 +38,16 @@ const handleProcessing = async (id) => {
     processing.value = true;
 
     router.post(
-      route("admin.orders.confirmed.update", id),
+      route("admin.orders.confirmed.update", {
+        order: props.order.id,
+        page: props.queryStringParams.page,
+        per_page: props.queryStringParams.per_page,
+        sort: props.queryStringParams.sort,
+        direction: props.queryStringParams.direction,
+      }),
       {},
       {
+        preserveScroll: true,
         onFinish: () => {
           processing.value = false;
         },
@@ -60,6 +62,15 @@ const handleProcessing = async (id) => {
     );
   }
 };
+
+// Order Control Permission
+const orderManageControl = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "order-manage.control"
+      )
+    : false;
+});
 </script>
 
 
@@ -113,32 +124,40 @@ const handleProcessing = async (id) => {
             </div>
           </li>
         </Breadcrumb>
+
+        <!-- Go Back button -->
         <div>
           <Link
             as="button"
             :href="route('admin.orders.confirmed.index')"
             :data="{
-              page: props.paginate.page,
-              per_page: props.paginate.per_page,
+              page: props.queryStringParams.page,
+              per_page: props.queryStringParams.per_page,
+              sort: props.queryStringParams.sort,
+              direction: props.queryStringParams.direction,
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+            class="goback-btn"
           >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
+            </span>
           </Link>
         </div>
       </div>
 
       <div class="grid grid-cols-2 gap-3 my-5">
+        <!-- Delivery Information Detail  -->
         <DeliveryInformationCard :deliveryInformation="deliveryInformation" />
 
         <div class="p-5 border shadow-md rounded-sm">
+          <!-- Order Detail  -->
           <OrderDetailCard
             :deliveryInformation="deliveryInformation"
-            :order="confirmedOrderDetail"
+            :order="order"
           >
             <div
-              v-if="confirmedOrderDetail.confirmed_date"
+              v-if="order.confirmed_date"
               class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
             >
               <span
@@ -147,16 +166,15 @@ const handleProcessing = async (id) => {
                 Order Confirmed Date
               </span>
               <span class="w-full block">
-                {{ confirmedOrderDetail.confirmed_date }}
+                {{ order.confirmed_date }}
               </span>
             </div>
           </OrderDetailCard>
+
+          <!-- Processing Button -->
           <button
-            @click="handleProcessing(confirmedOrderDetail.id)"
-            v-if="
-              confirmedOrderDetail.order_status === 'confirmed' &&
-              orderManageControl
-            "
+            @click="handleProcessingOrder(order.id)"
+            v-if="order.order_status === 'confirmed' && orderManageControl"
             class="bg-orange-600 py-3 w-full rounded-sm font-bold text-white hover:bg-orange-700 transition-all shadow"
           >
             <svg
@@ -181,6 +199,8 @@ const handleProcessing = async (id) => {
           </button>
         </div>
       </div>
+
+      <!-- Order Item Products  -->
       <div class="border shadow rounded-sm">
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table
@@ -213,6 +233,7 @@ const handleProcessing = async (id) => {
                 >
                   {{ orderItem.product.shop.shop_name }}
                 </th>
+
                 <td class="px-6 py-4">
                   <img
                     :src="orderItem.product.image"
@@ -220,17 +241,34 @@ const handleProcessing = async (id) => {
                     class="h-14 object-cover"
                   />
                 </td>
-                <td class="px-6 py-4">{{ orderItem.product.name }}</td>
-                <td class="px-6 py-4">{{ orderItem.product.code }}</td>
-                <td class="px-6 py-4">{{ orderItem.color }}</td>
-                <td class="px-6 py-4">{{ orderItem.size }}</td>
+
+                <td class="px-6 py-4">
+                  {{ orderItem.product.name }}
+                </td>
+
+                <td class="px-6 py-4">
+                  {{ orderItem.product.code }}
+                </td>
+
+                <td class="px-6 py-4">
+                  {{ orderItem.color }}
+                </td>
+
+                <td class="px-6 py-4">
+                  {{ orderItem.size }}
+                </td>
+
                 <td class="px-6 py-4">
                   <span v-if="orderItem.product.discount">
                     $ {{ orderItem.product.discount }}
                   </span>
                   <span v-else> $ {{ orderItem.product.price }} </span>
                 </td>
-                <td class="px-6 py-4">{{ orderItem.qty }}</td>
+
+                <td class="px-6 py-4">
+                  {{ orderItem.qty }}
+                </td>
+
                 <td class="px-6 py-4">$ {{ orderItem.price }}</td>
               </tr>
             </tbody>

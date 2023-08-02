@@ -13,9 +13,99 @@ import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Link, Head, router, usePage } from "@inertiajs/vue3";
 import { reactive, watch, computed } from "vue";
 
+// Define the props
 const props = defineProps({
   processingOrders: Object,
 });
+
+// Query String Parameteres
+const params = reactive({
+  search: usePage().props.ziggy.query?.search,
+  page: usePage().props.ziggy.query?.page,
+  per_page: usePage().props.ziggy.query?.per_page,
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
+});
+
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("admin.orders.processing.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
+
+// Remove Search Param
+const removeSearch = () => {
+  params.search = "";
+  router.get(
+    route("admin.orders.processing.index"),
+    {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
+
+// Handle Query String Parameter
+const handleQueryStringParameter = () => {
+  router.get(
+    route("admin.orders.processing.index"),
+    {
+      search: params.search,
+      page: params.page,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
+
+// Watching Search Box
+watch(
+  () => params.search,
+  () => {
+    if (params.search === "") {
+      removeSearch();
+    } else {
+      handleSearch();
+    }
+  }
+);
+
+// Watching Perpage Select Box
+watch(
+  () => params.per_page,
+  () => {
+    handleQueryStringParameter();
+  }
+);
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  handleQueryStringParameter();
+};
 
 // Formatted Amount
 const formattedAmount = (amount) => {
@@ -34,77 +124,6 @@ const orderManageDetail = computed(() => {
       )
     : false;
 });
-
-const params = reactive({
-  search: null,
-  page: props.processingOrders.current_page
-    ? props.processingOrders.current_page
-    : 1,
-  per_page: props.processingOrders.per_page
-    ? props.processingOrders.per_page
-    : 10,
-  sort: "id",
-  direction: "desc",
-});
-const handleSearchBox = () => {
-  params.search = "";
-};
-
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.orders.processing.index"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.orders.processing.index"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
-  router.get(
-    route("admin.orders.processing.index"),
-    {
-      search: params.search,
-      page: params.page,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-    },
-    { replace: true, preserveState: true }
-  );
-};
 </script>
 
 
@@ -140,27 +159,25 @@ const updateSorting = (sort = "id") => {
       </div>
 
       <div class="flex items-center justify-end mb-5">
+        <!-- Search Box -->
         <form class="w-[350px] relative">
           <input
             type="text"
-            class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-            placeholder="Search"
+            class="search-input"
+            placeholder="Search by invoice"
             v-model="params.search"
           />
-
           <i
             v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-            @click="handleSearchBox"
+            class="fa-solid fa-xmark remove-search"
+            @click="removeSearch"
           ></i>
         </form>
 
+        <!-- Perpage Select Box -->
         <div class="ml-5">
-          <select
-            class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-            v-model="params.per_page"
-          >
-            <option value="" selected disabled>Select</option>
+          <select class="perpage-selectbox" v-model="params.per_page">
+            <option value="" disabled>Select</option>
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="25">25</option>
@@ -171,134 +188,36 @@ const updateSorting = (sort = "id") => {
         </div>
       </div>
 
+      <!-- Processing Order Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="id" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('invoice_no')">
             Invoice
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'invoice_no',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'invoice_no',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'invoice_no',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'invoice_no',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="invoice_no" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('payment_type')">
             Payment
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'payment_type',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'payment_type',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'payment_type',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'payment_type',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="payment_type" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('total_amount')">
             Amount
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'total_amount',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'total_amount',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'total_amount',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'total_amount',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="total_amount" />
           </HeaderTh>
+
           <HeaderTh> Order Status </HeaderTh>
+
           <HeaderTh @click="updateSorting('order_date')">
             Order Date
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'order_date',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'order_date',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'order_date',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'order_date',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="order_date" />
           </HeaderTh>
+
           <HeaderTh v-if="orderManageDetail"> Action </HeaderTh>
         </TableHeader>
 
@@ -307,18 +226,32 @@ const updateSorting = (sort = "id") => {
             v-for="processingOrder in processingOrders.data"
             :key="processingOrder.id"
           >
-            <BodyTh>{{ processingOrder.id }}</BodyTh>
-            <Td>{{ processingOrder.invoice_no }}</Td>
-            <Td class="capitalize">{{ processingOrder.payment_type }}</Td>
-            <Td>$ {{ formattedAmount(processingOrder.total_amount) }}</Td>
+            <BodyTh>
+              {{ processingOrder.id }}
+            </BodyTh>
+
+            <Td>
+              {{ processingOrder.invoice_no }}
+            </Td>
+
+            <Td class="capitalize">
+              {{ processingOrder.payment_type }}
+            </Td>
+
+            <Td> $ {{ formattedAmount(processingOrder.total_amount) }} </Td>
+
             <Td>
               <ProcessingStatus>
                 {{ processingOrder.order_status }}
               </ProcessingStatus>
             </Td>
-            <Td>{{ processingOrder.order_date }}</Td>
+
+            <Td>
+              {{ processingOrder.order_date }}
+            </Td>
 
             <Td v-if="orderManageDetail">
+              <!-- Detail Button -->
               <Link
                 v-if="orderManageDetail"
                 as="button"
@@ -326,22 +259,35 @@ const updateSorting = (sort = "id") => {
                   route('admin.orders.processing.show', processingOrder.id)
                 "
                 :data="{
-                  page: props.processingOrders.current_page,
+                  page: params.page,
                   per_page: params.per_page,
+                  sort: params.sort,
+                  direction: params.direction,
                 }"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
+                class="detail-btn group"
               >
-                <i class="fa-solid fa-eye"></i>
-                Details
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-eye"></i>
+                  Details
+                </span>
               </Link>
             </Td>
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Processing Order Table End -->
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!processingOrders.data.length" />
 
-      <Pagination class="mt-6" :links="processingOrders.links" />
+      <!-- Pagination -->
+      <div v-if="processingOrders.data.length" class="mt-6">
+        <p class="text-center text-sm text-gray-600 mb-3 font-bold">
+          Showing {{ processingOrders.from }} - {{ processingOrders.to }} of
+          {{ processingOrders.total }}
+        </p>
+        <Pagination :links="processingOrders.links" />
+      </div>
     </div>
   </AdminDashboardLayout>
 </template>

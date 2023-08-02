@@ -7,10 +7,11 @@ import Td from "@/Components/Table/Td.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { Head } from "@inertiajs/vue3";
 
+// Define the props
 const props = defineProps({
-    queryStringParams: Array,
+  queryStringParams: Array,
   deliveryInformation: Object,
-  deliveredOrderDetail: Object,
+  order: Object,
   orderItems: Object,
 });
 </script>
@@ -22,6 +23,7 @@ const props = defineProps({
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -66,32 +68,40 @@ const props = defineProps({
             </div>
           </li>
         </Breadcrumb>
+
+        <!-- Go Back button -->
         <div>
           <Link
             as="button"
             :href="route('admin.orders.delivered.index')"
             :data="{
-              page: props.paginate.page,
-              per_page: props.paginate.per_page,
+              page: props.queryStringParams.page,
+              per_page: props.queryStringParams.per_page,
+              sort: props.queryStringParams.sort,
+              direction: props.queryStringParams.direction,
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+            class="goback-btn"
           >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
+            </span>
           </Link>
         </div>
       </div>
 
       <div class="grid grid-cols-2 gap-3 my-5">
+        <!-- Delivery Information Detail  -->
         <DeliveryInformationCard :deliveryInformation="deliveryInformation" />
 
         <div class="p-5 border shadow-md rounded-sm">
+          <!-- Order Detail  -->
           <OrderDetailCard
             :deliveryInformation="deliveryInformation"
-            :order="deliveredOrderDetail"
+            :order="order"
           >
             <div
-              v-if="deliveredOrderDetail.confirmed_date"
+              v-if="order.confirmed_date"
               class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
             >
               <span
@@ -100,11 +110,11 @@ const props = defineProps({
                 Order Confirmed Date
               </span>
               <span class="w-full block">
-                {{ deliveredOrderDetail.confirmed_date }}
+                {{ order.confirmed_date }}
               </span>
             </div>
             <div
-              v-if="deliveredOrderDetail.processing_date"
+              v-if="order.processing_date"
               class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
             >
               <span
@@ -113,11 +123,11 @@ const props = defineProps({
                 Order Processing Date
               </span>
               <span class="w-full block">
-                {{ deliveredOrderDetail.processing_date }}
+                {{ order.processing_date }}
               </span>
             </div>
             <div
-              v-if="deliveredOrderDetail.shipped_date"
+              v-if="order.shipped_date"
               class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
             >
               <span
@@ -126,12 +136,12 @@ const props = defineProps({
                 Order Shipped Date
               </span>
               <span class="w-full block">
-                {{ deliveredOrderDetail.shipped_date }}
+                {{ order.shipped_date }}
               </span>
             </div>
             <div
               class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
-              v-if="deliveredOrderDetail.delivered_date"
+              v-if="order.delivered_date"
             >
               <span
                 class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
@@ -139,12 +149,14 @@ const props = defineProps({
                 Order Delivered Date
               </span>
               <span class="w-full block">
-                {{ deliveredOrderDetail.delivered_date }}
+                {{ order.delivered_date }}
               </span>
             </div>
           </OrderDetailCard>
         </div>
       </div>
+
+      <!-- Order Item Products  -->
       <div class="border shadow rounded-sm">
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table
@@ -177,6 +189,7 @@ const props = defineProps({
                 >
                   {{ orderItem.product.shop.shop_name }}
                 </th>
+
                 <td class="px-6 py-4">
                   <img
                     :src="orderItem.product.image"
@@ -184,17 +197,34 @@ const props = defineProps({
                     class="h-14 object-cover"
                   />
                 </td>
-                <td class="px-6 py-4">{{ orderItem.product.name }}</td>
-                <td class="px-6 py-4">{{ orderItem.product.code }}</td>
-                <td class="px-6 py-4">{{ orderItem.color }}</td>
-                <td class="px-6 py-4">{{ orderItem.size }}</td>
+
+                <td class="px-6 py-4">
+                  {{ orderItem.product.name }}
+                </td>
+
+                <td class="px-6 py-4">
+                  {{ orderItem.product.code }}
+                </td>
+
+                <td class="px-6 py-4">
+                  {{ orderItem.color }}
+                </td>
+
+                <td class="px-6 py-4">
+                  {{ orderItem.size }}
+                </td>
+
                 <td class="px-6 py-4">
                   <span v-if="orderItem.product.discount">
                     $ {{ orderItem.product.discount }}
                   </span>
                   <span v-else> $ {{ orderItem.product.price }} </span>
                 </td>
-                <td class="px-6 py-4">{{ orderItem.qty }}</td>
+
+                <td class="px-6 py-4">
+                  {{ orderItem.qty }}
+                </td>
+
                 <td class="px-6 py-4">$ {{ orderItem.price }}</td>
               </tr>
             </tbody>

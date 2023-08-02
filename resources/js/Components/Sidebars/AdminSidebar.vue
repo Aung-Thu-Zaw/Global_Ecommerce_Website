@@ -513,7 +513,15 @@
                       ),
                     }"
                   >
-                    <Link :href="route('admin.orders.confirmed.index')">
+                    <Link
+                      :href="route('admin.orders.confirmed.index')"
+                      :data="{
+                        page: 1,
+                        per_page: 10,
+                        sort: 'id',
+                        direction: 'desc',
+                      }"
+                    >
                       {{ __("CONFIRMED_ORDERS") }}
                     </Link>
                   </li>

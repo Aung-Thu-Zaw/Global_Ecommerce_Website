@@ -7,6 +7,7 @@ use App\Models\DeliveryInformation;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -23,26 +24,26 @@ class AdminConfirmedOrderController extends Controller
         return inertia("Admin/OrderManagements/OrderManage/ConfirmedOrders/Index", compact("confirmedOrders"));
     }
 
-    public function show(int $id): Response|ResponseFactory
+    public function show(Request $request, Order $order): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $deliveryInformation=DeliveryInformation::where("user_id", $order->user_id)->first();
 
-        $confirmedOrderDetail=Order::findOrFail($id);
+        $orderItems=OrderItem::with("product.shop")->where("order_id", $order->id)->get();
 
-        $deliveryInformation=DeliveryInformation::where("user_id", $confirmedOrderDetail->user_id)->first();
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        $orderItems=OrderItem::with("product.shop")->where("order_id", $confirmedOrderDetail->id)->get();
-
-        return inertia("Admin/OrderManagements/OrderManage/ConfirmedOrders/Detail", compact("paginate", "confirmedOrderDetail", "deliveryInformation", "orderItems"));
+        return inertia("Admin/OrderManagements/OrderManage/ConfirmedOrders/Detail", compact("queryStringParams", "order", "deliveryInformation", "orderItems"));
     }
 
-    public function update(int $id): RedirectResponse
+    public function update(Request $request, Order $order): RedirectResponse
     {
-        Order::findOrFail($id)->update([
+        $order->update([
             "order_status"=>"processing",
             "processing_date"=>now()->format("Y-m-d")
         ]);
 
-        return to_route("admin.orders.processing.index")->with("success", "Order is processing");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route("admin.orders.confirmed.index", $queryStringParams)->with("success", "Order is processing");
     }
 }
