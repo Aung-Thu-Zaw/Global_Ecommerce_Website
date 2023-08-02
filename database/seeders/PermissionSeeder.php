@@ -178,13 +178,13 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"faq-category.trash.restore","group"=>"faq-category"]);
         Permission::create(["name"=>"faq-category.trash.delete","group"=>"faq-category"]);
 
-        Permission::create(["name"=>"faq-post.menu","group"=>"faq-post"]);
-        Permission::create(["name"=>"faq-post.add","group"=>"faq-post"]);
-        Permission::create(["name"=>"faq-post.edit","group"=>"faq-post"]);
-        Permission::create(["name"=>"faq-post.delete","group"=>"faq-post"]);
-        Permission::create(["name"=>"faq-post.trash.list","group"=>"faq-post"]);
-        Permission::create(["name"=>"faq-post.trash.restore","group"=>"faq-post"]);
-        Permission::create(["name"=>"faq-post.trash.delete","group"=>"faq-post"]);
+        Permission::create(["name"=>"faq.menu","group"=>"faq"]);
+        Permission::create(["name"=>"faq.add","group"=>"faq"]);
+        Permission::create(["name"=>"faq.edit","group"=>"faq"]);
+        Permission::create(["name"=>"faq.delete","group"=>"faq"]);
+        Permission::create(["name"=>"faq.trash.list","group"=>"faq"]);
+        Permission::create(["name"=>"faq.trash.restore","group"=>"faq"]);
+        Permission::create(["name"=>"faq.trash.delete","group"=>"faq"]);
 
         Permission::create(["name"=>"suggestion.menu","group"=>"suggestion"]);
         Permission::create(["name"=>"suggestion.detail","group"=>"suggestion"]);

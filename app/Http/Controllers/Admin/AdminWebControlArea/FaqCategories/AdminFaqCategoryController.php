@@ -7,7 +7,6 @@ use App\Actions\Admin\AdminWebControlArea\FaqCategories\Categories\PermanentlyDe
 use App\Actions\Admin\AdminWebControlArea\FaqCategories\Categories\UpdateFaqCategoryAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FaqCategoryRequest;
-use App\Models\Category;
 use App\Models\FaqCategory;
 use Illuminate\Database\Eloquent\Builder;
 use Inertia\Response;

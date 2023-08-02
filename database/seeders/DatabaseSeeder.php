@@ -44,7 +44,8 @@ class DatabaseSeeder extends Seeder
                 VendorDashboardGuideSeeder::class,
                 PageSeeder::class,
                 FaqCategorySeeder::class,
-                FaqSubCategorySeeder::class
+                FaqSubCategorySeeder::class,
+                FaqSeeder::class,
             ]
         );
     }

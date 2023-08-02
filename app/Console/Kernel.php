@@ -36,14 +36,12 @@ class Kernel extends ConsoleKernel
         $schedule->command('role:delete')->daily();
         $schedule->command('blog_category:delete')->daily();
         $schedule->command('blog_post:delete')->daily();
-        // Admin Web Control Area
         $schedule->command('faq_category:delete')->daily();
         $schedule->command('faq_sub_category:delete')->daily();
-
+        $schedule->command('faq:delete')->daily();
         $schedule->command('subscriber:delete')->daily();
         $schedule->command('suggestion:delete')->daily();
         $schedule->command('website_feedback:delete')->daily();
-
         $schedule->command('vendor_product_banner:delete')->daily();
     }
 

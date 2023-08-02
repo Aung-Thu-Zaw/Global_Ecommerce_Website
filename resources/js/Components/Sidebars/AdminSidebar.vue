@@ -1554,6 +1554,29 @@
               </li>
             </ul>
           </li>
+
+          <!-- Admin Manage Section -->
+          <li v-if="faqMenu" class="items-center">
+            <Link
+              :href="route('admin.faqs.index')"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url.startsWith('/admin/faqs'),
+                'text-slate-700 hover:text-slate-500':
+                  !$page.url.startsWith('/admin/faqs'),
+              }"
+            >
+              <i class="fa-solid fa-circle-question mr-2 text-sm"></i>
+              {{ __("FAQS") }}
+            </Link>
+          </li>
         </ul>
 
         <hr
@@ -1993,11 +2016,9 @@ export default {
         : false;
     },
 
-    faqPostMenu() {
+    faqMenu() {
       return this.permissions.length
-        ? this.permissions.some(
-            (permission) => permission.name === "faq-post.menu"
-          )
+        ? this.permissions.some((permission) => permission.name === "faq.menu")
         : false;
     },
 

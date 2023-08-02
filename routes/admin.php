@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\UserManagements\VendorManage\AdminInactiveVendorC
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminWebControlArea\FaqCategories\AdminFaqCategoryController;
 use App\Http\Controllers\Admin\AdminWebControlArea\FaqCategories\AdminFaqSubCategoryController;
+use App\Http\Controllers\Admin\AdminWebControlArea\Faqs\AdminFaqController;
 use App\Http\Controllers\Admin\AuthorityManagements\AdminRoleInPermissionController;
 use App\Http\Controllers\Admin\AdminWebControlArea\SiteSettings\AdminSeoSettingController;
 use App\Http\Controllers\Admin\AdminWebControlArea\SiteSettings\AdminWebsiteSettingController;
@@ -693,6 +694,22 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{trash_faq_sub_category_id}/restore", "restore")->middleware('permission:faq-category.trash.restore')->name("restore");
                     Route::delete("/{trash_faq_sub_category_id}/force-delete", "forceDelete")->middleware('permission:faq-category.trash.delete')->name("force.delete");
                     Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:faq-category.trash.delete')->name("permanently.delete");
+                });
+           // Admin Faqs Section
+           Route::controller(AdminFaqController::class)
+                ->prefix("/faqs")
+                ->name("faqs.")
+                ->group(function () {
+                    Route::get("/", "index")->middleware('permission:faq.menu')->name("index");
+                    Route::get("/create", "create")->middleware('permission:faq.add')->name("create");
+                    Route::post("/", "store")->middleware('permission:faq.add')->name("store");
+                    Route::get("/{faq}/edit", "edit")->middleware('permission:faq.edit')->name("edit");
+                    Route::post("/{faq}", "update")->middleware('permission:faq.edit')->name("update");
+                    Route::delete("/{faq}", "destroy")->middleware('permission:faq.delete')->name("destroy");
+                    Route::get("/trash", "trash")->middleware('permission:faq.trash.list')->name("trash");
+                    Route::post("/{trash_faq_id}/restore", "restore")->middleware('permission:faq.trash.restore')->name("restore");
+                    Route::delete("/{trash_faq_id}/force-delete", "forceDelete")->middleware('permission:faq.trash.delete')->name("force.delete");
+                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:faq.trash.delete')->name("permanently.delete");
                 });
 
            // ******************** Admin Dashboard From The Submitters ********************
