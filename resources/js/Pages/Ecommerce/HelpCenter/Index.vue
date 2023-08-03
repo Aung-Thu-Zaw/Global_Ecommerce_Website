@@ -221,9 +221,9 @@ const removeSearch = () => {
       <!-- Contact Us -->
       <div class="container mx-auto my-10">
         <p class="text-[.8rem] text-slate-700 text-center font-bold">
-          Still looking for answers? Ask anytime, day or night, just click on
-          "Chat Now" below to speak with us via live chat daily from 8:00 AM-
-          09:30 PM (Monday to Sunday)
+          Still looking for answers? Chat with us by clicking "Chat Now" or
+          click "Call" to make a call. You can contact us at 09-284784390034
+          from 8:00 AM to 09:30 AM (Monday to Sunday).
         </p>
 
         <div class="flex items-center justify-center space-x-10 mt-10">
@@ -243,17 +243,19 @@ const removeSearch = () => {
           <span class="font-bold text-slate-700 text-lg">Or</span>
 
           <!-- Email Card -->
-          <div
+          <Link
+            as="button"
+            :href="route('help-center.call')"
             class="rounded-md w-[250px] text-white flex items-center bg-blue-700 px-5 py-3"
           >
             <span class="mr-5">
-              <i class="fa-solid fa-envelope text-lg"></i>
+              <i class="fa-solid fa-phone text-lg"></i>
             </span>
             <div class="flex flex-col items-start justify-center">
-              <span class="text-lg font-bold">Send Email</span>
-              <span class="text-[.7rem]">You can send mail to our</span>
+              <span class="text-lg font-bold">Phone Call</span>
+              <span class="text-[.7rem]">8:00 AM- 09:30 PM</span>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
     </div>

@@ -25,4 +25,11 @@ class HelpCenterController extends Controller
 
         return inertia("Ecommerce/HelpCenter/QuestionSearchResult", compact("faqs"));
     }
+
+    public function contactPhoneCall(): Response|ResponseFactory
+    {
+        $faqs=Faq::filterBy(request(["search_question"]))->orderBy("id", "desc")->paginate(15)->withQueryString();
+
+        return inertia("Ecommerce/HelpCenter/PhoneCall", compact("faqs"));
+    }
 }

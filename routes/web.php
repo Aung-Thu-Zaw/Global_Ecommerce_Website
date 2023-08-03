@@ -83,6 +83,7 @@ Route::get("/faqs/{faq}", [FaqController::class,"show"])->name("faqs.show");
 
 Route::get("/help-center", [HelpCenterController::class,"index"])->name("help-center.index");
 Route::get("/help-center/questions/search-result", [HelpCenterController::class,"searchResult"])->name("help-center.questions.search");
+Route::get("/help-center/phone-call", [HelpCenterController::class,"contactPhoneCall"])->name("help-center.call");
 
 Route::post('/search/histories/{search_history}', [SearchHistoryController::class,"update"])->name("user.search.history.update");
 
