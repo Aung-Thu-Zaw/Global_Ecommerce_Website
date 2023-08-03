@@ -64,6 +64,12 @@ const handleChangeLanguage = (language) => {
               >
                 <i class="fa-solid fa-check"></i>
               </span>
+              <span
+                v-else-if="!$page.props.locale && language.short_name === 'en'"
+                class="ml-1"
+              >
+                <i class="fa-solid fa-check"></i>
+              </span>
             </div>
           </li>
         </ul>
