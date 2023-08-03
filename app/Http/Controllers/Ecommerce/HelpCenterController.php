@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Ecommerce;
 
 use App\Http\Controllers\Controller;
 use App\Models\Faq;
-use App\Models\FaqCategory;
+use App\Models\FaqSubCategory;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -14,9 +14,9 @@ class HelpCenterController extends Controller
     {
         $topQuestions=Faq::select("id", "question", "slug")->orderBy("helpful", "desc")->take(9)->get();
 
-        $faqCategories=FaqCategory::select("id", "name", "slug")->get();
+        $faqSubCategories=FaqSubCategory::select("id", "icon", "name", "slug")->get();
 
-        return inertia("Ecommerce/HelpCenter/Index", compact("topQuestions", "faqCategories"));
+        return inertia("Ecommerce/HelpCenter/Index", compact("topQuestions", "faqSubCategories"));
     }
 
     public function searchResult(): Response|ResponseFactory

@@ -19,6 +19,7 @@ const processing = ref(false);
 
 // Faq SubCategory Create Form Data
 const form = useForm({
+  icon: "",
   faq_category_id: "",
   name: "",
   captcha_token: null,
@@ -121,6 +122,22 @@ const handleCreateFaqSubCategory = async () => {
 
       <div class="border shadow-md p-10">
         <form @submit.prevent="handleCreateFaqSubCategory">
+          <!-- Icon Input -->
+          <div class="mb-6">
+            <InputLabel for="icon" value="Icon *" />
+
+            <TextInput
+              id="icon"
+              type="text"
+              class="mt-1 block w-full"
+              v-model="form.icon"
+              required
+              placeholder="Enter Fontawesome Icon"
+            />
+
+            <InputError class="mt-2" :message="form.errors.icon" />
+          </div>
+
           <!-- Faq SubCategory Name Input -->
           <div class="mb-6">
             <InputLabel for="name" value="Faq SubCategory Name *" />

@@ -12,6 +12,7 @@ class CreateFaqSubCategoryAction
     public function handle(array $data): void
     {
         FaqSubCategory::create([
+            "icon"=>$data["icon"],
             "faq_category_id"=>$data["faq_category_id"],
             "name"=>$data["name"],
         ]);

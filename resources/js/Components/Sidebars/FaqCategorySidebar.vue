@@ -87,7 +87,16 @@ defineProps({
                       search_question: $page.props.ziggy.query.search_question,
                       category: faqSubCategory.slug,
                     }"
-                    class="flex items-center w-full py-2 text-sm pl-10 text-gray-900 transition duration-75 group hover:bg-gray-200 hover:text-blue-700"
+                    class="flex items-center w-full py-2 text-sm pl-10 transition duration-75 group hover:bg-gray-200 hover:text-gray-900"
+                    :class="{
+                      'text-blue-700':
+                        $page.props.ziggy.query.category ===
+                        faqSubCategory.slug,
+
+                      'text-gray-800':
+                        $page.props.ziggy.query.category !==
+                        faqSubCategory.slug,
+                    }"
                     >{{ faqSubCategory.name }}
                   </Link>
                 </li>

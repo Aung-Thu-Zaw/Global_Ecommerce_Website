@@ -5,7 +5,7 @@ import { reactive } from "vue";
 
 defineProps({
   topQuestions: Object,
-  faqCategories: Object,
+  faqSubCategories: Object,
 });
 
 const params = reactive({
@@ -46,7 +46,7 @@ const removeSearch = () => {
   <AppLayout>
     <Head title="Help Center" />
 
-    <div class="min-h-[1700px] h-auto bg-gray-50 mt-40 w-full">
+    <div class="min-h-[1700px] h-auto mt-40 w-full">
       <div class="container mx-auto py-8">
         <h1 class="font-bold text-2xl">Global E-commerce Help Center</h1>
       </div>
@@ -127,96 +127,25 @@ const removeSearch = () => {
         </div>
 
         <div class="grid grid-cols-4 gap-y-4 px-12">
-          <div
+          <Link
+            v-for="faqSubCategory in faqSubCategories"
+            :key="faqSubCategory.id"
+            :href="route('faqs.index')"
+            :data="{
+              search_question: $page.props.ziggy.query.search_question,
+              category: faqSubCategory.slug,
+            }"
             class="border border-gray-300 cursor-pointer w-[280px] h-[120px] rounded-md hover:shadow-md p-5 flex flex-col items-center justify-center"
           >
             <span
               class="w-10 h-10 text-sm rounded-full flex items-center justify-center shadow-lg bg-blue-600 text-white"
             >
-              <i class="fa-solid fa-user-gear"></i>
+              <i v-html="faqSubCategory.icon"></i>
             </span>
-            <span class="text-gray-700 font-bold text-sm mt-3"
-              >Account Managements</span
-            >
-          </div>
-          <div
-            class="border border-gray-300 cursor-pointer w-[280px] h-[120px] rounded-md hover:shadow-md p-5 flex flex-col items-center justify-center"
-          >
-            <span
-              class="w-10 h-10 text-sm rounded-full flex items-center justify-center shadow-lg bg-blue-600 text-white"
-            >
-              <i class="fa-solid fa-boxes-packing"></i>
-            </span>
-            <span class="text-gray-700 font-bold text-sm mt-3">Orders</span>
-          </div>
-          <div
-            class="border border-gray-300 cursor-pointer w-[280px] h-[120px] rounded-md hover:shadow-md p-5 flex flex-col items-center justify-center"
-          >
-            <span
-              class="w-10 h-10 text-sm rounded-full flex items-center justify-center shadow-lg bg-blue-600 text-white"
-            >
-              <i class="fa-solid fa-money-check-dollar"></i>
-            </span>
-            <span class="text-gray-700 font-bold text-sm mt-3">Payments</span>
-          </div>
-          <div
-            class="border border-gray-300 cursor-pointer w-[280px] h-[120px] rounded-md hover:shadow-md p-5 flex flex-col items-center justify-center"
-          >
-            <span
-              class="w-10 h-10 text-sm rounded-full flex items-center justify-center shadow-lg bg-blue-600 text-white"
-            >
-              <i class="fa-solid fa-truck-fast"></i>
-            </span>
-            <span class="text-gray-700 font-bold text-sm mt-3"
-              >Shipping And Delivery</span
-            >
-          </div>
-          <div
-            class="border border-gray-300 cursor-pointer w-[280px] h-[120px] rounded-md hover:shadow-md p-5 flex flex-col items-center justify-center"
-          >
-            <span
-              class="w-10 h-10 text-sm rounded-full flex items-center justify-center shadow-lg bg-blue-600 text-white"
-            >
-              <i class="fa-solid fa-money-bill-transfer"></i>
-            </span>
-            <span class="text-gray-700 font-bold text-sm mt-3"
-              >Return And Refunds</span
-            >
-          </div>
-          <div
-            class="border border-gray-300 cursor-pointer w-[280px] h-[120px] rounded-md hover:shadow-md p-5 flex flex-col items-center justify-center"
-          >
-            <span
-              class="w-10 h-10 text-sm rounded-full flex items-center justify-center shadow-lg bg-blue-600 text-white"
-            >
-              <i class="fa-solid fa-shop"></i>
-            </span>
-            <span class="text-gray-700 font-bold text-sm mt-3"
-              >Sell on Global E-commerce</span
-            >
-          </div>
-          <div
-            class="border border-gray-300 cursor-pointer w-[280px] h-[120px] rounded-md hover:shadow-md p-5 flex flex-col items-center justify-center"
-          >
-            <span
-              class="w-10 h-10 text-sm rounded-full flex items-center justify-center shadow-lg bg-blue-600 text-white"
-            >
-              <i class="fa-solid fa-list"></i>
-            </span>
-            <span class="text-gray-700 font-bold text-sm mt-3"
-              >Product Categories</span
-            >
-          </div>
-          <div
-            class="border border-gray-300 cursor-pointer w-[280px] h-[120px] rounded-md hover:shadow-md p-5 flex flex-col items-center justify-center"
-          >
-            <span
-              class="w-10 h-10 text-sm rounded-full flex items-center justify-center shadow-lg bg-blue-600 text-white"
-            >
-              <i class="fa-solid fa-tags"></i>
-            </span>
-            <span class="text-gray-700 font-bold text-sm mt-3">Promotions</span>
-          </div>
+            <span class="text-gray-700 font-bold text-sm mt-3">{{
+              faqSubCategory.name
+            }}</span>
+          </Link>
         </div>
       </div>
 

@@ -19,7 +19,7 @@ const processing = ref(false);
 
 // Faq Category Edit Form Data
 const form = useForm({
-  name: props.faqCategory.name,
+  name: props.faqCategory?.name,
   captcha_token: null,
 });
 

@@ -15,6 +15,7 @@ return new class () extends Migration {
         Schema::create('faq_sub_categories', function (Blueprint $table) {
             $table->id();
             $table->foreignId("faq_category_id")->constrained()->cascadeOnDelete();
+            $table->string("icon")->nullable();
             $table->string("name")->unique();
             $table->string("slug")->unique();
             $table->softDeletes();

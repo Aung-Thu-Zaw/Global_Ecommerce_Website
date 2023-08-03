@@ -26,6 +26,7 @@ class FaqSubCategoryRequest extends FormRequest
     public function rules()
     {
         return [
+            "icon"=>["nullable","string"],
             "faq_category_id"=>["required",Rule::exists("faq_categories", "id")],
             "name"=>["required","string","max:255",Rule::unique("faq_categories", "name")],
             'captcha_token'  => ['required',new RecaptchaRule()],
@@ -38,6 +39,7 @@ class FaqSubCategoryRequest extends FormRequest
     public function messages(): array
     {
         return [
+            "icon.string" => "The icon must be a string.",
             "faq_category_id.required" =>  "The faq category id is required.",
             "faq_category_id.exists" =>  "The selected faq category id is invalid.",
             "name.required" => "The name field is required.",
