@@ -87,11 +87,11 @@ class Faq extends Model
     public function scopeFilterBy(Builder $query, array $filterBy): void
     {
         $query->when(
-            $filterBy["search"]??null,
-            function ($query, $search) {
+            $filterBy["search_question"]??null,
+            function ($query, $search_question) {
                 $query->where(
-                    function ($query) use ($search) {
-                        $query->where("question", "LIKE", "%".$search."%");
+                    function ($query) use ($search_question) {
+                        $query->where("question", "LIKE", "%".$search_question."%");
                     }
                 );
             }

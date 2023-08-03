@@ -1,37 +1,87 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, router, usePage } from "@inertiajs/vue3";
+import { reactive } from "vue";
 
 defineProps({
   topQuestions: Object,
   faqCategories: Object,
 });
+
+const params = reactive({
+  search_question: usePage().props.ziggy.query?.search_question,
+  page: usePage().props.ziggy.query?.page,
+});
+
+// Handle Search
+const handleSearch = () => {
+  router.get(
+    route("help-center.questions.search"),
+    {
+      search_question: params.search_question,
+      page: params.page,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
+
+// Remove Search Param
+const removeSearch = () => {
+  params.search_question = "";
+  router.get(
+    route("help-center.questions.search"),
+    {},
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
 </script>
 
 <template>
   <AppLayout>
     <Head title="Help Center" />
 
-    <div class="min-h-[1400px] h-auto bg-gray-50 mt-40 w-full">
+    <div class="min-h-[1700px] h-auto bg-gray-50 mt-40 w-full">
       <div class="container mx-auto py-8">
         <h1 class="font-bold text-2xl">Global E-commerce Help Center</h1>
       </div>
 
       <!-- Question Search Input -->
-      <div class="mb-5 bg-blue-900 py-16">
+      <div class="mb-5 pt-5 pb-10">
+        <img
+          src="../../../assets/images/faq.png"
+          class="w-full h-[200px] object-contain"
+        />
         <div class="container mx-auto flex flex-col items-center">
-          <h1 class="font-bold text-white mb-5 text-3xl">
+          <h1 class="font-bold text-dark mb-5 text-3xl">
             Hi, How can we help?
           </h1>
           <div>
-            <form class="w-[700px] h-[50px] mx-auto">
+            <form
+              @submit.prevent="handleSearch"
+              class="w-[700px] h-[50px] mx-auto"
+            >
               <div class="flex items-center justify-between">
-                <input
-                  type="text"
-                  class="w-[650px] h-full py-3 rounded-md borde-2 border-slate-400 focus:ring-0 focus:border-slate-400"
-                  autofocus
-                  placeholder="Search for a question..."
-                />
+                <div class="relative">
+                  <input
+                    type="text"
+                    class="w-[650px] h-full py-3 rounded-md borde-2 border-slate-400 focus:ring-0 focus:border-slate-400"
+                    autofocus
+                    placeholder="Search for a question..."
+                    v-model="params.search_question"
+                  />
+                  <i
+                    v-if="params.search_question"
+                    class="fa-solid fa-xmark remove-search"
+                    @click="removeSearch"
+                  ></i>
+                </div>
+
                 <button
                   class="bg-blue-600 text-white px-6 py-3 h-full rounded-md hover:bg-blue-700 ml-2"
                 >

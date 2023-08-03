@@ -84,7 +84,7 @@ defineProps({
                   <Link
                     :href="route('faqs.index')"
                     :data="{
-                      search: $page.props.ziggy.query.search,
+                      search_question: $page.props.ziggy.query.search_question,
                       category: faqSubCategory.slug,
                     }"
                     class="flex items-center w-full py-2 text-sm pl-10 text-gray-900 transition duration-75 group hover:bg-gray-200 hover:text-blue-700"

@@ -1,10 +1,12 @@
 <script setup>
 import { usePage, router } from "@inertiajs/vue3";
+import Pagination from "@/Components/Paginations/Pagination.vue";
 import { reactive } from "vue";
 
 const params = reactive({
-  search: usePage().props.ziggy.query?.search,
+  search_question: usePage().props.ziggy.query?.search_question,
   category: usePage().props.ziggy.query?.category,
+  page: usePage().props.ziggy.query?.page,
 });
 
 // Handle Search
@@ -12,8 +14,9 @@ const handleSearch = () => {
   router.get(
     route("faqs.index"),
     {
-      search: params.search,
+      search_question: params.search_question,
       category: params.category,
+      page: params.page,
     },
     {
       replace: true,
@@ -24,7 +27,7 @@ const handleSearch = () => {
 
 // Remove Search Param
 const removeSearch = () => {
-  params.search = "";
+  params.search_question = "";
   router.get(
     route("faqs.index"),
     {
@@ -49,10 +52,10 @@ const removeSearch = () => {
               class="w-[650px] h-full py-3 rounded-md borde-2 border-slate-400 focus:ring-0 focus:border-slate-400"
               autofocus
               placeholder="Search for a question..."
-              v-model="params.search"
+              v-model="params.search_question"
             />
             <i
-              v-if="params.search"
+              v-if="params.search_question"
               class="fa-solid fa-xmark remove-search"
               @click="removeSearch"
             ></i>

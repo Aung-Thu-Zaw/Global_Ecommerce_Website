@@ -15,7 +15,7 @@ class FaqController extends Controller
     {
         $faqCategories=FaqCategory::with("faqSubCategories")->get();
 
-        $faqs=Faq::filterBy(request(["search","category"]))->orderBy("id", "desc")->paginate(15);
+        $faqs=Faq::filterBy(request(["search_question","category"]))->orderBy("id", "desc")->paginate(15)->withQueryString();
 
         $faqSubCategory=FaqSubCategory::with("faqCategory")->where("slug", request("category"))->first();
 

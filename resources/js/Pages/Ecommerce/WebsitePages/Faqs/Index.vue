@@ -31,12 +31,12 @@ defineProps({
             <FaqSearchFormInput />
 
             <p
-              v-if="$page.props.ziggy.query.search"
+              v-if="$page.props.ziggy.query.search_question"
               class="text-sm font-bold my-5 text-gray-700"
             >
               {{ faqs.total }} question(s) found for search result
               <span class="text-blue-600"
-                >"{{ $page.props.ziggy.query.search }}"</span
+                >"{{ $page.props.ziggy.query.search_question }}"</span
               >
             </p>
 

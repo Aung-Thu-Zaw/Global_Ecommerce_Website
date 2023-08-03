@@ -161,7 +161,7 @@ const handleRemoveSearchHistory = (index, historyId) => {
       <nav class="hidden lg:flex flex-1 items-center justify-end py-1">
         <Link
           class="text-sm font-bold px-3 py-2 hover:text-gray-300 uppercase"
-          :href="route('help-center')"
+          :href="route('help-center.index')"
         >
           <i class="fa-solid fa-circle-info"></i>
           {{ __("HELP_CENTER") }}

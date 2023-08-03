@@ -18,4 +18,11 @@ class HelpCenterController extends Controller
 
         return inertia("Ecommerce/HelpCenter/Index", compact("topQuestions", "faqCategories"));
     }
+
+    public function searchResult(): Response|ResponseFactory
+    {
+        $faqs=Faq::filterBy(request(["search_question"]))->orderBy("id", "desc")->paginate(15)->withQueryString();
+
+        return inertia("Ecommerce/HelpCenter/QuestionSearchResult", compact("faqs"));
+    }
 }
