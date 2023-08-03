@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
@@ -16,6 +17,7 @@ class Faq extends Model
     use HasFactory;
     use Searchable;
     use SoftDeletes;
+    use HasSlug;
 
     protected $guarded=[];
 
@@ -75,6 +77,31 @@ class Faq extends Model
     public function faqSubCategory(): BelongsTo
     {
         return $this->belongsTo(FaqSubCategory::class);
+    }
+
+    /**
+    * @param array<string> $filterBy
+    * @param Builder<Faq> $query
+    */
+
+    public function scopeFilterBy(Builder $query, array $filterBy): void
+    {
+        $query->when(
+            $filterBy["search"]??null,
+            function ($query, $search) {
+                $query->where(
+                    function ($query) use ($search) {
+                        $query->where("question", "LIKE", "%".$search."%");
+                    }
+                );
+            }
+        );
+
+        $query->when($filterBy["category"]?? null, function ($query, $subCategorySlug) {
+            $query->whereHas("faqSubCategory", function ($query) use ($subCategorySlug) {
+                $query->where("slug", $subCategorySlug);
+            });
+        });
     }
 
 }

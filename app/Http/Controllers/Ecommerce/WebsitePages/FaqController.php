@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ecommerce\WebsitePages;
 use App\Http\Controllers\Controller;
 use App\Models\Faq;
 use App\Models\FaqCategory;
+use App\Models\FaqSubCategory;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -14,9 +15,11 @@ class FaqController extends Controller
     {
         $faqCategories=FaqCategory::with("faqSubCategories")->get();
 
-        $faqs=Faq::orderBy("id", "desc")->paginate(15);
+        $faqs=Faq::filterBy(request(["search","category"]))->orderBy("id", "desc")->paginate(15);
 
-        return inertia("Ecommerce/WebsitePages/Faqs/Index", compact("faqCategories", "faqs"));
+        $faqSubCategory=FaqSubCategory::with("faqCategory")->where("slug", request("category"))->first();
+
+        return inertia("Ecommerce/WebsitePages/Faqs/Index", compact("faqCategories", "faqs", "faqSubCategory"));
     }
 
     public function show(Faq $faq): Response|ResponseFactory

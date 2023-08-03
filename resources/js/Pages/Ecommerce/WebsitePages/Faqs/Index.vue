@@ -1,11 +1,16 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import { Head, Link } from "@inertiajs/vue3";
+import FaqCategorySidebar from "@/Components/Sidebars/FaqCategorySidebar.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/FaqSectionBreadcrumb.vue";
+import FaqSearchFormInput from "@/Components/Forms/FaqSearchFormInput.vue";
+import { Head, Link, usePage, router } from "@inertiajs/vue3";
+import { reactive } from "vue";
 
 defineProps({
   faqCategories: Object,
   faqs: Object,
+  faqSubCategory: Object,
 });
 </script>
 
@@ -19,199 +24,58 @@ defineProps({
 
         <div class="flex items-start justify-between mt-10">
           <!-- Categories Sidebar -->
-          <div
-            class="border w-[260px] overflow-hidden shadow-lg border-slate-400 rounded-md h-auto"
-          >
-            <h3
-              class="py-3 bg-blue-700 text-white text-md font-bold text-center"
-            >
-              <i class="fa-solid fa-list mr-3"></i>
-              Categories
-            </h3>
-
-            <div class="">
-              <button
-                data-drawer-target="sidebar-multi-level-sidebar"
-                data-drawer-toggle="sidebar-multi-level-sidebar"
-                aria-controls="sidebar-multi-level-sidebar"
-                type="button"
-                class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-600"
-              >
-                <span class="sr-only">Open sidebar</span>
-                <svg
-                  class="w-6 h-6"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    clip-rule="evenodd"
-                    fill-rule="evenodd"
-                    d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
-                  ></path>
-                </svg>
-              </button>
-
-              <aside
-                id="sidebar-multi-level-sidebar"
-                class="z-40 w-64 transition-transform -translate-x-full sm:translate-x-0"
-                aria-label="Sidebar"
-              >
-                <div class="w-full overflow-y-auto bg-gray-50">
-                  <ul class="text-sm font-medium">
-                    <li
-                      v-for="faqCategory in faqCategories"
-                      :key="faqCategory.id"
-                      class="w-full border-b border-b-slate-300"
-                    >
-                      <button
-                        type="button"
-                        class="flex items-center w-full p-3 text-base text-gray-900 transition duration-75 group hover:bg-gray-200"
-                        aria-controls="dropdown-example"
-                        data-collapse-toggle="dropdown-example"
-                      >
-                        <svg
-                          class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="currentColor"
-                          viewBox="0 0 18 21"
-                        >
-                          <path
-                            d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z"
-                          />
-                        </svg>
-                        <span
-                          class="flex-1 ml-3 text-left text-sm whitespace-nowrap"
-                        >
-                          {{ faqCategory.name }}
-                        </span>
-                        <svg
-                          class="w-3 h-3"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 10 6"
-                        >
-                          <path
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="m1 1 4 4 4-4"
-                          />
-                        </svg>
-                      </button>
-                      <ul id="dropdown-example" class="hidden py-2">
-                        <li
-                          v-for="faqSubCategory in faqCategory.faq_sub_categories"
-                          :key="faqSubCategory.id"
-                        >
-                          <a
-                            href="#"
-                            class="flex items-center w-full py-2 text-sm pl-10 text-gray-900 transition duration-75 group hover:bg-gray-200"
-                            >{{ faqSubCategory.name }}</a
-                          >
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>
-              </aside>
-            </div>
-          </div>
+          <FaqCategorySidebar :faqCategories="faqCategories" />
 
           <div class="w-[1000px] ml-5">
             <!-- Question Search Input -->
-            <div class="flex flex-col items-start mb-6">
-              <div>
-                <form class="w-[700px] h-[50px]">
-                  <div class="flex items-center justify-between">
-                    <input
-                      type="text"
-                      class="w-[650px] h-full py-3 rounded-md borde-2 border-slate-400 focus:ring-0 focus:border-slate-400"
-                      autofocus
-                      placeholder="Search for a question..."
-                    />
-                    <button
-                      class="bg-blue-600 text-white px-6 py-3 h-full rounded-md hover:bg-blue-700 ml-2"
-                    >
-                      <i class="fa-solid fa-magnifying-glass"></i>
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
+            <FaqSearchFormInput />
+
+            <p
+              v-if="$page.props.ziggy.query.search"
+              class="text-sm font-bold my-5 text-gray-700"
+            >
+              {{ faqs.total }} question(s) found for search result
+              <span class="text-blue-600"
+                >"{{ $page.props.ziggy.query.search }}"</span
+              >
+            </p>
 
             <!-- Result -->
             <div
               class="border border-slate-400 p-6 bg-white w-full rounded-md shadow-md"
             >
               <!-- Breadcrumb -->
-              <div class="mb-5 border-b pb-5">
-                <nav class="flex" aria-label="Breadcrumb">
-                  <ol class="inline-flex items-center space-x-1 md:space-x-3">
-                    <li class="inline-flex items-center">
-                      <a
-                        href="#"
-                        class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
-                      >
-                        <i class="fa-solid fa-list mr-3 text-dark"></i>
+              <Breadcrumb :faqSubCategory="faqSubCategory">
+                <li aria-current="page">
+                  <div class="flex items-center">
+                    <svg
+                      class="w-3 h-3 text-gray-400 mx-1"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 6 10"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="m1 9 4-4-4-4"
+                      />
+                    </svg>
+                    <span
+                      class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                      >{{
+                        $page.props.ziggy.query.search
+                          ? "Search Result(s)"
+                          : "All"
+                      }}</span
+                    >
+                  </div>
+                </li>
+              </Breadcrumb>
 
-                        Categories
-                      </a>
-                    </li>
-                    <!-- <li>
-                      <div class="flex items-center">
-                        <svg
-                          class="w-3 h-3 text-gray-400 mx-1"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 6 10"
-                        >
-                          <path
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="m1 9 4-4-4-4"
-                          />
-                        </svg>
-                        <a
-                          href="#"
-                          class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white"
-                          >Projects</a
-                        >
-                      </div>
-                    </li> -->
-                    <li aria-current="page">
-                      <div class="flex items-center">
-                        <svg
-                          class="w-3 h-3 text-gray-400 mx-1"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 6 10"
-                        >
-                          <path
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="m1 9 4-4-4-4"
-                          />
-                        </svg>
-                        <span
-                          class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                          >All</span
-                        >
-                      </div>
-                    </li>
-                  </ol>
-                </nav>
-              </div>
+              <!-- Faq Questions -->
               <div class="w-full">
                 <ul
                   class="list-disc list-inside space-y-4 text-sm text-gray-700"
@@ -226,6 +90,18 @@ defineProps({
                     </Link>
                   </li>
                 </ul>
+
+                <!-- Question Not Found -->
+                <p
+                  v-if="!faqs.data.length"
+                  class="my-3 font-bold text-slate-500 text-center"
+                >
+                  {{
+                    __(
+                      "WE'RE_SORRY_WE_CANNOT_FIND_ANY_MATCHES_FOR_YOUR_SEARCH_TERM"
+                    )
+                  }}
+                </p>
               </div>
 
               <!-- Pagination -->
