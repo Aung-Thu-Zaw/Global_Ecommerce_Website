@@ -52,7 +52,7 @@ import { Link } from "@inertiajs/vue3";
             <ul class="mt-2 space-y-1">
               <li>
                 <Link
-                  :href="route('about-us')"
+                  :href="route('about-us.index')"
                   class="opacity-70 hover:opacity-100"
                 >
                   {{ __("ABOUT_US") }}
@@ -60,7 +60,7 @@ import { Link } from "@inertiajs/vue3";
               </li>
               <li>
                 <Link
-                  :href="route('our-history')"
+                  :href="route('our-history.index')"
                   class="opacity-70 hover:opacity-100"
                 >
                   {{ __("OUR_HISTORY") }}
@@ -90,7 +90,7 @@ import { Link } from "@inertiajs/vue3";
               </li>
               <li>
                 <Link
-                  :href="route('terms-and-conditions')"
+                  :href="route('terms-and-conditions.index')"
                   class="opacity-70 hover:opacity-100"
                 >
                   {{ __("TERMS_AND_CONDITIONS") }}
@@ -98,7 +98,7 @@ import { Link } from "@inertiajs/vue3";
               </li>
               <li>
                 <Link
-                  :href="route('privacy-policy')"
+                  :href="route('privacy-policy.index')"
                   class="opacity-70 hover:opacity-100"
                 >
                   {{ __("PRIVACY_POLICY") }}

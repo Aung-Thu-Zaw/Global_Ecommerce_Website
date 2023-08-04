@@ -49,14 +49,12 @@ require __DIR__.'/vendor.php';
 
 Route::get('/', [HomeController::class,"index"])->name("home");
 
-Route::controller(MyAccountController::class)
-     ->middleware('auth')
-     ->prefix("/my-account")
-     ->name("my-account.")
+Route::controller(CollectionController::class)
+     ->prefix("/collections")
+     ->name("collections.")
      ->group(function () {
-         Route::get('/', 'edit')->name('edit');
-         Route::post('/', 'update')->name('update');
-         Route::delete('/', 'destroy')->name('destroy');
+         Route::get('/', "index")->name("index");
+         Route::get('/{collection}/products', "show")->name("show");
      });
 
 Route::controller(ProductController::class)
@@ -65,25 +63,9 @@ Route::controller(ProductController::class)
      ->group(function () {
          Route::get('/new-products', "newProducts")->name("new");
          Route::get('/featured-products', "featuredProducts")->name("featured");
-         Route::get('/special-offer-products', "specialOfferProducts")->name("special-offer");
          Route::get('/hot-deal-products', "hotDealProducts")->name("hot-deal");
          Route::get('/{product}', "show")->name("show");
      });
-
-Route::get("/about-us", [AboutUsController::class,"index"])->name("about-us");
-
-Route::get("/our-history", [OurHistoryController::class,"index"])->name("our-history");
-
-Route::get("/privacy-policy", [PrivacyPolicyController::class,"index"])->name("privacy-policy");
-
-Route::get("/terms-and-conditions", [TermsAndConditionsController::class,"index"])->name("terms-and-conditions");
-
-Route::get("/faqs", [FaqController::class,"index"])->name("faqs.index");
-Route::get("/faqs/{faq}", [FaqController::class,"show"])->name("faqs.show");
-
-Route::get("/help-center", [HelpCenterController::class,"index"])->name("help-center.index");
-Route::get("/help-center/questions/search-result", [HelpCenterController::class,"searchResult"])->name("help-center.questions.search");
-Route::get("/help-center/phone-call", [HelpCenterController::class,"contactPhoneCall"])->name("help-center.call");
 
 Route::post('/search/histories/{search_history}', [SearchHistoryController::class,"update"])->name("user.search.history.update");
 
@@ -91,15 +73,30 @@ Route::get("products", [SearchResultProductController::class,"index"])->name("pr
 
 Route::get("{category}/products", [SearchByCategoryProductController::class,"show"])->name("category.products");
 
-Route::get('/collections', [CollectionController::class,"index"])->name("collections.index");
+Route::get("/about-us", [AboutUsController::class,"index"])->name("about-us.index");
 
-Route::get('/collections/{collection}/products', [CollectionController::class,"show"])->name("collections.show");
+Route::get("/our-history", [OurHistoryController::class,"index"])->name("our-history.index");
 
-Route::get("/blogs", [BlogController::class,"index"])->name("blogs.index");
+Route::get("/privacy-policy", [PrivacyPolicyController::class,"index"])->name("privacy-policy.index");
 
-Route::get("/blogs/{blog_post}", [BlogController::class,"show"])->name("blogs.show");
+Route::get("/terms-and-conditions", [TermsAndConditionsController::class,"index"])->name("terms-and-conditions.index");
 
-Route::get("/blogs/tags/{tag}", [BlogController::class,"tagBlog"])->name("blogs.tag");
+Route::controller(FaqController::class)
+     ->prefix("/faqs")
+     ->name("faqs.")
+     ->group(function () {
+         Route::get("/", "index")->name("index");
+         Route::get("/{faq}", "show")->name("show");
+     });
+
+Route::controller(HelpCenterController::class)
+     ->prefix("/help-center")
+     ->name("help-center.")
+     ->group(function () {
+         Route::get("/", "index")->name("index");
+         Route::get("/questions/search-result", "searchResult")->name("questions.search");
+         Route::get("/phone-call", "contactPhoneCall")->name("call");
+     });
 
 Route::post('/subscribe', [SubscriberController::class, 'store'])->name("subscribe");
 
@@ -109,13 +106,25 @@ Route::post('/feedback', [WebsiteFeedbackController::class, 'store'])->name("fee
 
 Route::post('/languages/change', [LanguageController::class,"change"])->name("languages.change");
 
-// Route::controller(ShopController::class)
-// ->prefix("/shops")
-// ->name("shop.")
-// ->group(function () {
-//     Route::get("/", "index")->name("index");
-//     Route::get("/{shop_id:uuid}", "show")->name("show");
-// });
+Route::controller(BlogController::class)
+     ->prefix("/blogs")
+     ->name("blogs.")
+     ->group(function () {
+         Route::get("/", "index")->name("index");
+         Route::get("/{blog_post}", "show")->name("show");
+         Route::get("/tags/{tag}", "tagBlog")->name("tag");
+     });
+
+// For Authenticated Users
+Route::controller(MyAccountController::class)
+     ->middleware('auth')
+     ->prefix("/my-account")
+     ->name("my-account.")
+     ->group(function () {
+         Route::get('/', 'edit')->name('edit');
+         Route::post('/', 'update')->name('update');
+         Route::delete('/', 'destroy')->name('destroy');
+     });
 
 // For Authenticated And Verified Users
 Route::middleware(["auth","verified"])->group(function () {
