@@ -13,39 +13,62 @@ defineProps({
   blogPosts: Object,
 });
 
-const handleSearchBox = () => {
-  params.search_blog = "";
-};
-
 // Query String Parameters
 const params = reactive({
   search_blog: usePage().props.ziggy.query?.search_blog,
-  sort: usePage().props.ziggy.query?.id,
+  sort: usePage().props.ziggy.query?.sort,
   direction: usePage().props.ziggy.query?.direction,
   page: usePage().props.ziggy.query?.page,
   blog_category: usePage().props.ziggy.query?.blog_category,
   view: usePage().props.ziggy.query?.view,
 });
 
+const handleQueryStringParameter = () => {
+  router.get(
+    route("blogs.index"),
+    {
+      search_blog: params.search_blog,
+      sort: params.sort,
+      direction: params.direction,
+      page: params.page,
+      blog_category: params.blog_category,
+      view: params.view,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
+
+// Remove Search Param
+const removeSearch = () => {
+  params.search_blog = "";
+  router.get(
+    route("blogs.index"),
+    {
+      sort: params.sort,
+      direction: params.direction,
+      page: params.page,
+      blog_category: params.blog_category,
+      view: params.view,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
+
 // Watching Blog Search Input
 watch(
   () => params.search_blog,
   () => {
-    router.get(
-      route("blogs.index"),
-      {
-        search_blog: params.search_blog,
-        sort: params.sort,
-        direction: params.direction,
-        page: params.page,
-        blog_category: params.blog_category,
-        view: params.view,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
+    if (params.search_blog === "") {
+      removeSearch();
+    } else {
+      handleQueryStringParameter();
+    }
   }
 );
 
@@ -53,21 +76,7 @@ watch(
 watch(
   () => params.direction,
   () => {
-    router.get(
-      route("blogs.index"),
-      {
-        search_blog: params.search_blog,
-        sort: params.sort,
-        direction: params.direction,
-        page: params.page,
-        blog_category: params.blog_category,
-        view: params.view,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
+    handleQueryStringParameter();
   }
 );
 
@@ -130,32 +139,29 @@ const handleRemoveBlogCategory = () => {
               class="text-sm font-bold text-slate-600 px-5 py-3 border-t border-b flex items-center justify-between mb-5"
             >
               <!-- Search Blogs Input -->
-              <div
-                class="border-2 border-slate-400 rounded-sm shadow w-[300px] flex items-center justify-between py-1"
-              >
+              <form class="w-[350px] relative">
                 <input
                   type="text"
+                  class="search-input border border-gray-400 focus:border-gray-400"
                   :placeholder="__('SEARCH_BLOG')"
-                  class="text-sm w-full focus:ring-0 border-none bg-gray-50"
                   v-model="params.search_blog"
                 />
-                <span v-if="params.search_blog" class="mx-3 cursor-pointer">
-                  <i
-                    @click="handleSearchBox"
-                    class="fa-solid fa-xmark hover:text-xl hover:text-slate-700 transition-all"
-                  ></i>
-                </span>
-              </div>
+                <i
+                  v-if="params.search_blog"
+                  class="fa-solid fa-xmark remove-search"
+                  @click="removeSearch"
+                ></i>
+              </form>
 
               <!-- Search Result Text -->
               <p v-if="params.search_blog" class="ml-5">
-                {{ blogPosts.data.length }} {{ __("POST_FOUND_FOR_RESULT") }}
+                {{ blogPosts.total }} {{ __("POST_FOUND_FOR_RESULT") }}
                 <span class="text-blue-600">"{{ params.search_blog }}"</span>
               </p>
 
               <div class="flex items-center ml-auto">
                 <!-- Blog Sorting -->
-                <div class="w-[260px] flex items-center justify-between">
+                <div class="w-[210px] flex items-center justify-between">
                   <span class="flex items-center">{{ __("SORT_BY") }} : </span>
                   <select
                     id="countries"
@@ -183,11 +189,11 @@ const handleRemoveBlogCategory = () => {
                     <Link
                       :href="route('blogs.index')"
                       :data="{
-                        search_blog: $page.props.ziggy.query.search_blog,
-                        blog_category: $page.props.ziggy.query.blog_category,
-                        sort: $page.props.ziggy.query.sort,
-                        direction: $page.props.ziggy.query.direction,
-                        page: $page.props.ziggy.query.page,
+                        search_blog: $page.props.ziggy.query?.search_blog,
+                        blog_category: $page.props.ziggy.query?.blog_category,
+                        sort: $page.props.ziggy.query?.sort,
+                        direction: $page.props.ziggy.query?.direction,
+                        page: $page.props.ziggy.query?.page,
                         view: 'grid',
                       }"
                       class="px-2 py-1 rounded-md cursor-pointer hover:bg-gray-300 transition-none"
@@ -202,11 +208,11 @@ const handleRemoveBlogCategory = () => {
                     <Link
                       :href="route('blogs.index')"
                       :data="{
-                        search_blog: $page.props.ziggy.query.search_blog,
-                        blog_category: $page.props.ziggy.query.blog_category,
-                        sort: $page.props.ziggy.query.sort,
-                        direction: $page.props.ziggy.query.direction,
-                        page: $page.props.ziggy.query.page,
+                        search_blog: $page.props.ziggy.query?.search_blog,
+                        blog_category: $page.props.ziggy.query?.blog_category,
+                        sort: $page.props.ziggy.query?.sort,
+                        direction: $page.props.ziggy.query?.direction,
+                        page: $page.props.ziggy.query?.page,
                         view: 'list',
                       }"
                       class="ml-3 px-2 py-1 rounded-md cursor-pointer hover:bg-gray-300 transition-none"
@@ -265,7 +271,6 @@ const handleRemoveBlogCategory = () => {
                 </div>
               </div>
             </div>
-
             <!-- Pagination -->
             <Pagination class="mt-6" :links="blogPosts.links" />
           </div>

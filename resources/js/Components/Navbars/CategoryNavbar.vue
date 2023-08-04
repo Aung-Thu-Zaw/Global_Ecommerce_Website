@@ -26,6 +26,8 @@ import { Link } from "@inertiajs/vue3";
                 :href="route('blogs.index')"
                 :data="{
                   view: 'grid',
+                  sort: 'id',
+                  direction: 'desc',
                 }"
                 class="font-bold text-sm text-gray-700 hover:text-blue-700 transition-all ml-3"
               >

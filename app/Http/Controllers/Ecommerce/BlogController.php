@@ -18,7 +18,7 @@ class BlogController extends Controller
                            ->filterBy(request(["search_blog","blog_category"]))
                            ->orderBy(request("sort", "id"), request("direction", "desc"))
                            ->paginate(20)
-                           ->appends(request()->all());
+                           ->withQueryString();
 
         return inertia("Ecommerce/Blogs/Index", compact("blogCategories", "blogPosts"));
     }

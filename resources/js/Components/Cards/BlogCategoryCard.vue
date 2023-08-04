@@ -10,7 +10,7 @@ defineProps({
   <li
     v-for="blogCategory in blogCategories"
     :key="blogCategory.id"
-    class="py-2 rounded-sm transition-all ring-2 ring-slate-300 shadow px-4"
+    class="py-2 rounded-sm transition-all border border-slate-400 shadow px-4"
     :class="{
       'bg-blue-600 text-white hover:bg-blue-700':
         $page.props.ziggy.query.blog_category === blogCategory.slug,
@@ -22,12 +22,11 @@ defineProps({
     <Link
       :href="route('blogs.index')"
       :data="{
-        search_blog: $page.props.ziggy.query.search_blog,
+        search_blog: $page.props.ziggy.query?.search_blog,
         blog_category: blogCategory.slug,
-        sort: $page.props.ziggy.query.sort,
-        direction: $page.props.ziggy.query.direction,
-        page: $page.props.ziggy.query.page,
-        view: $page.props.ziggy.query.view,
+        sort: $page.props.ziggy.query?.sort,
+        direction: $page.props.ziggy.query?.direction,
+        view: $page.props.ziggy.query?.view,
       }"
       class="flex items-center justify-between"
     >

@@ -66,7 +66,7 @@ defineProps({
                   ></path>
                 </svg>
                 <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">
-                  {{ blogPost.slug }}
+                  {{ blogPost.title }}
                 </span>
               </div>
             </li>
