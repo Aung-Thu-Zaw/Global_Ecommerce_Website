@@ -14,7 +14,7 @@ class BlogController extends Controller
     {
         $blogCategories=BlogCategory::withCount("blogPosts")->where("status", "show")->get();
 
-        $blogPosts=BlogPost::with("author:id,name")
+        $blogPosts=BlogPost::with(["author:id,name","blogCategory:id,name"])
                            ->filterBy(request(["search_blog","blog_category"]))
                            ->orderBy(request("sort", "id"), request("direction", "desc"))
                            ->paginate(20)
@@ -27,8 +27,8 @@ class BlogController extends Controller
     {
         $blogCategories=BlogCategory::withCount("blogPosts")->where("status", "show")->get();
 
-        $blogPost->load("author:id,name");
+        $blogPost->load(["author:id,name","blogCategory:id,name"]);
 
-        return inertia("Ecommerce/Blogs/Detail", compact('blogPost', 'blogCategories'));
+        return inertia("Ecommerce/Blogs/Details", compact('blogPost', 'blogCategories'));
     }
 }

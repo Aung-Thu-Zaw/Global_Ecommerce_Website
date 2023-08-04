@@ -22,15 +22,24 @@ defineProps({
           {{ post.created_at }}
         </span>
       </div>
+
+      <span
+        class="text-xs font-bold bg-gray-300 mb-3 py-1 px-3 rounded-sm shadow"
+      >
+        {{ post.blog_category.name }}
+      </span>
+
       <h5
-        class="mb-2 text-lg font-bold tracking-tight text-gray-700 dark:text-white line-clamp-2"
+        class="my-2 text-lg font-bold tracking-tight text-gray-700 dark:text-white line-clamp-2"
       >
         {{ post.title }}
       </h5>
+
       <p
         v-html="post.description"
         class="mb-3 font-normal text-[.8rem] text-gray-500 line-clamp-3"
       ></p>
+
       <div class="w-full flex items-center justify-end">
         <Link
           :href="route('blogs.show', post.slug)"

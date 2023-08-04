@@ -30,8 +30,13 @@ defineProps({
         </div>
 
         <div>
+          <span
+            class="text-xs font-bold bg-gray-300 mb-3 py-1 px-3 rounded-sm shadow"
+          >
+            {{ post.blog_category.name }}
+          </span>
           <h5
-            class="mb-2 text-lg font-bold tracking-tight text-gray-700 dark:text-white"
+            class="my-2 text-lg font-bold tracking-tight text-gray-700 dark:text-white"
           >
             {{ post.title }}
           </h5>

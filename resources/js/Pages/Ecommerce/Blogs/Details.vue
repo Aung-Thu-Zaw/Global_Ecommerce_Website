@@ -92,10 +92,17 @@ defineProps({
             </h1>
 
             <div class="flex items-center mb-3">
+              <span
+                class="text-xs font-bold bg-gray-300 py-1 px-3 rounded-sm shadow mr-3"
+              >
+                {{ blogPost.blog_category.name }}
+              </span>
+
               <span class="font-bold text-slate-600 text-sm mr-3">
                 <i class="fa-solid fa-user mr-2"></i>
                 {{ blogPost.author.name }}
               </span>
+
               <span class="font-bold text-slate-600 text-sm">
                 <i class="fa-solid fa-clock mr-2"></i>
                 {{ blogPost.created_at }}
