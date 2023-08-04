@@ -16,7 +16,7 @@ class ProductController extends Controller
     {
         $newProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
                             ->with(["productReviews:id,product_id,rating","shop:id,offical"])
-                            ->whereStatus("active")
+                            ->whereStatus("approved")
                             ->whereBetween('created_at', [now()->subDays(30), now()])
                             ->orderBy("id", "desc")
                             ->paginate(20);
@@ -28,7 +28,7 @@ class ProductController extends Controller
     {
         $featuredProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
                                  ->with(["productReviews:id,product_id,rating","shop:id,offical"])
-                                 ->whereStatus("active")
+                                 ->whereStatus("approved")
                                  ->whereFeatured(1)
                                  ->orderBy("id", "desc")
                                  ->paginate(20);
@@ -40,7 +40,7 @@ class ProductController extends Controller
     {
         $hotDealProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
                                 ->with(["productReviews:id,product_id,rating","shop:id,offical"])
-                                ->whereStatus("active")
+                                ->whereStatus("approved")
                                 ->whereHotDeal(1)
                                 ->orderBy("id", "desc")
                                 ->paginate(20);
@@ -63,7 +63,7 @@ class ProductController extends Controller
 
         $relatedProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
                                 ->with(["productReviews:id,product_id,rating","shop:id,offical"])
-                                ->whereStatus("active")
+                                ->whereStatus("approved")
                                 ->where('category_id', $product->category_id)
                                 ->where('id', '!=', $product->id)
                                 ->limit(10)

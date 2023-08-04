@@ -131,7 +131,7 @@ const params = reactive({
           </aside>
 
           <!-- Slider Banner -->
-          <main class="md:w-3/4 flex-auto">
+          <main v-if="sliderBanners.length" class="md:w-3/4 flex-auto">
             <SliderBanner :sliderBanners="sliderBanners" />
           </main>
         </div>

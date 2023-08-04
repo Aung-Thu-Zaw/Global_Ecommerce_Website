@@ -5,7 +5,7 @@ defineProps({
 </script>
 
 <template>
-  <section class="container mx-auto">
+  <section v-if="productBanners.length" class="container mx-auto">
     <div class="flex items-center justify-between flex-wrap">
       <div
         v-for="productBanner in productBanners"
