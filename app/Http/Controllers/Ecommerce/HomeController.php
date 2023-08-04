@@ -20,7 +20,7 @@ class HomeController extends Controller
         $categories=Category::with("children")->limit(8)->get();
 
         $collections=Collection::select("id", "title", "slug")
-                               ->with("products:id,collection_id,image")
+                               ->with("products:id,collection_id,image,status")
                                ->limit(12)
                                ->get();
 

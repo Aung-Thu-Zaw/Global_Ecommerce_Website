@@ -9,8 +9,8 @@ import { usePage, Head, Link, router } from "@inertiajs/vue3";
 import { reactive, watch } from "vue";
 
 defineProps({
-  blogCategories: Object, // data come from blog controller
-  blogPosts: Object, // data come from blog controller
+  blogCategories: Object,
+  blogPosts: Object,
 });
 
 const handleSearchBox = () => {
@@ -19,17 +19,12 @@ const handleSearchBox = () => {
 
 // Query String Parameters
 const params = reactive({
-  search_blog: usePage().props.ziggy.query.search_blog,
-  sort: "id",
-  direction: usePage().props.ziggy.query.direction
-    ? usePage().props.ziggy.query.direction
-    : "desc",
-
-  page: usePage().props.ziggy.query.page,
-  blog_category: usePage().props.ziggy.query.blog_category,
-  view: usePage().props.ziggy.query.view
-    ? usePage().props.ziggy.query.view
-    : "grid",
+  search_blog: usePage().props.ziggy.query?.search_blog,
+  sort: usePage().props.ziggy.query?.id,
+  direction: usePage().props.ziggy.query?.direction,
+  page: usePage().props.ziggy.query?.page,
+  blog_category: usePage().props.ziggy.query?.blog_category,
+  view: usePage().props.ziggy.query?.view,
 });
 
 // Watching Blog Search Input

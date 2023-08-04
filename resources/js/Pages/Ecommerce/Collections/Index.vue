@@ -10,7 +10,7 @@ const props = defineProps({
 
 const isLoading = ref(false);
 
-const collections = ref(props.collections.data);
+const collections = ref(props.collections?.data);
 
 const url = usePage().url;
 
@@ -45,12 +45,12 @@ const loadMoreCollection = () => {
     <section class="pt-10 mt-44">
       <div class="container max-w-screen-xl mx-auto px-4">
         <!-- Collections Card -->
-        <nav
+        <div
           v-if="collections"
           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3"
         >
           <CollectionCard :collections="collections" />
-        </nav>
+        </div>
         <div v-else>
           <p class="text-center text-xl font-bold text-red-600 animate-bounce">
             {{ __("NO_COLLECTION_FOUND") }}!

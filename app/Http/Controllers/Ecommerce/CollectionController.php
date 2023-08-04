@@ -13,7 +13,7 @@ class CollectionController extends Controller
     public function index(): Response|ResponseFactory
     {
         $collections=Collection::select("id", "title", "slug")
-                               ->with(["products:id,collection_id,image"])
+                               ->with(["products:id,collection_id,image,status"])
                                ->paginate(20);
 
         return inertia("Ecommerce/Collections/Index", compact("collections"));
@@ -23,7 +23,7 @@ class CollectionController extends Controller
     {
         $products=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
                          ->with(["productReviews:id,product_id,rating","shop:id,offical"])
-                         ->whereStatus("active")
+                         ->whereStatus("approved")
                          ->where("collection_id", $collection->id)
                          ->paginate(20);
 
