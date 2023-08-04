@@ -15,27 +15,22 @@ const props = defineProps({
 
 // Query String Parameters
 const params = reactive({
-  search: usePage().props.ziggy.query.search,
-  sort: "id",
-  direction: usePage().props.ziggy.query.direction
-    ? usePage().props.ziggy.query.direction
-    : "desc",
-
-  page: usePage().props.ziggy.query.page,
-  tab: usePage().props.ziggy.query.tab,
-  category: usePage().props.ziggy.query.category,
-  brand: usePage().props.ziggy.query.brand,
-  rating: usePage().props.ziggy.query.rating,
-  price: usePage().props.ziggy.query.price,
+  search: usePage().props.ziggy.query?.search,
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
+  page: usePage().props.ziggy.query?.page,
+  tab: usePage().props.ziggy.query?.tab,
+  category: usePage().props.ziggy.query?.category,
+  brand: usePage().props.ziggy.query?.brand,
+  rating: usePage().props.ziggy.query?.rating,
+  price: usePage().props.ziggy.query?.price,
   view: usePage().props.ziggy.query.view
     ? usePage().props.ziggy.query.view
     : "grid",
 });
 
 // Handle Filter Prices
-const price = ref(
-  usePage().props.ziggy.query.price ? usePage().props.ziggy.query.price : ""
-);
+const price = ref(usePage().props.ziggy.query?.price);
 
 const [minValue, maxValue] = price.value
   .split("-")
@@ -175,15 +170,15 @@ watch(
                   <Link
                     :href="route('shop.show', shop.uuid)"
                     :data="{
-                      search: $page.props.ziggy.query.search,
-                      tab: $page.props.ziggy.query.tab,
-                      category: $page.props.ziggy.query.category,
-                      brand: $page.props.ziggy.query.brand,
-                      sort: $page.props.ziggy.query.sort,
-                      direction: $page.props.ziggy.query.direction,
-                      page: $page.props.ziggy.query.page,
-                      rating: $page.props.ziggy.query.rating,
-                      price: $page.props.ziggy.query.price,
+                      search: $page.props.ziggy.query?.search,
+                      tab: $page.props.ziggy.query?.tab,
+                      category: $page.props.ziggy.query?.category,
+                      brand: $page.props.ziggy.query?.brand,
+                      sort: $page.props.ziggy.query?.sort,
+                      direction: $page.props.ziggy.query?.direction,
+                      page: $page.props.ziggy.query?.page,
+                      rating: $page.props.ziggy.query?.rating,
+                      price: $page.props.ziggy.query?.price,
                       view: 'grid',
                     }"
                     class="px-2 py-1 rounded-md cursor-pointer hover:bg-gray-300 transition-none"
@@ -199,15 +194,15 @@ watch(
                   <Link
                     :href="route('shop.show', shop.uuid)"
                     :data="{
-                      search: $page.props.ziggy.query.search,
-                      tab: $page.props.ziggy.query.tab,
-                      category: $page.props.ziggy.query.category,
-                      brand: $page.props.ziggy.query.brand,
-                      sort: $page.props.ziggy.query.sort,
-                      direction: $page.props.ziggy.query.direction,
-                      page: $page.props.ziggy.query.page,
-                      rating: $page.props.ziggy.query.rating,
-                      price: $page.props.ziggy.query.price,
+                      search: $page.props.ziggy.query?.search,
+                      tab: $page.props.ziggy.query?.tab,
+                      category: $page.props.ziggy.query?.category,
+                      brand: $page.props.ziggy.query?.brand,
+                      sort: $page.props.ziggy.query?.sort,
+                      direction: $page.props.ziggy.query?.direction,
+                      page: $page.props.ziggy.query?.page,
+                      rating: $page.props.ziggy.query?.rating,
+                      price: $page.props.ziggy.query?.price,
                       view: 'list',
                     }"
                     class="ml-3 px-2 py-1 rounded-md cursor-pointer hover:bg-gray-300 transition-none"

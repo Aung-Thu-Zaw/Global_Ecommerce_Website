@@ -1,8 +1,9 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Head, Link, usePage, router } from "@inertiajs/vue3";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import { reactive, ref, watch } from "vue";
+import ShopCard from "@/Components/Cards/ShopCard.vue";
+import { Head, usePage, router } from "@inertiajs/vue3";
+import { reactive, watch } from "vue";
 
 const props = defineProps({
   vendorShops: Object,
@@ -43,8 +44,9 @@ const handelRemoveSearch = () => {
   <AppLayout>
     <Head title="Seller Shops" />
 
-    <section class="pt-10 mt-44">
+    <section class="pt-10 min-h-[2300px] bg-gray-50 mt-40">
       <div class="container max-w-screen-xl mx-auto px-4">
+        <!-- Cover Photo Section -->
         <div
           class="relative w-full h-[150px] mb-10 shadow-md rounded-md overflow-hidden border"
         >
@@ -59,58 +61,29 @@ const handelRemoveSearch = () => {
           </div>
         </div>
 
-        <!-- Search Box -->
-        <div>
-          <form
-            @submit.prevent="handleSearch"
-            class="flex items-center justify-end"
-          >
-            <div
-              class="border-2 border-slate-300 rounded-md focus:ring-0 focus:border-slate-300 w-[300px] flex items-center justify-between"
-            >
-              <input
-                type="text"
-                class="border-none focus:ring-0 w-full"
-                placeholder="Search by shop name"
-                v-model="params.search_shop"
-              />
-              <i
-                v-if="params.search_shop"
-                @click="handelRemoveSearch"
-                class="fa-solid fa-xmark mx-2 cursor-pointer hover:text-slate-600"
-              ></i>
-            </div>
+        <div class="flex items-center justify-end">
+          <!-- Search Box -->
+          <form @submit.prevent="handleSearch" class="w-[350px] relative">
+            <input
+              type="text"
+              class="search-input border border-gray-400 focus:border-gray-400"
+              placeholder="Search by name"
+              v-model="params.search_shop"
+            />
+            <i
+              v-if="params.search_shop"
+              class="fa-solid fa-xmark remove-search"
+              @click="handelRemoveSearch"
+            ></i>
           </form>
         </div>
 
-        <div class="grid grid-cols-5 gap-3 my-3">
-          <Link
-            v-for="vendorShop in vendorShops.data"
-            :key="vendorShop.id"
-            as="button"
-            :href="route('shop.show', vendorShop.uuid)"
-            :data="{ tab: 'home' }"
-            class="hover:shadow-lg border rounded-md p-3 flex flex-col items-center justify-center"
-          >
-            <img
-              :src="vendorShop.avatar"
-              alt=""
-              class="rounded-full w-24 h-24 object-cover ring-2 ring-gray-400 shadow-md"
-            />
-            <div class="my-3">
-              <h1 class="font-bold text-slate-600 text-center">
-                {{ vendorShop.shop_name }}
-                <span
-                  v-if="vendorShop.offical"
-                  class="text-green-400 rounded-xl"
-                >
-                  <i class="fa-solid fa-circle-check ml-2"></i>
-                </span>
-              </h1>
-            </div>
-          </Link>
+        <div class="grid grid-cols-3 gap-3 my-3">
+          <!-- Shop Card -->
+          <ShopCard :vendorShops="vendorShops.data" />
         </div>
 
+        <!-- Pagination -->
         <Pagination class="my-6" :links="vendorShops.links" />
       </div>
     </section>

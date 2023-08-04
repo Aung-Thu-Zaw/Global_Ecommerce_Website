@@ -107,6 +107,14 @@ Route::post('/feedback', [WebsiteFeedbackController::class, 'store'])->name("fee
 
 Route::post('/languages/change', [LanguageController::class,"change"])->name("languages.change");
 
+// Route::controller(ShopController::class)
+// ->prefix("/shops")
+// ->name("shop.")
+// ->group(function () {
+//     Route::get("/", "index")->name("index");
+//     Route::get("/{shop_id:uuid}", "show")->name("show");
+// });
+
 // For Authenticated And Verified Users
 Route::middleware(["auth","verified"])->group(function () {
 

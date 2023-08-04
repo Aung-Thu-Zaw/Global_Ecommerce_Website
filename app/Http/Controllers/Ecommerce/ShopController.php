@@ -14,15 +14,21 @@ use App\Notifications\FollowedShopNotification;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 use Inertia\ResponseFactory;
+use Illuminate\Database\Eloquent\Builder;
 
 class ShopController extends Controller
 {
     public function index(): Response | ResponseFactory
     {
         $vendorShops=User::search(request("search_shop"))
+                         ->query(function (Builder $builder) {
+                             $builder->with(["followers:id","products:id,user_id"])
+                                     ->select("id", "uuid", "shop_name", "avatar");
+                         })
                          ->where("status", "active")
                          ->where("role", "vendor")
-                         ->paginate(30);
+                         ->paginate(30)
+                         ->appends(request()->all());
 
         return inertia("Ecommerce/Shops/Index", compact("vendorShops"));
     }
@@ -48,7 +54,7 @@ class ShopController extends Controller
         $vendorRandomProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
                                      ->with(["productReviews:id,product_id,rating","shop:id,offical"])
                                      ->whereUserId($shop ? $shop->id : "")
-                                     ->whereStatus("active")
+                                     ->whereStatus("approved")
                                      ->inRandomOrder()
                                      ->limit(20)
                                      ->get();
@@ -56,7 +62,7 @@ class ShopController extends Controller
         $vendorProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
                                ->with(["productReviews:id,product_id,rating","shop:id,offical","images"])
                                ->filterBy(request(["search","category","brand","rating","price"]))
-                               ->where("status", "active")
+                               ->where("status", "approved")
                                ->where("user_id", $shop ? $shop->id : "")
                                ->orderBy(request("sort", "id"), request("direction", "desc"))
                                ->paginate(20)
@@ -81,14 +87,14 @@ class ShopController extends Controller
 
         $shopReviewsAvg=ShopReview::where("vendor_id", $shop ? $shop->id : "")->avg("rating");
 
-        $categories =  Category::join('products', 'categories.id', '=', 'products.category_id')
+        $categories=Category::join('products', 'categories.id', '=', 'products.category_id')
                                ->join('users', 'products.user_id', '=', 'users.id')
                                ->where('users.id', $shop ? $shop->id : "")
                                ->distinct()
                                ->select('categories.*')
                                ->get();
 
-        $brands =  Brand::join('products', 'brands.id', '=', 'products.brand_id')
+        $brands=Brand::join('products', 'brands.id', '=', 'products.brand_id')
                                ->join('users', 'products.user_id', '=', 'users.id')
                                ->where('users.id', $shop ? $shop->id : "")
                                ->distinct()
