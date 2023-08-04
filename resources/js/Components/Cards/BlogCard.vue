@@ -8,7 +8,7 @@ defineProps({
 
 <template>
   <div
-    class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 max-h-[450px]"
+    class="max-w-sm bg-white border rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 h-auto max-h-[500px] border-slate-300"
   >
     <img class="rounded-t-lg" :src="post.image" />
     <div class="p-5">

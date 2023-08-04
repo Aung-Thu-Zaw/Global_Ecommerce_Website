@@ -7,6 +7,7 @@ import { Head, Link } from "@inertiajs/vue3";
 defineProps({
   blogPost: Object,
   blogCategories: Object,
+  relatedBlogPosts: Object,
 });
 </script>
 
@@ -75,12 +76,67 @@ defineProps({
 
         <div class="flex items-start space-x-3">
           <!-- Blog Category Cards  -->
-          <div v-if="blogCategories.length" class="w-[400px]">
-            <ul
-              class="h-auto space-y-3 text-center text-md font-bold text-slate-700"
+          <div class="w-[400px]">
+            <div v-if="blogCategories.length" class="w-full mb-10">
+              <ul
+                class="h-auto space-y-3 text-center text-md font-bold text-slate-700"
+              >
+                <BlogCategoryCard :blogCategories="blogCategories" />
+              </ul>
+            </div>
+
+            <div
+              v-if="relatedBlogPosts.length"
+              class="border shadow-lg rounded-sm border-slate-400"
             >
-              <BlogCategoryCard :blogCategories="blogCategories" />
-            </ul>
+              <h1
+                class="text-lg font-semibold text-slate-700 text-center border-b border-slate-400 py-3"
+              >
+                Related Blogs
+              </h1>
+
+              <!-- post  -->
+
+              <div
+                v-for="(blogPost, index) in relatedBlogPosts"
+                :key="blogPost.id"
+                class="flex items-center px-2 py-3"
+                :class="{
+                  'border-b border-b-slate-400':
+                    index !== relatedBlogPosts.length - 1,
+                }"
+              >
+                <div class="w-[100px]">
+                  <img
+                    :src="blogPost.image"
+                    class="rounded-lg shadow-sm w-16 h-16 object-cover border border-slate-300"
+                  />
+                </div>
+                <div class="w-full">
+                  <Link
+                    :href="route('blogs.show', blogPost.slug)"
+                    :data="{
+                      sort: $page.props.ziggy.query.sort,
+                      direction: $page.props.ziggy.query.direction,
+                      view: $page.props.ziggy.query.view,
+                    }"
+                    class="hover:text-blue-700 text-md font-semibold text-gray-700 line-clamp-2"
+                  >
+                    {{ blogPost.title }}
+                  </Link>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="font-bold text-slate-400 text-[.7rem]">
+                      <i class="fa-solid fa-user mr-2"></i>
+                      {{ blogPost.author.name }}
+                    </span>
+                    <span class="font-bold text-slate-400 text-[.7rem]">
+                      <i class="fa-solid fa-clock mr-2"></i>
+                      {{ blogPost.created_at }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Blogs Detail -->
@@ -88,7 +144,7 @@ defineProps({
             <img
               :src="blogPost.image"
               alt=""
-              class="h-[400px] rounded-t-md object-cover"
+              class="h-[400px] rounded-t-md object-cover border shadow-sm border-slate-300"
             />
 
             <h1 class="font-bold text-2xl text-slate-700 mt-8 mb-2">
@@ -122,12 +178,19 @@ defineProps({
               v-if="blogPost.blog_tags.length"
               class="flex items-center my-5"
             >
-              <span class="font-bold text-gray-600 mr-3">Blog Tags :</span>
+              <span class="font-bold text-gray-600 mr-3"
+                >{{ __("BLOG_TAGS") }} :</span
+              >
               <div class="flex items-center space-x-3">
                 <Link
-                  href="#"
                   v-for="blogTag in blogPost.blog_tags"
                   :key="blogTag.id"
+                  :href="route('blogs.tag', blogTag.slug)"
+                  :data="{
+                    view: 'grid',
+                    sort: 'id',
+                    direction: 'desc',
+                  }"
                   class="px-3 py-1 bg-blue-600 rounded-full text-white text-xs capitalize font-medium"
                 >
                   {{ blogTag.name }}

@@ -254,5 +254,8 @@
     "TERMS_AND_CONDITIONS": "Terms & Conditions",
     "SUBCATEGORIES": "SubCategories",
     "FAQ_CATEGORIES": "Faq Categories",
-    "REGISTERED_ACCOUNTS": "Registered Accounts"
+    "REGISTERED_ACCOUNTS": "Registered Accounts",
+    "BLOG_TAGS":"Blog Tags",
+    "TAGS":"Tags",
+    "TAG":"Tag"
 }

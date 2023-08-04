@@ -8,8 +8,9 @@ import Pagination from "@/Components/Paginations/Pagination.vue";
 import { usePage, Head, Link, router } from "@inertiajs/vue3";
 import { reactive, watch } from "vue";
 
-defineProps({
+const props = defineProps({
   blogCategories: Object,
+  blogTag: Object,
   blogPosts: Object,
 });
 
@@ -19,19 +20,17 @@ const params = reactive({
   sort: usePage().props.ziggy.query?.sort,
   direction: usePage().props.ziggy.query?.direction,
   page: usePage().props.ziggy.query?.page,
-  blog_category: usePage().props.ziggy.query?.blog_category,
   view: usePage().props.ziggy.query?.view,
 });
 
 const handleQueryStringParameter = () => {
   router.get(
-    route("blogs.index"),
+    route("blogs.tag", props.blogTag.slug),
     {
       search_blog: params.search_blog,
       sort: params.sort,
       direction: params.direction,
       page: params.page,
-      blog_category: params.blog_category,
       view: params.view,
     },
     {
@@ -45,12 +44,11 @@ const handleQueryStringParameter = () => {
 const removeSearch = () => {
   params.search_blog = "";
   router.get(
-    route("blogs.index"),
+    route("blogs.tag", props.blogTag.slug),
     {
       sort: params.sort,
       direction: params.direction,
       page: params.page,
-      blog_category: params.blog_category,
       view: params.view,
     },
     {
@@ -81,7 +79,7 @@ watch(
 );
 
 // Remove Filter Tag
-const handleRemoveBlogCategory = () => {
+const handleRemoveBlogTag = () => {
   router.get(route("blogs.index"), {
     search_blog: params.search_blog,
     sort: params.sort,
@@ -187,7 +185,7 @@ const handleRemoveBlogCategory = () => {
                   <span class="mr-2"> {{ __("VIEW") }} : </span>
                   <div class="flex items-center justify-between">
                     <Link
-                      :href="route('blogs.index')"
+                      :href="route('blogs.tag', blogTag.slug)"
                       :data="{
                         search_blog: $page.props.ziggy.query?.search_blog,
                         blog_category: $page.props.ziggy.query?.blog_category,
@@ -206,7 +204,7 @@ const handleRemoveBlogCategory = () => {
                       <i class="fa-solid fa-grip"></i>
                     </Link>
                     <Link
-                      :href="route('blogs.index')"
+                      :href="route('blogs.tag', blogTag.slug)"
                       :data="{
                         search_blog: $page.props.ziggy.query?.search_blog,
                         blog_category: $page.props.ziggy.query?.blog_category,
@@ -230,10 +228,7 @@ const handleRemoveBlogCategory = () => {
             </div>
 
             <!-- Filter tags -->
-            <div
-              v-if="$page.props.ziggy.query.blog_category"
-              class="my-3 w-full"
-            >
+            <div v-if="blogTag" class="my-3 w-full">
               <span class="font-bold text-slate-600 text-lg mr-3"
                 >{{ __("FILTERED_BY") }} :</span
               >
@@ -241,11 +236,10 @@ const handleRemoveBlogCategory = () => {
               <span
                 class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow capitalize"
               >
-                {{ __("CATEGORY") }} :
-                {{ $page.props.ziggy.query.blog_category }}
+                {{ __("TAG") }} : {{ blogTag.name }}
 
                 <i
-                  @click="handleRemoveBlogCategory"
+                  @click="handleRemoveBlogTag"
                   class="fa-solid fa-xmark text-sm font-bold cursor-pointer hover:text-red-700 transition-all"
                 >
                 </i>

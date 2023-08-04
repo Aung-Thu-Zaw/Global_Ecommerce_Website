@@ -99,6 +99,8 @@ Route::get("/blogs", [BlogController::class,"index"])->name("blogs.index");
 
 Route::get("/blogs/{blog_post}", [BlogController::class,"show"])->name("blogs.show");
 
+Route::get("/blogs/tags/{tag}", [BlogController::class,"tagBlog"])->name("blogs.tag");
+
 Route::post('/subscribe', [SubscriberController::class, 'store'])->name("subscribe");
 
 Route::post('/suggestion', [SuggestionController::class, 'store'])->name("suggestion.store");
