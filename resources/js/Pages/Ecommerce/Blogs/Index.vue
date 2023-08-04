@@ -155,7 +155,7 @@ const handleRemoveBlogCategory = () => {
 
               <!-- Search Result Text -->
               <p v-if="params.search_blog" class="ml-5">
-                {{ blogPosts.total }} {{ __("POST_FOUND_FOR_RESULT") }}
+                {{ blogPosts.total }} {{ __("POSTS_FOUND_FOR_RESULT") }}
                 <span class="text-blue-600">"{{ params.search_blog }}"</span>
               </p>
 
@@ -189,18 +189,17 @@ const handleRemoveBlogCategory = () => {
                     <Link
                       :href="route('blogs.index')"
                       :data="{
-                        search_blog: $page.props.ziggy.query?.search_blog,
-                        blog_category: $page.props.ziggy.query?.blog_category,
-                        sort: $page.props.ziggy.query?.sort,
-                        direction: $page.props.ziggy.query?.direction,
-                        page: $page.props.ziggy.query?.page,
+                        search_blog: params.search_blog,
+                        blog_category: params.blog_category,
+                        sort: params.sort,
+                        direction: params.direction,
+                        page: params.page,
                         view: 'grid',
                       }"
                       class="px-2 py-1 rounded-md cursor-pointer hover:bg-gray-300 transition-none"
                       :class="{
-                        'bg-gray-400 text-white':
-                          $page.props.ziggy.query.view === 'grid',
-                        'bg-gray-200': $page.props.ziggy.query.view !== 'grid',
+                        'bg-gray-400 text-white': params.view === 'grid',
+                        'bg-gray-200': params.view !== 'grid',
                       }"
                     >
                       <i class="fa-solid fa-grip"></i>
@@ -208,18 +207,17 @@ const handleRemoveBlogCategory = () => {
                     <Link
                       :href="route('blogs.index')"
                       :data="{
-                        search_blog: $page.props.ziggy.query?.search_blog,
-                        blog_category: $page.props.ziggy.query?.blog_category,
-                        sort: $page.props.ziggy.query?.sort,
-                        direction: $page.props.ziggy.query?.direction,
-                        page: $page.props.ziggy.query?.page,
+                        search_blog: params.search_blog,
+                        blog_category: params.blog_category,
+                        sort: params.sort,
+                        direction: params.direction,
+                        page: params.page,
                         view: 'list',
                       }"
                       class="ml-3 px-2 py-1 rounded-md cursor-pointer hover:bg-gray-300 transition-none"
                       :class="{
-                        'bg-gray-400 text-white':
-                          $page.props.ziggy.query.view === 'list',
-                        'bg-gray-200': $page.props.ziggy.query.view !== 'list',
+                        'bg-gray-400 text-white': params.view === 'list',
+                        'bg-gray-200': params.view !== 'list',
                       }"
                     >
                       <i class="fa-solid fa-list"></i>
@@ -230,10 +228,7 @@ const handleRemoveBlogCategory = () => {
             </div>
 
             <!-- Filter tags -->
-            <div
-              v-if="$page.props.ziggy.query.blog_category"
-              class="my-3 w-full"
-            >
+            <div v-if="params.blog_category" class="my-3 w-full">
               <span class="font-bold text-slate-600 text-lg mr-3"
                 >{{ __("FILTERED_BY") }} :</span
               >
@@ -242,7 +237,7 @@ const handleRemoveBlogCategory = () => {
                 class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow capitalize"
               >
                 {{ __("CATEGORY") }} :
-                {{ $page.props.ziggy.query.blog_category }}
+                {{ params.blog_category }}
 
                 <i
                   @click="handleRemoveBlogCategory"
@@ -253,7 +248,7 @@ const handleRemoveBlogCategory = () => {
             </div>
 
             <!-- Blog Cards -->
-            <div v-if="$page.props.ziggy.query.view === 'list'" class="w-full">
+            <div v-if="params.view === 'list'" class="w-full">
               <div v-if="blogPosts.data.length" class="w-full">
                 <div
                   v-for="blogPost in blogPosts.data"
