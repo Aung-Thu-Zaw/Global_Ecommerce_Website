@@ -30,13 +30,16 @@ class BlogController extends Controller
 
         $blogTag=BlogTag::where("slug", $blogTagSlug)->first();
 
-        $blogPosts=$blogTag->blogPosts()->with(["author:id,name","blogCategory:id,name"])
-                           ->filterBy(request(["search_blog"]))
-                           ->orderBy(request("sort", "id"), request("direction", "desc"))
-                           ->paginate(20)
-                           ->withQueryString();
+        if($blogTag) {
+            $blogPosts=$blogTag->blogPosts()->with(["author:id,name","blogCategory:id,name"])
+                               ->filterBy(request(["search_blog"]))
+                               ->orderBy(request("sort", "id"), request("direction", "desc"))
+                               ->paginate(20)
+                               ->withQueryString();
+            return inertia("Ecommerce/Blogs/TagBlogs", compact("blogCategories", "blogTag", "blogPosts"));
+        }
 
-        return inertia("Ecommerce/Blogs/TagBlogs", compact("blogCategories", "blogTag", "blogPosts"));
+        return inertia("Ecommerce/Blogs/TagBlogs", compact("blogCategories", "blogTag"));
     }
 
     public function show(BlogPost $blogPost): Response|ResponseFactory
@@ -47,7 +50,7 @@ class BlogController extends Controller
 
         $relatedBlogPosts=BlogPost::with(["author:id,name","blogCategory:id,name"])
                                   ->where("blog_category_id", $blogPost->blog_category_id)
-                                  ->where("slug", "!=", $blogPost)
+                                  ->where("slug", "!=", $blogPost->slug)
                                   ->limit(10)
                                   ->get();
 

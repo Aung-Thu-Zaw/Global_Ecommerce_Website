@@ -1,6 +1,7 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
+import RelatedBlogCard from "@/Components/Cards/RelatedBlogCard.vue";
 import BlogCategoryCard from "@/Components/Cards/BlogCategoryCard.vue";
 import { Head, Link } from "@inertiajs/vue3";
 
@@ -85,6 +86,7 @@ defineProps({
               </ul>
             </div>
 
+            <!-- Related Blog Posts -->
             <div
               v-if="relatedBlogPosts.length"
               class="border shadow-lg rounded-sm border-slate-400"
@@ -95,8 +97,6 @@ defineProps({
                 Related Blogs
               </h1>
 
-              <!-- post  -->
-
               <div
                 v-for="(blogPost, index) in relatedBlogPosts"
                 :key="blogPost.id"
@@ -106,35 +106,8 @@ defineProps({
                     index !== relatedBlogPosts.length - 1,
                 }"
               >
-                <div class="w-[100px]">
-                  <img
-                    :src="blogPost.image"
-                    class="rounded-lg shadow-sm w-16 h-16 object-cover border border-slate-300"
-                  />
-                </div>
-                <div class="w-full">
-                  <Link
-                    :href="route('blogs.show', blogPost.slug)"
-                    :data="{
-                      sort: $page.props.ziggy.query.sort,
-                      direction: $page.props.ziggy.query.direction,
-                      view: $page.props.ziggy.query.view,
-                    }"
-                    class="hover:text-blue-700 text-md font-semibold text-gray-700 line-clamp-2"
-                  >
-                    {{ blogPost.title }}
-                  </Link>
-                  <div class="flex items-center justify-between mb-3">
-                    <span class="font-bold text-slate-400 text-[.7rem]">
-                      <i class="fa-solid fa-user mr-2"></i>
-                      {{ blogPost.author.name }}
-                    </span>
-                    <span class="font-bold text-slate-400 text-[.7rem]">
-                      <i class="fa-solid fa-clock mr-2"></i>
-                      {{ blogPost.created_at }}
-                    </span>
-                  </div>
-                </div>
+                <!-- Related Blog Card -->
+                <RelatedBlogCard :blogPost="blogPost" />
               </div>
             </div>
           </div>
