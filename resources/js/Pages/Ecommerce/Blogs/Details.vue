@@ -85,7 +85,11 @@ defineProps({
 
           <!-- Blogs Detail -->
           <div class="w-full pl-10">
-            <img :src="blogPost.image" alt="" class="h-[400px] rounded-t-md" />
+            <img
+              :src="blogPost.image"
+              alt=""
+              class="h-[400px] rounded-t-md object-cover"
+            />
 
             <h1 class="font-bold text-2xl text-slate-700 mt-8 mb-2">
               {{ blogPost.title }}
@@ -112,6 +116,24 @@ defineProps({
             <hr class="my-3" />
 
             <p v-html="blogPost.description" class="text-ms text-slate-600"></p>
+
+            <!-- Tags -->
+            <div
+              v-if="blogPost.blog_tags.length"
+              class="flex items-center my-5"
+            >
+              <span class="font-bold text-gray-600 mr-3">Blog Tags :</span>
+              <div class="flex items-center space-x-3">
+                <Link
+                  href="#"
+                  v-for="blogTag in blogPost.blog_tags"
+                  :key="blogTag.id"
+                  class="px-3 py-1 bg-blue-600 rounded-full text-white text-xs capitalize font-medium"
+                >
+                  {{ blogTag.name }}
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>

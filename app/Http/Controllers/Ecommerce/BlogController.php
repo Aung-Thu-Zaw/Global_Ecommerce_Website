@@ -27,7 +27,7 @@ class BlogController extends Controller
     {
         $blogCategories=BlogCategory::withCount("blogPosts")->where("status", "show")->get();
 
-        $blogPost->load(["author:id,name","blogCategory:id,name"]);
+        $blogPost->load(["author:id,name","blogCategory:id,name","blogTags:id,name,slug"]);
 
         return inertia("Ecommerce/Blogs/Details", compact('blogPost', 'blogCategories'));
     }

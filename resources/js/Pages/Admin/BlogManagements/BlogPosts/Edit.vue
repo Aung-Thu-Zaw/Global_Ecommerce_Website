@@ -5,7 +5,7 @@ import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/BlogPostBreadcrumb.vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { Link, useForm, Head, usePage } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 
@@ -20,6 +20,9 @@ const props = defineProps({
 const editor = ClassicEditor;
 const processing = ref(false);
 const previewPhoto = ref("");
+const tag = ref("");
+
+const tags = computed(() => props.blogPost.blog_tags.map((tag) => tag.name));
 
 // Handle Preview Image
 const getPreviewPhotoPath = (path) => {
@@ -36,8 +39,26 @@ const form = useForm({
   title: props.blogPost?.title,
   description: props.blogPost?.description,
   image: props.blogPost?.image,
+  tags: [...tags.value],
   captcha_token: null,
 });
+
+// Handle Blog Tags
+const createTag = (e) => {
+  if (e.key === ",") {
+    tag.value = tag.value.split(",").join("").toLowerCase();
+    form.tags.push(tag.value);
+    tag.value = "";
+  }
+  form.tags = [...new Set(form.tags)];
+};
+
+// Handle Remove Blog Tag
+const removeTag = (removeTag) => {
+  form.tags = form.tags.filter((tag) => {
+    return tag !== removeTag;
+  });
+};
 
 // Destructing ReCaptcha
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
@@ -191,6 +212,33 @@ const handleEditBlogPost = async () => {
             </select>
 
             <InputError class="mt-2" :message="form.errors.blog_category_id" />
+          </div>
+
+          <!-- Blog Tag Field -->
+          <div class="mb-6">
+            <InputLabel for="tag" value="Blog Tags" />
+
+            <TextInput
+              id="tag"
+              type="text"
+              class="mt-1 block w-full mb-2"
+              v-model="tag"
+              @keyup="createTag"
+              placeholder="Enter Blog Tag ( Eg. Fashion, Travel, Life, etc...)"
+            />
+
+            <InputError class="mt-2" :message="form.errors.tags" />
+            <span
+              v-for="(tag, index) in form.tags"
+              :key="index"
+              class="bg-blue-600 text-white rounded-sm min-w-[80px] h-auto px-3 py-1 mr-2"
+            >
+              <span class="text-sm font-blod mr-5">{{ tag }}</span>
+              <i
+                class="fas fa-xmark text-white arrow-icon cursor-pointer"
+                @click="removeTag(tag)"
+              ></i>
+            </span>
           </div>
 
           <!-- Blog Post File Input -->

@@ -50,6 +50,8 @@ class AdminBlogPostController extends Controller
 
         $blogCategories=BlogCategory::all();
 
+        $blogPost->load(["blogTags"]);
+
         return inertia("Admin/BlogManagements/BlogPosts/Edit", compact("blogPost", "queryStringParams", "blogCategories"));
     }
 

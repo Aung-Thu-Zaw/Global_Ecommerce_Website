@@ -31,6 +31,7 @@ class BlogPostRequest extends FormRequest
             "author_id"=>["required","numeric",Rule::exists("users", "id")],
             "title"=>["required","string","max:255"],
             "description"=>["required","string"],
+            "tags"=>["nullable","array"],
             "captcha_token"  => ["required",new RecaptchaRule()],
         ];
 

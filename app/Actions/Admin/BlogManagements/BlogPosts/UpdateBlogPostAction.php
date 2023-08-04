@@ -4,6 +4,7 @@ namespace App\Actions\Admin\BlogManagements\BlogPosts;
 
 use App\Models\BlogPost;
 use App\Services\BlogPostImageUploadService;
+use App\Services\HandleBlogTagService;
 
 class UpdateBlogPostAction
 {
@@ -21,5 +22,11 @@ class UpdateBlogPostAction
             "description"=>$data["description"],
             "image"=>$image
         ]);
+
+        if(isset($data["tags"])) {
+
+            (new HandleBlogTagService())->handle($data["tags"], $blogPost);
+
+        }
     }
 }

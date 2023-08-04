@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Scout\Attributes\SearchUsingFullText;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class BlogPost extends Model
 {
@@ -96,6 +97,14 @@ class BlogPost extends Model
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, "author_id");
+    }
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<BlogTag>
+    */
+    public function blogTags(): BelongsToMany
+    {
+        return $this->belongsToMany(BlogTag::class, "blog_post_blog_tag");
     }
 
     public static function deleteImage(string $blogPostImage): void
