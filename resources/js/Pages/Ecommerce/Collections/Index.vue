@@ -75,7 +75,7 @@ const loadMoreCollection = () => {
           @click="loadMoreCollection"
           class="border-2 border-slate-500 text-slate-600 rounded-sm px-5 py-2 shadow-md font-bold hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all"
         >
-          {{ __("LOAD_MORE_PRODUCTS") }}
+          {{ __("LOAD_MORE_COLLECTIONS") }}
         </button>
       </div>
       <p v-else class="my-5 text-slate-600 text-center">

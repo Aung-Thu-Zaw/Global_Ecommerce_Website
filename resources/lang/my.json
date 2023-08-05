@@ -116,7 +116,7 @@
     "BRAND": "အမှတ်တံဆိပ်",
     "RATING": "အဆင့်သတ်မှတ်ချက်",
     "PRICE": "စျေးနှုန်း",
-    "ITEMS_NOT_FOUND": "Items Not Found",
+    "ITEMS_NOT_FOUND": "ပစ္စည်း(များ) ရှာမတွေ့ပါ။",
     "WE'RE_SORRY_WE_CANNOT_FIND_ANY_MATCHES_FOR_YOUR_FILTER_TERM": "စိတ်မကောင်းပါဘူး။ သင့်စစ်ထုတ်သည့်အသုံးအနှုန်းအတွက် ကိုက်ညီမှုများကို ကျွန်ုပ်တို့ ရှာမတွေ့ပါ။",
     "WE'RE_SORRY_WE_CANNOT_FIND_ANY_MATCHES_FOR_YOUR_SEARCH_TERM": "စိတ်မကောင်းပါဘူး။ သင့်ရှာဖွေမှုစကားလုံးအတွက် ကိုက်ညီမှုတစ်စုံတစ်ရာကို ကျွန်ုပ်တို့ ရှာမတွေ့ပါ။",
     "MY_ACCOUNT": "ကျွန်ုပ်အကောင့်",
@@ -272,5 +272,7 @@
     "RELATED_QUESTIONS": "ဆက်စပ်မေးခွန်းများ",
     "IS_THIS_HELPFUL_FOR_YOU": "ဒါက သင့်အတွက် အထောက်အကူဖြစ်ပါသလား။",
     "YES": "ဟုတ်တယ်",
-    "NO": "မဟုတ်ဘူး"
+    "NO": "မဟုတ်ဘူး",
+    "ITEMS_FOUND_FOR_THE_RESULT": "ရလဒ်အတွက် အကြောင်းအရာ(များ)ကို တွေ့ရှိခဲ့သည်။",
+    "LOAD_MORE_COLLECTIONS": "နောက်ထပ်စုစည်းမှုများကို တင်ပါ"
 }

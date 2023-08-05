@@ -16,11 +16,11 @@ class SearchByCategoryProductController extends Controller
         $products=Product::select("id", "user_id", "image", "name", "description", "slug", "price", "discount", "special_offer")
                          ->with(["productReviews:id,product_id,rating","shop:id,offical","images"])
                          ->filterBy(request(["brand","rating","price"]))
-                         ->whereStatus("active")
+                         ->whereStatus("approved")
                          ->whereCategoryId($category->id)
                          ->orderBy(request("sort", "id"), request("direction", "desc"))
                          ->paginate(20)
-                         ->appends(request()->all());
+                         ->withQueryString();
 
         $category->load("parent.parent.parent.parent.parent", "children");
 

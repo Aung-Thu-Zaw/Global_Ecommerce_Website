@@ -10,8 +10,12 @@ defineProps({
 
 // Query String Parameters
 const params = reactive({
-  sort: "id",
-  direction: "desc",
+  sort: usePage().props.ziggy.query.sort
+    ? usePage().props.ziggy.query.sort
+    : "id",
+  direction: usePage().props.ziggy.query.direction
+    ? usePage().props.ziggy.query.direction
+    : "desc",
   view: usePage().props.ziggy.query.view
     ? usePage().props.ziggy.query.view
     : "grid",

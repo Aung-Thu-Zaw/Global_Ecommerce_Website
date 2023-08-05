@@ -17,11 +17,9 @@ const approvedProducts = (products) => {
     class="group border py-4 bg-slate-50 hover:shadow-lg hover:bg-slate-100 transition-all rounded-md"
     :href="route('collections.show', collection.slug)"
   >
-    <div
-      v-if="approvedProducts(collection.products).length"
-      class="flex items-center justify-between"
-    >
+    <div class="flex items-center justify-between">
       <div
+        v-if="approvedProducts(collection.products).length >= 1"
         class="flex items-center justify-center w-16 h-16 mx-auto mb-2 rounded-md border overflow-hidden"
       >
         <img
@@ -31,6 +29,7 @@ const approvedProducts = (products) => {
       </div>
 
       <div
+        v-if="approvedProducts(collection.products).length >= 2"
         class="flex items-center justify-center w-16 h-16 mx-auto mb-2 rounded-md border overflow-hidden"
       >
         <img
@@ -40,6 +39,7 @@ const approvedProducts = (products) => {
       </div>
 
       <div
+        v-if="approvedProducts(collection.products).length >= 3"
         class="flex items-center justify-center w-16 h-16 mx-auto mb-2 rounded-md border overflow-hidden"
       >
         <img

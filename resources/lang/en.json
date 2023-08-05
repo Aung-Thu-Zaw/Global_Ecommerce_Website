@@ -116,7 +116,7 @@
     "BRAND": "Brand",
     "RATING": "Rating",
     "PRICE": "Price",
-    "ITEMS_NOT_FOUND": "Items Not Found",
+    "ITEMS_NOT_FOUND": "Item(s) Not Found",
     "WE'RE_SORRY_WE_CANNOT_FIND_ANY_MATCHES_FOR_YOUR_FILTER_TERM": "We're sorry. We cannot find any matches for your filter term",
     "WE'RE_SORRY_WE_CANNOT_FIND_ANY_MATCHES_FOR_YOUR_SEARCH_TERM": "We're sorry. We cannot find any matches for your search term",
     "MY_ACCOUNT": "My Account",
@@ -271,5 +271,7 @@
     "RELATED_QUESTIONS": "Related Questions",
     "IS_THIS_HELPFUL_FOR_YOU": "Is this helpful for you?",
     "YES": "Yes",
-    "NO": "No"
+    "NO": "No",
+    "ITEMS_FOUND_FOR_THE_RESULT": "item(s) found for the result",
+    "LOAD_MORE_COLLECTIONS": "Load More Collections"
 }

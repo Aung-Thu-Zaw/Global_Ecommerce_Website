@@ -16,20 +16,15 @@ const props = defineProps({
 
 // Query String Parameters
 const params = reactive({
-  search: usePage().props.ziggy.query.search,
-  sort: "id",
-  direction: usePage().props.ziggy.query.direction
-    ? usePage().props.ziggy.query.direction
-    : "desc",
-
-  page: usePage().props.ziggy.query.page,
-  category: usePage().props.ziggy.query.category,
-  brand: usePage().props.ziggy.query.brand,
-  rating: usePage().props.ziggy.query.rating,
-  price: usePage().props.ziggy.query.price,
-  view: usePage().props.ziggy.query.view
-    ? usePage().props.ziggy.query.view
-    : "grid",
+  search: usePage().props.ziggy.query?.search,
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
+  page: usePage().props.ziggy.query?.page,
+  category: usePage().props.ziggy.query?.category,
+  brand: usePage().props.ziggy.query?.brand,
+  rating: usePage().props.ziggy.query?.rating,
+  price: usePage().props.ziggy.query?.price,
+  view: usePage().props.ziggy.query?.view,
 });
 
 // Handle Filter Prices
@@ -159,18 +154,21 @@ const handleRemoveBrand = () => {
             :categories="categories"
             :brands="brands"
           />
+
           <main class="md:w-2/3 lg:w-3/4 px-4">
             <div
               class="text-sm font-bold text-slate-600 px-5 py-3 border-t border-b flex items-center justify-between"
             >
-              <p v-if="params.search">
-                {{ products.data.length }} items found for result
-                <span class="text-blue-600">"{{ params.search }}"</span>
+              <p v-if="$page.props.ziggy.query?.search">
+                {{ products.total }} {{ __("ITEMS_FOUND_FOR_THE_RESULT") }}
+                <span class="text-blue-600"
+                  >"{{ $page.props.ziggy.query?.search }}"</span
+                >
               </p>
 
               <div class="flex items-center ml-auto">
                 <!-- Sorting Select Box -->
-                <div class="w-[260px] flex items-center justify-between">
+                <div class="w-[210px] flex items-center justify-between">
                   <span class="">{{ __("SORT_BY") }} : </span>
                   <select
                     id="countries"
@@ -193,27 +191,26 @@ const handleRemoveBrand = () => {
 
                 <!-- Dynamic View -->
                 <div class="flex items-center ml-3">
-                  <span class="mr-2">{{ __("VIEW") }} : </span>
+                  <span class="w-[50px]">{{ __("VIEW") }} : </span>
                   <div class="flex items-center justify-between">
                     <!-- Grid View -->
                     <Link
                       :href="route('product.search')"
                       :data="{
-                        search: $page.props.ziggy.query.search,
-                        category: $page.props.ziggy.query.category,
-                        brand: $page.props.ziggy.query.brand,
-                        sort: $page.props.ziggy.query.sort,
-                        direction: $page.props.ziggy.query.direction,
-                        page: $page.props.ziggy.query.page,
-                        rating: $page.props.ziggy.query.rating,
-                        price: $page.props.ziggy.query.price,
+                        search: params.search,
+                        category: params.category,
+                        brand: params.brand,
+                        sort: params.sort,
+                        direction: params.direction,
+                        page: params.page,
+                        rating: params.rating,
+                        price: params.price,
                         view: 'grid',
                       }"
                       class="px-2 py-1 rounded-md cursor-pointer hover:bg-gray-300 transition-none"
                       :class="{
-                        'bg-gray-400 text-white':
-                          $page.props.ziggy.query.view === 'grid',
-                        'bg-gray-200': $page.props.ziggy.query.view !== 'grid',
+                        'bg-gray-400 text-white': params.view === 'grid',
+                        'bg-gray-200': params.view !== 'grid',
                       }"
                     >
                       <i class="fa-solid fa-grip"></i>
@@ -223,21 +220,20 @@ const handleRemoveBrand = () => {
                     <Link
                       :href="route('product.search')"
                       :data="{
-                        search: $page.props.ziggy.query.search,
-                        category: $page.props.ziggy.query.category,
-                        brand: $page.props.ziggy.query.brand,
-                        sort: $page.props.ziggy.query.sort,
-                        direction: $page.props.ziggy.query.direction,
-                        page: $page.props.ziggy.query.page,
-                        rating: $page.props.ziggy.query.rating,
-                        price: $page.props.ziggy.query.price,
+                        search: params.search,
+                        category: params.category,
+                        brand: params.brand,
+                        sort: params.sort,
+                        direction: params.direction,
+                        page: params.page,
+                        rating: params.rating,
+                        price: params.price,
                         view: 'list',
                       }"
                       class="ml-3 px-2 py-1 rounded-md cursor-pointer hover:bg-gray-300 transition-none"
                       :class="{
-                        'bg-gray-400 text-white':
-                          $page.props.ziggy.query.view === 'list',
-                        'bg-gray-200': $page.props.ziggy.query.view !== 'list',
+                        'bg-gray-400 text-white': params.view === 'list',
+                        'bg-gray-200': params.view !== 'list',
                       }"
                     >
                       <i class="fa-solid fa-list"></i>
@@ -251,10 +247,10 @@ const handleRemoveBrand = () => {
             <div class="my-3 w-full">
               <span
                 v-if="
-                  $page.props.ziggy.query.category ||
-                  $page.props.ziggy.query.price ||
-                  $page.props.ziggy.query.rating ||
-                  $page.props.ziggy.query.brand
+                  params.category ||
+                  params.price ||
+                  params.rating ||
+                  params.brand
                 "
                 class="font-bold text-slate-600 text-lg mr-3"
                 >{{ __("FILTERED_BY") }} :</span
@@ -262,10 +258,10 @@ const handleRemoveBrand = () => {
 
               <!-- Category Filter Tag -->
               <span
-                v-if="$page.props.ziggy.query.category"
+                v-if="params.category"
                 class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow capitalize"
               >
-                {{ __("CATEGORY") }} : {{ $page.props.ziggy.query.category }}
+                {{ __("CATEGORY") }} : {{ params.category }}
 
                 <i
                   @click="handleRemoveCategory"
@@ -275,11 +271,11 @@ const handleRemoveBrand = () => {
               </span>
 
               <!-- Brand Filter Tag -->
-              <span v-if="$page.props.ziggy.query.brand">
+              <span v-if="params.brand">
                 <span
                   class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
                 >
-                  {{ __("BRAND") }} : {{ $page.props.ziggy.query.brand }}
+                  {{ __("BRAND") }} : {{ params.brand }}
 
                   <i
                     @click="handleRemoveBrand"
@@ -291,11 +287,10 @@ const handleRemoveBrand = () => {
 
               <!-- Rating Filter Tag -->
               <span
-                v-if="$page.props.ziggy.query.rating"
+                v-if="params.rating"
                 class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
               >
-                {{ __("RATING") }} : {{ $page.props.ziggy.query.rating }} Stars
-                And Up
+                {{ __("RATING") }} : {{ params.rating }} Stars And Up
 
                 <i
                   @click="handleRemoveRating"
@@ -306,7 +301,7 @@ const handleRemoveBrand = () => {
 
               <!-- Price Filter Tag -->
               <span
-                v-if="$page.props.ziggy.query.price"
+                v-if="params.price"
                 class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
               >
                 {{ __("PRICE") }} : {{ minPrice }} - {{ maxPrice }}
@@ -320,7 +315,7 @@ const handleRemoveBrand = () => {
             </div>
 
             <!-- Products List View -->
-            <div v-if="$page.props.ziggy.query.view === 'list'">
+            <div v-if="params.view === 'list'">
               <div
                 v-if="products.data.length"
                 class="flex flex-col items-center space-y-2"
@@ -349,7 +344,7 @@ const handleRemoveBrand = () => {
             </div>
 
             <!-- Products Grid View -->
-            <div v-if="$page.props.ziggy.query.view === 'grid'">
+            <div v-if="params.view === 'grid'">
               <div
                 v-if="products.data.length"
                 class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"

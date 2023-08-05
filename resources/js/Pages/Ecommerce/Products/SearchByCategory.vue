@@ -3,7 +3,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import ProductCard from "@/Components/Cards/ProductCard.vue";
 import ProductCardList from "@/Components/Cards/ProductCardList.vue";
 import EcommerceFilterSidebarForCategoryResult from "@/Components/Sidebars/EcommerceFilterSidebarForCategoryResult.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/SearchByCategoryBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import { reactive, ref, watch } from "vue";
 import { usePage, router, Link, Head } from "@inertiajs/vue3";
@@ -16,18 +16,26 @@ const props = defineProps({
 
 // Query String Parameters
 const params = reactive({
-  sort: "id",
-  direction: usePage().props.ziggy.query.direction
-    ? usePage().props.ziggy.query.direction
-    : "desc",
-  page: usePage().props.ziggy.query.page,
-  brand: usePage().props.ziggy.query.brand,
-  rating: usePage().props.ziggy.query.rating,
-  price: usePage().props.ziggy.query.price,
-  view: usePage().props.ziggy.query.view
-    ? usePage().props.ziggy.query.view
-    : "grid",
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
+  page: usePage().props.ziggy.query?.page,
+  brand: usePage().props.ziggy.query?.brand,
+  rating: usePage().props.ziggy.query?.rating,
+  price: usePage().props.ziggy.query?.price,
+  view: usePage().props.ziggy.query?.view,
 });
+
+// Handle Filter Prices
+const price = ref(
+  usePage().props.ziggy.query.price ? usePage().props.ziggy.query.price : ""
+);
+
+const [minValue, maxValue] = price.value
+  .split("-")
+  .map((value) => parseInt(value));
+
+const minPrice = ref(minValue);
+const maxPrice = ref(maxValue);
 
 // Watching Sorting Select Box
 watch(
@@ -44,18 +52,6 @@ watch(
     });
   }
 );
-
-// Handle Filter Prices
-const price = ref(
-  usePage().props.ziggy.query.price ? usePage().props.ziggy.query.price : ""
-);
-
-const [minValue, maxValue] = price.value
-  .split("-")
-  .map((value) => parseInt(value));
-
-const minPrice = ref(minValue);
-const maxPrice = ref(maxValue);
 
 // Remove Price Query String Parameter
 const handleRemovePrice = () => {
@@ -102,155 +98,7 @@ const handleRemoveBrand = () => {
       <div class="mb-5 px-4">
         <div class="border-b py-3">
           <!-- Breadcrumb -->
-          <Breadcrumb>
-            <li
-              v-if="category.parent?.parent?.parent?.parent"
-              aria-current="page"
-            >
-              <Link
-                :href="
-                  route(
-                    'category.products',
-                    category.parent.parent.parent.parent.slug
-                  )
-                "
-                :data="{
-                  sort: $page.props.ziggy.query.sort,
-                  direction: $page.props.ziggy.query.direction,
-                  view: params.view,
-                }"
-                class="flex items-center"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="w-6 h-6 text-gray-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <span
-                  class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-700 md:ml-2"
-                  >{{ category.parent.parent.parent.parent.name }}</span
-                >
-              </Link>
-            </li>
-            <li v-if="category.parent?.parent?.parent" aria-current="page">
-              <Link
-                :href="
-                  route('category.products', category.parent.parent.parent.slug)
-                "
-                :data="{
-                  sort: $page.props.ziggy.query.sort,
-                  direction: $page.props.ziggy.query.direction,
-                  view: params.view,
-                }"
-                class="flex items-center"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="w-6 h-6 text-gray-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <span
-                  class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-700 md:ml-2"
-                  >{{ category.parent.parent.parent.name }}</span
-                >
-              </Link>
-            </li>
-            <li v-if="category.parent?.parent" aria-current="page">
-              <Link
-                :href="route('category.products', category.parent.parent.slug)"
-                :data="{
-                  sort: $page.props.ziggy.query.sort,
-                  direction: $page.props.ziggy.query.direction,
-                  view: params.view,
-                }"
-                class="flex items-center"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="w-6 h-6 text-gray-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <span
-                  class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-700 md:ml-2"
-                  >{{ category.parent.parent.name }}</span
-                >
-              </Link>
-            </li>
-            <li v-if="category.parent" aria-current="page">
-              <Link
-                :href="route('category.products', category.parent.slug)"
-                :data="{
-                  sort: $page.props.ziggy.query.sort,
-                  direction: $page.props.ziggy.query.direction,
-                  view: params.view,
-                }"
-                class="flex items-center"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="w-6 h-6 text-gray-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <span
-                  class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-700 md:ml-2"
-                  >{{ category.parent.name }}</span
-                >
-              </Link>
-            </li>
-
-            <li aria-current="page">
-              <div class="flex items-center">
-                <svg
-                  aria-hidden="true"
-                  class="w-6 h-6 text-gray-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">{{
-                  category.name
-                }}</span>
-              </div>
-            </li>
-          </Breadcrumb>
+          <Breadcrumb :category="category" />
         </div>
       </div>
       <div class="container max-w-screen-xl mx-auto px-4">
@@ -265,12 +113,13 @@ const handleRemoveBrand = () => {
               class="text-sm font-bold text-slate-600 px-5 py-3 border-t border-b flex items-center justify-between"
             >
               <p v-if="category">
-                {{ products.data.length }} items found in
+                {{ products.total }} {{ __("ITEMS_FOUND_FOR_THE_RESULT") }}
                 <span class="text-blue-600">"{{ category.name }}"</span>
               </p>
+
               <div class="flex items-center ml-auto">
                 <!-- Sorting Select Box -->
-                <div class="w-[260px] flex items-center justify-between">
+                <div class="w-[210px] flex items-center justify-between">
                   <span class="">{{ __("SORT_BY") }} : </span>
                   <select
                     id="countries"
@@ -299,19 +148,18 @@ const handleRemoveBrand = () => {
                     <Link
                       :href="route('category.products', category.slug)"
                       :data="{
-                        brand: $page.props.ziggy.query.brand,
-                        sort: $page.props.ziggy.query.sort,
-                        direction: $page.props.ziggy.query.direction,
-                        page: $page.props.ziggy.query.page,
-                        rating: $page.props.ziggy.query.rating,
-                        price: $page.props.ziggy.query.price,
+                        brand: params.brand,
+                        sort: params.sort,
+                        direction: params.direction,
+                        page: params.page,
+                        rating: params.rating,
+                        price: params.price,
                         view: 'grid',
                       }"
                       class="px-2 py-1 rounded-md cursor-pointer hover:bg-gray-300 transition-none"
                       :class="{
-                        'bg-gray-400 text-white':
-                          $page.props.ziggy.query.view === 'grid',
-                        'bg-gray-200': $page.props.ziggy.query.view !== 'grid',
+                        'bg-gray-400 text-white': params.view === 'grid',
+                        'bg-gray-200': params.view !== 'grid',
                       }"
                     >
                       <i class="fa-solid fa-grip"></i>
@@ -320,19 +168,18 @@ const handleRemoveBrand = () => {
                     <Link
                       :href="route('category.products', category.slug)"
                       :data="{
-                        brand: $page.props.ziggy.query.brand,
-                        sort: $page.props.ziggy.query.sort,
-                        direction: $page.props.ziggy.query.direction,
-                        page: $page.props.ziggy.query.page,
-                        rating: $page.props.ziggy.query.rating,
-                        price: $page.props.ziggy.query.price,
+                        brand: params.brand,
+                        sort: params.sort,
+                        direction: params.direction,
+                        page: params.page,
+                        rating: params.rating,
+                        price: params.price,
                         view: 'list',
                       }"
                       class="ml-3 px-2 py-1 rounded-md cursor-pointer hover:bg-gray-300 transition-none"
                       :class="{
-                        'bg-gray-400 text-white':
-                          $page.props.ziggy.query.view === 'list',
-                        'bg-gray-200': $page.props.ziggy.query.view !== 'list',
+                        'bg-gray-400 text-white': params.view === 'list',
+                        'bg-gray-200': params.view !== 'list',
                       }"
                     >
                       <i class="fa-solid fa-list"></i>
@@ -345,21 +192,17 @@ const handleRemoveBrand = () => {
             <!-- Filter Tags -->
             <div class="my-3 w-full">
               <span
-                v-if="
-                  $page.props.ziggy.query.price ||
-                  $page.props.ziggy.query.rating ||
-                  $page.props.ziggy.query.brand
-                "
+                v-if="params.price || params.rating || params.brand"
                 class="font-bold text-slate-600 text-lg mr-3"
                 >{{ __("FILTERED_BY") }} :</span
               >
 
               <!-- Brand Filter Tag -->
-              <span v-if="$page.props.ziggy.query.brand">
+              <span v-if="params.brand">
                 <span
                   class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
                 >
-                  {{ __("BRAND") }} : {{ $page.props.ziggy.query.brand }}
+                  {{ __("BRAND") }} : {{ params.brand }}
 
                   <i
                     @click="handleRemoveBrand"
@@ -371,11 +214,10 @@ const handleRemoveBrand = () => {
 
               <!-- Rating Filter Tag -->
               <span
-                v-if="$page.props.ziggy.query.rating"
+                v-if="params.rating"
                 class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
               >
-                {{ __("RATING") }} : {{ $page.props.ziggy.query.rating }} Stars
-                And Up
+                {{ __("RATING") }} : {{ params.rating }} Stars And Up
 
                 <i
                   @click="handleRemoveRating"
@@ -386,7 +228,7 @@ const handleRemoveBrand = () => {
 
               <!-- Price Filter Tag -->
               <span
-                v-if="$page.props.ziggy.query.price"
+                v-if="params.price"
                 class="text-sm mr-2 border-2 border-slate-300 px-3 py-1 rounded-xl text-slate-700 shadow"
               >
                 {{ __("PRICE") }} : {{ minPrice }} - {{ maxPrice }}
@@ -400,7 +242,7 @@ const handleRemoveBrand = () => {
             </div>
 
             <!-- Products List View -->
-            <div v-if="$page.props.ziggy.query.view === 'list'">
+            <div v-if="params.view === 'list'">
               <div
                 v-if="products.data.length"
                 class="flex flex-col items-center space-y-2"
@@ -429,7 +271,7 @@ const handleRemoveBrand = () => {
             </div>
 
             <!-- Products Grid View -->
-            <div v-if="$page.props.ziggy.query.view === 'grid'">
+            <div v-if="params.view === 'grid'">
               <div
                 v-if="products.data.length"
                 class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"

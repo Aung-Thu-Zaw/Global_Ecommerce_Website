@@ -4,9 +4,12 @@ import { reactive } from "vue";
 
 // Query String Parameters
 const params = reactive({
-  search: usePage().props.ziggy.query?.search,
-  sort: usePage().props.ziggy.query?.sort,
-  direction: usePage().props.ziggy.query?.direction,
+  sort: usePage().props.ziggy.query.sort
+    ? usePage().props.ziggy.query.sort
+    : "id",
+  direction: usePage().props.ziggy.query.direction
+    ? usePage().props.ziggy.query.direction
+    : "desc",
   view: usePage().props.ziggy.query.view
     ? usePage().props.ziggy.query.view
     : "grid",
