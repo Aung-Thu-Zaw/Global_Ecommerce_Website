@@ -86,7 +86,7 @@ const fiveStarsRating = computed(() => {
     <!-- Customer Product Review  -->
     <div v-if="paginateProductReviews.data.length" class="p-5">
       <h1 class="font-bold text-slate-600 text-xl my-3">
-        Customer Product Reviews
+        {{ __("CUSTOMER_PRODUCT_REVIEWS") }}
       </h1>
 
       <div>
@@ -147,6 +147,22 @@ const fiveStarsRating = computed(() => {
                     {{ color.name }}
                     <span
                       v-if="index !== productReview.product.colors.length - 1"
+                      >,</span
+                    >
+                  </span>
+                </p>
+                <p
+                  v-if="productReview.product.types.length"
+                  class="text-sm text-slate-600"
+                >
+                  Types :
+                  <span
+                    v-for="(type, index) in productReview.product.types"
+                    :key="type.id"
+                  >
+                    {{ type.name }}
+                    <span
+                      v-if="index !== productReview.product.types.length - 1"
                       >,</span
                     >
                   </span>

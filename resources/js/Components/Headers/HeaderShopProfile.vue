@@ -1,4 +1,5 @@
 <script setup>
+import { router } from "@inertiajs/vue3";
 import { computed, inject } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -92,7 +93,7 @@ const handleUnFollow = async () => {
             class="px-3 py-1 bg-green-200 text-green-600 rounded-xl text-[.8rem]"
           >
             <i class="fa-solid fa-circle-check"></i>
-            Verified
+            {{ __("VERIFIED") }}
           </span>
         </h3>
         <span class="text-sm text-slate-500 block"
@@ -116,7 +117,7 @@ const handleUnFollow = async () => {
         class="px-5 py-2 rounded-sm mx-2 font-bold shadow bg-yellow-500 hover:bg-yellow-600 text-white"
       >
         <i class="fa-solid fa-message"></i>
-        Chat Now
+        {{ __("CHAT_NOW") }}
       </button>
       <button
         v-if="filterFollowing.length"

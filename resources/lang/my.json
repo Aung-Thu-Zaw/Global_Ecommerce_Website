@@ -274,5 +274,13 @@
     "YES": "ဟုတ်တယ်",
     "NO": "မဟုတ်ဘူး",
     "ITEMS_FOUND_FOR_THE_RESULT": "ရလဒ်အတွက် အကြောင်းအရာ(များ)ကို တွေ့ရှိခဲ့သည်။",
-    "LOAD_MORE_COLLECTIONS": "နောက်ထပ်စုစည်းမှုများကို တင်ပါ"
+    "LOAD_MORE_COLLECTIONS": "နောက်ထပ်စုစည်းမှုများကို တင်ပါ",
+    "JUST_FOR_YOU": "Just For You",
+    "SEARCH_PRODUCT_IN_SHOP": "ဆိုင်တွင် ကုန်ပစ္စည်းရှာဖွေပါ။",
+    "CUSTOMER_PRODUCT_REVIEWS": "ဖောက်သည်ထုတ်ကုန်သုံးသပ်ချက်များ",
+    "CUSTOMER_REVIEWS": "ဖောက်သည်သုံးသပ်ချက်များ",
+    "ALL_PRODUCTS": "ထုတ်ကုန်အားလုံး",
+    "RATING_AND_REVIEWS_FOR_SHOP": "ဆိုင်အတွက် အဆင့်သတ်မှတ်ချက်များနှင့် သုံးသပ်ချက်များ",
+    "RATING_AND_REVIEWS_FOR_PRODUCTS": "ထုတ်ကုန်များအတွက် အဆင့်သတ်မှတ်ချက်များနှင့် သုံးသပ်ချက်များ",
+    "THIS_SHOP_HAS_NO_REVIEWS": "ဤဆိုင်တွင် သုံးသပ်ချက်မရှိပါ။"
 }

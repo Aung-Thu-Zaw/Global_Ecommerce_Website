@@ -29,8 +29,12 @@ const props = defineProps({
 // Query String Parameters
 const params = reactive({
   search: usePage().props.ziggy.query?.search,
-  sort: usePage().props.ziggy.query?.sort,
-  direction: usePage().props.ziggy.query?.direction,
+  sort: usePage().props.ziggy.query.sort
+    ? usePage().props.ziggy.query.sort
+    : "id",
+  direction: usePage().props.ziggy.query.direction
+    ? usePage().props.ziggy.query.direction
+    : "desc",
   page: usePage().props.ziggy.query?.page,
   category: usePage().props.ziggy.query?.category,
   brand: usePage().props.ziggy.query?.brand,
@@ -118,7 +122,12 @@ const handelRemoveSearch = () => {
             <li class="mr-2" role="presentation">
               <Link
                 :href="route('shop.show', shop.uuid)"
-                :data="{ tab: 'all-products', view: 'grid' }"
+                :data="{
+                  tab: 'all-products',
+                  view: 'grid',
+                  sort: 'id',
+                  direction: 'desc',
+                }"
                 class="inline-flex p-4 rounded-t-lg active group text-slate-600"
                 :class="{
                   'text-blue-600 border-b-2 border-blue-600':
@@ -174,7 +183,7 @@ const handelRemoveSearch = () => {
                 <input
                   type="text"
                   class="border-none focus:ring-0 w-full"
-                  placeholder="Search product in shop"
+                  :placeholder="__('SEARCH_PRODUCT_IN_SHOP')"
                   v-model="params.search"
                 />
                 <i

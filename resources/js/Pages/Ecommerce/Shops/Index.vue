@@ -33,7 +33,7 @@ watch(
 );
 
 // Remove Query String Search
-const handelRemoveSearch = () => {
+const removeSearch = () => {
   params.search_shop = "";
   router.get(route("shop.index"));
 };
@@ -73,14 +73,21 @@ const handelRemoveSearch = () => {
             <i
               v-if="params.search_shop"
               class="fa-solid fa-xmark remove-search"
-              @click="handelRemoveSearch"
+              @click="removeSearch"
             ></i>
           </form>
         </div>
 
-        <div class="grid grid-cols-3 gap-3 my-3">
+        <div v-if="vendorShops.data.length" class="grid grid-cols-3 gap-3 my-3">
           <!-- Shop Card -->
           <ShopCard :vendorShops="vendorShops.data" />
+        </div>
+        <div v-else class="my-10">
+          <p class="my-3 font-bold text-slate-500 text-center">
+            {{
+              __("WE'RE_SORRY_WE_CANNOT_FIND_ANY_MATCHES_FOR_YOUR_SEARCH_TERM")
+            }}
+          </p>
         </div>
 
         <!-- Pagination -->

@@ -37,13 +37,11 @@ class ShopController extends Controller
     {
         $user=User::findOrFail(auth()->id());
 
+        $shop=User::whereUuid($shopUUID)->whereStatus("active")->first();
+
         $followings=$user->followings;
 
         $followers=$user->followers;
-
-        $shop=User::whereUuid($shopUUID)
-                  ->whereStatus("active")
-                  ->first();
 
         $vendorProductBanners=VendorProductBanner::select("id", "user_id", "image", "url")
                                                  ->whereUserId($shop ? $shop->id : "")
@@ -59,17 +57,16 @@ class ShopController extends Controller
                                      ->limit(20)
                                      ->get();
 
-        $vendorProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
+        $vendorProducts=Product::select("id", "user_id", "image", "name", "description", "slug", "price", "discount", "special_offer")
                                ->with(["productReviews:id,product_id,rating","shop:id,offical","images"])
                                ->filterBy(request(["search","category","brand","rating","price"]))
-                               ->where("status", "approved")
-                               ->where("user_id", $shop ? $shop->id : "")
+                               ->whereStatus("approved")
+                               ->whereUserId($shop ? $shop->id : "")
                                ->orderBy(request("sort", "id"), request("direction", "desc"))
                                ->paginate(20)
-                               ->appends(request()->all());
+                               ->withQueryString();
 
-
-        $paginateProductReviews=ProductReview::with(["product.sizes","product.colors","product.brand","user.orders.orderItems","reply.user:id,shop_name,avatar"])
+        $paginateProductReviews=ProductReview::with(["product.sizes","product.colors","product.types","product.brand","user.orders.orderItems","reply.user:id,shop_name,avatar"])
                                              ->where("vendor_id", $shop ? $shop->id : "")
                                              ->orderBy("id", "desc")
                                              ->paginate(5);
@@ -88,18 +85,18 @@ class ShopController extends Controller
         $shopReviewsAvg=ShopReview::where("vendor_id", $shop ? $shop->id : "")->avg("rating");
 
         $categories=Category::join('products', 'categories.id', '=', 'products.category_id')
-                               ->join('users', 'products.user_id', '=', 'users.id')
-                               ->where('users.id', $shop ? $shop->id : "")
-                               ->distinct()
-                               ->select('categories.*')
-                               ->get();
+                            ->join('users', 'products.user_id', '=', 'users.id')
+                            ->where('users.id', $shop ? $shop->id : "")
+                            ->distinct()
+                            ->select('categories.*')
+                            ->get();
 
         $brands=Brand::join('products', 'brands.id', '=', 'products.brand_id')
-                               ->join('users', 'products.user_id', '=', 'users.id')
-                               ->where('users.id', $shop ? $shop->id : "")
-                               ->distinct()
-                               ->select('brands.*')
-                               ->get();
+                     ->join('users', 'products.user_id', '=', 'users.id')
+                     ->where('users.id', $shop ? $shop->id : "")
+                     ->distinct()
+                     ->select('brands.*')
+                     ->get();
 
         return inertia("Ecommerce/Shops/Show", compact(
             "shop",

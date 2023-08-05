@@ -273,5 +273,13 @@
     "YES": "Yes",
     "NO": "No",
     "ITEMS_FOUND_FOR_THE_RESULT": "item(s) found for the result",
-    "LOAD_MORE_COLLECTIONS": "Load More Collections"
+    "LOAD_MORE_COLLECTIONS": "Load More Collections",
+    "JUST_FOR_YOU": "Just For You",
+    "SEARCH_PRODUCT_IN_SHOP": "Search product in shop",
+    "CUSTOMER_PRODUCT_REVIEWS": "Customer Product Reviews",
+    "CUSTOMER_REVIEWS": "Customer Reviews",
+    "ALL_PRODUCTS": "All Products",
+    "RATING_AND_REVIEWS_FOR_SHOP": "Ratings & Reviews For Shop",
+    "RATING_AND_REVIEWS_FOR_PRODUCTS": "Ratings & Reviews For Products",
+    "THIS_SHOP_HAS_NO_REVIEWS": "This shop has no reviews"
 }

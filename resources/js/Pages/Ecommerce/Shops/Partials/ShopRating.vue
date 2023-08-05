@@ -82,7 +82,7 @@ const fiveStarsRating = computed(() => {
             v-if="shopReviews.length"
             class="font-bold text-slate-600 text-xl my-3"
           >
-            Customer Reviews ({{ shopReviews.length }})
+            {{ __("CUSTOMER_REVIEWS") }} ({{ shopReviews.length }})
           </h1>
 
           <div v-if="paginateShopReviews.data.length">
@@ -105,10 +105,13 @@ const fiveStarsRating = computed(() => {
           <div v-else>
             <div class="font-bold text-center text-sm text-slate-600 my-10">
               <i class="fa-solid fa-star text-3xl mb-5 animate-bounce"></i>
-              <p>This shop has no reviews.</p>
+              <p>{{ __("THIS_SHOP_HAS_NO_REVIEWS") }}</p>
               <p>
-                Let others know what you think and be the first to write a
-                review.
+                {{
+                  __(
+                    "LET_OTHERS_KNOW_WHAT_YOU_THINK_AND_BE_THE_FIRST_TO_WRITE_A_REVIEW"
+                  )
+                }}
               </p>
             </div>
           </div>
@@ -126,11 +129,11 @@ const fiveStarsRating = computed(() => {
           <p class="font-bold text-sm text-slate-600 text-center">
             If you want to review this shop you need to login first. Here
             <Link :href="route('login')" class="text-blue-600 underline">
-              Login
+              {{ __("SIGN_IN") }}
             </Link>
             Or
             <Link :href="route('register')" class="text-blue-600 underline">
-              Register
+              {{ __("SIGN_UP") }}
             </Link>
           </p>
         </div>
