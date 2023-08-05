@@ -1,6 +1,5 @@
 <script setup>
 import { usePage, router } from "@inertiajs/vue3";
-import Pagination from "@/Components/Paginations/Pagination.vue";
 import { reactive } from "vue";
 
 const params = reactive({
@@ -51,7 +50,7 @@ const removeSearch = () => {
               type="text"
               class="w-[650px] h-full py-3 rounded-md borde-2 border-slate-400 focus:ring-0 focus:border-slate-400"
               autofocus
-              placeholder="Search for a question..."
+              :placeholder="__('SEARCH_FOR_A_QUESTION')"
               v-model="params.search_question"
             />
             <i

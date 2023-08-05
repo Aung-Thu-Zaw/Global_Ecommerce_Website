@@ -1,50 +1,12 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Head, Link, router, usePage } from "@inertiajs/vue3";
+import { Head, Link } from "@inertiajs/vue3";
+import QuestionSearchForm from "@/Components/Forms/QuestionSearchForm.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import { reactive } from "vue";
 
 const props = defineProps({
-  searchKeyword: Array,
   faqs: Object,
 });
-
-const params = reactive({
-  search_question: usePage().props.ziggy.query?.search_question,
-  page: usePage().props.ziggy.query?.page,
-});
-
-// Handle Search
-const handleSearch = () => {
-  if (params.search_question === "") {
-    router.get(route("help-center.index"));
-  } else {
-    router.get(
-      route("help-center.questions.search"),
-      {
-        search_question: params.search_question,
-        page: params.page,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-};
-
-// Remove Search Param
-const removeSearch = () => {
-  params.search_question = "";
-  router.get(
-    route("help-center.index"),
-    {},
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
 </script>
 
 <template>
@@ -67,33 +29,7 @@ const removeSearch = () => {
             Hi, How can we help?
           </h1>
           <div>
-            <form
-              @submit.prevent="handleSearch"
-              class="w-[700px] h-[50px] mx-auto"
-            >
-              <div class="flex items-center justify-between">
-                <div class="relative">
-                  <input
-                    type="text"
-                    class="w-[650px] h-full py-3 rounded-md borde-2 border-slate-400 focus:ring-0 focus:border-slate-400"
-                    autofocus
-                    placeholder="Search for a question..."
-                    v-model="params.search_question"
-                  />
-                  <i
-                    v-if="params.search_question"
-                    class="fa-solid fa-xmark remove-search"
-                    @click="removeSearch"
-                  ></i>
-                </div>
-
-                <button
-                  class="bg-blue-600 text-white px-6 py-3 h-full rounded-md hover:bg-blue-700 ml-2"
-                >
-                  <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
-              </div>
-            </form>
+            <QuestionSearchForm />
           </div>
         </div>
       </div>
@@ -104,12 +40,12 @@ const removeSearch = () => {
         class="container mx-auto border bg-white p-10 rounded-md shadow-lg mb-10"
       >
         <p
-          v-if="$page.props.ziggy.query.search_question"
+          v-if="$page.props.ziggy.query?.search_question"
           class="text-sm font-bold my-5 text-gray-700"
         >
-          {{ faqs.total }} question(s) found for search result
+          {{ faqs.total }} {{ __("QUESTION_FOUND_FOR_SEARCH_RESULT") }}
           <span class="text-blue-600"
-            >"{{ $page.props.ziggy.query.search_question }}"</span
+            >"{{ $page.props.ziggy.query?.search_question }}"</span
           >
         </p>
         <ul class="list-disc">

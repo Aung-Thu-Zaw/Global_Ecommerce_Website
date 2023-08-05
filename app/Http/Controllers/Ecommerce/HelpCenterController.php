@@ -12,7 +12,10 @@ class HelpCenterController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $topQuestions=Faq::select("id", "question", "slug")->orderBy("helpful", "desc")->take(9)->get();
+        $topQuestions=Faq::select("id", "question", "slug")
+                         ->orderBy("helpful", "desc")
+                         ->take(9)
+                         ->get();
 
         $faqSubCategories=FaqSubCategory::select("id", "icon", "name", "slug")->get();
 
@@ -21,15 +24,18 @@ class HelpCenterController extends Controller
 
     public function searchResult(): Response|ResponseFactory
     {
-        $faqs=Faq::filterBy(request(["search_question"]))->orderBy("id", "desc")->paginate(15)->withQueryString();
+        $faqs=Faq::filterBy(request(["search_question"]))
+                 ->orderBy("id", "desc")
+                 ->paginate(15)
+                 ->withQueryString();
 
         return inertia("Ecommerce/HelpCenter/QuestionSearchResult", compact("faqs"));
     }
 
-    public function contactPhoneCall(): Response|ResponseFactory
-    {
-        $faqs=Faq::filterBy(request(["search_question"]))->orderBy("id", "desc")->paginate(15)->withQueryString();
+    // public function contactPhoneCall(): Response|ResponseFactory
+    // {
+    //     $faqs=Faq::filterBy(request(["search_question"]))->orderBy("id", "desc")->paginate(15)->withQueryString();
 
-        return inertia("Ecommerce/HelpCenter/PhoneCall", compact("faqs"));
-    }
+    //     return inertia("Ecommerce/HelpCenter/PhoneCall", compact("faqs"));
+    // }
 }

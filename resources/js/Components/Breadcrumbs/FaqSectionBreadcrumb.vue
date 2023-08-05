@@ -1,4 +1,6 @@
 <script setup>
+import { Link } from "@inertiajs/vue3";
+
 defineProps({
   faqSubCategory: Object,
 });
@@ -9,14 +11,14 @@ defineProps({
     <nav class="flex" aria-label="Breadcrumb">
       <ol class="inline-flex items-center space-x-1 md:space-x-3">
         <li class="inline-flex items-center">
-          <a
-            href="#"
+          <Link
+            :href="route('faqs.index')"
             class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
           >
             <i class="fa-solid fa-list mr-3 text-dark"></i>
 
-            Categories
-          </a>
+            {{ __("CATEGORIES") }}
+          </Link>
         </li>
         <li v-if="faqSubCategory?.faq_category">
           <div class="flex items-center">
@@ -35,11 +37,11 @@ defineProps({
                 d="m1 9 4-4-4-4"
               />
             </svg>
-            <a
-              href="#"
-              class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white"
-              >{{ faqSubCategory?.faq_category?.name }}</a
+            <span
+              class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
             >
+              {{ faqSubCategory?.faq_category?.name }}
+            </span>
           </div>
         </li>
         <li v-if="faqSubCategory" aria-current="page">

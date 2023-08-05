@@ -4,8 +4,7 @@ import Pagination from "@/Components/Paginations/Pagination.vue";
 import FaqCategorySidebar from "@/Components/Sidebars/FaqCategorySidebar.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/FaqSectionBreadcrumb.vue";
 import FaqSearchFormInput from "@/Components/Forms/FaqSearchFormInput.vue";
-import { Head, Link, usePage, router } from "@inertiajs/vue3";
-import { reactive } from "vue";
+import { Head, Link } from "@inertiajs/vue3";
 
 defineProps({
   faqCategories: Object,
@@ -20,7 +19,7 @@ defineProps({
 
     <div class="min-h-[1400px] h-auto bg-gray-50 mt-40 w-full">
       <div class="container mx-auto py-8">
-        <h1 class="font-bold text-2xl">Frequently Ask Questions?</h1>
+        <h1 class="font-bold text-2xl">{{ __("FREQUENTLY_ASK_QUESTIONS") }}</h1>
 
         <div class="flex items-start justify-between mt-10">
           <!-- Categories Sidebar -->
@@ -31,13 +30,13 @@ defineProps({
             <FaqSearchFormInput />
 
             <p
-              v-if="$page.props.ziggy.query.search_question"
+              v-if="$page.props.ziggy.query?.search_question"
               class="text-sm font-bold my-5 text-gray-700"
             >
-              {{ faqs.total }} question(s) found for search result
+              {{ faqs.total }} {{ __("QUESTION_FOUND_FOR_SEARCH_RESULT") }}
               <span class="text-blue-600"
-                >"{{ $page.props.ziggy.query.search_question }}"</span
-              >
+                >"{{ $page.props.ziggy.query?.search_question }}"
+              </span>
             </p>
 
             <!-- Result -->

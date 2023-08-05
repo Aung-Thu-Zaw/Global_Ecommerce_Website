@@ -12,7 +12,7 @@ defineProps({
   >
     <h3 class="py-3 bg-blue-700 text-white text-md font-bold text-center">
       <i class="fa-solid fa-list mr-3"></i>
-      Categories
+      {{ __("CATEGORIES") }}
     </h3>
 
     <div class="">

@@ -18,7 +18,7 @@ defineProps({
 
     <div class="min-h-[1400px] h-auto bg-gray-50 mt-40 w-full">
       <div class="container mx-auto py-8">
-        <h1 class="font-bold text-2xl">Frequently Ask Questions?</h1>
+        <h1 class="font-bold text-2xl">{{ __("FREQUENTLY_ASK_QUESTIONS") }}</h1>
 
         <div class="flex items-start justify-between mt-10">
           <!-- Categories Sidebar -->
@@ -71,7 +71,7 @@ defineProps({
                 <div
                   class="my-5 text-sm text-gray-700 font-semibold text-center"
                 >
-                  <p class="mb-5">Is this helpful for you?</p>
+                  <p class="mb-5">{{ __("IS_THIS_HELPFUL_FOR_YOU") }}</p>
 
                   <div class="space-x-5">
                     <button
@@ -80,7 +80,7 @@ defineProps({
                       <i
                         class="fa-solid fa-thumbs-up text-blue-600 group-hover:text-white"
                       ></i>
-                      Yes
+                      {{ __("YES") }}
                     </button>
                     <button
                       class="px-5 py-2 group rounded-sm shadow-sm text-gray-600 text-sm border border-orange-600 hover:bg-orange-600 hover:text-white transition-all"
@@ -88,7 +88,7 @@ defineProps({
                       <i
                         class="fa-solid fa-thumbs-down text-orange-600 group-hover:text-white"
                       ></i>
-                      No
+                      {{ __("NO") }}
                     </button>
                   </div>
                 </div>
@@ -97,7 +97,7 @@ defineProps({
               <!-- Related Questions -->
               <div class="p-6">
                 <h3 class="font-bold text-gray-700 text-md mb-3">
-                  Related Questions :
+                  {{ __("RELATED_QUESTIONS") }} :
                 </h3>
 
                 <ul class="list-disc space-y-3">

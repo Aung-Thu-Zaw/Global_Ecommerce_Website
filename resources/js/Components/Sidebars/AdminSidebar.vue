@@ -66,7 +66,7 @@
         <h6
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
-          {{ __("ADMIN_WEB_CONTROL_AREA") }}
+          {{ __("ECOMMERCE_CONTROL_AREA") }}
         </h6>
 
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">

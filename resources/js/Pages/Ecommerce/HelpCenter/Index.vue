@@ -1,45 +1,14 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Head, Link, router, usePage } from "@inertiajs/vue3";
-import { reactive } from "vue";
+import QuestionCategoryCard from "@/Components/Cards/QuestionCategoryCard.vue";
+import SelfServiceToolCards from "@/Components/Cards/SelfServiceToolCards.vue";
+import QuestionSearchForm from "@/Components/Forms/QuestionSearchForm.vue";
+import { Head, Link } from "@inertiajs/vue3";
 
 defineProps({
   topQuestions: Object,
   faqSubCategories: Object,
 });
-
-const params = reactive({
-  search_question: usePage().props.ziggy.query?.search_question,
-  page: usePage().props.ziggy.query?.page,
-});
-
-// Handle Search
-const handleSearch = () => {
-  router.get(
-    route("help-center.questions.search"),
-    {
-      search_question: params.search_question,
-      page: params.page,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
-
-// Remove Search Param
-const removeSearch = () => {
-  params.search_question = "";
-  router.get(
-    route("help-center.questions.search"),
-    {},
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
 </script>
 
 <template>
@@ -48,7 +17,9 @@ const removeSearch = () => {
 
     <div class="min-h-[1700px] h-auto mt-40 w-full">
       <div class="container mx-auto py-8">
-        <h1 class="font-bold text-2xl">Global E-commerce Help Center</h1>
+        <h1 class="font-bold text-2xl">
+          Global E-commerce {{ __("HELP_CENTER") }}
+        </h1>
       </div>
 
       <!-- Question Search Input -->
@@ -59,36 +30,10 @@ const removeSearch = () => {
         />
         <div class="container mx-auto flex flex-col items-center">
           <h1 class="font-bold text-dark mb-5 text-3xl">
-            Hi, How can we help?
+            {{ __("HI_HOW_CAN_WE_HELP") }}
           </h1>
           <div>
-            <form
-              @submit.prevent="handleSearch"
-              class="w-[700px] h-[50px] mx-auto"
-            >
-              <div class="flex items-center justify-between">
-                <div class="relative">
-                  <input
-                    type="text"
-                    class="w-[650px] h-full py-3 rounded-md borde-2 border-slate-400 focus:ring-0 focus:border-slate-400"
-                    autofocus
-                    placeholder="Search for a question..."
-                    v-model="params.search_question"
-                  />
-                  <i
-                    v-if="params.search_question"
-                    class="fa-solid fa-xmark remove-search"
-                    @click="removeSearch"
-                  ></i>
-                </div>
-
-                <button
-                  class="bg-blue-600 text-white px-6 py-3 h-full rounded-md hover:bg-blue-700 ml-2"
-                >
-                  <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
-              </div>
-            </form>
+            <QuestionSearchForm />
           </div>
         </div>
       </div>
@@ -99,7 +44,7 @@ const removeSearch = () => {
           <h1
             class="font-bold text-gray-600 mb-5 text-xl py-2 inline border-b-2 border-b-slate-500"
           >
-            Top Questions
+            {{ __("TOP_QUESTIONS") }}
           </h1>
         </div>
 
@@ -111,7 +56,7 @@ const removeSearch = () => {
             :href="route('faqs.show', topQuestion.slug)"
           >
             <i class="fa-solid fa-circle mr-2 text-[.5rem]"></i>
-            <span class="hover:text-blue-700"> {{ topQuestion.question }}</span>
+            <span class="hover:text-blue-700 hover:underline font-medium"> {{ topQuestion.question }}</span>
           </Link>
         </div>
       </div>
@@ -122,30 +67,17 @@ const removeSearch = () => {
           <h1
             class="font-bold text-gray-600 mb-5 text-xl py-2 inline border-b-2 border-b-slate-500"
           >
-            Question Categories
+            {{ __("QUESTION_CATEGORIES") }}
           </h1>
         </div>
 
         <div class="grid grid-cols-4 gap-y-4 px-12">
-          <Link
+          <div
             v-for="faqSubCategory in faqSubCategories"
             :key="faqSubCategory.id"
-            :href="route('faqs.index')"
-            :data="{
-              search_question: $page.props.ziggy.query.search_question,
-              category: faqSubCategory.slug,
-            }"
-            class="border border-gray-300 cursor-pointer w-[280px] h-[120px] rounded-md hover:shadow-md p-5 flex flex-col items-center justify-center"
           >
-            <span
-              class="w-10 h-10 text-sm rounded-full flex items-center justify-center shadow-lg bg-blue-600 text-white"
-            >
-              <i v-html="faqSubCategory.icon"></i>
-            </span>
-            <span class="text-gray-700 font-bold text-sm mt-3">{{
-              faqSubCategory.name
-            }}</span>
-          </Link>
+            <QuestionCategoryCard :faqSubCategory="faqSubCategory" />
+          </div>
         </div>
       </div>
 
@@ -155,75 +87,19 @@ const removeSearch = () => {
           <h1
             class="font-bold text-gray-600 mb-5 text-xl py-2 inline border-b-2 border-b-slate-500"
           >
-            Self Service Tools
+            {{ __("SELF_SERVICE_TOOLS") }}
           </h1>
         </div>
 
         <div class="grid grid-cols-4 gap-y-4 px-12">
-          <Link
-            :href="route('my-account.edit')"
-            :data="{ tab: 'edit-profile' }"
-            class="border border-gray-300 cursor-pointer w-[280px] h-[120px] rounded-md hover:shadow-md p-5 flex flex-col items-center justify-center"
-          >
-            <span
-              class="w-10 h-10 text-sm rounded-full flex items-center justify-center shadow-lg bg-blue-600 text-white"
-            >
-              <i class="fa-solid fa-user-gear"></i>
-            </span>
-            <span class="text-gray-700 font-bold text-sm mt-3">My Account</span>
-          </Link>
-
-          <Link
-            :href="route('my-orders.index')"
-            :data="{ tab: 'all-orders' }"
-            class="border border-gray-300 cursor-pointer w-[280px] h-[120px] rounded-md hover:shadow-md p-5 flex flex-col items-center justify-center"
-          >
-            <span
-              class="w-10 h-10 text-sm rounded-full flex items-center justify-center shadow-lg bg-blue-600 text-white"
-            >
-              <i class="fa-solid fa-boxes-packing"></i>
-            </span>
-            <span class="text-gray-700 font-bold text-sm mt-3">My Orders</span>
-          </Link>
-
-          <Link
-            :href="route('return-orders.index')"
-            :data="{ tab: 'requested-return-orders' }"
-            class="border border-gray-300 cursor-pointer w-[280px] h-[120px] rounded-md hover:shadow-md p-5 flex flex-col items-center justify-center"
-          >
-            <span
-              class="w-10 h-10 text-sm rounded-full flex items-center justify-center shadow-lg bg-blue-600 text-white"
-            >
-              <i class="fa-solid fa-money-check-dollar"></i>
-            </span>
-            <span class="text-gray-700 font-bold text-sm mt-3"
-              >Return Orders And Items</span
-            >
-          </Link>
-
-          <Link
-            :href="route('cancel-orders.index')"
-            :data="{ tab: 'requested-cancel-orders' }"
-            class="border border-gray-300 cursor-pointer w-[280px] h-[120px] rounded-md hover:shadow-md p-5 flex flex-col items-center justify-center"
-          >
-            <span
-              class="w-10 h-10 text-sm rounded-full flex items-center justify-center shadow-lg bg-blue-600 text-white"
-            >
-              <i class="fa-solid fa-truck-fast"></i>
-            </span>
-            <span class="text-gray-700 font-bold text-sm mt-3"
-              >Cancel Orders And Items</span
-            >
-          </Link>
+          <SelfServiceToolCards />
         </div>
       </div>
 
       <!-- Contact Us -->
       <div class="container mx-auto my-10">
         <p class="text-[.8rem] text-slate-700 text-center font-bold">
-          Still looking for answers? Chat with us by clicking "Chat Now" or
-          click "Call" to make a call. You can contact us at 09-284784390034
-          from 8:00 AM to 09:30 AM (Monday to Sunday).
+          {{ __("STILL_LOOKING_FOR_ANSWERS") }}
         </p>
 
         <div class="flex items-center justify-center space-x-10 mt-10">
@@ -235,25 +111,23 @@ const removeSearch = () => {
               <i class="fa-solid fa-message text-lg"></i>
             </span>
             <div class="flex flex-col items-start justify-center">
-              <span class="text-lg font-bold">Chat Now</span>
-              <span class="text-[.7rem]">8:00 AM- 09:30 PM</span>
+              <span class="text-lg font-bold">{{ __("CHAT_NOW") }}</span>
+              <span class="text-[.7rem]">8:00 AM - 09:30 PM</span>
             </div>
           </div>
-
-          <span class="font-bold text-slate-700 text-lg">Or</span>
 
           <!-- Email Card -->
           <Link
             as="button"
-            :href="route('help-center.call')"
+            href="#"
             class="rounded-md w-[250px] text-white flex items-center bg-blue-700 px-5 py-3"
           >
             <span class="mr-5">
               <i class="fa-solid fa-phone text-lg"></i>
             </span>
             <div class="flex flex-col items-start justify-center">
-              <span class="text-lg font-bold">Phone Call</span>
-              <span class="text-[.7rem]">8:00 AM- 09:30 PM</span>
+              <span class="text-lg font-bold">{{ __("PHONE_CALL") }}</span>
+              <span class="text-[.7rem]">8:00 AM - 09:30 PM</span>
             </div>
           </Link>
         </div>
