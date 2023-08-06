@@ -66,6 +66,7 @@ Route::middleware(["auth","verified","user.role:admin"])
 
            // Dashboard Notification
            Route::post("/notifications/{notification_id}/read", [AdminDashboardNotificationController::class,"reatNotification"])->name("notifications.read");
+           Route::post("/notifications/read-all", [AdminDashboardNotificationController::class,"markAllAsRead"])->name("notifications.read-all");
 
            // Dashboard Social Traffics
            Route::controller(AdminSocialTrafficController::class)
