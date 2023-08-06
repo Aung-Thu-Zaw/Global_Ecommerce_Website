@@ -10,12 +10,6 @@ const props = defineProps({
   notification: Object,
 });
 
-const formattedTime = computed(() =>
-  props.notification.created_at
-    ? dayjs(props.notification.created_at).fromNow()
-    : ""
-);
-
 const goToDetailPage = () => {
   router.get(
     route("admin.subscribers.index", props.notification.data.subscriber.id)
@@ -46,7 +40,7 @@ const handleNotificationReadAt = () => {
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
-      class="flex-shrink-0 bg-green-300 text-green-700 ring-2 ring-green-400 w-10 h-10 rounded-full flex items-center justify-center p-3 font-bold"
+      class="flex-shrink-0 bg-green-300 text-green-700 ring-2 ring-green-500 w-10 h-10 rounded-md flex items-center justify-center p-3 font-bold"
     >
       <i
         class="fa-solid fa-bell"
@@ -85,7 +79,7 @@ const handleNotificationReadAt = () => {
           v-if="!notification.read_at"
           class="fa-solid fa-circle animate-pulse text-[.6rem]"
         ></i>
-        {{ formattedTime }}
+        {{ dayjs(notification.created_at).fromNow() }}
       </div>
     </div>
   </div>

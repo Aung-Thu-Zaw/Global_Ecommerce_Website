@@ -10,12 +10,6 @@ const props = defineProps({
   notification: Object,
 });
 
-const formattedTime = computed(() =>
-  props.notification.created_at
-    ? dayjs(props.notification.created_at).fromNow()
-    : ""
-);
-
 const goToQuestion = () => {
   router.get(route("products.show", props.notification.data.product));
 };
@@ -47,7 +41,7 @@ const handleNotificationReadAt = () => {
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
-      class="flex-shrink-0 bg-rose-300 text-rose-700 ring-2 ring-rose-400 w-10 h-10 rounded-full flex items-center justify-center p-3 font-bold"
+      class="flex-shrink-0 bg-rose-300 text-rose-700 ring-2 ring-rose-500 w-10 h-10 rounded-md flex items-center justify-center p-3 font-bold"
     >
       <i class="fa-solid fa-question"></i>
     </div>
@@ -82,7 +76,7 @@ const handleNotificationReadAt = () => {
           v-if="!notification.read_at"
           class="fa-solid fa-circle animate-pulse text-[.6rem]"
         ></i>
-        {{ formattedTime }}
+        {{ dayjs(notification.created_at).fromNow() }}
       </div>
     </div>
   </div>

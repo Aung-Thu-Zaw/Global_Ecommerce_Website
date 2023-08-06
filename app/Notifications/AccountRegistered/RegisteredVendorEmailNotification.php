@@ -49,7 +49,7 @@ class RegisteredVendorEmailNotification extends Notification
         ->line("Shop Name: ".$this->user->shop_name)
         ->line("Email: ".$this->user->email)
         ->line("Registration Date: ".Carbon::parse($this->user->created_at)->format("Y-m-d"))
-        ->action('See More Details', route('admin.vendors.register.show', $this->user->id));
+        ->action('See More Details', route('admin.vendors.registered.show', $this->user->id));
     }
 
 

@@ -49,7 +49,7 @@ class RegisteredUserEmailNotification extends Notification
         ->line("Name: ".$this->user->name)
         ->line("Email: ".$this->user->email)
         ->line("Registration Date: ".Carbon::parse($this->user->created_at)->format("Y-m-d"))
-        ->action('See More Details', route('admin.users.register.show', $this->user->id));
+        ->action('See More Details', route('admin.users.registered.show', $this->user->id));
 
     }
 

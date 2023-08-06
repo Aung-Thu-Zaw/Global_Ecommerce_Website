@@ -6,6 +6,7 @@ import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import { Link, Head } from "@inertiajs/vue3";
+import { computed } from "vue";
 
 const props = defineProps({
   queryStringParams: Array,
@@ -22,6 +23,12 @@ const status = (last_activity) => {
 
   return timeDifference < threshold ? "active" : "offline";
 };
+
+const defaultAvatar = computed(() =>
+  props.user.avatar.startsWith(
+    "http://localhost:8000/storage/avatars/default-avatar"
+  )
+);
 </script>
 
 <template>
@@ -120,8 +127,13 @@ const status = (last_activity) => {
       <div class="border shadow-md p-10">
         <div class="mb-5 flex items-center justify-center">
           <img
+            v-if="defaultAvatar"
+            src="../../../../../assets/images/user.webp"
+            class="w-48 h-48 rounded-full object-cover ring-4 ring-slate-300 mb-5"
+          />
+          <img
+            v-else
             :src="user.avatar"
-            alt=""
             class="w-48 h-48 rounded-full object-cover ring-4 ring-slate-300 mb-5"
           />
         </div>

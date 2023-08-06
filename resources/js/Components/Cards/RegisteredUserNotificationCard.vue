@@ -1,7 +1,7 @@
 <script setup>
+import { router } from "@inertiajs/vue3";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { computed } from "vue";
 
 dayjs.extend(relativeTime);
 
@@ -9,15 +9,9 @@ const props = defineProps({
   notification: Object,
 });
 
-const formattedTime = computed(() =>
-  props.notification.created_at
-    ? dayjs(props.notification.created_at).fromNow()
-    : ""
-);
-
 const goToDetailPage = () => {
   router.get(
-    route("admin.users.register.show", props.notification.data.user.id)
+    route("admin.users.registered.show", props.notification.data.user.id)
   );
 };
 
@@ -47,7 +41,7 @@ const handleNotificationReadAt = () => {
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
-      class="flex-shrink-0 bg-blue-300 text-blue-700 ring-2 ring-blue-400 w-10 h-10 rounded-full flex items-center justify-center p-3 font-bold"
+      class="flex-shrink-0 bg-blue-300 text-blue-700 ring-2 ring-blue-500 w-10 h-10 rounded-md flex items-center justify-center p-3 font-bold"
     >
       <i
         class="fa-solid fa-user-plus"
@@ -97,7 +91,7 @@ const handleNotificationReadAt = () => {
           v-if="!notification.read_at"
           class="fa-solid fa-circle animate-pulse text-[.6rem]"
         ></i>
-        {{ formattedTime }}
+        {{ dayjs(notification.created_at).fromNow() }}
       </div>
     </div>
   </div>

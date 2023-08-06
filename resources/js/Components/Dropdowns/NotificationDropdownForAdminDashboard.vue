@@ -6,7 +6,7 @@ import DeletedUserNotificationCard from "@/Components/Cards/DeletedUserNotificat
 import DeletedVendorNotificationCard from "@/Components/Cards/DeletedVendorNotificationCard.vue";
 import NewsletterSubscribedNotificationCard from "@/Components/Cards/NewsletterSubscribedNotificationCard.vue";
 import NewSuggestionNotificationCard from "@/Components/Cards/NewSuggestionNotificationCard.vue";
-import { usePage } from "@inertiajs/vue3";
+import { usePage, Link } from "@inertiajs/vue3";
 import { computed, onMounted, ref } from "vue";
 
 const notifications = ref([]);
@@ -110,13 +110,20 @@ onMounted(() => {
   <!-- Dropdown menu -->
   <div
     id="dropdownNotification"
-    class="z-20 w-1/2 hidden h-auto max-h-[800px] overflow-auto max-w-sm bg-white divide-y divide-gray-100 rounded-lg shadow border scrollbar"
+    class="z-20 w-1/2 hidden h-auto max-h-[800px] overflow-auto max-w-sm bg-white divide-y divide-gray-100 rounded-sm border-slate-300 shadow border scrollbar"
     aria-labelledby="dropdownNotificationButton"
   >
     <div
-      class="block px-4 py-2 font-medium text-center text-gray-700 rounded-t-lg bg-gray-50"
+      class="flex items-center justify-between px-4 py-2 font-semibold text-center text-gray-700 rounded-t-lg bg-gray-50"
     >
-      {{ __("NOTIFICATIONS") }}
+      <span class="text-lg">
+        {{ __("NOTIFICATIONS") }}
+      </span>
+      <span class="">
+        <Link href="#" class="text-xs hover:text-blue-600">
+          {{ __("MARK_ALL_AS_READ") }}
+        </Link>
+      </span>
     </div>
 
     <div

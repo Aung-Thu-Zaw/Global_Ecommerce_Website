@@ -30,7 +30,7 @@ const formattedTime = computed(() =>
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
-      class="flex-shrink-0 bg-sky-300 text-sky-700 ring-2 ring-sky-400 w-10 h-10 rounded-full flex items-center justify-center p-3 font-bold"
+      class="flex-shrink-0 bg-sky-300 text-sky-700 ring-2 ring-sky-500 w-10 h-10 rounded-md flex items-center justify-center p-3 font-bold"
     >
       <i class="fa-solid fa-cart-plus"></i>
     </div>
@@ -64,7 +64,7 @@ const formattedTime = computed(() =>
           v-if="!notification.read_at"
           class="fa-solid fa-circle animate-pulse text-[.6rem]"
         ></i>
-        {{ formattedTime }}
+        {{ dayjs(notification.created_at).fromNow() }}
       </div>
     </div>
   </Link>
