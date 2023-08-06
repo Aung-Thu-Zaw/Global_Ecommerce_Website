@@ -7,12 +7,15 @@ use App\Actions\Admin\Products\PermanentlyDeleteAllTrashProductAction;
 use App\Actions\Admin\Products\UpdateProductAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Jobs\Products\SendAdminApprovedOrDisapprovedCreatedNewProductNotificationToVendorDashboard;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Collection;
 use App\Models\Image;
 use App\Models\Product;
 use App\Models\User;
+use App\Notifications\Products\AdminApprovedCreatedNewProductNotification;
+use App\Notifications\Products\AdminDisapprovedCreatedNewProductNotification;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
@@ -156,7 +159,12 @@ class AdminProductController extends Controller
     {
         $product->update(["status"=>$request->status]);
 
-        $message=$request->status==="pending" ? "Product has been successfully disapproved" : "Product has been successfully approved";
+        $vendor=User::findOrFail($product->user_id);
+
+        $product->status==="approved" ? $vendor->notify(new AdminApprovedCreatedNewProductNotification($product)) :
+                                        $vendor->notify(new AdminDisapprovedCreatedNewProductNotification($product));
+
+        $message=$request->status==="disapproved" ? "Product has been successfully disapproved" : "Product has been successfully approved";
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 

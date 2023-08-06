@@ -1,6 +1,7 @@
 <script setup>
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import PendingStatus from "@/Components/Status/PendingStatus.vue";
+import DisapprovedStatus from "@/Components/Status/DisapprovedStatus.vue";
 import ApprovedStatus from "@/Components/Status/ApprovedStatus.vue";
 import NoDiscountStatus from "@/Components/Status/NoDiscountStatus.vue";
 import DiscountStatus from "@/Components/Status/DiscountStatus.vue";
@@ -129,11 +130,15 @@ const handleStatus = async (product) => {
   const result = await swal({
     icon: "question",
     title: `Are you sure you want to set ${
-      product.status === "pending" ? "approve" : "disapprove"
+      product.status === "pending" || product.status === "disapproved"
+        ? "approve"
+        : "disapprove"
     } this product?`,
     showCancelButton: true,
     confirmButtonText: `Yes, ${
-      product.status === "pending" ? "Approve" : "Disapprove"
+      product.status === "pending" || product.status === "disapproved"
+        ? "Approve"
+        : "Disapprove"
     }!`,
     confirmButtonColor: "#2562c4",
     cancelButtonColor: "#626262",
@@ -146,7 +151,10 @@ const handleStatus = async (product) => {
     router.post(
       route("admin.products.handle.status", {
         product: product.slug,
-        status: product.status === "pending" ? "approved" : "pending",
+        status:
+          product.status === "pending" || product.status === "disapproved"
+            ? "approved"
+            : "disapproved",
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
@@ -416,7 +424,11 @@ if (usePage().props.flash.successMessage) {
                 {{ product.status }}
               </PendingStatus>
 
-              <ApprovedStatus v-else>
+              <DisapprovedStatus v-if="product.status === 'disapproved'">
+                {{ product.status }}
+              </DisapprovedStatus>
+
+              <ApprovedStatus v-if="product.status === 'approved'">
                 {{ product.status }}
               </ApprovedStatus>
             </Td>
@@ -439,13 +451,17 @@ if (usePage().props.flash.successMessage) {
                 type="button"
                 :class="{
                   'bg-green-600  hover:bg-green-700 border-green-700':
-                    product.status === 'pending',
+                    product.status === 'pending' ||
+                    product.status === 'disapproved',
                   'bg-orange-600  hover:bg-orange-700 border-orange-700':
                     product.status === 'approved',
                 }"
               >
                 <span
-                  v-if="product.status === 'pending'"
+                  v-if="
+                    product.status === 'pending' ||
+                    product.status === 'disapproved'
+                  "
                   class="group-hover:animate-pulse"
                 >
                   <i class="fa-solid fa-check"></i>

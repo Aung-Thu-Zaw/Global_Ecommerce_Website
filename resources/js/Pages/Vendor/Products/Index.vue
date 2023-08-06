@@ -2,6 +2,7 @@
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import PendingStatus from "@/Components/Status/PendingStatus.vue";
 import ApprovedStatus from "@/Components/Status/ApprovedStatus.vue";
+import DisapprovedStatus from "@/Components/Status/DisapprovedStatus.vue";
 import NoDiscountStatus from "@/Components/Status/NoDiscountStatus.vue";
 import DiscountStatus from "@/Components/Status/DiscountStatus.vue";
 import SortingArrows from "@/Components/Table/SortingArrows.vue";
@@ -316,7 +317,11 @@ if (usePage().props.flash.successMessage) {
                 {{ product.status }}
               </PendingStatus>
 
-              <ApprovedStatus v-else>
+              <DisapprovedStatus v-if="product.status === 'disapproved'">
+                {{ product.status }}
+              </DisapprovedStatus>
+
+              <ApprovedStatus v-if="product.status === 'approved'">
                 {{ product.status }}
               </ApprovedStatus>
             </Td>

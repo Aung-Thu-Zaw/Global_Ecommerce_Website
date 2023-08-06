@@ -1,6 +1,8 @@
 <script setup>
 import FollowedShopNotificationCard from "@/Components/Cards/FollowedShopNotificationCard.vue";
 import ProductQuestionNotificationCard from "@/Components/Cards/ProductQuestionNotificationCard.vue";
+import ApprovedCreatedNewProductNotificationCard from "@/Components/Cards/ApprovedCreatedNewProductNotificationCard.vue";
+import DisapprovedCreatedNewProductNotificationCard from "@/Components/Cards/DisapprovedCreatedNewProductNotificationCard.vue";
 import { usePage, router } from "@inertiajs/vue3";
 import { computed, onMounted, ref } from "vue";
 
@@ -18,7 +20,7 @@ onMounted(() => {
       if (
         notification.type === "App\\Notifications\\FollowedShopNotification"
       ) {
-        notifications.value.push({
+        notifications.value.unshift({
           id: notification.id,
           type: notification.type,
           data: {
@@ -29,13 +31,28 @@ onMounted(() => {
         notification.type ===
         "App\\Notifications\\ProductQuestions\\NewProductQuestionFromUserNotification"
       ) {
-        notifications.value.push({
+        notifications.value.unshift({
           id: notification.id,
           type: notification.type,
           data: {
             message: notification.message,
             product: notification.product,
             question: notification.question,
+          },
+        });
+      } else if (
+        notification.type ===
+          "App\\Notifications\\Products\\AdminApprovedCreatedNewProductNotification" ||
+        notification.type ===
+          "App\\Notifications\\Products\\AdminDisapprovedCreatedNewProductNotification"
+      ) {
+        console.log(notification);
+        notifications.value.unshift({
+          id: notification.id,
+          type: notification.type,
+          data: {
+            message: notification.message,
+            product: notification.product,
           },
         });
       }
@@ -135,6 +152,10 @@ const handleMarkAllAsRead = () => {
     >
       <FollowedShopNotificationCard :notification="notification" />
       <ProductQuestionNotificationCard :notification="notification" />
+      <ApprovedCreatedNewProductNotificationCard :notification="notification" />
+      <DisapprovedCreatedNewProductNotificationCard
+        :notification="notification"
+      />
     </div>
 
     <div class="w-full text-center py-3" v-if="!notifications.length">
