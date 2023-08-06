@@ -6,7 +6,8 @@ import DeletedUserNotificationCard from "@/Components/Cards/DeletedUserNotificat
 import DeletedVendorNotificationCard from "@/Components/Cards/DeletedVendorNotificationCard.vue";
 import NewsletterSubscribedNotificationCard from "@/Components/Cards/NewsletterSubscribedNotificationCard.vue";
 import NewSuggestionNotificationCard from "@/Components/Cards/NewSuggestionNotificationCard.vue";
-import { usePage, Link, router } from "@inertiajs/vue3";
+import VendorCreateNewProductNotificationCard from "@/Components/Cards/VendorCreateNewProductNotificationCard.vue";
+import { usePage, router } from "@inertiajs/vue3";
 import { computed, onMounted, onUpdated, ref } from "vue";
 
 const notifications = ref([]);
@@ -76,6 +77,18 @@ onMounted(() => {
           data: {
             message: notification.message,
             suggestion: notification.suggestion,
+          },
+        });
+      } else if (
+        notification.type ===
+        "App\\Notifications\\Products\\VendorCreateNewProductNotification"
+      ) {
+        notifications.value.unshift({
+          id: notification.id,
+          type: notification.type,
+          data: {
+            message: notification.message,
+            product: notification.product,
           },
         });
       }
@@ -180,6 +193,7 @@ const handleMarkAllAsRead = () => {
       <NewsletterSubscribedNotificationCard :notification="notification" />
       <NewSuggestionNotificationCard :notification="notification" />
       <OrderPlacedNotificationCard :notification="notification" />
+      <VendorCreateNewProductNotificationCard :notification="notification" />
     </div>
 
     <div class="w-full text-center py-3" v-if="!sortedNotifications.length">

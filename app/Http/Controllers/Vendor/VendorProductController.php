@@ -7,6 +7,7 @@ use App\Actions\Vendor\Products\PermanentlyDeleteAllTrashProductAction;
 use App\Actions\Vendor\Products\UpdateProductAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Jobs\Products\SendVendorCreateNewProductNotificationToAdminDashboard;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Image;
@@ -51,7 +52,9 @@ class VendorProductController extends Controller
 
     public function store(ProductRequest $request): RedirectResponse
     {
-        (new CreateProductAction())->handle($request->validated());
+        $product=(new CreateProductAction())->handle($request->validated());
+
+        SendVendorCreateNewProductNotificationToAdminDashboard::dispatch($product);
 
         $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
 

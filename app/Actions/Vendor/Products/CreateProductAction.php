@@ -14,7 +14,7 @@ class CreateProductAction
     /**
      * @param array<mixed> $data
      */
-    public function handle(array $data): void
+    public function handle(array $data): Product
     {
         $image = isset($data["image"]) ? (new ProductImageUploadService())->createImage($data["image"]) : null;
 
@@ -58,6 +58,8 @@ class CreateProductAction
             (new ProductMultiImageUploadService())->createMultiImage($data["multi_image"], $product);
 
         }
+
+        return $product;
 
     }
 }
