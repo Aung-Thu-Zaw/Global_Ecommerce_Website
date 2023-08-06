@@ -68,21 +68,23 @@ class ShopController extends Controller
 
         $paginateProductReviews=ProductReview::with(["product.sizes","product.colors","product.types","product.brand","user.orders.orderItems","reply.user:id,shop_name,avatar"])
                                              ->where("vendor_id", $shop ? $shop->id : "")
+                                             ->whereStatus(1)
                                              ->orderBy("id", "desc")
                                              ->paginate(5);
 
-        $productReviews=ProductReview::where("vendor_id", $shop ? $shop->id : "")->get();
+        $productReviews=ProductReview::where("vendor_id", $shop ? $shop->id : "")->whereStatus(1)->get();
 
-        $productReviewsAvg=ProductReview::where("vendor_id", $shop ? $shop->id : "")->avg("rating");
+        $productReviewsAvg=ProductReview::where("vendor_id", $shop ? $shop->id : "")->whereStatus(1)->avg("rating");
 
         $paginateShopReviews=ShopReview::with(["user:id,name,avatar","reply.user:id,shop_name,avatar"])
                                        ->where("vendor_id", $shop ? $shop->id : "")
+                                       ->whereStatus(1)
                                        ->orderBy("id", "desc")
                                        ->paginate(5);
 
-        $shopReviews=ShopReview::where("vendor_id", $shop ? $shop->id : "")->get();
+        $shopReviews=ShopReview::where("vendor_id", $shop ? $shop->id : "")->whereStatus(1)->get();
 
-        $shopReviewsAvg=ShopReview::where("vendor_id", $shop ? $shop->id : "")->avg("rating");
+        $shopReviewsAvg=ShopReview::where("vendor_id", $shop ? $shop->id : "")->whereStatus(1)->avg("rating");
 
         $categories=Category::join('products', 'categories.id', '=', 'products.category_id')
                             ->join('users', 'products.user_id', '=', 'users.id')
