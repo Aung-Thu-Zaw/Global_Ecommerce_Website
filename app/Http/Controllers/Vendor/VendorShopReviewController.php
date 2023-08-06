@@ -7,6 +7,7 @@ use App\Models\ShopReview;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 
 class VendorShopReviewController extends Controller
 {
@@ -25,11 +26,11 @@ class VendorShopReviewController extends Controller
         return inertia("Vendor/ShopReviews/Index", compact("shopReviews"));
     }
 
-    public function show(int $shopReviewId): Response|ResponseFactory
+    public function show(Request $request, ShopReview $shopReview): Response|ResponseFactory
     {
-        $queryStringParams=[ "page"=>request("page"),"per_page"=>request("per_page"),"sort"=>request("sort"),"direction"=>request("direction")];
+        $shopReview->load(["shop:id,shop_name","user:id,name,email"]);
 
-        $shopReview=ShopReview::with(["user:id,name,email","shop:id,shop_name"])->findOrFail($shopReviewId);
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
         return inertia("Vendor/ShopReviews/Details", compact("shopReview", "queryStringParams"));
     }

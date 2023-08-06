@@ -6,7 +6,7 @@ import PublishedStatus from "@/Components/Status/PublishedStatus.vue";
 import { Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
-  queryStringParams: Object,
+  queryStringParams: Array,
   productReview: Object,
 });
 </script>
@@ -37,7 +37,7 @@ const props = defineProps({
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
               >
-                {{ productReview.user.email }}
+                {{ productReview.product.name }}
               </span>
             </div>
           </li>
@@ -63,7 +63,6 @@ const props = defineProps({
             </div>
           </li>
         </Breadcrumb>
-
         <!-- Go Back Button -->
         <div>
           <Link
@@ -75,10 +74,12 @@ const props = defineProps({
               sort: props.queryStringParams.sort,
               direction: props.queryStringParams.direction,
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+            class="goback-btn"
           >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
+            </span>
           </Link>
         </div>
       </div>
@@ -89,7 +90,6 @@ const props = defineProps({
             class="w-full text-sm text-left text-gray-500 border overflow-hidden shadow rounded-md my-5"
           >
             <div>
-              <!-- Product Name -->
               <div
                 class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
               >
@@ -102,8 +102,6 @@ const props = defineProps({
                   {{ productReview.product.name }}
                 </span>
               </div>
-
-              <!-- Reviewer Name -->
               <div class="border-b py-3 bg-gray-50 flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
@@ -115,7 +113,6 @@ const props = defineProps({
                 </span>
               </div>
 
-              <!-- Reviewer Email -->
               <div
                 class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
               >
@@ -128,8 +125,6 @@ const props = defineProps({
                   {{ productReview.user.email }}
                 </span>
               </div>
-
-              <!-- Review Date -->
               <div class="border-b py-3 bg-gray-50 flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
@@ -140,8 +135,6 @@ const props = defineProps({
                   {{ productReview.created_at }}
                 </span>
               </div>
-
-              <!-- Rating -->
               <div
                 class="bg-white border-b py-3 dark:bg-gray-900 flex items-center"
               >
@@ -154,8 +147,6 @@ const props = defineProps({
                   <TotalRatingStars :rating="productReview.rating" />
                 </span>
               </div>
-
-              <!-- Status -->
               <div class="border-b py-3 bg-gray-50 flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
@@ -169,7 +160,6 @@ const props = defineProps({
                 </span>
               </div>
 
-              <!-- Review Text -->
               <div
                 class="bg-white border-b py-3 dark:bg-gray-900 flex items-start"
               >
@@ -178,10 +168,8 @@ const props = defineProps({
                 >
                   Review Text
                 </span>
-                <span
-                  v-html="productReview.review_text"
-                  class="w-1/2 block pr-5"
-                >
+                <span class="w-1/2 block pr-5">
+                  {{ productReview.review_text }}
                 </span>
               </div>
             </div>

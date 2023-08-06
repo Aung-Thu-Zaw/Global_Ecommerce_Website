@@ -1,5 +1,6 @@
 <script setup>
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
+import SortingArrows from "@/Components/Table/SortingArrows.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -111,7 +112,7 @@ const updateSorting = (sort = "id") => {
 
 <template>
   <VendorDashboardLayout>
-    <Head title="Vendor Product Reviews" />
+    <Head title="Product Reviews" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -125,24 +126,20 @@ const updateSorting = (sort = "id") => {
           <form class="w-[350px] relative">
             <input
               type="text"
-              class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
+              class="search-input"
               placeholder="Search by review text"
               v-model="params.search"
             />
-
             <i
               v-if="params.search"
-              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600"
+              class="fa-solid fa-xmark remove-search"
               @click="removeSearch"
             ></i>
           </form>
 
           <!-- Perpage Select Box -->
           <div class="ml-5">
-            <select
-              class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-              v-model="params.per_page"
-            >
+            <select class="perpage-selectbox" v-model="params.per_page">
               <option value="" disabled>Select</option>
               <option value="5">5</option>
               <option value="10">10</option>
@@ -155,87 +152,30 @@ const updateSorting = (sort = "id") => {
         </div>
       </div>
 
-      <!-- Product Review Table Start -->
+      <!-- Product Review Table End -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="id" />
           </HeaderTh>
+
           <HeaderTh> Product Name </HeaderTh>
+
           <HeaderTh> Reviewer Name </HeaderTh>
+
           <HeaderTh @click="updateSorting('review_text')">
             Review Text
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'review_text',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'review_text',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'review_text',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'review_text',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="review_text" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('rating')">
             Rating
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'rating',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'rating',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'rating',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'rating',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="rating" />
           </HeaderTh>
+
           <HeaderTh>Status</HeaderTh>
+
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
@@ -249,7 +189,7 @@ const updateSorting = (sort = "id") => {
             </BodyTh>
 
             <Td>
-              <span class="line-clamp-1">
+              <span class="line-clamp-1 w-[300px]">
                 {{ productReview.product.name }}
               </span>
             </Td>
@@ -278,18 +218,20 @@ const updateSorting = (sort = "id") => {
 
             <Td>
               <Link
-                as="button"
                 :href="route('vendor.product-reviews.show', productReview.id)"
+                as="button"
                 :data="{
                   page: params.page,
                   per_page: params.per_page,
                   sort: params.sort,
                   direction: params.direction,
                 }"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 mr-3"
+                class="detail-btn group"
               >
-                <i class="fa-solid fa-eye"></i>
-                Details
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-eye"></i>
+                  Details
+                </span>
               </Link>
             </Td>
           </Tr>
@@ -301,7 +243,13 @@ const updateSorting = (sort = "id") => {
       <NotAvaliableData v-if="!productReviews.data.length" />
 
       <!-- Pagination -->
-      <Pagination class="mt-6" :links="productReviews.links" />
+      <div v-if="productReviews.data.length" class="mt-6">
+        <p class="text-center text-sm text-gray-600 mb-3 font-bold">
+          Showing {{ productReviews.from }} - {{ productReviews.to }} of
+          {{ productReviews.total }}
+        </p>
+        <Pagination :links="productReviews.links" />
+      </div>
     </div>
   </VendorDashboardLayout>
 </template>
