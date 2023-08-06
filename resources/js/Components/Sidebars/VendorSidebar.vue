@@ -62,11 +62,11 @@
 
         <hr class="my-4 md:min-w-full" />
 
-        <!-- Vendor Web Control Area Section -->
+        <!-- Shop Control Area Section -->
         <h6
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
-          {{ __("VENDOR_WEB_CONTROL_AREA") }}
+          {{ __("SHOP_CONTROL_AREA") }}
         </h6>
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
           <li class="items-center">

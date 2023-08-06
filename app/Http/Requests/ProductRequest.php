@@ -42,7 +42,7 @@ class ProductRequest extends FormRequest
             "sizes"=>["nullable","array"],
             "colors"=>["nullable","array"],
             "types"=>["nullable","array"],
-            "status"=>["required","status",Rule::in(["pending","approved"])],
+            "status"=>["required","string",Rule::in(["pending","approved"])],
             "captcha_token"=> ["required",new RecaptchaRule()],
         ];
 

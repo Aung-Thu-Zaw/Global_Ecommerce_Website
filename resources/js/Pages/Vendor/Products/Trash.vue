@@ -1,7 +1,8 @@
 <script setup>
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import ActiveStatus from "@/Components/Status/ActiveStatus.vue";
-import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
+import NoDiscountStatus from "@/Components/Status/NoDiscountStatus.vue";
+import DiscountStatus from "@/Components/Status/DiscountStatus.vue";
+import SortingArrows from "@/Components/Table/SortingArrows.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -12,7 +13,7 @@ import Breadcrumb from "@/Components/Breadcrumbs/ProductBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import VendorDashboardLayout from "@/Layouts/VendorDashboardLayout.vue";
 import { Link, Head, router, usePage } from "@inertiajs/vue3";
-import { inject, reactive, watch } from "vue";
+import { inject, reactive, watch, computed, ref } from "vue";
 
 // Define the Props
 const props = defineProps({
@@ -111,22 +112,34 @@ const updateSorting = (sort = "id") => {
   handleQueryStringParameter();
 };
 
-// Handle Vendor Trash Product Restore
+// Formatted Amount
+const formattedAmount = (amount) => {
+  const totalAmount = parseFloat(amount);
+  if (Number.isInteger(totalAmount)) {
+    return totalAmount.toFixed(0);
+  } else {
+    return totalAmount.toFixed(2);
+  }
+};
+
+// Handle Trash Product Restore
 const handleRestoreTrashProduct = async (trashProductId) => {
   const result = await swal({
-    icon: "info",
+    icon: "question",
     title: "Are you sure you want to restore this product?",
     showCancelButton: true,
-    confirmButtonText: "Yes, restore",
-    confirmButtonColor: "#4d9be9",
+    confirmButtonText: "Yes, Restore It",
+    confirmButtonColor: "#2562c4",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
   });
+
   if (result.isConfirmed) {
     router.post(
       route("vendor.products.restore", {
-        product: trashProductId,
+        trash_product_id: trashProductId,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
@@ -134,6 +147,7 @@ const handleRestoreTrashProduct = async (trashProductId) => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -147,15 +161,16 @@ const handleRestoreTrashProduct = async (trashProductId) => {
   }
 };
 
-// Handle Vendor Trash Product Delete
+// Handle Trash Product Delete
 const handleDeleteTrashProduct = async (trashProductId) => {
   const result = await swal({
-    icon: "warning",
+    icon: "question",
     title: "Are you sure you want to delete it from the trash?",
     text: "Product in the trash will be permanetly deleted! You can't get it back.",
     showCancelButton: true,
-    confirmButtonText: "Yes, delete it !",
-    confirmButtonColor: "#ef4444",
+    confirmButtonText: "Yes, Delete it !",
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -164,13 +179,14 @@ const handleDeleteTrashProduct = async (trashProductId) => {
   if (result.isConfirmed) {
     router.delete(
       route("vendor.products.force.delete", {
-        product: trashProductId,
+        trash_product_id: trashProductId,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
       }),
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -184,15 +200,16 @@ const handleDeleteTrashProduct = async (trashProductId) => {
   }
 };
 
-// Handle Vendor Trash Product Delete Permanently
-const handlePermanentlyDeleteTrashProduct = async () => {
+// Handle Trash Product Delete Permanently
+const handlePermanentlyDeleteTrashProducts = async () => {
   const result = await swal({
-    icon: "warning",
+    icon: "question",
     title: "Are you sure you want to delete it from the trash?",
-    text: "All blog posts in the trash will be permanetly deleted! You can't get it back.",
+    text: "All products in the trash will be permanetly deleted! You can't get it back.",
     showCancelButton: true,
-    confirmButtonText: "Yes, delete it !",
-    confirmButtonColor: "#ef4444",
+    confirmButtonText: "Yes, Delete it !",
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -208,6 +225,7 @@ const handlePermanentlyDeleteTrashProduct = async () => {
       }),
       {},
       {
+        preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
@@ -228,7 +246,7 @@ const handlePermanentlyDeleteTrashProduct = async () => {
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
-        <!-- Breadcrumb  -->
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -256,6 +274,7 @@ const handlePermanentlyDeleteTrashProduct = async () => {
         <!-- Go Back Button -->
         <div>
           <Link
+            as="button"
             :href="route('vendor.products.index')"
             :data="{
               page: 1,
@@ -263,36 +282,35 @@ const handlePermanentlyDeleteTrashProduct = async () => {
               sort: 'id',
               direction: 'desc',
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+            class="goback-btn"
           >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
+            </span>
           </Link>
         </div>
       </div>
 
       <div class="flex items-center justify-end mb-5">
-        <!-- Search Form -->
+        <!-- Search Box -->
         <form class="w-[350px] relative">
           <input
             type="text"
-            class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-            placeholder="Search"
+            class="search-input"
+            placeholder="Search by name"
             v-model="params.search"
           />
 
           <i
             v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-            @click="handleSearchBox"
+            class="fa-solid fa-xmark remove-search"
+            @click="removeSearch"
           ></i>
         </form>
-        <!-- PerPage Dropdown -->
+        <!-- Perpage Select Box -->
         <div class="ml-5">
-          <select
-            class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-            v-model="params.per_page"
-          >
+          <select class="perpage-selectbox" v-model="params.per_page">
             <option value="" selected disabled>Select</option>
             <option value="5">5</option>
             <option value="10">10</option>
@@ -304,267 +322,120 @@ const handlePermanentlyDeleteTrashProduct = async () => {
         </div>
       </div>
 
-      <!-- Auto delete description and button  -->
+      <!-- Product Permanently Delete Button -->
       <p class="text-left text-sm font-bold mb-2 text-warning-600">
         Products in the Trash will be automatically deleted after 60 days.
         <button
-          @click="handlePermanentlyDeleteTrashProduct"
-          class="text-primary-500 rounded-md px-2 py-1 hover:bg-primary-200 hover:text-primary-600 transition-all hover:animate-bounce"
+          @click="handlePermanentlyDeleteTrashProducts"
+          class="empty-trash-btn"
         >
           Empty the trash now
         </button>
       </p>
 
-      <!-- Trash Product Table -->
+      <!-- Trash Product Table Start -->
       <TableContainer>
-        <!-- Table Header -->
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="id" />
           </HeaderTh>
+
           <HeaderTh> Image </HeaderTh>
+
           <HeaderTh @click="updateSorting('name')">
             Name
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'name',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'name',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="name" />
           </HeaderTh>
-          <HeaderTh @click="updateSorting('qty')">
-            Qty
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'qty',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'qty',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'qty',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'qty',
-              }"
-            ></i>
-          </HeaderTh>
+
           <HeaderTh @click="updateSorting('price')">
             Price
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'price',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'price',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'price',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'price',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="price" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('discount')">
             Discount (%)
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'discount',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'discount',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'discount',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'discount',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="discount" />
           </HeaderTh>
-          <HeaderTh @click="updateSorting('status')">
-            Status
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'status',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'status',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'status',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'status',
-              }"
-            ></i>
+
+          <HeaderTh @click="updateSorting('deleted_at')">
+            Deleted At
+            <SortingArrows :params="params" sort="deleted_at" />
           </HeaderTh>
-          <HeaderTh @click="updateSorting('created_at')">
-            Created At
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'created_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'created_at',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'created_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'created_at',
-              }"
-            ></i>
-          </HeaderTh>
+
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
-        <!-- Table Body  -->
         <tbody v-if="trashProducts.data.length">
           <Tr v-for="trashProduct in trashProducts.data" :key="trashProduct.id">
-            <BodyTh>{{ trashProduct.id }}</BodyTh>
+            <BodyTh>
+              {{ trashProduct.id }}
+            </BodyTh>
+
             <Td>
-              <img
-                :src="trashProduct.image"
-                class="h-[50px] rounded-sm object-cover shadow-lg ring-2 ring-slate-300"
-                alt=""
+              <img :src="trashProduct.image" class="image" />
+            </Td>
+
+            <Td>
+              {{ trashProduct.name }}
+            </Td>
+
+            <Td> $ {{ formattedAmount(trashProduct.price) }} </Td>
+
+            <Td>
+              <DiscountStatus
+                :price="trashProduct.price"
+                :discount="trashProduct.discount"
               />
+
+              <NoDiscountStatus v-if="!trashProduct.discount" />
             </Td>
-            <Td>{{ trashProduct.name }}</Td>
-            <Td>{{ trashProduct.qty }}</Td>
-            <Td>$ {{ trashProduct.price }}</Td>
+
             <Td>
-              <span
-                v-if="trashProduct.discount"
-                class="bg-green-200 text-green-600 py-1 px-3 rounded-full"
-              >
-                {{
-                  (
-                    ((trashProduct.price - trashProduct.discount) /
-                      trashProduct.price) *
-                    100
-                  ).toFixed(1)
-                }}%
-              </span>
-              <span
-                v-if="!trashProduct.discount"
-                class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full"
-              >
-                No Discount
-              </span>
+              {{ trashProduct.deleted_at }}
             </Td>
+
             <Td>
-              <ActiveStatus v-if="trashProduct.status == 'active'">
-                {{ trashProduct.status }}
-              </ActiveStatus>
-              <InactiveStatus v-if="trashProduct.status == 'inactive'">
-                {{ trashProduct.status }}
-              </InactiveStatus>
-            </Td>
-            <Td>{{ trashProduct.created_at }}</Td>
-            <Td>
+              <!-- Restore Button -->
               <button
                 @click="handleRestoreTrashProduct(trashProduct.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
+                class="edit-btn group"
+                type="button"
               >
-                <i class="fa-solid fa-recycle"></i>
-                Restore
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-recycle"></i>
+                  Restore
+                </span>
               </button>
+
+              <!-- Delete Button -->
               <button
                 @click="handleDeleteTrashProduct(trashProduct.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
+                class="delete-btn group"
+                type="button"
               >
-                <i class="fa-solid fa-trash"></i>
-                Delete Forever
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-trash-can"></i>
+                  Delete Forever
+                </span>
               </button>
             </Td>
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Trash Product Table End -->
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!trashProducts.data.length" />
 
-      <Pagination class="mt-6" :links="trashProducts.links" />
+      <!-- Pagination -->
+      <div v-if="trashProducts.data.length" class="mt-6">
+        <p class="text-center text-sm text-gray-600 mb-3 font-bold">
+          Showing {{ trashProducts.from }} - {{ trashProducts.to }} of
+          {{ trashProducts.total }}
+        </p>
+        <Pagination :links="trashProducts.links" />
+      </div>
     </div>
   </VendorDashboardLayout>
 </template>

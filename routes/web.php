@@ -98,7 +98,7 @@ Route::controller(HelpCenterController::class)
          //  Route::get("/phone-call", "contactPhoneCall")->name("call");
      });
 
-Route::post('/subscribe', [SubscriberController::class, 'store'])->name("subscribe");
+Route::post('/subscribe', [SubscriberController::class, 'store'])->name("subscribe.store");
 
 Route::post('/suggestion', [SuggestionController::class, 'store'])->name("suggestion.store");
 

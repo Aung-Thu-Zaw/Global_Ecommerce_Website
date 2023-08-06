@@ -33,15 +33,15 @@ Route::middleware(["vendor","user.role:vendor"])
               ->name("products.")
               ->group(function () {
                   Route::get("/", "index")->name("index");
-                  Route::get("/{product}", "show")->name("show");
+                  Route::get("/{product}/details", "show")->name("show");
                   Route::get("/create", "create")->name("create");
                   Route::post("/", "store")->name("store");
                   Route::get("/{product}/edit", "edit")->name("edit");
                   Route::post("/{product}", "update")->name("update");
                   Route::delete("/{product}", "destroy")->name("destroy");
                   Route::get("/trash", "trash")->name("trash");
-                  Route::post("/{product}/restore", "restore")->name("restore");
-                  Route::delete("/{product}/force-delete", "forceDelete")->name("force.delete");
+                  Route::post("/{trash_product_id}/restore", "restore")->name("restore");
+                  Route::delete("/{trash_product_id}/force-delete", "forceDelete")->name("force.delete");
                   Route::get("/permanently-delete", "permanentlyDelete")->name("permanently.delete");
               });
 

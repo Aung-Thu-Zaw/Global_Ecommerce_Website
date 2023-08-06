@@ -21,7 +21,7 @@ const handleSubscribe = async () => {
 };
 
 const submit = () => {
-  form.post(route("subscribe"), {
+  form.post(route("subscribe.store"), {
     preserveScroll: true,
     onFinish: () => (form.email = ""),
   });

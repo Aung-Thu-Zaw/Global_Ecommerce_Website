@@ -1,30 +1,41 @@
 <script setup>
-import VendorDashboardLayout from "@/Layouts/VendorDashboardLayout.vue";
-import { Link, useForm, Head, usePage } from "@inertiajs/vue3";
-import { useReCaptcha } from "vue-recaptcha-v3";
+import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
-import FormButton from "@/Components/Buttons/FormButton.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ProductBreadcrumb.vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { Link, useForm, Head, router } from "@inertiajs/vue3";
+import { useReCaptcha } from "vue-recaptcha-v3";
 import { computed, ref } from "vue";
 
+// Define the props
 const props = defineProps({
-  paginate: Array,
+  queryStringParams: Array,
   product: Object,
   brands: Object,
   categories: Object,
 });
 
+// Define Variables
+const processing = ref(false);
+const editor = ClassicEditor;
+const size = ref("");
+const color = ref("");
+const type = ref("");
+const previewPhoto = ref("");
+const multiPreviewPhotos = ref([]);
+
 const sizes = computed(() => props.product.sizes.map((size) => size.name));
-
 const colors = computed(() => props.product.colors.map((color) => color.name));
+const types = computed(() => props.product.types.map((type) => type.name));
 
+// Product Edit Form Data
 const form = useForm({
   name: props.product.name,
   sizes: [...sizes.value],
   colors: [...colors.value],
+  types: [...types.value],
   description: props.product.description,
   image: props.product.image,
   multi_image: [],
@@ -34,22 +45,20 @@ const form = useForm({
   qty: props.product.qty,
   brand_id: props.product.brand_id,
   category_id: props.product.category_id,
-  user_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
+  user_id: props.product.user_id,
+  status: props.product.status,
   hot_deal: props.product.hot_deal,
   special_offer: props.product.special_offer,
   featured: props.product.featured,
-  status: props.product.status,
   captcha_token: null,
 });
 
-const editor = ClassicEditor;
-
-const previewPhoto = ref("");
+// Handle Preview Image
 const getPreviewPhotoPath = (path) => {
   previewPhoto.value.src = URL.createObjectURL(path);
 };
 
-const multiPreviewPhotos = ref([]);
+// Handle Multi Preview Image
 const getMultiPreviewPhotoPath = (paths) => {
   paths.forEach((path) => {
     multiPreviewPhotos.value.push(URL.createObjectURL(path));
@@ -61,6 +70,7 @@ const handleMultiplePhotoChange = (files) => {
   getMultiPreviewPhotoPath(paths);
 };
 
+// Handle Remove Preview Image
 const removeImage = (index) => {
   multiPreviewPhotos.value.splice(index, 1);
 
@@ -68,7 +78,7 @@ const removeImage = (index) => {
   form.multi_image.splice(index, 1);
 };
 
-const size = ref("");
+// Handle Size Tags
 const createSize = (e) => {
   if (e.key === ",") {
     size.value = size.value.split(",").join("").toLowerCase();
@@ -77,13 +87,15 @@ const createSize = (e) => {
   }
   form.sizes = [...new Set(form.sizes)];
 };
+
+// Handle Remove Size
 const removeSize = (removeSize) => {
   form.sizes = form.sizes.filter((size) => {
     return size !== removeSize;
   });
 };
 
-const color = ref("");
+// Handle Color Tags
 const createColor = (e) => {
   if (e.key === ",") {
     color.value = color.value.split(",").join("").toLowerCase();
@@ -93,39 +105,102 @@ const createColor = (e) => {
 
   form.colors = [...new Set(form.colors)];
 };
+
+// Handle Remove Color
 const removeColor = (removeColor) => {
   form.colors = form.colors.filter((color) => {
     return color !== removeColor;
   });
 };
 
-const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
-const handleEditCatrgory = async () => {
-  await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("edit_product");
-  submit();
+// Handle Type Tags
+const createType = (e) => {
+  if (e.key === ",") {
+    type.value = type.value.split(",").join("").toLowerCase();
+    form.types.push(type.value);
+    type.value = "";
+  }
+
+  form.types = [...new Set(form.types)];
 };
 
-const submit = () => {
+// Handle Remove Type
+const removeType = (removeType) => {
+  form.types = form.types.filter((type) => {
+    return type !== removeType;
+  });
+};
+
+// Handle Delete Product Multi Image
+const handleDeleteProductMultiImage = (imageId) => {
+  router.delete(
+    route("vendor.image.destroy", {
+      product_id: props.product.id,
+      image_id: imageId,
+    }),
+    {
+      preserveScroll: true,
+    }
+  );
+};
+
+// Destructing ReCaptcha
+const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+
+// Handle Edit Brand
+const handleEditProduct = async () => {
+  await recaptchaLoaded();
+  form.captcha_token = await executeRecaptcha("edit_product");
+
+  processing.value = true;
+
   form.post(
     route("vendor.products.update", {
       product: props.product.slug,
-      page: props.paginate.page,
-      per_page: props.paginate.per_page,
+      page: props.queryStringParams.page,
+      per_page: props.queryStringParams.per_page,
+      sort: props.queryStringParams.sort,
+      direction: props.queryStringParams.direction,
     }),
     {
-      onFinish: () => form.reset(),
+      replace: true,
+      preserveState: true,
+      onFinish: () => {
+        processing.value = false;
+      },
     }
   );
 };
 </script>
 
 <template>
-  <VendorDashboardLayout>
+  <AdminDashboardLayout>
     <Head title="Edit Product" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span
+                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                >{{ product.name }}</span
+              >
+            </div>
+          </li>
           <li aria-current="page">
             <div class="flex items-center">
               <svg
@@ -149,17 +224,22 @@ const submit = () => {
           </li>
         </Breadcrumb>
 
+        <!-- Go Back Button -->
         <div>
           <Link
             :href="route('vendor.products.index')"
             :data="{
-              page: props.paginate.page,
-              per_page: props.paginate.per_page,
+              page: queryStringParams.page,
+              per_page: queryStringParams.per_page,
+              sort: queryStringParams.sort,
+              direction: queryStringParams.direction,
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+            class="goback-btn"
           >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
+            <span>
+              <i class="fa-solid fa-circle-left"></i>
+              Go Back
+            </span>
           </Link>
         </div>
       </div>
@@ -167,7 +247,7 @@ const submit = () => {
       <div class="border shadow-md p-10">
         <div class="">
           <!-- Edit Product Form -->
-          <form @submit.prevent="handleEditCatrgory" class="">
+          <form @submit.prevent="handleEditProduct" class="">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
               <div class="py-6">
                 <!-- Product Name Field -->
@@ -215,7 +295,7 @@ const submit = () => {
 
                 <!-- Product Color Field -->
                 <div class="mb-6">
-                  <InputLabel for="color" value="Product Colors *" />
+                  <InputLabel for="color" value="Product Colors" />
 
                   <TextInput
                     id="color"
@@ -241,6 +321,34 @@ const submit = () => {
                   </span>
                 </div>
 
+                <!-- Product Type Field -->
+                <div class="mb-6">
+                  <InputLabel for="type" value="Product Types" />
+
+                  <TextInput
+                    id="type"
+                    type="text"
+                    class="mt-1 block w-full mb-2"
+                    v-model="type"
+                    @keyup="createType"
+                    placeholder="Enter Product Type ( Eg. Jeans, Leather, Material, Steel, etc...)"
+                  />
+
+                  <InputError class="mt-2" :message="form.errors.types" />
+
+                  <span
+                    v-for="(type, index) in form.types"
+                    :key="index"
+                    class="bg-blue-600 text-white rounded-sm min-w-[80px] h-auto px-3 py-1 mr-2"
+                  >
+                    <span class="text-sm font-blod mr-5">{{ type }}</span>
+                    <i
+                      class="fas fa-xmark text-white arrow-icon cursor-pointer"
+                      @click="removeType(type)"
+                    ></i>
+                  </span>
+                </div>
+
                 <!-- Product Description Field -->
                 <div class="mb-6">
                   <InputLabel for="description" value="Product Description *" />
@@ -253,28 +361,12 @@ const submit = () => {
                   <InputError class="mt-2" :message="form.errors.description" />
                 </div>
 
-                <!-- Product Status Field -->
-                <div class="mb-6">
-                  <InputLabel for="status" value="Status *" />
-
-                  <select
-                    class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-                    v-model="form.status"
-                  >
-                    <option value="" selected disabled>Select Status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                  </select>
-
-                  <InputError class="mt-2" :message="form.errors.status" />
-                </div>
-
                 <!-- Product Single Image Field -->
                 <div class="mb-6">
                   <InputLabel for="image" value="Product Image ( Main ) *" />
 
                   <input
-                    class="relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-neutral-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out file:-mx-3 file:-my-1.5 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-1.5 file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[margin-inline-end:0.75rem] file:[border-inline-end-width:1px] hover:file:bg-neutral-200 focus:border-primary focus:bg-white focus:text-neutral-700 focus:shadow-[0_0_0_1px] focus:shadow-primary focus:outline-none dark:bg-transparent dark:text-neutral-200 dark:focus:bg-transparent"
+                    class="file-input"
                     type="file"
                     id="image"
                     @input="form.image = $event.target.files[0]"
@@ -282,7 +374,7 @@ const submit = () => {
                   />
 
                   <span class="text-xs text-gray-500">
-                    SVG, PNG, JPG, JPEG, WEBP or GIF (MAX. 800x400px)
+                    SVG, PNG, JPG, JPEG, WEBP or GIF (Max File size : 5 MB)
                   </span>
 
                   <InputError class="mt-2" :message="form.errors.image" />
@@ -296,7 +388,7 @@ const submit = () => {
                   />
 
                   <input
-                    class="relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-neutral-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out file:-mx-3 file:-my-1.5 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-1.5 file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[margin-inline-end:0.75rem] file:[border-inline-end-width:1px] hover:file:bg-neutral-200 focus:border-primary focus:bg-white focus:text-neutral-700 focus:shadow-[0_0_0_1px] focus:shadow-primary focus:outline-none dark:bg-transparent dark:text-neutral-200 dark:focus:bg-transparent"
+                    class="file-input"
                     type="file"
                     id="multiImage"
                     multiple
@@ -305,7 +397,7 @@ const submit = () => {
                   />
 
                   <span class="text-xs text-gray-500">
-                    SVG, PNG, JPG, JPEG, WEBP or GIF (MAX. 800x400px)
+                    SVG, PNG, JPG, JPEG, WEBP or GIF (Max File size : 5 MB)
                   </span>
 
                   <InputError class="mt-2" :message="form.errors.multi_image" />
@@ -313,7 +405,9 @@ const submit = () => {
               </div>
 
               <div class="flex flex-col-reverse lg:flex-col">
-                <div class="border shadow-md p-6 rounded-md mb-5 h-[550px]">
+                <div
+                  class="border shadow-md p-6 rounded-md mb-5 min-h-[730px] h-auto"
+                >
                   <div class="grid grid-cols-2 gap-3">
                     <!-- Product Price Field -->
                     <div class="mb-6">
@@ -393,7 +487,7 @@ const submit = () => {
 
                   <!-- Product Brand Field -->
                   <div class="mb-6">
-                    <InputLabel for="name" value="Product Brand *" />
+                    <InputLabel for="name" value="Product Brand" />
 
                     <select
                       v-model="form.brand_id"
@@ -449,7 +543,7 @@ const submit = () => {
                         type="checkbox"
                         name="bordered-checkbox"
                         v-model="form.hot_deal"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <label
                         for="bordered-checkbox-2"
@@ -468,7 +562,7 @@ const submit = () => {
                         type="checkbox"
                         v-model="form.special_offer"
                         name="bordered-checkbox"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <label
                         for="bordered-checkbox-2"
@@ -486,7 +580,7 @@ const submit = () => {
                         type="checkbox"
                         v-model="form.featured"
                         name="bordered-checkbox"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <label
                         for="bordered-checkbox-2"
@@ -518,7 +612,7 @@ const submit = () => {
                     <span class="text-slate-500 text-sm font-bold"
                       >New Multiple Image</span
                     >
-                    <div class="flex flex-wrap">
+                    <div class="flex flex-wrap space-x-3">
                       <div
                         class="relative"
                         v-for="(multiPreviewPhoto, index) in multiPreviewPhotos"
@@ -539,11 +633,11 @@ const submit = () => {
                     </div>
                   </div>
                   <!-- {{ props.product.images }} -->
-                  <div v-if="props.product.images" class="mb-4">
+                  <div v-if="props.product.images.length" class="mb-4">
                     <span class="text-slate-500 text-sm font-bold"
                       >Exisiting Multiple Image</span
                     >
-                    <div class="flex flex-wrap">
+                    <div class="flex flex-wrap space-x-3">
                       <div
                         v-for="image in props.product.images"
                         :key="image.id"
@@ -555,19 +649,13 @@ const submit = () => {
                           class="h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300 mx-2"
                         />
 
-                        <Link
-                          :href="
-                            route('vendor.image.destroy', {
-                              product_id: props.product.id,
-                              image_id: image.id,
-                            })
-                          "
-                          method="delete"
-                          as="button"
+                        <button
+                          @click="handleDeleteProductMultiImage(image.id)"
+                          type="button"
                           class="bg-red-600 rounded-md px-10 py-2 text-sm text-white hover:bg-red-800 transition-all"
                         >
                           Delete
-                        </Link>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -575,20 +663,41 @@ const submit = () => {
               </div>
             </div>
 
+            <!-- Edit Button -->
             <div class="mb-6">
-              <FormButton>Save</FormButton>
+              <button class="save-btn">
+                <svg
+                  v-if="processing"
+                  aria-hidden="true"
+                  role="status"
+                  class="inline w-4 h-4 mr-3 text-white animate-spin"
+                  viewBox="0 0 100 101"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                    fill="#E5E7EB"
+                  />
+                  <path
+                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                {{ processing ? "Processing..." : "Update" }}
+              </button>
             </div>
           </form>
         </div>
       </div>
     </div>
-  </VendorDashboardLayout>
+  </AdminDashboardLayout>
 </template>
 
 
 <style>
 .ck-editor__editable_inline {
-  min-height: 250px;
+  min-height: 400px;
   border-radius: 200px;
 }
 

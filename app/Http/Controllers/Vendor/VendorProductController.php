@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Vendor;
 
-use App\Actions\CreateProductColorAction;
-use App\Actions\CreateProductSizeAction;
+use App\Actions\Vendor\Products\CreateProductAction;
+use App\Actions\Vendor\Products\PermanentlyDeleteAllTrashProductAction;
+use App\Actions\Vendor\Products\UpdateProductAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Image;
 use App\Models\Product;
-use App\Services\ProductImageUploadService;
-use App\Services\ProductMultiImageUploadService;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
@@ -22,23 +21,22 @@ class VendorProductController extends Controller
     public function index(): Response|ResponseFactory
     {
         $products=Product::search(request("search"))
-                           ->where("user_id", auth()->id())
-                           ->orderBy(request("sort", "id"), request("direction", "desc"))
-                           ->paginate(request("per_page", 10))
-                           ->appends(request()->all());
+                         ->where("user_id", auth()->id())
+                         ->orderBy(request("sort", "id"), request("direction", "desc"))
+                         ->paginate(request("per_page", 10))
+                         ->appends(request()->all());
 
         return inertia("Vendor/Products/Index", compact("products"));
     }
 
-    public function show(Product $product): Response|ResponseFactory
+    public function show(Request $request, Product $product): Response|ResponseFactory
     {
-        $queryStringParams=["page"=>request("page"),"per_page"=>request("per_page")];
+        $product->load("brand:id,name", "shop:id,shop_name", "images", "colors", "sizes", "types");
 
-        $product->load("brand:id,name", "shop:id,shop_name", "images");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
         return inertia("Vendor/Products/Details", compact("product", "queryStringParams"));
     }
-
 
     public function create(): Response|ResponseFactory
     {
@@ -51,101 +49,98 @@ class VendorProductController extends Controller
         return inertia("Vendor/Products/Create", compact("per_page", "brands", "categories"));
     }
 
-    public function store(ProductRequest $request, ProductImageUploadService $productImageUploadService, ProductMultiImageUploadService $productMultiImageUploadService): RedirectResponse
+    public function store(ProductRequest $request): RedirectResponse
     {
-        $product= Product::create($request->validated()+["image"=>$productImageUploadService->createImage($request)]);
+        (new CreateProductAction())->handle($request->validated());
 
-        (new CreateProductSizeAction())->handle($request, $product);
+        $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
 
-        (new CreateProductColorAction())->handle($request, $product);
-
-        $productMultiImageUploadService->createMultiImage($request, $product);
-
-        return to_route("vendor.products.index", "per_page=$request->per_page")->with("success", "Product has been successfully created.");
+        return to_route("vendor.products.index", $queryStringParams)->with("success", "Product has been successfully created.");
     }
 
-
-    public function edit(Product $product): Response|ResponseFactory
+    public function edit(Request $request, Product $product): Response|ResponseFactory
     {
-        $queryStringParams=[ "page"=>request("page"),"per_page"=>request("per_page"),"sort"=>request("sort"),"direction"=>request("direction")];
-
         $brands=Brand::all();
 
         $categories=Category::all();
 
-        $product->load(["sizes","colors","images"]);
+        $product->load(["sizes","colors","types","images"]);
+
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
         return inertia("Vendor/Products/Edit", compact("product", "queryStringParams", "brands", "categories"));
     }
 
-    public function update(ProductRequest $request, Product $product, ProductImageUploadService $productImageUploadService, ProductMultiImageUploadService $productMultiImageUploadService): RedirectResponse
+    public function update(ProductRequest $request, Product $product): RedirectResponse
     {
-        $product->update($request->validated()+["image"=>$productImageUploadService->updateImage($request, $product)]);
+        (new UpdateProductAction())->handle($request->validated(), $product);
 
-        (new CreateProductSizeAction())->handle($request, $product);
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        (new CreateProductColorAction())->handle($request, $product);
-
-        $productMultiImageUploadService->createMultiImage($request, $product);
-
-        return to_route("vendor.products.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product has been successfully updated.");
+        return to_route("vendor.products.index", $queryStringParams)->with("success", "Product has been successfully updated.");
     }
 
     public function destroy(Request $request, Product $product): RedirectResponse
     {
         $product->delete();
 
-        return to_route("vendor.products.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product has been successfully deleted.");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route("vendor.products.index", $queryStringParams)->with("success", "Product has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
     {
         $trashProducts=Product::search(request("search"))
-                                ->onlyTrashed()
-                                ->where("user_id", auth()->id())
-                                ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                ->paginate(request("per_page", 10))
-                                ->appends(request()->all());
-
+                              ->onlyTrashed()
+                              ->where("user_id", auth()->id())
+                              ->orderBy(request("sort", "id"), request("direction", "desc"))
+                              ->paginate(request("per_page", 10))
+                              ->appends(request()->all());
 
         return inertia("Vendor/Products/Trash", compact("trashProducts"));
     }
 
-    public function restore(Request $request, int $id): RedirectResponse
+    public function restore(Request $request, int $trashProductId): RedirectResponse
     {
-        $product = Product::onlyTrashed()->findOrFail($id);
+        $product = Product::onlyTrashed()->findOrFail($trashProductId);
 
         $product->restore();
 
-        return to_route('vendor.products.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product has been successfully restored.");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route('vendor.products.trash', $queryStringParams)->with("success", "Product has been successfully restored.");
     }
 
-    public function forceDelete(Request $request, int $id): RedirectResponse
+    public function forceDelete(Request $request, int $trashProductId): RedirectResponse
     {
-        $product = Product::onlyTrashed()->findOrFail($id);
+        $product = Product::onlyTrashed()->findOrFail($trashProductId);
 
         $multiImages=Image::where("product_id", $product->id)->get();
 
         $multiImages->each(function ($image) {
+
             Image::deleteImage($image);
+
         });
 
-        Product::deleteImage($product);
+        Product::deleteImage($product->image);
 
         $product->forceDelete();
 
-        return to_route('vendor.products.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product has been permanently deleted.");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route('vendor.products.trash', $queryStringParams)->with("success", "Product has been permanently deleted.");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $products = Product::onlyTrashed()->where("user_id", auth()->id())->get();
+        $products = Product::onlyTrashed()->get();
 
-        $products->each(function ($product) {
-            Product::deleteImage($product);
-            $product->forceDelete();
-        });
+        (new PermanentlyDeleteAllTrashProductAction())->handle($products);
 
-        return to_route('vendor.products.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Products have been successfully deleted.");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route('vendor.products.trash', $queryStringParams)->with("success", "Products have been successfully deleted.");
     }
 }

@@ -149,11 +149,11 @@ const handleMarkAllAsRead = () => {
   <!-- Dropdown menu -->
   <div
     id="dropdownNotification"
-    class="z-20 w-1/2 hidden h-auto max-h-[800px] overflow-auto max-w-sm bg-white divide-y divide-gray-100 rounded-sm border-slate-300 shadow border scrollbar"
+    class="z-20 w-1/2 hidden h-auto max-h-[800px] overflow-auto max-w-sm bg-white divide-y divide-gray-200 rounded-[5px] border-slate-300 shadow border scrollbar"
     aria-labelledby="dropdownNotificationButton"
   >
     <div
-      class="flex items-center justify-between px-4 py-2 font-semibold text-center text-gray-700 rounded-t-lg bg-gray-50"
+      class="flex items-center justify-between px-4 py-3 font-semibold text-center text-gray-700 rounded-t-lg bg-gray-50"
     >
       <span class="text-lg">
         {{ __("NOTIFICATIONS") }}
