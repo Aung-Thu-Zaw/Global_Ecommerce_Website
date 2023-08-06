@@ -25,7 +25,13 @@ Route::middleware(["vendor","user.role:vendor"])
          Route::get("/dashboard", [VendorDashboardController::class,"index"])->name("dashboard");
 
          // Dashboard Notification
-         Route::post("/notifications/{notification_id}/read", [VendorDashboardNotificationController::class,"reatNotification"])->name("notifications.read");
+         Route::controller(VendorDashboardNotificationController::class)
+              ->prefix("/notifications")
+              ->name("notifications.")
+              ->group(function () {
+                  Route::post("/{notification_id}/read", "reatNotification")->name("read");
+                  Route::post("/read-all", "markAllAsRead")->name("read-all");
+              });
 
          // Vendor Products Section
          Route::controller(VendorProductController::class)

@@ -1,7 +1,7 @@
 <script setup>
 import FollowedShopNotificationCard from "@/Components/Cards/FollowedShopNotificationCard.vue";
 import ProductQuestionNotificationCard from "@/Components/Cards/ProductQuestionNotificationCard.vue";
-import { usePage } from "@inertiajs/vue3";
+import { usePage, router } from "@inertiajs/vue3";
 import { computed, onMounted, ref } from "vue";
 
 const notifications = ref([]);
@@ -42,6 +42,45 @@ onMounted(() => {
     }
   );
 });
+
+const sortedNotifications = computed(() => {
+  return notifications.value.sort((a, b) => {
+    const aReadAt = new Date(a.read_at);
+    const bReadAt = new Date(b.read_at);
+    const aCreatedAt = new Date(a.created_at);
+    const bCreatedAt = new Date(b.created_at);
+
+    // First, sort by read_at date, with null (unread) values first
+    if (aReadAt === null && bReadAt !== null) return -1;
+    if (aReadAt !== null && bReadAt === null) return 1;
+
+    // Then, sort by read_at date in ascending order (oldest first)
+    if (aReadAt !== null && bReadAt !== null) {
+      if (aReadAt < bReadAt) return -1;
+      if (aReadAt > bReadAt) return 1;
+    }
+
+    // If both are unread or have the same read_at date, sort by created_at date in ascending order (oldest first)
+    if (aCreatedAt < bCreatedAt) return -1;
+    if (aCreatedAt > bCreatedAt) return 1;
+
+    return 0; // Return 0 if both read_at and created_at dates are the same
+  });
+});
+
+const handleMarkAllAsRead = () => {
+  router.post(
+    route("vendor.notifications.read-all"),
+    {
+      notifications: totalUnreadNotifications.value,
+    },
+    {
+      onSuccess: () => {
+        window.location.reload();
+      },
+    }
+  );
+};
 </script>
 
 <template>
@@ -50,7 +89,7 @@ onMounted(() => {
     data-dropdown-toggle="vendorDropdownNotification"
     data-dropdown-placement="bottom"
     data-dropdown-trigger="hover"
-    class="inline-flex items-center justify-center ring-2 ring-slate-300 mx-3 text-sm font-medium w-10 h-10 rounded-full bg-gray-200 text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400"
+    class="inline-flex items-center justify-center ring-2 ring-slate-300 mx-3 text-sm font-medium w-10 h-10 rounded-full bg-gray-200 text-center text-gray-500 hover:text-gray-900 focus:outline-none"
     type="button"
   >
     <i
@@ -70,17 +109,27 @@ onMounted(() => {
   <!-- Dropdown menu -->
   <div
     id="vendorDropdownNotification"
-    class="z-20 w-1/2 hidden h-auto max-h-[800px] overflow-auto max-w-sm bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-800 dark:divide-gray-700 border scrollbar"
+    class="z-20 w-1/2 hidden h-auto max-h-[800px] overflow-auto max-w-sm bg-white divide-y divide-gray-200 rounded-[5px] border-slate-300 shadow border scrollbar"
     aria-labelledby="vendorDropdownNotificationButton"
   >
     <div
-      class="block px-4 py-2 font-medium text-center text-gray-700 rounded-t-lg bg-gray-50 dark:bg-gray-800 dark:text-white"
+      class="flex items-center justify-between px-4 py-3 font-semibold text-center text-gray-700 rounded-t-lg bg-gray-50"
     >
-      {{ __("NOTIFICATIONS") }}
+      <span class="text-lg">
+        {{ __("NOTIFICATIONS") }}
+      </span>
+      <span class="">
+        <button
+          @click="handleMarkAllAsRead"
+          class="text-xs hover:text-blue-600"
+        >
+          {{ __("MARK_ALL_AS_READ") }}
+        </button>
+      </span>
     </div>
 
     <div
-      v-for="notification in notifications"
+      v-for="notification in sortedNotifications"
       :key="notification.id"
       class="divide-y divide-gray-300 dark:divide-gray-700"
     >

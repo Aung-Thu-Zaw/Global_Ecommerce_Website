@@ -65,8 +65,13 @@ Route::middleware(["auth","verified","user.role:admin"])
            Route::get("/dashboard", [AdminDashboardController::class,"index"])->name("dashboard");
 
            // Dashboard Notification
-           Route::post("/notifications/{notification_id}/read", [AdminDashboardNotificationController::class,"reatNotification"])->name("notifications.read");
-           Route::post("/notifications/read-all", [AdminDashboardNotificationController::class,"markAllAsRead"])->name("notifications.read-all");
+           Route::controller(AdminDashboardNotificationController::class)
+                ->prefix("/notifications")
+                ->name("notifications.")
+                ->group(function () {
+                    Route::post("/{notification_id}/read", "reatNotification")->name("read");
+                    Route::post("/read-all", "markAllAsRead")->name("read-all");
+                });
 
            // Dashboard Social Traffics
            Route::controller(AdminSocialTrafficController::class)
