@@ -40,14 +40,14 @@ class HomeController extends Controller
                                      ->limit(3)
                                      ->get();
 
-        $newProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
+        $newProducts=Product::select("id", "seller_id", "image", "name", "slug", "price", "discount", "special_offer")
                             ->with(["productReviews:id,product_id,rating","shop:id,offical"])
                             ->whereStatus("approved")
                             ->orderBy("id", "desc")
                             ->limit(5)
                             ->get();
 
-        $hotDealProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
+        $hotDealProducts=Product::select("id", "seller_id", "image", "name", "slug", "price", "discount", "special_offer")
                                 ->with(["productReviews:id,product_id,rating","shop:id,offical"])
                                 ->whereStatus("approved")
                                 ->whereHotDeal(1)
@@ -55,7 +55,7 @@ class HomeController extends Controller
                                 ->limit(5)
                                 ->get();
 
-        $featuredProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
+        $featuredProducts=Product::select("id", "seller_id", "image", "name", "slug", "price", "discount", "special_offer")
                                  ->with(["productReviews:id,product_id,rating","shop:id,offical"])
                                  ->whereStatus("approved")
                                  ->whereFeatured(1)
@@ -63,7 +63,7 @@ class HomeController extends Controller
                                  ->limit(5)
                                  ->get();
 
-        $randomProducts=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
+        $randomProducts=Product::select("id", "seller_id", "image", "name", "slug", "price", "discount", "special_offer")
                                ->with(["productReviews:id,product_id,rating","shop:id,offical"])
                                ->whereStatus("approved")
                                ->inRandomOrder()

@@ -7,7 +7,6 @@ use App\Http\Requests\WebsiteFeedbackRequest;
 use App\Mail\ForTheSubmitters\ThankForWebsiteFeedbackMail;
 use App\Models\WebsiteFeedback;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class WebsiteFeedbackController extends Controller

@@ -7,7 +7,6 @@ use App\Http\Requests\ConversationRequest;
 use App\Models\Conversation;
 use App\Models\Message;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class ConversationController extends Controller
 {
@@ -25,7 +24,6 @@ class ConversationController extends Controller
 
         return back();
     }
-
 
     public function markMessageAsSeen(Conversation $conversation): RedirectResponse
     {

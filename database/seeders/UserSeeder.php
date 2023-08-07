@@ -40,7 +40,7 @@ class UserSeeder extends Seeder
 
 
         User::factory()->create([
-            "name"=>"seller",
+            "name"=>"Seller",
             "email"=>"seller@gmail.com",
             "password"=>"Password!",
             "role"=>"seller",

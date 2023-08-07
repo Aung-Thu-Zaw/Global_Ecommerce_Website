@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductAnswerRequest;
 use App\Models\ProductAnswer;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class ProductAnswerController extends Controller
 {
@@ -19,11 +18,9 @@ class ProductAnswerController extends Controller
 
     public function updateAnswer(ProductAnswerRequest $request, int $answerId): RedirectResponse
     {
-
         $productAnswer=ProductAnswer::findOrFail($answerId);
 
         $productAnswer->update(["answer_text"=>$request->answer_text]);
-
 
         return back();
     }
@@ -36,6 +33,4 @@ class ProductAnswerController extends Controller
 
         return back();
     }
-
-
 }

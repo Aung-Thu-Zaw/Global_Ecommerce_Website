@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\ReviewManagements\ProductReviews;
+namespace App\Http\Controllers\Admin\ReviewManagements\ProductReviews;
 
 use App\Actions\Admin\ReviewManagements\ProductReviews\PermanentlyDeleteAllTrashProductReviewAction;
 use App\Http\Controllers\Controller;
@@ -30,7 +30,7 @@ class AdminPendingProductReviewController extends Controller
     public function show(Request $request, ProductReview $productReview): Response|ResponseFactory
     {
         $productReview->load(["product:id,name","user:id,name,email"]);
-        
+
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
         return inertia("Admin/ReviewManagements/ProductReviews/PendingReviews/Details", compact("productReview", "queryStringParams"));

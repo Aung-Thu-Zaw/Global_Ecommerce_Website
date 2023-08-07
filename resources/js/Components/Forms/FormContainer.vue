@@ -9,7 +9,7 @@
       class="hidden md:block w-1/2"
     />
     <img
-      v-if="$page.url === '/vendor/login' || $page.url === '/vendor/register'"
+      v-if="$page.url === '/seller/login' || $page.url === '/seller/register'"
       src="../../assets/images/vendor-login.jpg"
       alt=""
       class="hidden md:block w-1/2"

@@ -21,10 +21,10 @@ class CollectionController extends Controller
 
     public function show(Collection $collection): Response|ResponseFactory
     {
-        $products=Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
+        $products=Product::select("id", "seller_id", "image", "name", "slug", "price", "discount", "special_offer")
                          ->with(["productReviews:id,product_id,rating","shop:id,offical"])
                          ->whereStatus("approved")
-                         ->where("collection_id", $collection->id)
+                         ->whereCollectionId($collection->id)
                          ->paginate(20);
 
         return inertia("Ecommerce/Collections/Show", compact("products", "collection"));

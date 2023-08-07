@@ -6,8 +6,6 @@ use App\Actions\CreateMessageAction;
 use App\Events\ChatMessage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MessageRequest;
-use App\Models\User;
-use Illuminate\Http\RedirectResponse;
 
 class MessageController extends Controller
 {

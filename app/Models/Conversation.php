@@ -32,8 +32,8 @@ class Conversation extends Model
     /**
     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,Conversation>
     */
-    public function vendor(): BelongsTo
+    public function seller(): BelongsTo
     {
-        return $this->belongsTo(User::class, "vendor_id");
+        return $this->belongsTo(User::class, "seller_id");
     }
 }

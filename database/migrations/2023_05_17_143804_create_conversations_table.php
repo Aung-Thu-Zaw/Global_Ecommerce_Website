@@ -15,7 +15,7 @@ return new class () extends Migration {
         Schema::create('conversations', function (Blueprint $table) {
             $table->id();
             $table->foreignId("customer_id")->references("id")->on("users")->cascadeOnDelete();
-            $table->foreignId("vendor_id")->references("id")->on("users")->cascadeOnDelete();
+            $table->foreignId("seller_id")->references("id")->on("users")->cascadeOnDelete();
             $table->timestamps();
         });
     }

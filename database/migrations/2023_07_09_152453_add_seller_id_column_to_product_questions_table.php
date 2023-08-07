@@ -13,7 +13,7 @@ return new class () extends Migration {
     public function up()
     {
         Schema::table('product_questions', function (Blueprint $table) {
-            $table->foreignId("shop_id")->after("product_id")->references("id")->on("products")->cascadeOnDelete();
+            $table->foreignId("seller_id")->after("product_id")->references("id")->on("products")->cascadeOnDelete();
         });
     }
 
@@ -25,7 +25,7 @@ return new class () extends Migration {
     public function down()
     {
         Schema::table('product_questions', function (Blueprint $table) {
-            $table->dropConstrainedForeignId("shop_id");
+            $table->dropConstrainedForeignId("seller_id");
         });
     }
 };

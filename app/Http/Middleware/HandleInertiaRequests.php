@@ -65,7 +65,7 @@ class HandleInertiaRequests extends Middleware
 
             "conversations"=>Conversation::with(["messages.user:id,avatar","customer:id,name,avatar,last_activity","vendor:id,shop_name,avatar,offical,last_activity"])
                                          ->where("customer_id", auth()->user() ? auth()->user()->id : null)
-                                         ->orWhere("vendor_id", auth()->user() ? auth()->user()->id : null)
+                                         ->orWhere("seller_id", auth()->user() ? auth()->user()->id : null)
                                          ->get(),
 
             'flash'=>[

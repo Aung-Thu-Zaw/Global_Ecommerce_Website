@@ -48,10 +48,10 @@ use App\Http\Controllers\Admin\FromTheSubmitters\AdminWebsiteFeedbackController;
 use App\Http\Controllers\Admin\FromTheSubmitters\AdminSubscriberController;
 use App\Http\Controllers\Admin\FromTheSubmitters\AdminSuggestionController;
 use App\Http\Controllers\Admin\UserManagements\AdminManage\AdminManageController;
-use App\Http\Controllers\ReviewManagements\ProductReviews\AdminPendingProductReviewController;
-use App\Http\Controllers\ReviewManagements\ProductReviews\AdminPublishedProductReviewController;
-use App\Http\Controllers\ReviewManagements\ShopReviews\AdminPendingShopReviewController;
-use App\Http\Controllers\ReviewManagements\ShopReviews\AdminPublishedShopReviewController;
+use App\Http\Controllers\Admin\ReviewManagements\ProductReviews\AdminPendingProductReviewController;
+use App\Http\Controllers\Admin\ReviewManagements\ProductReviews\AdminPublishedProductReviewController;
+use App\Http\Controllers\Admin\ReviewManagements\ShopReviews\AdminPendingShopReviewController;
+use App\Http\Controllers\Admin\ReviewManagements\ShopReviews\AdminPublishedShopReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/admin/login", [AdminAuthController::class,"login"])->middleware("guest")->name("admin.login");

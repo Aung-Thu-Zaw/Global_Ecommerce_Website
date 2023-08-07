@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\ReviewManagements\ShopReviews;
+namespace App\Http\Controllers\Admin\ReviewManagements\ShopReviews;
 
 use App\Http\Controllers\Controller;
 use App\Models\ShopReview;

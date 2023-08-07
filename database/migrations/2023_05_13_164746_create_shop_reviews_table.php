@@ -14,7 +14,7 @@ return new class () extends Migration {
     {
         Schema::create('shop_reviews', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("vendor_id")->references("id")->on("users")->cascadeOnDelete();
+            $table->foreignId("seller_id")->references("id")->on("users")->cascadeOnDelete();
             $table->foreignId("user_id")->constrained()->cascadeOnDelete();
             $table->text("review_text");
             $table->integer("rating");
