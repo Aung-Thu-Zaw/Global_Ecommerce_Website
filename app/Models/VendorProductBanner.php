@@ -47,10 +47,10 @@ class VendorProductBanner extends Model
         );
     }
 
-    public static function deleteImage(VendorProductBanner $vendorProductBanner): void
+    public static function deleteImage(string $vendorProductBannerImage): void
     {
-        if (!empty($vendorProductBanner->image) && file_exists(storage_path("app/public/product-banners/".pathinfo($vendorProductBanner->image, PATHINFO_BASENAME)))) {
-            unlink(storage_path("app/public/product-banners/".pathinfo($vendorProductBanner->image, PATHINFO_BASENAME)));
+        if (!empty($vendorProductBannerImage) && file_exists(storage_path("app/public/product-banners/".pathinfo($vendorProductBannerImage, PATHINFO_BASENAME)))) {
+            unlink(storage_path("app/public/product-banners/".pathinfo($vendorProductBannerImage, PATHINFO_BASENAME)));
         }
     }
 }

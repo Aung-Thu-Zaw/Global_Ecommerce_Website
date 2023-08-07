@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Vendor;
 
+use App\Actions\Vendor\ProductBanners\CreateVendorProductBannerAction;
+use App\Actions\Vendor\ProductBanners\PermanentlyDeleteAllTrashVendorProductBannerAction;
+use App\Actions\Vendor\ProductBanners\UpdateVendorProductBannerAction;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\VendorProductBannerRequest;
 use App\Models\VendorProductBanner;
-use App\Services\ProductBannerImageUploadService;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
 use Inertia\ResponseFactory;
@@ -21,117 +23,136 @@ class VendorProductBannerController extends Controller
                                                  ->paginate(request("per_page", 10))
                                                  ->appends(request()->all());
 
-        return inertia("Vendor/Product-Banners/Index", compact("vendorProductBanners"));
+        return inertia("Vendor/ProductBanners/Index", compact("vendorProductBanners"));
     }
 
     public function create(): Response|ResponseFactory
     {
         $per_page=request("per_page");
 
-        return inertia("Vendor/Product-Banners/Create", compact("per_page"));
+        return inertia("Vendor/ProductBanners/Create", compact("per_page"));
     }
 
-    public function store(VendorProductBannerRequest $request, ProductBannerImageUploadService $productBannerImageUploadService): RedirectResponse
+    public function store(VendorProductBannerRequest $request): RedirectResponse
     {
-        VendorProductBanner::create($request->validated()+["image"=>$productBannerImageUploadService->createImage($request),"status"=>"hide"]);
+        (new CreateVendorProductBannerAction())->handle($request->validated());
 
-        return to_route("vendor.product-banners.index", "per_page=$request->per_page")->with("success", "Product Banner has been successfully created.");
+        $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
+
+        return to_route("vendor.product-banners.index", $queryStringParams)->with("success", "Product Banner has been successfully created.");
+
     }
 
-    public function edit(VendorProductBanner $vendorProductBanner): Response|ResponseFactory
+    public function edit(Request $request, VendorProductBanner $vendorProductBanner): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return inertia("Vendor/Product-Banners/Edit", compact("vendorProductBanner", "paginate"));
+        return inertia("Vendor/Product-Banners/Edit", compact("vendorProductBanner", "queryStringParams"));
     }
 
-
-    public function update(VendorProductBannerRequest $request, VendorProductBanner $vendorProductBanner, ProductBannerImageUploadService $productBannerImageUploadService): RedirectResponse
+    public function update(VendorProductBannerRequest $request, VendorProductBanner $vendorProductBanner): RedirectResponse
     {
-        $vendorProductBanner->update($request->validated()+["image"=>$productBannerImageUploadService->updateImageForVendor($request, $vendorProductBanner),"status"=>$vendorProductBanner->status]);
+        (new UpdateVendorProductBannerAction())->handle($request->validated(), $vendorProductBanner);
 
-        return to_route("vendor.product-banners.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product Banner has been successfully updated.");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route("vendor.product-banners.index", $queryStringParams)->with("success", "Product Banner has been successfully updated.");
     }
 
     public function destroy(Request $request, VendorProductBanner $vendorProductBanner): RedirectResponse
     {
         $vendorProductBanner->delete();
 
-        return to_route("vendor.product-banners.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product Banner has been successfully deleted.");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route("vendor.product-banners.index", $queryStringParams)->with("success", "Product Banner has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
     {
         $trashVendorProductBanners=VendorProductBanner::search(request("search"))
-                                            ->onlyTrashed()
-                                            ->where("user_id", auth()->id())
-                                            ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                            ->paginate(request("per_page", 10))
-                                            ->appends(request()->all());
+                                                      ->onlyTrashed()
+                                                      ->where("user_id", auth()->id())
+                                                      ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                                      ->paginate(request("per_page", 10))
+                                                      ->appends(request()->all());
 
-        return inertia("Vendor/Product-Banners/Trash", compact("trashVendorProductBanners"));
+        return inertia("Vendor/ProductBanners/Trash", compact("trashVendorProductBanners"));
     }
 
-    public function restore(Request $request, int $id): RedirectResponse
+    public function restore(Request $request, int $trashVendorProductBannerId): RedirectResponse
     {
-        $vendorProductBanner = VendorProductBanner::onlyTrashed()->findOrFail($id);
+        $vendorProductBanner = VendorProductBanner::onlyTrashed()->findOrFail($trashVendorProductBannerId);
 
         $vendorProductBanner->restore();
 
-        return to_route('vendor.product-banners.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product Banner has been successfully restored.");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route('vendor.product-banners.trash', $queryStringParams)->with("success", "Product Banner has been successfully restored.");
     }
 
-    public function forceDelete(Request $request, int $id): RedirectResponse
+    public function forceDelete(Request $request, int $trashVendorProductBannerId): RedirectResponse
     {
-        $vendorProductBanner = VendorProductBanner::onlyTrashed()->findOrFail($id);
+        $vendorProductBanner = VendorProductBanner::onlyTrashed()->findOrFail($trashVendorProductBannerId);
 
-        VendorProductBanner::deleteImage($vendorProductBanner);
+        VendorProductBanner::deleteImage($vendorProductBanner->image);
 
         $vendorProductBanner->forceDelete();
 
-        return to_route('vendor.product-banners.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product Banner has been permanently deleted.");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route('vendor.product-banners.trash', $queryStringParams)->with("success", "Product Banner has been permanently deleted.");
     }
 
-    public function handleShow(Request $request, int $id): RedirectResponse
+    public function handleShow(Request $request, int $vendorProductBannerId): RedirectResponse
     {
         $countVendorProductBanners=VendorProductBanner::where([["user_id", auth()->id() ],["status", "show"]])->count();
 
         if ($countVendorProductBanners >= 6) {
-            return to_route('vendor.product-banners.index', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("error", "You can't display the product banner. Only 6 product banners are allowed.");
+
+            $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+            return to_route('vendor.product-banners.index', $queryStringParams)->with("error", "You can't display the product banner. Only 6 product banners are allowed.");
         }
 
-        $vendorProductBanner = VendorProductBanner::where([["id", $id],["status","hide"]])->first();
+        $vendorProductBanner = VendorProductBanner::where([["id", $vendorProductBannerId],["status","hide"]])->first();
 
         if($vendorProductBanner) {
+
             $vendorProductBanner->update(["status"=>"show"]);
+
         }
 
-        return to_route('vendor.product-banners.index', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Product Banner has been successfully displayed.");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route('vendor.product-banners.index', $queryStringParams)->with("success", "Product Banner has been successfully displayed.");
+
     }
 
-    public function handleHide(Request $request, int $id): RedirectResponse
+    public function handleHide(Request $request, int $vendorProductBannerId): RedirectResponse
     {
-        $vendorProductBanner = VendorProductBanner::where([["id", $id],["status","show"]])->first();
+        $vendorProductBanner = VendorProductBanner::where([["id", $vendorProductBannerId],["status","show"]])->first();
 
         if($vendorProductBanner) {
+
             $vendorProductBanner->update(["status"=>"hide"]);
         }
 
-        return to_route('vendor.product-banners.index', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
-             ->with("success", "Product Banner has been successfully hidden.");
-    }
 
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route('vendor.product-banners.index', $queryStringParams)->with("success", "Product Banner has been successfully hidden.");
+
+    }
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
         $vendorProductBanners = VendorProductBanner::onlyTrashed()->where("user_id", auth()->id())->get();
 
-        $vendorProductBanners->each(function ($vendorProductBanner) {
-            VendorProductBanner::deleteImage($vendorProductBanner);
-            $vendorProductBanner->forceDelete();
-        });
+        (new PermanentlyDeleteAllTrashVendorProductBannerAction())->handle($vendorProductBanners);
 
-        return to_route('vendor.product-banners.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")
-             ->with("success", "Product Banners have been successfully deleted.");
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route('vendor.product-banners.trash', $queryStringParams)->with("success", "Product Banners have been successfully deleted.");
     }
 }

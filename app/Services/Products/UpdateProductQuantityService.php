@@ -8,7 +8,7 @@ use App\Models\Product;
 
 class UpdateProductQuantityService
 {
-    public function updateQuantity(Order $order)
+    public function updateQuantity(Order $order): void
     {
         $orderItems=OrderItem::where("order_id", $order->id)->get();
 
