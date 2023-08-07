@@ -14,7 +14,7 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ProductBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import VendorDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
+import SellerDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
 import { Link, Head, router, usePage } from "@inertiajs/vue3";
 import { reactive, watch, inject, computed, ref } from "vue";
 
@@ -38,7 +38,7 @@ const params = reactive({
 // Handle Search
 const handleSearch = () => {
   router.get(
-    route("vendor.products.index"),
+    route("seller.products.index"),
     {
       search: params.search,
       per_page: params.per_page,
@@ -56,7 +56,7 @@ const handleSearch = () => {
 const removeSearch = () => {
   params.search = "";
   router.get(
-    route("vendor.products.index"),
+    route("seller.products.index"),
     {
       per_page: params.per_page,
       sort: params.sort,
@@ -72,7 +72,7 @@ const removeSearch = () => {
 // Handle Query String Parameter
 const handleQueryStringParameter = () => {
   router.get(
-    route("vendor.products.index"),
+    route("seller.products.index"),
     {
       search: params.search,
       page: params.page,
@@ -142,7 +142,7 @@ const handleProductDelete = async (productSlug) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("vendor.products.destroy", {
+      route("seller.products.destroy", {
         product: productSlug,
         page: params.page,
         per_page: params.per_page,
@@ -173,7 +173,7 @@ if (usePage().props.flash.successMessage) {
 </script>
 
 <template>
-  <VendorDashboardLayout>
+  <SellerDashboardLayout>
     <Head title="Products" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -184,7 +184,7 @@ if (usePage().props.flash.successMessage) {
         <div>
           <Link
             as="button"
-            :href="route('vendor.products.trash')"
+            :href="route('seller.products.trash')"
             :data="{
               page: 1,
               per_page: 10,
@@ -205,7 +205,7 @@ if (usePage().props.flash.successMessage) {
         <!-- Create Product Button -->
         <Link
           as="button"
-          :href="route('vendor.products.create')"
+          :href="route('seller.products.create')"
           :data="{
             per_page: params.per_page,
           }"
@@ -334,7 +334,7 @@ if (usePage().props.flash.successMessage) {
               <!-- Edit Button -->
               <Link
                 as="button"
-                :href="route('vendor.products.edit', product.slug)"
+                :href="route('seller.products.edit', product.slug)"
                 :data="{
                   page: params.page,
                   per_page: params.per_page,
@@ -365,7 +365,7 @@ if (usePage().props.flash.successMessage) {
               <Link
                 v-if="productDetail"
                 as="button"
-                :href="route('vendor.products.show', product.slug)"
+                :href="route('seller.products.show', product.slug)"
                 :data="{
                   page: params.page,
                   per_page: params.per_page,
@@ -397,6 +397,6 @@ if (usePage().props.flash.successMessage) {
         <Pagination :links="products.links" />
       </div>
     </div>
-  </VendorDashboardLayout>
+  </SellerDashboardLayout>
 </template>
 

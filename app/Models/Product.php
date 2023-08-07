@@ -138,7 +138,7 @@ class Product extends Model
     */
     public function shop(): BelongsTo
     {
-        return $this->belongsTo(User::class, "user_id");
+        return $this->belongsTo(User::class, "seller_id");
     }
 
     /**

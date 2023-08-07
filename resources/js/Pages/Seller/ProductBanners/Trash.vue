@@ -8,23 +8,23 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/BannerBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import VendorDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
+import SellerDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
 import { inject, reactive, watch } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
-  trashVendorProductBanners: Object,
+  trashSellerProductBanners: Object,
 });
 
 const swal = inject("$swal");
 
 const params = reactive({
   search: null,
-  page: props.trashVendorProductBanners.current_page
-    ? props.trashVendorProductBanners.current_page
+  page: props.trashSellerProductBanners.current_page
+    ? props.trashSellerProductBanners.current_page
     : 1,
-  per_page: props.trashVendorProductBanners.per_page
-    ? props.trashVendorProductBanners.per_page
+  per_page: props.trashSellerProductBanners.per_page
+    ? props.trashSellerProductBanners.per_page
     : 10,
   sort: "id",
   direction: "desc",
@@ -38,7 +38,7 @@ watch(
   () => params.search,
   () => {
     router.get(
-      route("vendor.product-banners.trash"),
+      route("seller.product-banners.trash"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -57,7 +57,7 @@ watch(
   () => params.per_page,
   () => {
     router.get(
-      route("vendor.product-banners.trash"),
+      route("seller.product-banners.trash"),
       {
         search: params.search,
         page: params.page,
@@ -78,7 +78,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    route("vendor.product-banners.trash"),
+    route("seller.product-banners.trash"),
     {
       search: params.search,
       page: params.page,
@@ -104,7 +104,7 @@ const handleRestore = async (trashBannerId) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("vendor.product-banners.restore", {
+      route("seller.product-banners.restore", {
         id: trashBannerId,
         page: params.page,
         per_page: params.per_page,
@@ -134,7 +134,7 @@ const handleDelete = async (trashBannerId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("vendor.product-banners.forceDelete", {
+      route("seller.product-banners.forceDelete", {
         id: trashBannerId,
         page: params.page,
         per_page: params.per_page,
@@ -164,7 +164,7 @@ const handlePermanentlyDelete = async () => {
 
   if (result.isConfirmed) {
     router.get(
-      route("vendor.product-banners.permanentlyDelete", {
+      route("seller.product-banners.permanentlyDelete", {
         page: params.page,
         per_page: params.per_page,
       })
@@ -180,7 +180,7 @@ const handlePermanentlyDelete = async () => {
 </script>
 
 <template>
-  <VendorDashboardLayout>
+  <SellerDashboardLayout>
     <Head title="Trash Product Banners" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
@@ -232,7 +232,7 @@ const handlePermanentlyDelete = async () => {
 
         <div>
           <Link
-            :href="route('vendor.product-banners.index')"
+            :href="route('seller.product-banners.index')"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
           >
             <i class="fa-solid fa-arrow-left"></i>
@@ -365,31 +365,31 @@ const handlePermanentlyDelete = async () => {
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="trashVendorProductBanners.data.length">
+        <tbody v-if="trashSellerProductBanners.data.length">
           <Tr
-            v-for="trashVendorProductBanner in trashVendorProductBanners.data"
-            :key="trashVendorProductBanner.id"
+            v-for="trashSellerProductBanner in trashSellerProductBanners.data"
+            :key="trashSellerProductBanner.id"
           >
-            <BodyTh>{{ trashVendorProductBanner.id }}</BodyTh>
+            <BodyTh>{{ trashSellerProductBanner.id }}</BodyTh>
             <Td>
               <img
-                :src="trashVendorProductBanner.image"
+                :src="trashSellerProductBanner.image"
                 class="h-[50px] rounded-sm object-cover shadow-lg ring-2 ring-slate-300"
                 alt=""
               />
             </Td>
-            <Td>{{ trashVendorProductBanner.url }}</Td>
-            <Td>{{ trashVendorProductBanner.deleted_at }}</Td>
+            <Td>{{ trashSellerProductBanner.url }}</Td>
+            <Td>{{ trashSellerProductBanner.deleted_at }}</Td>
             <Td>
               <button
-                @click="handleRestore(trashVendorProductBanner.id)"
+                @click="handleRestore(trashSellerProductBanner.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-recycle"></i>
                 Restore
               </button>
               <button
-                @click="handleDelete(trashVendorProductBanner.id)"
+                @click="handleDelete(trashSellerProductBanner.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-trash"></i>
@@ -400,11 +400,11 @@ const handlePermanentlyDelete = async () => {
         </tbody>
       </TableContainer>
 
-      <NotAvaliableData v-if="!trashVendorProductBanners.data.length" />
+      <NotAvaliableData v-if="!trashSellerProductBanners.data.length" />
 
-      <Pagination class="mt-6" :links="trashVendorProductBanners.links" />
+      <Pagination class="mt-6" :links="trashSellerProductBanners.links" />
     </div>
-  </VendorDashboardLayout>
+  </SellerDashboardLayout>
 </template>
 
 

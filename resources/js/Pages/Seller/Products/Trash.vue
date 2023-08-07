@@ -11,7 +11,7 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ProductBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import VendorDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
+import SellerDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
 import { Link, Head, router, usePage } from "@inertiajs/vue3";
 import { inject, reactive, watch, computed, ref } from "vue";
 
@@ -35,7 +35,7 @@ const params = reactive({
 // Handle Search
 const handleSearch = () => {
   router.get(
-    route("vendor.products.trash"),
+    route("seller.products.trash"),
     {
       search: params.search,
       per_page: params.per_page,
@@ -53,7 +53,7 @@ const handleSearch = () => {
 const removeSearch = () => {
   params.search = "";
   router.get(
-    route("vendor.products.trash"),
+    route("seller.products.trash"),
     {
       per_page: params.per_page,
       sort: params.sort,
@@ -69,7 +69,7 @@ const removeSearch = () => {
 // Handle Query String Parameter
 const handleQueryStringParameter = () => {
   router.get(
-    route("vendor.products.trash"),
+    route("seller.products.trash"),
     {
       search: params.search,
       page: params.page,
@@ -138,7 +138,7 @@ const handleRestoreTrashProduct = async (trashProductId) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("vendor.products.restore", {
+      route("seller.products.restore", {
         trash_product_id: trashProductId,
         page: params.page,
         per_page: params.per_page,
@@ -178,7 +178,7 @@ const handleDeleteTrashProduct = async (trashProductId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("vendor.products.force.delete", {
+      route("seller.products.force.delete", {
         trash_product_id: trashProductId,
         page: params.page,
         per_page: params.per_page,
@@ -217,7 +217,7 @@ const handlePermanentlyDeleteTrashProducts = async () => {
 
   if (result.isConfirmed) {
     router.get(
-      route("vendor.products.permanently.delete", {
+      route("seller.products.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
@@ -241,7 +241,7 @@ const handlePermanentlyDeleteTrashProducts = async () => {
 </script>
 
 <template>
-  <VendorDashboardLayout>
+  <SellerDashboardLayout>
     <Head title="Trash products" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
@@ -275,7 +275,7 @@ const handlePermanentlyDeleteTrashProducts = async () => {
         <div>
           <Link
             as="button"
-            :href="route('vendor.products.index')"
+            :href="route('seller.products.index')"
             :data="{
               page: 1,
               per_page: 10,
@@ -437,7 +437,7 @@ const handlePermanentlyDeleteTrashProducts = async () => {
         <Pagination :links="trashProducts.links" />
       </div>
     </div>
-  </VendorDashboardLayout>
+  </SellerDashboardLayout>
 </template>
 
 

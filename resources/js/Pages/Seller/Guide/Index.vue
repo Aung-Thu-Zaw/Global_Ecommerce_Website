@@ -1,16 +1,16 @@
 <script setup>
-import VendorDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
+import SellerDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/SellerDashboardGuideBreadcrumb.vue";
 import { Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
-  vendorDashboardGuides: Object,
+  sellerDashboardGuides: Object,
 });
 </script>
 
 <template>
-  <VendorDashboardLayout>
-    <Head title="Guide" />
+  <SellerDashboardLayout>
+    <Head title="Dashboard Guide" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -23,7 +23,7 @@ const props = defineProps({
         data-accordion="collapse"
         data-active-classes="bg-blue-100 dark:bg-gray-800 text-blue-600 dark:text-white"
       >
-        <div v-for="guide in vendorDashboardGuides" :key="guide.id">
+        <div v-for="guide in sellerDashboardGuides" :key="guide.id">
           <h2 :id="'accordion-color-heading-' + guide.id">
             <button
               type="button"
@@ -63,7 +63,7 @@ const props = defineProps({
         </div>
       </div>
     </div>
-  </VendorDashboardLayout>
+  </SellerDashboardLayout>
 </template>
 
 

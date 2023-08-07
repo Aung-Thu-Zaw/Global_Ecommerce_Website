@@ -1,5 +1,5 @@
 <script setup>
-import VendorDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
+import SellerDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
 import { Link, useForm, Head, usePage } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Forms/InputError.vue";
@@ -34,7 +34,7 @@ const handleCreateProductBanner = async () => {
 
 const submit = () => {
   form.post(
-    route("vendor.product-banners.store", {
+    route("seller.product-banners.store", {
       per_page: props.per_page,
     }),
     {
@@ -45,7 +45,7 @@ const submit = () => {
 </script>
 
 <template>
-  <VendorDashboardLayout>
+  <SellerDashboardLayout>
     <Head title="Create Product Banner" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -96,7 +96,7 @@ const submit = () => {
 
         <div>
           <Link
-            :href="route('vendor.product-banners.index')"
+            :href="route('seller.product-banners.index')"
             :data="{
               per_page: props.per_page,
             }"
@@ -158,5 +158,5 @@ const submit = () => {
         </form>
       </div>
     </div>
-  </VendorDashboardLayout>
+  </SellerDashboardLayout>
 </template>

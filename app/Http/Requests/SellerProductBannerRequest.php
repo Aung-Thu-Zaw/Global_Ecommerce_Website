@@ -36,9 +36,9 @@ class SellerProductBannerRequest extends FormRequest
     public function messages(): array
     {
         return [
-            "seller_id.required" =>  "The user id is required.",
-            "seller_id.numeric" =>  "The user id must be a number.",
-            "seller_id.exists" =>  "The selected user id is invalid.",
+            "seller_id.required" =>  "The seller id is required.",
+            "seller_id.numeric" =>  "The seller id must be a number.",
+            "seller_id.exists" =>  "The selected seller id is invalid.",
             "url.required" =>  "The url is required.",
             "url.url" => "The url must be a valid URL.",
         ];

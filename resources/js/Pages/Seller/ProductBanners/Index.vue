@@ -10,23 +10,23 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/BannerBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import VendorDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
+import SellerDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
 import { Link, Head, router, usePage } from "@inertiajs/vue3";
 import { reactive, watch, inject } from "vue";
 
 const props = defineProps({
-  vendorProductBanners: Object,
+  sellerProductBanners: Object,
 });
 
 const swal = inject("$swal");
 
 const params = reactive({
   search: null,
-  page: props.vendorProductBanners.current_page
-    ? props.vendorProductBanners.current_page
+  page: props.sellerProductBanners.current_page
+    ? props.sellerProductBanners.current_page
     : 1,
-  per_page: props.vendorProductBanners.per_page
-    ? props.vendorProductBanners.per_page
+  per_page: props.sellerProductBanners.per_page
+    ? props.sellerProductBanners.per_page
     : 10,
   sort: "id",
   direction: "desc",
@@ -40,7 +40,7 @@ watch(
   () => params.search,
   () => {
     router.get(
-      route("vendor.product-banners.index"),
+      route("seller.product-banners.index"),
       {
         search: params.search,
         per_page: params.per_page,
@@ -59,7 +59,7 @@ watch(
   () => params.per_page,
   () => {
     router.get(
-      route("vendor.product-banners.index"),
+      route("seller.product-banners.index"),
       {
         search: params.search,
         page: params.page,
@@ -80,7 +80,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    route("vendor.product-banners.index"),
+    route("seller.product-banners.index"),
     {
       search: params.search,
       page: params.page,
@@ -106,7 +106,7 @@ const handleShow = async (hideProductBannerId) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("vendor.product-banners.show", {
+      route("seller.product-banners.show", {
         id: hideProductBannerId,
         page: params.page,
         per_page: params.per_page,
@@ -144,7 +144,7 @@ const handleHide = async (showProductBannerId) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("vendor.product-banners.hide", {
+      route("seller.product-banners.hide", {
         id: showProductBannerId,
         page: params.page,
         per_page: params.per_page,
@@ -174,7 +174,7 @@ const handleDelete = async (productBannerId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("vendor.product-banners.destroy", {
+      route("seller.product-banners.destroy", {
         vendor_product_banner: productBannerId,
         page: params.page,
         per_page: params.per_page,
@@ -198,7 +198,7 @@ if (usePage().props.flash.successMessage) {
 </script>
 
 <template>
-  <VendorDashboardLayout>
+  <SellerDashboardLayout>
     <Head title="Product Banners" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
@@ -229,7 +229,7 @@ if (usePage().props.flash.successMessage) {
         <div>
           <Link
             as="button"
-            :href="route('vendor.product-banners.trash')"
+            :href="route('seller.product-banners.trash')"
             class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
           >
             <i class="fa-solid fa-trash"></i>
@@ -241,7 +241,7 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <Link
-          :href="route('vendor.product-banners.create')"
+          :href="route('seller.product-banners.create')"
           :data="{
             per_page: params.per_page,
           }"
@@ -389,41 +389,41 @@ if (usePage().props.flash.successMessage) {
           <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="vendorProductBanners.data.length">
+        <tbody v-if="sellerProductBanners.data.length">
           <Tr
-            v-for="vendorProductBanner in vendorProductBanners.data"
-            :key="vendorProductBanner.id"
+            v-for="sellerProductBanner in sellerProductBanners.data"
+            :key="sellerProductBanner.id"
           >
-            <BodyTh>{{ vendorProductBanner.id }}</BodyTh>
+            <BodyTh>{{ sellerProductBanner.id }}</BodyTh>
             <Td>
               <img
-                :src="vendorProductBanner.image"
+                :src="sellerProductBanner.image"
                 class="h-[50px] rounded-sm object-cover shadow-lg ring-2 ring-slate-300"
                 alt=""
               />
             </Td>
-            <Td>{{ vendorProductBanner.url }}</Td>
+            <Td>{{ sellerProductBanner.url }}</Td>
             <Td>
-              <ActiveStatus v-if="vendorProductBanner.status == 'show'">
-                {{ vendorProductBanner.status }}
+              <ActiveStatus v-if="sellerProductBanner.status == 'show'">
+                {{ sellerProductBanner.status }}
               </ActiveStatus>
-              <InactiveStatus v-if="vendorProductBanner.status == 'hide'">
-                {{ vendorProductBanner.status }}
+              <InactiveStatus v-if="sellerProductBanner.status == 'hide'">
+                {{ sellerProductBanner.status }}
               </InactiveStatus>
             </Td>
-            <Td>{{ vendorProductBanner.created_at }}</Td>
+            <Td>{{ sellerProductBanner.created_at }}</Td>
             <Td>
               <button
-                v-if="vendorProductBanner.status == 'hide'"
-                @click="handleShow(vendorProductBanner.id)"
+                v-if="sellerProductBanner.status == 'hide'"
+                @click="handleShow(sellerProductBanner.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-emerald-600 text-white hover:bg-emerald-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-eye"></i>
                 Show
               </button>
               <button
-                v-if="vendorProductBanner.status == 'show'"
-                @click="handleHide(vendorProductBanner.id)"
+                v-if="sellerProductBanner.status == 'show'"
+                @click="handleHide(sellerProductBanner.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-orange-600 text-white hover:bg-orange-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-eye-slash"></i>
@@ -432,7 +432,7 @@ if (usePage().props.flash.successMessage) {
               <Link
                 as="button"
                 :href="
-                  route('vendor.product-banners.edit', vendorProductBanner.id)
+                  route('seller.product-banners.edit', sellerProductBanner.id)
                 "
                 :data="{
                   page: params.page,
@@ -444,7 +444,7 @@ if (usePage().props.flash.successMessage) {
                 Edit
               </Link>
               <button
-                @click="handleDelete(vendorProductBanner.id)"
+                @click="handleDelete(sellerProductBanner.id)"
                 class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
               >
                 <i class="fa-solid fa-xmark"></i>
@@ -455,10 +455,10 @@ if (usePage().props.flash.successMessage) {
         </tbody>
       </TableContainer>
 
-      <NotAvaliableData v-if="!vendorProductBanners.data.length" />
+      <NotAvaliableData v-if="!sellerProductBanners.data.length" />
 
-      <Pagination class="mt-6" :links="vendorProductBanners.links" />
+      <Pagination class="mt-6" :links="sellerProductBanners.links" />
     </div>
-  </VendorDashboardLayout>
+  </SellerDashboardLayout>
 </template>
 

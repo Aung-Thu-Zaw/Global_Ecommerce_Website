@@ -13,7 +13,7 @@ import BodyTh from "@/Components/Table/BodyTh.vue";
 import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import VendorDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
+import SellerDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
 import { Head, router, Link } from "@inertiajs/vue3";
 import { inject, reactive, watch } from "vue";
 
@@ -92,7 +92,7 @@ const updateSorting = (sort = "id") => {
 
 
 <template>
-  <VendorDashboardLayout>
+  <SellerDashboardLayout>
     <Head title="Orders" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
@@ -331,6 +331,6 @@ const updateSorting = (sort = "id") => {
 
       <Pagination class="mt-6" :links="orderItems.links" />
     </div>
-  </VendorDashboardLayout>
+  </SellerDashboardLayout>
 </template>
 

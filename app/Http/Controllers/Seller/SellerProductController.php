@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Seller;
 
-use App\Actions\Vendor\Products\CreateProductAction;
-use App\Actions\Vendor\Products\PermanentlyDeleteAllTrashProductAction;
-use App\Actions\Vendor\Products\UpdateProductAction;
+use App\Actions\Seller\Products\CreateProductAction;
+use App\Actions\Seller\Products\PermanentlyDeleteAllTrashProductAction;
+use App\Actions\Seller\Products\PermanentlyDeleteTrashProductAction;
+use App\Actions\Seller\Products\UpdateProductAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
-use App\Models\Image;
 use App\Models\Product;
-use App\Services\BroadcastNotifications\VendorCreatesANewProductNotificationSendToAdminDashboardService;
+use App\Services\BroadcastNotifications\SellerCreatesANewProductNotificationSendToAdminDashboardService;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
@@ -22,12 +22,12 @@ class SellerProductController extends Controller
     public function index(): Response|ResponseFactory
     {
         $products=Product::search(request("search"))
-                         ->where("user_id", auth()->id())
+                         ->where("seller_id", auth()->id())
                          ->orderBy(request("sort", "id"), request("direction", "desc"))
                          ->paginate(request("per_page", 10))
                          ->appends(request()->all());
 
-        return inertia("Vendor/Products/Index", compact("products"));
+        return inertia("Seller/Products/Index", compact("products"));
     }
 
     public function show(Request $request, Product $product): Response|ResponseFactory
@@ -36,7 +36,7 @@ class SellerProductController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return inertia("Vendor/Products/Details", compact("product", "queryStringParams"));
+        return inertia("Seller/Products/Details", compact("product", "queryStringParams"));
     }
 
     public function create(): Response|ResponseFactory
@@ -47,18 +47,18 @@ class SellerProductController extends Controller
 
         $categories=Category::all();
 
-        return inertia("Vendor/Products/Create", compact("per_page", "brands", "categories"));
+        return inertia("Seller/Products/Create", compact("per_page", "brands", "categories"));
     }
 
     public function store(ProductRequest $request): RedirectResponse
     {
         $product=(new CreateProductAction())->handle($request->validated());
 
-        (new VendorCreatesANewProductNotificationSendToAdminDashboardService())->send($product);
+        (new SellerCreatesANewProductNotificationSendToAdminDashboardService())->send($product);
 
         $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
 
-        return to_route("vendor.products.index", $queryStringParams)->with("success", "Product has been successfully created.");
+        return to_route("seller.products.index", $queryStringParams)->with("success", "Product has been successfully created.");
     }
 
     public function edit(Request $request, Product $product): Response|ResponseFactory
@@ -71,7 +71,7 @@ class SellerProductController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return inertia("Vendor/Products/Edit", compact("product", "queryStringParams", "brands", "categories"));
+        return inertia("Seller/Products/Edit", compact("product", "queryStringParams", "brands", "categories"));
     }
 
     public function update(ProductRequest $request, Product $product): RedirectResponse
@@ -80,7 +80,7 @@ class SellerProductController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("vendor.products.index", $queryStringParams)->with("success", "Product has been successfully updated.");
+        return to_route("seller.products.index", $queryStringParams)->with("success", "Product has been successfully updated.");
     }
 
     public function destroy(Request $request, Product $product): RedirectResponse
@@ -89,61 +89,51 @@ class SellerProductController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("vendor.products.index", $queryStringParams)->with("success", "Product has been successfully deleted.");
+        return to_route("seller.products.index", $queryStringParams)->with("success", "Product has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
     {
         $trashProducts=Product::search(request("search"))
                               ->onlyTrashed()
-                              ->where("user_id", auth()->id())
+                              ->where("seller_id", auth()->id())
                               ->orderBy(request("sort", "id"), request("direction", "desc"))
                               ->paginate(request("per_page", 10))
                               ->appends(request()->all());
 
-        return inertia("Vendor/Products/Trash", compact("trashProducts"));
+        return inertia("Seller/Products/Trash", compact("trashProducts"));
     }
 
     public function restore(Request $request, int $trashProductId): RedirectResponse
     {
-        $product = Product::onlyTrashed()->findOrFail($trashProductId);
+        $trashProduct = Product::onlyTrashed()->findOrFail($trashProductId);
 
-        $product->restore();
+        $trashProduct->restore();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('vendor.products.trash', $queryStringParams)->with("success", "Product has been successfully restored.");
+        return to_route('seller.products.trash', $queryStringParams)->with("success", "Product has been successfully restored.");
     }
 
     public function forceDelete(Request $request, int $trashProductId): RedirectResponse
     {
-        $product = Product::onlyTrashed()->findOrFail($trashProductId);
+        $trashProduct = Product::onlyTrashed()->findOrFail($trashProductId);
 
-        $multiImages=Image::where("product_id", $product->id)->get();
-
-        $multiImages->each(function ($image) {
-
-            Image::deleteImage($image);
-
-        });
-
-        Product::deleteImage($product->image);
-
-        $product->forceDelete();
+        (new PermanentlyDeleteTrashProductAction())->handle($trashProduct);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('vendor.products.trash', $queryStringParams)->with("success", "Product has been permanently deleted.");
+        return to_route('seller.products.trash', $queryStringParams)->with("success", "Product has been permanently deleted.");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $products = Product::onlyTrashed()->get();
+        $trashProducts = Product::onlyTrashed()->get();
 
-        (new PermanentlyDeleteAllTrashProductAction())->handle($products);
+        (new PermanentlyDeleteAllTrashProductAction())->handle($trashProducts);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('vendor.products.trash', $queryStringParams)->with("success", "Products have been successfully deleted.");
+        return to_route('seller.products.trash', $queryStringParams)->with("success", "Products have been successfully deleted.");
     }
 }

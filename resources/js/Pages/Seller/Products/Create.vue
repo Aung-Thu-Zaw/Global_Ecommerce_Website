@@ -1,5 +1,5 @@
 <script setup>
-import VendorDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
+import SellerDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
@@ -137,7 +137,7 @@ const handleCreateProduct = async () => {
   processing.value = true;
 
   form.post(
-    route("vendor.products.store", {
+    route("seller.products.store", {
       per_page: props.per_page,
     }),
     {
@@ -152,7 +152,7 @@ const handleCreateProduct = async () => {
 </script>
 
 <template>
-  <VendorDashboardLayout>
+  <SellerDashboardLayout>
     <Head title="Create Product" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -184,7 +184,7 @@ const handleCreateProduct = async () => {
         <div>
           <Link
             as="button"
-            :href="route('vendor.products.index')"
+            :href="route('seller.products.index')"
             :data="{
               per_page: props.per_page,
               sort: 'id',
@@ -619,7 +619,7 @@ const handleCreateProduct = async () => {
         </div>
       </div>
     </div>
-  </VendorDashboardLayout>
+  </SellerDashboardLayout>
 </template>
 
 

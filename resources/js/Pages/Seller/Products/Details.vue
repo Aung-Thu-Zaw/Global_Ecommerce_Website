@@ -1,5 +1,5 @@
 <script setup>
-import VendorDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
+import SellerDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ProductBreadcrumb.vue";
 import NoDiscountStatus from "@/Components/Status/NoDiscountStatus.vue";
 import PendingStatus from "@/Components/Status/PendingStatus.vue";
@@ -25,7 +25,7 @@ const formattedAmount = (amount) => {
 </script>
 
 <template>
-  <VendorDashboardLayout>
+  <SellerDashboardLayout>
     <Head :title="product.name" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
@@ -323,5 +323,5 @@ const formattedAmount = (amount) => {
         </div>
       </div>
     </div>
-  </VendorDashboardLayout>
+  </SellerDashboardLayout>
 </template>

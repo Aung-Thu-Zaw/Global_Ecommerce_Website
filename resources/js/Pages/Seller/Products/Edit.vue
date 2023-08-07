@@ -1,5 +1,5 @@
 <script setup>
-import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import SellerDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
@@ -134,7 +134,7 @@ const removeType = (removeType) => {
 // Handle Delete Product Multi Image
 const handleDeleteProductMultiImage = (imageId) => {
   router.delete(
-    route("vendor.image.destroy", {
+    route("seller.image.destroy", {
       product_id: props.product.id,
       image_id: imageId,
     }),
@@ -155,7 +155,7 @@ const handleEditProduct = async () => {
   processing.value = true;
 
   form.post(
-    route("vendor.products.update", {
+    route("seller.products.update", {
       product: props.product.slug,
       page: props.queryStringParams.page,
       per_page: props.queryStringParams.per_page,
@@ -174,7 +174,7 @@ const handleEditProduct = async () => {
 </script>
 
 <template>
-  <AdminDashboardLayout>
+  <SellerDashboardLayout>
     <Head title="Edit Product" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -227,7 +227,7 @@ const handleEditProduct = async () => {
         <!-- Go Back Button -->
         <div>
           <Link
-            :href="route('vendor.products.index')"
+            :href="route('seller.products.index')"
             :data="{
               page: queryStringParams.page,
               per_page: queryStringParams.per_page,
@@ -691,7 +691,7 @@ const handleEditProduct = async () => {
         </div>
       </div>
     </div>
-  </AdminDashboardLayout>
+  </SellerDashboardLayout>
 </template>
 
 

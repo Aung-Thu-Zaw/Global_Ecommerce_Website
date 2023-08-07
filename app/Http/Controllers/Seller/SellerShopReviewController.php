@@ -23,7 +23,7 @@ class SellerShopReviewController extends Controller
                                ->paginate(request("per_page", 10))
                                ->appends(request()->all());
 
-        return inertia("Vendor/ShopReviews/Index", compact("shopReviews"));
+        return inertia("Seller/ShopReviews/Index", compact("shopReviews"));
     }
 
     public function show(Request $request, ShopReview $shopReview): Response|ResponseFactory
@@ -32,6 +32,6 @@ class SellerShopReviewController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return inertia("Vendor/ShopReviews/Details", compact("shopReview", "queryStringParams"));
+        return inertia("Seller/ShopReviews/Details", compact("shopReview", "queryStringParams"));
     }
 }

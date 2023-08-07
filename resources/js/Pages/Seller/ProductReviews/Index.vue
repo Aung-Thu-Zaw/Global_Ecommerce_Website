@@ -11,7 +11,7 @@ import Breadcrumb from "@/Components/Breadcrumbs/ProductReviewBreadcrumb.vue";
 import PublishedStatus from "@/Components/Status/PublishedStatus.vue";
 import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import VendorDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
+import SellerDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
 import { reactive, watch } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
@@ -32,7 +32,7 @@ const params = reactive({
 // Handle Search
 const handleSearch = () => {
   router.get(
-    route("vendor.product-reviews.index"),
+    route("seller.product-reviews.index"),
     {
       search: params.search,
       per_page: params.per_page,
@@ -50,7 +50,7 @@ const handleSearch = () => {
 const removeSearch = () => {
   params.search = "";
   router.get(
-    route("vendor.product-reviews.index"),
+    route("seller.product-reviews.index"),
     {
       per_page: params.per_page,
       sort: params.sort,
@@ -66,7 +66,7 @@ const removeSearch = () => {
 // Handle Query String Parameter
 const handleQueryStringParameter = () => {
   router.get(
-    route("vendor.product-reviews.index"),
+    route("seller.product-reviews.index"),
     {
       search: params.search,
       page: params.page,
@@ -111,8 +111,8 @@ const updateSorting = (sort = "id") => {
 </script>
 
 <template>
-  <VendorDashboardLayout>
-    <Head title="Product Reviews" />
+  <SellerDashboardLayout>
+    <Head :title="__('PRODUCT_REVIEWS')" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -218,7 +218,7 @@ const updateSorting = (sort = "id") => {
 
             <Td>
               <Link
-                :href="route('vendor.product-reviews.show', productReview.id)"
+                :href="route('seller.product-reviews.show', productReview.id)"
                 as="button"
                 :data="{
                   page: params.page,
@@ -251,6 +251,6 @@ const updateSorting = (sort = "id") => {
         <Pagination :links="productReviews.links" />
       </div>
     </div>
-  </VendorDashboardLayout>
+  </SellerDashboardLayout>
 </template>
 

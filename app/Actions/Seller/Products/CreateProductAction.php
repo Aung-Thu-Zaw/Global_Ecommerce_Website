@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Vendor\Products;
+namespace App\Actions\Seller\Products;
 
 use App\Models\Product;
 use App\Services\ProductImageUploadService;
@@ -21,7 +21,7 @@ class CreateProductAction
         $product=Product::create([
             "brand_id"=>$data["brand_id"],
             "category_id"=>$data["category_id"],
-            "user_id"=>$data["user_id"],
+            "seller_id"=>$data["seller_id"],
             "name"=>$data["name"],
             "code"=>$data["code"],
             "qty"=>$data["qty"],

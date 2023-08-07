@@ -51,118 +51,42 @@ Route::middleware(["seller","user.role:seller"])
                   Route::post("/{product}", "update")->name("update");
                   Route::delete("/{product}", "destroy")->name("destroy");
                   Route::get("/trash", "trash")->name("trash");
-                  Route::post("/{trash_product_id}/restore", "restore")->name("restore");
-                  Route::delete("/{trash_product_id}/force-delete", "forceDelete")->name("force.delete");
-                  Route::get("/permanently-delete", "permanentlyDelete")->name("permanently.delete");
+                  Route::post("/trash/{trash_product_id}/restore", "restore")->name("restore");
+                  Route::delete("/trash/{trash_product_id}/force-delete", "forceDelete")->name("force.delete");
+                  Route::delete("/trash/permanently-delete", "permanentlyDelete")->name("permanently.delete");
               });
 
          Route::delete('products/{product_id}/images/{image_id}', [MultiImageController::class,"destroy"])->name("image.destroy");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
          // Seller Product Banners Section
          Route::controller(SellerProductBannerController::class)
-              ->prefix("/product-banners")
-              ->name("product-banners.")
-              ->group(function () {
-                  Route::get("/", "index")->name("index");
-                  Route::get("/create", "create")->name("create");
-                  Route::post("/", "store")->name("store");
-                  Route::get("/{Seller_product_banner}/edit", "edit")->name("edit");
-                  Route::post("/{Seller_product_banner}", "update")->name("update");
-                  Route::delete("/{Seller_product_banner}", "destroy")->name("destroy");
-                  Route::get("/trash", "trash")->name("trash");
-                  Route::post("/{Seller_product_banner}/restore", "restore")->name("restore");
-                  Route::delete("/{Seller_product_banner}/force-delete", "forceDelete")->name("force.delete");
-                  Route::post("/{Seller_product_banner}/show", "handleShow")->name("show");
-                  Route::post("/{Seller_product_banner}/hide", "handleHide")->name("hide");
-                  Route::get("/permanently-delete", "permanentlyDelete")->name("permanently.delete");
-              });
+         ->prefix("/product-banners")
+         ->name("product-banners.")
+         ->group(function () {
+             Route::get("/", "index")->name("index");
+             Route::get("/create", "create")->name("create");
+             Route::post("/", "store")->name("store");
+             Route::get("/{seller_product_banner}/edit", "edit")->name("edit");
+             Route::post("/{seller_product_banner}", "update")->name("update");
+             Route::delete("/{seller_product_banner}", "destroy")->name("destroy");
+             Route::get("/trash", "trash")->name("trash");
+             Route::post("/trash/{seller_product_banner}/restore", "restore")->name("restore");
+             Route::delete("/trash/{seller_product_banner}/force-delete", "forceDelete")->name("force.delete");
+             Route::delete("/trash/permanently-delete", "permanentlyDelete")->name("permanently.delete");
+             Route::post("/{seller_product_banner}/show", "handleShow")->name("show");
+             Route::post("/{seller_product_banner}/hide", "handleHide")->name("hide");
+         });
+
+         // Seller Orders
+         Route::controller(SellerOrderController::class)
+         ->prefix("/orders")
+         ->name("orders.")
+         ->group(function () {
+             Route::get("/", "index")->name("index");
+             Route::get("/details/{id}", "show")->name("show");
+             Route::post("/{id}", "update")->name("update");
+
+         });
 
          // Seller Product Reviews Section
          Route::controller(SellerProductReviewController::class)
@@ -185,24 +109,4 @@ Route::middleware(["seller","user.role:seller"])
          // Seller Dashboard Guide Section
          Route::get("/guide", [SellerDashboardGuideController::class,"index"])->name("dashboard.guide");
 
-
-
-
-
-
-
-         // Seller Orders
-         Route::controller(SellerOrderController::class)
-         ->prefix("/orders")
-         ->name("orders.")
-         ->group(function () {
-             Route::get("/", "index")->name("index");
-             Route::get("/details/{id}", "show")->name("show");
-             Route::post("/{id}", "update")->name("update");
-             //    Route::delete("/{id}", "destroy")->name("destroy");
-             //    Route::get("/trash", "trash")->name("trash");
-             //    Route::post("/{id}/restore", "restore")->name("restore");
-             //    Route::delete("/{id}/force-delete", "forceDelete")->name("force.delete");
-             //    Route::get("/permanently-delete", "permanentlyDelete")->name("permanently.delete");
-         });
      });

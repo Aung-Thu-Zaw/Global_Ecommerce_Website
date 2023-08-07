@@ -17,13 +17,13 @@ class SellerProductBannerController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $vendorProductBanners=SellerProductBanner::search(request("search"))
+        $sellerProductBanners=SellerProductBanner::search(request("search"))
                                                  ->where("seller_id", auth()->id())
                                                  ->orderBy(request("sort", "id"), request("direction", "desc"))
                                                  ->paginate(request("per_page", 10))
                                                  ->appends(request()->all());
 
-        return inertia("Seller/ProductBanners/Index", compact("vendorProductBanners"));
+        return inertia("Seller/ProductBanners/Index", compact("sellerProductBanners"));
     }
 
     public function create(): Response|ResponseFactory

@@ -1,5 +1,5 @@
 <script setup>
-import VendorDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
+import SellerDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ShopReviewBreadcrumb.vue";
 import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
 import PublishedStatus from "@/Components/Status/PublishedStatus.vue";
@@ -12,7 +12,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <VendorDashboardLayout>
+  <SellerDashboardLayout>
     <Head title="Shop Review Details" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
@@ -67,7 +67,7 @@ const props = defineProps({
         <div>
           <Link
             as="button"
-            :href="route('vendor.product-reviews.index')"
+            :href="route('seller.product-reviews.index')"
             :data="{
               page: props.queryStringParams.page,
               per_page: props.queryStringParams.per_page,
@@ -177,5 +177,5 @@ const props = defineProps({
         </div>
       </div>
     </div>
-  </VendorDashboardLayout>
+  </SellerDashboardLayout>
 </template>
