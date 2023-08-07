@@ -128,7 +128,7 @@ const handleRestoreTrashCategory = async (trashCategoryId) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("admin.categories.restore", {
+      route("admin.categories.trash.restore", {
         trash_category_id: trashCategoryId,
         page: params.page,
         per_page: params.per_page,
@@ -168,7 +168,7 @@ const handleDeleteTrashCategory = async (trashCategoryId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.categories.force.delete", {
+      route("admin.categories.trash.force.delete", {
         trash_category_id: trashCategoryId,
         page: params.page,
         per_page: params.per_page,
@@ -206,14 +206,13 @@ const handlePermanentlyDeleteTrashCategories = async () => {
   });
 
   if (result.isConfirmed) {
-    router.get(
-      route("admin.categories.permanently.delete", {
+    router.delete(
+      route("admin.categories.trash.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
       }),
-      {},
       {
         preserveScroll: true,
         onSuccess: () => {

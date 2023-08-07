@@ -3,19 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Actions\Admin\Products\CreateProductAction;
-use App\Actions\Admin\Products\PermanentlyDeleteAllTrashProductAction;
+use App\Actions\Products\PermanentlyDeleteAllTrashProductAction;
 use App\Actions\Admin\Products\UpdateProductAction;
+use App\Actions\Products\PermanentlyDeleteTrashProductAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
-use App\Jobs\Products\SendAdminApprovedOrDisapprovedCreatedNewProductNotificationToVendorDashboard;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Collection;
-use App\Models\Image;
 use App\Models\Product;
 use App\Models\User;
-use App\Notifications\Products\AdminApprovedCreatedNewProductNotification;
-use App\Notifications\Products\AdminDisapprovedCreatedNewProductNotification;
+use App\Services\BroadcastNotifications\CreatedNewProductApporvedOrDisapprovedNotificationSendToSellerDashboardService;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
@@ -52,9 +50,9 @@ class AdminProductController extends Controller
 
         $collections=Collection::all();
 
-        $vendors=User::select("id", "name", "shop_name")->where([["status","active"],["role","vendor"]])->get();
+        $sellers=User::select("id", "name", "shop_name")->where([["status","active"],["role","seller"]])->get();
 
-        return inertia("Admin/Products/Create", compact("per_page", "brands", "categories", "collections", "vendors"));
+        return inertia("Admin/Products/Create", compact("per_page", "brands", "categories", "collections", "sellers"));
     }
 
     public function store(ProductRequest $request): RedirectResponse
@@ -74,13 +72,13 @@ class AdminProductController extends Controller
 
         $collections=Collection::all();
 
-        $vendors=User::where([["status","active"],["role","vendor"]])->get();
+        $sellers=User::select("id", "name", "shop_name")->where([["status","active"],["role","seller"]])->get();
 
         $product->load(["sizes","colors","types","images"]);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return inertia("Admin/Products/Edit", compact("product", "queryStringParams", "brands", "categories", "collections", "vendors"));
+        return inertia("Admin/Products/Edit", compact("product", "queryStringParams", "brands", "categories", "collections", "sellers"));
     }
 
     public function update(ProductRequest $request, Product $product): RedirectResponse
@@ -114,9 +112,9 @@ class AdminProductController extends Controller
 
     public function restore(Request $request, int $trashProductId): RedirectResponse
     {
-        $product = Product::onlyTrashed()->findOrFail($trashProductId);
+        $trashProduct = Product::onlyTrashed()->findOrFail($trashProductId);
 
-        $product->restore();
+        $trashProduct->restore();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
@@ -125,19 +123,9 @@ class AdminProductController extends Controller
 
     public function forceDelete(Request $request, int $trashProductId): RedirectResponse
     {
-        $product = Product::onlyTrashed()->findOrFail($trashProductId);
+        $trashProduct = Product::onlyTrashed()->findOrFail($trashProductId);
 
-        $multiImages=Image::where("product_id", $product->id)->get();
-
-        $multiImages->each(function ($image) {
-
-            Image::deleteImage($image);
-
-        });
-
-        Product::deleteImage($product->image);
-
-        $product->forceDelete();
+        (new PermanentlyDeleteTrashProductAction())->handle($trashProduct);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
@@ -146,9 +134,9 @@ class AdminProductController extends Controller
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $products = Product::onlyTrashed()->get();
+        $trashProducts = Product::onlyTrashed()->get();
 
-        (new PermanentlyDeleteAllTrashProductAction())->handle($products);
+        (new PermanentlyDeleteAllTrashProductAction())->handle($trashProducts);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
@@ -159,10 +147,7 @@ class AdminProductController extends Controller
     {
         $product->update(["status"=>$request->status]);
 
-        $vendor=User::findOrFail($product->user_id);
-
-        $product->status==="approved" ? $vendor->notify(new AdminApprovedCreatedNewProductNotification($product)) :
-                                        $vendor->notify(new AdminDisapprovedCreatedNewProductNotification($product));
+        (new CreatedNewProductApporvedOrDisapprovedNotificationSendToSellerDashboardService())->send($product);
 
         $message=$request->status==="disapproved" ? "Product has been successfully disapproved" : "Product has been successfully approved";
 

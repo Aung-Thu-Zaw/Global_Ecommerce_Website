@@ -21,7 +21,7 @@ const formattedDiscount = computed(() => {
 <template>
   <span
     v-if="discount"
-    class="bg-green-200 text-green-600 py-1 px-3 rounded-full"
+    class="bg-green-200 text-green-600 text-sm font-medium py-1 px-3 rounded-full"
   >
     {{ formattedDiscount }}%
   </span>

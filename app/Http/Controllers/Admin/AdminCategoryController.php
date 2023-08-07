@@ -87,9 +87,9 @@ class AdminCategoryController extends Controller
 
     public function restore(Request $request, int $trashCategoryId): RedirectResponse
     {
-        $category = Category::onlyTrashed()->findOrFail($trashCategoryId);
+        $trashCategory = Category::onlyTrashed()->findOrFail($trashCategoryId);
 
-        $category->restore();
+        $trashCategory->restore();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
@@ -98,11 +98,11 @@ class AdminCategoryController extends Controller
 
     public function forceDelete(Request $request, int $trashCategoryId): RedirectResponse
     {
-        $category = Category::onlyTrashed()->findOrFail($trashCategoryId);
+        $trashCategory = Category::onlyTrashed()->findOrFail($trashCategoryId);
 
-        Category::deleteImage($category->image);
+        Category::deleteImage($trashCategory->image);
 
-        $category->forceDelete();
+        $trashCategory->forceDelete();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
@@ -111,9 +111,9 @@ class AdminCategoryController extends Controller
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $categories = Category::onlyTrashed()->get();
+        $trashCategories = Category::onlyTrashed()->get();
 
-        (new PermanentlyDeleteAllTrashCategoryAction())->handle($categories);
+        (new PermanentlyDeleteAllTrashCategoryAction())->handle($trashCategories);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 

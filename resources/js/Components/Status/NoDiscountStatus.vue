@@ -1,6 +1,6 @@
 <template>
   <span
-    class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full"
+    class="bg-primary-200 text-primary-600 py-1 px-3 rounded-full text-sm font-medium"
   >
     No Discount
   </span>

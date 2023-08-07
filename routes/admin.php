@@ -56,7 +56,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get("/admin/login", [AdminAuthController::class,"login"])->middleware("guest")->name("admin.login");
 
-Route::middleware(["auth","verified","user.role:admin"])
+Route::middleware(["admin","verified","user.role:admin"])
        ->prefix("admin")
        ->name("admin.")
        ->group(function () {
@@ -94,9 +94,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{brand}", "update")->middleware('permission:brand.edit')->name("update");
                     Route::delete("/{brand}", "destroy")->middleware('permission:brand.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:brand.trash.list')->name("trash");
-                    Route::post("/{trash_brand_id}/restore", "restore")->middleware('permission:brand.trash.restore')->name("restore");
-                    Route::delete("/{trash_brand_id}/force-delete", "forceDelete")->middleware('permission:brand.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:brand.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_brand_id}/restore", "restore")->middleware('permission:brand.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_brand_id}/force-delete", "forceDelete")->middleware('permission:brand.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:brand.trash.delete')->name("trash.permanently.delete");
                 });
 
            // Admin Collections Section
@@ -108,12 +108,12 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::get("/create", "create")->middleware('permission:collection.add')->name("create");
                     Route::post("/", "store")->middleware('permission:collection.add')->name("store");
                     Route::get("/{collection}/edit", "edit")->middleware('permission:collection.edit')->name("edit");
-                    Route::post("/{collection}", "update")->middleware('permission:collection.edit')->name("update");
+                    Route::patch("/{collection}", "update")->middleware('permission:collection.edit')->name("update");
                     Route::delete("/{collection}", "destroy")->middleware('permission:collection.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:collection.trash.list')->name("trash");
-                    Route::post("/{trash_collection_id}/restore", "restore")->middleware('permission:collection.trash.restore')->name("restore");
-                    Route::delete("/{trash_collection_id}/force-delete", "forceDelete")->middleware('permission:collection.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:collection.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_collection_id}/restore", "restore")->middleware('permission:collection.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_collection_id}/force-delete", "forceDelete")->middleware('permission:collection.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:collection.trash.delete')->name("trash.permanently.delete");
                 });
 
            // Admin Categories Section
@@ -128,9 +128,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{category}", "update")->middleware('permission:category.edit')->name("update");
                     Route::delete("/{category}", "destroy")->middleware('permission:category.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:category.trash.list')->name("trash");
-                    Route::post("/{trash_category_id}/restore", "restore")->middleware('permission:category.trash.restore')->name("restore");
-                    Route::delete("/{trash_category_id}/force-delete", "forceDelete")->middleware('permission:category.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:category.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_category_id}/restore", "restore")->middleware('permission:category.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_category_id}/force-delete", "forceDelete")->middleware('permission:category.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:category.trash.delete')->name("trash.permanently.delete");
                 });
 
            // Admin Products Section
@@ -147,9 +147,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{product}/status", "handleStatus")->middleware('permission:product.control')->name("handle.status");
                     Route::delete("/{product}", "destroy")->middleware('permission:product.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:product.trash.list')->name("trash");
-                    Route::post("/{trash_product_id}/restore", "restore")->middleware('permission:product.trash.restore')->name("restore");
-                    Route::delete("/{trash_product_id}/force-delete", "forceDelete")->middleware('permission:product.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:product.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_product_id}/restore", "restore")->middleware('permission:product.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_product_id}/force-delete", "forceDelete")->middleware('permission:product.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:product.trash.delete')->name("trash.permanently.delete");
                 });
            Route::delete('products/{product_id}/images/{image_id}', [MultiImageController::class,"destroy"])->name("image.destroy");
 
@@ -165,9 +165,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{coupon}", "update")->middleware('permission:coupon.edit')->name("update");
                     Route::delete("/{coupon}", "destroy")->middleware('permission:coupon.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:coupon.trash.list')->name("trash");
-                    Route::post("/{trash_coupon_id}/restore", "restore")->middleware('permission:coupon.trash.restore')->name("restore");
-                    Route::delete("/{trash_coupon_id}/force-delete", "forceDelete")->middleware('permission:coupon.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:coupon.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_coupon_id}/restore", "restore")->middleware('permission:coupon.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_coupon_id}/force-delete", "forceDelete")->middleware('permission:coupon.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:coupon.trash.delete')->name("trash.permanently.delete");
                 });
 
            // ========== Admin Banners Section ==========
@@ -186,9 +186,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{slider_banner}/show", "handleShow")->middleware('permission:banner.control')->name("show");
                     Route::post("/{slider_banner}/hide", "handleHide")->middleware('permission:banner.control')->name("hide");
                     Route::get("/trash", "trash")->middleware('permission:banner.trash.list')->name("trash");
-                    Route::post("/{trash_slider_banner_id}/restore", "restore")->middleware('permission:banner.trash.restore')->name("restore");
-                    Route::delete("/{trash_slider_banner_id}/force-delete", "forceDelete")->middleware('permission:banner.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:banner.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_slider_banner_id}/restore", "restore")->middleware('permission:banner.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_slider_banner_id}/force-delete", "forceDelete")->middleware('permission:banner.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:banner.trash.delete')->name("trash.permanently.delete");
                 });
 
            // Admin Product Banners Section
@@ -205,9 +205,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{product_banner}/show", "handleShow")->middleware('permission:banner.control')->name("show");
                     Route::post("/{product_banner}/hide", "handleHide")->middleware('permission:banner.control')->name("hide");
                     Route::get("/trash", "trash")->middleware('permission:banner.trash.list')->name("trash");
-                    Route::post("/{trash_product_banner_id}/restore", "restore")->middleware('permission:banner.trash.restore')->name("restore");
-                    Route::delete("/{trash_product_banner_id}/force-delete", "forceDelete")->middleware('permission:banner.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:banner.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_product_banner_id}/restore", "restore")->middleware('permission:banner.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_product_banner_id}/force-delete", "forceDelete")->middleware('permission:banner.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:banner.trash.delete')->name("trash.permanently.delete");
                 });
 
            // Admin Campaign Banners Section
@@ -224,74 +224,74 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::get("/trash", "trash")->middleware('permission:banner.trash.list')->name("trash");
                     Route::post("/{campaign_banner}/show", "handleShow")->middleware('permission:banner.control')->name("show");
                     Route::post("/{campaign_banner}/hide", "handleHide")->middleware('permission:banner.control')->name("hide");
-                    Route::post("/{trash_campaign_banner_id}/restore", "restore")->middleware('permission:banner.trash.restore')->name("restore");
-                    Route::delete("/{trash_campaign_banner_id}/force-delete", "forceDelete")->middleware('permission:banner.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:banner.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_campaign_banner_id}/restore", "restore")->middleware('permission:banner.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_campaign_banner_id}/force-delete", "forceDelete")->middleware('permission:banner.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:banner.trash.delete')->name("trash.permanently.delete");
                 });
 
-           //    Route::controller(AdminCountryController::class)
-           //         ->prefix("/countries")
-           //         ->name("countries.")
-           //         ->group(function () {
-           //             Route::get("/", "index")->middleware('permission:shipping-area.menu')->name("index");
-           //             Route::get("/create", "create")->middleware('permission:shipping-area.add')->name("create");
-           //             Route::post("/", "store")->middleware('permission:shipping-area.add')->name("store");
-           //             Route::get("/{country}/edit", "edit")->middleware('permission:shipping-area.edit')->name("edit");
-           //             Route::post("/{country}", "update")->middleware('permission:shipping-area.edit')->name("update");
-           //             Route::delete("/{country}", "destroy")->middleware('permission:shipping-area.delete')->name("destroy");
-           //             Route::get("/trash", "trash")->middleware('permission:shipping-area.trash.list')->name("trash");
-           //             Route::post("/{id}/restore", "restore")->middleware('permission:shipping-area.trash.restore')->name("restore");
-           //             Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:shipping-area.trash.delete')->name("force.delete");
-           //             Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:shipping-area.trash.delete')->name("permanently.delete");
-           //         });
+           Route::controller(AdminCountryController::class)
+                ->prefix("/countries")
+                ->name("countries.")
+                ->group(function () {
+                    Route::get("/", "index")->middleware('permission:shipping-area.menu')->name("index");
+                    Route::get("/create", "create")->middleware('permission:shipping-area.add')->name("create");
+                    Route::post("/", "store")->middleware('permission:shipping-area.add')->name("store");
+                    Route::get("/{country}/edit", "edit")->middleware('permission:shipping-area.edit')->name("edit");
+                    Route::post("/{country}", "update")->middleware('permission:shipping-area.edit')->name("update");
+                    Route::delete("/{country}", "destroy")->middleware('permission:shipping-area.delete')->name("destroy");
+                    Route::get("/trash", "trash")->middleware('permission:shipping-area.trash.list')->name("trash");
+                    Route::post("/trash/{trash_country_id}/restore", "restore")->middleware('permission:shipping-area.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_country_id}/force-delete", "forceDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.permanently.delete");
+                });
 
-           //    Route::controller(AdminRegionController::class)
-           //         ->prefix("/regions")
-           //         ->name("regions.")
-           //         ->group(function () {
-           //             Route::get("/", "index")->middleware('permission:shipping-area.menu')->name("index");
-           //             Route::get("/create", "create")->middleware('permission:shipping-area.add')->name("create");
-           //             Route::post("/", "store")->middleware('permission:shipping-area.add')->name("store");
-           //             Route::get("/{region}/edit", "edit")->middleware('permission:shipping-area.edit')->name("edit");
-           //             Route::post("/{region}", "update")->middleware('permission:shipping-area.edit')->name("update");
-           //             Route::delete("/{region}", "destroy")->middleware('permission:shipping-area.delete')->name("destroy");
-           //             Route::get("/trash", "trash")->middleware('permission:shipping-area.trash.list')->name("trash");
-           //             Route::post("/{id}/restore", "restore")->middleware('permission:shipping-area.trash.restore')->name("restore");
-           //             Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:shipping-area.trash.delete')->name("force.delete");
-           //             Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:shipping-area.trash.delete')->name("permanently.delete");
-           //         });
+           Route::controller(AdminRegionController::class)
+                ->prefix("/regions")
+                ->name("regions.")
+                ->group(function () {
+                    Route::get("/", "index")->middleware('permission:shipping-area.menu')->name("index");
+                    Route::get("/create", "create")->middleware('permission:shipping-area.add')->name("create");
+                    Route::post("/", "store")->middleware('permission:shipping-area.add')->name("store");
+                    Route::get("/{region}/edit", "edit")->middleware('permission:shipping-area.edit')->name("edit");
+                    Route::post("/{region}", "update")->middleware('permission:shipping-area.edit')->name("update");
+                    Route::delete("/{region}", "destroy")->middleware('permission:shipping-area.delete')->name("destroy");
+                    Route::get("/trash", "trash")->middleware('permission:shipping-area.trash.list')->name("trash");
+                    Route::post("/trash/{trash_region_id}/restore", "restore")->middleware('permission:shipping-area.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_region_id}/force-delete", "forceDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.permanently.delete");
+                });
 
-           //    Route::controller(AdminCityController::class)
-           //         ->prefix("/cities")
-           //         ->name("cities.")
-           //         ->group(function () {
-           //             Route::get("/", "index")->middleware('permission:shipping-area.menu')->name("index");
-           //             Route::get("/create", "create")->middleware('permission:shipping-area.add')->name("create");
-           //             Route::post("/", "store")->middleware('permission:shipping-area.add')->name("store");
-           //             Route::get("/{city}/edit", "edit")->middleware('permission:shipping-area.edit')->name("edit");
-           //             Route::post("/{city}", "update")->middleware('permission:shipping-area.edit')->name("update");
-           //             Route::delete("/{city}", "destroy")->middleware('permission:shipping-area.delete')->name("destroy");
-           //             Route::get("/trash", "trash")->middleware('permission:shipping-area.trash.list')->name("trash");
-           //             Route::post("/{id}/restore", "restore")->middleware('permission:shipping-area.trash.restore')->name("restore");
-           //             Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:shipping-area.trash.delete')->name("force.delete");
-           //             Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:shipping-area.trash.delete')->name("permanently.delete");
-           //         });
+           Route::controller(AdminCityController::class)
+                ->prefix("/cities")
+                ->name("cities.")
+                ->group(function () {
+                    Route::get("/", "index")->middleware('permission:shipping-area.menu')->name("index");
+                    Route::get("/create", "create")->middleware('permission:shipping-area.add')->name("create");
+                    Route::post("/", "store")->middleware('permission:shipping-area.add')->name("store");
+                    Route::get("/{city}/edit", "edit")->middleware('permission:shipping-area.edit')->name("edit");
+                    Route::post("/{city}", "update")->middleware('permission:shipping-area.edit')->name("update");
+                    Route::delete("/{city}", "destroy")->middleware('permission:shipping-area.delete')->name("destroy");
+                    Route::get("/trash", "trash")->middleware('permission:shipping-area.trash.list')->name("trash");
+                    Route::post("/trash/{trash_city_id}/restore", "restore")->middleware('permission:shipping-area.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_city_id}/force-delete", "forceDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.permanently.delete");
+                });
 
-           //    Route::controller(AdminTownshipController::class)
-           //         ->prefix("/townships")
-           //         ->name("townships.")
-           //         ->group(function () {
-           //             Route::get("/", "index")->middleware('permission:shipping-area.menu')->name("index");
-           //             Route::get("/create", "create")->middleware('permission:shipping-area.add')->name("create");
-           //             Route::post("/", "store")->middleware('permission:shipping-area.add')->name("store");
-           //             Route::get("/{township}/edit", "edit")->middleware('permission:shipping-area.edit')->name("edit");
-           //             Route::post("/{township}", "update")->middleware('permission:shipping-area.edit')->name("update");
-           //             Route::delete("/{township}", "destroy")->middleware('permission:shipping-area.delete')->name("destroy");
-           //             Route::get("/trash", "trash")->middleware('permission:shipping-area.trash.list')->name("trash");
-           //             Route::post("/{id}/restore", "restore")->middleware('permission:shipping-area.trash.restore')->name("restore");
-           //             Route::delete("/{id}/force-delete", "forceDelete")->middleware('permission:shipping-area.trash.delete')->name("force.delete");
-           //             Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:shipping-area.trash.delete')->name("permanently.delete");
-           //         });
+           Route::controller(AdminTownshipController::class)
+                ->prefix("/townships")
+                ->name("townships.")
+                ->group(function () {
+                    Route::get("/", "index")->middleware('permission:shipping-area.menu')->name("index");
+                    Route::get("/create", "create")->middleware('permission:shipping-area.add')->name("create");
+                    Route::post("/", "store")->middleware('permission:shipping-area.add')->name("store");
+                    Route::get("/{township}/edit", "edit")->middleware('permission:shipping-area.edit')->name("edit");
+                    Route::post("/{township}", "update")->middleware('permission:shipping-area.edit')->name("update");
+                    Route::delete("/{township}", "destroy")->middleware('permission:shipping-area.delete')->name("destroy");
+                    Route::get("/trash", "trash")->middleware('permission:shipping-area.trash.list')->name("trash");
+                    Route::post("/trash/{trash_township_id}/restore", "restore")->middleware('permission:shipping-area.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_township_id}/force-delete", "forceDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.permanently.delete");
+                });
 
            // Admin Languages Section
            Route::controller(AdminLanguageController::class)
@@ -307,9 +307,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{language}", "update")->middleware('permission:language.edit')->name("update");
                     Route::delete("/{language}", "destroy")->middleware('permission:language.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:language.trash.list')->name("trash");
-                    Route::post("/{trash_language_id}/restore", "restore")->middleware('permission:language.trash.restore')->name("restore");
-                    Route::delete("/{trash_language_id}/force-delete", "forceDelete")->middleware('permission:language.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:language.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_language_id}/restore", "restore")->middleware('permission:language.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_language_id}/force-delete", "forceDelete")->middleware('permission:language.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:language.trash.delete')->name("trash.permanently.delete");
                 });
 
 
@@ -432,9 +432,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{product_review}", "update")->middleware('permission:product-review.control')->name("update");
                     Route::delete("/{product_review}", "destroy")->middleware('permission:product-review.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:product-review.trash.list')->name("trash");
-                    Route::post("/{trash_product_review_id}/restore", "restore")->middleware('permission:product-review.trash.restore')->name("restore");
-                    Route::delete("/{trash_product_review_id}/force-delete", "forceDelete")->middleware('permission:product-review.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:product-review.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_product_review_id}/restore", "restore")->middleware('permission:product-review.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_product_review_id}/force-delete", "forceDelete")->middleware('permission:product-review.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:product-review.trash.delete')->name("trash.permanently.delete");
                 });
 
            // Admin Published Product Reviews Section
@@ -459,9 +459,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{shop_review}", "update")->middleware('permission:shop-review.control')->name("update");
                     Route::delete("/{shop_review}", "destroy")->middleware('permission:shop-review.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:shop-review.trash.list')->name("trash");
-                    Route::post("/{trash_shop_review_id}/restore", "restore")->middleware('permission:shop-review.trash.restore')->name("restore");
-                    Route::delete("/{trash_shop_review_id}/force-delete", "forceDelete")->middleware('permission:shop-review.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:shop-review.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_shop_review_id}/restore", "restore")->middleware('permission:shop-review.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_shop_review_id}/force-delete", "forceDelete")->middleware('permission:shop-review.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:shop-review.trash.delete')->name("trash.permanently.delete");
                 });
 
            //    Admin Dashboard Published Shop Reviews Section
@@ -488,9 +488,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{user}", "update")->middleware('permission:vendor-manage.control')->name("update");
                     Route::delete("/{user}", "destroy")->middleware('permission:vendor-manage.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:vendor-manage.trash.list')->name("trash");
-                    Route::post("/{trash_vendor_id}/restore", "restore")->middleware('permission:vendor-manage.trash.restore')->name("restore");
-                    Route::delete("/{trash_vendor_id}/force-delete", "forceDelete")->middleware('permission:vendor-manage.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:vendor-manage.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_vendor_id}/restore", "restore")->middleware('permission:vendor-manage.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_vendor_id}/force-delete", "forceDelete")->middleware('permission:vendor-manage.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:vendor-manage.trash.delete')->name("trash.permanently.delete");
                 });
 
            // Admin Active Vendors Section
@@ -514,9 +514,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::get("/{user}/details", "show")->middleware('permission:registered-account.detail')->name("show");
                     Route::delete("/{user}", "destroy")->middleware('permission:registered-account.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:registered-account.trash.list')->name("trash");
-                    Route::post("/{trash_user_id}/restore", "restore")->middleware('permission:registered-account.trash.restore')->name("restore");
-                    Route::delete("/{trash_user_id}/force-delete", "forceDelete")->middleware('permission:registered-account.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:registered-account.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_user_id}/restore", "restore")->middleware('permission:registered-account.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_user_id}/force-delete", "forceDelete")->middleware('permission:registered-account.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:registered-account.trash.delete')->name("trash.permanently.delete");
                 });
 
            // Admin Registered Vendors Section
@@ -528,9 +528,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::get("/{user}/details", "show")->middleware('permission:registered-account.detail')->name("show");
                     Route::delete("/{user}", "destroy")->middleware('permission:registered-account.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:registered-account.trash.list')->name("trash");
-                    Route::post("/{trash_vendor_id}/restore", "restore")->middleware('permission:registered-account.trash.restore')->name("restore");
-                    Route::delete("/{trash_vendor_id}/force-delete", "forceDelete")->middleware('permission:registered-account.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:registered-account.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_vendor_id}/restore", "restore")->middleware('permission:registered-account.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_vendor_id}/force-delete", "forceDelete")->middleware('permission:registered-account.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:registered-account.trash.delete')->name("trash.permanently.delete");
                 });
 
            // Admin Admin Manage Section
@@ -546,9 +546,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{user}", "update")->middleware(['permission:admin-manage.edit','restrict.superadmin.data'])->name("update");
                     Route::delete("/{user}", "destroy")->middleware(['permission:admin-manage.delete','restrict.superadmin.data'])->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:admin-manage.trash.list')->name("trash");
-                    Route::post("/{trash_admin_id}/restore", "restore")->middleware('permission:admin-manage.trash.restore')->name("restore");
-                    Route::delete("/{trash_admin_id}/force-delete", "forceDelete")->middleware('permission:admin-manage.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:admin-manage.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_admin_id}/restore", "restore")->middleware('permission:admin-manage.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_admin_id}/force-delete", "forceDelete")->middleware('permission:admin-manage.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:admin-manage.trash.delete')->name("trash.permanently.delete");
                 });
 
            // ******************** Admin Dashboard Authority Managements ********************
@@ -567,9 +567,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{role}", "update")->middleware('permission:role-and-permission.edit')->name("update");
                     Route::delete("/{role}", "destroy")->middleware('permission:role-and-permission.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:role-and-permission.trash.list')->name("trash");
-                    Route::post("/{trash_role_id}/restore", "restore")->middleware('permission:role-and-permission.trash.restore')->name("restore");
-                    Route::delete("/{trash_role_id}/force-delete", "forceDelete")->middleware('permission:role-and-permission.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:role-and-permission.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_role_id}/restore", "restore")->middleware('permission:role-and-permission.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_role_id}/force-delete", "forceDelete")->middleware('permission:role-and-permission.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:role-and-permission.trash.delete')->name("trash.permanently.delete");
                 });
 
            // Admin Permissions Section
@@ -602,9 +602,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{blog_category}", "update")->middleware('permission:blog-category.edit')->name("update");
                     Route::delete("/{blog_category}", "destroy")->middleware('permission:blog-category.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:blog-category.trash.list')->name("trash");
-                    Route::post("/{trash_blog_category_id}/restore", "restore")->middleware('permission:blog-category.trash.restore')->name("restore");
-                    Route::delete("/{trash_blog_category_id}/force-delete", "forceDelete")->middleware('permission:blog-category.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:blog-category.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_blog_category_id}/restore", "restore")->middleware('permission:blog-category.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_blog_category_id}/force-delete", "forceDelete")->middleware('permission:blog-category.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:blog-category.trash.delete')->name("trash.permanently.delete");
                 });
 
            // Admin Blog Posts Section
@@ -619,9 +619,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{blog_post}", "update")->middleware('permission:blog-post.edit')->name("update");
                     Route::delete("/{blog_post}", "destroy")->middleware('permission:blog-post.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:blog-post.trash.list')->name("trash");
-                    Route::post("/{trash_blog_post_id}/restore", "restore")->middleware('permission:blog-post.trash.restore')->name("restore");
-                    Route::delete("/{trash_blog_post_id}/force-delete", "forceDelete")->middleware('permission:blog-post.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:blog-post.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_blog_post_id}/restore", "restore")->middleware('permission:blog-post.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_blog_post_id}/force-delete", "forceDelete")->middleware('permission:blog-post.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:blog-post.trash.delete')->name("trash.permanently.delete");
                 });
 
            // ******************** Admin Dashboard Admin Web Control Area ********************
@@ -680,9 +680,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{faq_category}", "update")->middleware('permission:faq-category.edit')->name("update");
                     Route::delete("/{faq_category}", "destroy")->middleware('permission:faq-category.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:faq-category.trash.list')->name("trash");
-                    Route::post("/{trash_faq_category_id}/restore", "restore")->middleware('permission:faq-category.trash.restore')->name("restore");
-                    Route::delete("/{trash_faq_category_id}/force-delete", "forceDelete")->middleware('permission:faq-category.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:faq-category.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_faq_category_id}/restore", "restore")->middleware('permission:faq-category.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_faq_category_id}/force-delete", "forceDelete")->middleware('permission:faq-category.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:faq-category.trash.delete')->name("trash.permanently.delete");
                 });
 
            // Admin Faq Sub Category Section
@@ -697,9 +697,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{faq_sub_category}", "update")->middleware('permission:faq-category.edit')->name("update");
                     Route::delete("/{faq_sub_category}", "destroy")->middleware('permission:faq-category.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:faq-category.trash.list')->name("trash");
-                    Route::post("/{trash_faq_sub_category_id}/restore", "restore")->middleware('permission:faq-category.trash.restore')->name("restore");
-                    Route::delete("/{trash_faq_sub_category_id}/force-delete", "forceDelete")->middleware('permission:faq-category.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:faq-category.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_faq_sub_category_id}/restore", "restore")->middleware('permission:faq-category.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_faq_sub_category_id}/force-delete", "forceDelete")->middleware('permission:faq-category.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:faq-category.trash.delete')->name("trash.permanently.delete");
                 });
            // Admin Faqs Section
            Route::controller(AdminFaqController::class)
@@ -713,9 +713,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::post("/{faq}", "update")->middleware('permission:faq.edit')->name("update");
                     Route::delete("/{faq}", "destroy")->middleware('permission:faq.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:faq.trash.list')->name("trash");
-                    Route::post("/{trash_faq_id}/restore", "restore")->middleware('permission:faq.trash.restore')->name("restore");
-                    Route::delete("/{trash_faq_id}/force-delete", "forceDelete")->middleware('permission:faq.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:faq.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_faq_id}/restore", "restore")->middleware('permission:faq.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_faq_id}/force-delete", "forceDelete")->middleware('permission:faq.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:faq.trash.delete')->name("trash.permanently.delete");
                 });
 
            // ******************** Admin Dashboard From The Submitters ********************
@@ -728,9 +728,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::get("/", "index")->middleware('permission:subscriber.menu')->name("index");
                     Route::delete("/{subscriber}", "destroy")->middleware('permission:subscriber.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:subscriber.trash.list')->name("trash");
-                    Route::post("/{trash_subscriber_id}/restore", "restore")->middleware('permission:subscriber.trash.restore')->name("restore");
-                    Route::delete("/{trash_subscriber_id}/force-delete", "forceDelete")->middleware('permission:subscriber.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:subscriber.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_subscriber_id}/restore", "restore")->middleware('permission:subscriber.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_subscriber_id}/force-delete", "forceDelete")->middleware('permission:subscriber.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:subscriber.trash.delete')->name("trash.permanently.delete");
                 });
 
            // Admin Suggestions Section
@@ -742,9 +742,9 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::get("/{suggestion}/details", "show")->middleware('permission:suggestion.detail')->name("show");
                     Route::delete("/{suggestion}", "destroy")->middleware('permission:suggestion.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:suggestion.trash.list')->name("trash");
-                    Route::post("/{trash_suggestion_id}/restore", "restore")->middleware('permission:suggestion.trash.restore')->name("restore");
-                    Route::delete("/{trash_suggestion_id}/force-delete", "forceDelete")->middleware('permission:suggestion.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:suggestion.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_suggestion_id}/restore", "restore")->middleware('permission:suggestion.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_suggestion_id}/force-delete", "forceDelete")->middleware('permission:suggestion.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:suggestion.trash.delete')->name("trash.permanently.delete");
                 });
 
            // Admin Website Feedbacks Section
@@ -756,8 +756,8 @@ Route::middleware(["auth","verified","user.role:admin"])
                     Route::get("/{website_feedback}/details", "show")->middleware('permission:website-feedback.detail')->name("show");
                     Route::delete("/{website_feedback}", "destroy")->middleware('permission:website-feedback.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:website-feedback.trash.list')->name("trash");
-                    Route::post("/{trash_website_feedback_id}/restore", "restore")->middleware('permission:website-feedback.trash.restore')->name("restore");
-                    Route::delete("/{trash_website_feedback_id}/force-delete", "forceDelete")->middleware('permission:website-feedback.trash.delete')->name("force.delete");
-                    Route::get("/permanently-delete", "permanentlyDelete")->middleware('permission:website-feedback.trash.delete')->name("permanently.delete");
+                    Route::post("/trash/{trash_website_feedback_id}/restore", "restore")->middleware('permission:website-feedback.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_website_feedback_id}/force-delete", "forceDelete")->middleware('permission:website-feedback.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:website-feedback.trash.delete')->name("trash.permanently.delete");
                 });
        });

@@ -42,22 +42,22 @@ defineProps({
 });
 
 // Success Toast
-// if (usePage().props.flash.successMessage) {
-//   toast.success(usePage().props.flash.successMessage, {
-//     autoClose: 2000,
-//   });
-// }
+if (usePage().props.flash.successMessage) {
+  toast.success(usePage().props.flash.successMessage, {
+    autoClose: 2000,
+  });
+}
 
-watch(
-  () => usePage().props.flash.successMessage,
-  () => {
-    if (usePage().props.flash.successMessage) {
-      toast.success(usePage().props.flash.successMessage, {
-        autoClose: 2000,
-      });
-    }
-  }
-);
+// watch(
+//   () => usePage().props.flash.successMessage,
+//   () => {
+//     if (usePage().props.flash.successMessage) {
+//       toast.success(usePage().props.flash.successMessage, {
+//         autoClose: 2000,
+//       });
+//     }
+//   }
+// );
 </script>
 
 <template>

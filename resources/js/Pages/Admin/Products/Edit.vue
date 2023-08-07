@@ -16,7 +16,7 @@ const props = defineProps({
   brands: Object,
   categories: Object,
   collections: Object,
-  vendors: Object,
+  sellers: Object,
 });
 
 // Define Variables
@@ -48,7 +48,7 @@ const form = useForm({
   brand_id: props.product.brand_id,
   category_id: props.product.category_id,
   collection_id: props.product.collection_id,
-  user_id: props.product.user_id,
+  seller_id: props.product.seller_id,
   status: props.product.status,
   hot_deal: props.product.hot_deal,
   special_offer: props.product.special_offer,
@@ -563,25 +563,26 @@ const handleEditProduct = async () => {
                     />
                   </div>
 
-                  <!-- Product Vendor Field -->
+                  <!-- Product Seller Field -->
                   <div class="mb-6">
-                    <InputLabel for="name" value="Vendor *" />
+                    <InputLabel for="seller" value="Seller *" />
 
                     <select
-                      v-model="form.user_id"
+                      v-model="form.seller_id"
                       class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
                     >
-                      <option value="" selected disabled>Select Vendor</option>
+                      <option value="" selected disabled>Select Seller</option>
                       <option
-                        v-for="vendor in vendors"
-                        :key="vendor.id"
-                        :value="vendor.id"
+                        v-for="seller in sellers"
+                        :key="seller.id"
+                        :value="seller.id"
+                        :selected="seller.id === form.seller_id"
                       >
-                        {{ vendor.name }}
+                        {{ seller.name }}
                       </option>
                     </select>
 
-                    <InputError class="mt-2" :message="form.errors.user_id" />
+                    <InputError class="mt-2" :message="form.errors.seller_id" />
                   </div>
 
                   <div class="grid grid-cols-3 gap-3">

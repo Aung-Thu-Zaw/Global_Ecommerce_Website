@@ -79,9 +79,9 @@ class AdminCouponController extends Controller
 
     public function restore(Request $request, int $trashCouponId): RedirectResponse
     {
-        $coupon =Coupon::onlyTrashed()->findOrFail($trashCouponId);
+        $trashCoupon=Coupon::onlyTrashed()->findOrFail($trashCouponId);
 
-        $coupon->restore();
+        $trashCoupon->restore();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
@@ -90,9 +90,9 @@ class AdminCouponController extends Controller
 
     public function forceDelete(Request $request, int $trashCouponId): RedirectResponse
     {
-        $coupon = Coupon::onlyTrashed()->findOrFail($trashCouponId);
+        $trashCoupon= Coupon::onlyTrashed()->findOrFail($trashCouponId);
 
-        $coupon->forceDelete();
+        $trashCoupon->forceDelete();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
@@ -101,9 +101,9 @@ class AdminCouponController extends Controller
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $coupons = Coupon::onlyTrashed()->get();
+        $trashCoupon = Coupon::onlyTrashed()->get();
 
-        (new PermanentlyDeleteAllTrashCouponAction())->handle($coupons);
+        (new PermanentlyDeleteAllTrashCouponAction())->handle($trashCoupon);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 

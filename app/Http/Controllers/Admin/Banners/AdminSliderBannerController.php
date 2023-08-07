@@ -79,9 +79,9 @@ class AdminSliderBannerController extends Controller
 
     public function restore(Request $request, int $trashSliderBannerId): RedirectResponse
     {
-        $sliderBanner = SliderBanner::onlyTrashed()->findOrFail($trashSliderBannerId);
+        $trashSliderBanner = SliderBanner::onlyTrashed()->findOrFail($trashSliderBannerId);
 
-        $sliderBanner->restore();
+        $trashSliderBanner->restore();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
@@ -90,15 +90,26 @@ class AdminSliderBannerController extends Controller
 
     public function forceDelete(Request $request, int $trashSliderBannerId): RedirectResponse
     {
-        $sliderBanner = SliderBanner::onlyTrashed()->findOrFail($trashSliderBannerId);
+        $trashSliderBanner = SliderBanner::onlyTrashed()->findOrFail($trashSliderBannerId);
 
-        SliderBanner::deleteImage($sliderBanner->image);
+        SliderBanner::deleteImage($trashSliderBanner->image);
 
-        $sliderBanner->forceDelete();
+        $trashSliderBanner->forceDelete();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
         return to_route('admin.slider-banners.trash', $queryStringParams)->with("success", "Slider Banner has been permanently deleted.");
+    }
+
+    public function permanentlyDelete(Request $request): RedirectResponse
+    {
+        $trashSliderBanners = SliderBanner::onlyTrashed()->get();
+
+        (new PermanentlyDeleteAllTrashSliderBannerAction())->handle($trashSliderBanners);
+
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route('admin.slider-banners.trash', $queryStringParams)->with("success", "Slider Banners have been successfully deleted.");
     }
 
     public function handleShow(Request $request, int $sliderBannerId): RedirectResponse
@@ -138,14 +149,5 @@ class AdminSliderBannerController extends Controller
         return to_route('admin.slider-banners.index', $queryStringParams)->with("success", "Slider Banner has been successfully hidden.");
     }
 
-    public function permanentlyDelete(Request $request): RedirectResponse
-    {
-        $sliderBanners = SliderBanner::onlyTrashed()->get();
 
-        (new PermanentlyDeleteAllTrashSliderBannerAction())->handle($sliderBanners);
-
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.slider-banners.trash', $queryStringParams)->with("success", "Slider Banners have been successfully deleted.");
-    }
 }

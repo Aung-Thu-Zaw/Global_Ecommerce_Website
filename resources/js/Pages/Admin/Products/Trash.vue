@@ -138,7 +138,7 @@ const handleRestoreTrashProduct = async (trashProductId) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("admin.products.restore", {
+      route("admin.products.trash.restore", {
         trash_product_id: trashProductId,
         page: params.page,
         per_page: params.per_page,
@@ -178,7 +178,7 @@ const handleDeleteTrashProduct = async (trashProductId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.products.force.delete", {
+      route("admin.products.trash.force.delete", {
         trash_product_id: trashProductId,
         page: params.page,
         per_page: params.per_page,
@@ -216,14 +216,13 @@ const handlePermanentlyDeleteTrashProducts = async () => {
   });
 
   if (result.isConfirmed) {
-    router.get(
-      route("admin.products.permanently.delete", {
+    router.delete(
+      route("admin.products.trash.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
       }),
-      {},
       {
         preserveScroll: true,
         onSuccess: () => {

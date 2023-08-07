@@ -79,9 +79,9 @@ class AdminProductBannerController extends Controller
 
     public function restore(Request $request, int $trashProductBannerId): RedirectResponse
     {
-        $productBanner = ProductBanner::onlyTrashed()->findOrFail($trashProductBannerId);
+        $trashProductBanner = ProductBanner::onlyTrashed()->findOrFail($trashProductBannerId);
 
-        $productBanner->restore();
+        $trashProductBanner->restore();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
@@ -90,15 +90,26 @@ class AdminProductBannerController extends Controller
 
     public function forceDelete(Request $request, int $trashProductBannerId): RedirectResponse
     {
-        $productBanner = ProductBanner::onlyTrashed()->findOrFail($trashProductBannerId);
+        $trashProductBanner = ProductBanner::onlyTrashed()->findOrFail($trashProductBannerId);
 
-        ProductBanner::deleteImage($productBanner->image);
+        ProductBanner::deleteImage($trashProductBanner->image);
 
-        $productBanner->forceDelete();
+        $trashProductBanner->forceDelete();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
         return to_route('admin.product-banners.trash', $queryStringParams)->with("success", "Product Banner has been permanently deleted.");
+    }
+
+    public function permanentlyDelete(Request $request): RedirectResponse
+    {
+        $trashProductBanners = ProductBanner::onlyTrashed()->get();
+
+        (new PermanentlyDeleteAllTrashProductBannerAction())->handle($trashProductBanners);
+
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route('admin.product-banners.trash', $queryStringParams)->with("success", "Product Banners have been successfully deleted.");
     }
 
     public function handleShow(Request $request, int $productBannerId): RedirectResponse
@@ -139,15 +150,4 @@ class AdminProductBannerController extends Controller
         return to_route('admin.product-banners.index', $queryStringParams)->with("success", "Product Banner has been successfully hidden.");
     }
 
-
-    public function permanentlyDelete(Request $request): RedirectResponse
-    {
-        $productBanners = ProductBanner::onlyTrashed()->get();
-
-        (new PermanentlyDeleteAllTrashProductBannerAction())->handle($productBanners);
-
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.product-banners.trash', $queryStringParams)->with("success", "Product Banners have been successfully deleted.");
-    }
 }

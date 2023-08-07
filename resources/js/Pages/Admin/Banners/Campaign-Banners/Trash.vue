@@ -124,7 +124,7 @@ const handleRestoreTrashCampaignBanner = async (trashCampaignBannerId) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("admin.campaign-banners.restore", {
+      route("admin.campaign-banners.trash.restore", {
         trash_campaign_banner_id: trashCampaignBannerId,
         page: params.page,
         per_page: params.per_page,
@@ -164,7 +164,7 @@ const handleDeleteTrashCampaignBanner = async (trashCampaignBannerId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.campaign-banners.force.delete", {
+      route("admin.campaign-banners.trash.force.delete", {
         trash_campaign_banner_id: trashCampaignBannerId,
         page: params.page,
         per_page: params.per_page,
@@ -202,14 +202,13 @@ const handlePermanentlyDeleteTrashCampaignBanners = async () => {
   });
 
   if (result.isConfirmed) {
-    router.get(
-      route("admin.campaign-banners.permanently.delete", {
+    router.delete(
+      route("admin.campaign-banners.trash.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
       }),
-      {},
       {
         preserveScroll: true,
         onSuccess: () => {

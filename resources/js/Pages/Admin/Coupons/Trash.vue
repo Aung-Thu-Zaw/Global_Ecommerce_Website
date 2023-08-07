@@ -147,7 +147,7 @@ const handleRestoreTrashCoupon = async (trashCouponId) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("admin.coupons.restore", {
+      route("admin.coupons.trash.restore", {
         trash_coupon_id: trashCouponId,
         page: params.page,
         per_page: params.per_page,
@@ -187,7 +187,7 @@ const handleDeleteTrashCoupon = async (trashCouponId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.coupons.force.delete", {
+      route("admin.coupons.trash.force.delete", {
         trash_coupon_id: trashCouponId,
         page: params.page,
         per_page: params.per_page,
@@ -225,14 +225,13 @@ const handlePermanentlyDeleteTrashCoupons = async () => {
   });
 
   if (result.isConfirmed) {
-    router.get(
-      route("admin.coupons.permanently.delete", {
+    router.delete(
+      route("admin.coupons.trash.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
       }),
-      {},
       {
         preserveScroll: true,
         onSuccess: () => {

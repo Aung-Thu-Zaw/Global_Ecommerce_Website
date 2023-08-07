@@ -33,7 +33,7 @@ const handleEditCollection = async () => {
   form.captcha_token = await executeRecaptcha("edit_collection");
 
   processing.value = true;
-  form.post(
+  form.patch(
     route("admin.collections.update", {
       collection: props.collection.slug,
       page: props.queryStringParams.page,

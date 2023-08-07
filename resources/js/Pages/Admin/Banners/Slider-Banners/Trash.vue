@@ -126,7 +126,7 @@ const handleRestoreTrashSliderBanner = async (trashSliderBannerId) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("admin.slider-banners.restore", {
+      route("admin.slider-banners.trash.restore", {
         trash_slider_banner_id: trashSliderBannerId,
         page: params.page,
         per_page: params.per_page,
@@ -166,7 +166,7 @@ const handleDeleteTrashSliderBanner = async (trashSliderBannerId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.slider-banners.force.delete", {
+      route("admin.slider-banners.trash.force.delete", {
         trash_slider_banner_id: trashSliderBannerId,
         page: params.page,
         per_page: params.per_page,
@@ -204,14 +204,13 @@ const handlePermanentlyDeleteTrashSliderBanners = async () => {
   });
 
   if (result.isConfirmed) {
-    router.get(
-      route("admin.slider-banners.permanently.delete", {
+    router.delete(
+      route("admin.slider-banners.trash.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
       }),
-      {},
       {
         preserveScroll: true,
         onSuccess: () => {

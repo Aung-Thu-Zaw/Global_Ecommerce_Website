@@ -88,9 +88,9 @@ class AdminBrandController extends Controller
 
     public function restore(Request $request, int $trashBrandId): RedirectResponse
     {
-        $brand = Brand::onlyTrashed()->findOrFail($trashBrandId);
+        $trashBrand = Brand::onlyTrashed()->findOrFail($trashBrandId);
 
-        $brand->restore();
+        $trashBrand->restore();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
@@ -99,11 +99,11 @@ class AdminBrandController extends Controller
 
     public function forceDelete(Request $request, int $trashBrandId): RedirectResponse
     {
-        $brand = Brand::onlyTrashed()->findOrFail($trashBrandId);
+        $trashBrand = Brand::onlyTrashed()->findOrFail($trashBrandId);
 
-        Brand::deleteImage($brand->image);
+        Brand::deleteImage($trashBrand->image);
 
-        $brand->forceDelete();
+        $trashBrand->forceDelete();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
@@ -112,9 +112,9 @@ class AdminBrandController extends Controller
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $brands = Brand::onlyTrashed()->get();
+        $trashBrands = Brand::onlyTrashed()->get();
 
-        (new PermanentlyDeleteAllTrashBrandAction())->handle($brands);
+        (new PermanentlyDeleteAllTrashBrandAction())->handle($trashBrands);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 

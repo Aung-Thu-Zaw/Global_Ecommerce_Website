@@ -92,15 +92,26 @@ class AdminCampaignBannerController extends Controller
 
     public function forceDelete(Request $request, int $trashCampaignBannerId): RedirectResponse
     {
-        $campaignBanner = CampaignBanner::onlyTrashed()->findOrFail($trashCampaignBannerId);
+        $trashCampaignBanner = CampaignBanner::onlyTrashed()->findOrFail($trashCampaignBannerId);
 
-        CampaignBanner::deleteImage($campaignBanner->image);
+        CampaignBanner::deleteImage($trashCampaignBanner->image);
 
-        $campaignBanner->forceDelete();
+        $trashCampaignBanner->forceDelete();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
         return to_route('admin.campaign-banners.trash', $queryStringParams)->with("success", "Campaign Banner has been permanently deleted.");
+    }
+
+    public function permanentlyDelete(Request $request): RedirectResponse
+    {
+        $trashCampaignBanners = CampaignBanner::onlyTrashed()->get();
+
+        (new PermanentlyDeleteAllTrashCampaignBannerAction())->handle($trashCampaignBanners);
+
+        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+
+        return to_route('admin.campaign-banners.trash', $queryStringParams)->with("success", "Campaign Banners have been successfully deleted.");
     }
 
     public function handleShow(Request $request, int $campaignBannerId): RedirectResponse
@@ -133,14 +144,4 @@ class AdminCampaignBannerController extends Controller
         return to_route('admin.campaign-banners.index', $queryStringParams)->with("success", "The campaign banner has been successfully hidden.");
     }
 
-    public function permanentlyDelete(Request $request): RedirectResponse
-    {
-        $campaignBanners = CampaignBanner::onlyTrashed()->get();
-
-        (new PermanentlyDeleteAllTrashCampaignBannerAction())->handle($campaignBanners);
-
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.campaign-banners.trash', $queryStringParams)->with("success", "Campaign Banners have been successfully deleted.");
-    }
 }

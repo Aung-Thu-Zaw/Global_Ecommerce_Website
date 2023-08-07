@@ -126,7 +126,7 @@ const handleRestoreTrashCollection = async (trashCollectionId) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("admin.collections.restore", {
+      route("admin.collections.trash.restore", {
         trash_collection_id: trashCollectionId,
         page: params.page,
         per_page: params.per_page,
@@ -166,7 +166,7 @@ const handleDeleteTrashCollection = async (trashCollectionId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.collections.force.delete", {
+      route("admin.collections.trash.force.delete", {
         trash_collection_id: trashCollectionId,
         page: params.page,
         per_page: params.per_page,
@@ -204,14 +204,13 @@ const handlePermanentlyDeleteTrashCollections = async () => {
   });
 
   if (result.isConfirmed) {
-    router.get(
-      route("admin.collections.permanently.delete", {
+    router.delete(
+      route("admin.collections.trash.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
       }),
-      {},
       {
         preserveScroll: true,
         onSuccess: () => {

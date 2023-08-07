@@ -126,7 +126,7 @@ const handleRestoreTrashBrand = async (trashBrandId) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("admin.brands.restore", {
+      route("admin.brands.trash.restore", {
         trash_brand_id: trashBrandId,
         page: params.page,
         per_page: params.per_page,
@@ -166,7 +166,7 @@ const handleDeleteTrashBrand = async (trashBrandId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.brands.force.delete", {
+      route("admin.brands.trash.force.delete", {
         trash_brand_id: trashBrandId,
         page: params.page,
         per_page: params.per_page,
@@ -205,7 +205,7 @@ const handlePermanentlyDeleteTrashBrands = async () => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.brands.permanently.delete", {
+      route("admin.brands.trash.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,

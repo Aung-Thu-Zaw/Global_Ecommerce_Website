@@ -83,9 +83,9 @@ class AdminCollectionController extends Controller
 
     public function restore(Request $request, int $trashCollectionId): RedirectResponse
     {
-        $collection = Collection::onlyTrashed()->findOrFail($trashCollectionId);
+        $trashCollection = Collection::onlyTrashed()->findOrFail($trashCollectionId);
 
-        $collection->restore();
+        $trashCollection->restore();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
@@ -94,9 +94,9 @@ class AdminCollectionController extends Controller
 
     public function forceDelete(Request $request, int $trashCollectionId): RedirectResponse
     {
-        $collection = Collection::onlyTrashed()->findOrFail($trashCollectionId);
+        $trashCollection = Collection::onlyTrashed()->findOrFail($trashCollectionId);
 
-        $collection->forceDelete();
+        $trashCollection->forceDelete();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
@@ -105,9 +105,9 @@ class AdminCollectionController extends Controller
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $collections = Collection::onlyTrashed()->get();
+        $trashCollections = Collection::onlyTrashed()->get();
 
-        (new PermanentlyDeleteAllTrashCollectionAction())->handle($collections);
+        (new PermanentlyDeleteAllTrashCollectionAction())->handle($trashCollections);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
