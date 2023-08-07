@@ -13,7 +13,7 @@ return new class () extends Migration {
     public function up()
     {
         Schema::table('product_reviews', function (Blueprint $table) {
-            $table->boolean("status")->default(false)->after("rating");
+            $table->enum("status", ["pending","published","unpublished"])->after("rating")->default("pending");
         });
     }
 

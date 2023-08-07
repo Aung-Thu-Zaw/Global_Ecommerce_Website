@@ -3,6 +3,7 @@ import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ProductReviewBreadcrumb.vue";
 import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
 import PublishedStatus from "@/Components/Status/PublishedStatus.vue";
+import PendingStatus from "@/Components/Status/PendingStatus.vue";
 import { Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -37,7 +38,7 @@ const props = defineProps({
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
               >
-                Published Reviews
+                Pending Reviews
               </span>
             </div>
           </li>
@@ -89,7 +90,7 @@ const props = defineProps({
         <div>
           <Link
             as="button"
-            :href="route('admin.product-reviews.published.index')"
+            :href="route('admin.product-reviews.pending.index')"
             :data="{
               page: props.queryStringParams.page,
               per_page: props.queryStringParams.per_page,
@@ -175,7 +176,10 @@ const props = defineProps({
                 >
                   Status
                 </span>
-                <span class="w-1/2 block">
+                <span class="w-1/2 block capitalize">
+                  <PendingStatus v-if="productReview.status === 0">
+                    pending
+                  </PendingStatus>
                   <PublishedStatus v-if="productReview.status === 1">
                     published
                   </PublishedStatus>

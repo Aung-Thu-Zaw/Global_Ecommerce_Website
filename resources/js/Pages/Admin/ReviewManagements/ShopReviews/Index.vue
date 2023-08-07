@@ -9,6 +9,8 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ShopReviewBreadcrumb.vue";
 import PendingStatus from "@/Components/Status/PendingStatus.vue";
+import PublishedStatus from "@/Components/Status/PublishedStatus.vue";
+import UnpublishedStatus from "@/Components/Status/UnpublishedStatus.vue";
 import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
@@ -17,7 +19,7 @@ import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 // Define the props
 const props = defineProps({
-  pendingShopReviews: Object,
+  shopReviews: Object,
 });
 
 // Define Alert Variables
@@ -35,7 +37,7 @@ const params = reactive({
 // Handle Search
 const handleSearch = () => {
   router.get(
-    route("admin.shop-reviews.pending.index"),
+    route("admin.shop-reviews.index"),
     {
       search: params.search,
       per_page: params.per_page,
@@ -53,7 +55,7 @@ const handleSearch = () => {
 const removeSearch = () => {
   params.search = "";
   router.get(
-    route("admin.shop-reviews.pending.index"),
+    route("admin.shop-reviews.index"),
     {
       per_page: params.per_page,
       sort: params.sort,
@@ -69,7 +71,7 @@ const removeSearch = () => {
 // Handle Query String Parameter
 const handleQueryStringParameter = () => {
   router.get(
-    route("admin.shop-reviews.pending.index"),
+    route("admin.shop-reviews.index"),
     {
       search: params.search,
       page: params.page,
@@ -112,13 +114,21 @@ const updateSorting = (sort = "id") => {
   handleQueryStringParameter();
 };
 
-// Handle Shop Review Publish
-const handleShopReviewPublish = async (shopReview) => {
+// Handle Product Review Published Or Unpublished
+const handleStatus = async (shopReview) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to publish this shop review?",
+    title: `Are you sure you want to set ${
+      shopReview.status === "pending" || shopReview.status === "unpublished"
+        ? "publish"
+        : "unpublish"
+    } this shop review?`,
     showCancelButton: true,
-    confirmButtonText: "Yes, Publish!",
+    confirmButtonText: `Yes, ${
+      shopReview.status === "pending" || shopReview.status === "unpublished"
+        ? "Publish"
+        : "Unpublish"
+    }!`,
     confirmButtonColor: "#2562c4",
     cancelButtonColor: "#626262",
     timer: 20000,
@@ -127,9 +137,13 @@ const handleShopReviewPublish = async (shopReview) => {
   });
 
   if (result.isConfirmed) {
-    router.post(
-      route("admin.shop-reviews.pending.update", {
-        shop_review: shopReview,
+    router.patch(
+      route("admin.shop-reviews.update", {
+        shop_review: shopReview.id,
+        status:
+          shopReview.status === "pending" || shopReview.status === "unpublished"
+            ? "published"
+            : "unpublished",
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
@@ -168,7 +182,7 @@ const handleDeleteShopReview = async (shopReview) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.shop-reviews.pending.destroy", {
+      route("admin.shop-reviews.destroy", {
         shop_review: shopReview,
         page: params.page,
         per_page: params.per_page,
@@ -272,7 +286,7 @@ if (usePage().props.flash.successMessage) {
         <div v-if="shopReviewTrashList">
           <Link
             as="button"
-            :href="route('admin.shop-reviews.pending.trash')"
+            :href="route('admin.shop-reviews.trash')"
             :data="{
               page: 1,
               per_page: 10,
@@ -331,8 +345,6 @@ if (usePage().props.flash.successMessage) {
 
           <HeaderTh> Shop Name </HeaderTh>
 
-          <HeaderTh> Reviewer Name </HeaderTh>
-
           <HeaderTh @click="updateSorting('review_text')">
             Review Text
             <SortingArrows :params="params" sort="review_text" />
@@ -352,60 +364,76 @@ if (usePage().props.flash.successMessage) {
           </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="pendingShopReviews.data.length">
-          <Tr
-            v-for="pendingShopReview in pendingShopReviews.data"
-            :key="pendingShopReview.id"
-          >
+        <tbody v-if="shopReviews.data.length">
+          <Tr v-for="shopReview in shopReviews.data" :key="shopReview.id">
             <BodyTh>
-              {{ pendingShopReview.id }}
+              {{ shopReview.id }}
             </BodyTh>
 
             <Td>
               <span class="line-clamp-1">
-                {{ pendingShopReview.shop.shop_name }}
+                {{ shopReview.shop.shop_name }}
               </span>
-            </Td>
-
-            <Td>
-              {{ pendingShopReview.user.name }}
             </Td>
 
             <Td>
               <span class="line-clamp-1 w-[300px]">
-                {{ pendingShopReview.review_text }}
+                {{ shopReview.review_text }}
               </span>
             </Td>
 
             <Td>
-              <TotalRatingStars :rating="pendingShopReview.rating" />
+              <TotalRatingStars :rating="shopReview.rating" />
             </Td>
 
             <Td>
-              <PendingStatus v-if="pendingShopReview.status === 0">
+              <PendingStatus v-if="shopReview.status === 'pending'">
                 pending
               </PendingStatus>
+              <PublishedStatus v-if="shopReview.status === 'published'">
+                published
+              </PublishedStatus>
+              <UnpublishedStatus v-if="shopReview.status === 'unpublished'">
+                unpublished
+              </UnpublishedStatus>
             </Td>
 
             <Td
               v-if="shopReviewControl || shopReviewDetail || shopReviewDelete"
             >
-              <!-- Publish Button -->
+              <!-- Control Button -->
               <button
                 v-if="shopReviewControl"
-                @click="handleShopReviewPublish(pendingShopReview.id)"
-                class="active-btn group"
+                @click="handleStatus(shopReview)"
+                class="offical-btn group"
                 type="button"
+                :class="{
+                  'bg-green-600  hover:bg-green-700 border-green-700':
+                    shopReview.status === 'pending' ||
+                    shopReview.status === 'unpublished',
+                  'bg-orange-600  hover:bg-orange-700 border-orange-700':
+                    shopReview.status === 'published',
+                }"
               >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-arrow-up"></i>
+                <span
+                  v-if="
+                    shopReview.status === 'pending' ||
+                    shopReview.status === 'unpublished'
+                  "
+                  class="group-hover:animate-pulse"
+                >
+                  <i class="fa-solid fa-check"></i>
                   Publish
+                </span>
+                <span v-else class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-xmark"></i>
+                  Unpublish
                 </span>
               </button>
 
               <!-- Delete Button -->
               <button
-                @click="handleDeleteShopReview(pendingShopReview.id)"
+                @click="handleDeleteShopReview(shopReview.id)"
                 v-if="shopReviewDelete"
                 class="delete-btn group"
                 type="button"
@@ -418,9 +446,7 @@ if (usePage().props.flash.successMessage) {
 
               <Link
                 v-if="shopReviewDetail"
-                :href="
-                  route('admin.shop-reviews.pending.show', pendingShopReview.id)
-                "
+                :href="route('admin.shop-reviews.show', shopReview.id)"
                 as="button"
                 :data="{
                   page: params.page,
@@ -442,15 +468,15 @@ if (usePage().props.flash.successMessage) {
       <!-- Pending Product Review Review Table End -->
 
       <!-- No Data Row -->
-      <NotAvaliableData v-if="!pendingShopReviews.data.length" />
+      <NotAvaliableData v-if="!shopReviews.data.length" />
 
       <!-- Pagination -->
-      <div v-if="pendingShopReviews.data.length" class="mt-6">
+      <div v-if="shopReviews.data.length" class="mt-6">
         <p class="text-center text-sm text-gray-600 mb-3 font-bold">
-          Showing {{ pendingShopReviews.from }} - {{ pendingShopReviews.to }} of
-          {{ pendingShopReviews.total }}
+          Showing {{ shopReviews.from }} - {{ shopReviews.to }} of
+          {{ shopReviews.total }}
         </p>
-        <Pagination :links="pendingShopReviews.links" />
+        <Pagination :links="shopReviews.links" />
       </div>
     </div>
   </AdminDashboardLayout>

@@ -16,6 +16,7 @@ class ShopReviewSeeder extends Seeder
     public function run()
     {
         ShopReview::factory(3000)->create();
-        ShopReview::factory(100)->create(["seller_id"=>3,"status"=>true]);
+        ShopReview::factory(50)->create(["shop_id"=>3,"status"=>"published"]);
+        ShopReview::factory(50)->create(["shop_id"=>3,"status"=>"unpublished"]);
     }
 }

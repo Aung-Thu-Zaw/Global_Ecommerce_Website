@@ -48,10 +48,8 @@ use App\Http\Controllers\Admin\FromTheSubmitters\AdminWebsiteFeedbackController;
 use App\Http\Controllers\Admin\FromTheSubmitters\AdminSubscriberController;
 use App\Http\Controllers\Admin\FromTheSubmitters\AdminSuggestionController;
 use App\Http\Controllers\Admin\UserManagements\AdminManage\AdminManageController;
-use App\Http\Controllers\Admin\ReviewManagements\ProductReviews\AdminPendingProductReviewController;
-use App\Http\Controllers\Admin\ReviewManagements\ProductReviews\AdminPublishedProductReviewController;
-use App\Http\Controllers\Admin\ReviewManagements\ShopReviews\AdminPendingShopReviewController;
-use App\Http\Controllers\Admin\ReviewManagements\ShopReviews\AdminPublishedShopReviewController;
+use App\Http\Controllers\Admin\ReviewManagements\AdminProductReviewController;
+use App\Http\Controllers\Admin\ReviewManagements\AdminShopReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/admin/login", [AdminAuthController::class,"login"])->middleware("guest")->name("admin.login");
@@ -162,7 +160,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::get("/create", "create")->middleware('permission:coupon.add')->name("create");
                     Route::post("/", "store")->middleware('permission:coupon.add')->name("store");
                     Route::get("/{coupon}/edit", "edit")->middleware('permission:coupon.edit')->name("edit");
-                    Route::post("/{coupon}", "update")->middleware('permission:coupon.edit')->name("update");
+                    Route::patch("/{coupon}", "update")->middleware('permission:coupon.edit')->name("update");
                     Route::delete("/{coupon}", "destroy")->middleware('permission:coupon.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:coupon.trash.list')->name("trash");
                     Route::post("/trash/{trash_coupon_id}/restore", "restore")->middleware('permission:coupon.trash.restore')->name("trash.restore");
@@ -304,7 +302,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::get("/create", "create")->middleware('permission:language.add')->name("create");
                     Route::post("/", "store")->middleware('permission:language.add')->name("store");
                     Route::get("/{language}/edit", "edit")->middleware('permission:language.edit')->name("edit");
-                    Route::post("/{language}", "update")->middleware('permission:language.edit')->name("update");
+                    Route::patch("/{language}", "update")->middleware('permission:language.edit')->name("update");
                     Route::delete("/{language}", "destroy")->middleware('permission:language.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:language.trash.list')->name("trash");
                     Route::post("/trash/{trash_language_id}/restore", "restore")->middleware('permission:language.trash.restore')->name("trash.restore");
@@ -420,16 +418,14 @@ Route::middleware(["admin","verified","user.role:admin"])
 
            // ******************** Admin Dashboard Review Managements ********************
 
-           // ========== Admin Product Reviews Section ==========
-
-           // Admin Pending Product Reviews Section
-           Route::controller(AdminPendingProductReviewController::class)
-                ->prefix("/product-reviews/pending-reviews")
-                ->name("product-reviews.pending.")
+           // Admin Product Reviews Section
+           Route::controller(AdminProductReviewController::class)
+                ->prefix("/product-reviews")
+                ->name("product-reviews.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:product-review.menu')->name("index");
                     Route::get("/{product_review}/details", "show")->middleware('permission:product-review.detail')->name("show");
-                    Route::post("/{product_review}", "update")->middleware('permission:product-review.control')->name("update");
+                    Route::patch("/{product_review}", "update")->middleware('permission:product-review.control')->name("update");
                     Route::delete("/{product_review}", "destroy")->middleware('permission:product-review.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:product-review.trash.list')->name("trash");
                     Route::post("/trash/{trash_product_review_id}/restore", "restore")->middleware('permission:product-review.trash.restore')->name("trash.restore");
@@ -437,41 +433,19 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:product-review.trash.delete')->name("trash.permanently.delete");
                 });
 
-           // Admin Published Product Reviews Section
-           Route::controller(AdminPublishedProductReviewController::class)
-                ->prefix("/product-reviews/published-reviews")
-                ->name("product-reviews.published.")
-                ->group(function () {
-                    Route::get("/", "index")->middleware('permission:product-review.menu')->name("index");
-                    Route::get("/{product_review}", "show")->middleware('permission:product-review.detail')->name("show");
-                    Route::post("/{product_review}", "update")->middleware('permission:product-review.control')->name("update");
-                });
-
-           // ========== Admin Shop Reviews Section ==========
-
-           //    Admin Pending Shop Reviews Section
-           Route::controller(AdminPendingShopReviewController::class)
-                ->prefix("/shop-reviews/pending-reviews")
-                ->name("shop-reviews.pending.")
+           //    Admin Shop Reviews Section
+           Route::controller(AdminShopReviewController::class)
+                ->prefix("/shop-reviews")
+                ->name("shop-reviews.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:shop-review.menu')->name("index");
-                    Route::get("/{shop_review}", "show")->middleware('permission:shop-review.detail')->name("show");
-                    Route::post("/{shop_review}", "update")->middleware('permission:shop-review.control')->name("update");
+                    Route::get("/{shop_review}/details", "show")->middleware('permission:shop-review.detail')->name("show");
+                    Route::patch("/{shop_review}", "update")->middleware('permission:shop-review.control')->name("update");
                     Route::delete("/{shop_review}", "destroy")->middleware('permission:shop-review.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:shop-review.trash.list')->name("trash");
                     Route::post("/trash/{trash_shop_review_id}/restore", "restore")->middleware('permission:shop-review.trash.restore')->name("trash.restore");
                     Route::delete("/trash/{trash_shop_review_id}/force-delete", "forceDelete")->middleware('permission:shop-review.trash.delete')->name("trash.force.delete");
                     Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:shop-review.trash.delete')->name("trash.permanently.delete");
-                });
-
-           //    Admin Dashboard Published Shop Reviews Section
-           Route::controller(AdminPublishedShopReviewController::class)
-                ->prefix("/shop-reviews/published-reviews")
-                ->name("shop-reviews.published.")
-                ->group(function () {
-                    Route::get("/", "index")->middleware('permission:shop-review.menu')->name("index");
-                    Route::get("/{shop_review}", "show")->middleware('permission:shop-review.detail')->name("show");
-                    Route::post("/{shop_review}", "update")->middleware('permission:shop-review.control')->name("update");
                 });
 
            // ******************** Admin Dashboard User Managements ********************

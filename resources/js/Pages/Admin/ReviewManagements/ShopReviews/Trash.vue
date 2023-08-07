@@ -2,6 +2,8 @@
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import SortingArrows from "@/Components/Table/SortingArrows.vue";
 import PendingStatus from "@/Components/Status/PendingStatus.vue";
+import PublishedStatus from "@/Components/Status/PublishedStatus.vue";
+import UnpublishedStatus from "@/Components/Status/UnpublishedStatus.vue";
 import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
@@ -17,7 +19,7 @@ import { router, usePage, Link, Head } from "@inertiajs/vue3";
 
 // Define the Props
 const props = defineProps({
-  trashPendingShopReviews: Object,
+  trashShopReviews: Object,
 });
 
 // Define Alert Variables
@@ -35,7 +37,7 @@ const params = reactive({
 // Handle Search
 const handleSearch = () => {
   router.get(
-    route("admin.shop-reviews.pending.trash"),
+    route("admin.shop-reviews.trash"),
     {
       search: params.search,
       per_page: params.per_page,
@@ -53,7 +55,7 @@ const handleSearch = () => {
 const removeSearch = () => {
   params.search = "";
   router.get(
-    route("admin.shop-reviews.pending.trash"),
+    route("admin.shop-reviews.trash"),
     {
       per_page: params.per_page,
       sort: params.sort,
@@ -69,7 +71,7 @@ const removeSearch = () => {
 // Handle Query String Parameter
 const handleQueryStringParameter = () => {
   router.get(
-    route("admin.shop-reviews.pending.trash"),
+    route("admin.shop-reviews.trash"),
     {
       search: params.search,
       page: params.page,
@@ -113,7 +115,7 @@ const updateSorting = (sort = "id") => {
 };
 
 // Handle Trash Shop Review Restore
-const handleRestoreTrashPendingShopReview = async (trashShopReviewId) => {
+const handleRestoreTrashShopReview = async (trashShopReviewId) => {
   const result = await swal({
     icon: "question",
     title: "Are you sure you want to restore this shop review?",
@@ -128,8 +130,8 @@ const handleRestoreTrashPendingShopReview = async (trashShopReviewId) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("admin.shop-reviews.pending.restore", {
-        trash_product_review_id: trashShopReviewId,
+      route("admin.shop-reviews.trash.restore", {
+        trash_shop_review_id: trashShopReviewId,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
@@ -152,7 +154,7 @@ const handleRestoreTrashPendingShopReview = async (trashShopReviewId) => {
 };
 
 // Handle Trash Shop Review Delete
-const handleDeleteTrashPendingShopReview = async (trashShopReviewId) => {
+const handleDeleteTrashShopReview = async (trashShopReviewId) => {
   const result = await swal({
     icon: "question",
     title: "Are you sure you want to delete it from the trash?",
@@ -168,8 +170,8 @@ const handleDeleteTrashPendingShopReview = async (trashShopReviewId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.shop-reviews.pending.force.delete", {
-        trash_product_review_id: trashShopReviewId,
+      route("admin.shop-reviews.trash.force.delete", {
+        trash_shop_review_id: trashShopReviewId,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
@@ -191,7 +193,7 @@ const handleDeleteTrashPendingShopReview = async (trashShopReviewId) => {
 };
 
 // Handle Trash Shop Review Delete Permanently
-const handlePermanentlyDeletetrashPendingShopReviews = async () => {
+const handlePermanentlyDeletetrashShopReviews = async () => {
   const result = await swal({
     icon: "question",
     title: "Are you sure you want to delete it from the trash?",
@@ -206,14 +208,13 @@ const handlePermanentlyDeletetrashPendingShopReviews = async () => {
   });
 
   if (result.isConfirmed) {
-    router.get(
-      route("admin.shop-reviews.pending.permanently.delete", {
+    router.delete(
+      route("admin.shop-reviews.trash.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
       }),
-      {},
       {
         preserveScroll: true,
         onSuccess: () => {
@@ -307,7 +308,7 @@ const shopReviewTrashDelete = computed(() => {
         <div>
           <Link
             as="button"
-            :href="route('admin.shop-reviews.pending.index')"
+            :href="route('admin.shop-reviews.index')"
             :data="{
               page: 1,
               per_page: 10,
@@ -356,14 +357,12 @@ const shopReviewTrashDelete = computed(() => {
 
       <!-- Brand Permanently Delete Button -->
       <p
-        v-if="
-          shopReviewTrashDelete && trashPendingShopReviews.data.length !== 0
-        "
+        v-if="shopReviewTrashDelete && trashShopReviews.data.length !== 0"
         class="text-left text-sm font-bold mb-2 text-warning-600"
       >
         Shop Review in the Trash will be automatically deleted after 60 days.
         <button
-          @click="handlePermanentlyDeletetrashPendingShopReviews"
+          @click="handlePermanentlyDeletetrashShopReviews"
           class="empty-trash-btn"
         >
           Empty the trash now
@@ -379,8 +378,6 @@ const shopReviewTrashDelete = computed(() => {
           </HeaderTh>
 
           <HeaderTh> Shop Name </HeaderTh>
-
-          <HeaderTh> Reviewer Name </HeaderTh>
 
           <HeaderTh @click="updateSorting('review_text')">
             Review Text
@@ -399,50 +396,48 @@ const shopReviewTrashDelete = computed(() => {
           </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="trashPendingShopReviews.data.length">
+        <tbody v-if="trashShopReviews.data.length">
           <Tr
-            v-for="trashPendingShopReview in trashPendingShopReviews.data"
-            :key="trashPendingShopReview.id"
+            v-for="trashShopReview in trashShopReviews.data"
+            :key="trashShopReview.id"
           >
             <BodyTh>
-              {{ trashPendingShopReview.id }}
+              {{ trashShopReview.id }}
             </BodyTh>
 
             <Td>
               <span class="line-clamp-1">
-                {{ trashPendingShopReview.shop.shop_name }}
+                {{ trashShopReview.shop.shop_name }}
               </span>
-            </Td>
-
-            <Td>
-              {{ trashPendingShopReview.user.name }}
             </Td>
 
             <Td>
               <span class="line-clamp-1 w-[300px]">
-                {{ trashPendingShopReview.review_text }}
+                {{ trashShopReview.review_text }}
               </span>
             </Td>
 
             <Td>
-              <TotalRatingStars :rating="trashPendingShopReview.rating" />
+              <TotalRatingStars :rating="trashShopReview.rating" />
             </Td>
 
             <Td>
-              <PendingStatus v-if="trashPendingShopReview.status === 0">
+              <PendingStatus v-if="trashShopReview.status === 'pending'">
                 pending
               </PendingStatus>
+              <PublishedStatus v-if="trashShopReview.status === 'published'">
+                published
+              </PublishedStatus>
+              <UnpublishedStatus v-if="trashShopReview.status === 'unpublished'">
+                unpublished
+              </UnpublishedStatus>
             </Td>
 
             <Td v-if="shopReviewTrashRestore || shopReviewTrashDelete">
               <!-- Restore Button -->
               <button
                 v-if="shopReviewTrashRestore"
-                @click="
-                  handleRestoreTrashPendingShopReview(
-                    trashPendingShopReview.id
-                  )
-                "
+                @click="handleRestoreTrashShopReview(trashShopReview.id)"
                 class="edit-btn group"
                 type="button"
               >
@@ -455,11 +450,7 @@ const shopReviewTrashDelete = computed(() => {
               <!-- Delete Button -->
               <button
                 v-if="shopReviewTrashDelete"
-                @click="
-                  handleDeleteTrashPendingShopReview(
-                    trashPendingShopReview.id
-                  )
-                "
+                @click="handleDeleteTrashShopReview(trashShopReview.id)"
                 class="delete-btn group"
                 type="button"
               >
@@ -475,16 +466,15 @@ const shopReviewTrashDelete = computed(() => {
       <!-- Trash Product Review Table End -->
 
       <!-- No Data Row -->
-      <NotAvaliableData v-if="!trashPendingShopReviews.data.length" />
+      <NotAvaliableData v-if="!trashShopReviews.data.length" />
 
       <!-- Pagination -->
-      <div v-if="trashPendingShopReviews.data.length" class="mt-6">
+      <div v-if="trashShopReviews.data.length" class="mt-6">
         <p class="text-center text-sm text-gray-600 mb-3 font-bold">
-          Showing {{ trashPendingShopReviews.from }} -
-          {{ trashPendingShopReviews.to }} of
-          {{ trashPendingShopReviews.total }}
+          Showing {{ trashShopReviews.from }} - {{ trashShopReviews.to }} of
+          {{ trashShopReviews.total }}
         </p>
-        <Pagination :links="trashPendingShopReviews.links" />
+        <Pagination :links="trashShopReviews.links" />
       </div>
     </div>
   </AdminDashboardLayout>

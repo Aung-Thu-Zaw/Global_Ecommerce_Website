@@ -61,7 +61,7 @@ class ShopReview extends Model
     */
     public function shop(): BelongsTo
     {
-        return $this->belongsTo(User::class, "vendor_id");
+        return $this->belongsTo(User::class, "shop_id");
     }
 
     /**

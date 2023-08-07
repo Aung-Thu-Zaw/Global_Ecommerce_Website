@@ -26,9 +26,10 @@ class ProductReviewRequest extends FormRequest
     {
         return [
             "product_id"=>["required","numeric",Rule::exists("products", "id")],
-            "vendor_id"=>["required","numeric",Rule::exists("users", "id")],
+            "shop_id"=>["required","numeric",Rule::exists("users", "id")],
             "user_id"=>["required","numeric",Rule::exists("users", "id")],
             "review_text"=>["required","string"],
+            "status"=>["required","string",Rule::in(["pending","published","unpublished"])],
             "rating"=>["required","numeric"],
         ];
     }
@@ -45,9 +46,9 @@ class ProductReviewRequest extends FormRequest
             "product_id.required" =>  "The product id is required.",
             "product_id.numeric" =>  "The product id must be a number.",
             "product_id.exists" =>  "The selected product id is invalid.",
-            "vendor_id.required" =>  "The vendor id is required.",
-            "vendor_id.numeric" =>  "The vendor id must be a number.",
-            "vendor_id.exists" =>  "The selected vendor id is invalid.",
+            "shop_id.required" =>  "The shop id is required.",
+            "shop_id.numeric" =>  "The shop id must be a number.",
+            "shop_id.exists" =>  "The selected shop id is invalid.",
             "review_text.required" =>  "The review text is required.",
             "review_text.string" =>  "The review text must be a string.",
             "rating.required" =>  "The rating is required.",

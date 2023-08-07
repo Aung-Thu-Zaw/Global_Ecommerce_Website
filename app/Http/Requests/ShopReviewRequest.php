@@ -28,6 +28,7 @@ class ShopReviewRequest extends FormRequest
             "vendor_id"=>["required","numeric",Rule::exists("users", "id")],
             "user_id"=>["required","numeric",Rule::exists("users", "id")],
             "review_text"=>["required","string"],
+            "status"=>["required","string",Rule::in(["pending","published","unpublished"])],
             "rating"=>["required","numeric"],
         ];
     }

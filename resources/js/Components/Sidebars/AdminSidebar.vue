@@ -789,152 +789,52 @@
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
           <!-- Product Reviews Section -->
           <li v-if="productReviewMenu" class="items-center">
-            <ul class="md:flex-col md:min-w-full flex flex-col list-none">
-              <li class="items-center cursor-pointer">
-                <div
-                  class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
-                  @click="
-                    productReviewManageIsHidden = !productReviewManageIsHidden
-                  "
-                >
-                  <span>
-                    <i class="fa-solid fa-star mr-2 text-sm"></i>
-                    {{ __("PRODUCT_REVIEWS") }}
-                  </span>
-                  <i
-                    v-if="productReviewManageIsHidden"
-                    class="fa-solid fa-chevron-right"
-                  ></i>
-                  <i
-                    v-if="!productReviewManageIsHidden"
-                    class="fa-solid fa-chevron-down"
-                  ></i>
-                </div>
-
-                <ul
-                  v-if="!productReviewManageIsHidden || productReviewManage"
-                  class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
-                >
-                  <!-- Pending Product Reviews Section -->
-                  <li
-                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                    :class="{
-                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                        '/admin/product-reviews/pending-reviews'
-                      ),
-                    }"
-                  >
-                    <Link
-                      :href="route('admin.product-reviews.pending.index')"
-                      :data="{
-                        page: 1,
-                        per_page: 10,
-                        sort: 'id',
-                        direction: 'desc',
-                      }"
-                    >
-                      {{ __("PENDING_REVIEWS") }}
-                    </Link>
-                  </li>
-
-                  <!-- Published Product Reviews Section -->
-                  <li
-                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                    :class="{
-                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                        '/admin/product-reviews/published-reviews'
-                      ),
-                    }"
-                  >
-                    <Link
-                      :href="route('admin.product-reviews.published.index')"
-                      :data="{
-                        page: 1,
-                        per_page: 10,
-                        sort: 'id',
-                        direction: 'desc',
-                      }"
-                    >
-                      {{ __("PUBLISHED_REVIEWS") }}
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-            </ul>
+            <Link
+              :href="route('admin.product-reviews.index')"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                  '/admin/product-reviews'
+                ),
+                'text-slate-700 hover:text-slate-500': !$page.url.startsWith(
+                  '/admin/product-reviews'
+                ),
+              }"
+            >
+              <i class="fa-solid fa-star mr-2 text-sm"></i>
+              {{ __("PRODUCT_REVIEWS") }}
+            </Link>
           </li>
 
           <!-- Shop Reviews Section -->
           <li v-if="shopReviewMenu" class="items-center">
-            <ul class="md:flex-col md:min-w-full flex flex-col list-none">
-              <li class="items-center cursor-pointer">
-                <div
-                  class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
-                  @click="shopReviewManageIsHidden = !shopReviewManageIsHidden"
-                >
-                  <span>
-                    <i class="fa-solid fa-shop mr-2 text-sm"></i>
-                    {{ __("SHOP_REVIEWS") }}
-                  </span>
-                  <i
-                    v-if="shopReviewManageIsHidden"
-                    class="fa-solid fa-chevron-right"
-                  ></i>
-                  <i
-                    v-if="!shopReviewManageIsHidden"
-                    class="fa-solid fa-chevron-down"
-                  ></i>
-                </div>
-
-                <ul
-                  v-if="!shopReviewManageIsHidden || shopReviewManage"
-                  class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
-                >
-                  <!-- Pending Shop Reviews Section -->
-                  <li
-                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                    :class="{
-                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                        '/admin/shop-reviews/pending-reviews'
-                      ),
-                    }"
-                  >
-                    <Link
-                      :href="route('admin.shop-reviews.pending.index')"
-                      :data="{
-                        page: 1,
-                        per_page: 10,
-                        sort: 'id',
-                        direction: 'desc',
-                      }"
-                    >
-                      {{ __("PENDING_REVIEWS") }}
-                    </Link>
-                  </li>
-
-                  <!-- Published Shop Reviews Section -->
-                  <li
-                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                    :class="{
-                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                        '/admin/shop-reviews/published-reviews'
-                      ),
-                    }"
-                  >
-                    <Link
-                      :href="route('admin.shop-reviews.published.index')"
-                      :data="{
-                        page: 1,
-                        per_page: 10,
-                        sort: 'id',
-                        direction: 'desc',
-                      }"
-                    >
-                      {{ __("PUBLISHED_REVIEWS") }}
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-            </ul>
+            <Link
+              :href="route('admin.shop-reviews.index')"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                  '/admin/shop-reviews'
+                ),
+                'text-slate-700 hover:text-slate-500': !$page.url.startsWith(
+                  '/admin/shop-reviews'
+                ),
+              }"
+            >
+              <i class="fa-solid fa-shop mr-2 text-sm"></i>
+              {{ __("SHOP_REVIEWS") }}
+            </Link>
           </li>
         </ul>
 

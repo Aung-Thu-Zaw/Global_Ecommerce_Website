@@ -125,7 +125,7 @@ const formattedAmount = (amount) => {
   }
 };
 
-// Handle Offical Or UnOffical
+// Handle Product Approved Or Disapproved
 const handleStatus = async (product) => {
   const result = await swal({
     icon: "question",
@@ -443,7 +443,7 @@ if (usePage().props.flash.successMessage) {
                 productEdit || productDelete || productDetail || productControl
               "
             >
-              <!-- Delete Button -->
+              <!-- Control Button -->
               <button
                 v-if="productControl"
                 @click="handleStatus(product)"

@@ -18,11 +18,11 @@ class ProductReviewFactory extends Factory
     {
         return [
             "product_id"=>fake()->numberBetween(1, 250),
-            "seller_id"=>fake()->numberBetween(4, 64),
+            "shop_id"=>fake()->numberBetween(4, 64),
             "user_id"=>fake()->numberBetween(1, 263),
             "review_text"=>fake()->paragraph(),
             "rating"=>fake()->numberBetween(1, 5),
-            "status"=>fake()->randomElement([true,false])
+            "status"=>fake()->randomElement(["pending","published","unpublished"])
         ];
     }
 }

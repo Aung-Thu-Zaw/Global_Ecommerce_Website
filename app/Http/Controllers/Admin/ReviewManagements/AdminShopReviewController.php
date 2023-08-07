@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\ReviewManagements\ShopReviews;
+namespace App\Http\Controllers\Admin\ReviewManagements;
 
 use App\Actions\Admin\ReviewManagements\ShopReviews\PermanentlyDeleteAllTrashShopReviewAction;
 use App\Http\Controllers\Controller;
@@ -11,20 +11,19 @@ use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Database\Eloquent\Builder;
 
-class AdminPendingShopReviewController extends Controller
+class AdminShopReviewController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $pendingShopReviews=ShopReview::search(request("search"))
+        $shopReviews=ShopReview::search(request("search"))
                                       ->query(function (Builder $builder) {
-                                          $builder->with(["shop:id,shop_name","user:id,name"]);
+                                          $builder->with(["shop:id,shop_name"]);
                                       })
-                                      ->where("status", 0)
                                       ->orderBy(request("sort", "id"), request("direction", "desc"))
                                       ->paginate(request("per_page", 10))
                                       ->appends(request()->all());
 
-        return inertia("Admin/ReviewManagements/ShopReviews/PendingReviews/Index", compact("pendingShopReviews"));
+        return inertia("Admin/ReviewManagements/ShopReviews/Index", compact("shopReviews"));
     }
 
     public function show(Request $request, ShopReview $shopReview): Response|ResponseFactory
@@ -33,16 +32,18 @@ class AdminPendingShopReviewController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return inertia("Admin/ReviewManagements/ShopReviews/PendingReviews/Details", compact("shopReview", "queryStringParams"));
+        return inertia("Admin/ReviewManagements/ShopReviews/Details", compact("shopReview", "queryStringParams"));
     }
 
     public function update(Request $request, ShopReview $shopReview): RedirectResponse
     {
-        $shopReview->update(["status"=>true]);
+        $shopReview->update(["status"=>$request->status]);
+
+        $message=$request->status==="unpublished" ? "Shop review has been successfully unpublished" : "Shop review has been successfully published";
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.shop-reviews.pending.index', $queryStringParams)->with("success", "Shop review has been successfully published.");
+        return to_route('admin.shop-reviews.index', $queryStringParams)->with("success", $message);
     }
 
     public function destroy(Request $request, ShopReview $shopReview): RedirectResponse
@@ -51,54 +52,53 @@ class AdminPendingShopReviewController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.shop-reviews.pending.index', $queryStringParams)->with("success", "The shop review has been successfully moved to the trash.");
+        return to_route('admin.shop-reviews.index', $queryStringParams)->with("success", "The shop review has been successfully moved to the trash.");
     }
 
     public function trash(): Response|ResponseFactory
     {
-        $trashPendingShopReviews=ShopReview::search(request("search"))
+        $trashShopReviews=ShopReview::search(request("search"))
                                            ->query(function (Builder $builder) {
-                                               $builder->with(["shop:id,shop_name","user:id,name"]);
+                                               $builder->with(["shop:id,shop_name"]);
                                            })
                                            ->onlyTrashed()
-                                           ->where("status", 0)
                                            ->orderBy(request("sort", "id"), request("direction", "desc"))
                                            ->paginate(request("per_page", 10))
                                            ->appends(request()->all());
 
-        return inertia("Admin/ReviewManagements/ShopReviews/PendingReviews/Trash", compact("trashPendingShopReviews"));
+        return inertia("Admin/ReviewManagements/ShopReviews/Trash", compact("trashShopReviews"));
     }
 
-    public function restore(Request $request, int $trashShopReview): RedirectResponse
+    public function restore(Request $request, int $trashShopReviewId): RedirectResponse
     {
-        $pendingShopReview = ShopReview::onlyTrashed()->findOrFail($trashShopReview);
+        $trashShopReview = ShopReview::onlyTrashed()->findOrFail($trashShopReviewId);
 
-        $pendingShopReview->restore();
+        $trashShopReview->restore();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.shop-reviews.pending.trash', $queryStringParams)->with("success", "Shop review has been successfully restored.");
+        return to_route('admin.shop-reviews.trash', $queryStringParams)->with("success", "Shop review has been successfully restored.");
     }
 
-    public function forceDelete(Request $request, int $trashShopReview): RedirectResponse
+    public function forceDelete(Request $request, int $trashShopReviewId): RedirectResponse
     {
-        $pendingShopReview = ShopReview::onlyTrashed()->findOrFail($trashShopReview);
+        $trashShopReview = ShopReview::onlyTrashed()->findOrFail($trashShopReviewId);
 
-        $pendingShopReview->forceDelete();
+        $trashShopReview->forceDelete();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.shop-reviews.pending.trash', $queryStringParams)->with("success", "Shop review has been successfully deleted.");
+        return to_route('admin.shop-reviews.trash', $queryStringParams)->with("success", "Shop review has been successfully deleted.");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $pendingShopReviews = ShopReview::onlyTrashed()->get();
+        $trashShopReviews = ShopReview::onlyTrashed()->get();
 
-        (new PermanentlyDeleteAllTrashShopReviewAction())->handle($pendingShopReviews);
+        (new PermanentlyDeleteAllTrashShopReviewAction())->handle($trashShopReviews);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.shop-reviews.pending.trash', $queryStringParams)->with("success", "Shop reviews have been successfully deleted.");
+        return to_route('admin.shop-reviews.trash', $queryStringParams)->with("success", "Shop reviews have been successfully deleted.");
     }
 }

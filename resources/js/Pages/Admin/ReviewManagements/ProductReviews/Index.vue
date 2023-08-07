@@ -9,6 +9,8 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ProductReviewBreadcrumb.vue";
 import PendingStatus from "@/Components/Status/PendingStatus.vue";
+import PublishedStatus from "@/Components/Status/PublishedStatus.vue";
+import UnpublishedStatus from "@/Components/Status/UnpublishedStatus.vue";
 import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
@@ -17,7 +19,7 @@ import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 // Define the props
 const props = defineProps({
-  pendingProductReviews: Object,
+  productReviews: Object,
 });
 
 // Define Alert Variables
@@ -35,7 +37,7 @@ const params = reactive({
 // Handle Search
 const handleSearch = () => {
   router.get(
-    route("admin.product-reviews.pending.index"),
+    route("admin.product-reviews.index"),
     {
       search: params.search,
       per_page: params.per_page,
@@ -53,7 +55,7 @@ const handleSearch = () => {
 const removeSearch = () => {
   params.search = "";
   router.get(
-    route("admin.product-reviews.pending.index"),
+    route("admin.product-reviews.index"),
     {
       per_page: params.per_page,
       sort: params.sort,
@@ -69,7 +71,7 @@ const removeSearch = () => {
 // Handle Query String Parameter
 const handleQueryStringParameter = () => {
   router.get(
-    route("admin.product-reviews.pending.index"),
+    route("admin.product-reviews.index"),
     {
       search: params.search,
       page: params.page,
@@ -112,13 +114,23 @@ const updateSorting = (sort = "id") => {
   handleQueryStringParameter();
 };
 
-// Handle Product Review Publish
-const handleProductReviewPublish = async (productReview) => {
+// Handle Product Review Published Or Unpublished
+const handleStatus = async (productReview) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to publish this product review?",
+    title: `Are you sure you want to set ${
+      productReview.status === "pending" ||
+      productReview.status === "unpublished"
+        ? "publish"
+        : "unpublish"
+    } this product review?`,
     showCancelButton: true,
-    confirmButtonText: "Yes, Publish!",
+    confirmButtonText: `Yes, ${
+      productReview.status === "pending" ||
+      productReview.status === "unpublished"
+        ? "Publish"
+        : "Unpublish"
+    }!`,
     confirmButtonColor: "#2562c4",
     cancelButtonColor: "#626262",
     timer: 20000,
@@ -127,9 +139,14 @@ const handleProductReviewPublish = async (productReview) => {
   });
 
   if (result.isConfirmed) {
-    router.post(
-      route("admin.product-reviews.pending.update", {
-        product_review: productReview,
+    router.patch(
+      route("admin.product-reviews.update", {
+        product_review: productReview.id,
+        status:
+          productReview.status === "pending" ||
+          productReview.status === "unpublished"
+            ? "published"
+            : "unpublished",
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
@@ -168,7 +185,7 @@ const handleDeleteProductReview = async (productReview) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.product-reviews.pending.destroy", {
+      route("admin.product-reviews.destroy", {
         product_review: productReview,
         page: params.page,
         per_page: params.per_page,
@@ -239,40 +256,18 @@ if (usePage().props.flash.successMessage) {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Pending Product Reviews" />
+    <Head title="Product Reviews" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
         <!-- Breadcrumb -->
-        <Breadcrumb>
-          <li>
-            <div class="flex items-center">
-              <svg
-                aria-hidden="true"
-                class="w-6 h-6 text-gray-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <span
-                class="ml-1 font-medium text-gray-500 md:ml-2 dark:hover:text-white"
-                >Pending Reviews</span
-              >
-            </div>
-          </li>
-        </Breadcrumb>
+        <Breadcrumb />
 
         <!-- Trash Button -->
         <div v-if="productReviewTrashList">
           <Link
             as="button"
-            :href="route('admin.product-reviews.pending.trash')"
+            :href="route('admin.product-reviews.trash')"
             :data="{
               page: 1,
               per_page: 10,
@@ -321,7 +316,7 @@ if (usePage().props.flash.successMessage) {
         </div>
       </div>
 
-      <!-- Pending Product Review Table Start -->
+      <!-- Product Review Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -330,8 +325,6 @@ if (usePage().props.flash.successMessage) {
           </HeaderTh>
 
           <HeaderTh> Product Name </HeaderTh>
-
-          <HeaderTh> Reviewer Name </HeaderTh>
 
           <HeaderTh @click="updateSorting('review_text')">
             Review Text
@@ -343,7 +336,10 @@ if (usePage().props.flash.successMessage) {
             <SortingArrows :params="params" sort="rating" />
           </HeaderTh>
 
-          <HeaderTh>Status</HeaderTh>
+          <HeaderTh @click="updateSorting('status')">
+            Status
+            <SortingArrows :params="params" sort="status" />
+          </HeaderTh>
 
           <HeaderTh
             v-if="
@@ -354,39 +350,41 @@ if (usePage().props.flash.successMessage) {
           </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="pendingProductReviews.data.length">
+        <tbody v-if="productReviews.data.length">
           <Tr
-            v-for="pendingProductReview in pendingProductReviews.data"
-            :key="pendingProductReview.id"
+            v-for="productReview in productReviews.data"
+            :key="productReview.id"
           >
             <BodyTh>
-              {{ pendingProductReview.id }}
+              {{ productReview.id }}
             </BodyTh>
 
             <Td>
               <span class="line-clamp-1">
-                {{ pendingProductReview.product.name }}
+                {{ productReview.product.name }}
               </span>
-            </Td>
-
-            <Td>
-              {{ pendingProductReview.user.name }}
             </Td>
 
             <Td>
               <span class="line-clamp-1 w-[300px]">
-                {{ pendingProductReview.review_text }}
+                {{ productReview.review_text }}
               </span>
             </Td>
 
             <Td>
-              <TotalRatingStars :rating="pendingProductReview.rating" />
+              <TotalRatingStars :rating="productReview.rating" />
             </Td>
 
             <Td>
-              <PendingStatus v-if="pendingProductReview.status === 0">
+              <PendingStatus v-if="productReview.status === 'pending'">
                 pending
               </PendingStatus>
+              <PublishedStatus v-if="productReview.status === 'published'">
+                published
+              </PublishedStatus>
+              <UnpublishedStatus v-if="productReview.status === 'unpublished'">
+                unpublished
+              </UnpublishedStatus>
             </Td>
 
             <Td
@@ -396,22 +394,39 @@ if (usePage().props.flash.successMessage) {
                 productReviewDelete
               "
             >
-              <!-- Publish Button -->
+              <!-- Control Button -->
               <button
                 v-if="productReviewControl"
-                @click="handleProductReviewPublish(pendingProductReview.id)"
-                class="active-btn group"
+                @click="handleStatus(productReview)"
+                class="offical-btn group"
                 type="button"
+                :class="{
+                  'bg-green-600  hover:bg-green-700 border-green-700':
+                    productReview.status === 'pending' ||
+                    productReview.status === 'unpublished',
+                  'bg-orange-600  hover:bg-orange-700 border-orange-700':
+                    productReview.status === 'published',
+                }"
               >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-arrow-up"></i>
+                <span
+                  v-if="
+                    productReview.status === 'pending' ||
+                    productReview.status === 'unpublished'
+                  "
+                  class="group-hover:animate-pulse"
+                >
+                  <i class="fa-solid fa-check"></i>
                   Publish
+                </span>
+                <span v-else class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-xmark"></i>
+                  Unpublish
                 </span>
               </button>
 
               <!-- Delete Button -->
               <button
-                @click="handleDeleteProductReview(pendingProductReview.id)"
+                @click="handleDeleteProductReview(productReview.id)"
                 v-if="productReviewDelete"
                 class="delete-btn group"
                 type="button"
@@ -424,12 +439,7 @@ if (usePage().props.flash.successMessage) {
 
               <Link
                 v-if="productReviewDetail"
-                :href="
-                  route(
-                    'admin.product-reviews.pending.show',
-                    pendingProductReview.id
-                  )
-                "
+                :href="route('admin.product-reviews.show', productReview.id)"
                 as="button"
                 :data="{
                   page: params.page,
@@ -448,19 +458,18 @@ if (usePage().props.flash.successMessage) {
           </Tr>
         </tbody>
       </TableContainer>
-      <!-- Pending Product Review Review Table End -->
+      <!-- Product Review Review Table End -->
 
       <!-- No Data Row -->
-      <NotAvaliableData v-if="!pendingProductReviews.data.length" />
+      <NotAvaliableData v-if="!productReviews.data.length" />
 
       <!-- Pagination -->
-      <div v-if="pendingProductReviews.data.length" class="mt-6">
+      <div v-if="productReviews.data.length" class="mt-6">
         <p class="text-center text-sm text-gray-600 mb-3 font-bold">
-          Showing {{ pendingProductReviews.from }} -
-          {{ pendingProductReviews.to }} of
-          {{ pendingProductReviews.total }}
+          Showing {{ productReviews.from }} - {{ productReviews.to }} of
+          {{ productReviews.total }}
         </p>
-        <Pagination :links="pendingProductReviews.links" />
+        <Pagination :links="productReviews.links" />
       </div>
     </div>
   </AdminDashboardLayout>

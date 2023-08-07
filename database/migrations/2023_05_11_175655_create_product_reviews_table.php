@@ -15,7 +15,7 @@ return new class () extends Migration {
         Schema::create('product_reviews', function (Blueprint $table) {
             $table->id();
             $table->foreignId("product_id")->constrained()->cascadeOnDelete();
-            $table->foreignId("seller_id")->references("id")->on("users")->cascadeOnDelete();
+            $table->foreignId("shop_id")->references("id")->on("users")->cascadeOnDelete();
             $table->foreignId("user_id")->constrained()->cascadeOnDelete();
             $table->text("review_text");
             $table->integer("rating");
@@ -23,14 +23,6 @@ return new class () extends Migration {
             $table->softDeletes();
         });
     }
-
-    //     id (primary key)
-    // product_id (foreign key referencing the products table)
-    // user_id (foreign key referencing the users table)
-    // rating (integer)
-    // comment (text)
-    // created_at
-    // updated_at
 
     /**
      * Reverse the migrations.

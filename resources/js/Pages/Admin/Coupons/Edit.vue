@@ -63,7 +63,7 @@ const handleEditCoupon = async () => {
   form.captcha_token = await executeRecaptcha("edit_coupon");
 
   processing.value = true;
-  form.post(
+  form.patch(
     route("admin.coupons.update", {
       coupon: props.coupon.id,
       page: props.queryStringParams.page,
