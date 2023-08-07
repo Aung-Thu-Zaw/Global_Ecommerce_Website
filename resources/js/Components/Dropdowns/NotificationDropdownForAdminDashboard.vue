@@ -1,12 +1,12 @@
 <script setup>
-import RegisteredVendorNotificationCard from "@/Components/Cards/RegisteredVendorNotificationCard.vue";
+import RegisteredVendorNotificationCard from "@/Components/Cards/RegisteredSellerNotificationCard.vue";
 import RegisteredUserNotificationCard from "@/Components/Cards/RegisteredUserNotificationCard.vue";
 import OrderPlacedNotificationCard from "@/Components/Cards/OrderPlacedNotificationCard.vue";
 import DeletedUserNotificationCard from "@/Components/Cards/DeletedUserNotificationCard.vue";
-import DeletedVendorNotificationCard from "@/Components/Cards/DeletedVendorNotificationCard.vue";
+import DeletedVendorNotificationCard from "@/Components/Cards/DeletedSellerNotificationCard.vue";
 import NewsletterSubscribedNotificationCard from "@/Components/Cards/NewsletterSubscribedNotificationCard.vue";
 import NewSuggestionNotificationCard from "@/Components/Cards/NewSuggestionNotificationCard.vue";
-import VendorCreateNewProductNotificationCard from "@/Components/Cards/VendorCreateNewProductNotificationCard.vue";
+import VendorCreateNewProductNotificationCard from "@/Components/Cards/SellerCreateNewProductNotificationCard.vue";
 import { usePage, router } from "@inertiajs/vue3";
 import { computed, onMounted, onUpdated, ref } from "vue";
 

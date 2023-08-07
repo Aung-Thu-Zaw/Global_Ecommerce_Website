@@ -39,7 +39,7 @@ const totalItems = computed(() => {
         <!-- Seller Register -->
         <Link
           class="text-sm font-bold px-3 py-2 hover:text-gray-300 uppercase"
-          :href="route('vendor.register')"
+          :href="route('seller.register')"
         >
           <i class="fa-solid fa-store"></i>
           {{ __("BECOME_A_SELLER") }}

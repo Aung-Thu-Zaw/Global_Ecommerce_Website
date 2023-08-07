@@ -19,17 +19,17 @@
 
         <span
           v-if="
-            $page.url.startsWith('/admin') || $page.url.startsWith('/vendor')
+            $page.url.startsWith('/admin') || $page.url.startsWith('/seller')
           "
           class="font-bold ml-2"
           :class="{
             'text-slate-600 md:text-white':
               $page.url === '/admin/dashboard' ||
-              $page.url === '/vendor/dashboard',
+              $page.url === '/seller/dashboard',
 
             'text-white':
               $page.url !== '/admin/dashboard' ||
-              $page.url !== '/vendor/dashboard',
+              $page.url !== '/seller/dashboard',
           }"
           >{{ $page.props.auth.user.name }}
         </span>
@@ -56,7 +56,7 @@
         {{ __("MY_ACCOUNT") }}
       </Link>
       <Link
-        v-if="$page.props.auth.user?.role === 'vendor'"
+        v-if="$page.props.auth.user?.role === 'seller'"
         :href="route('shop.show', $page.props.auth.user.uuid)"
         :data="{ tab: 'home' }"
         as="button"

@@ -1,5 +1,5 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/VendorManageBreadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/SellerManageBreadcrumb.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import InputContainer from "@/Components/Forms/InputContainer.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";

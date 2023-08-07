@@ -16,6 +16,6 @@ class ProductReviewSeeder extends Seeder
     public function run()
     {
         ProductReview::factory(3000)->create();
-        ProductReview::factory(100)->create(["vendor_id"=>3,"status"=>true]);
+        ProductReview::factory(100)->create(["seller_id"=>3,"status"=>true]);
     }
 }

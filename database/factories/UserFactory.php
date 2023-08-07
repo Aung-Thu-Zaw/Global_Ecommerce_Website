@@ -27,7 +27,7 @@ class UserFactory extends Factory
             // 'status'=>fake()->randomElement(["active","inactive"]),
             'status'=>"active",
             'gender'=>fake()->randomElement(["male","female"]),
-            'role'=>fake()->randomElement(["user","vendor"]),
+            'role'=>fake()->randomElement(["user","seller"]),
             'shop_name'=>fake()->jobTitle(),
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password

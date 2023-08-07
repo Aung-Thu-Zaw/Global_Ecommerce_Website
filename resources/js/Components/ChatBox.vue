@@ -2,7 +2,7 @@
 import { router, usePage } from "@inertiajs/vue3";
 import MessageBox from "@/Components/MessageBox.vue";
 import ConversationCardForCustomer from "@/Components/Cards/ConversationCardForCustomer.vue";
-import ConversationCardForVendor from "@/Components/Cards/ConversationCardForVendor.vue";
+import ConversationCardForVendor from "@/Components/Cards/ConversationCardForSeller.vue";
 import { computed, onMounted, onUpdated, ref, watch } from "vue";
 
 const props = defineProps({

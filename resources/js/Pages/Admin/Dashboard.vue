@@ -4,7 +4,7 @@ import AdminHeaderStats from "@/Components/Headers/AdminHeaderStats.vue";
 import MonthlyOrderCardBarChart from "@/Components/Charts/MonthlyOrderCardBarChart.vue";
 import MonthlySalesCardLineChart from "@/Components/Charts/MonthlySalesCardLineChart.vue";
 import MonthlyRegisterUserCardLineChart from "@/Components/Charts/MonthlyRegisterUserCardLineChart.vue";
-import MonthlyRegisterVendorCardLineChart from "@/Components/Charts/MonthlyRegisterVendorCardLineChart.vue";
+import MonthlyRegisterVendorCardLineChart from "@/Components/Charts/MonthlyRegisterSellerCardLineChart.vue";
 import CardPageVisits from "@/Components/Cards/CardPageVisits.vue";
 import CardSocialTraffic from "@/Components/Cards/CardSocialTraffic.vue";
 import { toast } from "vue3-toastify";

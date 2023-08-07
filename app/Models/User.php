@@ -182,7 +182,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return match ((string)$this->role) {
             "admin"=>"admin.dashboard",
-            "vendor"=>"vendor.dashboard",
+            "seller"=>"seller.dashboard",
             "user"=>"home",
         };
     }
@@ -191,7 +191,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return match ((string)$this->role) {
             "admin"=>"admin.login",
-            "vendor"=>"vendor.login",
+            "seller"=>"seller.login",
             "user"=>"home",
         };
     }

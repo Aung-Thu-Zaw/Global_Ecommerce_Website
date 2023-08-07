@@ -1,5 +1,5 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/VendorManageBreadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/SellerManageBreadcrumb.vue";
 import SortingArrows from "@/Components/Table/SortingArrows.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
