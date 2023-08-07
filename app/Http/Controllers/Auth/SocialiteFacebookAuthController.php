@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\RegisteredWithSocialite;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Jobs\AccountRegistered\SendNewUserRegisteredWithSocialiteEmailNotificationForAdmin;
@@ -37,15 +38,12 @@ class SocialiteFacebookAuthController extends Controller
                 "name"=>$facebookUser->getName(),
                 "email"=>$facebookUser->getEmail(),
                 "avatar"=>$facebookUser->getAvatar(),
+                "role"=>"user",
                 "email_verified_at"=>now(),
                 'offical'=>false,
             ]);
 
-            SendNewUserRegisteredWithSocialiteNotificationForAdminDashboard::dispatch($newUser);
-
-            SendNewUserRegisteredWithSocialiteEmailNotificationForAdmin::dispatch($newUser);
-
-            SendWelcomeEmailToRegisteredWithSocialiteAccount::dispatch($newUser);
+            event(new RegisteredWithSocialite($newUser));
 
             Auth::login($newUser);
         } else {

@@ -7,11 +7,11 @@ use App\Actions\Vendor\Products\PermanentlyDeleteAllTrashProductAction;
 use App\Actions\Vendor\Products\UpdateProductAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
-use App\Jobs\Products\SendVendorCreateNewProductNotificationToAdminDashboard;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Image;
 use App\Models\Product;
+use App\Services\BroadcastNotifications\VendorCreatesANewProductNotificationSendToAdminDashboardService;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
@@ -54,7 +54,7 @@ class VendorProductController extends Controller
     {
         $product=(new CreateProductAction())->handle($request->validated());
 
-        SendVendorCreateNewProductNotificationToAdminDashboard::dispatch($product);
+        (new VendorCreatesANewProductNotificationSendToAdminDashboardService())->send($product);
 
         $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
 

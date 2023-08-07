@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\RegisteredWithSocialite;
 use App\Http\Controllers\Controller;
 use App\Jobs\AccountRegistered\SendNewUserRegisteredWithSocialiteEmailNotificationForAdmin;
 use App\Jobs\AccountRegistered\SendNewUserRegisteredWithSocialiteNotificationForAdminDashboard;
@@ -37,15 +38,12 @@ class SocialiteGoogleAuthController extends Controller
                 "name"=>$googleUser->getName(),
                 "email"=>$googleUser->getEmail(),
                 "avatar"=>$googleUser->getAvatar(),
+                "role"=>"user",
                 "email_verified_at"=>now(),
                 'offical'=>false,
             ]);
 
-            SendNewUserRegisteredWithSocialiteNotificationForAdminDashboard::dispatch($newUser);
-
-            SendNewUserRegisteredWithSocialiteEmailNotificationForAdmin::dispatch($newUser);
-
-            SendWelcomeEmailToRegisteredWithSocialiteAccount::dispatch($newUser);
+            event(new RegisteredWithSocialite($newUser));
 
             Auth::login($newUser);
         } else {

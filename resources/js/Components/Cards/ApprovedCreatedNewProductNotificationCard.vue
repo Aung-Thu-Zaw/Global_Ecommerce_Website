@@ -20,7 +20,7 @@ const handleNotificationReadAt = () => {
     route("vendor.notifications.read", props.notification.id),
     {},
     {
-      onSuccess: () => {
+      onemerald: () => {
         goToDetailPage();
       },
     }
@@ -39,7 +39,7 @@ const handleNotificationReadAt = () => {
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
-      class="flex-shrink-0 bg-success-300 text-success-700 ring-2 ring-success-500 w-10 h-10 rounded-md flex items-center justify-center p-3 font-bold"
+      class="flex-shrink-0 bg-emerald-300 text-emerald-700 ring-2 ring-emerald-500 w-10 h-10 rounded-md flex items-center justify-center p-3 font-bold"
     >
       <i
         class="fa-solid fa-circle-check"
@@ -70,7 +70,7 @@ const handleNotificationReadAt = () => {
       <div
         class="text-xs font-bold dark:text-blue-500"
         :class="{
-          'text-success-500': !notification.read_at,
+          'text-emerald-500': !notification.read_at,
           'text-gray-500': notification.read_at,
         }"
       >

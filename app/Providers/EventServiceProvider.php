@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Events\AccountDeleted;
+use App\Events\RegisteredWithSocialite;
 use App\Events\SubscribedNewsletter;
 use App\Events\SuggestionForWebsite;
 use App\Listeners\AccountDeleted\SendConfirmOfAccountDeletionEmailToUser;
@@ -11,6 +12,9 @@ use App\Listeners\AccountDeleted\SendUserAccountDeletedNotificationToAdminDashbo
 use App\Listeners\AccountRegistered\SendNewUserRegisteredEmailNotificationToAdmin;
 use App\Listeners\AccountRegistered\SendNewUserRegisteredNotificationToAdminDashboard;
 use App\Listeners\AccountRegistered\SendWelcomeEmailToRegisteredUser;
+use App\Listeners\AccountRegisteredWithSocialite\SendNewUserRegisteredWithSocialiteEmailNotificationToAdmin;
+use App\Listeners\AccountRegisteredWithSocialite\SendNewUserRegisteredWithSocialiteNotificationToAdminDashboard;
+use App\Listeners\AccountRegisteredWithSocialite\SendWelcomeEmailToRegisteredWithSocialiteUser;
 use App\Listeners\SubscribedNewsletter\SendNewSubscriberEmailNotificationToAdmin;
 use App\Listeners\SubscribedNewsletter\SendNewSubscriberNotificationToAdminDashboard;
 use App\Listeners\SubscribedNewsletter\SendThankForSubscribeWebsiteEmailToSubscriber;
@@ -34,6 +38,11 @@ class EventServiceProvider extends ServiceProvider
             SendNewUserRegisteredNotificationToAdminDashboard::class,
             SendNewUserRegisteredEmailNotificationToAdmin::class,
             SendWelcomeEmailToRegisteredUser::class,
+        ],
+        RegisteredWithSocialite::class => [
+            SendNewUserRegisteredWithSocialiteNotificationToAdminDashboard::class,
+            SendNewUserRegisteredWithSocialiteEmailNotificationToAdmin::class,
+            SendWelcomeEmailToRegisteredWithSocialiteUser::class,
         ],
         AccountDeleted::class=>[
             SendUserAccountDeletedNotificationToAdminDashboard::class,
