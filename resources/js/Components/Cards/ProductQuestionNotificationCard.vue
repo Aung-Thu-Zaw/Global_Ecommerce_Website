@@ -41,7 +41,7 @@ const handleNotificationReadAt = () => {
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
-      class="flex-shrink-0 bg-rose-300 text-rose-700 ring-2 ring-rose-500 w-10 h-10 rounded-md flex items-center justify-center p-3 font-bold"
+      class="flex-shrink-0 bg-purple-300 text-purple-700 ring-2 ring-purple-500 w-10 h-10 rounded-md flex items-center justify-center p-3 font-bold"
     >
       <i class="fa-solid fa-question"></i>
     </div>
@@ -68,7 +68,7 @@ const handleNotificationReadAt = () => {
       <div
         class="text-xs font-bold"
         :class="{
-          'text-rose-500': !notification.read_at,
+          'text-purple-500': !notification.read_at,
           'text-gray-500': notification.read_at,
         }"
       >

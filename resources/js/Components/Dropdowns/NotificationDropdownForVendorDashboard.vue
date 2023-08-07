@@ -73,13 +73,13 @@ const sortedNotifications = computed(() => {
 
     // Then, sort by read_at date in ascending order (oldest first)
     if (aReadAt !== null && bReadAt !== null) {
-      if (aReadAt < bReadAt) return -1;
-      if (aReadAt > bReadAt) return 1;
+      if (aReadAt > bReadAt) return -1;
+      if (aReadAt < bReadAt) return 1;
     }
 
     // If both are unread or have the same read_at date, sort by created_at date in ascending order (oldest first)
-    if (aCreatedAt < bCreatedAt) return -1;
-    if (aCreatedAt > bCreatedAt) return 1;
+    if (aCreatedAt > bCreatedAt) return -1;
+    if (aCreatedAt < bCreatedAt) return 1;
 
     return 0; // Return 0 if both read_at and created_at dates are the same
   });

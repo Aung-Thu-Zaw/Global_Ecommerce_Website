@@ -1,5 +1,5 @@
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { computed } from "vue";
@@ -9,13 +9,30 @@ dayjs.extend(relativeTime);
 const props = defineProps({
   notification: Object,
 });
+
+const goToDetailPage = () => {
+  router.get(route("user.shop.followed"));
+};
+
+const handleNotificationReadAt = () => {
+  router.post(
+    route("vendor.notifications.read", props.notification.id),
+    {},
+    {
+      onSuccess: () => {
+        goToDetailPage();
+      },
+    }
+  );
+};
 </script>
 
 <template>
-  <Link
+  <div
+    @click="handleNotificationReadAt"
     v-if="notification.type === 'App\\Notifications\\FollowedShopNotification'"
     href="#"
-    class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
+    class="flex px-4 py-3 hover:bg-gray-100 cursor-pointer"
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
@@ -47,5 +64,5 @@ const props = defineProps({
         {{ dayjs(notification.created_at).fromNow() }}
       </div>
     </div>
-  </Link>
+  </div>
 </template>
