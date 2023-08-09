@@ -22,8 +22,17 @@ const props = defineProps({
 // Define Alert Variables
 const swal = inject("$swal");
 const isFilterBoxOpened = ref(false);
-const createdFrom = ref(null);
-const createdUntil = ref(null);
+const createdFrom = ref(
+  usePage().props.ziggy.query.created_from
+    ? new Date(usePage().props.ziggy.query.created_from)
+    : ""
+);
+const createdUntil = ref(
+  usePage().props.ziggy.query.created_until
+    ? new Date(usePage().props.ziggy.query.created_until)
+    : ""
+);
+// const createdUntil = ref("");
 
 // Formatted Date
 const formattedCreatedFrom = computed(() => {
@@ -31,7 +40,7 @@ const formattedCreatedFrom = computed(() => {
   const month = createdFrom.value ? createdFrom.value.getMonth() + 1 : "";
   const day = createdFrom.value ? createdFrom.value.getDate() : "";
 
-  return year && month && day ? `${year}-${month}-${day}` : null;
+  return year && month && day ? `${year}-${month}-${day}` : undefined;
 });
 
 const formattedCreatedUntil = computed(() => {
@@ -39,7 +48,7 @@ const formattedCreatedUntil = computed(() => {
   const month = createdUntil.value ? createdUntil.value.getMonth() + 1 : "";
   const day = createdUntil.value ? createdUntil.value.getDate() : "";
 
-  return year && month && day ? `${year}-${month}-${day}` : null;
+  return year && month && day ? `${year}-${month}-${day}` : undefined;
 });
 
 // Query String Parameteres
@@ -66,8 +75,8 @@ const handleSearch = () => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
-      created_from: usePage().props.ziggy.query?.created_from,
-      created_until: usePage().props.ziggy.query?.created_until,
+      created_from: params.created_from,
+      created_until: params.created_until,
     },
     {
       replace: true,
@@ -85,8 +94,8 @@ const removeSearch = () => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
-      created_from: usePage().props.ziggy.query?.created_from,
-      created_until: usePage().props.ziggy.query?.created_until,
+      created_from: params.created_from,
+      created_until: params.created_until,
     },
     {
       replace: true,
@@ -104,7 +113,7 @@ const filteredByCreatedFrom = () => {
       sort: params.sort,
       direction: params.direction,
       created_from: formattedCreatedFrom.value,
-      created_until: usePage().props.ziggy.query?.created_until,
+      created_until: params.created_until,
     },
     {
       replace: true,
@@ -124,7 +133,7 @@ const filteredByCreatedUntil = () => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
-      created_from: usePage().props.ziggy.query?.created_from,
+      created_from: params.created_from,
       created_until: formattedCreatedUntil.value,
     },
     {
@@ -139,6 +148,8 @@ const filteredByCreatedUntil = () => {
 
 // Handle Reset Filtered Date
 const resetFilteredDate = () => {
+  createdFrom.value = "";
+  createdUntil.value = "";
   router.get(
     route("admin.brands.index"),
     {
@@ -150,6 +161,7 @@ const resetFilteredDate = () => {
     {
       replace: true,
       preserveState: true,
+      onSuccess: () => (isFilterBoxOpened.value = false),
     }
   );
 };
@@ -164,8 +176,8 @@ const handleQueryStringParameter = () => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
-      created_from: usePage().props.ziggy.query?.created_from,
-      created_until: usePage().props.ziggy.query?.created_until,
+      created_from: params.created_from,
+      created_until: params.created_until,
     },
     {
       replace: true,
@@ -235,8 +247,8 @@ const handleDelete = (brand) => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
-      created_from: usePage().props.ziggy.query?.created_from,
-      created_until: usePage().props.ziggy.query?.created_until,
+      created_from: params.created_from,
+      created_until: params.created_until,
     }),
     {
       preserveScroll: true,
@@ -419,7 +431,7 @@ if (usePage().props.flash.successMessage) {
 
           <div
             v-if="isFilterBoxOpened"
-            class="w-[400px] border border-gray-300 shadow-lg absolute bg-gray-50 top-64 right-10 z-30 px-5 py-4 rounded-md"
+            class="w-[400px] border border-gray-300 shadow-lg absolute bg-white top-64 right-10 z-30 px-5 py-4 rounded-md"
           >
             <div class="flex items-center justify-end">
               <span
@@ -454,7 +466,10 @@ if (usePage().props.flash.successMessage) {
               </div>
             </div>
 
-            <div class="w-full flex items-center">
+            <div
+              v-if="params.created_from || params.created_until"
+              class="w-full flex items-center"
+            >
               <button
                 @click="resetFilteredDate"
                 class="text-xs font-semibold px-3 ml-auto py-2 text-white bg-red-600 rounded-[4px] hover:bg-red-700 transition-all"
