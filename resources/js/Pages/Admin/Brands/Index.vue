@@ -10,6 +10,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/BrandBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import datepicker from "vue3-datepicker";
 import { reactive, watch, inject, computed, ref } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
@@ -20,6 +21,26 @@ const props = defineProps({
 
 // Define Alert Variables
 const swal = inject("$swal");
+const isFilterBoxOpened = ref(false);
+const createdFrom = ref(null);
+const createdUntil = ref(null);
+
+// Formatted Date
+const formattedCreatedFrom = computed(() => {
+  const year = createdFrom.value ? createdFrom.value.getFullYear() : "";
+  const month = createdFrom.value ? createdFrom.value.getMonth() + 1 : "";
+  const day = createdFrom.value ? createdFrom.value.getDate() : "";
+
+  return year && month && day ? `${year}-${month}-${day}` : null;
+});
+
+const formattedCreatedUntil = computed(() => {
+  const year = createdUntil.value ? createdUntil.value.getFullYear() : "";
+  const month = createdUntil.value ? createdUntil.value.getMonth() + 1 : "";
+  const day = createdUntil.value ? createdUntil.value.getDate() : "";
+
+  return year && month && day ? `${year}-${month}-${day}` : null;
+});
 
 // Query String Parameteres
 const params = reactive({
@@ -28,6 +49,12 @@ const params = reactive({
   per_page: usePage().props.ziggy.query?.per_page,
   sort: usePage().props.ziggy.query?.sort,
   direction: usePage().props.ziggy.query?.direction,
+  created_from: usePage().props.ziggy.query.created_from
+    ? usePage().props.ziggy.query.created_from
+    : formattedCreatedFrom,
+  created_until: usePage().props.ziggy.query.created_until
+    ? usePage().props.ziggy.query.created_until
+    : formattedCreatedUntil,
 });
 
 // Handle Search
@@ -39,6 +66,8 @@ const handleSearch = () => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
+      created_from: usePage().props.ziggy.query?.created_from,
+      created_until: usePage().props.ziggy.query?.created_until,
     },
     {
       replace: true,
@@ -53,6 +82,67 @@ const removeSearch = () => {
   router.get(
     route("admin.brands.index"),
     {
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+      created_from: usePage().props.ziggy.query?.created_from,
+      created_until: usePage().props.ziggy.query?.created_until,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
+
+const filteredByCreatedFrom = () => {
+  router.get(
+    route("admin.brands.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+      created_from: formattedCreatedFrom.value,
+      created_until: usePage().props.ziggy.query?.created_until,
+    },
+    {
+      replace: true,
+      preserveState: true,
+      onSuccess: () => {
+        isFilterBoxOpened.value = true;
+      },
+    }
+  );
+};
+
+const filteredByCreatedUntil = () => {
+  router.get(
+    route("admin.brands.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+      created_from: usePage().props.ziggy.query?.created_from,
+      created_until: formattedCreatedUntil.value,
+    },
+    {
+      replace: true,
+      preserveState: true,
+      onSuccess: () => {
+        isFilterBoxOpened.value = true;
+      },
+    }
+  );
+};
+
+// Handle Reset Filtered Date
+const resetFilteredDate = () => {
+  router.get(
+    route("admin.brands.index"),
+    {
+      search: params.search,
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
@@ -74,6 +164,8 @@ const handleQueryStringParameter = () => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
+      created_from: usePage().props.ziggy.query?.created_from,
+      created_until: usePage().props.ziggy.query?.created_until,
     },
     {
       replace: true,
@@ -102,6 +194,30 @@ watch(
   }
 );
 
+// Watching Created From Datepicker
+watch(
+  () => params.created_from,
+  () => {
+    if (params.created_from === "") {
+      resetFilteredDate();
+    } else {
+      filteredByCreatedFrom();
+    }
+  }
+);
+
+// Watching Created Unitl Datepicker
+watch(
+  () => params.created_until,
+  () => {
+    if (params.created_until === "") {
+      resetFilteredDate();
+    } else {
+      filteredByCreatedUntil();
+    }
+  }
+);
+
 // Update Sorting Table Column
 const updateSorting = (sort = "id") => {
   params.sort = sort;
@@ -119,6 +235,8 @@ const handleDelete = (brand) => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
+      created_from: usePage().props.ziggy.query?.created_from,
+      created_until: usePage().props.ziggy.query?.created_until,
     }),
     {
       preserveScroll: true,
@@ -287,6 +405,63 @@ if (usePage().props.flash.successMessage) {
               <option value="75">75</option>
               <option value="100">100</option>
             </select>
+          </div>
+
+          <!-- Filter By Date -->
+          <button
+            @click="isFilterBoxOpened = !isFilterBoxOpened"
+            class="filter-btn"
+          >
+            <span class="">
+              <i class="fa-solid fa-filter"></i>
+            </span>
+          </button>
+
+          <div
+            v-if="isFilterBoxOpened"
+            class="w-[400px] border border-gray-300 shadow-lg absolute bg-gray-50 top-64 right-10 z-30 px-5 py-4 rounded-md"
+          >
+            <div class="flex items-center justify-end">
+              <span
+                @click="isFilterBoxOpened = false"
+                class="text-lg text-gray-500 hover:text-gray-800 cursor-pointer"
+              >
+                <i class="fa-solid fa-xmark"></i>
+              </span>
+            </div>
+            <div class="w-full mb-6">
+              <span class="font-bold text-sm text-gray-700 mb-5"
+                >Created from</span
+              >
+              <div>
+                <datepicker
+                  class="w-full rounded-md p-3 border-gray-300 bg-white focus:ring-0 focus:border-gray-400 text-sm"
+                  placeholder="Select Date"
+                  v-model="createdFrom"
+                />
+              </div>
+            </div>
+            <div class="w-full mb-3">
+              <span class="font-bold text-sm text-gray-700 mb-5"
+                >Created until</span
+              >
+              <div>
+                <datepicker
+                  class="w-full rounded-md p-3 border-gray-300 bg-white focus:ring-0 focus:border-gray-400 text-sm"
+                  placeholder="Select Date"
+                  v-model="createdUntil"
+                />
+              </div>
+            </div>
+
+            <div class="w-full flex items-center">
+              <button
+                @click="resetFilteredDate"
+                class="text-xs font-semibold px-3 ml-auto py-2 text-white bg-red-600 rounded-[4px] hover:bg-red-700 transition-all"
+              >
+                Reset Filter
+              </button>
+            </div>
           </div>
         </div>
       </div>
