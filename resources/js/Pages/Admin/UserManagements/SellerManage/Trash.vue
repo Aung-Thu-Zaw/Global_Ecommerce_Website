@@ -3,6 +3,7 @@ import Breadcrumb from "@/Components/Breadcrumbs/SellerManageBreadcrumb.vue";
 import SortingArrows from "@/Components/Table/SortingArrows.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
+import ActiveStatus from "@/Components/Status/ActiveStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -16,7 +17,7 @@ import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 // Define the Props
 const props = defineProps({
-  inactiveTrashVendors: Object,
+  trashSellers: Object,
 });
 
 // Define Alert Variables
@@ -34,7 +35,7 @@ const params = reactive({
 // Handle Search
 const handleSearch = () => {
   router.get(
-    route("admin.vendors.inactive.trash"),
+    route("admin.seller-manage.trash"),
     {
       search: params.search,
       per_page: params.per_page,
@@ -52,7 +53,7 @@ const handleSearch = () => {
 const removeSearch = () => {
   params.search = "";
   router.get(
-    route("admin.vendors.inactive.trash"),
+    route("admin.seller-manage.trash"),
     {
       per_page: params.per_page,
       sort: params.sort,
@@ -68,7 +69,7 @@ const removeSearch = () => {
 // Handle Query String Parameter
 const handleQueryStringParameter = () => {
   router.get(
-    route("admin.vendors.inactive.trash"),
+    route("admin.seller-manage.trash"),
     {
       search: params.search,
       page: params.page,
@@ -111,11 +112,11 @@ const updateSorting = (sort = "id") => {
   handleQueryStringParameter();
 };
 
-// Handle Trash Vendor Restore
-const handleRestoreTrashVendor = async (inactiveVendorId) => {
+// Handle Trash Seller Restore
+const handleRestoreTrashSeller = async (sellerId) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to restore this vendor?",
+    title: "Are you sure you want to restore this seller?",
     showCancelButton: true,
     confirmButtonText: "Yes, Restore It",
     confirmButtonColor: "#2562c4",
@@ -127,8 +128,8 @@ const handleRestoreTrashVendor = async (inactiveVendorId) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("admin.vendors.inactive.restore", {
-        trash_vendor_id: inactiveVendorId,
+      route("admin.seller-manage.trash.restore", {
+        trash_seller_id: sellerId,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
@@ -150,8 +151,8 @@ const handleRestoreTrashVendor = async (inactiveVendorId) => {
   }
 };
 
-// Handle Trash Vendor Delete
-const handleDeleteTrashVendor = async (inactiveVendorId) => {
+// Handle Trash Seller Delete
+const handleDeleteTrashSeller = async (sellerId) => {
   const result = await swal({
     icon: "question",
     title: "Are you sure you want to delete it from the trash?",
@@ -167,8 +168,8 @@ const handleDeleteTrashVendor = async (inactiveVendorId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.vendors.inactive.force.delete", {
-        trash_vendor_id: inactiveVendorId,
+      route("admin.seller-manage.trash.force.delete", {
+        trash_seller_id: sellerId,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
@@ -189,12 +190,12 @@ const handleDeleteTrashVendor = async (inactiveVendorId) => {
   }
 };
 
-// Handle Trash Vendor Delete Permanently
-const handlePermanentlyDeleteTrashVendors = async () => {
+// Handle Trash Seller Delete Permanently
+const handlePermanentlyDeleteTrashSellers = async () => {
   const result = await swal({
     icon: "question",
     title: "Are you sure you want to delete it from the trash?",
-    text: "All inactive vendors in the trash will be permanetly deleted! You can't get it back.",
+    text: "All sellers in the trash will be permanetly deleted! You can't get it back.",
     showCancelButton: true,
     confirmButtonText: "Yes, Delete it !",
     confirmButtonColor: "#d52222",
@@ -205,14 +206,13 @@ const handlePermanentlyDeleteTrashVendors = async () => {
   });
 
   if (result.isConfirmed) {
-    router.get(
-      route("admin.vendors.inactive.permanently.delete", {
+    router.delete(
+      route("admin.seller-manage.trash.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
       }),
-      {},
       {
         preserveScroll: true,
         onSuccess: () => {
@@ -231,20 +231,20 @@ const handlePermanentlyDeleteTrashVendors = async () => {
 // Define Permissions Variables
 const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
 
-// Vendor Trash Restore Permission
-const vendorManageTrashRestore = computed(() => {
+// Seller Trash Restore Permission
+const sellerManageTrashRestore = computed(() => {
   return permissions.value.length
     ? permissions.value.some(
-        (permission) => permission.name === "vendor-manage.trash.restore"
+        (permission) => permission.name === "seller-manage.trash.restore"
       )
     : false;
 });
 
-// Vendor Trash Delete Permission
-const vendorManageTrashDelete = computed(() => {
+// Seller Trash Delete Permission
+const sellerManageTrashDelete = computed(() => {
   return permissions.value.length
     ? permissions.value.some(
-        (permission) => permission.name === "vendor-manage.trash.delete"
+        (permission) => permission.name === "seller-manage.trash.delete"
       )
     : false;
 });
@@ -252,33 +252,12 @@ const vendorManageTrashDelete = computed(() => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Trash Inactive Vendors" />
+    <Head title="Trash Sellers" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
         <!-- Breadcrumb -->
         <Breadcrumb>
-          <li aria-current="page">
-            <div class="flex items-center">
-              <svg
-                aria-hidden="true"
-                class="w-6 h-6 text-gray-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <span
-                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Inactive Vendors</span
-              >
-            </div>
-          </li>
           <li aria-current="page">
             <div class="flex items-center">
               <svg
@@ -306,7 +285,7 @@ const vendorManageTrashDelete = computed(() => {
         <div>
           <Link
             as="button"
-            :href="route('admin.vendors.inactive.index')"
+            :href="route('admin.seller-manage.index')"
             :data="{
               page: 1,
               per_page: 10,
@@ -354,20 +333,19 @@ const vendorManageTrashDelete = computed(() => {
       </div>
 
       <p
-        v-if="vendorManageTrashDelete"
+        v-if="sellerManageTrashDelete"
         class="text-left text-sm font-bold mb-2 text-warning-600"
       >
-        Inactive Vendors in the Trash will be automatically deleted after 60
-        days.
+        Sellers in the Trash will be automatically deleted after 60 days.
         <button
-          @click="handlePermanentlyDeleteTrashVendors"
+          @click="handlePermanentlyDeleteTrashSellers"
           class="empty-trash-btn"
         >
           Empty the trash now
         </button>
       </p>
 
-      <!-- Trash Inactive Vendor Table Start -->
+      <!-- Trash Sellers Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -375,9 +353,9 @@ const vendorManageTrashDelete = computed(() => {
             <SortingArrows :params="params" sort="id" />
           </HeaderTh>
 
-          <HeaderTh @click="updateSorting('name')">
-            Username
-            <SortingArrows :params="params" sort="name" />
+          <HeaderTh @click="updateSorting('shop_name')">
+            Shop Name
+            <SortingArrows :params="params" sort="shop_name" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('email')">
@@ -385,50 +363,53 @@ const vendorManageTrashDelete = computed(() => {
             <SortingArrows :params="params" sort="email" />
           </HeaderTh>
 
-          <HeaderTh> Status </HeaderTh>
+          <HeaderTh @click="updateSorting('status')">
+            Status
+            <SortingArrows :params="params" sort="status" />
+          </HeaderTh>
 
           <HeaderTh @click="updateSorting('deleted_at')">
             Deleted At
             <SortingArrows :params="params" sort="deleted_at" />
           </HeaderTh>
 
-          <HeaderTh v-if="vendorManageTrashRestore || vendorManageTrashDelete">
+          <HeaderTh v-if="sellerManageTrashRestore || sellerManageTrashDelete">
             Action
           </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="inactiveTrashVendors.data.length">
-          <Tr
-            v-for="inactiveTrashVendor in inactiveTrashVendors.data"
-            :key="inactiveTrashVendor.id"
-          >
+        <tbody v-if="trashSellers.data.length">
+          <Tr v-for="trashSeller in trashSellers.data" :key="trashSeller.id">
             <BodyTh>
-              {{ inactiveTrashVendor.id }}
+              {{ trashSeller.id }}
             </BodyTh>
 
             <Td>
-              {{ inactiveTrashVendor.name }}
+              {{ trashSeller.shop_name }}
             </Td>
 
             <Td>
-              {{ inactiveTrashVendor.email }}
+              {{ trashSeller.email }}
             </Td>
 
             <Td>
-              <InactiveStatus>
-                {{ inactiveTrashVendor.status }}
+              <ActiveStatus v-if="trashSeller.status === 'active'">
+                {{ trashSeller.status }}
+              </ActiveStatus>
+              <InactiveStatus v-if="trashSeller.status === 'inactive'">
+                {{ trashSeller.status }}
               </InactiveStatus>
             </Td>
 
             <Td>
-              {{ inactiveTrashVendor.deleted_at }}
+              {{ trashSeller.deleted_at }}
             </Td>
 
-            <Td v-if="vendorManageTrashRestore || vendorManageTrashDelete">
+            <Td v-if="sellerManageTrashRestore || sellerManageTrashDelete">
               <!-- Restore Button -->
               <button
-                v-if="vendorManageTrashRestore"
-                @click="handleRestoreTrashVendor(inactiveTrashVendor.id)"
+                v-if="sellerManageTrashRestore"
+                @click="handleRestoreTrashSeller(trashSeller.id)"
                 class="edit-btn group"
                 type="button"
               >
@@ -440,8 +421,8 @@ const vendorManageTrashDelete = computed(() => {
 
               <!-- Delete Button -->
               <button
-                v-if="vendorManageTrashDelete"
-                @click="handleDeleteTrashVendor(inactiveTrashVendor.id)"
+                v-if="sellerManageTrashDelete"
+                @click="handleDeleteTrashSeller(trashSeller.id)"
                 class="delete-btn group"
                 type="button"
               >
@@ -454,19 +435,18 @@ const vendorManageTrashDelete = computed(() => {
           </Tr>
         </tbody>
       </TableContainer>
-      <!-- Trash Inactive Vendor Table End -->
+      <!-- Trash Sellers Table End -->
 
       <!-- Not Avaliable Data -->
-      <NotAvaliableData v-if="!inactiveTrashVendors.data.length" />
+      <NotAvaliableData v-if="!trashSellers.data.length" />
 
       <!-- Pagination -->
-      <div v-if="inactiveTrashVendors.data.length" class="mt-6">
+      <div v-if="trashSellers.data.length" class="mt-6">
         <p class="text-center text-sm text-gray-600 mb-3 font-bold">
-          Showing {{ inactiveTrashVendors.from }} -
-          {{ inactiveTrashVendors.to }} of
-          {{ inactiveTrashVendors.total }}
+          Showing {{ trashSellers.from }} - {{ trashSellers.to }} of
+          {{ trashSellers.total }}
         </p>
-        <Pagination :links="inactiveTrashVendors.links" />
+        <Pagination :links="trashSellers.links" />
       </div>
     </div>
   </AdminDashboardLayout>

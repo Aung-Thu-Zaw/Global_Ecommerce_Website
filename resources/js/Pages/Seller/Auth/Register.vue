@@ -17,7 +17,7 @@ const form = useForm({
   password: "",
   password_confirmation: "",
   gender: "other",
-  role: "vendor",
+  role: "seller",
   status: "inactive",
   terms: false,
   captcha_token: null,
@@ -26,7 +26,7 @@ const form = useForm({
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 const recaptcha = async () => {
   await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("register");
+  form.captcha_token = await executeRecaptcha("register_seller");
   submit();
 };
 

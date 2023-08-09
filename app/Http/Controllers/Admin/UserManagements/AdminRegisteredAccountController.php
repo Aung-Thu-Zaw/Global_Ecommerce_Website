@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\UserManagements\RegisteredAccounts;
+namespace App\Http\Controllers\Admin\UserManagements;
 
 use App\Actions\Admin\UserManagements\PermanentlyDeleteAllTrashUserAction;
 use App\Http\Controllers\Controller;
@@ -10,24 +10,23 @@ use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
-class AdminRegisteredUserController extends Controller
+class AdminRegisteredAccountController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
         $users=User::search(request("search"))
-                   ->where("role", "user")
                    ->orderBy(request("sort", "id"), request("direction", "desc"))
                    ->paginate(request("per_page", 10))
                    ->appends(request()->all());
 
-        return inertia("Admin/UserManagements/RegisteredAccounts/RegisteredUsers/Index", compact("users"));
+        return inertia("Admin/UserManagements/RegisteredAccounts/Index", compact("users"));
     }
 
     public function show(Request $request, User $user): Response|ResponseFactory
     {
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return inertia("Admin/UserManagements/RegisteredAccounts/RegisteredUsers/Details", compact("user", "queryStringParams"));
+        return inertia("Admin/UserManagements/RegisteredAccounts/Details", compact("user", "queryStringParams"));
     }
 
     public function destroy(Request $request, User $user): RedirectResponse
@@ -36,53 +35,52 @@ class AdminRegisteredUserController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.users.registered.index", $queryStringParams)->with("success", "User has been successfully deleted.");
+        return to_route("admin.registered-accounts.index", $queryStringParams)->with("success", "User has been successfully deleted.");
     }
 
     public function trash(): Response|ResponseFactory
     {
         $trashUsers=User::search(request("search"))
                         ->onlyTrashed()
-                        ->where("role", "user")
                         ->orderBy(request("sort", "id"), request("direction", "desc"))
                         ->paginate(request("per_page", 10))
                         ->appends(request()->all());
 
-        return inertia("Admin/UserManagements/RegisteredAccounts/RegisteredUsers/Trash", compact("trashUsers"));
+        return inertia("Admin/UserManagements/RegisteredAccounts/Trash", compact("trashUsers"));
     }
 
-    public function restore(Request $request, int $trashRegisteredUserId): RedirectResponse
+    public function restore(Request $request, int $trashRegisteredAccountId): RedirectResponse
     {
-        $user = User::onlyTrashed()->findOrFail($trashRegisteredUserId);
+        $trashRegisteredAccount = User::onlyTrashed()->findOrFail($trashRegisteredAccountId);
 
-        $user->restore();
+        $trashRegisteredAccount->restore();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.users.registered.trash', $queryStringParams)->with("success", "User has been successfully restored.");
+        return to_route('admin.registered-accounts.trash', $queryStringParams)->with("success", "User has been successfully restored.");
     }
 
-    public function forceDelete(Request $request, int $trashRegisteredUserId): RedirectResponse
+    public function forceDelete(Request $request, int $trashRegisteredAccountId): RedirectResponse
     {
-        $user = User::onlyTrashed()->findOrFail($trashRegisteredUserId);
+        $trashRegisteredAccount = User::onlyTrashed()->findOrFail($trashRegisteredAccountId);
 
-        User::deleteUserAvatar($user->avatar);
+        User::deleteUserAvatar($trashRegisteredAccount->avatar);
 
-        $user->forceDelete();
+        $trashRegisteredAccount->forceDelete();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.users.registered.trash', $queryStringParams)->with("success", "The user has been permanently deleted");
+        return to_route('admin.registered-accounts.trash', $queryStringParams)->with("success", "The user has been permanently deleted");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $users = User::onlyTrashed()->get();
+        $trashRegisteredAccounts = User::onlyTrashed()->get();
 
-        (new PermanentlyDeleteAllTrashUserAction())->handle($users);
+        (new PermanentlyDeleteAllTrashUserAction())->handle($trashRegisteredAccounts);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.users.registered.trash', $queryStringParams)->with("success", "Users have been successfully deleted.");
+        return to_route('admin.registered-accounts.trash', $queryStringParams)->with("success", "Users have been successfully deleted.");
     }
 }

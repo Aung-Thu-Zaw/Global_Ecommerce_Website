@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\UserManagements\AdminManage;
+namespace App\Http\Controllers\Admin\UserManagements;
 
 use App\Actions\Admin\UserManagements\AdminManage\CreateAdminAction;
 use App\Actions\Admin\UserManagements\AdminManage\UpdateAdminAction;
@@ -110,9 +110,9 @@ class AdminManageController extends Controller
 
     public function restore(Request $request, int $trashAdminId): RedirectResponse
     {
-        $admin = User::onlyTrashed()->findOrFail($trashAdminId);
+        $trashAdmin=User::onlyTrashed()->findOrFail($trashAdminId);
 
-        $admin->restore();
+        $trashAdmin->restore();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
@@ -121,11 +121,11 @@ class AdminManageController extends Controller
 
     public function forceDelete(Request $request, int $trashAdminId): RedirectResponse
     {
-        $admin = User::onlyTrashed()->findOrFail($trashAdminId);
+        $trashAdmin=User::onlyTrashed()->findOrFail($trashAdminId);
 
-        User::deleteUserAvatar($admin->avatar);
+        User::deleteUserAvatar($trashAdmin->avatar);
 
-        $admin->forceDelete();
+        $trashAdmin->forceDelete();
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
@@ -134,9 +134,9 @@ class AdminManageController extends Controller
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $admins = User::onlyTrashed()->get();
+        $trashAdmins = User::onlyTrashed()->get();
 
-        (new PermanentlyDeleteAllTrashUserAction())->handle($admins);
+        (new PermanentlyDeleteAllTrashUserAction())->handle($trashAdmins);
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 

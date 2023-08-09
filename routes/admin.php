@@ -11,8 +11,7 @@ use App\Http\Controllers\Admin\AdminDashboardNotificationController;
 use App\Http\Controllers\Admin\AdminLanguageController;
 use App\Http\Controllers\MultiImageController;
 use App\Http\Controllers\Admin\Banners\AdminProductBannerController;
-use App\Http\Controllers\Admin\UserManagements\VendorManage\AdminActiveVendorController;
-use App\Http\Controllers\Admin\UserManagements\VendorManage\AdminInactiveVendorController;
+use App\Http\Controllers\Admin\UserManagements\AdminSellerManageController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminWebControlArea\FaqCategories\AdminFaqCategoryController;
 use App\Http\Controllers\Admin\AdminWebControlArea\FaqCategories\AdminFaqSubCategoryController;
@@ -25,8 +24,7 @@ use App\Http\Controllers\Admin\AdminWebControlArea\WebsitePages\AdminTermsAndCon
 use App\Http\Controllers\Admin\Banners\AdminSliderBannerController;
 use App\Http\Controllers\Admin\BlogManagements\AdminBlogCategoryController;
 use App\Http\Controllers\Admin\BlogManagements\AdminBlogPostController;
-use App\Http\Controllers\Admin\UserManagements\RegisteredAccounts\AdminRegisteredUserController;
-use App\Http\Controllers\Admin\UserManagements\RegisteredAccounts\AdminRegisteredVendorController;
+use App\Http\Controllers\Admin\UserManagements\AdminRegisteredAccountController;
 use App\Http\Controllers\Admin\OrderManagements\CancelOrderManage\AdminApprovedCancelOrderController;
 use App\Http\Controllers\Admin\OrderManagements\CancelOrderManage\AdminRequestedCancelOrderController;
 use App\Http\Controllers\Admin\OrderManagements\OrderManage\AdminConfirmedOrderController;
@@ -47,7 +45,7 @@ use App\Http\Controllers\Admin\Dashboard\AdminSocialTrafficController;
 use App\Http\Controllers\Admin\FromTheSubmitters\AdminWebsiteFeedbackController;
 use App\Http\Controllers\Admin\FromTheSubmitters\AdminSubscriberController;
 use App\Http\Controllers\Admin\FromTheSubmitters\AdminSuggestionController;
-use App\Http\Controllers\Admin\UserManagements\AdminManage\AdminManageController;
+use App\Http\Controllers\Admin\UserManagements\AdminManageController;
 use App\Http\Controllers\Admin\ReviewManagements\AdminProductReviewController;
 use App\Http\Controllers\Admin\ReviewManagements\AdminShopReviewController;
 use Illuminate\Support\Facades\Route;
@@ -450,39 +448,26 @@ Route::middleware(["admin","verified","user.role:admin"])
 
            // ******************** Admin Dashboard User Managements ********************
 
-           // ========== Admin Vendor Manage Section ==========
-
-           // Admin Inactive Vendors Section
-           Route::controller(AdminInactiveVendorController::class)
-                ->prefix("/vendor-manage/inactive-vendors")
-                ->name("vendors.inactive.")
+           // Admin Seller Manage Section
+           Route::controller(AdminSellerManageController::class)
+                ->prefix("/seller-manage")
+                ->name("seller-manage.")
                 ->group(function () {
-                    Route::get("/", "index")->middleware('permission:vendor-manage.menu')->name("index");
-                    Route::get("/{user}/details", "show")->middleware('permission:vendor-manage.detail')->name("show");
-                    Route::post("/{user}", "update")->middleware('permission:vendor-manage.control')->name("update");
-                    Route::delete("/{user}", "destroy")->middleware('permission:vendor-manage.delete')->name("destroy");
-                    Route::get("/trash", "trash")->middleware('permission:vendor-manage.trash.list')->name("trash");
-                    Route::post("/trash/{trash_vendor_id}/restore", "restore")->middleware('permission:vendor-manage.trash.restore')->name("trash.restore");
-                    Route::delete("/trash/{trash_vendor_id}/force-delete", "forceDelete")->middleware('permission:vendor-manage.trash.delete')->name("trash.force.delete");
-                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:vendor-manage.trash.delete')->name("trash.permanently.delete");
+                    Route::get("/", "index")->middleware('permission:seller-manage.menu')->name("index");
+                    Route::get("/{user}/details", "show")->middleware('permission:seller-manage.detail')->name("show");
+                    Route::patch("/{user}", "update")->middleware('permission:seller-manage.control')->name("update");
+                    Route::delete("/{user}", "destroy")->middleware('permission:seller-manage.delete')->name("destroy");
+                    Route::get("/trash", "trash")->middleware('permission:seller-manage.trash.list')->name("trash");
+                    Route::post("/trash/{trash_seller_id}/restore", "restore")->middleware('permission:seller-manage.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_seller_id}/force-delete", "forceDelete")->middleware('permission:seller-manage.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:seller-manage.trash.delete')->name("trash.permanently.delete");
                 });
 
-           // Admin Active Vendors Section
-           Route::controller(AdminActiveVendorController::class)
-                ->prefix("/vendor-manage/active-vendors")
-                ->name("vendors.active.")
-                ->group(function () {
-                    Route::get("/", "index")->middleware('permission:vendor-manage.menu')->name("index");
-                    Route::get("/{user}/details", "show")->middleware('permission:vendor-manage.detail')->name("show");
-                    Route::post("/{user}", "update")->middleware('permission:vendor-manage.control')->name("update");
-                });
 
-           // ========== Admin Registered Accounts Section ==========
-
-           // Admin Registered Users Section
-           Route::controller(AdminRegisteredUserController::class)
-                ->prefix("/registered-accounts/registered-users")
-                ->name("users.registered.")
+           // Admin Registered Account Section
+           Route::controller(AdminRegisteredAccountController::class)
+                ->prefix("/registered-accounts")
+                ->name("registered-accounts.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:registered-account.menu')->name("index");
                     Route::get("/{user}/details", "show")->middleware('permission:registered-account.detail')->name("show");
@@ -490,20 +475,6 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::get("/trash", "trash")->middleware('permission:registered-account.trash.list')->name("trash");
                     Route::post("/trash/{trash_user_id}/restore", "restore")->middleware('permission:registered-account.trash.restore')->name("trash.restore");
                     Route::delete("/trash/{trash_user_id}/force-delete", "forceDelete")->middleware('permission:registered-account.trash.delete')->name("trash.force.delete");
-                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:registered-account.trash.delete')->name("trash.permanently.delete");
-                });
-
-           // Admin Registered Vendors Section
-           Route::controller(AdminRegisteredVendorController::class)
-                ->prefix("/registered-accounts/registered-vendors")
-                ->name("vendors.registered.")
-                ->group(function () {
-                    Route::get("/", "index")->middleware('permission:registered-account.menu')->name("index");
-                    Route::get("/{user}/details", "show")->middleware('permission:registered-account.detail')->name("show");
-                    Route::delete("/{user}", "destroy")->middleware('permission:registered-account.delete')->name("destroy");
-                    Route::get("/trash", "trash")->middleware('permission:registered-account.trash.list')->name("trash");
-                    Route::post("/trash/{trash_vendor_id}/restore", "restore")->middleware('permission:registered-account.trash.restore')->name("trash.restore");
-                    Route::delete("/trash/{trash_vendor_id}/force-delete", "forceDelete")->middleware('permission:registered-account.trash.delete')->name("trash.force.delete");
                     Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:registered-account.trash.delete')->name("trash.permanently.delete");
                 });
 

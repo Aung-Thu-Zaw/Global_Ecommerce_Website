@@ -1,10 +1,9 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/RegisteredAccountBreadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/SellerManageBreadcrumb.vue";
 import SortingArrows from "@/Components/Table/SortingArrows.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import ActiveStatus from "@/Components/Status/ActiveStatus.vue";
 import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
-import RoleStatus from "@/Components/Status/RoleStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -13,27 +12,16 @@ import TableHeader from "@/Components/Table/TableHeader.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject, computed, ref } from "vue";
-import { router, Head, Link, usePage } from "@inertiajs/vue3";
+import { Link, usePage, Head, router } from "@inertiajs/vue3";
+import { inject, reactive, watch, computed, ref } from "vue";
 
 // Define the props
 const props = defineProps({
-  vendors: Object,
+  sellers: Object,
 });
 
 // Define Alert Variables
 const swal = inject("$swal");
-
-// Vendor Activity Status
-const currentTime = new Date();
-const threshold = 1000 * 60 * 5; //5minutes in millseconds
-
-const status = (last_activity) => {
-  const lastActivity = new Date(last_activity);
-  const timeDifference = currentTime.getTime() - lastActivity.getTime();
-
-  return timeDifference < threshold ? "active" : "offline";
-};
 
 // Query String Parameteres
 const params = reactive({
@@ -43,10 +31,11 @@ const params = reactive({
   sort: usePage().props.ziggy.query?.sort,
   direction: usePage().props.ziggy.query?.direction,
 });
+
 // Handle Search
 const handleSearch = () => {
   router.get(
-    route("admin.vendors.registered.index"),
+    route("admin.seller-manage.index"),
     {
       search: params.search,
       per_page: params.per_page,
@@ -64,7 +53,7 @@ const handleSearch = () => {
 const removeSearch = () => {
   params.search = "";
   router.get(
-    route("admin.vendors.registered.index"),
+    route("admin.seller-manage.index"),
     {
       per_page: params.per_page,
       sort: params.sort,
@@ -80,7 +69,7 @@ const removeSearch = () => {
 // Handle Query String Parameter
 const handleQueryStringParameter = () => {
   router.get(
-    route("admin.vendors.registered.index"),
+    route("admin.seller-manage.index"),
     {
       search: params.search,
       page: params.page,
@@ -123,12 +112,56 @@ const updateSorting = (sort = "id") => {
   handleQueryStringParameter();
 };
 
-// Handle Vendor Delete
-const handleDeleteRegisteredVendor = async (vendor) => {
+// Handle Seller shop is active or inactive
+const handleStatus = async (seller) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to delete this vendor?",
-    text: "You will be able to restore this vendor in the trash!",
+    title: `Are you sure you want to set ${
+      seller.status === "active" ? "inactive" : "active"
+    } this seller?`,
+    showCancelButton: true,
+    confirmButtonText: `Yes, ${
+      seller.status === "active" ? "Inactive" : "Active"
+    }!`,
+    confirmButtonColor: "#2562c4",
+    cancelButtonColor: "#626262",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.patch(
+      route("admin.seller-manage.update", {
+        user: seller.id,
+        status: seller.status === "inactive" ? "active" : "inactive",
+        page: params.page,
+        per_page: params.per_page,
+        sort: params.sort,
+        direction: params.direction,
+      }),
+      {},
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: usePage().props.flash.successMessage,
+            });
+          }
+        },
+      }
+    );
+  }
+};
+
+// Handle Delete Seller
+const handleDeleteSeller = async (sellerId) => {
+  const result = await swal({
+    icon: "question",
+    title: "Are you sure you want to move it to the trash?",
+    text: "You will be able to revert this action!",
     showCancelButton: true,
     confirmButtonText: "Yes, Delete it!",
     confirmButtonColor: "#d52222",
@@ -140,8 +173,8 @@ const handleDeleteRegisteredVendor = async (vendor) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.vendors.registered.destroy", {
-        user: vendor,
+      route("admin.seller-manage.destroy", {
+        user: sellerId,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
@@ -165,67 +198,65 @@ const handleDeleteRegisteredVendor = async (vendor) => {
 // Define Permissions Variables
 const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
 
-// Registered Account Detail Permission
-const registeredAccountDetail = computed(() => {
+// Seller Manage Control Permission
+const sellerManageControl = computed(() => {
   return permissions.value.length
     ? permissions.value.some(
-        (permission) => permission.name === "registered-account.detail"
+        (permission) => permission.name === "seller-manage.control"
       )
     : false;
 });
 
-// Registered Account Delete Permission
-const registeredAccountDelete = computed(() => {
+// Seller Manage Detail Permission
+const sellerManageDetail = computed(() => {
   return permissions.value.length
     ? permissions.value.some(
-        (permission) => permission.name === "registered-account.delete"
+        (permission) => permission.name === "seller-manage.detail"
       )
     : false;
 });
 
-// Registered Account Trash List Permission
-const registeredAccountTrashList = computed(() => {
+// Seller Manage Delete Permission
+const sellerManageDelete = computed(() => {
   return permissions.value.length
     ? permissions.value.some(
-        (permission) => permission.name === "registered-account.trash.list"
+        (permission) => permission.name === "seller-manage.delete"
       )
     : false;
 });
+
+// Seller Manage Trash List Permission
+const sellerManageTrashList = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "seller-manage.trash.list"
+      )
+    : false;
+});
+
+if (usePage().props.flash.successMessage) {
+  swal({
+    icon: "success",
+    title: usePage().props.flash.successMessage,
+  });
+}
 </script>
+
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Registered Vendors" />
+    <Head title="Sellers" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
-        <Breadcrumb>
-          <li aria-current="page">
-            <div class="flex items-center">
-              <svg
-                aria-hidden="true"
-                class="w-6 h-6 text-gray-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <span class="ml-1 font-medium text-gray-500 md:ml-2"
-                >Registered Vendors</span
-              >
-            </div>
-          </li>
-        </Breadcrumb>
+        <!-- Breadcrumb -->
+        <Breadcrumb />
 
-        <div v-if="registeredAccountTrashList">
+        <!-- Trash Button -->
+        <div v-if="sellerManageTrashList">
           <Link
             as="button"
-            :href="route('admin.vendors.registered.trash')"
+            :href="route('admin.seller-manage.trash')"
             :data="{
               page: 1,
               per_page: 10,
@@ -242,13 +273,13 @@ const registeredAccountTrashList = computed(() => {
         </div>
       </div>
 
-      <div class="flex items-center justify-end mb-5">
+      <div class="flex items-center justify-end mb-5 ml-auto">
         <!-- Search Box -->
         <form class="w-[350px] relative">
           <input
             type="text"
             class="search-input"
-            placeholder="Search by name"
+            placeholder="Search by shop name"
             v-model="params.search"
           />
           <i
@@ -279,11 +310,9 @@ const registeredAccountTrashList = computed(() => {
             <SortingArrows :params="params" sort="id" />
           </HeaderTh>
 
-          <HeaderTh>Avatar</HeaderTh>
-
-          <HeaderTh @click="updateSorting('name')">
-            Name
-            <SortingArrows :params="params" sort="name" />
+          <HeaderTh @click="updateSorting('shop_name')">
+            Shop Name
+            <SortingArrows :params="params" sort="shop_name" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('email')">
@@ -291,67 +320,87 @@ const registeredAccountTrashList = computed(() => {
             <SortingArrows :params="params" sort="email" />
           </HeaderTh>
 
-          <HeaderTh> Role </HeaderTh>
-
-          <HeaderTh> Status </HeaderTh>
+          <HeaderTh @click="updateSorting('status')">
+            Status
+            <SortingArrows :params="params" sort="status" />
+          </HeaderTh>
 
           <HeaderTh @click="updateSorting('created_at')">
             Created At
             <SortingArrows :params="params" sort="created_at" />
           </HeaderTh>
 
-          <HeaderTh v-if="registeredAccountDelete || registeredAccountDetail">
+          <HeaderTh
+            v-if="
+              sellerManageControl || sellerManageDelete || sellerManageDetail
+            "
+          >
             Action
           </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="vendors.data.length">
-          <Tr v-for="vendor in vendors.data" :key="vendor.id">
+        <tbody v-if="sellers.data.length">
+          <Tr v-for="seller in sellers.data" :key="seller.id">
             <BodyTh>
-              {{ vendor.id }}
+              {{ seller.id }}
             </BodyTh>
 
             <Td>
-              <img
-                :src="vendor.avatar"
-                alt=""
-                class="h-[50px] w-[50px] ring-2 ring-slate-300 object-cover rounded-full"
-              />
+              {{ seller.shop_name }}
             </Td>
 
             <Td>
-              {{ vendor.name }}
+              {{ seller.email }}
             </Td>
 
             <Td>
-              {{ vendor.email }}
-            </Td>
-
-            <Td>
-              <RoleStatus>
-                {{ vendor.role }}
-              </RoleStatus>
-            </Td>
-
-            <Td>
-              <ActiveStatus v-if="status(vendor.last_activity) == 'active'">
-                {{ status(vendor.last_activity) }}
+              <ActiveStatus v-if="seller.status === 'active'">
+                {{ seller.status }}
               </ActiveStatus>
-
-              <InactiveStatus v-if="status(vendor.last_activity) == 'offline'">
-                {{ status(vendor.last_activity) }}
+              <InactiveStatus v-if="seller.status === 'inactive'">
+                {{ seller.status }}
               </InactiveStatus>
             </Td>
 
             <Td>
-              {{ vendor.created_at }}
+              {{ seller.created_at }}
             </Td>
 
-            <Td v-if="registeredAccountDelete || registeredAccountDetail">
+            <Td
+              v-if="
+                sellerManageControl || sellerManageDelete || sellerManageDetail
+              "
+            >
+              <!-- Control Button -->
+              <button
+                v-if="sellerManageControl"
+                @click="handleStatus(seller)"
+                class="offical-btn group"
+                type="button"
+                :class="{
+                  'bg-green-600  hover:bg-green-700 border-green-700':
+                    seller.status === 'inactive',
+                  'bg-orange-600  hover:bg-orange-700 border-orange-700':
+                    seller.status === 'active',
+                }"
+              >
+                <span
+                  v-if="seller.status === 'inactive'"
+                  class="group-hover:animate-pulse"
+                >
+                  <i class="fa-solid fa-check"></i>
+                  Active
+                </span>
+                <span v-else class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-xmark"></i>
+                  Inactive
+                </span>
+              </button>
+
               <!-- Delete Button -->
               <button
-                v-if="registeredAccountDelete"
-                @click="handleDeleteRegisteredVendor(vendor.id)"
+                v-if="sellerManageDelete"
+                @click="handleDeleteSeller(seller.id)"
                 class="delete-btn group"
                 type="button"
               >
@@ -363,9 +412,9 @@ const registeredAccountTrashList = computed(() => {
 
               <!-- Detail Button -->
               <Link
-                v-if="registeredAccountDetail"
+                v-if="sellerManageDetail"
                 as="button"
-                :href="route('admin.vendors.registered.show', vendor.id)"
+                :href="route('admin.seller-manage.show', seller.id)"
                 :data="{
                   page: params.page,
                   per_page: params.per_page,
@@ -383,17 +432,17 @@ const registeredAccountTrashList = computed(() => {
           </Tr>
         </tbody>
       </TableContainer>
-      <!-- User Table End -->
 
       <!-- No Data Row -->
-      <NotAvaliableData v-if="!vendors.data.length" />
+      <NotAvaliableData v-if="!sellers.data.length" />
 
-      <div v-if="vendors.data.length" class="mt-6">
+      <!-- Pagination -->
+      <div v-if="sellers.data.length" class="mt-6">
         <p class="text-center text-sm text-gray-600 mb-3 font-bold">
-          Showing {{ vendors.from }} - {{ vendors.to }} of
-          {{ vendors.total }}
+          Showing {{ sellers.from }} - {{ sellers.to }} of
+          {{ sellers.total }}
         </p>
-        <Pagination :links="vendors.links" />
+        <Pagination :links="sellers.links" />
       </div>
     </div>
   </AdminDashboardLayout>

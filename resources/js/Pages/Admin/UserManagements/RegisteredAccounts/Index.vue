@@ -1,8 +1,10 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/SellerManageBreadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/RegisteredAccountBreadcrumb.vue";
 import SortingArrows from "@/Components/Table/SortingArrows.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import ActiveStatus from "@/Components/Status/ActiveStatus.vue";
+import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
+import RoleStatus from "@/Components/Status/RoleStatus.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
@@ -12,15 +14,26 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import { reactive, watch, inject, computed, ref } from "vue";
-import { router, Link, Head, usePage } from "@inertiajs/vue3";
+import { router, Head, Link, usePage } from "@inertiajs/vue3";
 
 // Define the props
 const props = defineProps({
-  activeVendors: Object,
+  users: Object,
 });
 
 // Define Alert Variables
 const swal = inject("$swal");
+
+// User Activity Status
+const currentTime = new Date();
+const threshold = 1000 * 60 * 5; //5minutes in millseconds
+
+const status = (last_activity) => {
+  const lastActivity = new Date(last_activity);
+  const timeDifference = currentTime.getTime() - lastActivity.getTime();
+
+  return timeDifference < threshold ? "active" : "offline";
+};
 
 // Query String Parameteres
 const params = reactive({
@@ -34,7 +47,7 @@ const params = reactive({
 // Handle Search
 const handleSearch = () => {
   router.get(
-    route("admin.vendors.active.index"),
+    route("admin.registered-accounts.index"),
     {
       search: params.search,
       per_page: params.per_page,
@@ -52,7 +65,7 @@ const handleSearch = () => {
 const removeSearch = () => {
   params.search = "";
   router.get(
-    route("admin.vendors.active.index"),
+    route("admin.registered-accounts.index"),
     {
       per_page: params.per_page,
       sort: params.sort,
@@ -68,7 +81,7 @@ const removeSearch = () => {
 // Handle Query String Parameter
 const handleQueryStringParameter = () => {
   router.get(
-    route("admin.vendors.active.index"),
+    route("admin.registered-accounts.index"),
     {
       search: params.search,
       page: params.page,
@@ -111,14 +124,15 @@ const updateSorting = (sort = "id") => {
   handleQueryStringParameter();
 };
 
-// Handle Vendor Inactive
-const handleInactive = async (activeVendorId) => {
+// Handle User Delete
+const handleDeleteRegisteredUser = async (user) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to inactive this vendor?",
+    title: "Are you sure you want to delete this user?",
+    text: "You will be able to restore this user in the trash!",
     showCancelButton: true,
-    confirmButtonText: "Yes, Inactive!",
-    confirmButtonColor: "#2562c4",
+    confirmButtonText: "Yes, Delete it!",
+    confirmButtonColor: "#d52222",
     cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
@@ -126,60 +140,14 @@ const handleInactive = async (activeVendorId) => {
   });
 
   if (result.isConfirmed) {
-    router.post(
-      route("admin.vendors.active.update", {
-        user: activeVendorId,
-        status: "inactive",
+    router.delete(
+      route("admin.registered-accounts.destroy", {
+        user: user,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
       }),
-      {},
-      {
-        preserveScroll: true,
-        onSuccess: () => {
-          if (usePage().props.flash.successMessage) {
-            swal({
-              icon: "success",
-              title: usePage().props.flash.successMessage,
-            });
-          }
-        },
-      }
-    );
-  }
-};
-
-// Handle Offical Or UnOffical
-const handleOffical = async (activeVendor) => {
-  const result = await swal({
-    icon: "question",
-    title: `Are you sure you want to set ${
-      activeVendor.offical ? "unoffical" : "offical"
-    } this vendor?`,
-    showCancelButton: true,
-    confirmButtonText: `Yes, ${
-      activeVendor.offical ? "unoffical" : "offical"
-    }!`,
-    confirmButtonColor: "#2562c4",
-    cancelButtonColor: "#626262",
-    timer: 20000,
-    timerProgressBar: true,
-    reverseButtons: true,
-  });
-
-  if (result.isConfirmed) {
-    router.post(
-      route("admin.vendors.active.update", {
-        user: activeVendor.id,
-        offical: activeVendor.offical ? false : true,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      }),
-      {},
       {
         preserveScroll: true,
         onSuccess: () => {
@@ -198,68 +166,92 @@ const handleOffical = async (activeVendor) => {
 // Define Permissions Variables
 const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
 
-// Vendor Manage Control Permission
-const vendorManageControl = computed(() => {
+// Registered Account Detail Permission
+const registeredAccountDetail = computed(() => {
   return permissions.value.length
     ? permissions.value.some(
-        (permission) => permission.name === "vendor-manage.control"
+        (permission) => permission.name === "registered-account.detail"
       )
     : false;
 });
 
-// Vendor Manage Detail Permission
-const vendorManageDetail = computed(() => {
+// Registered Account Delete Permission
+const registeredAccountDelete = computed(() => {
   return permissions.value.length
     ? permissions.value.some(
-        (permission) => permission.name === "vendor-manage.detail"
+        (permission) => permission.name === "registered-account.delete"
       )
     : false;
 });
 
-if (usePage().props.flash.successMessage) {
-  swal({
-    icon: "success",
-    title: usePage().props.flash.successMessage,
-  });
-}
+// Registered Account Trash List Permission
+const registeredAccountTrashList = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "registered-account.trash.list"
+      )
+    : false;
+});
 </script>
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Active Vendors" />
+    <Head title="Registered Users" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Breadcrumb -->
-      <Breadcrumb>
-        <li aria-current="page">
-          <div class="flex items-center">
-            <svg
-              aria-hidden="true"
-              class="w-6 h-6 text-gray-400"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
-            <span class="ml-1 font-medium text-gray-500 md:ml-2"
-              >Active Vendors</span
-            >
-          </div>
-        </li>
-      </Breadcrumb>
+      <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
+        <Breadcrumb>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span class="ml-1 font-medium text-gray-500 md:ml-2"
+                >Registered Users</span
+              >
+            </div>
+          </li>
+        </Breadcrumb>
 
-      <div class="flex items-center justify-end mb-5 ml-auto">
+        <!-- Trash Button -->
+        <div v-if="registeredAccountTrashList">
+          <Link
+            as="button"
+            :href="route('admin.registered-accounts.trash')"
+            :data="{
+              page: 1,
+              per_page: 10,
+              sort: 'id',
+              direction: 'desc',
+            }"
+            class="trash-btn group"
+          >
+            <span class="group-hover:animate-pulse">
+              <i class="fa-solid fa-trash-can-arrow-up"></i>
+              Trash
+            </span>
+          </Link>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end mb-5">
         <!-- Search Box -->
         <form class="w-[350px] relative">
           <input
             type="text"
             class="search-input"
-            placeholder="Search by shop name"
+            placeholder="Search by name"
             v-model="params.search"
           />
           <i
@@ -283,7 +275,7 @@ if (usePage().props.flash.successMessage) {
         </div>
       </div>
 
-      <!-- Active Vendor Table Start -->
+      <!-- User Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -291,9 +283,11 @@ if (usePage().props.flash.successMessage) {
             <SortingArrows :params="params" sort="id" />
           </HeaderTh>
 
-          <HeaderTh @click="updateSorting('shop_name')">
-            Shop Name
-            <SortingArrows :params="params" sort="shop_name" />
+          <HeaderTh>Avatar</HeaderTh>
+
+          <HeaderTh @click="updateSorting('name')">
+            Name
+            <SortingArrows :params="params" sort="name" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('email')">
@@ -301,84 +295,99 @@ if (usePage().props.flash.successMessage) {
             <SortingArrows :params="params" sort="email" />
           </HeaderTh>
 
-          <HeaderTh> Status </HeaderTh>
+          <HeaderTh @click="updateSorting('role')">
+            Role
+            <SortingArrows :params="params" sort="role" />
+          </HeaderTh>
+
+          <HeaderTh @click="updateSorting('status')">
+            Status
+            <SortingArrows :params="params" sort="status" />
+          </HeaderTh>
+
+          <HeaderTh> Online Status </HeaderTh>
 
           <HeaderTh @click="updateSorting('created_at')">
             Created At
             <SortingArrows :params="params" sort="created_at" />
           </HeaderTh>
 
-          <HeaderTh v-if="vendorManageControl || vendorManageDetail">
+          <HeaderTh v-if="registeredAccountDelete || registeredAccountDetail">
             Action
           </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="activeVendors.data.length">
-          <Tr v-for="activeVendor in activeVendors.data" :key="activeVendor.id">
+        <tbody v-if="users.data.length">
+          <Tr v-for="user in users.data" :key="user.id">
             <BodyTh>
-              {{ activeVendor.id }}
+              {{ user.id }}
             </BodyTh>
 
             <Td>
-              {{ activeVendor.shop_name }}
-
-              <i
-                v-if="activeVendor.offical"
-                class="fas fa-check arrow-icon ml-1 bg-green-500 p-1 rounded-full text-white"
-              ></i>
-            </Td>
-            <Td>
-              {{ activeVendor.email }}
+              <img
+                :src="user.avatar"
+                alt=""
+                class="h-[50px] w-[50px] ring-2 ring-slate-300 object-cover rounded-full"
+              />
             </Td>
 
             <Td>
-              <ActiveStatus>
-                {{ activeVendor.status }}
+              {{ user.name }}
+            </Td>
+
+            <Td>
+              {{ user.email }}
+            </Td>
+
+            <Td>
+              <RoleStatus>
+                {{ user.role }}
+              </RoleStatus>
+            </Td>
+
+            <Td>
+              <ActiveStatus v-if="user.status == 'active'">
+                {{ user.status }}
               </ActiveStatus>
+
+              <InactiveStatus v-if="user.status == 'inactive'">
+                {{ user.status }}
+              </InactiveStatus>
             </Td>
 
             <Td>
-              {{ activeVendor.created_at }}
+              <ActiveStatus v-if="status(user.last_activity) == 'active'">
+                {{ status(user.last_activity) }}
+              </ActiveStatus>
+
+              <InactiveStatus v-if="status(user.last_activity) == 'offline'">
+                {{ status(user.last_activity) }}
+              </InactiveStatus>
             </Td>
 
-            <Td v-if="vendorManageControl || vendorManageDetail">
-              <!-- Offical Button -->
-              <button
-                v-if="vendorManageControl"
-                @click="handleOffical(activeVendor)"
-                class="offical-btn group"
-                type="button"
-                :class="{
-                  'bg-slate-600  hover:bg-slate-700 border-slate-700':
-                    !activeVendor.offical,
-                  'bg-emerald-600  hover:bg-emerald-700 border-emerald-700':
-                    activeVendor.offical,
-                }"
-              >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-award"></i>
-                  {{ activeVendor.offical ? "Unoffical" : "Offical" }}
-                </span>
-              </button>
+            <Td>
+              {{ user.created_at }}
+            </Td>
 
-              <!-- Inactive Button -->
+            <Td v-if="registeredAccountDelete || registeredAccountDetail">
+              <!-- Delete Button -->
               <button
-                v-if="vendorManageControl"
-                @click="handleInactive(activeVendor.id)"
+                v-if="registeredAccountDelete"
+                @click="handleDeleteRegisteredUser(user.id)"
                 class="delete-btn group"
                 type="button"
               >
                 <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-trash"></i>
-                  Inactive
+                  <i class="fa-solid fa-trash-can"></i>
+                  Delete
                 </span>
               </button>
 
               <!-- Detail Button -->
               <Link
-                v-if="vendorManageDetail"
+                v-if="registeredAccountDetail"
                 as="button"
-                :href="route('admin.vendors.active.show', activeVendor.id)"
+                :href="route('admin.registered-accounts.show', user.id)"
                 :data="{
                   page: params.page,
                   per_page: params.per_page,
@@ -396,18 +405,18 @@ if (usePage().props.flash.successMessage) {
           </Tr>
         </tbody>
       </TableContainer>
-      <!-- Active Vendor Table End -->
+      <!-- User Table End -->
 
       <!-- No Data Row -->
-      <NotAvaliableData v-if="!activeVendors.data.length" />
+      <NotAvaliableData v-if="!users.data.length" />
 
       <!-- Pagination -->
-      <div v-if="activeVendors.data.length" class="mt-6">
+      <div v-if="users.data.length" class="mt-6">
         <p class="text-center text-sm text-gray-600 mb-3 font-bold">
-          Showing {{ activeVendors.from }} - {{ activeVendors.to }} of
-          {{ activeVendors.total }}
+          Showing {{ users.from }} - {{ users.to }} of
+          {{ users.total }}
         </p>
-        <Pagination :links="activeVendors.links" />
+        <Pagination :links="users.links" />
       </div>
     </div>
   </AdminDashboardLayout>

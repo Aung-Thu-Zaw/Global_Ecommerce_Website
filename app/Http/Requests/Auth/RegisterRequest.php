@@ -35,7 +35,7 @@ class RegisterRequest extends FormRequest
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'gender'=>["nullable",Rule::in(['male','female','other'])],
             'birthday'=>["nullable","date"],
-            'role'=>["nullable",Rule::in(["admin","vendor","user"])],
+            'role'=>["nullable",Rule::in(["admin","seller","user"])],
             'status'=>["nullable",Rule::in(["active","inactive"])],
             'captcha_token'  => ['required',new RecaptchaRule()],
         ];

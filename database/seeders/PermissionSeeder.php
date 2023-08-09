@@ -111,13 +111,13 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"product-review.trash.restore","group"=>"product-review"]);
         Permission::create(["name"=>"product-review.trash.delete","group"=>"product-review"]);
 
-        Permission::create(["name"=>"vendor-manage.menu","group"=>"vendor-manage"]);
-        Permission::create(["name"=>"vendor-manage.detail","group"=>"vendor-manage"]);
-        Permission::create(["name"=>"vendor-manage.control","group"=>"vendor-manage"]);
-        Permission::create(["name"=>"vendor-manage.delete","group"=>"vendor-manage"]);
-        Permission::create(["name"=>"vendor-manage.trash.list","group"=>"vendor-manage"]);
-        Permission::create(["name"=>"vendor-manage.trash.restore","group"=>"vendor-manage"]);
-        Permission::create(["name"=>"vendor-manage.trash.delete","group"=>"vendor-manage"]);
+        Permission::create(["name"=>"seller-manage.menu","group"=>"seller-manage"]);
+        Permission::create(["name"=>"seller-manage.detail","group"=>"seller-manage"]);
+        Permission::create(["name"=>"seller-manage.control","group"=>"seller-manage"]);
+        Permission::create(["name"=>"seller-manage.delete","group"=>"seller-manage"]);
+        Permission::create(["name"=>"seller-manage.trash.list","group"=>"seller-manage"]);
+        Permission::create(["name"=>"seller-manage.trash.restore","group"=>"seller-manage"]);
+        Permission::create(["name"=>"seller-manage.trash.delete","group"=>"seller-manage"]);
 
         Permission::create(["name"=>"registered-account.menu","group"=>"registered-account"]);
         Permission::create(["name"=>"registered-account.detail","group"=>"registered-account"]);

@@ -839,165 +839,67 @@
         </ul>
 
         <hr
-          v-if="vendorManageMenu || registeredAccountMenu || adminManageMenu"
+          v-if="sellerManageMenu || registeredAccountMenu || adminManageMenu"
           class="my-4 md:min-w-full"
         />
 
         <!-- User Managements Section Title -->
         <h6
-          v-if="vendorManageMenu || registeredAccountMenu || adminManageMenu"
+          v-if="sellerManageMenu || registeredAccountMenu || adminManageMenu"
           class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
         >
           {{ __("USER_MANAGEMENTS") }}
         </h6>
 
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
-          <!-- Vendor Manage Section -->
-          <li v-if="vendorManageMenu" class="items-center">
-            <ul class="md:flex-col md:min-w-full flex flex-col list-none">
-              <li class="items-center cursor-pointer">
-                <div
-                  class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
-                  @click="vendorManageIsHidden = !vendorManageIsHidden"
-                >
-                  <span>
-                    <i class="fas fa-store mr-2 text-sm"></i>
-                    {{ __("VENDOR_MANAGE") }}
-                  </span>
-                  <i
-                    v-if="vendorManageIsHidden"
-                    class="fa-solid fa-chevron-right"
-                  ></i>
-                  <i
-                    v-if="!vendorManageIsHidden"
-                    class="fa-solid fa-chevron-down"
-                  ></i>
-                </div>
-
-                <ul
-                  v-if="!vendorManageIsHidden || vendorManage"
-                  class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
-                >
-                  <!-- Active Vendor Section -->
-                  <li
-                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                    :class="{
-                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                        '/admin/vendor-manage/active-vendors'
-                      ),
-                    }"
-                  >
-                    <Link
-                      :href="route('admin.vendors.active.index')"
-                      :data="{
-                        page: 1,
-                        per_page: 10,
-                        sort: 'id',
-                        direction: 'desc',
-                      }"
-                    >
-                      {{ __("ACTIVE_VENDORS") }}
-                    </Link>
-                  </li>
-
-                  <!-- Inactive Vendor Section -->
-                  <li
-                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                    :class="{
-                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                        '/admin/vendor-manage/inactive-vendors'
-                      ),
-                    }"
-                  >
-                    <Link
-                      :href="route('admin.vendors.inactive.index')"
-                      :data="{
-                        page: 1,
-                        per_page: 10,
-                        sort: 'id',
-                        direction: 'desc',
-                      }"
-                    >
-                      {{ __("INACTIVE_VENDORS") }}
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-            </ul>
+          <!-- Seller Manage Section -->
+          <li v-if="sellerManageMenu" class="items-center">
+            <Link
+              :href="route('admin.seller-manage.index')"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                  '/admin/seller-manage'
+                ),
+                'text-slate-700 hover:text-slate-500': !$page.url.startsWith(
+                  '/admin/seller-manage'
+                ),
+              }"
+            >
+              <i class="fas fa-shop mr-2 text-sm"></i>
+              {{ __("SELLER_MANAGE") }}
+            </Link>
           </li>
 
-          <!-- Registered User Manage Section -->
+          <!-- Registered Account Manage Section -->
           <li v-if="registeredAccountMenu" class="items-center">
-            <ul class="md:flex-col md:min-w-full flex flex-col list-none">
-              <li class="items-center cursor-pointer">
-                <div
-                  class="text-xs flex items-center justify-between uppercase py-3 font-bold text-slate-700 hover:text-slate-500"
-                  @click="userManageIsHidden = !userManageIsHidden"
-                >
-                  <span>
-                    <i class="fas fa-users mr-2 text-sm"></i>
-                    {{ __("REGISTERED_ACCOUNTS") }}
-                  </span>
-                  <i
-                    v-if="userManageIsHidden"
-                    class="fa-solid fa-chevron-right"
-                  ></i>
-                  <i
-                    v-if="!userManageIsHidden"
-                    class="fa-solid fa-chevron-down"
-                  ></i>
-                </div>
-
-                <ul
-                  v-if="!userManageIsHidden || userManage"
-                  class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
-                >
-                  <!-- Registered Users Section -->
-                  <li
-                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                    :class="{
-                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                        '/admin/registered-accounts/registered-users'
-                      ),
-                    }"
-                  >
-                    <Link
-                      :href="route('admin.users.registered.index')"
-                      :data="{
-                        page: 1,
-                        per_page: 10,
-                        sort: 'id',
-                        direction: 'desc',
-                      }"
-                    >
-                      {{ __("REGISTERED_USERS") }}
-                    </Link>
-                  </li>
-
-                  <!-- Registered Vendors Section -->
-                  <li
-                    class="p-2 hover:text-slate-700 text-left w-full hover:bg-slate-100"
-                    :class="{
-                      'text-blue-500 hover:text-blue-600': $page.url.startsWith(
-                        '/admin/registered-accounts/registered-vendors'
-                      ),
-                    }"
-                  >
-                    <Link
-                      :href="route('admin.vendors.registered.index')"
-                      :data="{
-                        page: 1,
-                        per_page: 10,
-                        sort: 'id',
-                        direction: 'desc',
-                      }"
-                    >
-                      {{ __("REGISTERED_VENDORS") }}
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-            </ul>
+            <Link
+              :href="route('admin.registered-accounts.index')"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                  '/admin/registered-accounts'
+                ),
+                'text-slate-700 hover:text-slate-500': !$page.url.startsWith(
+                  '/admin/registered-accounts'
+                ),
+              }"
+            >
+              <i class="fas fa-users mr-2 text-sm"></i>
+              {{ __("REGISTERED_ACCOUNTS") }}
+            </Link>
           </li>
 
           <!-- Admin Manage Section -->
@@ -1822,10 +1724,10 @@ export default {
         : false;
     },
 
-    vendorManageMenu() {
+    sellerManageMenu() {
       return this.permissions.length
         ? this.permissions.some(
-            (permission) => permission.name === "vendor-manage.menu"
+            (permission) => permission.name === "seller-manage.menu"
           )
         : false;
     },
