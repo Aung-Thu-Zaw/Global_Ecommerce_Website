@@ -10,6 +10,7 @@ import Breadcrumb from "@/Components/Breadcrumbs/BrandBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import SortingArrows from "@/Components/Table/SortingArrows.vue";
+import datepicker from "vue3-datepicker";
 import { inject, reactive, watch, computed, ref } from "vue";
 import { router, usePage, Link, Head } from "@inertiajs/vue3";
 
@@ -18,8 +19,36 @@ const props = defineProps({
   trashBrands: Object,
 });
 
-// Define Alert Variables
+// Define  Variables
 const swal = inject("$swal");
+const isFilterBoxOpened = ref(false);
+const deletedFrom = ref(
+  usePage().props.ziggy.query.deleted_from
+    ? new Date(usePage().props.ziggy.query.deleted_from)
+    : ""
+);
+const deletedUntil = ref(
+  usePage().props.ziggy.query.deleted_until
+    ? new Date(usePage().props.ziggy.query.deleted_until)
+    : ""
+);
+
+// Formatted Date
+const formattedDeletedFrom = computed(() => {
+  const year = deletedFrom.value ? deletedFrom.value.getFullYear() : "";
+  const month = deletedFrom.value ? deletedFrom.value.getMonth() + 1 : "";
+  const day = deletedFrom.value ? deletedFrom.value.getDate() : "";
+
+  return year && month && day ? `${year}-${month}-${day}` : undefined;
+});
+
+const formattedDeletedUntil = computed(() => {
+  const year = deletedUntil.value ? deletedUntil.value.getFullYear() : "";
+  const month = deletedUntil.value ? deletedUntil.value.getMonth() + 1 : "";
+  const day = deletedUntil.value ? deletedUntil.value.getDate() : "";
+
+  return year && month && day ? `${year}-${month}-${day}` : undefined;
+});
 
 // Query String Parameteres
 const params = reactive({
@@ -28,6 +57,12 @@ const params = reactive({
   per_page: usePage().props.ziggy.query?.per_page,
   sort: usePage().props.ziggy.query?.sort,
   direction: usePage().props.ziggy.query?.direction,
+  deleted_from: usePage().props.ziggy.query.deleted_from
+    ? usePage().props.ziggy.query.deleted_from
+    : formattedDeletedFrom,
+  deleted_until: usePage().props.ziggy.query.deleted_until
+    ? usePage().props.ziggy.query.deleted_until
+    : formattedDeletedUntil,
 });
 
 // Handle Search
@@ -39,6 +74,8 @@ const handleSearch = () => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
+      deleted_from: params.deleted_from,
+      deleted_until: params.deleted_until,
     },
     {
       replace: true,
@@ -56,10 +93,76 @@ const removeSearch = () => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
+      deleted_from: params.deleted_from,
+      deleted_until: params.deleted_until,
     },
     {
       replace: true,
       preserveState: true,
+    }
+  );
+};
+
+// Filtered By Only Deleted From
+const filteredByDeletedFrom = () => {
+  router.get(
+    route("admin.brands.trash"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+      deleted_from: formattedDeletedFrom.value,
+      deleted_until: params.deleted_until,
+    },
+    {
+      replace: true,
+      preserveState: true,
+      onSuccess: () => {
+        isFilterBoxOpened.value = true;
+      },
+    }
+  );
+};
+
+// Filtered By Only Deleted Until
+const filteredByDeletedUntil = () => {
+  router.get(
+    route("admin.brands.trash"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+      deleted_from: params.deleted_from,
+      deleted_until: formattedDeletedUntil.value,
+    },
+    {
+      replace: true,
+      preserveState: true,
+      onSuccess: () => {
+        isFilterBoxOpened.value = true;
+      },
+    }
+  );
+};
+
+// Handle Reset Filtered Date
+const resetFilteredDate = () => {
+  deletedFrom.value = "";
+  deletedUntil.value = "";
+  router.get(
+    route("admin.brands.trash"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+      onSuccess: () => (isFilterBoxOpened.value = false),
     }
   );
 };
@@ -74,6 +177,8 @@ const handleQueryStringParameter = () => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
+      deleted_from: params.deleted_from,
+      deleted_until: params.deleted_until,
     },
     {
       replace: true,
@@ -99,6 +204,30 @@ watch(
   () => params.per_page,
   () => {
     handleQueryStringParameter();
+  }
+);
+
+// Watching Deleted From Datepicker
+watch(
+  () => params.deleted_from,
+  () => {
+    if (params.deleted_from === "") {
+      resetFilteredDate();
+    } else {
+      filteredByDeletedFrom();
+    }
+  }
+);
+
+// Watching Deleted Unitl Datepicker
+watch(
+  () => params.deleted_until,
+  () => {
+    if (params.deleted_until === "") {
+      resetFilteredDate();
+    } else {
+      filteredByDeletedUntil();
+    }
   }
 );
 
@@ -132,6 +261,8 @@ const handleRestoreTrashBrand = async (trashBrandId) => {
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
+        deleted_from: params.deleted_from,
+        deleted_until: params.deleted_until,
       }),
       {},
       {
@@ -172,6 +303,8 @@ const handleDeleteTrashBrand = async (trashBrandId) => {
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
+        deleted_from: params.deleted_from,
+        deleted_until: params.deleted_until,
       }),
       {
         preserveScroll: true,
@@ -210,6 +343,8 @@ const handlePermanentlyDeleteTrashBrands = async () => {
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
+        deleted_from: params.deleted_from,
+        deleted_until: params.deleted_until,
       }),
       {
         preserveScroll: true,
@@ -327,6 +462,66 @@ const brandTrashDelete = computed(() => {
             <option value="75">75</option>
             <option value="100">100</option>
           </select>
+        </div>
+
+        <!-- Filter By Date -->
+        <button
+          @click="isFilterBoxOpened = !isFilterBoxOpened"
+          class="filter-btn"
+        >
+          <span class="">
+            <i class="fa-solid fa-filter"></i>
+          </span>
+        </button>
+
+        <div
+          v-if="isFilterBoxOpened"
+          class="w-[400px] border border-gray-300 shadow-lg absolute bg-white top-64 right-10 z-30 px-5 py-4 rounded-md"
+        >
+          <div class="flex items-center justify-end">
+            <span
+              @click="isFilterBoxOpened = false"
+              class="text-lg text-gray-500 hover:text-gray-800 cursor-pointer"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </span>
+          </div>
+          <div class="w-full mb-6">
+            <span class="font-bold text-sm text-gray-700 mb-5"
+              >Deleted from</span
+            >
+            <div>
+              <datepicker
+                class="w-full rounded-md p-3 border-gray-300 bg-white focus:ring-0 focus:border-gray-400 text-sm"
+                placeholder="Select Date"
+                v-model="deletedFrom"
+              />
+            </div>
+          </div>
+          <div class="w-full mb-3">
+            <span class="font-bold text-sm text-gray-700 mb-5"
+              >Deleted until</span
+            >
+            <div>
+              <datepicker
+                class="w-full rounded-md p-3 border-gray-300 bg-white focus:ring-0 focus:border-gray-400 text-sm"
+                placeholder="Select Date"
+                v-model="deletedUntil"
+              />
+            </div>
+          </div>
+
+          <div
+            v-if="params.deleted_from || params.deleted_until"
+            class="w-full flex items-center"
+          >
+            <button
+              @click="resetFilteredDate"
+              class="text-xs font-semibold px-3 ml-auto py-2 text-white bg-red-600 rounded-[4px] hover:bg-red-700 transition-all"
+            >
+              Reset Filter
+            </button>
+          </div>
         </div>
       </div>
 

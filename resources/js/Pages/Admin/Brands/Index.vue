@@ -19,7 +19,7 @@ const props = defineProps({
   brands: Object,
 });
 
-// Define Alert Variables
+// Define  Variables
 const swal = inject("$swal");
 const isFilterBoxOpened = ref(false);
 const createdFrom = ref(
@@ -32,7 +32,6 @@ const createdUntil = ref(
     ? new Date(usePage().props.ziggy.query.created_until)
     : ""
 );
-// const createdUntil = ref("");
 
 // Formatted Date
 const formattedCreatedFrom = computed(() => {
@@ -104,6 +103,7 @@ const removeSearch = () => {
   );
 };
 
+// Filtered By Only Created From
 const filteredByCreatedFrom = () => {
   router.get(
     route("admin.brands.index"),
@@ -125,6 +125,7 @@ const filteredByCreatedFrom = () => {
   );
 };
 
+// Filtered By Only Created Until
 const filteredByCreatedUntil = () => {
   router.get(
     route("admin.brands.index"),
