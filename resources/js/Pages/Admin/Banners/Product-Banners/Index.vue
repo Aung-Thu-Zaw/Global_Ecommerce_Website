@@ -17,6 +17,7 @@ import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
+import { __ } from "@/Translations/translations-inside-setup.js";
 import datepicker from "vue3-datepicker";
 import { reactive, watch, inject, computed, ref } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
@@ -278,13 +279,13 @@ const handleShow = async (hideProductBannerId) => {
           if (usePage().props.flash.successMessage) {
             swal({
               icon: "success",
-              title: usePage().props.flash.successMessage,
+              title: __(usePage().props.flash.successMessage),
             });
           }
           if (usePage().props.flash.errorMessage) {
             swal({
               icon: "error",
-              title: usePage().props.flash.errorMessage,
+              title: __(usePage().props.flash.errorMessage),
             });
           }
         },
@@ -325,7 +326,7 @@ const handleHide = async (showProductBannerId) => {
           if (usePage().props.flash.successMessage) {
             swal({
               icon: "success",
-              title: usePage().props.flash.successMessage,
+              title: __(usePage().props.flash.successMessage),
             });
           }
         },
@@ -366,7 +367,7 @@ const handleDeleteProductBanner = async (productBannerId) => {
           if (usePage().props.flash.successMessage) {
             swal({
               icon: "success",
-              title: usePage().props.flash.successMessage,
+              title: __(usePage().props.flash.successMessage),
             });
           }
         },
@@ -422,7 +423,7 @@ const bannerTrashList = computed(() => {
 if (usePage().props.flash.successMessage) {
   swal({
     icon: "success",
-    title: usePage().props.flash.successMessage,
+    title: __(usePage().props.flash.successMessage),
   });
 }
 </script>
@@ -517,6 +518,61 @@ if (usePage().props.flash.successMessage) {
               <option value="75">75</option>
               <option value="100">100</option>
             </select>
+          </div>
+
+          <!-- Filter By Date -->
+          <button
+            @click="isFilterBoxOpened = !isFilterBoxOpened"
+            class="filter-btn"
+          >
+            <span class="">
+              <i class="fa-solid fa-filter"></i>
+            </span>
+          </button>
+
+          <div
+            v-if="isFilterBoxOpened"
+            class="w-[400px] border border-gray-300 shadow-lg absolute bg-white top-64 right-10 z-30 px-5 py-4 rounded-md"
+          >
+            <div class="flex items-center justify-end">
+              <span
+                @click="isFilterBoxOpened = false"
+                class="text-lg text-gray-500 hover:text-gray-800 cursor-pointer"
+              >
+                <i class="fa-solid fa-xmark"></i>
+              </span>
+            </div>
+            <div class="w-full mb-6">
+              <span class="font-bold text-sm text-gray-700 mb-5"
+                >Created from</span
+              >
+              <div>
+                <datepicker
+                  class="w-full rounded-md p-3 border-gray-300 bg-white focus:ring-0 focus:border-gray-400 text-sm"
+                  :placeholder="__('SELECT_DATE')"
+                  v-model="createdFrom"
+                />
+              </div>
+            </div>
+            <div class="w-full mb-3">
+              <span class="font-bold text-sm text-gray-700 mb-5"
+                >Created until</span
+              >
+              <div>
+                <datepicker
+                  class="w-full rounded-md p-3 border-gray-300 bg-white focus:ring-0 focus:border-gray-400 text-sm"
+                  :placeholder="__('SELECT_DATE')"
+                  v-model="createdUntil"
+                />
+              </div>
+            </div>
+
+            <div
+              v-if="params.created_from || params.created_until"
+              class="w-full flex items-center"
+            >
+              <ResetFilterButton @click="resetFilteredDate" />
+            </div>
           </div>
         </div>
       </div>

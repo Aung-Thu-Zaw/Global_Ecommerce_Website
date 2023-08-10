@@ -17,6 +17,7 @@ import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
+import { __ } from "@/Translations/translations-inside-setup.js";
 import datepicker from "vue3-datepicker";
 import { reactive, watch, inject, computed, ref } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
@@ -264,7 +265,7 @@ const handleDelete = (category) => {
         if (usePage().props.flash.successMessage) {
           swal({
             icon: "success",
-            title: usePage().props.flash.successMessage,
+            title: __(usePage().props.flash.successMessage),
           });
         }
       },
@@ -351,7 +352,7 @@ const categoryTrashList = computed(() => {
 if (usePage().props.flash.successMessage) {
   swal({
     icon: "success",
-    title: usePage().props.flash.successMessage,
+    title: __(usePage().props.flash.successMessage),
   });
 }
 </script>

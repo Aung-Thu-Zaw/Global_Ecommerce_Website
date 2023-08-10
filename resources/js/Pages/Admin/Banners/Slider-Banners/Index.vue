@@ -17,6 +17,7 @@ import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
+import { __ } from "@/Translations/translations-inside-setup.js";
 import datepicker from "vue3-datepicker";
 import { reactive, watch, inject, computed, ref } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
@@ -278,13 +279,13 @@ const handleShow = async (hideSliderBannerId) => {
           if (usePage().props.flash.successMessage) {
             swal({
               icon: "success",
-              title: usePage().props.flash.successMessage,
+              title: __(usePage().props.flash.successMessage),
             });
           }
           if (usePage().props.flash.errorMessage) {
             swal({
               icon: "error",
-              title: usePage().props.flash.errorMessage,
+              title: __(usePage().props.flash.errorMessage),
             });
           }
         },
@@ -325,7 +326,7 @@ const handleHide = async (showSliderBannerId) => {
           if (usePage().props.flash.successMessage) {
             swal({
               icon: "success",
-              title: usePage().props.flash.successMessage,
+              title: __(usePage().props.flash.successMessage),
             });
           }
         },
@@ -366,7 +367,7 @@ const handleDeleteSliderBanner = async (sliderBannerId) => {
           if (usePage().props.flash.successMessage) {
             swal({
               icon: "success",
-              title: usePage().props.flash.successMessage,
+              title: __(usePage().props.flash.successMessage),
             });
           }
         },
@@ -422,7 +423,7 @@ const bannerTrashList = computed(() => {
 if (usePage().props.flash.successMessage) {
   swal({
     icon: "success",
-    title: usePage().props.flash.successMessage,
+    title: __(usePage().props.flash.successMessage),
   });
 }
 </script>
