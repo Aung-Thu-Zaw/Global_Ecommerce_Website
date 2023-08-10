@@ -19,16 +19,15 @@ const handleChangeLanguage = (language) => {
   <div class="flex justify-center mx-2">
     <div>
       <div class="relative" data-te-dropdown-ref>
-        <a
+        <button
           class="flex items-center whitespace-nowrap px-4 pt-2.5 pb-2 text-sm font-bold uppercase leading-normal text-white"
-          href="#"
           type="button"
           id="dropdownMenuButton2"
           data-te-dropdown-toggle-ref
           aria-expanded="false"
         >
           <i class="fa-solid fa-globe mr-1"></i>
-        </a>
+        </button>
         <ul
           class="absolute z-[1000] float-left m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg [&[data-te-dropdown-show]]:block"
           aria-labelledby="dropdownMenuButton2"

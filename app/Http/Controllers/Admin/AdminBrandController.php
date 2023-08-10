@@ -45,7 +45,7 @@ class AdminBrandController extends Controller
 
         $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
 
-        return to_route("admin.brands.index", $queryStringParams)->with("success", __("BRAND_HAS_BEEN_SUCCESSFULLY_CREATED"));
+        return to_route("admin.brands.index", $queryStringParams)->with("success", "BRAND_HAS_BEEN_SUCCESSFULLY_CREATED");
     }
 
     public function edit(Request $request, Brand $brand): Response|ResponseFactory
@@ -63,7 +63,7 @@ class AdminBrandController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.brands.index", $queryStringParams)->with("success", __("BRAND_HAS_BEEN_SUCCESSFULLY_UPDATED"));
+        return to_route("admin.brands.index", $queryStringParams)->with("success", "BRAND_HAS_BEEN_SUCCESSFULLY_UPDATED");
     }
 
     public function destroy(Request $request, Brand $brand): RedirectResponse
@@ -72,7 +72,7 @@ class AdminBrandController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.brands.index", $queryStringParams)->with("success", __("BRAND_HAS_BEEN_SUCCESSFULLY_DELETED"));
+        return to_route("admin.brands.index", $queryStringParams)->with("success", "BRAND_HAS_BEEN_SUCCESSFULLY_DELETED");
     }
 
     public function trash(): Response|ResponseFactory
@@ -94,7 +94,7 @@ class AdminBrandController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.brands.trash', $queryStringParams)->with("success", __("BRAND_HAS_BEEN_SUCCESSFULLY_RESTORED"));
+        return to_route('admin.brands.trash', $queryStringParams)->with("success", "BRAND_HAS_BEEN_SUCCESSFULLY_RESTORED");
     }
 
     public function forceDelete(Request $request, int $trashBrandId): RedirectResponse
@@ -107,7 +107,7 @@ class AdminBrandController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.brands.trash', $queryStringParams)->with("success", __("THE_BRAND_HAS_BEEN_PERMANENTLY_DELETED"));
+        return to_route('admin.brands.trash', $queryStringParams)->with("success", "THE_BRAND_HAS_BEEN_PERMANENTLY_DELETED");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -118,6 +118,6 @@ class AdminBrandController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.brands.trash', $queryStringParams)->with("success", __("BRANDS_HAVE_BEEN_PERMANENTLY_DELETED"));
+        return to_route('admin.brands.trash', $queryStringParams)->with("success", "BRANDS_HAVE_BEEN_PERMANENTLY_DELETED");
     }
 }
