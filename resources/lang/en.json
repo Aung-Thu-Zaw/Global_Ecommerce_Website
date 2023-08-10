@@ -321,5 +321,16 @@
     "CREATE_COLLECTION": "Create Collection",
     "EDIT_COLLECTION": "Edit Collection",
     "TRASH_COLLECTIONS": "Trash Collections",
-    "COLLECTIONS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "Collections in the Trash will be automatically deleted after 60 days"
+    "COLLECTIONS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "Collections in the Trash will be automatically deleted after 60 days",
+    "STATUS": "Status",
+    "ADD_CATEGORY": "Add Category",
+    "CREATE_CATEGORY": "Create Category",
+    "EDIT_CATEGORY": "Edit Category",
+    "CATEGORY_NAME": "Category Name",
+    "ENTER_CATEGORY_NAME": "Enter Category Name",
+    "PARENT_CATEGORY": "Parent Category",
+    "SELECT_PARENT_CATEGORY": "Select Parent Category",
+    "SELECT_STATUS": "Select Status",
+    "TRASH_CATEGORIES": "Trash Categories",
+    "CATEGORIES_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "Categories in the Trash will be automatically deleted after 60 days"
 }

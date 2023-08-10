@@ -322,5 +322,16 @@
     "CREATE_COLLECTION": "စုစည်းမှုကို ဖန်တီးပါ",
     "EDIT_COLLECTION": "စုစည်းမှုကို တည်းဖြတ်ပါ",
     "TRASH_COLLECTIONS": "အမှိုက်စုဆောင်းမှုများ",
-    "COLLECTIONS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "အမှိုက်ပုံးရှိ စုဆောင်းမှုများကို ရက် 60 ကြာပြီးနောက် အလိုအလျောက် ဖျက်သွားပါမည်။"
+    "COLLECTIONS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "အမှိုက်ပုံးရှိ စုဆောင်းမှုများကို ရက် 60 ကြာပြီးနောက် အလိုအလျောက် ဖျက်သွားပါမည်။",
+    "STATUS": "အခြေအနေ",
+    "ADD_CATEGORY": "အမျိုးအစားထည့်ပါ",
+    "CREATE_CATEGORY": "အမျိုးအစားဖန်တီးပါ",
+    "EDIT_CATEGORY": "အမျိုးအစား တည်းဖြတ်ပါ",
+    "CATEGORY_NAME": "အမျိုးအစားအမည်",
+    "ENTER_CATEGORY_NAME": "အမျိုးအစားအမည်ကို ထည့်သွင်းပါ။",
+    "PARENT_CATEGORY": "ပင်မအမျိုးအစား",
+    "SELECT_PARENT_CATEGORY": "ပင်မအမျိုးအစားကို ရွေးပါ။",
+    "SELECT_STATUS": "အခြေအနေကို ရွေးပါ။",
+    "TRASH_CATEGORIES": "အမှိုက်အမျိုးအစားများ",
+    "CATEGORIES_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "အမှိုက်ပုံးရှိ အမျိုးအစားများကို ရက် 60 ကြာပြီးနောက် အလိုအလျောက် ဖျက်သွားပါမည်။"
 }
