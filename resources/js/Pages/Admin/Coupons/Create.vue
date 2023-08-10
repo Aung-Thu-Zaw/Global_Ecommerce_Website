@@ -1,13 +1,15 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/CouponBreadcrumb.vue";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/CouponBreadcrumb.vue";
+import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
+import SaveButton from "@/Components/Buttons/SaveButton.vue";
 import datepicker from "vue3-datepicker";
-import { computed, ref } from "vue";
 import { Link, useForm, Head } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
+import { ref, computed } from "vue";
 
 // Define the props
 const props = defineProps({
@@ -74,7 +76,7 @@ const handleCreateCoupon = async () => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Create Coupon" />
+    <Head :title="__('CREATE_COUPON')" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
         <!-- Breadcrumb -->
@@ -96,7 +98,7 @@ const handleCreateCoupon = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Create</span
+                >{{ __("CREATE") }}</span
               >
             </div>
           </li>
@@ -111,12 +113,8 @@ const handleCreateCoupon = async () => {
               sort: 'id',
               direction: 'desc',
             }"
-            class="goback-btn"
           >
-            <span>
-              <i class="fa-solid fa-circle-left"></i>
-              Go Back
-            </span>
+            <GoBackButton />
           </Link>
         </div>
       </div>
@@ -125,7 +123,7 @@ const handleCreateCoupon = async () => {
         <form @submit.prevent="handleCreateCoupon">
           <!-- Coupon Code Input -->
           <div class="mb-6">
-            <InputLabel for="code" value="Coupon Code *" />
+            <InputLabel for="code" :value="__('COUPON_CODE') + ' *'" />
 
             <TextInput
               id="code"
@@ -133,7 +131,7 @@ const handleCreateCoupon = async () => {
               class="mt-1 block w-full"
               v-model="form.code"
               required
-              placeholder="Enter Coupon Code"
+              :placeholder="__('ENTER_COUPON_CODE')"
             />
 
             <InputError class="mt-2" :message="form.errors.code" />
@@ -141,13 +139,18 @@ const handleCreateCoupon = async () => {
 
           <!-- Coupon Type Select Box -->
           <div class="mb-6">
-            <InputLabel for="discount_type" value="Coupon Discount Type *" />
+            <InputLabel
+              for="discount_type"
+              :value="__('COUPON_DISCOUNT_TYPE') + ' *'"
+            />
 
             <select
               class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
               v-model="form.discount_type"
             >
-              <option value="" selected disabled>Select Discount Type</option>
+              <option value="" selected disabled>
+                {{ __("SELECT_DISCOUNT_TYPE") }}
+              </option>
               <option value="percentage">Percentage</option>
               <option value="fixed_amount">Fixed Amount</option>
             </select>
@@ -159,7 +162,7 @@ const handleCreateCoupon = async () => {
           <div class="mb-6">
             <InputLabel
               for="discount_amount"
-              value="Coupon Discount Amount *"
+              :value="__('COUPON_DISCOUNT_AMOUNT') + ' *'"
             />
 
             <TextInput
@@ -168,7 +171,7 @@ const handleCreateCoupon = async () => {
               class="mt-1 block w-full"
               v-model="form.discount_amount"
               required
-              placeholder="Enter Discount Amount"
+              :placeholder="__('ENTER_DISCOUNT_AMOUNT')"
             >
               <template v-slot:icon>
                 <span
@@ -190,14 +193,14 @@ const handleCreateCoupon = async () => {
 
           <!-- Coupon Min Spend Input -->
           <div class="mb-6">
-            <InputLabel for="min_spend" value="Minmimum Spend *" />
+            <InputLabel for="min_spend" :value="__('MINIMUN_SPEND') + ' *'" />
 
             <TextInput
               id="min_spend"
               type="text"
               class="mt-1 block w-full"
               v-model="form.min_spend"
-              placeholder="Enter User Minimun Spend Amount"
+              :placeholder="__('ENTER_USER_MINIMUN_SPEND_AMOUNT')"
             />
 
             <InputError class="mt-2" :message="form.errors.min_spend" />
@@ -205,11 +208,14 @@ const handleCreateCoupon = async () => {
 
           <!-- Coupon Date Component -->
           <div class="mb-6">
-            <InputLabel for="start_date" value="Coupon Start Date *" />
+            <InputLabel
+              for="start_date"
+              :value="__('COUPON_START_DATE') + ' *'"
+            />
 
             <datepicker
               class="p-3 w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 placeholder:text-gray-400 placeholder:text-sm"
-              placeholder="Select Coupon Start Date"
+              :placeholder="__('SELECT_COUPON_START_DATE')"
               v-model="startDate"
             />
 
@@ -218,11 +224,11 @@ const handleCreateCoupon = async () => {
 
           <!-- Coupon Date Component -->
           <div class="mb-6">
-            <InputLabel for="end_date" value="Coupon End Date *" />
+            <InputLabel for="end_date" :value="__('COUPON_END_DATE') + ' *'" />
 
             <datepicker
               class="p-3 w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 placeholder:text-gray-400 placeholder:text-sm"
-              placeholder="Select Coupon End Date"
+              :placeholder="__('SELECT_COUPON_END_DATE')"
               v-model="endDate"
             />
 
@@ -231,42 +237,22 @@ const handleCreateCoupon = async () => {
 
           <!-- Coupon Max Usage Input -->
           <div class="mb-6">
-            <InputLabel for="max_uses" value="Max Uses *" />
+            <InputLabel for="max_uses" :value="__('MAX_USES') + ' *'" />
 
             <TextInput
               id="max_uses"
               type="text"
               class="mt-1 block w-full"
               v-model="form.max_uses"
-              placeholder="Enter Max Usage Coupon"
+              :placeholder="__('ENTER_MAX_USAGE_COUPON')"
             />
 
             <InputError class="mt-2" :message="form.errors.max_uses" />
           </div>
 
-          <!-- Create Button -->
+          <!-- Save Button -->
           <div class="mb-6">
-            <button class="save-btn">
-              <svg
-                v-if="processing"
-                aria-hidden="true"
-                role="status"
-                class="inline w-4 h-4 mr-3 text-white animate-spin"
-                viewBox="0 0 100 101"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                  fill="#E5E7EB"
-                />
-                <path
-                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                  fill="currentColor"
-                />
-              </svg>
-              {{ processing ? "Processing..." : "Save" }}
-            </button>
+            <SaveButton :processing="processing" />
           </div>
         </form>
       </div>
