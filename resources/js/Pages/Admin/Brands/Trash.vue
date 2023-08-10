@@ -1,18 +1,23 @@
 <script setup>
-import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import Tr from "@/Components/Table/Tr.vue";
-import Td from "@/Components/Table/Td.vue";
+import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/BrandBreadcrumb.vue";
+import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
+import RestoreButton from "@/Components/Buttons/RestoreButton.vue";
+import DeleteForeverButton from "@/Components/Buttons/DeleteForeverButton.vue";
+import EmptyTrashButton from "@/Components/Buttons/EmptyTrashButton.vue";
+import ResetFilterButton from "@/Components/Buttons/ResetFilterButton.vue";
+import SortingArrows from "@/Components/Table/SortingArrows.vue";
+import TableContainer from "@/Components/Table/TableContainer.vue";
+import TableHeader from "@/Components/Table/TableHeader.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
-import TableHeader from "@/Components/Table/TableHeader.vue";
-import TableContainer from "@/Components/Table/TableContainer.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/BrandBreadcrumb.vue";
+import Tr from "@/Components/Table/Tr.vue";
+import Td from "@/Components/Table/Td.vue";
+import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import SortingArrows from "@/Components/Table/SortingArrows.vue";
 import datepicker from "vue3-datepicker";
-import { inject, reactive, watch, computed, ref } from "vue";
-import { router, usePage, Link, Head } from "@inertiajs/vue3";
+import { reactive, watch, inject, computed, ref } from "vue";
+import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 // Define the Props
 const props = defineProps({
@@ -408,8 +413,9 @@ const brandTrashDelete = computed(() => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >{{ __("TRASH") }}</span
               >
+                {{ __("TRASH") }}
+              </span>
             </div>
           </li>
         </Breadcrumb>
@@ -425,12 +431,8 @@ const brandTrashDelete = computed(() => {
               sort: 'id',
               direction: 'desc',
             }"
-            class="goback-btn"
           >
-            <span>
-              <i class="fa-solid fa-circle-left"></i>
-              {{ __("GO_BACK") }}
-            </span>
+            <GoBackButton />
           </Link>
         </div>
       </div>
@@ -515,12 +517,7 @@ const brandTrashDelete = computed(() => {
             v-if="params.deleted_from || params.deleted_until"
             class="w-full flex items-center"
           >
-            <button
-              @click="resetFilteredDate"
-              class="text-xs font-semibold px-3 ml-auto py-2 text-white bg-red-600 rounded-[4px] hover:bg-red-700 transition-all"
-            >
-              {{ __("RESET_FILTER") }}
-            </button>
+            <ResetFilterButton @click="resetFilteredDate" />
           </div>
         </div>
       </div>
@@ -533,12 +530,8 @@ const brandTrashDelete = computed(() => {
         {{
           __("BRANDS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS")
         }}
-        <button
-          @click="handlePermanentlyDeleteTrashBrands"
-          class="empty-trash-btn"
-        >
-          {{ __("EMPTY_THE_TRASH_NOW") }}
-        </button>
+
+        <EmptyTrashButton @click="handlePermanentlyDeleteTrashBrands" />
       </p>
 
       <!-- Trash Brand Table Start -->
@@ -599,30 +592,16 @@ const brandTrashDelete = computed(() => {
 
             <Td v-if="brandTrashRestore || brandTrashDelete">
               <!-- Restore Button -->
-              <button
+              <RestoreButton
                 v-if="brandTrashRestore"
                 @click="handleRestoreTrashBrand(trashBrand.id)"
-                class="edit-btn group"
-                type="button"
-              >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-recycle"></i>
-                  {{ __("RESTORE") }}
-                </span>
-              </button>
+              />
 
               <!-- Delete Button -->
-              <button
+              <DeleteForeverButton
                 v-if="brandTrashDelete"
                 @click="handleDeleteTrashBrand(trashBrand.id)"
-                class="delete-btn group"
-                type="button"
-              >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-trash-can"></i>
-                  {{ __("DELETE_FOREVER") }}
-                </span>
-              </button>
+              />
             </Td>
           </Tr>
         </tbody>

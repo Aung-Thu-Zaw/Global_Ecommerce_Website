@@ -7,34 +7,6 @@
         @apply flex items-center justify-center border border-gray-300 p-3 w-full my-2 rounded-md md:w-[200px] hover:-translate-y-2 hover:shadow-md duration-150;
     }
 
-    .trash-btn {
-        @apply text-sm px-5 py-2.5 shadow-md font-semibold rounded-[4px] bg-red-600 text-white hover:bg-red-700;
-    }
-
-    .goback-btn {
-        @apply text-sm px-5 py-2.5 font-semibold rounded-[4px] bg-blue-600 text-white hover:bg-blue-700;
-    }
-
-    .add-btn {
-        @apply text-sm px-4 shadow-md py-3 font-semibold rounded-[4px] bg-blue-600 text-white hover:bg-blue-700;
-    }
-
-    .edit-btn {
-        @apply text-sm px-5 py-2 border-[3px] border-blue-700 font-semibold rounded-[4px] shadow-md bg-blue-600 text-white transition-all hover:bg-blue-700 mr-3 my-1;
-    }
-
-    .delete-btn {
-        @apply text-sm px-5 py-2 border-[3px]  border-red-700 font-semibold rounded-[4px] shadow-md bg-red-600 text-white  transition-all hover:bg-red-700 mr-3 my-1;
-    }
-
-    .empty-trash-btn {
-        @apply text-primary-500 rounded-md px-2 py-1 hover:bg-primary-200 hover:text-primary-600 transition-all hover:animate-bounce;
-    }
-
-    .save-btn {
-        @apply py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all;
-    }
-
     .detail-btn {
         @apply text-sm px-5 py-2 border-[3px] border-sky-700 font-semibold rounded-[4px] shadow-md bg-sky-600 text-white transition-all hover:bg-sky-700 mr-3 my-1;
     }

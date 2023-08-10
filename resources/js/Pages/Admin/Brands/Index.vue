@@ -1,15 +1,20 @@
 <script setup>
-import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
+import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/BrandBreadcrumb.vue";
+import CreateButton from "@/Components/Buttons/CreateButton.vue";
+import TrashButton from "@/Components/Buttons/TrashButton.vue";
+import EditButton from "@/Components/Buttons/EditButton.vue";
+import DeleteButton from "@/Components/Buttons/DeleteButton.vue";
+import ResetFilterButton from "@/Components/Buttons/ResetFilterButton.vue";
 import SortingArrows from "@/Components/Table/SortingArrows.vue";
-import Tr from "@/Components/Table/Tr.vue";
-import Td from "@/Components/Table/Td.vue";
+import TableContainer from "@/Components/Table/TableContainer.vue";
+import TableHeader from "@/Components/Table/TableHeader.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
-import TableHeader from "@/Components/Table/TableHeader.vue";
-import TableContainer from "@/Components/Table/TableContainer.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/BrandBreadcrumb.vue";
+import Tr from "@/Components/Table/Tr.vue";
+import Td from "@/Components/Table/Td.vue";
+import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import datepicker from "vue3-datepicker";
 import { reactive, watch, inject, computed, ref } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
@@ -364,12 +369,8 @@ if (usePage().props.flash.successMessage) {
               sort: 'id',
               direction: 'desc',
             }"
-            class="trash-btn group"
           >
-            <span class="group-hover:animate-pulse">
-              <i class="fa-solid fa-trash-can-arrow-up"></i>
-              {{ __("TRASH") }}
-            </span>
+            <TrashButton />
           </Link>
         </div>
       </div>
@@ -383,12 +384,10 @@ if (usePage().props.flash.successMessage) {
           :data="{
             per_page: params.per_page,
           }"
-          class="add-btn"
         >
-          <span>
-            <i class="fa-solid fa-file-circle-plus"></i>
+          <CreateButton>
             {{ __("ADD_BRAND") }}
-          </span>
+          </CreateButton>
         </Link>
 
         <div class="flex items-center ml-auto">
@@ -471,12 +470,7 @@ if (usePage().props.flash.successMessage) {
               v-if="params.created_from || params.created_until"
               class="w-full flex items-center"
             >
-              <button
-                @click="resetFilteredDate"
-                class="text-xs font-semibold px-3 ml-auto py-2 text-white bg-red-600 rounded-[4px] hover:bg-red-700 transition-all"
-              >
-                {{ __("RESET_FILTER") }}
-              </button>
+              <ResetFilterButton @click="resetFilteredDate" />
             </div>
           </div>
         </div>
@@ -547,26 +541,15 @@ if (usePage().props.flash.successMessage) {
                   sort: params.sort,
                   direction: params.direction,
                 }"
-                class="edit-btn group"
               >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-edit"></i>
-                  {{ __("EDIT") }}
-                </span>
+                <EditButton />
               </Link>
 
               <!-- Delete Button -->
-              <button
+              <DeleteButton
                 v-if="brandDelete"
                 @click="handleDeleteBrand(brand)"
-                class="delete-btn group"
-                type="button"
-              >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-trash-can"></i>
-                  {{ __("DELETE") }}
-                </span>
-              </button>
+              />
             </Td>
           </Tr>
         </tbody>
