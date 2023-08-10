@@ -61,7 +61,7 @@ class AdminProductController extends Controller
 
         $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
 
-        return to_route("admin.products.index", $queryStringParams)->with("success", __("PRODUCT_HAS_BEEN_SUCCESSFULLY_CREATED"));
+        return to_route("admin.products.index", $queryStringParams)->with("success", "PRODUCT_HAS_BEEN_SUCCESSFULLY_CREATED");
     }
 
     public function edit(Request $request, Product $product): Response|ResponseFactory
@@ -87,7 +87,7 @@ class AdminProductController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.products.index", $queryStringParams)->with("success", __("PRODUCT_HAS_BEEN_SUCCESSFULLY_UPDATED"));
+        return to_route("admin.products.index", $queryStringParams)->with("success", "PRODUCT_HAS_BEEN_SUCCESSFULLY_UPDATED");
     }
 
     public function destroy(Request $request, Product $product): RedirectResponse
@@ -96,7 +96,7 @@ class AdminProductController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.products.index", $queryStringParams)->with("success", __("PRODUCT_HAS_BEEN_SUCCESSFULLY_DELETED"));
+        return to_route("admin.products.index", $queryStringParams)->with("success", "PRODUCT_HAS_BEEN_SUCCESSFULLY_DELETED");
     }
 
     public function trash(): Response|ResponseFactory
@@ -118,7 +118,7 @@ class AdminProductController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.products.trash', $queryStringParams)->with("success", __("PRODUCT_HAS_BEEN_SUCCESSFULLY_RESTORED"));
+        return to_route('admin.products.trash', $queryStringParams)->with("success", "PRODUCT_HAS_BEEN_SUCCESSFULLY_RESTORED");
     }
 
     public function forceDelete(Request $request, int $trashProductId): RedirectResponse
@@ -129,7 +129,7 @@ class AdminProductController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.products.trash', $queryStringParams)->with("success", __("THE_PRODUCT_HAS_BEEN_PERMANENTLY_DELETED"));
+        return to_route('admin.products.trash', $queryStringParams)->with("success", "THE_PRODUCT_HAS_BEEN_PERMANENTLY_DELETED");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -140,7 +140,7 @@ class AdminProductController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.products.trash', $queryStringParams)->with("success", __("PRODUCTS_HAVE_BEEN_PERMANENTLY_DELETED"));
+        return to_route('admin.products.trash', $queryStringParams)->with("success", "PRODUCTS_HAVE_BEEN_PERMANENTLY_DELETED");
     }
 
     public function handleStatus(Request $request, Product $product): RedirectResponse
@@ -149,7 +149,7 @@ class AdminProductController extends Controller
 
         (new CreatedNewProductApporvedOrDisapprovedNotificationSendToSellerDashboardService())->send($product);
 
-        $message=$request->status==="disapproved" ? __("PRODUCT_HAS_BEEN_SUCCESSFULLY_DISAPPROVED") : __("PRODUCT_HAS_BEEN_SUCCESSFULLY_APPROVED");
+        $message=$request->status==="disapproved" ? "PRODUCT_HAS_BEEN_SUCCESSFULLY_DISAPPROVED" : "PRODUCT_HAS_BEEN_SUCCESSFULLY_APPROVED";
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
