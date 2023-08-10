@@ -346,7 +346,7 @@ if (usePage().props.flash.successMessage) {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Brands" />
+    <Head :title="__('BRANDS')" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -368,7 +368,7 @@ if (usePage().props.flash.successMessage) {
           >
             <span class="group-hover:animate-pulse">
               <i class="fa-solid fa-trash-can-arrow-up"></i>
-              Trash
+              {{ __("TRASH") }}
             </span>
           </Link>
         </div>
@@ -387,7 +387,7 @@ if (usePage().props.flash.successMessage) {
         >
           <span>
             <i class="fa-solid fa-file-circle-plus"></i>
-            Add Brand
+            {{ __("ADD_BRAND") }}
           </span>
         </Link>
 
@@ -397,7 +397,7 @@ if (usePage().props.flash.successMessage) {
             <input
               type="text"
               class="search-input"
-              placeholder="Search by name"
+              :placeholder="__('SEARCH_BY_NAME')"
               v-model="params.search"
             />
             <i
@@ -449,7 +449,7 @@ if (usePage().props.flash.successMessage) {
               <div>
                 <datepicker
                   class="w-full rounded-md p-3 border-gray-300 bg-white focus:ring-0 focus:border-gray-400 text-sm"
-                  placeholder="Select Date"
+                  :placeholder="__('SELECT_DATE')"
                   v-model="createdFrom"
                 />
               </div>
@@ -461,7 +461,7 @@ if (usePage().props.flash.successMessage) {
               <div>
                 <datepicker
                   class="w-full rounded-md p-3 border-gray-300 bg-white focus:ring-0 focus:border-gray-400 text-sm"
-                  placeholder="Select Date"
+                  :placeholder="__('SELECT_DATE')"
                   v-model="createdUntil"
                 />
               </div>
@@ -475,7 +475,7 @@ if (usePage().props.flash.successMessage) {
                 @click="resetFilteredDate"
                 class="text-xs font-semibold px-3 ml-auto py-2 text-white bg-red-600 rounded-[4px] hover:bg-red-700 transition-all"
               >
-                Reset Filter
+                {{ __("RESET_FILTER") }}
               </button>
             </div>
           </div>
@@ -490,24 +490,26 @@ if (usePage().props.flash.successMessage) {
             <SortingArrows :params="params" sort="id" />
           </HeaderTh>
 
-          <HeaderTh> Image </HeaderTh>
+          <HeaderTh> {{ __("IMAGE") }} </HeaderTh>
 
           <HeaderTh @click="updateSorting('name')">
-            Name
+            {{ __("NAME") }}
             <SortingArrows :params="params" sort="name" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('description')">
-            Description
+            {{ __("DESCRIPTION") }}
             <SortingArrows :params="params" sort="description" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('created_at')">
-            Created At
+            {{ __("CREATED_DATE") }}
             <SortingArrows :params="params" sort="created_at" />
           </HeaderTh>
 
-          <HeaderTh v-if="brandEdit || brandDelete"> Action </HeaderTh>
+          <HeaderTh v-if="brandEdit || brandDelete">
+            {{ __("ACTION") }}
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="brands.data.length">
@@ -549,7 +551,7 @@ if (usePage().props.flash.successMessage) {
               >
                 <span class="group-hover:animate-pulse">
                   <i class="fa-solid fa-edit"></i>
-                  Edit
+                  {{ __("EDIT") }}
                 </span>
               </Link>
 
@@ -562,7 +564,7 @@ if (usePage().props.flash.successMessage) {
               >
                 <span class="group-hover:animate-pulse">
                   <i class="fa-solid fa-trash-can"></i>
-                  Delete
+                  {{ __("DELETE") }}
                 </span>
               </button>
             </Td>

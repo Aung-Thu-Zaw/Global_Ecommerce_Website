@@ -61,7 +61,7 @@ const handleCreateBrand = async () => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Create Brand" />
+    <Head :title="__('CREATE_BRAND')" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
         <!-- Breadcrumb -->
@@ -83,7 +83,7 @@ const handleCreateBrand = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Create</span
+                >{{ __("CREATE") }}</span
               >
             </div>
           </li>
@@ -103,7 +103,7 @@ const handleCreateBrand = async () => {
           >
             <span>
               <i class="fa-solid fa-circle-left"></i>
-              Go Back
+              {{ __("GO_BACK") }}
             </span>
           </Link>
         </div>
@@ -122,7 +122,7 @@ const handleCreateBrand = async () => {
         <form @submit.prevent="handleCreateBrand">
           <!-- Brand Name Input -->
           <div class="mb-6">
-            <InputLabel for="name" value="Brand Name *" />
+            <InputLabel for="name" :value="__('BRAND_NAME') + ' *'" />
 
             <TextInput
               id="name"
@@ -130,7 +130,7 @@ const handleCreateBrand = async () => {
               class="mt-1 block w-full"
               v-model="form.name"
               required
-              placeholder="Enter Brand Name"
+              :placeholder="__('ENTER_BRAND_NAME')"
             />
 
             <InputError class="mt-2" :message="form.errors.name" />
@@ -138,7 +138,10 @@ const handleCreateBrand = async () => {
 
           <!-- Brand Description Editor -->
           <div class="mb-6">
-            <InputLabel for="description" value="Brand Description *" />
+            <InputLabel
+              for="description"
+              :value="__('BRAND_DESCRIPTION') + ' *'"
+            />
 
             <ckeditor :editor="editor" v-model="form.description"></ckeditor>
 
@@ -147,10 +150,12 @@ const handleCreateBrand = async () => {
 
           <!-- Brand Select Box -->
           <div class="mb-6">
-            <InputLabel for="category" value="Select Category" />
+            <InputLabel for="category" :value="__('CATEGORY')" />
 
             <select class="select-box" v-model="form.category_id">
-              <option value="" selected disabled>Select Category</option>
+              <option value="" selected disabled>
+                {{ __("SELECT_CATEGORY") }}
+              </option>
               <option
                 v-for="category in categories"
                 :key="category"
@@ -165,7 +170,7 @@ const handleCreateBrand = async () => {
 
           <!-- Brand File Input -->
           <div class="mb-6">
-            <InputLabel for="image" value="Image *" />
+            <InputLabel for="image" :value="__('IMAGE') + ' *'" />
 
             <input
               class="file-input"
@@ -204,7 +209,7 @@ const handleCreateBrand = async () => {
                   fill="currentColor"
                 />
               </svg>
-              {{ processing ? "Processing..." : "Save" }}
+              {{ processing ? __("PROCESSING") : __("SAVE") }}
             </button>
           </div>
         </form>

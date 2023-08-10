@@ -385,7 +385,7 @@ const brandTrashDelete = computed(() => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Trash Brands" />
+    <Head :title="__('TRASH_BRANDS')" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -408,7 +408,7 @@ const brandTrashDelete = computed(() => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Trash</span
+                >{{ __("TRASH") }}</span
               >
             </div>
           </li>
@@ -429,7 +429,7 @@ const brandTrashDelete = computed(() => {
           >
             <span>
               <i class="fa-solid fa-circle-left"></i>
-              Go Back
+              {{ __("GO_BACK") }}
             </span>
           </Link>
         </div>
@@ -441,7 +441,7 @@ const brandTrashDelete = computed(() => {
           <input
             type="text"
             class="search-input"
-            placeholder="Search by name"
+            :placeholder="__('SEARCH_BY_NAME')"
             v-model="params.search"
           />
 
@@ -493,7 +493,7 @@ const brandTrashDelete = computed(() => {
             <div>
               <datepicker
                 class="w-full rounded-md p-3 border-gray-300 bg-white focus:ring-0 focus:border-gray-400 text-sm"
-                placeholder="Select Date"
+                :placeholder="__('SELECT_DATE')"
                 v-model="deletedFrom"
               />
             </div>
@@ -505,7 +505,7 @@ const brandTrashDelete = computed(() => {
             <div>
               <datepicker
                 class="w-full rounded-md p-3 border-gray-300 bg-white focus:ring-0 focus:border-gray-400 text-sm"
-                placeholder="Select Date"
+                :placeholder="__('SELECT_DATE')"
                 v-model="deletedUntil"
               />
             </div>
@@ -519,7 +519,7 @@ const brandTrashDelete = computed(() => {
               @click="resetFilteredDate"
               class="text-xs font-semibold px-3 ml-auto py-2 text-white bg-red-600 rounded-[4px] hover:bg-red-700 transition-all"
             >
-              Reset Filter
+              {{ __("RESET_FILTER") }}
             </button>
           </div>
         </div>
@@ -530,12 +530,14 @@ const brandTrashDelete = computed(() => {
         v-if="brandTrashDelete && trashBrands.data.length !== 0"
         class="text-left text-sm font-bold mb-2 text-warning-600"
       >
-        Brands in the Trash will be automatically deleted after 60 days.
+        {{
+          __("BRANDS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS")
+        }}
         <button
           @click="handlePermanentlyDeleteTrashBrands"
           class="empty-trash-btn"
         >
-          Empty the trash now
+          {{ __("EMPTY_THE_TRASH_NOW") }}
         </button>
       </p>
 
@@ -547,25 +549,25 @@ const brandTrashDelete = computed(() => {
             <SortingArrows :params="params" sort="id" />
           </HeaderTh>
 
-          <HeaderTh> Image </HeaderTh>
+          <HeaderTh> {{ __("IMAGE") }} </HeaderTh>
 
           <HeaderTh @click="updateSorting('name')">
-            Name
+            {{ __("NAME") }}
             <SortingArrows :params="params" sort="name" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('description')">
-            Description
+            {{ __("DESCRIPTION") }}
             <SortingArrows :params="params" sort="description" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('deleted_at')">
-            Deleted At
+            {{ __("DELETED_DATE") }}
             <SortingArrows :params="params" sort="deleted_at" />
           </HeaderTh>
 
           <HeaderTh v-if="brandTrashRestore || brandTrashDelete">
-            Action
+            {{ __("ACTION") }}
           </HeaderTh>
         </TableHeader>
 
@@ -605,7 +607,7 @@ const brandTrashDelete = computed(() => {
               >
                 <span class="group-hover:animate-pulse">
                   <i class="fa-solid fa-recycle"></i>
-                  Restore
+                  {{ __("RESTORE") }}
                 </span>
               </button>
 
@@ -618,7 +620,7 @@ const brandTrashDelete = computed(() => {
               >
                 <span class="group-hover:animate-pulse">
                   <i class="fa-solid fa-trash-can"></i>
-                  Delete Forever
+                  {{ __("DELETE_FOREVER") }}
                 </span>
               </button>
             </Td>

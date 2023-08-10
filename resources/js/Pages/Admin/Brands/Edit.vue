@@ -65,7 +65,7 @@ const handleEditBrand = async () => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Edit Brand" />
+    <Head :title="__('EDIT_BRAND')" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
         <!-- Breadcrumb -->
@@ -110,7 +110,7 @@ const handleEditBrand = async () => {
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
               >
-                Edit
+                {{ __("EDIT") }}
               </span>
             </div>
           </li>
@@ -146,7 +146,7 @@ const handleEditBrand = async () => {
         <form @submit.prevent="handleEditBrand">
           <!-- Brand Name Input -->
           <div class="mb-6">
-            <InputLabel for="name" value="Brand Name *" />
+            <InputLabel for="name" :value="__('BRAND_NAME') + ' *'" />
 
             <TextInput
               id="name"
@@ -154,7 +154,7 @@ const handleEditBrand = async () => {
               class="mt-1 block w-full"
               v-model="form.name"
               required
-              placeholder="Enter Brand Name"
+              :placeholder="__('ENTER_BRAND_NAME')"
             />
 
             <InputError class="mt-2" :message="form.errors.name" />
@@ -162,7 +162,10 @@ const handleEditBrand = async () => {
 
           <!-- Brand Description Editor -->
           <div class="mb-6">
-            <InputLabel for="description" value="Brand Description *" />
+            <InputLabel
+              for="description"
+              :value="__('BRAND_DESCRIPTION') + ' *'"
+            />
 
             <ckeditor :editor="editor" v-model="form.description"></ckeditor>
 
@@ -171,10 +174,12 @@ const handleEditBrand = async () => {
 
           <!-- Brand Select Box -->
           <div class="mb-6">
-            <InputLabel for="category" value="Select Category" />
+            <InputLabel for="category" :value="__('CATEGORY')" />
 
             <select class="select-box" v-model="form.category_id">
-              <option value="" selected disabled>Select Category</option>
+              <option value="" selected disabled>
+                {{ __("SELECT_CATEGORY") }}
+              </option>
               <option
                 v-for="category in categories"
                 :key="category"
@@ -189,7 +194,7 @@ const handleEditBrand = async () => {
           </div>
 
           <div class="mb-6">
-            <InputLabel for="image" value="Image *" />
+            <InputLabel for="image" :value="__('IMAGE') + ' *'" />
 
             <!-- Brand File Input -->
             <input
@@ -228,7 +233,7 @@ const handleEditBrand = async () => {
                   fill="currentColor"
                 />
               </svg>
-              {{ processing ? "Processing..." : "Update" }}
+              {{ processing ? __("PROCESSING") : __("UPDATE") }}
             </button>
           </div>
         </form>
