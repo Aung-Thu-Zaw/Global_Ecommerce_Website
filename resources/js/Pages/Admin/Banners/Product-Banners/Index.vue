@@ -1,17 +1,23 @@
 <script setup>
+import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/BannerBreadcrumb.vue";
+import CreateButton from "@/Components/Buttons/CreateButton.vue";
+import TrashButton from "@/Components/Buttons/TrashButton.vue";
+import EditButton from "@/Components/Buttons/EditButton.vue";
+import DeleteButton from "@/Components/Buttons/DeleteButton.vue";
+import ResetFilterButton from "@/Components/Buttons/ResetFilterButton.vue";
 import ActiveStatus from "@/Components/Status/ActiveStatus.vue";
 import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
 import SortingArrows from "@/Components/Table/SortingArrows.vue";
-import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import Tr from "@/Components/Table/Tr.vue";
-import Td from "@/Components/Table/Td.vue";
+import TableContainer from "@/Components/Table/TableContainer.vue";
+import TableHeader from "@/Components/Table/TableHeader.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
-import TableHeader from "@/Components/Table/TableHeader.vue";
-import TableContainer from "@/Components/Table/TableContainer.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/BannerBreadcrumb.vue";
+import Tr from "@/Components/Table/Tr.vue";
+import Td from "@/Components/Table/Td.vue";
+import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import datepicker from "vue3-datepicker";
 import { reactive, watch, inject, computed, ref } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
@@ -20,8 +26,36 @@ const props = defineProps({
   productBanners: Object,
 });
 
-// Define Alert Variables
+// Define  Variables
 const swal = inject("$swal");
+const isFilterBoxOpened = ref(false);
+const createdFrom = ref(
+  usePage().props.ziggy.query.created_from
+    ? new Date(usePage().props.ziggy.query.created_from)
+    : ""
+);
+const createdUntil = ref(
+  usePage().props.ziggy.query.created_until
+    ? new Date(usePage().props.ziggy.query.created_until)
+    : ""
+);
+
+// Formatted Date
+const formattedCreatedFrom = computed(() => {
+  const year = createdFrom.value ? createdFrom.value.getFullYear() : "";
+  const month = createdFrom.value ? createdFrom.value.getMonth() + 1 : "";
+  const day = createdFrom.value ? createdFrom.value.getDate() : "";
+
+  return year && month && day ? `${year}-${month}-${day}` : undefined;
+});
+
+const formattedCreatedUntil = computed(() => {
+  const year = createdUntil.value ? createdUntil.value.getFullYear() : "";
+  const month = createdUntil.value ? createdUntil.value.getMonth() + 1 : "";
+  const day = createdUntil.value ? createdUntil.value.getDate() : "";
+
+  return year && month && day ? `${year}-${month}-${day}` : undefined;
+});
 
 // Query String Parameteres
 const params = reactive({
@@ -30,6 +64,12 @@ const params = reactive({
   per_page: usePage().props.ziggy.query?.per_page,
   sort: usePage().props.ziggy.query?.sort,
   direction: usePage().props.ziggy.query?.direction,
+  created_from: usePage().props.ziggy.query.created_from
+    ? usePage().props.ziggy.query.created_from
+    : formattedCreatedFrom,
+  created_until: usePage().props.ziggy.query.created_until
+    ? usePage().props.ziggy.query.created_until
+    : formattedCreatedUntil,
 });
 
 // Handle Search
@@ -41,6 +81,8 @@ const handleSearch = () => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
+      created_from: params.created_from,
+      created_until: params.created_until,
     },
     {
       replace: true,
@@ -58,10 +100,76 @@ const removeSearch = () => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
+      created_from: params.created_from,
+      created_until: params.created_until,
     },
     {
       replace: true,
       preserveState: true,
+    }
+  );
+};
+
+// Filtered By Only Created From
+const filteredByCreatedFrom = () => {
+  router.get(
+    route("admin.product-banners.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+      created_from: formattedCreatedFrom.value,
+      created_until: params.created_until,
+    },
+    {
+      replace: true,
+      preserveState: true,
+      onSuccess: () => {
+        isFilterBoxOpened.value = true;
+      },
+    }
+  );
+};
+
+// Filtered By Only Created Until
+const filteredByCreatedUntil = () => {
+  router.get(
+    route("admin.product-banners.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+      created_from: params.created_from,
+      created_until: formattedCreatedUntil.value,
+    },
+    {
+      replace: true,
+      preserveState: true,
+      onSuccess: () => {
+        isFilterBoxOpened.value = true;
+      },
+    }
+  );
+};
+
+// Handle Reset Filtered Date
+const resetFilteredDate = () => {
+  createdFrom.value = "";
+  createdUntil.value = "";
+  router.get(
+    route("admin.product-banners.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+      onSuccess: () => (isFilterBoxOpened.value = false),
     }
   );
 };
@@ -76,6 +184,8 @@ const handleQueryStringParameter = () => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
+      created_from: params.created_from,
+      created_until: params.created_until,
     },
     {
       replace: true,
@@ -101,6 +211,30 @@ watch(
   () => params.per_page,
   () => {
     handleQueryStringParameter();
+  }
+);
+
+// Watching Created From Datepicker
+watch(
+  () => params.created_from,
+  () => {
+    if (params.created_from === "") {
+      resetFilteredDate();
+    } else {
+      filteredByCreatedFrom();
+    }
+  }
+);
+
+// Watching Created Unitl Datepicker
+watch(
+  () => params.created_until,
+  () => {
+    if (params.created_until === "") {
+      resetFilteredDate();
+    } else {
+      filteredByCreatedUntil();
+    }
   }
 );
 
@@ -134,6 +268,8 @@ const handleShow = async (hideProductBannerId) => {
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
+        created_from: params.created_from,
+        created_until: params.created_until,
       }),
       {},
       {
@@ -179,6 +315,8 @@ const handleHide = async (showProductBannerId) => {
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
+        created_from: params.created_from,
+        created_until: params.created_until,
       }),
       {},
       {
@@ -219,6 +357,8 @@ const handleDeleteProductBanner = async (productBannerId) => {
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
+        created_from: params.created_from,
+        created_until: params.created_until,
       }),
       {
         preserveScroll: true,
@@ -289,7 +429,7 @@ if (usePage().props.flash.successMessage) {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Product Banners" />
+    <Head :title="__('PRODUCT_BANNERS')" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -312,7 +452,7 @@ if (usePage().props.flash.successMessage) {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Product Banners</span
+                >{{ __("PRODUCT_BANNERS") }}</span
               >
             </div>
           </li>
@@ -329,12 +469,8 @@ if (usePage().props.flash.successMessage) {
               sort: 'id',
               direction: 'desc',
             }"
-            class="trash-btn group"
           >
-            <span class="group-hover:animate-pulse">
-              <i class="fa-solid fa-trash-can-arrow-up"></i>
-              Trash
-            </span>
+            <TrashButton />
           </Link>
         </div>
       </div>
@@ -348,12 +484,10 @@ if (usePage().props.flash.successMessage) {
           :data="{
             per_page: params.per_page,
           }"
-          class="add-btn"
         >
-          <span>
-            <i class="fa-solid fa-file-circle-plus"></i>
-            Add Product Banner
-          </span>
+          <CreateButton>
+            {{ __("ADD_PRODUCT_BANNER") }}
+          </CreateButton>
         </Link>
 
         <div class="flex items-center">
@@ -362,7 +496,7 @@ if (usePage().props.flash.successMessage) {
             <input
               type="text"
               class="search-input"
-              placeholder="Search by url"
+              :placeholder="__('SEARCH_BY_URL')"
               v-model="params.search"
             />
             <i
@@ -395,25 +529,25 @@ if (usePage().props.flash.successMessage) {
             <SortingArrows :params="params" sort="id" />
           </HeaderTh>
 
-          <HeaderTh> Image </HeaderTh>
+          <HeaderTh> {{ __("IMAGE") }} </HeaderTh>
 
           <HeaderTh @click="updateSorting('url')">
-            URL
+            {{ __("URL") }}
             <SortingArrows :params="params" sort="url" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('status')">
-            Status
+            {{ __("STATUS") }}
             <SortingArrows :params="params" sort="status" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('created_at')">
-            Created At
+            {{ __("CREATED_DATE") }}
             <SortingArrows :params="params" sort="created_at" />
           </HeaderTh>
 
           <HeaderTh v-if="bannerEdit || bannerDelete || bannerControl">
-            Action
+            {{ __("ACTION") }}
           </HeaderTh>
         </TableHeader>
 
@@ -456,7 +590,7 @@ if (usePage().props.flash.successMessage) {
               >
                 <span class="group-hover:animate-pulse">
                   <i class="fa-solid fa-eye"></i>
-                  Show
+                  {{ __("SHOW") }}
                 </span>
               </button>
 
@@ -469,7 +603,7 @@ if (usePage().props.flash.successMessage) {
               >
                 <span class="group-hover:animate-pulse">
                   <i class="fa-solid fa-eye-slash"></i>
-                  Hide
+                  {{ __("HIDE") }}
                 </span>
               </button>
 
@@ -484,26 +618,15 @@ if (usePage().props.flash.successMessage) {
                   sort: params.sort,
                   direction: params.direction,
                 }"
-                class="edit-btn group"
               >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-edit"></i>
-                  Edit
-                </span>
+                <EditButton />
               </Link>
 
               <!-- Delete Button -->
-              <button
+              <DeleteButton
                 v-if="bannerDelete"
                 @click="handleDeleteProductBanner(productBanner.id)"
-                class="delete-btn group"
-                type="button"
-              >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-trash-can"></i>
-                  Delete
-                </span>
-              </button>
+              />
             </Td>
           </Tr>
         </tbody>
