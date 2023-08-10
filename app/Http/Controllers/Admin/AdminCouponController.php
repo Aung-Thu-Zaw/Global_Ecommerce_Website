@@ -38,7 +38,7 @@ class AdminCouponController extends Controller
 
         $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
 
-        return to_route("admin.coupons.index", $queryStringParams)->with("success", "Coupon has been successfully created.");
+        return to_route("admin.coupons.index", $queryStringParams)->with("success", __("COUPON_HAS_BEEN_SUCCESSFULLY_CREATED"));
     }
 
     public function edit(Request $request, Coupon $coupon): Response|ResponseFactory
@@ -54,7 +54,7 @@ class AdminCouponController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.coupons.index", $queryStringParams)->with("success", "Coupon has been successfully updated.");
+        return to_route("admin.coupons.index", $queryStringParams)->with("success", __("COUPON_HAS_BEEN_SUCCESSFULLY_UPDATED"));
     }
 
     public function destroy(Request $request, Coupon $coupon): RedirectResponse
@@ -63,7 +63,7 @@ class AdminCouponController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route("admin.coupons.index", $queryStringParams)->with("success", "Coupon has been successfully deleted.");
+        return to_route("admin.coupons.index", $queryStringParams)->with("success", __("COUPON_HAS_BEEN_SUCCESSFULLY_DELETED"));
     }
 
     public function trash(): Response|ResponseFactory
@@ -85,7 +85,7 @@ class AdminCouponController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.coupons.trash', $queryStringParams)->with("success", "Coupon has been successfully restored.");
+        return to_route('admin.coupons.trash', $queryStringParams)->with("success", __("COUPON_HAS_BEEN_SUCCESSFULLY_RESTORED"));
     }
 
     public function forceDelete(Request $request, int $trashCouponId): RedirectResponse
@@ -96,7 +96,7 @@ class AdminCouponController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.coupons.trash', $queryStringParams)->with("success", "The coupon has been permanently deleted.");
+        return to_route('admin.coupons.trash', $queryStringParams)->with("success", __("THE_COUPON_HAS_BEEN_PERMANENTLY_DELETED"));
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -107,6 +107,6 @@ class AdminCouponController extends Controller
 
         $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
 
-        return to_route('admin.coupons.trash', $queryStringParams)->with("success", "Coupons have been successfully deleted.");
+        return to_route('admin.coupons.trash', $queryStringParams)->with("success", __("COUPONS_HAVE_BEEN_PERMANENTLY_DELETED"));
     }
 }
