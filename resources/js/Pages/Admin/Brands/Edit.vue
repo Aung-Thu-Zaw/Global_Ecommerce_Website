@@ -4,6 +4,7 @@ import Breadcrumb from "@/Components/Breadcrumbs/BrandBreadcrumb.vue";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
+import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
 import SaveButton from "@/Components/Buttons/SaveButton.vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { Link, useForm, Head } from "@inertiajs/vue3";
@@ -211,9 +212,7 @@ const handleEditBrand = async () => {
 
           <!-- Save Button -->
           <div class="mb-6">
-            <SaveButton v-if="processing">
-              {{ processing ? __("PROCESSING") : __("UPDATE") }}
-            </SaveButton>
+            <SaveButton :processing="processing" />
           </div>
         </form>
       </div>

@@ -310,5 +310,6 @@
     "BRAND_NAME": "အမှတ်တံဆိပ်အမည်",
     "ENTER_BRAND_NAME": "အမှတ်တံဆိပ်အမည်ထည့်ပါ။",
     "BRAND_DESCRIPTION": "အမှတ်တံဆိပ်ဖော်ပြချက်",
-    "SELECT_CATEGORY": "အမျိုးအစားကို ရွေးပါ။"
+    "SELECT_CATEGORY": "အမျိုးအစားကို ရွေးပါ။",
+    "DATA_IS_NOT_AVALIABLE_FOR_THIS_TABLE": "ဤဇယားအတွက် Data မရနိုင်ပါ။"
 }

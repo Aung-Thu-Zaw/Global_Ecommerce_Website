@@ -1,4 +1,7 @@
 <script setup>
+defineProps({
+  processing: Boolean,
+});
 </script>
 
 <template>
@@ -6,6 +9,7 @@
     class="py-3 bg-blueGray-700 rounded-sm w-full font-bold text-white hover:bg-blueGray-800 transition-all"
   >
     <svg
+      v-if="processing"
       aria-hidden="true"
       role="status"
       class="inline w-4 h-4 mr-3 text-white animate-spin"
@@ -23,7 +27,7 @@
       />
     </svg>
 
-    <slot />
+    {{ processing ? __("PROCESSING") : __("SAVE") }}
   </button>
 </template>
 

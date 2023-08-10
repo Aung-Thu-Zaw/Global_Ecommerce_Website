@@ -309,5 +309,6 @@
     "BRAND_NAME": "Brand Name",
     "ENTER_BRAND_NAME": "Enter Brand Name",
     "BRAND_DESCRIPTION": "Brand Description",
-    "SELECT_CATEGORY": "Select Category"
+    "SELECT_CATEGORY": "Select Category",
+    "DATA_IS_NOT_AVALIABLE_FOR_THIS_TABLE": "Data is not avaliable for this table"
 }

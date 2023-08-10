@@ -188,9 +188,7 @@ const handleCreateBrand = async () => {
 
           <!-- Save Button -->
           <div class="mb-6">
-            <SaveButton v-if="processing">
-              {{ processing ? __("PROCESSING") : __("SAVE") }}
-            </SaveButton>
+            <SaveButton :processing="processing" />
           </div>
         </form>
       </div>
