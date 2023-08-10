@@ -310,5 +310,16 @@
     "ENTER_BRAND_NAME": "Enter Brand Name",
     "BRAND_DESCRIPTION": "Brand Description",
     "SELECT_CATEGORY": "Select Category",
-    "DATA_IS_NOT_AVALIABLE_FOR_THIS_TABLE": "Data is not avaliable for this table"
+    "DATA_IS_NOT_AVALIABLE_FOR_THIS_TABLE": "Data is not avaliable for this table",
+    "TITLE": "Title",
+    "ADD_COLLECTION": "Add Collection",
+    "SEARCH_BY_TITLE": "Search by title",
+    "COLLECTION_TITLE": "Collection Title",
+    "ENTER_COLLECTION_TITLE": "Enter Collection Title",
+    "COLLECTION_DESCRIPTION": "Collection Description",
+    "ENTER_COLLECTION_DESCRIPTION": "Enter Collection Description",
+    "CREATE_COLLECTION": "Create Collection",
+    "EDIT_COLLECTION": "Edit Collection",
+    "TRASH_COLLECTIONS": "Trash Collections",
+    "COLLECTIONS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "Collections in the Trash will be automatically deleted after 60 days"
 }

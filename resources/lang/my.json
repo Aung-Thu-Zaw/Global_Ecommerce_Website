@@ -302,7 +302,7 @@
     "SELECT_DATE": "ရက်စွဲကို ရွေးပါ။",
     "RESET_FILTER": "စစ်ထုတ်မှုကို ပြန်လည်သတ်မှတ်ပါ",
     "CREATE_BRAND": "အမှတ်တံဆိပ်ဖန်တီးပါ",
-    "EDIT_BRAND": "အမှတ်တံဆိပ်ကို တည်းဖြတ်ပါ။",
+    "EDIT_BRAND": "အမှတ်တံဆိပ်ကို တည်းဖြတ်ပါ",
     "TRASH_BRANDS": "အမှိုက်အမှတ်တံဆိပ်များ",
     "CREATE": "ဖန်တီးပါ",
     "UPDATE": "အပ်ဒိတ်",
@@ -311,5 +311,16 @@
     "ENTER_BRAND_NAME": "အမှတ်တံဆိပ်အမည်ထည့်ပါ။",
     "BRAND_DESCRIPTION": "အမှတ်တံဆိပ်ဖော်ပြချက်",
     "SELECT_CATEGORY": "အမျိုးအစားကို ရွေးပါ။",
-    "DATA_IS_NOT_AVALIABLE_FOR_THIS_TABLE": "ဤဇယားအတွက် Data မရနိုင်ပါ။"
+    "DATA_IS_NOT_AVALIABLE_FOR_THIS_TABLE": "ဤဇယားအတွက် Data မရနိုင်ပါ။",
+    "TITLE": "ခေါင်းစဥ်",
+    "ADD_COLLECTION": "စုဆောင်းမှုထည့်ပါ",
+    "SEARCH_BY_TITLE": "ခေါင်းစဉ်ဖြင့်ရှာဖွေပါ။",
+    "COLLECTION_TITLE": "စုစည်းမှုခေါင်းစဉ်",
+    "ENTER_COLLECTION_TITLE": "စုစည်းမှုခေါင်းစဉ်ကို ထည့်သွင်းပါ။",
+    "COLLECTION_DESCRIPTION": "စုစည်းမှုဖော်ပြချက်",
+    "ENTER_COLLECTION_DESCRIPTION": "စုစည်းမှုဖော်ပြချက်ကို ထည့်သွင်းပါ။",
+    "CREATE_COLLECTION": "စုစည်းမှုကို ဖန်တီးပါ",
+    "EDIT_COLLECTION": "စုစည်းမှုကို တည်းဖြတ်ပါ",
+    "TRASH_COLLECTIONS": "အမှိုက်စုဆောင်းမှုများ",
+    "COLLECTIONS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "အမှိုက်ပုံးရှိ စုဆောင်းမှုများကို ရက် 60 ကြာပြီးနောက် အလိုအလျောက် ဖျက်သွားပါမည်။"
 }
