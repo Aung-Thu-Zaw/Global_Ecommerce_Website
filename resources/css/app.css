@@ -7,20 +7,12 @@
         @apply flex items-center justify-center border border-gray-300 p-3 w-full my-2 rounded-md md:w-[200px] hover:-translate-y-2 hover:shadow-md duration-150;
     }
 
-    .detail-btn {
-        @apply text-sm px-5 py-2 border-[3px] border-sky-700 font-semibold rounded-[4px] shadow-md bg-sky-600 text-white transition-all hover:bg-sky-700 mr-3 my-1;
-    }
-
     .hide-btn {
         @apply text-sm px-5 py-2 border-[3px] border-orange-700 font-semibold rounded-[4px] shadow-md bg-orange-600 text-white transition-all hover:bg-orange-700 mr-3 my-1;
     }
 
     .show-btn {
         @apply text-sm px-5 py-2 border-[3px] border-green-700 font-semibold rounded-[4px] shadow-md bg-green-600 text-white transition-all hover:bg-green-700 mr-3 my-1;
-    }
-
-    .offical-btn {
-        @apply text-sm px-5 py-2 border-[3px] font-semibold rounded-[4px] shadow-md  text-white transition-all mr-3 my-1;
     }
 
     .active-btn {

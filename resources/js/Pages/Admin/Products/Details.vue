@@ -5,6 +5,7 @@ import NoDiscountStatus from "@/Components/Status/NoDiscountStatus.vue";
 import PendingStatus from "@/Components/Status/PendingStatus.vue";
 import ApprovedStatus from "@/Components/Status/ApprovedStatus.vue";
 import DiscountStatus from "@/Components/Status/DiscountStatus.vue";
+import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
 import { Link, Head } from "@inertiajs/vue3";
 
 // Define the props
@@ -71,7 +72,7 @@ const formattedAmount = (amount) => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Details</span
+                >{{ __("DETAILS") }}</span
               >
             </div>
           </li>
@@ -88,12 +89,8 @@ const formattedAmount = (amount) => {
               sort: props.queryStringParams.sort,
               direction: props.queryStringParams.direction,
             }"
-            class="goback-btn"
           >
-            <span>
-              <i class="fa-solid fa-circle-left"></i>
-              Go Back
-            </span>
+            <GoBackButton />
           </Link>
         </div>
       </div>
