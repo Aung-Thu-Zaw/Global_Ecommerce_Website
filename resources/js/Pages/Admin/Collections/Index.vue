@@ -249,10 +249,11 @@ const updateSorting = (sort = "id") => {
 const handleDeleteCollection = async (collection) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to delete this collection?",
-    text: "You will be able to restore this collection in the trash!",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_COLLECTION"),
+    text: __("YOU_WILL_BE_ABLE_TO_RESTORE_THIS_COLLECTION_IN_THE_TRASH"),
     showCancelButton: true,
-    confirmButtonText: "Yes, Delete it!",
+    confirmButtonText: __("YES_DELETE_IT"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#d52222",
     cancelButtonColor: "#626262",
     timer: 20000,
