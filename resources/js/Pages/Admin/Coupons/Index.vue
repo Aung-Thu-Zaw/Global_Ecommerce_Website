@@ -270,10 +270,11 @@ const updateSorting = (sort = "id") => {
 const handleDeleteCoupon = async (coupon) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to delete this coupon?",
-    text: "You will be able to restore this coupon in the trash!",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_COUPON"),
+    text: __("YOU_WILL_BE_ABLE_TO_RESTORE_THIS_COUPON_IN_THE_TRASH"),
     showCancelButton: true,
-    confirmButtonText: "Yes, Delete it!",
+    confirmButtonText: __("YES_DELETE_IT"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#d52222",
     cancelButtonColor: "#626262",
     timer: 20000,

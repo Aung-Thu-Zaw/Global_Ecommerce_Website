@@ -270,9 +270,10 @@ const updateSorting = (sort = "id") => {
 const handleRestoreTrashCoupon = async (trashCouponId) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to restore this coupon?",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_COUPON"),
     showCancelButton: true,
-    confirmButtonText: "Yes, Restore It",
+    confirmButtonText: __("YES_RESTORE_IT"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#2562c4",
     cancelButtonColor: "#626262",
     timer: 20000,
@@ -311,10 +312,13 @@ const handleRestoreTrashCoupon = async (trashCouponId) => {
 const handleDeleteTrashCoupon = async (trashCouponId) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to delete it from the trash?",
-    text: "Coupon in the trash will be permanetly deleted! You can't get it back.",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_IT_FROM_THE_TRASH"),
+    text: __(
+      "COUPON_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK"
+    ),
     showCancelButton: true,
-    confirmButtonText: "Yes, Delete it !",
+    confirmButtonText: __("YES_DELETE_IT"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#d52222",
     cancelButtonColor: "#626262",
     timer: 20000,
@@ -352,10 +356,13 @@ const handleDeleteTrashCoupon = async (trashCouponId) => {
 const handlePermanentlyDeleteTrashCoupons = async () => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to delete it from the trash?",
-    text: "All coupons in the trash will be permanetly deleted! You can't get it back.",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_IT_FROM_THE_TRASH"),
+    text: __(
+      "ALL_COUPONS_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK"
+    ),
     showCancelButton: true,
-    confirmButtonText: "Yes, Delete it !",
+    confirmButtonText: __("YES_DELETE_IT"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#d52222",
     cancelButtonColor: "#626262",
     timer: 20000,
