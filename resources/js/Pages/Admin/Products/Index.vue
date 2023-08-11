@@ -270,12 +270,17 @@ const handleStatus = async (product) => {
         ? "approve"
         : "disapprove"
     } this product?`,
-    showCancelButton: true,
-    confirmButtonText: `Yes, ${
+
+    title:
       product.status === "pending" || product.status === "disapproved"
-        ? "Approve"
-        : "Disapprove"
-    }!`,
+        ? __("ARE_YOU_SURE_YOU_WANT_TO_SET_APPROVE_THIS_PRODUCT")
+        : __("ARE_YOU_SURE_YOU_WANT_TO_SET_DISAPPROVE_THIS_PRODUCT"),
+    showCancelButton: true,
+    confirmButtonText:
+      product.status === "pending" || product.status === "disapproved"
+        ? __("YES_APPROVE_IT")
+        : __("YES_DISAPPROVE_IT"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#2562c4",
     cancelButtonColor: "#626262",
     timer: 20000,
@@ -318,10 +323,11 @@ const handleStatus = async (product) => {
 const handleProductDelete = async (productSlug) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to delete this product?",
-    text: "You will be able to restore this product in the trash!",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_PRODUCT"),
+    text: __("YOU_WILL_BE_ABLE_TO_RESTORE_THIS_PRODUCT_IN_THE_TRASH"),
     showCancelButton: true,
-    confirmButtonText: "Yes, Delete it!",
+    confirmButtonText: __("YES_DELETE_IT"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#d52222",
     cancelButtonColor: "#626262",
     timer: 20000,
