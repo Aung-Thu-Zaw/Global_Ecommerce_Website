@@ -293,7 +293,7 @@ const handleDeleteTrashBrand = async (trashBrandId) => {
     icon: "question",
     title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_IT_FROM_THE_TRASH"),
     text: __(
-      "BRANDS_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK"
+      "BRAND_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK"
     ),
     showCancelButton: true,
     confirmButtonText: __("YES_DELETE_IT"),

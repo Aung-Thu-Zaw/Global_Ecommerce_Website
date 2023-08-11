@@ -278,11 +278,13 @@ const handleDeleteCategory = async (category) => {
   if (category.children.length > 0) {
     const result = await swal({
       icon: "error",
-      title:
-        "You can't delete this category because this category have children category?",
-      text: "If you click 'Delete, whatever!' button children category will be automatically deleted.You will be able to restore this category in the trash!",
+      title: __("YOU_CANT_DELETE_THIS_CATEGORY_BECAUSE_THIS_CATEGORY_HAVE_CHILDREN_CATEGORIES"),
+      text: __(
+        "IF_YOU_CLICK_THE_DELETE_WHATEVER_BUTTON_CHILDREN_CATEGORY_ASSOCIATED_WITH_THAT_PARENT_CATEGORY_WILL_BE_AUTOMATICALLY_DELETED"
+      ),
       showCancelButton: true,
-      confirmButtonText: "Delete, whatever!",
+      confirmButtonText: __("DELETE_WHATEVER"),
+      cancelButtonText: __("CANCEL"),
       confirmButtonColor: "#d52222",
       cancelButtonColor: "#626262",
       timer: 20000,
@@ -295,10 +297,11 @@ const handleDeleteCategory = async (category) => {
   } else {
     const result = await swal({
       icon: "question",
-      title: "Are you sure you want to delete this category?",
-      text: "You will be able to restore this category in the trash!",
+      title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_CATEGORY"),
+      text: __("YOU_WILL_BE_ABLE_TO_RESTORE_THIS_CATEGORY_IN_THE_TRASH"),
       showCancelButton: true,
-      confirmButtonText: "Yes, Delete it!",
+      confirmButtonText: __("YES_DELETE_IT"),
+      cancelButtonText: __("CANCEL"),
       confirmButtonColor: "#d52222",
       cancelButtonColor: "#626262",
       timer: 20000,
