@@ -555,7 +555,7 @@ const bannerTrashDelete = computed(() => {
       >
         {{
           __(
-            "SLIDER_BANNERS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS"
+            "PRODUCT_BANNERS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS"
           )
         }}
 
