@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Actions\Admin\Brands\CreateBrandAction;
 use App\Actions\Admin\Brands\PermanentlyDeleteAllTrashBrandAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 use App\Actions\Admin\Brands\UpdateBrandAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BrandRequest;
@@ -17,6 +18,8 @@ use Illuminate\Http\Request;
 
 class AdminBrandController extends Controller
 {
+    use HandlesQueryStringParameters;
+
     public function index(): Response|ResponseFactory
     {
         $brands=Brand::search(request("search"))
@@ -43,16 +46,14 @@ class AdminBrandController extends Controller
     {
         (new CreateBrandAction())->handle($request->validated());
 
-        $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
-
-        return to_route("admin.brands.index", $queryStringParams)->with("success", "BRAND_HAS_BEEN_SUCCESSFULLY_CREATED");
+        return to_route("admin.brands.index", $this->getQueryStringParams($request))->with("success", "BRAND_HAS_BEEN_SUCCESSFULLY_CREATED");
     }
 
     public function edit(Request $request, Brand $brand): Response|ResponseFactory
     {
         $categories=Category::all();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+        $queryStringParams=$this->getQueryStringParams($request);
 
         return inertia("Admin/Brands/Edit", compact("brand", "categories", "queryStringParams"));
     }
@@ -61,18 +62,14 @@ class AdminBrandController extends Controller
     {
         (new UpdateBrandAction())->handle($request->validated(), $brand);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route("admin.brands.index", $queryStringParams)->with("success", "BRAND_HAS_BEEN_SUCCESSFULLY_UPDATED");
+        return to_route("admin.brands.index", $this->getQueryStringParams($request))->with("success", "BRAND_HAS_BEEN_SUCCESSFULLY_UPDATED");
     }
 
     public function destroy(Request $request, Brand $brand): RedirectResponse
     {
         $brand->delete();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route("admin.brands.index", $queryStringParams)->with("success", "BRAND_HAS_BEEN_SUCCESSFULLY_DELETED");
+        return to_route("admin.brands.index", $this->getQueryStringParams($request))->with("success", "BRAND_HAS_BEEN_SUCCESSFULLY_DELETED");
     }
 
     public function trash(): Response|ResponseFactory
@@ -92,9 +89,7 @@ class AdminBrandController extends Controller
 
         $trashBrand->restore();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.brands.trash', $queryStringParams)->with("success", "BRAND_HAS_BEEN_SUCCESSFULLY_RESTORED");
+        return to_route('admin.brands.trash', $this->getQueryStringParams($request))->with("success", "BRAND_HAS_BEEN_SUCCESSFULLY_RESTORED");
     }
 
     public function forceDelete(Request $request, int $trashBrandId): RedirectResponse
@@ -105,9 +100,7 @@ class AdminBrandController extends Controller
 
         $trashBrand->forceDelete();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.brands.trash', $queryStringParams)->with("success", "THE_BRAND_HAS_BEEN_PERMANENTLY_DELETED");
+        return to_route('admin.brands.trash', $this->getQueryStringParams($request))->with("success", "THE_BRAND_HAS_BEEN_PERMANENTLY_DELETED");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -116,8 +109,6 @@ class AdminBrandController extends Controller
 
         (new PermanentlyDeleteAllTrashBrandAction())->handle($trashBrands);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.brands.trash', $queryStringParams)->with("success", "BRANDS_HAVE_BEEN_PERMANENTLY_DELETED");
+        return to_route('admin.brands.trash', $this->getQueryStringParams($request))->with("success", "BRANDS_HAVE_BEEN_PERMANENTLY_DELETED");
     }
 }
