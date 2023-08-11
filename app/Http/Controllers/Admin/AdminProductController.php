@@ -6,6 +6,8 @@ use App\Actions\Admin\Products\CreateProductAction;
 use App\Actions\Products\PermanentlyDeleteAllTrashProductAction;
 use App\Actions\Admin\Products\UpdateProductAction;
 use App\Actions\Products\PermanentlyDeleteTrashProductAction;
+use App\Services\BroadcastNotifications\CreatedNewProductApporvedOrDisapprovedNotificationSendToSellerDashboardService;
+use App\Http\Traits\HandlesQueryStringParameters;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
@@ -13,7 +15,6 @@ use App\Models\Category;
 use App\Models\Collection;
 use App\Models\Product;
 use App\Models\User;
-use App\Services\BroadcastNotifications\CreatedNewProductApporvedOrDisapprovedNotificationSendToSellerDashboardService;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
@@ -21,6 +22,8 @@ use Illuminate\Http\Request;
 
 class AdminProductController extends Controller
 {
+    use HandlesQueryStringParameters;
+
     public function index(): Response|ResponseFactory
     {
         $products=Product::search(request("search"))
@@ -35,7 +38,7 @@ class AdminProductController extends Controller
     {
         $product->load("brand:id,name", "shop:id,shop_name", "images", "colors", "sizes", "types");
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+        $queryStringParams=$this->getQueryStringParams($request);
 
         return inertia("Admin/Products/Details", compact("product", "queryStringParams"));
     }
@@ -59,9 +62,7 @@ class AdminProductController extends Controller
     {
         (new CreateProductAction())->handle($request->validated());
 
-        $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
-
-        return to_route("admin.products.index", $queryStringParams)->with("success", "PRODUCT_HAS_BEEN_SUCCESSFULLY_CREATED");
+        return to_route("admin.products.index", $this->getQueryStringParams($request))->with("success", "PRODUCT_HAS_BEEN_SUCCESSFULLY_CREATED");
     }
 
     public function edit(Request $request, Product $product): Response|ResponseFactory
@@ -76,7 +77,7 @@ class AdminProductController extends Controller
 
         $product->load(["sizes","colors","types","images"]);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+        $queryStringParams=$this->getQueryStringParams($request);
 
         return inertia("Admin/Products/Edit", compact("product", "queryStringParams", "brands", "categories", "collections", "sellers"));
     }
@@ -85,18 +86,14 @@ class AdminProductController extends Controller
     {
         (new UpdateProductAction())->handle($request->validated(), $product);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route("admin.products.index", $queryStringParams)->with("success", "PRODUCT_HAS_BEEN_SUCCESSFULLY_UPDATED");
+        return to_route("admin.products.index", $this->getQueryStringParams($request))->with("success", "PRODUCT_HAS_BEEN_SUCCESSFULLY_UPDATED");
     }
 
     public function destroy(Request $request, Product $product): RedirectResponse
     {
         $product->delete();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route("admin.products.index", $queryStringParams)->with("success", "PRODUCT_HAS_BEEN_SUCCESSFULLY_DELETED");
+        return to_route("admin.products.index", $this->getQueryStringParams($request))->with("success", "PRODUCT_HAS_BEEN_SUCCESSFULLY_DELETED");
     }
 
     public function trash(): Response|ResponseFactory
@@ -116,9 +113,7 @@ class AdminProductController extends Controller
 
         $trashProduct->restore();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.products.trash', $queryStringParams)->with("success", "PRODUCT_HAS_BEEN_SUCCESSFULLY_RESTORED");
+        return to_route('admin.products.trash', $this->getQueryStringParams($request))->with("success", "PRODUCT_HAS_BEEN_SUCCESSFULLY_RESTORED");
     }
 
     public function forceDelete(Request $request, int $trashProductId): RedirectResponse
@@ -127,9 +122,7 @@ class AdminProductController extends Controller
 
         (new PermanentlyDeleteTrashProductAction())->handle($trashProduct);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.products.trash', $queryStringParams)->with("success", "THE_PRODUCT_HAS_BEEN_PERMANENTLY_DELETED");
+        return to_route('admin.products.trash', $this->getQueryStringParams($request))->with("success", "THE_PRODUCT_HAS_BEEN_PERMANENTLY_DELETED");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -138,9 +131,7 @@ class AdminProductController extends Controller
 
         (new PermanentlyDeleteAllTrashProductAction())->handle($trashProducts);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.products.trash', $queryStringParams)->with("success", "PRODUCTS_HAVE_BEEN_PERMANENTLY_DELETED");
+        return to_route('admin.products.trash', $this->getQueryStringParams($request))->with("success", "PRODUCTS_HAVE_BEEN_PERMANENTLY_DELETED");
     }
 
     public function handleStatus(Request $request, Product $product): RedirectResponse
@@ -151,9 +142,6 @@ class AdminProductController extends Controller
 
         $message=$request->status==="disapproved" ? "PRODUCT_HAS_BEEN_SUCCESSFULLY_DISAPPROVED" : "PRODUCT_HAS_BEEN_SUCCESSFULLY_APPROVED";
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.products.index', $queryStringParams)->with("success", $message);
-
+        return to_route('admin.products.index', $this->getQueryStringParams($request))->with("success", $message);
     }
 }
