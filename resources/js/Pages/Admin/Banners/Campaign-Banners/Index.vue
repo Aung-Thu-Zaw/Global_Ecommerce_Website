@@ -251,9 +251,10 @@ const updateSorting = (sort = "id") => {
 const handleShow = async (hideCampaignBannerId) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to show this campaign banner?",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_SHOW_THIS_CAMPAIGN_BANNER"),
     showCancelButton: true,
-    confirmButtonText: "Yes, Show",
+    confirmButtonText: __("YES_SHOW"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#2562c4",
     cancelButtonColor: "#626262",
     timer: 20000,
@@ -292,9 +293,10 @@ const handleShow = async (hideCampaignBannerId) => {
 const handleHide = async (showCampaignBannerId) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to hide this campaign banner?",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_HIDE_THIS_CAMPAIGN_BANNER"),
     showCancelButton: true,
-    confirmButtonText: "Yes, Hide",
+    confirmButtonText: __("YES_HIDE"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#2562c4",
     cancelButtonColor: "#626262",
     timer: 20000,
@@ -333,10 +335,11 @@ const handleHide = async (showCampaignBannerId) => {
 const handleDeleteCampaignBanner = async (campaignBannerId) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to delete this campaign banner?",
-    text: "You will be able to restore this campaign banner in the trash!",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_CAMPAIGN_BANNER"),
+    text: __("YOU_WILL_BE_ABLE_TO_RESTORE_THIS_CAMPAIGN_BANNER_IN_THE_TRASH"),
     showCancelButton: true,
-    confirmButtonText: "Yes, Delete it!",
+    confirmButtonText: __("YES_DELETE_IT"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#d52222",
     cancelButtonColor: "#626262",
     timer: 20000,

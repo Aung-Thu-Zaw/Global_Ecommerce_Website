@@ -251,9 +251,10 @@ const updateSorting = (sort = "id") => {
 const handleShow = async (hideSliderBannerId) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to show this slider banner?",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_SHOW_THIS_SLIDER_BANNER"),
     showCancelButton: true,
-    confirmButtonText: "Yes, Show",
+    confirmButtonText: __("YES_SHOW"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#2562c4",
     cancelButtonColor: "#626262",
     timer: 20000,
@@ -298,9 +299,10 @@ const handleShow = async (hideSliderBannerId) => {
 const handleHide = async (showSliderBannerId) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to hide this slider banner?",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_HIDE_THIS_SLIDER_BANNER"),
     showCancelButton: true,
-    confirmButtonText: "Yes, Hide",
+    confirmButtonText: __("YES_HIDE"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#2562c4",
     cancelButtonColor: "#626262",
     timer: 20000,
@@ -339,10 +341,11 @@ const handleHide = async (showSliderBannerId) => {
 const handleDeleteSliderBanner = async (sliderBannerId) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to delete this slider banner?",
-    text: "You will be able to restore this slider banner in the trash!",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_SLIDER_BANNER"),
+    text: __("YOU_WILL_BE_ABLE_TO_RESTORE_THIS_SLIDER_BANNER_IN_THE_TRASH"),
     showCancelButton: true,
-    confirmButtonText: "Yes, Delete it!",
+    confirmButtonText: __("YES_DELETE_IT"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#d52222",
     cancelButtonColor: "#626262",
     timer: 20000,

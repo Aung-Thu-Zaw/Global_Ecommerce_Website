@@ -248,9 +248,10 @@ const updateSorting = (sort = "id") => {
 const handleRestoreTrashCampaignBanner = async (trashCampaignBannerId) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to restore this campaign banner?",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_CAMPAIGN_BANNER"),
     showCancelButton: true,
-    confirmButtonText: "Yes, Restore It",
+    confirmButtonText: __("YES_RESTORE_IT"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#2562c4",
     cancelButtonColor: "#626262",
     timer: 20000,
@@ -289,10 +290,13 @@ const handleRestoreTrashCampaignBanner = async (trashCampaignBannerId) => {
 const handleDeleteTrashCampaignBanner = async (trashCampaignBannerId) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to delete it from the trash?",
-    text: "Campaign Banner in the trash will be permanetly deleted! You can't get it back.",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_IT_FROM_THE_TRASH"),
+    text: __(
+      "CAMPAIGN_BANNER_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK"
+    ),
     showCancelButton: true,
-    confirmButtonText: "Yes, Delete it !",
+    confirmButtonText: __("YES_DELETE_IT"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#d52222",
     cancelButtonColor: "#626262",
     timer: 20000,
@@ -330,10 +334,13 @@ const handleDeleteTrashCampaignBanner = async (trashCampaignBannerId) => {
 const handlePermanentlyDeleteTrashCampaignBanners = async () => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to delete it from the trash?",
-    text: "All campaign banners in the trash will be permanetly deleted! You can't get it back.",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_IT_FROM_THE_TRASH"),
+    text: __(
+      "ALL_CAMPAIGN_BANNERS_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK"
+    ),
     showCancelButton: true,
-    confirmButtonText: "Yes, Delete it !",
+    confirmButtonText: __("YES_DELETE_IT"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#d52222",
     cancelButtonColor: "#626262",
     timer: 20000,
