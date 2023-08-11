@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Actions\Admin\Collections\CreateCollectionAction;
 use App\Actions\Admin\Collections\PermanentlyDeleteAllTrashCollectionAction;
 use App\Actions\Admin\Collections\UpdateCollectionAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CollectionRequest;
 use App\Models\Collection;
@@ -16,6 +17,8 @@ use Illuminate\Http\Request;
 
 class AdminCollectionController extends Controller
 {
+    use HandlesQueryStringParameters;
+
     public function index(): Response|ResponseFactory
     {
         $collections=Collection::search(request("search"))
@@ -40,14 +43,12 @@ class AdminCollectionController extends Controller
     {
         (new CreateCollectionAction())->handle($request->validated());
 
-        $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
-
-        return to_route("admin.collections.index", $queryStringParams)->with("success", "COLLECTION_HAS_BEEN_SUCCESSFULLY_CREATED");
+        return to_route("admin.collections.index", $this->getQueryStringParams($request))->with("success", "COLLECTION_HAS_BEEN_SUCCESSFULLY_CREATED");
     }
 
     public function edit(Request $request, Collection $collection): Response|ResponseFactory
     {
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+        $queryStringParams=$this->getQueryStringParams($request);
 
         return inertia("Admin/Collections/Edit", compact("collection", "queryStringParams"));
     }
@@ -56,18 +57,14 @@ class AdminCollectionController extends Controller
     {
         (new UpdateCollectionAction())->handle($request->validated(), $collection);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route("admin.collections.index", $queryStringParams)->with("success", "COLLECTION_HAS_BEEN_SUCCESSFULLY_UPDATED");
+        return to_route("admin.collections.index", $this->getQueryStringParams($request))->with("success", "COLLECTION_HAS_BEEN_SUCCESSFULLY_UPDATED");
     }
 
     public function destroy(Request $request, Collection $collection): RedirectResponse
     {
         $collection->delete();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route("admin.collections.index", $queryStringParams)->with("success", "COLLECTION_HAS_BEEN_SUCCESSFULLY_DELETED");
+        return to_route("admin.collections.index", $this->getQueryStringParams($request))->with("success", "COLLECTION_HAS_BEEN_SUCCESSFULLY_DELETED");
     }
 
     public function trash(): Response|ResponseFactory
@@ -87,9 +84,7 @@ class AdminCollectionController extends Controller
 
         $trashCollection->restore();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.collections.trash', $queryStringParams)->with("success", "COLLECTION_HAS_BEEN_SUCCESSFULLY_RESTORED");
+        return to_route('admin.collections.trash', $this->getQueryStringParams($request))->with("success", "COLLECTION_HAS_BEEN_SUCCESSFULLY_RESTORED");
     }
 
     public function forceDelete(Request $request, int $trashCollectionId): RedirectResponse
@@ -98,9 +93,7 @@ class AdminCollectionController extends Controller
 
         $trashCollection->forceDelete();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.collections.trash', $queryStringParams)->with("success", "THE_COLLECTION_HAS_BEEN_PERMANENTLY_DELETED");
+        return to_route('admin.collections.trash', $this->getQueryStringParams($request))->with("success", "THE_COLLECTION_HAS_BEEN_PERMANENTLY_DELETED");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -109,8 +102,6 @@ class AdminCollectionController extends Controller
 
         (new PermanentlyDeleteAllTrashCollectionAction())->handle($trashCollections);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.collections.trash', $queryStringParams)->with("success", "COLLECTIONS_HAVE_BEEN_PERMANENTLY_DELETED");
+        return to_route('admin.collections.trash', $this->getQueryStringParams($request))->with("success", "COLLECTIONS_HAVE_BEEN_PERMANENTLY_DELETED");
     }
 }
