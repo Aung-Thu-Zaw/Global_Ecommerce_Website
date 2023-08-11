@@ -276,10 +276,13 @@ const handleDeleteBrand = async (brand) => {
   if (brand.products.length > 0) {
     const result = await swal({
       icon: "error",
-      title: "You can't delete this brand because this brand have products?",
-      text: "If you click 'Delete, whatever!' button products will be automatically deleted.You will be able to restore this brand in the trash!",
+      title: __("YOU_CANT_DELETE_THIS_BRAND_BECAUSE_THIS_BRAND_HAVE_PRODUCTS"),
+      text: __(
+        "IF_YOU_CLICK_THE_DELETE_WHATEVER_BUTTON_PRODUCTS_ASSOCIATED_WITH_THAT_BRAND_WILL_BE_AUTOMATICALLY_DELETED"
+      ),
       showCancelButton: true,
-      confirmButtonText: "Delete, whatever!",
+      confirmButtonText: __("DELETE_WHATEVER"),
+      cancelButtonText: __("CANCEL"),
       confirmButtonColor: "#d52222",
       cancelButtonColor: "#626262",
       timer: 20000,
@@ -292,10 +295,11 @@ const handleDeleteBrand = async (brand) => {
   } else {
     const result = await swal({
       icon: "question",
-      title: "Are you sure you want to delete this brand?",
-      text: "You will be able to restore this brand in the trash!",
+      title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_BRAND"),
+      text: __("YOU_WILL_BE_ABLE_TO_RESTORE_THIS_BRAND_IN_THE_TRASH"),
       showCancelButton: true,
-      confirmButtonText: "Yes, Delete it!",
+      confirmButtonText: __("YES_DELETE_IT"),
+      cancelButtonText: __("CANCEL"),
       confirmButtonColor: "#d52222",
       cancelButtonColor: "#626262",
       timer: 20000,
