@@ -1,28 +1,31 @@
 <script setup>
+import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/RegisteredAccountBreadcrumb.vue";
-import SortingArrows from "@/Components/Table/SortingArrows.vue";
-import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
+import TrashButton from "@/Components/Buttons/TrashButton.vue";
+import DetailButton from "@/Components/Buttons/DetailButton.vue";
+import DeleteButton from "@/Components/Buttons/DeleteButton.vue";
+import ResetFilterButton from "@/Components/Buttons/ResetFilterButton.vue";
 import ActiveStatus from "@/Components/Status/ActiveStatus.vue";
 import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
 import RoleStatus from "@/Components/Status/RoleStatus.vue";
-import Tr from "@/Components/Table/Tr.vue";
-import Td from "@/Components/Table/Td.vue";
+import SortingArrows from "@/Components/Table/SortingArrows.vue";
+import TableContainer from "@/Components/Table/TableContainer.vue";
+import TableHeader from "@/Components/Table/TableHeader.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
-import TableHeader from "@/Components/Table/TableHeader.vue";
-import TableContainer from "@/Components/Table/TableContainer.vue";
+import Tr from "@/Components/Table/Tr.vue";
+import Td from "@/Components/Table/Td.vue";
+import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import { __ } from "@/Translations/translations-inside-setup.js";
+import datepicker from "vue3-datepicker";
 import { reactive, watch, inject, computed, ref } from "vue";
-import { router, Head, Link, usePage } from "@inertiajs/vue3";
+import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 // Define the props
 const props = defineProps({
   users: Object,
 });
-
-// Define Alert Variables
-const swal = inject("$swal");
 
 // User Activity Status
 const currentTime = new Date();
@@ -35,6 +38,37 @@ const status = (last_activity) => {
   return timeDifference < threshold ? "active" : "offline";
 };
 
+// Define  Variables
+const swal = inject("$swal");
+const isFilterBoxOpened = ref(false);
+const createdFrom = ref(
+  usePage().props.ziggy.query.created_from
+    ? new Date(usePage().props.ziggy.query.created_from)
+    : ""
+);
+const createdUntil = ref(
+  usePage().props.ziggy.query.created_until
+    ? new Date(usePage().props.ziggy.query.created_until)
+    : ""
+);
+
+// Formatted Date
+const formattedCreatedFrom = computed(() => {
+  const year = createdFrom.value ? createdFrom.value.getFullYear() : "";
+  const month = createdFrom.value ? createdFrom.value.getMonth() + 1 : "";
+  const day = createdFrom.value ? createdFrom.value.getDate() : "";
+
+  return year && month && day ? `${year}-${month}-${day}` : undefined;
+});
+
+const formattedCreatedUntil = computed(() => {
+  const year = createdUntil.value ? createdUntil.value.getFullYear() : "";
+  const month = createdUntil.value ? createdUntil.value.getMonth() + 1 : "";
+  const day = createdUntil.value ? createdUntil.value.getDate() : "";
+
+  return year && month && day ? `${year}-${month}-${day}` : undefined;
+});
+
 // Query String Parameteres
 const params = reactive({
   search: usePage().props.ziggy.query?.search,
@@ -42,6 +76,12 @@ const params = reactive({
   per_page: usePage().props.ziggy.query?.per_page,
   sort: usePage().props.ziggy.query?.sort,
   direction: usePage().props.ziggy.query?.direction,
+  created_from: usePage().props.ziggy.query.created_from
+    ? usePage().props.ziggy.query.created_from
+    : formattedCreatedFrom,
+  created_until: usePage().props.ziggy.query.created_until
+    ? usePage().props.ziggy.query.created_until
+    : formattedCreatedUntil,
 });
 
 // Handle Search
@@ -53,6 +93,8 @@ const handleSearch = () => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
+      created_from: params.created_from,
+      created_until: params.created_until,
     },
     {
       replace: true,
@@ -70,10 +112,76 @@ const removeSearch = () => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
+      created_from: params.created_from,
+      created_until: params.created_until,
     },
     {
       replace: true,
       preserveState: true,
+    }
+  );
+};
+
+// Filtered By Only Created From
+const filteredByCreatedFrom = () => {
+  router.get(
+    route("admin.registered-accounts.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+      created_from: formattedCreatedFrom.value,
+      created_until: params.created_until,
+    },
+    {
+      replace: true,
+      preserveState: true,
+      onSuccess: () => {
+        isFilterBoxOpened.value = true;
+      },
+    }
+  );
+};
+
+// Filtered By Only Created Until
+const filteredByCreatedUntil = () => {
+  router.get(
+    route("admin.registered-accounts.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+      created_from: params.created_from,
+      created_until: formattedCreatedUntil.value,
+    },
+    {
+      replace: true,
+      preserveState: true,
+      onSuccess: () => {
+        isFilterBoxOpened.value = true;
+      },
+    }
+  );
+};
+
+// Handle Reset Filtered Date
+const resetFilteredDate = () => {
+  createdFrom.value = "";
+  createdUntil.value = "";
+  router.get(
+    route("admin.registered-accounts.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+      onSuccess: () => (isFilterBoxOpened.value = false),
     }
   );
 };
@@ -88,6 +196,8 @@ const handleQueryStringParameter = () => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
+      created_from: params.created_from,
+      created_until: params.created_until,
     },
     {
       replace: true,
@@ -116,6 +226,30 @@ watch(
   }
 );
 
+// Watching Created From Datepicker
+watch(
+  () => params.created_from,
+  () => {
+    if (params.created_from === "") {
+      resetFilteredDate();
+    } else {
+      filteredByCreatedFrom();
+    }
+  }
+);
+
+// Watching Created Unitl Datepicker
+watch(
+  () => params.created_until,
+  () => {
+    if (params.created_until === "") {
+      resetFilteredDate();
+    } else {
+      filteredByCreatedUntil();
+    }
+  }
+);
+
 // Update Sorting Table Column
 const updateSorting = (sort = "id") => {
   params.sort = sort;
@@ -128,10 +262,11 @@ const updateSorting = (sort = "id") => {
 const handleDeleteRegisteredUser = async (user) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to delete this user?",
-    text: "You will be able to restore this user in the trash!",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_USER"),
+    text: __("YOU_WILL_BE_ABLE_TO_RESTORE_THIS_USER_IN_THE_TRASH"),
     showCancelButton: true,
-    confirmButtonText: "Yes, Delete it!",
+    confirmButtonText: __("YES_DELETE_IT"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#d52222",
     cancelButtonColor: "#626262",
     timer: 20000,
@@ -147,6 +282,8 @@ const handleDeleteRegisteredUser = async (user) => {
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
+        created_from: params.created_from,
+        created_until: params.created_until,
       }),
       {
         preserveScroll: true,
@@ -154,7 +291,7 @@ const handleDeleteRegisteredUser = async (user) => {
           if (usePage().props.flash.successMessage) {
             swal({
               icon: "success",
-              title: usePage().props.flash.successMessage,
+              title: __(usePage().props.flash.successMessage),
             });
           }
         },
@@ -196,33 +333,12 @@ const registeredAccountTrashList = computed(() => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Registered Users" />
+    <Head :title="__('REGISTERED_ACCOUNTS')" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
         <!-- Breadcrumb -->
-        <Breadcrumb>
-          <li aria-current="page">
-            <div class="flex items-center">
-              <svg
-                aria-hidden="true"
-                class="w-6 h-6 text-gray-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <span class="ml-1 font-medium text-gray-500 md:ml-2"
-                >Registered Users</span
-              >
-            </div>
-          </li>
-        </Breadcrumb>
+        <Breadcrumb />
 
         <!-- Trash Button -->
         <div v-if="registeredAccountTrashList">
@@ -235,12 +351,8 @@ const registeredAccountTrashList = computed(() => {
               sort: 'id',
               direction: 'desc',
             }"
-            class="trash-btn group"
           >
-            <span class="group-hover:animate-pulse">
-              <i class="fa-solid fa-trash-can-arrow-up"></i>
-              Trash
-            </span>
+            <TrashButton />
           </Link>
         </div>
       </div>
@@ -251,7 +363,7 @@ const registeredAccountTrashList = computed(() => {
           <input
             type="text"
             class="search-input"
-            placeholder="Search by name"
+            :placeholder="__('SEARCH_BY_NAME')"
             v-model="params.search"
           />
           <i
@@ -273,6 +385,61 @@ const registeredAccountTrashList = computed(() => {
             <option value="100">100</option>
           </select>
         </div>
+
+        <!-- Filter By Date -->
+        <button
+          @click="isFilterBoxOpened = !isFilterBoxOpened"
+          class="filter-btn"
+        >
+          <span class="">
+            <i class="fa-solid fa-filter"></i>
+          </span>
+        </button>
+
+        <div
+          v-if="isFilterBoxOpened"
+          class="w-[400px] border border-gray-300 shadow-lg absolute bg-white top-64 right-10 z-30 px-5 py-4 rounded-md"
+        >
+          <div class="flex items-center justify-end">
+            <span
+              @click="isFilterBoxOpened = false"
+              class="text-lg text-gray-500 hover:text-gray-800 cursor-pointer"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </span>
+          </div>
+          <div class="w-full mb-6">
+            <span class="font-bold text-sm text-gray-700 mb-5"
+              >Created from</span
+            >
+            <div>
+              <datepicker
+                class="w-full rounded-md p-3 border-gray-300 bg-white focus:ring-0 focus:border-gray-400 text-sm"
+                :placeholder="__('SELECT_DATE')"
+                v-model="createdFrom"
+              />
+            </div>
+          </div>
+          <div class="w-full mb-3">
+            <span class="font-bold text-sm text-gray-700 mb-5"
+              >Created until</span
+            >
+            <div>
+              <datepicker
+                class="w-full rounded-md p-3 border-gray-300 bg-white focus:ring-0 focus:border-gray-400 text-sm"
+                :placeholder="__('SELECT_DATE')"
+                v-model="createdUntil"
+              />
+            </div>
+          </div>
+
+          <div
+            v-if="params.created_from || params.created_until"
+            class="w-full flex items-center"
+          >
+            <ResetFilterButton @click="resetFilteredDate" />
+          </div>
+        </div>
       </div>
 
       <!-- User Table Start -->
@@ -283,37 +450,37 @@ const registeredAccountTrashList = computed(() => {
             <SortingArrows :params="params" sort="id" />
           </HeaderTh>
 
-          <HeaderTh>Avatar</HeaderTh>
+          <HeaderTh>{{ __("AVATAR") }}</HeaderTh>
 
           <HeaderTh @click="updateSorting('name')">
-            Name
+            {{ __("NAME") }}
             <SortingArrows :params="params" sort="name" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('email')">
-            Email Address
+            {{ __("EMAIL_ADDRESS") }}
             <SortingArrows :params="params" sort="email" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('role')">
-            Role
+            {{ __("ROLE") }}
             <SortingArrows :params="params" sort="role" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('status')">
-            Status
+            {{ __("STATUS") }}
             <SortingArrows :params="params" sort="status" />
           </HeaderTh>
 
-          <HeaderTh> Online Status </HeaderTh>
+          <HeaderTh> {{ __("ONLINE_STATUS") }} </HeaderTh>
 
           <HeaderTh @click="updateSorting('created_at')">
-            Created At
+            {{ __("CREATED_DATE") }}
             <SortingArrows :params="params" sort="created_at" />
           </HeaderTh>
 
           <HeaderTh v-if="registeredAccountDelete || registeredAccountDetail">
-            Action
+            {{ __("ACTION") }}
           </HeaderTh>
         </TableHeader>
 
@@ -371,17 +538,10 @@ const registeredAccountTrashList = computed(() => {
 
             <Td v-if="registeredAccountDelete || registeredAccountDetail">
               <!-- Delete Button -->
-              <button
+              <DeleteButton
                 v-if="registeredAccountDelete"
                 @click="handleDeleteRegisteredUser(user.id)"
-                class="delete-btn group"
-                type="button"
-              >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-trash-can"></i>
-                  Delete
-                </span>
-              </button>
+              />
 
               <!-- Detail Button -->
               <Link
@@ -394,12 +554,8 @@ const registeredAccountTrashList = computed(() => {
                   sort: params.sort,
                   direction: params.direction,
                 }"
-                class="detail-btn group"
               >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-eye"></i>
-                  Details
-                </span>
+                <DetailButton />
               </Link>
             </Td>
           </Tr>

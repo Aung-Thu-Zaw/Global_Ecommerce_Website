@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\UserManagements;
 
 use App\Actions\Admin\UserManagements\PermanentlyDeleteAllTrashUserAction;
 use App\Http\Controllers\Controller;
+use App\Http\Traits\HandlesQueryStringParameters;
 use App\Models\User;
 use Inertia\Response;
 use Inertia\ResponseFactory;
@@ -12,6 +13,8 @@ use Illuminate\Http\Request;
 
 class AdminSellerManageController extends Controller
 {
+    use HandlesQueryStringParameters;
+
     public function index(): Response|ResponseFactory
     {
         $sellers=User::search(request("search"))
@@ -25,7 +28,7 @@ class AdminSellerManageController extends Controller
 
     public function show(Request $request, User $user): Response|ResponseFactory
     {
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+        $queryStringParams=$this->getQueryStringParams($request);
 
         return inertia("Admin/UserManagements/SellerManage/Details", compact("user", "queryStringParams"));
     }
@@ -34,20 +37,16 @@ class AdminSellerManageController extends Controller
     {
         $user->update(["status"=>$request->status]);
 
-        $message=$request->status==="inactive" ? "Seller has been successfully inactive" : "Seller has been successfully active";
+        $message=$request->status==="inactive" ? "SELLER_HAS_BEEN_SUCCESSFULLY_INACTIVE" : "SELLER_HAS_BEEN_SUCCESSFULLY_ACTIVE";
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.seller-manage.index', $queryStringParams)->with("success", $message);
+        return to_route('admin.seller-manage.index', $this->getQueryStringParams($request))->with("success", $message);
     }
 
     public function destroy(Request $request, User $user): RedirectResponse
     {
         $user->delete();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.seller-manage.index', $queryStringParams)->with("success", "The seller has been successfully moved to the trash.");
+        return to_route('admin.seller-manage.index', $this->getQueryStringParams($request))->with("success", "SELLER_HAS_BEEN_SUCCESSFULLY_DELETED");
     }
 
     public function trash(): Response|ResponseFactory
@@ -68,9 +67,7 @@ class AdminSellerManageController extends Controller
 
         $trashSeller->restore();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.seller-manage.trash', $queryStringParams)->with("success", "seller has been successfully restored.");
+        return to_route('admin.seller-manage.trash', $this->getQueryStringParams($request))->with("success", "SELLER_HAS_BEEN_SUCCESSFULLY_RESTORED");
     }
 
     public function forceDelete(Request $request, int $trashSellerId): RedirectResponse
@@ -81,9 +78,7 @@ class AdminSellerManageController extends Controller
 
         $trashSeller->forceDelete();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.seller-manage.trash', $queryStringParams)->with("success", "Seller has been successfully deleted.");
+        return to_route('admin.seller-manage.trash', $this->getQueryStringParams($request))->with("success", "THE_SELLER_HAS_BEEN_PERMANENTLY_DELETED");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -92,8 +87,6 @@ class AdminSellerManageController extends Controller
 
         (new PermanentlyDeleteAllTrashUserAction())->handle($trashSellers);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.seller-manage.trash', $queryStringParams)->with("success", "Sellers have been successfully deleted.");
+        return to_route('admin.seller-manage.trash', $this->getQueryStringParams($request))->with("success", "SELLERS_HAVE_BEEN_PERMANENTLY_DELETED");
     }
 }
