@@ -78,9 +78,9 @@ class AdminCampaignBannerController extends Controller
 
     public function restore(Request $request, int $trashCampaignBannerId): RedirectResponse
     {
-        $campaignBanner = CampaignBanner::onlyTrashed()->findOrFail($trashCampaignBannerId);
+        $trashCampaignBanner = CampaignBanner::onlyTrashed()->findOrFail($trashCampaignBannerId);
 
-        $campaignBanner->restore();
+        $trashCampaignBanner->restore();
 
         return to_route('admin.campaign-banners.trash', $this->getQueryStringParams($request))->with("success", "CAMPAIGN_BANNER_HAS_BEEN_SUCCESSFULLY_RESTORED");
     }

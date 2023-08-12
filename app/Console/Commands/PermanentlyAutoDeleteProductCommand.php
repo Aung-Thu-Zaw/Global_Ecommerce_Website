@@ -2,8 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Actions\Admin\Products\PermanentlyDeleteAllTrashProductAction;
-use App\Models\Image;
+use App\Actions\Products\PermanentlyDeleteAllTrashProductAction;
 use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Console\Command;

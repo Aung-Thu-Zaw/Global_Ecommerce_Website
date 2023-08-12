@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Actions\Admin\Languages\PermanentlyDeleteAllTrashLanguageAction;
 use App\Actions\Admin\Languages\CreateLanguageAction;
 use App\Actions\Admin\Languages\UpdateLanguageAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LanguageRequest;
 use App\Models\Language;
@@ -15,6 +16,8 @@ use Inertia\ResponseFactory;
 
 class AdminLanguageController extends Controller
 {
+    use HandlesQueryStringParameters;
+
     public function index(): Response|ResponseFactory
     {
         $languages=Language::search(request("search"))
@@ -23,6 +26,17 @@ class AdminLanguageController extends Controller
                            ->appends(request()->all());
 
         return inertia("Admin/Languages/Index", compact("languages"));
+    }
+
+    public function show(Request $request, Language $language): Response|ResponseFactory
+    {
+        $json = file_get_contents(resource_path("lang/$language->short_name.json"));
+
+        $jsonData = $json !== false ? json_decode($json, true) : null;
+
+        $queryStringParams=$this->getQueryStringParams($request);
+
+        return inertia("Admin/Languages/Details", compact("jsonData", "language", "queryStringParams"));
     }
 
     public function create(): Response|ResponseFactory
@@ -36,14 +50,12 @@ class AdminLanguageController extends Controller
     {
         (new CreateLanguageAction())->handle($request->validated());
 
-        $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
-
-        return to_route("admin.languages.index", $queryStringParams)->with("success", "LANGUAGE_HAS_BEEN_SUCCESSFULLY_CREATED");
+        return to_route("admin.languages.index", $this->getQueryStringParams($request))->with("success", "LANGUAGE_HAS_BEEN_SUCCESSFULLY_CREATED");
     }
 
     public function edit(Request $request, Language $language): Response|ResponseFactory
     {
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+        $queryStringParams=$this->getQueryStringParams($request);
 
         return inertia("Admin/Languages/Edit", compact("language", "queryStringParams"));
     }
@@ -52,18 +64,14 @@ class AdminLanguageController extends Controller
     {
         (new UpdateLanguageAction())->handle($request->validated(), $language);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route("admin.languages.index", $queryStringParams)->with("success", "LANGUAGE_HAS_BEEN_SUCCESSFULLY_UPDATED");
+        return to_route("admin.languages.index", $this->getQueryStringParams($request))->with("success", "LANGUAGE_HAS_BEEN_SUCCESSFULLY_UPDATED");
     }
 
     public function destroy(Request $request, Language $language): RedirectResponse
     {
         $language->delete();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route("admin.languages.index", $queryStringParams)->with("success", "LANGUAGE_HAS_BEEN_SUCCESSFULLY_DELETED");
+        return to_route("admin.languages.index", $this->getQueryStringParams($request))->with("success", "LANGUAGE_HAS_BEEN_SUCCESSFULLY_DELETED");
     }
 
     public function trash(): Response|ResponseFactory
@@ -79,49 +87,34 @@ class AdminLanguageController extends Controller
 
     public function restore(Request $request, int $trashLanguageId): RedirectResponse
     {
-        $language = Language::onlyTrashed()->findOrFail($trashLanguageId);
+        $trashLanguage = Language::onlyTrashed()->findOrFail($trashLanguageId);
 
-        $language->restore();
+        $trashLanguage->restore();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.languages.trash', $queryStringParams)->with("success", "LANGUAGE_HAS_BEEN_SUCCESSFULLY_RESTORED");
+        return to_route('admin.languages.trash', $this->getQueryStringParams($request))->with("success", "LANGUAGE_HAS_BEEN_SUCCESSFULLY_RESTORED");
     }
 
     public function forceDelete(Request $request, int $trashLanguageId): RedirectResponse
     {
-        $language = Language::onlyTrashed()->findOrFail($trashLanguageId);
+        $trashLanguage = Language::onlyTrashed()->findOrFail($trashLanguageId);
 
-        unlink(resource_path("lang/$language->short_name.json"));
+        unlink(resource_path("lang/$trashLanguage->short_name.json"));
 
-        $language->forceDelete();
+        $trashLanguage->forceDelete();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.languages.trash', $queryStringParams)->with("success", "THE_LANGUAGE_HAS_BEEN_PERMANENTLY_DELETED");
+        return to_route('admin.languages.trash', $this->getQueryStringParams($request))->with("success", "THE_LANGUAGE_HAS_BEEN_PERMANENTLY_DELETED");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $languages = Language::onlyTrashed()->get();
+        $trashLanguages = Language::onlyTrashed()->get();
 
-        (new PermanentlyDeleteAllTrashLanguageAction())->handle($languages);
+        (new PermanentlyDeleteAllTrashLanguageAction())->handle($trashLanguages);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.languages.trash', $queryStringParams)->with("success", "LANGUAGES_HAVE_BEEN_PERMANENTLY_DELETED");
+        return to_route('admin.languages.trash', $this->getQueryStringParams($request))->with("success", "LANGUAGES_HAVE_BEEN_PERMANENTLY_DELETED");
     }
 
-    public function languageDetail(Request $request, Language $language): Response|ResponseFactory
-    {
-        $json = file_get_contents(resource_path("lang/$language->short_name.json"));
 
-        $jsonData = $json !== false ? json_decode($json, true) : null;
-
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return inertia("Admin/Languages/Detail", compact("jsonData", "language", "queryStringParams"));
-    }
 
     // public function updateDetailUpdate(Request $request, Language $language)
     // {

@@ -295,7 +295,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->name("languages.")
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:language.menu')->name("index");
-                    Route::get("/{language}/details", "languageDetail")->middleware('permission:language.detail')->name("show");
+                    Route::get("/{language}/details", "show")->middleware('permission:language.detail')->name("show");
                     Route::patch("/{language}/update", "updateLanguageDetail")->middleware('permission:language.detail')->name("update.detail");
                     Route::get("/create", "create")->middleware('permission:language.add')->name("create");
                     Route::post("/", "store")->middleware('permission:language.add')->name("store");
