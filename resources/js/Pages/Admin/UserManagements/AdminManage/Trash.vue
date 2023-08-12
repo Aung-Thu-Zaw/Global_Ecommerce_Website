@@ -1,27 +1,62 @@
 <script setup>
+import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/AdminManageBreadcrumb.vue";
+import RestoreButton from "@/Components/Buttons/RestoreButton.vue";
+import DeleteForeverButton from "@/Components/Buttons/DeleteForeverButton.vue";
+import ResetFilterButton from "@/Components/Buttons/ResetFilterButton.vue";
+import EmptyTrashButton from "@/Components/Buttons/EmptyTrashButton.vue";
+import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
 import RoleStatus from "@/Components/Status/RoleStatus.vue";
 import NoRoleStatus from "@/Components/Status/NoRoleStatus.vue";
-import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import SortingArrows from "@/Components/Table/SortingArrows.vue";
-import Tr from "@/Components/Table/Tr.vue";
-import Td from "@/Components/Table/Td.vue";
+import TableContainer from "@/Components/Table/TableContainer.vue";
+import TableHeader from "@/Components/Table/TableHeader.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
-import TableHeader from "@/Components/Table/TableHeader.vue";
-import TableContainer from "@/Components/Table/TableContainer.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/AdminManageBreadcrumb.vue";
+import Tr from "@/Components/Table/Tr.vue";
+import Td from "@/Components/Table/Td.vue";
+import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { inject, reactive, watch, computed, ref } from "vue";
-import { router, usePage, Link, Head } from "@inertiajs/vue3";
+import { __ } from "@/Translations/translations-inside-setup.js";
+import datepicker from "vue3-datepicker";
+import { reactive, watch, inject, computed, ref } from "vue";
+import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
 // Define the Props
 const props = defineProps({
   trashAdmins: Object,
 });
 
-// Define Alert Variables
+// Define  Variables
 const swal = inject("$swal");
+const isFilterBoxOpened = ref(false);
+const deletedFrom = ref(
+  usePage().props.ziggy.query.deleted_from
+    ? new Date(usePage().props.ziggy.query.deleted_from)
+    : ""
+);
+const deletedUntil = ref(
+  usePage().props.ziggy.query.deleted_until
+    ? new Date(usePage().props.ziggy.query.deleted_until)
+    : ""
+);
+
+// Formatted Date
+const formattedDeletedFrom = computed(() => {
+  const year = deletedFrom.value ? deletedFrom.value.getFullYear() : "";
+  const month = deletedFrom.value ? deletedFrom.value.getMonth() + 1 : "";
+  const day = deletedFrom.value ? deletedFrom.value.getDate() : "";
+
+  return year && month && day ? `${year}-${month}-${day}` : undefined;
+});
+
+const formattedDeletedUntil = computed(() => {
+  const year = deletedUntil.value ? deletedUntil.value.getFullYear() : "";
+  const month = deletedUntil.value ? deletedUntil.value.getMonth() + 1 : "";
+  const day = deletedUntil.value ? deletedUntil.value.getDate() : "";
+
+  return year && month && day ? `${year}-${month}-${day}` : undefined;
+});
 
 // Query String Parameteres
 const params = reactive({
@@ -30,6 +65,12 @@ const params = reactive({
   per_page: usePage().props.ziggy.query?.per_page,
   sort: usePage().props.ziggy.query?.sort,
   direction: usePage().props.ziggy.query?.direction,
+  deleted_from: usePage().props.ziggy.query.deleted_from
+    ? usePage().props.ziggy.query.deleted_from
+    : formattedDeletedFrom,
+  deleted_until: usePage().props.ziggy.query.deleted_until
+    ? usePage().props.ziggy.query.deleted_until
+    : formattedDeletedUntil,
 });
 
 // Handle Search
@@ -41,6 +82,8 @@ const handleSearch = () => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
+      deleted_from: params.deleted_from,
+      deleted_until: params.deleted_until,
     },
     {
       replace: true,
@@ -58,10 +101,76 @@ const removeSearch = () => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
+      deleted_from: params.deleted_from,
+      deleted_until: params.deleted_until,
     },
     {
       replace: true,
       preserveState: true,
+    }
+  );
+};
+
+// Filtered By Only Deleted From
+const filteredByDeletedFrom = () => {
+  router.get(
+    route("admin.admin-manage.trash"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+      deleted_from: formattedDeletedFrom.value,
+      deleted_until: params.deleted_until,
+    },
+    {
+      replace: true,
+      preserveState: true,
+      onSuccess: () => {
+        isFilterBoxOpened.value = true;
+      },
+    }
+  );
+};
+
+// Filtered By Only Deleted Until
+const filteredByDeletedUntil = () => {
+  router.get(
+    route("admin.admin-manage.trash"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+      deleted_from: params.deleted_from,
+      deleted_until: formattedDeletedUntil.value,
+    },
+    {
+      replace: true,
+      preserveState: true,
+      onSuccess: () => {
+        isFilterBoxOpened.value = true;
+      },
+    }
+  );
+};
+
+// Handle Reset Filtered Date
+const resetFilteredDate = () => {
+  deletedFrom.value = "";
+  deletedUntil.value = "";
+  router.get(
+    route("admin.admin-manage.trash"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+      onSuccess: () => (isFilterBoxOpened.value = false),
     }
   );
 };
@@ -76,6 +185,8 @@ const handleQueryStringParameter = () => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
+      deleted_from: params.deleted_from,
+      deleted_until: params.deleted_until,
     },
     {
       replace: true,
@@ -104,6 +215,30 @@ watch(
   }
 );
 
+// Watching Deleted From Datepicker
+watch(
+  () => params.deleted_from,
+  () => {
+    if (params.deleted_from === "") {
+      resetFilteredDate();
+    } else {
+      filteredByDeletedFrom();
+    }
+  }
+);
+
+// Watching Deleted Unitl Datepicker
+watch(
+  () => params.deleted_until,
+  () => {
+    if (params.deleted_until === "") {
+      resetFilteredDate();
+    } else {
+      filteredByDeletedUntil();
+    }
+  }
+);
+
 // Update Sorting Table Column
 const updateSorting = (sort = "id") => {
   params.sort = sort;
@@ -116,9 +251,10 @@ const updateSorting = (sort = "id") => {
 const handleRestoreTrashAdmin = async (trashAdminId) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to restore this admin user?",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_ADMIN_USER"),
     showCancelButton: true,
-    confirmButtonText: "Yes, Restore It",
+    confirmButtonText: __("YES_RESTORE_IT"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#2562c4",
     cancelButtonColor: "#626262",
     timer: 20000,
@@ -128,12 +264,14 @@ const handleRestoreTrashAdmin = async (trashAdminId) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("admin.admin-manage.restore", {
+      route("admin.admin-manage.trash.restore", {
         trash_admin_id: trashAdminId,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
+        deleted_from: params.deleted_from,
+        deleted_until: params.deleted_until,
       }),
       {},
       {
@@ -142,7 +280,7 @@ const handleRestoreTrashAdmin = async (trashAdminId) => {
           if (usePage().props.flash.successMessage) {
             swal({
               icon: "success",
-              title: usePage().props.flash.successMessage,
+              title: __(usePage().props.flash.successMessage),
             });
           }
         },
@@ -155,10 +293,13 @@ const handleRestoreTrashAdmin = async (trashAdminId) => {
 const handleDeleteTrashAdmin = async (trashAdminId) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to delete it from the trash?",
-    text: "Admin user in the trash will be permanetly deleted! You can't get it back.",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_IT_FROM_THE_TRASH"),
+    text: __(
+      "ADMIN_USER_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK"
+    ),
     showCancelButton: true,
-    confirmButtonText: "Yes, Delete it !",
+    confirmButtonText: __("YES_DELETE_IT"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#d52222",
     cancelButtonColor: "#626262",
     timer: 20000,
@@ -168,12 +309,14 @@ const handleDeleteTrashAdmin = async (trashAdminId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.admin-manage.force.delete", {
+      route("admin.admin-manage.trash.force.delete", {
         trash_admin_id: trashAdminId,
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
+        deleted_from: params.deleted_from,
+        deleted_until: params.deleted_until,
       }),
       {
         preserveScroll: true,
@@ -181,7 +324,7 @@ const handleDeleteTrashAdmin = async (trashAdminId) => {
           if (usePage().props.flash.successMessage) {
             swal({
               icon: "success",
-              title: usePage().props.flash.successMessage,
+              title: __(usePage().props.flash.successMessage),
             });
           }
         },
@@ -194,10 +337,13 @@ const handleDeleteTrashAdmin = async (trashAdminId) => {
 const handlePermanentlyDeleteTrashAdmins = async () => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to delete it from the trash?",
-    text: "All admin users in the trash will be permanetly deleted! You can't get it back.",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_IT_FROM_THE_TRASH"),
+    text: __(
+      "ALL_ADMIN_USERS_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK"
+    ),
     showCancelButton: true,
-    confirmButtonText: "Yes, Delete it !",
+    confirmButtonText: __("YES_DELETE_IT"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#d52222",
     cancelButtonColor: "#626262",
     timer: 20000,
@@ -206,21 +352,22 @@ const handlePermanentlyDeleteTrashAdmins = async () => {
   });
 
   if (result.isConfirmed) {
-    router.get(
-      route("admin.admin-manage.permanently.delete", {
+    router.delete(
+      route("admin.admin-manage.trash.permanently.delete", {
         page: params.page,
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
+        deleted_from: params.deleted_from,
+        deleted_until: params.deleted_until,
       }),
-      {},
       {
         preserveScroll: true,
         onSuccess: () => {
           if (usePage().props.flash.successMessage) {
             swal({
               icon: "success",
-              title: usePage().props.flash.successMessage,
+              title: __(usePage().props.flash.successMessage),
             });
           }
         },
@@ -253,7 +400,7 @@ const adminManageTrashDelete = computed(() => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Trash Admins" />
+    <Head :title="__('TRASH_ADMIN_USERS')" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -275,7 +422,8 @@ const adminManageTrashDelete = computed(() => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Trash</span
+              >
+                {{ __("TRASH") }}</span
               >
             </div>
           </li>
@@ -291,12 +439,8 @@ const adminManageTrashDelete = computed(() => {
               sort: 'id',
               direction: 'desc',
             }"
-            class="goback-btn"
           >
-            <span>
-              <i class="fa-solid fa-circle-left"></i>
-              Go Back
-            </span>
+            <GoBackButton />
           </Link>
         </div>
       </div>
@@ -307,7 +451,7 @@ const adminManageTrashDelete = computed(() => {
           <input
             type="text"
             class="search-input"
-            placeholder="Search by name"
+            :placeholder="__('SEARCH_BY_NAME')"
             v-model="params.search"
           />
 
@@ -329,6 +473,61 @@ const adminManageTrashDelete = computed(() => {
             <option value="100">100</option>
           </select>
         </div>
+
+        <!-- Filter By Date -->
+        <button
+          @click="isFilterBoxOpened = !isFilterBoxOpened"
+          class="filter-btn"
+        >
+          <span class="">
+            <i class="fa-solid fa-filter"></i>
+          </span>
+        </button>
+
+        <div
+          v-if="isFilterBoxOpened"
+          class="w-[400px] border border-gray-300 shadow-lg absolute bg-white top-64 right-10 z-30 px-5 py-4 rounded-md"
+        >
+          <div class="flex items-center justify-end">
+            <span
+              @click="isFilterBoxOpened = false"
+              class="text-lg text-gray-500 hover:text-gray-800 cursor-pointer"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </span>
+          </div>
+          <div class="w-full mb-6">
+            <span class="font-bold text-sm text-gray-700 mb-5"
+              >Deleted from</span
+            >
+            <div>
+              <datepicker
+                class="w-full rounded-md p-3 border-gray-300 bg-white focus:ring-0 focus:border-gray-400 text-sm"
+                :placeholder="__('SELECT_DATE')"
+                v-model="deletedFrom"
+              />
+            </div>
+          </div>
+          <div class="w-full mb-3">
+            <span class="font-bold text-sm text-gray-700 mb-5"
+              >Deleted until</span
+            >
+            <div>
+              <datepicker
+                class="w-full rounded-md p-3 border-gray-300 bg-white focus:ring-0 focus:border-gray-400 text-sm"
+                :placeholder="__('SELECT_DATE')"
+                v-model="deletedUntil"
+              />
+            </div>
+          </div>
+
+          <div
+            v-if="params.deleted_from || params.deleted_until"
+            class="w-full flex items-center"
+          >
+            <ResetFilterButton @click="resetFilteredDate" />
+          </div>
+        </div>
       </div>
 
       <!-- Admin users Permanently Delete Button -->
@@ -336,13 +535,13 @@ const adminManageTrashDelete = computed(() => {
         v-if="adminManageTrashDelete && trashAdmins.data.length !== 0"
         class="text-left text-sm font-bold mb-2 text-warning-600"
       >
-        Admin users in the Trash will be automatically deleted after 60 days.
-        <button
-          @click="handlePermanentlyDeleteTrashAdmins"
-          class="empty-trash-btn"
-        >
-          Empty the trash now
-        </button>
+        {{
+          __(
+            "ADMIN_USERS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS"
+          )
+        }}
+
+        <EmptyTrashButton @click="handlePermanentlyDeleteTrashAdmins" />
       </p>
 
       <!-- Trash Admin Table Start -->
@@ -352,33 +551,32 @@ const adminManageTrashDelete = computed(() => {
             No
             <SortingArrows :params="params" sort="id" />
           </HeaderTh>
-
-          <HeaderTh>Avatar</HeaderTh>
+          <HeaderTh> {{ __("AVATAR") }} </HeaderTh>
 
           <HeaderTh @click="updateSorting('name')">
-            Name
+            {{ __("NAME") }}
             <SortingArrows :params="params" sort="name" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('email')">
-            Email Address
+            {{ __("EMAIL_ADDRESS") }}
             <SortingArrows :params="params" sort="email" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('phone')">
-            Phone
+            {{ __("PHONE") }}
             <SortingArrows :params="params" sort="phone" />
           </HeaderTh>
 
-          <HeaderTh> Admin Role </HeaderTh>
+          <HeaderTh> {{ __("ADMIN_ROLE") }} </HeaderTh>
 
           <HeaderTh @click="updateSorting('deleted_at')">
-            Deleted At
+            {{ __("DELETED_DATE") }}
             <SortingArrows :params="params" sort="deleted_at" />
           </HeaderTh>
 
           <HeaderTh v-if="adminManageTrashRestore || adminManageTrashDelete">
-            Action
+            {{ __("ACTION") }}
           </HeaderTh>
         </TableHeader>
 
@@ -420,30 +618,16 @@ const adminManageTrashDelete = computed(() => {
 
             <Td v-if="adminManageTrashRestore || adminManageTrashDelete">
               <!-- Restore Button -->
-              <button
+              <RestoreButton
                 v-if="adminManageTrashRestore"
                 @click="handleRestoreTrashAdmin(trashAdmin.id)"
-                class="edit-btn group"
-                type="button"
-              >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-recycle"></i>
-                  Restore
-                </span>
-              </button>
+              />
 
               <!-- Delete Button -->
-              <button
+              <DeleteForeverButton
                 v-if="adminManageTrashDelete"
                 @click="handleDeleteTrashAdmin(trashAdmin.id)"
-                class="delete-btn group"
-                type="button"
-              >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-trash-can"></i>
-                  Delete Forever
-                </span>
-              </button>
+              />
             </Td>
           </Tr>
         </tbody>

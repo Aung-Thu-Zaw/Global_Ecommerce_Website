@@ -487,9 +487,9 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::get("/{user}/details", "show")->middleware('permission:admin-manage.detail')->name("show");
                     Route::get("/create", "create")->middleware('permission:admin-manage.add')->name("create");
                     Route::post("/", "store")->middleware('permission:admin-manage.add')->name("store");
-                    Route::get("/{user}/edit", "edit")->middleware(['permission:admin-manage.edit','restrict.superadmin.data'])->name("edit");
-                    Route::post("/{user}", "update")->middleware(['permission:admin-manage.edit','restrict.superadmin.data'])->name("update");
-                    Route::delete("/{user}", "destroy")->middleware(['permission:admin-manage.delete','restrict.superadmin.data'])->name("destroy");
+                    Route::get("/{user}/edit", "edit")->middleware('permission:admin-manage.edit')->name("edit");
+                    Route::post("/{user}", "update")->middleware('permission:admin-manage.edit')->name("update");
+                    Route::delete("/{user}", "destroy")->middleware('permission:admin-manage.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:admin-manage.trash.list')->name("trash");
                     Route::post("/trash/{trash_admin_id}/restore", "restore")->middleware('permission:admin-manage.trash.restore')->name("trash.restore");
                     Route::delete("/trash/{trash_admin_id}/force-delete", "forceDelete")->middleware('permission:admin-manage.trash.delete')->name("trash.force.delete");

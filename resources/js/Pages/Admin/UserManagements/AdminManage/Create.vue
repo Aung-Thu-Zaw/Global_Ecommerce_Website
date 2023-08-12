@@ -1,13 +1,15 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/AdminManageBreadcrumb.vue";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/AdminManageBreadcrumb.vue";
-import { computed, ref } from "vue";
+import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
+import SaveButton from "@/Components/Buttons/SaveButton.vue";
+import datepicker from "vue3-datepicker";
 import { Link, useForm, Head } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
-import datepicker from "vue3-datepicker";
+import { ref, computed } from "vue";
 
 // Define the props
 const props = defineProps({
@@ -77,7 +79,7 @@ const handleCreateAdminUser = async () => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Create Admin" />
+    <Head :title="__('CREATE_ADMIN_USER')" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
         <!-- Breadcrumb -->
@@ -99,7 +101,7 @@ const handleCreateAdminUser = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Create</span
+                >{{ __("CREATE") }}</span
               >
             </div>
           </li>
@@ -115,12 +117,8 @@ const handleCreateAdminUser = async () => {
               sort: 'id',
               direction: 'desc',
             }"
-            class="goback-btn"
           >
-            <span>
-              <i class="fa-solid fa-circle-left"></i>
-              Go Back
-            </span>
+            <GoBackButton />
           </Link>
         </div>
       </div>
@@ -138,7 +136,7 @@ const handleCreateAdminUser = async () => {
           <div class="grid grid-cols-2 gap-5">
             <!-- Name Input -->
             <div class="mb-6">
-              <InputLabel for="name" value="Name *" />
+              <InputLabel for="name" :value="__('NAME') + ' *'" />
 
               <TextInput
                 id="name"
@@ -146,7 +144,7 @@ const handleCreateAdminUser = async () => {
                 class="mt-1 block w-full"
                 v-model="form.name"
                 required
-                placeholder="Enter Name"
+                :placeholder="__('ENTER_NAME')"
               />
 
               <InputError class="mt-2" :message="form.errors.name" />
@@ -154,7 +152,7 @@ const handleCreateAdminUser = async () => {
 
             <!-- Email Input -->
             <div class="mb-6">
-              <InputLabel for="email" value="Email Address *" />
+              <InputLabel for="email" :value="__('EMAIL_ADDRESS') + ' *'" />
 
               <TextInput
                 id="email"
@@ -162,7 +160,7 @@ const handleCreateAdminUser = async () => {
                 class="mt-1 block w-full"
                 v-model="form.email"
                 required
-                placeholder="Enter Email Address"
+                :placeholder="__('ENTER_EMAIL_ADDRESS')"
               />
 
               <InputError class="mt-2" :message="form.errors.email" />
@@ -172,7 +170,7 @@ const handleCreateAdminUser = async () => {
           <div class="grid grid-cols-2 gap-5">
             <!-- Phone Input -->
             <div class="mb-6">
-              <InputLabel for="phone" value="Phone No *" />
+              <InputLabel for="phone" :value="__('PHONE') + ' *'" />
 
               <TextInput
                 id="phone"
@@ -180,7 +178,7 @@ const handleCreateAdminUser = async () => {
                 class="mt-1 block w-full"
                 v-model="form.phone"
                 required
-                placeholder="Enter Phone Number"
+                :placeholder="__('ENTER_PHONE_NUMBER')"
               />
 
               <InputError class="mt-2" :message="form.errors.phone" />
@@ -188,7 +186,7 @@ const handleCreateAdminUser = async () => {
 
             <!-- Password Input -->
             <div class="mb-6">
-              <InputLabel for="password" value="Password *" />
+              <InputLabel for="password" :value="__('PASSWORD') + ' *'" />
 
               <TextInput
                 id="password"
@@ -196,7 +194,7 @@ const handleCreateAdminUser = async () => {
                 class="mt-1 block w-full"
                 v-model="form.password"
                 required
-                placeholder="Enter Password"
+                :placeholder="__('ENTER_PASSWORD')"
               />
 
               <InputError class="mt-2" :message="form.errors.password" />
@@ -205,14 +203,16 @@ const handleCreateAdminUser = async () => {
           <div class="grid grid-cols-2 gap-5">
             <!-- Gender Select Box -->
             <div class="mb-6">
-              <InputLabel for="gender" value="Gender *" />
+              <InputLabel for="gender" :value="__('GENDER') + ' *'" />
 
               <select
                 class="p-3 w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
                 v-model="form.gender"
                 required
               >
-                <option selected disabled>Select Your Gender</option>
+                <option selected disabled>
+                  {{ __("SELECT_GENDER") }}
+                </option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="other">Other</option>
@@ -223,11 +223,11 @@ const handleCreateAdminUser = async () => {
 
             <!-- Calendar Component -->
             <div class="mb-6">
-              <InputLabel for="birthday" value="Birthday" />
+              <InputLabel for="birthday" :value="__('BIRTHDAY')" />
 
               <datepicker
                 class="px-3 py-2.5 w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 placeholder:text-gray-400 placeholder:text-sm"
-                placeholder="Select Birthday Date"
+                :placeholder="__('SELECT_BIRTHDAY_DATE')"
                 v-model="date"
               />
 
@@ -237,7 +237,7 @@ const handleCreateAdminUser = async () => {
 
           <!-- Address Input -->
           <div class="mb-6">
-            <InputLabel for="address" value="Address" />
+            <InputLabel for="address" :value="__('ADDRESS')" />
 
             <TextInput
               id="address"
@@ -245,7 +245,7 @@ const handleCreateAdminUser = async () => {
               class="mt-1 block w-full"
               v-model="form.address"
               required
-              placeholder="Enter Address"
+              :placeholder="__('ENTER_ADDRESS')"
             />
 
             <InputError class="mt-2" :message="form.errors.address" />
@@ -253,7 +253,7 @@ const handleCreateAdminUser = async () => {
 
           <!-- About Textarea -->
           <div class="mb-6">
-            <InputLabel for="about" value="About" />
+            <InputLabel for="about" :value="__('ABOUT')" />
 
             <textarea
               cols="30"
@@ -268,14 +268,14 @@ const handleCreateAdminUser = async () => {
 
           <!-- Role Select Box -->
           <div class="mb-6">
-            <InputLabel for="assignRole" value="Role *" />
+            <InputLabel for="assignRole" :value="__('ROLE') + ' *'" />
 
             <select
               class="p-3 w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
               v-model="form.assign_role"
               required
             >
-              <option selected disabled>Select Role</option>
+              <option selected disabled>{{ __("SELECT_ROLE") }}</option>
               <option v-for="role in roles" :key="role.id" :value="role.id">
                 {{ role.name }}
               </option>
@@ -286,7 +286,7 @@ const handleCreateAdminUser = async () => {
 
           <!-- Avatar File Input -->
           <div class="mb-6">
-            <InputLabel for="image" value="Avatar" />
+            <InputLabel for="image" :value="__('AVATAR')" />
 
             <input
               class="file-input"
@@ -303,29 +303,9 @@ const handleCreateAdminUser = async () => {
             <InputError class="mt-2" :message="form.errors.avatar" />
           </div>
 
-          <!-- Create Button -->
+          <!-- Save Button -->
           <div class="mb-6">
-            <button class="save-btn">
-              <svg
-                v-if="processing"
-                aria-hidden="true"
-                role="status"
-                class="inline w-4 h-4 mr-3 text-white animate-spin"
-                viewBox="0 0 100 101"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                  fill="#E5E7EB"
-                />
-                <path
-                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                  fill="currentColor"
-                />
-              </svg>
-              {{ processing ? "Processing..." : "Save" }}
-            </button>
+            <SaveButton :processing="processing" />
           </div>
         </form>
       </div>

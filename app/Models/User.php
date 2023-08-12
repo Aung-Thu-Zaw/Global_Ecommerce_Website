@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\FilteredByDateScope;
 use App\Notifications\ResetPasswordQueued;
 use App\Notifications\AccountRegistered\VerifyEmailQueued;
 use Spatie\Permission\Traits\HasRoles;
@@ -54,6 +55,17 @@ class User extends Authenticatable implements MustVerifyEmail
             'shop_name'=>$this->shop_name,
         ];
     }
+
+    // /**
+    //  * The "booted" method of the model.
+    //  *
+    //  * @return void
+    //  */
+    // protected static function booted()
+    // {
+    //     static::addGlobalScope(new FilteredByDateScope());
+    // }
+
 
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<User, never>
