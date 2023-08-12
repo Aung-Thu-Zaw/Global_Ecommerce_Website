@@ -265,12 +265,6 @@ const formattedAmount = (amount) => {
 const handleStatus = async (product) => {
   const result = await swal({
     icon: "question",
-    title: `Are you sure you want to set ${
-      product.status === "pending" || product.status === "disapproved"
-        ? "approve"
-        : "disapprove"
-    } this product?`,
-
     title:
       product.status === "pending" || product.status === "disapproved"
         ? __("ARE_YOU_SURE_YOU_WANT_TO_SET_APPROVE_THIS_PRODUCT")

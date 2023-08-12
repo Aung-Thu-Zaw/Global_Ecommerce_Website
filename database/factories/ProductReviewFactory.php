@@ -22,7 +22,8 @@ class ProductReviewFactory extends Factory
             "user_id"=>fake()->numberBetween(1, 263),
             "review_text"=>fake()->paragraph(),
             "rating"=>fake()->numberBetween(1, 5),
-            "status"=>fake()->randomElement(["pending","published","unpublished"])
+            "status"=>fake()->randomElement(["pending","published","unpublished"]),
+            "created_at"=>fake()->dateTimeBetween("-5 months", now()),
         ];
     }
 }

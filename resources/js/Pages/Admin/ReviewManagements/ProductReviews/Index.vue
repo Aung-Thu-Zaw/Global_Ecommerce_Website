@@ -1,19 +1,25 @@
 <script setup>
-import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import SortingArrows from "@/Components/Table/SortingArrows.vue";
-import Tr from "@/Components/Table/Tr.vue";
-import Td from "@/Components/Table/Td.vue";
-import HeaderTh from "@/Components/Table/HeaderTh.vue";
-import BodyTh from "@/Components/Table/BodyTh.vue";
-import TableHeader from "@/Components/Table/TableHeader.vue";
-import TableContainer from "@/Components/Table/TableContainer.vue";
+import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ProductReviewBreadcrumb.vue";
 import PendingStatus from "@/Components/Status/PendingStatus.vue";
 import PublishedStatus from "@/Components/Status/PublishedStatus.vue";
 import UnpublishedStatus from "@/Components/Status/UnpublishedStatus.vue";
 import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
+import TrashButton from "@/Components/Buttons/TrashButton.vue";
+import DetailButton from "@/Components/Buttons/DetailButton.vue";
+import DeleteButton from "@/Components/Buttons/DeleteButton.vue";
+import ResetFilterButton from "@/Components/Buttons/ResetFilterButton.vue";
+import SortingArrows from "@/Components/Table/SortingArrows.vue";
+import TableContainer from "@/Components/Table/TableContainer.vue";
+import TableHeader from "@/Components/Table/TableHeader.vue";
+import HeaderTh from "@/Components/Table/HeaderTh.vue";
+import BodyTh from "@/Components/Table/BodyTh.vue";
+import Tr from "@/Components/Table/Tr.vue";
+import Td from "@/Components/Table/Td.vue";
+import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import { __ } from "@/Translations/translations-inside-setup.js";
+import datepicker from "vue3-datepicker";
 import { reactive, watch, inject, computed, ref } from "vue";
 import { router, Link, Head, usePage } from "@inertiajs/vue3";
 
@@ -22,8 +28,36 @@ const props = defineProps({
   productReviews: Object,
 });
 
-// Define Alert Variables
+// Define  Variables
 const swal = inject("$swal");
+const isFilterBoxOpened = ref(false);
+const createdFrom = ref(
+  usePage().props.ziggy.query.created_from
+    ? new Date(usePage().props.ziggy.query.created_from)
+    : ""
+);
+const createdUntil = ref(
+  usePage().props.ziggy.query.created_until
+    ? new Date(usePage().props.ziggy.query.created_until)
+    : ""
+);
+
+// Formatted Date
+const formattedCreatedFrom = computed(() => {
+  const year = createdFrom.value ? createdFrom.value.getFullYear() : "";
+  const month = createdFrom.value ? createdFrom.value.getMonth() + 1 : "";
+  const day = createdFrom.value ? createdFrom.value.getDate() : "";
+
+  return year && month && day ? `${year}-${month}-${day}` : undefined;
+});
+
+const formattedCreatedUntil = computed(() => {
+  const year = createdUntil.value ? createdUntil.value.getFullYear() : "";
+  const month = createdUntil.value ? createdUntil.value.getMonth() + 1 : "";
+  const day = createdUntil.value ? createdUntil.value.getDate() : "";
+
+  return year && month && day ? `${year}-${month}-${day}` : undefined;
+});
 
 // Query String Parameteres
 const params = reactive({
@@ -32,6 +66,12 @@ const params = reactive({
   per_page: usePage().props.ziggy.query?.per_page,
   sort: usePage().props.ziggy.query?.sort,
   direction: usePage().props.ziggy.query?.direction,
+  created_from: usePage().props.ziggy.query.created_from
+    ? usePage().props.ziggy.query.created_from
+    : formattedCreatedFrom,
+  created_until: usePage().props.ziggy.query.created_until
+    ? usePage().props.ziggy.query.created_until
+    : formattedCreatedUntil,
 });
 
 // Handle Search
@@ -43,6 +83,8 @@ const handleSearch = () => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
+      created_from: params.created_from,
+      created_until: params.created_until,
     },
     {
       replace: true,
@@ -60,10 +102,76 @@ const removeSearch = () => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
+      created_from: params.created_from,
+      created_until: params.created_until,
     },
     {
       replace: true,
       preserveState: true,
+    }
+  );
+};
+
+// Filtered By Only Created From
+const filteredByCreatedFrom = () => {
+  router.get(
+    route("admin.product-reviews.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+      created_from: formattedCreatedFrom.value,
+      created_until: params.created_until,
+    },
+    {
+      replace: true,
+      preserveState: true,
+      onSuccess: () => {
+        isFilterBoxOpened.value = true;
+      },
+    }
+  );
+};
+
+// Filtered By Only Created Until
+const filteredByCreatedUntil = () => {
+  router.get(
+    route("admin.product-reviews.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+      created_from: params.created_from,
+      created_until: formattedCreatedUntil.value,
+    },
+    {
+      replace: true,
+      preserveState: true,
+      onSuccess: () => {
+        isFilterBoxOpened.value = true;
+      },
+    }
+  );
+};
+
+// Handle Reset Filtered Date
+const resetFilteredDate = () => {
+  createdFrom.value = "";
+  createdUntil.value = "";
+  router.get(
+    route("admin.product-reviews.index"),
+    {
+      search: params.search,
+      per_page: params.per_page,
+      sort: params.sort,
+      direction: params.direction,
+    },
+    {
+      replace: true,
+      preserveState: true,
+      onSuccess: () => (isFilterBoxOpened.value = false),
     }
   );
 };
@@ -78,6 +186,8 @@ const handleQueryStringParameter = () => {
       per_page: params.per_page,
       sort: params.sort,
       direction: params.direction,
+      created_from: params.created_from,
+      created_until: params.created_until,
     },
     {
       replace: true,
@@ -106,6 +216,30 @@ watch(
   }
 );
 
+// Watching Created From Datepicker
+watch(
+  () => params.created_from,
+  () => {
+    if (params.created_from === "") {
+      resetFilteredDate();
+    } else {
+      filteredByCreatedFrom();
+    }
+  }
+);
+
+// Watching Created Unitl Datepicker
+watch(
+  () => params.created_until,
+  () => {
+    if (params.created_until === "") {
+      resetFilteredDate();
+    } else {
+      filteredByCreatedUntil();
+    }
+  }
+);
+
 // Update Sorting Table Column
 const updateSorting = (sort = "id") => {
   params.sort = sort;
@@ -118,19 +252,18 @@ const updateSorting = (sort = "id") => {
 const handleStatus = async (productReview) => {
   const result = await swal({
     icon: "question",
-    title: `Are you sure you want to set ${
+    title:
       productReview.status === "pending" ||
       productReview.status === "unpublished"
-        ? "publish"
-        : "unpublish"
-    } this product review?`,
+        ? __("ARE_YOU_SURE_YOU_WANT_TO_SET_PUBLISH_THIS_PRODUCT")
+        : __("ARE_YOU_SURE_YOU_WANT_TO_SET_UNPUBLISH_THIS_PRODUCT"),
     showCancelButton: true,
-    confirmButtonText: `Yes, ${
+    confirmButtonText:
       productReview.status === "pending" ||
       productReview.status === "unpublished"
-        ? "Publish"
-        : "Unpublish"
-    }!`,
+        ? __("YES_PUBLISH")
+        : __("YES_UNPUBLISH"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#2562c4",
     cancelButtonColor: "#626262",
     timer: 20000,
@@ -151,6 +284,8 @@ const handleStatus = async (productReview) => {
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
+        created_from: params.created_from,
+        created_until: params.created_until,
       }),
       {},
       {
@@ -159,7 +294,7 @@ const handleStatus = async (productReview) => {
           if (usePage().props.flash.successMessage) {
             swal({
               icon: "success",
-              title: usePage().props.flash.successMessage,
+              title: __(usePage().props.flash.successMessage),
             });
           }
         },
@@ -172,10 +307,11 @@ const handleStatus = async (productReview) => {
 const handleDeleteProductReview = async (productReview) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to delete this product review?",
-    text: "You will be able to restore this product review in the trash!",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_PRODUCT_REVIEW"),
+    text: __("YOU_WILL_BE_ABLE_TO_RESTORE_THIS_PRODUCT_REVIEW_IN_THE_TRASH"),
     showCancelButton: true,
-    confirmButtonText: "Yes, Delete it!",
+    confirmButtonText: __("YES_DELETE_IT"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#d52222",
     cancelButtonColor: "#626262",
     timer: 20000,
@@ -191,6 +327,8 @@ const handleDeleteProductReview = async (productReview) => {
         per_page: params.per_page,
         sort: params.sort,
         direction: params.direction,
+        created_from: params.created_from,
+        created_until: params.created_until,
       }),
       {
         preserveScroll: true,
@@ -198,7 +336,7 @@ const handleDeleteProductReview = async (productReview) => {
           if (usePage().props.flash.successMessage) {
             swal({
               icon: "success",
-              title: usePage().props.flash.successMessage,
+              title: __(usePage().props.flash.successMessage),
             });
           }
         },
@@ -249,14 +387,14 @@ const productReviewTrashList = computed(() => {
 if (usePage().props.flash.successMessage) {
   swal({
     icon: "success",
-    title: usePage().props.flash.successMessage,
+    title: __(usePage().props.flash.successMessage),
   });
 }
 </script>
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Product Reviews" />
+    <Head :title="__('PRODUCT_REVIEWS')" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -274,12 +412,8 @@ if (usePage().props.flash.successMessage) {
               sort: 'id',
               direction: 'desc',
             }"
-            class="trash-btn group"
           >
-            <span class="group-hover:animate-pulse">
-              <i class="fa-solid fa-trash-can-arrow-up"></i>
-              Trash
-            </span>
+            <TrashButton />
           </Link>
         </div>
       </div>
@@ -291,7 +425,7 @@ if (usePage().props.flash.successMessage) {
             <input
               type="text"
               class="search-input"
-              placeholder="Search by review text"
+              :placeholder="__('SEARCH_BY_REVIEW')"
               v-model="params.search"
             />
             <i
@@ -313,6 +447,61 @@ if (usePage().props.flash.successMessage) {
               <option value="100">100</option>
             </select>
           </div>
+
+          <!-- Filter By Date -->
+          <button
+            @click="isFilterBoxOpened = !isFilterBoxOpened"
+            class="filter-btn"
+          >
+            <span class="">
+              <i class="fa-solid fa-filter"></i>
+            </span>
+          </button>
+
+          <div
+            v-if="isFilterBoxOpened"
+            class="w-[400px] border border-gray-300 shadow-lg absolute bg-white top-64 right-10 z-30 px-5 py-4 rounded-md"
+          >
+            <div class="flex items-center justify-end">
+              <span
+                @click="isFilterBoxOpened = false"
+                class="text-lg text-gray-500 hover:text-gray-800 cursor-pointer"
+              >
+                <i class="fa-solid fa-xmark"></i>
+              </span>
+            </div>
+            <div class="w-full mb-6">
+              <span class="font-bold text-sm text-gray-700 mb-5"
+                >Created from</span
+              >
+              <div>
+                <datepicker
+                  class="w-full rounded-md p-3 border-gray-300 bg-white focus:ring-0 focus:border-gray-400 text-sm"
+                  :placeholder="__('SELECT_DATE')"
+                  v-model="createdFrom"
+                />
+              </div>
+            </div>
+            <div class="w-full mb-3">
+              <span class="font-bold text-sm text-gray-700 mb-5"
+                >Created until</span
+              >
+              <div>
+                <datepicker
+                  class="w-full rounded-md p-3 border-gray-300 bg-white focus:ring-0 focus:border-gray-400 text-sm"
+                  :placeholder="__('SELECT_DATE')"
+                  v-model="createdUntil"
+                />
+              </div>
+            </div>
+
+            <div
+              v-if="params.created_from || params.created_until"
+              class="w-full flex items-center"
+            >
+              <ResetFilterButton @click="resetFilteredDate" />
+            </div>
+          </div>
         </div>
       </div>
 
@@ -324,21 +513,26 @@ if (usePage().props.flash.successMessage) {
             <SortingArrows :params="params" sort="id" />
           </HeaderTh>
 
-          <HeaderTh> Product Name </HeaderTh>
+          <HeaderTh> {{ __("PRODUCT_NAME") }} </HeaderTh>
 
           <HeaderTh @click="updateSorting('review_text')">
-            Review Text
+            {{ __("REVIEW") }}
             <SortingArrows :params="params" sort="review_text" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('rating')">
-            Rating
+            {{ __("RATING") }}
             <SortingArrows :params="params" sort="rating" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('status')">
-            Status
+            {{ __("STATUS") }}
             <SortingArrows :params="params" sort="status" />
+          </HeaderTh>
+
+          <HeaderTh @click="updateSorting('created_at')">
+            {{ __("CREATED_DATE") }}
+            <SortingArrows :params="params" sort="created_at" />
           </HeaderTh>
 
           <HeaderTh
@@ -346,7 +540,7 @@ if (usePage().props.flash.successMessage) {
               productReviewControl || productReviewDetail || productReviewDelete
             "
           >
-            Action
+            {{ __("ACTION") }}
           </HeaderTh>
         </TableHeader>
 
@@ -360,7 +554,7 @@ if (usePage().props.flash.successMessage) {
             </BodyTh>
 
             <Td>
-              <span class="line-clamp-1">
+              <span v-if="productReview.product" class="line-clamp-1">
                 {{ productReview.product.name }}
               </span>
             </Td>
@@ -377,14 +571,18 @@ if (usePage().props.flash.successMessage) {
 
             <Td>
               <PendingStatus v-if="productReview.status === 'pending'">
-                pending
+                {{ productReview.status }}
               </PendingStatus>
               <PublishedStatus v-if="productReview.status === 'published'">
-                published
+                {{ productReview.status }}
               </PublishedStatus>
               <UnpublishedStatus v-if="productReview.status === 'unpublished'">
-                unpublished
+                {{ productReview.status }}
               </UnpublishedStatus>
+            </Td>
+
+            <Td>
+              {{ productReview.created_at }}
             </Td>
 
             <Td
@@ -398,7 +596,7 @@ if (usePage().props.flash.successMessage) {
               <button
                 v-if="productReviewControl"
                 @click="handleStatus(productReview)"
-                class="offical-btn group"
+                class="text-sm px-5 py-2 border-[3px] font-semibold rounded-[4px] shadow-md text-white transition-all mr-3 my-1 group"
                 type="button"
                 :class="{
                   'bg-green-600  hover:bg-green-700 border-green-700':
@@ -416,27 +614,21 @@ if (usePage().props.flash.successMessage) {
                   class="group-hover:animate-pulse"
                 >
                   <i class="fa-solid fa-check"></i>
-                  Publish
+                  {{ __("PUBLISH") }}
                 </span>
                 <span v-else class="group-hover:animate-pulse">
                   <i class="fa-solid fa-xmark"></i>
-                  Unpublish
+                  {{ __("UNPUBLISH") }}
                 </span>
               </button>
 
               <!-- Delete Button -->
-              <button
-                @click="handleDeleteProductReview(productReview.id)"
+              <DeleteButton
                 v-if="productReviewDelete"
-                class="delete-btn group"
-                type="button"
-              >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-trash-can"></i>
-                  Delete
-                </span>
-              </button>
+                @click="handleDeleteProductReview(productReview.id)"
+              />
 
+              <!-- Detail Button -->
               <Link
                 v-if="productReviewDetail"
                 :href="route('admin.product-reviews.show', productReview.id)"
@@ -447,12 +639,8 @@ if (usePage().props.flash.successMessage) {
                   sort: params.sort,
                   direction: params.direction,
                 }"
-                class="detail-btn group"
               >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-eye"></i>
-                  Details
-                </span>
+                <DetailButton />
               </Link>
             </Td>
           </Tr>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\ReviewManagements;
 
 use App\Actions\Admin\ReviewManagements\ProductReviews\PermanentlyDeleteAllTrashProductReviewAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 use App\Http\Controllers\Controller;
 use App\Models\ProductReview;
 use Illuminate\Http\RedirectResponse;
@@ -13,15 +14,17 @@ use Illuminate\Database\Eloquent\Builder;
 
 class AdminProductReviewController extends Controller
 {
+    use HandlesQueryStringParameters;
+
     public function index(): Response|ResponseFactory
     {
         $productReviews=ProductReview::search(request("search"))
-                                            ->query(function (Builder $builder) {
-                                                $builder->with(["product:id,name"]);
-                                            })
-                                            ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                            ->paginate(request("per_page", 10))
-                                            ->appends(request()->all());
+                                     ->query(function (Builder $builder) {
+                                         $builder->with(["product:id,name"]);
+                                     })
+                                     ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                     ->paginate(request("per_page", 10))
+                                     ->appends(request()->all());
 
         return inertia("Admin/ReviewManagements/ProductReviews/Index", compact("productReviews"));
     }
@@ -30,7 +33,7 @@ class AdminProductReviewController extends Controller
     {
         $productReview->load(["product:id,name","user:id,name,email"]);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+        $queryStringParams=$this->getQueryStringParams($request);
 
         return inertia("Admin/ReviewManagements/ProductReviews/Details", compact("productReview", "queryStringParams"));
     }
@@ -39,32 +42,28 @@ class AdminProductReviewController extends Controller
     {
         $productReview->update(["status"=>$request->status]);
 
-        $message=$request->status==="unpublished" ? "Product review has been successfully unpublished" : "Product review has been successfully published";
+        $message=$request->status==="unpublished" ? "PRODUCT_REVIEW_HAS_BEEN_SUCCESSFULLY_UNPUBLISHED" : "PRODUCT_REVIEW_HAS_BEEN_SUCCESSFULLY_PUBLISHED";
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.product-reviews.index', $queryStringParams)->with("success", $message);
+        return to_route('admin.product-reviews.index', $this->getQueryStringParams($request))->with("success", $message);
     }
 
     public function destroy(Request $request, ProductReview $productReview): RedirectResponse
     {
         $productReview->delete();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.product-reviews.index', $queryStringParams)->with("success", "The product review has been successfully moved to the trash.");
+        return to_route('admin.product-reviews.index', $this->getQueryStringParams($request))->with("success", "PRODUCT_REVIEW_HAS_BEEN_SUCCESSFULLY_DELETED");
     }
 
     public function trash(): Response|ResponseFactory
     {
         $trashProductReviews=ProductReview::search(request("search"))
-                                                 ->query(function (Builder $builder) {
-                                                     $builder->with(["product:id,name"]);
-                                                 })
-                                                 ->onlyTrashed()
-                                                 ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                                 ->paginate(request("per_page", 10))
-                                                 ->appends(request()->all());
+                                          ->query(function (Builder $builder) {
+                                              $builder->with(["product:id,name"]);
+                                          })
+                                          ->onlyTrashed()
+                                          ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                          ->paginate(request("per_page", 10))
+                                          ->appends(request()->all());
 
         return inertia("Admin/ReviewManagements/ProductReviews/Trash", compact("trashProductReviews"));
     }
@@ -75,9 +74,7 @@ class AdminProductReviewController extends Controller
 
         $trashProductReview->restore();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.product-reviews.trash', $queryStringParams)->with("success", "Product review has been successfully restored.");
+        return to_route('admin.product-reviews.trash', $this->getQueryStringParams($request))->with("success", "PRODUCT_REVIEW_HAS_BEEN_SUCCESSFULLY_RESTORED");
     }
 
     public function forceDelete(Request $request, int $trashProductReview): RedirectResponse
@@ -86,9 +83,7 @@ class AdminProductReviewController extends Controller
 
         $trashProductReview->forceDelete();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.product-reviews.trash', $queryStringParams)->with("success", "Product review has been successfully deleted.");
+        return to_route('admin.product-reviews.trash', $this->getQueryStringParams($request))->with("success", "THE_PRODUCT_REVIEW_HAS_BEEN_PERMANENTLY_DELETED");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -97,8 +92,6 @@ class AdminProductReviewController extends Controller
 
         (new PermanentlyDeleteAllTrashProductReviewAction())->handle($trashProductReviews);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.product-reviews.trash', $queryStringParams)->with("success", "Product reviews have been successfully deleted.");
+        return to_route('admin.product-reviews.trash', $this->getQueryStringParams($request))->with("success", "PRODUCT_REVIEWS_HAVE_BEEN_PERMANENTLY_DELETED");
     }
 }
