@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\BlogManagements;
 use App\Actions\Admin\BlogManagements\BlogPosts\CreateBlogPostAction;
 use App\Actions\Admin\BlogManagements\BlogPosts\PermanentlyDeleteAllTrashBlogPostAction;
 use App\Actions\Admin\BlogManagements\BlogPosts\UpdateBlogPostAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BlogPostRequest;
 use App\Models\BlogCategory;
@@ -16,6 +17,8 @@ use Illuminate\Http\RedirectResponse;
 
 class AdminBlogPostController extends Controller
 {
+    use HandlesQueryStringParameters;
+
     public function index(): Response|ResponseFactory
     {
         $blogPosts=BlogPost::search(request("search"))
@@ -39,14 +42,12 @@ class AdminBlogPostController extends Controller
     {
         (new CreateBlogPostAction())->handle($request->validated());
 
-        $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
-
-        return to_route("admin.blogs.posts.index", $queryStringParams)->with("success", "Post has been successfully created.");
+        return to_route("admin.blogs.posts.index", $this->getQueryStringParams($request))->with("success", "BLOG_POST_HAS_BEEN_SUCCESSFULLY_CREATED");
     }
 
     public function edit(Request $request, BlogPost $blogPost): Response|ResponseFactory
     {
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+        $queryStringParams=$this->getQueryStringParams($request);
 
         $blogCategories=BlogCategory::all();
 
@@ -59,18 +60,14 @@ class AdminBlogPostController extends Controller
     {
         (new UpdateBlogPostAction())->handle($request->validated(), $blogPost);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route("admin.blogs.posts.index", $queryStringParams)->with("success", "Post has been successfully updated.");
+        return to_route("admin.blogs.posts.index", $this->getQueryStringParams($request))->with("success", "BLOG_POST_HAS_BEEN_SUCCESSFULLY_UPDATED");
     }
 
     public function destroy(Request $request, BlogPost $blogPost): RedirectResponse
     {
         $blogPost->delete();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route("admin.blogs.posts.index", $queryStringParams)->with("success", "Post has been successfully deleted.");
+        return to_route("admin.blogs.posts.index", $this->getQueryStringParams($request))->with("success", "BLOG_POST_HAS_BEEN_SUCCESSFULLY_DELETED");
     }
 
     public function trash(): Response|ResponseFactory
@@ -81,42 +78,35 @@ class AdminBlogPostController extends Controller
                                 ->paginate(request("per_page", 10))
                                 ->appends(request()->all());
 
-
         return inertia("Admin/BlogManagements/BlogPosts/Trash", compact("trashBlogPosts"));
     }
 
     public function restore(Request $request, int $trashBlogPostId): RedirectResponse
     {
-        $blogPost = BlogPost::onlyTrashed()->findOrFail($trashBlogPostId);
+        $trashBlogPost = BlogPost::onlyTrashed()->findOrFail($trashBlogPostId);
 
-        $blogPost->restore();
+        $trashBlogPost->restore();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.blogs.posts.trash', $queryStringParams)->with("success", "Post has been successfully restored.");
+        return to_route('admin.blogs.posts.trash', $this->getQueryStringParams($request))->with("success",  "BLOG_POST_HAS_BEEN_SUCCESSFULLY_RESTORED");
     }
 
     public function forceDelete(Request $request, int $trashBlogPostId): RedirectResponse
     {
-        $blogPost = BlogPost::onlyTrashed()->findOrFail($trashBlogPostId);
+        $trashBlogPost = BlogPost::onlyTrashed()->findOrFail($trashBlogPostId);
 
-        BlogPost::deleteImage($blogPost->image);
+        BlogPost::deleteImage($trashBlogPost->image);
 
-        $blogPost->forceDelete();
+        $trashBlogPost->forceDelete();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.blogs.posts.trash', $queryStringParams)->with("success", "The post has been permanently deleted.");
+        return to_route('admin.blogs.posts.trash', $this->getQueryStringParams($request))->with("success", "THE_BLOG_POST_HAS_BEEN_PERMANENTLY_DELETED");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $blogPosts = BlogPost::onlyTrashed()->get();
+        $trashBlogPosts = BlogPost::onlyTrashed()->get();
 
-        (new PermanentlyDeleteAllTrashBlogPostAction())->handle($blogPosts);
+        (new PermanentlyDeleteAllTrashBlogPostAction())->handle($trashBlogPosts);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.blogs.posts.trash', $queryStringParams)->with("success", "Posts have been successfully deleted.");
+        return to_route('admin.blogs.posts.trash', $this->getQueryStringParams($request))->with("success", "BLOG_POSTS_HAVE_BEEN_PERMANENTLY_DELETED");
     }
 }
