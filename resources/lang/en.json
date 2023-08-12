@@ -574,6 +574,21 @@
     "YES_PUBLISH": "Yes, Publish",
     "YES_UNPUBLISH": "Yes, Unpublish",
     "PRODUCT_REVIEWS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "Product reviews in the Trash will be automatically deleted after 60 days",
-    "ARE_YOU_SURE_YOU_WANT_TO_SET_PUBLISH_THIS_PRODUCT": "Are you sure you want to set publish this product?",
-    "ARE_YOU_SURE_YOU_WANT_TO_SET_UNPUBLISH_THIS_PRODUCT": "Are you sure you want to set unpublish this product?"
+    "ARE_YOU_SURE_YOU_WANT_TO_SET_PUBLISH_THIS_PRODUCT_REVIEW": "Are you sure you want to set publish this product review?",
+    "ARE_YOU_SURE_YOU_WANT_TO_SET_UNPUBLISH_THIS_PRODUCT_REVIEW": "Are you sure you want to set unpublish this product review?",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_SHOP_REVIEW": "Are you sure you want to delete this shop review?",
+    "YOU_WILL_BE_ABLE_TO_RESTORE_THIS_SHOP_REVIEW_IN_THE_TRASH": "You will be able to restore this shop review in the trash!",
+    "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_SHOP_REVIEW": "Are you sure you want to restore this shop review?",
+    "SHOP_REVIEW_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "Shop review in the trash will be permanetly deleted! You can't get it back.",
+    "ALL_SHOP_REVIEWS_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "All shop reviews in the trash will be permanetly deleted! You can't get it back.",
+    "SHOP_REVIEW_HAS_BEEN_SUCCESSFULLY_PUBLISHED": "Shop review has been successfully published.",
+    "SHOP_REVIEW_HAS_BEEN_SUCCESSFULLY_UNPUBLISHED": "Shop review has been successfully unpublished.",
+    "SHOP_REVIEW_HAS_BEEN_SUCCESSFULLY_DELETED": "Shop review has been successfully deleted.",
+    "SHOP_REVIEW_HAS_BEEN_SUCCESSFULLY_RESTORED": "Shop review has been successfully restored.",
+    "THE_SHOP_REVIEW_HAS_BEEN_PERMANENTLY_DELETED": "The shop review has been permanently deleted.",
+    "SHOP_REVIEWS_HAVE_BEEN_PERMANENTLY_DELETED": "Shop reviews have been permanently deleted.",
+    "TRASH_SHOP_REVIEWS": "Trash Shop Reviews",
+    "SHOP_REVIEWS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "Shop reviews in the Trash will be automatically deleted after 60 days",
+    "ARE_YOU_SURE_YOU_WANT_TO_SET_PUBLISH_THIS_SHOP_REVIEW": "Are you sure you want to set publish this shop review?",
+    "ARE_YOU_SURE_YOU_WANT_TO_SET_UNPUBLISH_THIS_SHOP_REVIEW": "Are you sure you want to set unpublish this shop review?"
 }

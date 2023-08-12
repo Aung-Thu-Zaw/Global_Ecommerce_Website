@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\ReviewManagements;
 
 use App\Actions\Admin\ReviewManagements\ShopReviews\PermanentlyDeleteAllTrashShopReviewAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 use App\Http\Controllers\Controller;
 use App\Models\ShopReview;
 use Illuminate\Http\RedirectResponse;
@@ -13,15 +14,17 @@ use Illuminate\Database\Eloquent\Builder;
 
 class AdminShopReviewController extends Controller
 {
+    use HandlesQueryStringParameters;
+
     public function index(): Response|ResponseFactory
     {
         $shopReviews=ShopReview::search(request("search"))
-                                      ->query(function (Builder $builder) {
-                                          $builder->with(["shop:id,shop_name"]);
-                                      })
-                                      ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                      ->paginate(request("per_page", 10))
-                                      ->appends(request()->all());
+                               ->query(function (Builder $builder) {
+                                   $builder->with(["shop:id,shop_name"]);
+                               })
+                               ->orderBy(request("sort", "id"), request("direction", "desc"))
+                               ->paginate(request("per_page", 10))
+                               ->appends(request()->all());
 
         return inertia("Admin/ReviewManagements/ShopReviews/Index", compact("shopReviews"));
     }
@@ -30,7 +33,7 @@ class AdminShopReviewController extends Controller
     {
         $shopReview->load(["shop:id,shop_name","user:id,name,email"]);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+        $queryStringParams=$this->getQueryStringParams($request);
 
         return inertia("Admin/ReviewManagements/ShopReviews/Details", compact("shopReview", "queryStringParams"));
     }
@@ -39,32 +42,28 @@ class AdminShopReviewController extends Controller
     {
         $shopReview->update(["status"=>$request->status]);
 
-        $message=$request->status==="unpublished" ? "Shop review has been successfully unpublished" : "Shop review has been successfully published";
+        $message=$request->status==="unpublished" ? "SHOP_REVIEW_HAS_BEEN_SUCCESSFULLY_UNPUBLISHED" : "SHOP_REVIEW_HAS_BEEN_SUCCESSFULLY_PUBLISHED";
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.shop-reviews.index', $queryStringParams)->with("success", $message);
+        return to_route('admin.shop-reviews.index', $this->getQueryStringParams($request))->with("success", $message);
     }
 
     public function destroy(Request $request, ShopReview $shopReview): RedirectResponse
     {
         $shopReview->delete();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.shop-reviews.index', $queryStringParams)->with("success", "The shop review has been successfully moved to the trash.");
+        return to_route('admin.shop-reviews.index', $this->getQueryStringParams($request))->with("success", "SHOP_REVIEW_HAS_BEEN_SUCCESSFULLY_DELETED");
     }
 
     public function trash(): Response|ResponseFactory
     {
         $trashShopReviews=ShopReview::search(request("search"))
-                                           ->query(function (Builder $builder) {
-                                               $builder->with(["shop:id,shop_name"]);
-                                           })
-                                           ->onlyTrashed()
-                                           ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                           ->paginate(request("per_page", 10))
-                                           ->appends(request()->all());
+                                    ->query(function (Builder $builder) {
+                                        $builder->with(["shop:id,shop_name"]);
+                                    })
+                                    ->onlyTrashed()
+                                    ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                    ->paginate(request("per_page", 10))
+                                    ->appends(request()->all());
 
         return inertia("Admin/ReviewManagements/ShopReviews/Trash", compact("trashShopReviews"));
     }
@@ -75,9 +74,7 @@ class AdminShopReviewController extends Controller
 
         $trashShopReview->restore();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.shop-reviews.trash', $queryStringParams)->with("success", "Shop review has been successfully restored.");
+        return to_route('admin.shop-reviews.trash', $this->getQueryStringParams($request))->with("success", "SHOP_REVIEW_HAS_BEEN_SUCCESSFULLY_RESTORED");
     }
 
     public function forceDelete(Request $request, int $trashShopReviewId): RedirectResponse
@@ -86,9 +83,7 @@ class AdminShopReviewController extends Controller
 
         $trashShopReview->forceDelete();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.shop-reviews.trash', $queryStringParams)->with("success", "Shop review has been successfully deleted.");
+        return to_route('admin.shop-reviews.trash', $this->getQueryStringParams($request))->with("success", "THE_SHOP_REVIEW_HAS_BEEN_PERMANENTLY_DELETED");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -97,8 +92,6 @@ class AdminShopReviewController extends Controller
 
         (new PermanentlyDeleteAllTrashShopReviewAction())->handle($trashShopReviews);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.shop-reviews.trash', $queryStringParams)->with("success", "Shop reviews have been successfully deleted.");
+        return to_route('admin.shop-reviews.trash', $this->getQueryStringParams($request))->with("success", "SHOP_REVIEWS_HAVE_BEEN_PERMANENTLY_DELETED");
     }
 }

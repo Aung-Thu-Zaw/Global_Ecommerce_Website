@@ -255,8 +255,8 @@ const handleStatus = async (productReview) => {
     title:
       productReview.status === "pending" ||
       productReview.status === "unpublished"
-        ? __("ARE_YOU_SURE_YOU_WANT_TO_SET_PUBLISH_THIS_PRODUCT")
-        : __("ARE_YOU_SURE_YOU_WANT_TO_SET_UNPUBLISH_THIS_PRODUCT"),
+        ? __("ARE_YOU_SURE_YOU_WANT_TO_SET_PUBLISH_THIS_PRODUCT_REVIEW")
+        : __("ARE_YOU_SURE_YOU_WANT_TO_SET_UNPUBLISH_THIS_PRODUCT_REVIEW"),
     showCancelButton: true,
     confirmButtonText:
       productReview.status === "pending" ||
