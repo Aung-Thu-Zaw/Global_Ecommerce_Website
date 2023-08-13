@@ -6,6 +6,7 @@ import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
 import { VueReCaptcha } from "vue-recaptcha-v3";
+import * as te from "tw-elements";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import CKEditor from "@ckeditor/ckeditor5-vue";

@@ -544,6 +544,8 @@
     "CAMPAIGN_BANNER_HAS_BEEN_SUCCESSFULLY_RESTORED": "Campaign Banner has been successfully restored.",
     "THE_CAMPAIGN_BANNER_HAS_BEEN_PERMANENTLY_DELETED": "The campaign banner has been permanently deleted.",
     "CAMPAIGN_BANNERS_HAVE_BEEN_PERMANENTLY_DELETED": "Campaign Banners have been permanently deleted.",
+    "CAMPAIGN_BANNER_HAS_BEEN_SUCCESSFULLY_DISPLAYED": "Campaign banner has been successfully displayed.",
+    "CAMPAIGN_BANNER_HAS_BEEN_SUCCESSFULLY_HIDDEN": "Campaign banner has been successfully hidden.",
     "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_LANGUAGE": "Are you sure you want to delete this language?",
     "YOU_WILL_BE_ABLE_TO_RESTORE_THIS_LANGUAGE_IN_THE_TRASH": "You will be able to restore this language in the trash!",
     "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_LANGUAGE": "Are you sure you want to restore this language?",

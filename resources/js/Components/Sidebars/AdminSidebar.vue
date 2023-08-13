@@ -227,7 +227,7 @@
 
                 <ul
                   v-if="!bannersIsHidden || bannersArea"
-                  class="text-xs ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+                  class="text-[.84rem] ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
                 >
                   <!-- Slider Banner Section -->
 
