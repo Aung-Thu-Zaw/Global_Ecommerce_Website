@@ -1,0 +1,690 @@
+{
+    "HELP_CENTER": "مركز المساعدة",
+    "BECOME_A_SELLER": "كن بائعًا",
+    "TRACK_MY_ORDER": "تتبع طلبي",
+    "ENTER_YOUR_ORDER_NUMBER": "أدخل رقم طلبك",
+    "SEARCH": "بحث",
+    "LANGUAGE": "اللغة",
+    "MY_CART": "عربة التسوق",
+    "SHOP_BY_CATEGORIES": "تسوق حسب الفئات",
+    "OUR_SELLER_SHOPS": "متاجر البائعين لدينا",
+    "OUR_BLOGS": "مدوناتنا",
+    "COLLECTIONS": "مجموعات",
+    "HOT_DEAL_PRODUCTS": "منتجات الصفقات الساخنة",
+    "NEW_PRODUCTS": "منتجات جديدة",
+    "FEATURED_PRODUCTS": "منتجات مميزة",
+    "PRODUCTS_FOR_YOU": "منتجات لك",
+    "LOAD_MORE_PRODUCTS": "تحميل المزيد من المنتجات",
+    "WHY_CHOOSE_US": "لماذا تختارنا",
+    "SUBSCRIBE": "اشترك",
+    "GET_NOTIFIED_ON_OFFERS": "احصل على إشعارات حول العروض",
+    "WHAT_ARE_YOU_LOOKING_FOR": "ما الذي تبحث عنه",
+    "SIGN_UP": "سجل",
+    "SIGN_IN": "تسجيل الدخول",
+    "EMAIL_ADDRESS": "عنوان البريد الإلكتروني",
+    "SUBMIT": "إرسال",
+    "SEE_ALL": "عرض الكل",
+    "NO_COLLECTION_FOUND": "لم يتم العثور على مجموعات",
+    "NO_PRODUCT_FOUND": "لم يتم العثور على منتجات",
+    "YOU_HAVE_REACH_THE_END_OF_THE_PAGE": "لقد وصلت إلى نهاية الصفحة.",
+    "VIEW_MORE": "عرض المزيد",
+    "CREATE_GLOBAL_E-COMMERCE_ACCOUNT": "إنشاء حساب تجارة إلكترونية عالمي",
+    "NAME": "الاسم",
+    "PASSWORD": "كلمة المرور",
+    "CONFIRM_PASSWORD": "تأكيد كلمة المرور",
+    "GENDER": "الجنس",
+    "BIRTHDAY": "تاريخ الميلاد",
+    "ENTER_YOUR_FULLNAME": "أدخل اسمك الكامل",
+    "ENTER_YOUR_EMAIL_ADDRESS": "أدخل عنوان بريدك الإلكتروني",
+    "ENTER_PASSWORD": "أدخل كلمة المرور",
+    "RETYPE_YOUR_PASSWORD": "أعد كتابة كلمة المرور",
+    "SELECT_YOUR_GENDER": "اختر جنسك",
+    "SELECT_YOUR_BIRTHDAY": "اختر تاريخ ميلادك",
+    "MALE": "ذكر",
+    "FEMALE": "أنثى",
+    "OTHER": "آخر",
+    "ALREDAY_HAVE_ACCOUNT": "لديك بالفعل حساب",
+    "OR": "أو",
+    "LOGIN_WITH_GLOBAL_E-COMMERCE_ACCOUNT": "تسجيل الدخول باستخدام حساب التجارة الإلكترونية العالمي",
+    "REMEMBER_ME": "تذكرني",
+    "FORGOT_PASSWORD": "هل نسيت كلمة المرور",
+    "YOU_DON'T_HAVE_ACCOUNT": "ليس لديك حساب؟ من فضلك",
+    "COMPANY_NAME": "اسم الشركة",
+    "ENTER_COMPANY_NAME": "أدخل اسم الشركة",
+    "SELLER_DASHBOARD_LOGIN": "تسجيل الدخول إلى لوحة تحكم البائع",
+    "SELLER_REGISTER": "تسجيل البائع",
+    "SHOP_NAME": "اسم المتجر",
+    "ENTER_SHOP_NAME": "أدخل اسم المتجر",
+    "PHONE": "الهاتف",
+    "ENTER_YOUR_PHONE_NUMBER": "أدخل رقم هاتفك",
+    "ALREADY_HAS_A_SELLER_ACCOUNT": "بالفعل لديه حساب بائع",
+    "ALL_COLLECTIONS": "جميع المجموعات",
+    "HOME": "الصفحة الرئيسية",
+    "BLOGS": "المدونات",
+    "POSTS_FOUND_FOR_RESULT": "تم العثور على منشورات للنتيجة",
+    "SORT_BY": "ترتيب حسب",
+    "LATEST_POST": "آخر منشور",
+    "NEWEST_POST": "أحدث منشور",
+    "VIEW": "عرض",
+    "SEARCH_BLOG": "بحث في المدونة",
+    "FILTERED_BY": "تم التصفية حسب",
+    "CATEGORY": "الفئة",
+    "READ_MORE": "قراءة المزيد",
+    "SHOPPING_CART": "عربة التسوق",
+    "APPLY_COUPON": "تطبيق القسيمة",
+    "COUPON_CODE_APPLIED": "تم تطبيق رمز القسيمة.",
+    "APPLY": "تطبيق",
+    "THERE_ARE_NO_ITEMS_IN_THIS_CART": "لا توجد عناصر في هذه العربة.",
+    "CONTINUE_SHOPPING": "متابعة التسوق",
+    "PACKAGE": "الطرد",
+    "SHIPPED_BY": "تم شحنه بواسطة",
+    "ORDER_SUMMARY": "ملخص الطلب",
+    "TOTAL_ITEMS": "إجمالي العناصر",
+    "TOTAL_PRICE": "إجمالي السعر",
+    "COUPON_CODE": "رمز القسيمة",
+    "COUPON_DISCOUNT": "خصم القسيمة",
+    "BACK_TO_SHOP": "العودة إلى المتجر",
+    "PROCEED_TO_CHECKOUT": "المتابعة إلى الخروج",
+    "ITEMS": "عناصر",
+    "ENTER_COUPON_CODE": "أدخل رمز القسيمة",
+    "SELECT_PAYMENT_METHODS": "حدد وسائل الدفع",
+    "PLACE_ORDER": "تقديم الطلب",
+    "DELIVERY_INFORMATION": "معلومات التسليم",
+    "PRODUCTS": "منتجات",
+    "DESCRIPTION": "الوصف",
+    "DELIVERY_AND_SERVICES": "التوصيل والخدمات",
+    "AVAILABLE_PAYMENTS": "طرق الدفع المتاحة",
+    "PRODUCT_REVIEWS": "آراء المنتج",
+    "ASK_QUESTIONS_ABOUT_THIS_PRODCUT": "اسأل أسئلة حول هذا المنتج",
+    "RELATED_PRODUCTS": "منتجات ذات صلة",
+    "TOTAL_QUESTIONS": "إجمالي الأسئلة",
+    "QUESTIONS_NOT_YET": "لا يوجد بعد أسئلة",
+    "ASK_QUESTION": "اسأل سؤالًا",
+    "VISIT_SHOP": "زيارة المتجر",
+    "FROM_THE_SAME_STORE": "من نفس المتجر",
+    "CHAT_NOW": "الدردشة الآن",
+    "IF_YOU_WANT_TO_ASK_QUESTIONS_YOU_NEED_TO_LOGIN_FIRST_HERE": "إذا كنت ترغب في طرح أسئلة، يجب عليك تسجيل الدخول أولاً هنا",
+    "WRITE_QUESTION_WHAT_YOU_WANT_TO_ASK_ABOUT_THIS_PRODUCT": "اكتب السؤال الذي تريد طرحه حول هذا المنتج",
+    "CUSTOMER_PRODUCT_PRVIEWS": "آراء العملاء حول المنتج",
+    "IF_YOU_WANT_TO_REVIEW_THIS_PRODUCT_YOU_NEED_TO_LOGIN_FIRST_HERE": "إذا كنت ترغب في مراجعة هذا المنتج، يجب عليك تسجيل الدخول أولاً هنا",
+    "THIS_PRODUCT_HAS_NO_REVIEWS": "لا توجد آراء حول هذا المنتج حتى الآن",
+    "LET_OTHERS_KNOW_WHAT_YOU_THINK_AND_BE_THE_FIRST_TO_WRITE_A_REVIEW": "دع الآخرين يعرفون رأيك وكن أول من يكتب مراجعة",
+    "ADD_REVIEW": "إضافة مراجعة",
+    "ADD_A_REVIEW": "إضافة مراجعة",
+    "LATEST_ARRIVALS": "أحدث الوصولات",
+    "EARLIEST_ARRIVALS": "أقدم الوصولات",
+    "BRAND": "العلامة التجارية",
+    "RATING": "التقييم",
+    "PRICE": "السعر",
+    "ITEMS_NOT_FOUND": "لم يتم العثور على عناصر",
+    "WE'RE_SORRY_WE_CANNOT_FIND_ANY_MATCHES_FOR_YOUR_FILTER_TERM": "نأسف، لا يمكننا العثور على أي تطابقات لمصطلح التصفية الخاص بك",
+    "WE'RE_SORRY_WE_CANNOT_FIND_ANY_MATCHES_FOR_YOUR_SEARCH_TERM": "نأسف، لا يمكننا العثور على أي تطابقات لمصطلح البحث الخاص بك",
+    "MY_ACCOUNT": "حسابي",
+    "MY_ORDERS": "طلباتي",
+    "MY_SHOP": "متجري",
+    "RETURN_ORDERS_AND_ITEMS": "إرجاع الطلبات والعناصر",
+    "CANCEL_ORDERS_AND_ITEMS": "إلغاء الطلبات والعناصر",
+    "MY_WATCHLIST": "قائمة المراقبة",
+    "FOLLOWED_SHOPS": "المتاجر المتابعة",
+    "LOGOUT": "تسجيل الخروج",
+    "SELLER_DASHBOARD": "لوحة تحكم البائع",
+    "ADMIN_DASHBOARD": "لوحة تحكم المشرف",
+    "DASHBOARD": "لوحة التحكم",
+    "SELLER_SHOP_CONTROL_AREA": "منطقة التحكم بمتجر البائع",
+    "PENDING": "معلق",
+    "SEARCH_HERE": "البحث هنا",
+    "NOTIFICATIONS": "الإشعارات",
+    "THERE_ARE_NO_NOTIFICATIONS": "لا توجد إشعارات.",
+    "AT_THE_MONENT_YOUR_SHOP_IS_INACTIVE_ADMIN_WILL_CHECK_AND_CONTACT_YOU": "في الوقت الحالي، متجرك غير نشط. سيقوم المشرف بالتحقق والاتصال بك.",
+    "GO_TO_HOME_PAGE": "الانتقال إلى الصفحة الرئيسية",
+    "YOUR_SHOP_HAS_BEEN_SUCCESSFULLY_REGISTERED_PLEASE_VERIFY_YOUR_EMAIL_IN_YOUR_EMAIL_INBOX_OR_SPAN_BOX": "تم تسجيل متجرك بنجاح 🎉. يرجى التحقق من بريدك الإلكتروني في صندوق الوارد أو صندوق البريد المزعج.",
+    "PRODUCT_BANNERS": "بانرات المنتج",
+    "ORDERS": "الطلبات",
+    "ADMIN_WEB_CONTROL_AREA": "منطقة التحكم بموقع الويب للمشرف",
+    "BRANDS": "العلامات التجارية",
+    "CATEGORIES": "الفئات",
+    "COUPONS": "القسائم",
+    "BANNERS": "البانرات",
+    "SHIPPING_AREAS": "مناطق الشحن",
+    "LANGUAGES": "اللغات",
+    "ORDER_MANAGEMENTS": "إدارة الطلبات",
+    "ORDER_MANAGE": "إدارة الطلبات",
+    "RETURN_ORDER_MANAGE": "إدارة طلبات الإرجاع",
+    "CANCEL_ORDER_MANAGE": "إدارة طلبات الإلغاء",
+    "USER_MANAGEMENTS": "إدارة المستخدمين",
+    "SELLER_MANAGE": "إدارة البائعين",
+    "USER_MANAGE": "إدارة المستخدمين",
+    "ADMIN_MANAGE": "إدارة المشرفين",
+    "AUTHORITY_MANAGEMENTS": "إدارة الصلاحيات",
+    "ROLES_AND_PERMISSIONS": "الأدوار والصلاحيات",
+    "ROLE_IN_PERMISSIONS": "الدور في الصلاحيات",
+    "BLOG_MANAGEMENTS": "إدارة المدونات",
+    "BLOG_CATEGORIES": "فئات المدونات",
+    "BLOG_POSTS": "منشورات المدونة",
+    "SITE_SETTINGS": "إعدادات الموقع",
+    "WEBSITE_SETTING": "إعدادات الموقع",
+    "SEO_SETTING": "إعدادات السيو",
+    "FROM_THE_SUBMITTERS": "من المقدمين",
+    "SUBSCRIBERS": "مشتركين",
+    "SUGGESTIONS": "اقتراحات",
+    "WEBSITE_FEEDBACKS": "تغذية راجعة حول الموقع",
+    "SLIDER_BANNERS": "بانرات السلايدر",
+    "CAMPAIGN_BANNERS": "بانرات الحملات",
+    "PENDING_ORDERS": "الطلبات المعلقة",
+    "CONFIRMED_ORDERS": "الطلبات المؤكدة",
+    "PROCESSING_ORDERS": "الطلبات قيد التجهيز",
+    "SHIPPED_ORDERS": "الطلبات المشحونة",
+    "DELIVERED_ORDERS": "الطلبات المستلمة",
+    "REQUESTED_RETURNS": "طلبات الإرجاع المطلوبة",
+    "APPROVED_RETURNS": "طلبات الإرجاع المعتمدة",
+    "REFUNDED_RETURNS": "طلبات الإرجاع المستردة",
+    "REQUESTED_CANCELS": "طلبات الإلغاء المطلوبة",
+    "APPROVED_CANCELS": "طلبات الإلغاء المعتمدة",
+    "ACTIVE_SELLERS": "البائعين النشطين",
+    "INACTIVE_SELLERS": "البائعين غير النشطين",
+    "REGISTERED_USERS": "المستخدمين المسجلين",
+    "REGISTERED_SELLERS": "البائعين المسجلين",
+    "ROLES": "الأدوار",
+    "PERMISSIONS": "الصلاحيات",
+    "TOTAL_USERS": "إجمالي المستخدمين",
+    "TOTAL_SELLERS": "إجمالي البائعين",
+    "TOTAL_ORDERS": "إجمالي الطلبات",
+    "TODAY_SALES": "مبيعات اليوم",
+    "THAN_LAST_MONTH": "مقارنة بالشهر الماضي",
+    "THAN_YESTERDAY": "مقارنة بالأمس",
+    "TOTAL_REGISTERED_USERS": "إجمالي المستخدمين المسجلين",
+    "TOTAL_REGISTERED_SELLERS": "إجمالي البائعين المسجلين",
+    "TOTAL_SALES_VALUE": "إجمالي قيمة المبيعات",
+    "OVERVIEW": "نظرة عامة",
+    "PERFORMANCE": "الأداء",
+    "PAGE_VISITS": "زيارات الصفحة",
+    "SOCIAL_TRAFFIC": "حركة التوجيه الاجتماعية",
+    "PAGE_NAME": "اسم الصفحة",
+    "VISITORS": "الزوار",
+    "UNIQUE_USERS": "المستخدمون الفريدين",
+    "BOUNCE_RATE": "معدل الارتداد",
+    "REFERRAL": "الإحالة",
+    "VERIFIED": "تم التحقق منه",
+    "SUPPORT": "الدعم",
+    "GUIDE": "الدليل",
+    "SELLER_SUPPORT": "دعم البائع",
+    "CUSTOMER_SUPPORT": "دعم العميل",
+    "EDIT_PROFILE": "تعديل الملف الشخصي",
+    "CHANGE_PASSWORD": "تغيير كلمة المرور",
+    "DELETE_ACCOUNT": "حذف الحساب",
+    "PROFILE_INFORMATION": "معلومات الملف الشخصي",
+    "UPDATE_YOUR_ACCOUNT_PROFILE_INFORMATION": "قم بتحديث معلومات ملف حسابك.",
+    "ADDRESS": "العنوان",
+    "SAVE": "حفظ",
+    "AVATAR": "الصورة الرمزية",
+    "UPDATE_PASSWORD": "تحديث كلمة المرور",
+    "CURRENT_PASSWORD": "كلمة المرور الحالية",
+    "NEW_PASSWORD": "كلمة المرور الجديدة",
+    "ONCE_YOUR_ACCOUNT_IS_DELETED_ALL_OF_ITS_RESOURCES_AND_DATA_WILL_BE_PERMANENTLY_DELETED_BEFPORE_DELETING_YOUR_ACCOUNT_PLEASE_DOWNLOAD_ANY_DATA_OR_INFORMATION_THAT_YOU_WISH_TO_RETAIN": "عند حذف حسابك، سيتم حذف جميع الموارد والبيانات الخاصة به بشكل دائم. قبل حذف حسابك، يرجى تنزيل أي بيانات أو معلومات ترغب في الاحتفاظ بها.",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_YOUR_ACCOUNT": "هل أنت متأكد أنك تريد حذف حسابك؟",
+    "CANCEL": "إلغاء",
+    "YOUR_EMAIL_ADDRESS_IS_UNVERIFIED": "عنوان بريدك الإلكتروني غير موثق.",
+    "CLICK_HERE_TO_RESEND_THE_VERIFICATION_EMAIL": "انقر هنا لإعادة إرسال رسالة التحقق.",
+    "A_NEW_VERIFICATION_LINK_HAS_BEEN_SENT_TO_YOUR_EMAIL_ADDRESS": "تم إرسال رابط التحقق الجديد إلى عنوان بريدك الإلكتروني.",
+    "ADMIN_DASHBOARD_LOGIN": "تسجيل دخول لوحة تحكم المشرف",
+    "SHOP_REVIEWS": "تقييمات المتجر",
+    "CANCEL_ORDERS": "إلغاء الطلبات",
+    "RETURN_ORDERS": "إرجاع الطلبات",
+    "REVIEW_MANAGEMENTS": "إدارة التقييمات",
+    "PENDING_REVIEWS": "تقييمات معلقة",
+    "PUBLISHED_REVIEWS": "تقييمات منشورة",
+    "TARGET_VISITORS": "الزوار المستهدفون",
+    "ACTUAL_VISITORS": "الزوار الفعليون",
+    "PAGES": "صفحات",
+    "JOIN_US": "انضم إلينا",
+    "FIND_SHOP": "ابحث عن متجر",
+    "PARTNERSHIP": "شراكة",
+    "CONTACT_US": "اتصل بنا",
+    "ABOUT_US": "من نحن",
+    "OUR_HISTORY": "تاريخنا",
+    "OUR_OFFICES": "مكاتبنا",
+    "FAQS": "أسئلة شائعة",
+    "OUR_TERMS": "شروطنا",
+    "PRIVACY_POLICY": "سياسة الخصوصية",
+    "RETURNS_AND_REFUNDS": "إرجاع واسترداد",
+    "STORE": "متجر",
+    "ABOUT": "حول",
+    "HELP": "مساعدة",
+    "SETTINGS": "إعدادات",
+    "TERMS_AND_CONDITIONS": "الشروط والأحكام",
+    "SUBCATEGORIES": "فئات فرعية",
+    "FAQ_CATEGORIES": "فئات الأسئلة الشائعة",
+    "REGISTERED_ACCOUNTS": "حسابات مسجلة",
+    "BLOG_TAGS": "علامات المدونة",
+    "TAGS": "علامات",
+    "TAG": "علامة",
+    "ECOMMERCE_CONTROL_AREA": "منطقة التحكم في التجارة الإلكترونية",
+    "HI_HOW_CAN_WE_HELP": "مرحبًا، كيف يمكننا مساعدتك؟",
+    "SEARCH_FOR_A_QUESTION": "ابحث عن سؤال",
+    "TOP_QUESTIONS": "أهم الأسئلة",
+    "QUESTION_CATEGORIES": "فئات الأسئلة",
+    "STILL_LOOKING_FOR_ANSWERS": "هل تبحث لا تزال عن إجابات؟ تحدث معنا بالنقر فوق 'الدردشة الآن' أو انقر فوق 'الاتصال' لإجراء مكالمة. يمكنك الاتصال بنا على 09-284784390034 من الساعة 8:00 صباحًا حتى 9:30 صباحًا (من الاثنين إلى الأحد).",
+    "SELF_SERVICE_TOOLS": "أدوات الخدمة الذاتية",
+    "PHONE_CALL": "مكالمة هاتفية",
+    "QUESTION_FOUND_FOR_SEARCH_RESULT": "سؤال(أسئلة) تم العثور عليه(عليها) لنتيجة البحث",
+    "FREQUENTLY_ASK_QUESTIONS": "الأسئلة المكررة",
+    "RELATED_QUESTIONS": "الأسئلة ذات الصلة",
+    "IS_THIS_HELPFUL_FOR_YOU": "هل هذا مفيد بالنسبة لك؟",
+    "YES": "نعم",
+    "NO": "لا",
+    "ITEMS_FOUND_FOR_THE_RESULT": "عنصر(عناصر) تم العثور عليه(عليها) للنتيجة",
+    "LOAD_MORE_COLLECTIONS": "تحميل المزيد من المجموعات",
+    "JUST_FOR_YOU": "مخصص لك فقط",
+    "SEARCH_PRODUCT_IN_SHOP": "البحث عن منتج في المتجر",
+    "CUSTOMER_PRODUCT_REVIEWS": "تقييمات المنتج من العملاء",
+    "CUSTOMER_REVIEWS": "تقييمات العملاء",
+    "ALL_PRODUCTS": "جميع المنتجات",
+    "RATING_AND_REVIEWS_FOR_SHOP": "التقييمات والتعليقات للمتجر",
+    "RATING_AND_REVIEWS_FOR_PRODUCTS": "التقييمات والتعليقات للمنتجات",
+    "THIS_SHOP_HAS_NO_REVIEWS": "هذا المتجر ليس لديه تقييمات",
+    "MARK_ALL_AS_READ": "وضع علامة على الكل كمقروء",
+    "SHOP_CONTROL_AREA": "منطقة التحكم في المتجر",
+    "TRASH": "سلة المهملات",
+    "ADD_BRAND": "إضافة علامة تجارية",
+    "EDIT": "تحرير",
+    "DELETE": "حذف",
+    "SEARCH_BY_NAME": "البحث حسب الاسم",
+    "IMAGE": "صورة",
+    "ACTION": "إجراء",
+    "CREATED_DATE": "تاريخ الإنشاء",
+    "DELETED_DATE": "تاريخ الحذف",
+    "RESTORE": "استعادة",
+    "DELETE_FOREVER": "حذف نهائياً",
+    "EMPTY_THE_TRASH_NOW": "إفراغ سلة المهملات الآن",
+    "BRANDS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "ستتم حذف العلامات التجارية في سلة المهملات تلقائياً بعد 60 يومًا",
+    "GO_BACK": "عودة",
+    "SELECT_DATE": "اختيار التاريخ",
+    "RESET_FILTER": "إعادة تعيين الفلتر",
+    "CREATE_BRAND": "إنشاء علامة تجارية",
+    "EDIT_BRAND": "تحرير العلامة التجارية",
+    "TRASH_BRANDS": "العلامات التجارية في سلة المهملات",
+    "CREATE": "إنشاء",
+    "UPDATE": "تحديث",
+    "PROCESSING": "جارٍ المعالجة...",
+    "BRAND_NAME": "اسم العلامة التجارية",
+    "ENTER_BRAND_NAME": "أدخل اسم العلامة التجارية",
+    "BRAND_DESCRIPTION": "وصف العلامة التجارية",
+    "SELECT_CATEGORY": "اختيار الفئة",
+    "DATA_IS_NOT_AVALIABLE_FOR_THIS_TABLE": "البيانات غير متوفرة لهذا الجدول",
+    "TITLE": "عنوان",
+    "ADD_COLLECTION": "إضافة مجموعة",
+    "SEARCH_BY_TITLE": "البحث حسب العنوان",
+    "COLLECTION_TITLE": "عنوان المجموعة",
+    "ENTER_COLLECTION_TITLE": "أدخل عنوان المجموعة",
+    "COLLECTION_DESCRIPTION": "وصف المجموعة",
+    "ENTER_COLLECTION_DESCRIPTION": "أدخل وصف المجموعة",
+    "CREATE_COLLECTION": "إنشاء مجموعة",
+    "EDIT_COLLECTION": "تحرير المجموعة",
+    "TRASH_COLLECTIONS": "المجموعات في سلة المهملات",
+    "COLLECTIONS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "ستتم حذف المجموعات في سلة المهملات تلقائياً بعد 60 يومًا",
+    "STATUS": "الحالة",
+    "ADD_CATEGORY": "إضافة فئة",
+    "CREATE_CATEGORY": "إنشاء فئة",
+    "EDIT_CATEGORY": "تحرير الفئة",
+    "CATEGORY_NAME": "اسم الفئة",
+    "ENTER_CATEGORY_NAME": "أدخل اسم الفئة",
+    "PARENT_CATEGORY": "الفئة الأم",
+    "SELECT_PARENT_CATEGORY": "اختيار الفئة الأم",
+    "SELECT_STATUS": "اختيار الحالة",
+    "TRASH_CATEGORIES": "الفئات في سلة المهملات",
+    "CATEGORIES_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "ستتم حذف الفئات في سلة المهملات تلقائياً بعد 60 يومًا",
+    "DISCOUNT": "خصم",
+    "ADD_PRODUCT": "إضافة منتج",
+    "DETAILS": "تفاصيل",
+    "APPROVE": "موافقة",
+    "DISAPPROVE": "عدم الموافقة",
+    "PRODUCTS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "ستتم حذف المنتجات في سلة المهملات تلقائياً بعد 60 يومًا",
+    "TRASH_PRODUCTS": "المنتجات في سلة المهملات",
+    "PRODUCT_NAME": "اسم المنتج",
+    "ENTER_PRODUCT_NAME": "أدخل اسم المنتج",
+    "PRODUCT_SIZES": "أحجام المنتج",
+    "ENTER_PRODUCT_SIZES": "أدخل أحجام المنتج",
+    "PRODUCT_COLORS": "ألوان المنتج",
+    "ENTER_PRODUCT_COLORS": "أدخل ألوان المنتج",
+    "PRODUCT_TYPES": "أنواع المنتج",
+    "ENTER_PRODUCT_TYPES": "أدخل أنواع المنتج",
+    "PRODUCT_DESCRIPTION": "وصف المنتج",
+    "MAIN_IMAGE": "الصورة الرئيسية",
+    "MULTIPLE_IMAGE": "صور متعددة",
+    "SELECT_SELLER": "اختيار البائع",
+    "SELECT_COLLECTION": "اختيار المجموعة",
+    "COLLECTION": "مجموعة",
+    "PRODUCT_PRICE": "سعر المنتج",
+    "ENTER_PRODUCT_PRICE": "أدخل سعر المنتج",
+    "ENTER_PRODUCT_DISCOUNT_PRICE": "أدخل سعر خصم المنتج",
+    "ENTER_PRODUCT_CODE": "أدخل كود المنتج",
+    "ENTER_PRODUCT_QUANTITY": "أدخل كمية المنتج",
+    "PRODUCT_BRAND": "علامة المنتج",
+    "HOT_DEAL": "عرض ساخن",
+    "SPECIAL_OFFER": "عرض خاص",
+    "FEATURED": "مميز",
+    "DISCOUNT_PRICE": "سعر الخصم",
+    "PRODUCT_CODE": "كود المنتج",
+    "PRODUCT_QUANTITY": "كمية المنتج",
+    "SELLER": "البائع",
+    "SELECT_BRAND": "اختر العلامة التجارية",
+    "PRODUCT_IMAGE": "صورة المنتج",
+    "YOU_CAN_CHOOSE_MULTIPLE_IMAGE_PRESS_CLT_CLICK": "يمكنك اختيار صور متعددة بالضغط على ctrl+انقر",
+    "OPTIONAL": "اختياري",
+    "MAIN": "رئيسي",
+    "NEW_MULTIPLE_IMAGE": "صورة متعددة جديدة",
+    "EXISITING_MULTIPLE_IMAGE": "صورة متعددة موجودة",
+    "CREATE_PRODUCT": "إنشاء منتج",
+    "EDIT_PRODUCT": "تعديل منتج",
+    "CODE": "كود",
+    "DISCOUNT_TYPE": "نوع الخصم",
+    "DISCOUNT_AMOUNT": "مقدار الخصم",
+    "MINIMUN_SPEND": "الحد الأدنى للإنفاق",
+    "MAX_USES": "الاستخدامات القصوى",
+    "TOTAL_USED": "المجموع المستخدم",
+    "ADD_COUPON": "إضافة كوبون",
+    "SEARCH_BY_CODE": "البحث حسب الكود",
+    "TRASH_COUPONS": "كوبونات في سلة المهملات",
+    "COUPONS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "ستتم حذف الكوبونات في سلة المهملات تلقائياً بعد 60 يومًا",
+    "EDIT_COUPON": "تعديل الكوبون",
+    "CREATE_COUPON": "إنشاء كوبون",
+    "COUPON_DISCOUNT_TYPE": "نوع خصم الكوبون",
+    "SELECT_DISCOUNT_TYPE": "اختر نوع الخصم",
+    "COUPON_DISCOUNT_AMOUNT": "قيمة خصم الكوبون",
+    "ENTER_DISCOUNT_AMOUNT": "أدخل قيمة الخصم",
+    "COUPON_START_DATE": "تاريخ بداية الكوبون",
+    "SELECT_COUPON_START_DATE": "اختر تاريخ بداية الكوبون",
+    "COUPON_END_DATE": "تاريخ نهاية الكوبون",
+    "SELECT_COUPON_END_DATE": "اختر تاريخ نهاية الكوبون",
+    "ENTER_MAX_USAGE_COUPON": "أدخل الحد الأقصى لاستخدام الكوبون",
+    "ENTER_USER_MINIMUN_SPEND_AMOUNT": "أدخل الحد الأدنى لإنفاق المستخدم",
+    "ADD_SLIDER_BANNER": "إضافة شريط تمرير",
+    "ADD_CAMPAIGN_BANNER": "إضافة شريط حملة",
+    "ADD_PRODUCT_BANNER": "إضافة شريط منتج",
+    "URL": "عنوان URL",
+    "SEARCH_BY_URL": "البحث حسب الرابط",
+    "CREATE_SLIDER_BANNER": "إنشاء شريط تمرير",
+    "CREATE_PRODUCT_BANNER": "إنشاء شريط منتج",
+    "CREATE_CAMPAIGN_BANNER": "إنشاء شريط حملة",
+    "EDIT_SLIDER_BANNER": "تعديل شريط تمرير",
+    "EDIT_CAMPAIGN_BANNER": "تعديل شريط حملة",
+    "EDIT_PRODUCT_BANNER": "تعديل شريط منتج",
+    "TRASH_SLIDER_BANNERS": "شرائط تمرير في سلة المهملات",
+    "TRASH_CAMPAIGN_BANNERS": "شرائط حملة في سلة المهملات",
+    "TRASH_PRODUCT_BANNERS": "شرائط منتج في سلة المهملات",
+    "SHORT_NAME": "الاسم المختصر",
+    "ADD_LANGUAGE": "إضافة لغة",
+    "EDIT_LANGUAGE": "تعديل اللغة",
+    "TRASH_LANGUAGES": "اللغات في سلة المهملات",
+    "UPDATE_DETAILS": "تحديث التفاصيل",
+    "CREATE_LANGUAGE": "إنشاء لغة",
+    "LANGUAGE_NAME": "اسم اللغة",
+    "ENTER_LANGUAGE_NAME": "أدخل اسم اللغة",
+    "LANGUAGE_SHORT_NAME": "اختصار اللغة",
+    "ENTER_LANGUAGE_SHORT_NAME": "أدخل اختصار اللغة",
+    "SLIDER_BANNERS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "سيتم حذف شرائط التمرير في سلة المهملات تلقائياً بعد 60 يومًا",
+    "PRODUCT_BANNERS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "سيتم حذف شرائط المنتج في سلة المهملات تلقائياً بعد 60 يومًا",
+    "CAMPAIGN_BANNERS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "سيتم حذف شرائط الحملة في سلة المهملات تلقائياً بعد 60 يومًا",
+    "HIDE": "إخفاء",
+    "SHOW": "إظهار",
+    "ENTER_URL": "أدخل الرابط",
+    "YOU_CANT_DELETE_THIS_BRAND_BECAUSE_THIS_BRAND_HAVE_PRODUCTS": "لا يمكنك حذف هذه العلامة التجارية لأن لديها منتجات.",
+    "IF_YOU_CLICK_THE_DELETE_WHATEVER_BUTTON_PRODUCTS_ASSOCIATED_WITH_THAT_BRAND_WILL_BE_AUTOMATICALLY_DELETED": "إذا قمت بالنقر على زر 'حذف مهما كان!'، سيتم حذف المنتجات المرتبطة بهذه العلامة التجارية تلقائيًا.",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_BRAND": "هل أنت متأكد من رغبتك في حذف هذه العلامة التجارية؟",
+    "YOU_WILL_BE_ABLE_TO_RESTORE_THIS_BRAND_IN_THE_TRASH": "ستتمكن من استعادة هذه العلامة التجارية في سلة المهملات!",
+    "YES_DELETE_IT": "نعم، احذفها!",
+    "DELETE_WHATEVER": "حذف مهما كان!",
+    "YES_RESTORE_IT": "نعم، استعد الآن!",
+    "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_BRAND": "هل أنت متأكد من رغبتك في استعادة هذه العلامة التجارية؟",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_IT_FROM_THE_TRASH": "هل أنت متأكد من رغبتك في حذفها من سلة المهملات؟",
+    "BRAND_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "ستتم حذف العلامة التجارية في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "ALL_BRANDS_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف جميع العلامات التجارية في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "BRAND_HAS_BEEN_SUCCESSFULLY_CREATED": "تم إنشاء العلامة التجارية بنجاح.",
+    "BRAND_HAS_BEEN_SUCCESSFULLY_UPDATED": "تم تحديث العلامة التجارية بنجاح.",
+    "BRAND_HAS_BEEN_SUCCESSFULLY_DELETED": "تم حذف العلامة التجارية بنجاح.",
+    "BRAND_HAS_BEEN_SUCCESSFULLY_RESTORED": "تم استعادة العلامة التجارية بنجاح.",
+    "THE_BRAND_HAS_BEEN_PERMANENTLY_DELETED": "تم حذف العلامة التجارية بشكل دائم.",
+    "BRANDS_HAVE_BEEN_PERMANENTLY_DELETED": "تم حذف العلامات التجارية بشكل دائم.",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_COLLECTION": "هل أنت متأكد من رغبتك في حذف هذه المجموعة؟",
+    "YOU_WILL_BE_ABLE_TO_RESTORE_THIS_COLLECTION_IN_THE_TRASH": "سيتمكن من استعادة هذه المجموعة في سلة المهملات!",
+    "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_COLLECTION": "هل أنت متأكد من رغبتك في استعادة هذه المجموعة؟",
+    "COLLECTION_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف المجموعة في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "ALL_COLLECTIONS_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف جميع المجموعات في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "COLLECTION_HAS_BEEN_SUCCESSFULLY_CREATED": "تم إنشاء المجموعة بنجاح.",
+    "COLLECTION_HAS_BEEN_SUCCESSFULLY_UPDATED": "تم تحديث المجموعة بنجاح.",
+    "COLLECTION_HAS_BEEN_SUCCESSFULLY_DELETED": "تم حذف المجموعة بنجاح.",
+    "COLLECTION_HAS_BEEN_SUCCESSFULLY_RESTORED": "تم استعادة المجموعة بنجاح.",
+    "THE_COLLECTION_HAS_BEEN_PERMANENTLY_DELETED": "تم حذف المجموعة بشكل دائم.",
+    "COLLECTIONS_HAVE_BEEN_PERMANENTLY_DELETED": "تم حذف المجموعات بشكل دائم.",
+    "YOU_CANT_DELETE_THIS_CATEGORY_BECAUSE_THIS_CATEGORY_HAVE_CHILDREN_CATEGORIES": "لا يمكنك حذف هذه الفئة لأن لديها فئات فرعية.",
+    "IF_YOU_CLICK_THE_DELETE_WHATEVER_BUTTON_CHILDREN_CATEGORY_ASSOCIATED_WITH_THAT_PARENT_CATEGORY_WILL_BE_AUTOMATICALLY_DELETED": "إذا قمت بالنقر على زر 'حذف مهما كان!'، ستتم حذف الفئات الفرعية المرتبطة بتلك الفئة الرئيسية تلقائيًا.",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_CATEGORY": "هل أنت متأكد من رغبتك في حذف هذه الفئة؟",
+    "YOU_WILL_BE_ABLE_TO_RESTORE_THIS_CATEGORY_IN_THE_TRASH": "سيتمكن من استعادة هذه الفئة في سلة المهملات!",
+    "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_CATEGORY": "هل أنت متأكد من رغبتك في استعادة هذه الفئة؟",
+    "CATEGORY_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "ستتم حذف الفئة في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "ALL_CATEGORIES_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف جميع الفئات في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "CATEGORY_HAS_BEEN_SUCCESSFULLY_CREATED": "تم إنشاء الفئة بنجاح.",
+    "CATEGORY_HAS_BEEN_SUCCESSFULLY_UPDATED": "تم تحديث الفئة بنجاح.",
+    "CATEGORY_HAS_BEEN_SUCCESSFULLY_DELETED": "تم حذف الفئة بنجاح.",
+    "CATEGORY_HAS_BEEN_SUCCESSFULLY_RESTORED": "تم استعادة الفئة بنجاح.",
+    "THE_CATEGORY_HAS_BEEN_PERMANENTLY_DELETED": "تم حذف الفئة بشكل دائم.",
+    "CATEGORIES_HAVE_BEEN_PERMANENTLY_DELETED": "تم حذف الفئات بشكل دائم.",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_PRODUCT": "هل أنت متأكد من رغبتك في حذف هذا المنتج؟",
+    "YOU_WILL_BE_ABLE_TO_RESTORE_THIS_PRODUCT_IN_THE_TRASH": "سيتمكن من استعادة هذا المنتج في سلة المهملات!",
+    "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_PRODUCT": "هل أنت متأكد من رغبتك في استعادة هذا المنتج؟",
+    "PRODUCT_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "ستتم حذف المنتج في سلة المهملات بشكل دائم! لا يمكنك استعادته.",
+    "ALL_PRODUCTS_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف جميع المنتجات في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "YES_APPROVE_IT": "نعم، وافق!",
+    "YES_DISAPPROVE_IT": "نعم، عدم الموافقة!",
+    "YES_SHOW": "نعم، إظهار",
+    "YES_HIDE": "نعم، إخفاء",
+    "ARE_YOU_SURE_YOU_WANT_TO_SET_APPROVE_THIS_PRODUCT": "هل أنت متأكد من رغبتك في الموافقة على هذا المنتج؟",
+    "ARE_YOU_SURE_YOU_WANT_TO_SET_DISAPPROVE_THIS_PRODUCT": "هل أنت متأكد من رغبتك في عدم الموافقة على هذا المنتج؟",
+    "PRODUCT_HAS_BEEN_SUCCESSFULLY_CREATED": "تم إنشاء المنتج بنجاح.",
+    "PRODUCT_HAS_BEEN_SUCCESSFULLY_UPDATED": "تم تحديث المنتج بنجاح.",
+    "PRODUCT_HAS_BEEN_SUCCESSFULLY_DELETED": "تم حذف المنتج بنجاح.",
+    "PRODUCT_HAS_BEEN_SUCCESSFULLY_RESTORED": "تم استعادة المنتج بنجاح.",
+    "THE_PRODUCT_HAS_BEEN_PERMANENTLY_DELETED": "تم حذف المنتج بشكل دائم.",
+    "PRODUCTS_HAVE_BEEN_PERMANENTLY_DELETED": "تم حذف المنتجات بشكل دائم.",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_COUPON": "هل أنت متأكد من رغبتك في حذف هذا الكوبون؟",
+    "YOU_WILL_BE_ABLE_TO_RESTORE_THIS_COUPON_IN_THE_TRASH": "ستتمكن من استعادة هذا الكوبون في سلة المهملات!",
+    "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_COUPON": "هل أنت متأكد من رغبتك في استعادة هذا الكوبون؟",
+    "COUPON_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف الكوبون في سلة المهملات بشكل دائم! لا يمكنك استعادته.",
+    "ALL_COUPONS_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف جميع الكوبونات في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "COUPON_HAS_BEEN_SUCCESSFULLY_CREATED": "تم إنشاء الكوبون بنجاح.",
+    "COUPON_HAS_BEEN_SUCCESSFULLY_UPDATED": "تم تحديث الكوبون بنجاح.",
+    "COUPON_HAS_BEEN_SUCCESSFULLY_DELETED": "تم حذف الكوبون بنجاح.",
+    "COUPON_HAS_BEEN_SUCCESSFULLY_RESTORED": "تم استعادة الكوبون بنجاح.",
+    "THE_COUPON_HAS_BEEN_PERMANENTLY_DELETED": "تم حذف الكوبون بشكل دائم.",
+    "COUPONS_HAVE_BEEN_PERMANENTLY_DELETED": "تم حذف الكوبونات بشكل دائم.",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_SLIDER_BANNER": "هل أنت متأكد من رغبتك في حذف لوحة الإعلان المتداولة هذه؟",
+    "YOU_WILL_BE_ABLE_TO_RESTORE_THIS_SLIDER_BANNER_IN_THE_TRASH": "ستتمكن من استعادة لوحة الإعلان المتداولة هذه في سلة المهملات!",
+    "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_SLIDER_BANNER": "هل أنت متأكد من رغبتك في استعادة لوحة الإعلان المتداولة هذه؟",
+    "SLIDER_BANNER_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "ستتم حذف لوحة الإعلان المتداولة هذه في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "ALL_SLIDER_BANNERS_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "ستتم حذف جميع لوحات الإعلان المتداولة في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "ARE_YOU_SURE_YOU_WANT_TO_SHOW_THIS_SLIDER_BANNER": "هل أنت متأكد من رغبتك في عرض لوحة الإعلان المتداولة هذه؟",
+    "ARE_YOU_SURE_YOU_WANT_TO_HIDE_THIS_SLIDER_BANNER": "هل أنت متأكد من رغبتك في إخفاء لوحة الإعلان المتداولة هذه؟",
+    "SLIDER_BANNER_HAS_BEEN_SUCCESSFULLY_CREATED": "تم إنشاء لوحة الإعلان المتداولة بنجاح.",
+    "SLIDER_BANNER_HAS_BEEN_SUCCESSFULLY_UPDATED": "تم تحديث لوحة الإعلان المتداولة بنجاح.",
+    "SLIDER_BANNER_HAS_BEEN_SUCCESSFULLY_DELETED": "تم حذف لوحة الإعلان المتداولة بنجاح.",
+    "SLIDER_BANNER_HAS_BEEN_SUCCESSFULLY_RESTORED": "تم استعادة لوحة الإعلان المتداولة بنجاح.",
+    "THE_SLIDER_BANNER_HAS_BEEN_PERMANENTLY_DELETED": "تم حذف لوحة الإعلان المتداولة بشكل دائم.",
+    "SLIDER_BANNERS_HAVE_BEEN_PERMANENTLY_DELETED": "تم حذف لوحات الإعلانات المتداولة بشكل دائم.",
+    "YOU_CANT_DISPLAY_THE_SLIDER_BANNER": "لا يمكنك عرض لوحة الإعلان المتداول. يُسمح فقط بـ 6 لوحات إعلان متداولة.",
+    "SLIDER_BANNER_HAS_BEEN_SUCCESSFULLY_DISPLAYED": "تم عرض لوحة الإعلان المتداول بنجاح.",
+    "SLIDER_BANNER_HAS_BEEN_SUCCESSFULLY_HIDDEN": "تم إخفاء لوحة الإعلان المتداول بنجاح.",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_PRODUCT_BANNER": "هل أنت متأكد من رغبتك في حذف لوحة الإعلان لهذا المنتج؟",
+    "YOU_WILL_BE_ABLE_TO_RESTORE_THIS_PRODUCT_BANNER_IN_THE_TRASH": "ستتمكن من استعادة لوحة الإعلان لهذا المنتج في سلة المهملات!",
+    "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_PRODUCT_BANNER": "هل أنت متأكد من رغبتك في استعادة لوحة الإعلان لهذا المنتج؟",
+    "PRODUCT_BANNER_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "ستتم حذف لوحة الإعلان للمنتج في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "ALL_PRODUCT_BANNERS_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف جميع لوحات الإعلان للمنتج في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "ARE_YOU_SURE_YOU_WANT_TO_SHOW_THIS_PRODUCT_BANNER": "هل أنت متأكد من رغبتك في عرض لوحة الإعلان لهذا المنتج؟",
+    "ARE_YOU_SURE_YOU_WANT_TO_HIDE_THIS_PRODUCT_BANNER": "هل أنت متأكد من رغبتك في إخفاء لوحة الإعلان لهذا المنتج؟",
+    "PRODUCT_BANNER_HAS_BEEN_SUCCESSFULLY_CREATED": "تم إنشاء لوحة الإعلان للمنتج بنجاح.",
+    "PRODUCT_BANNER_HAS_BEEN_SUCCESSFULLY_UPDATED": "تم تحديث لوحة الإعلان للمنتج بنجاح.",
+    "PRODUCT_BANNER_HAS_BEEN_SUCCESSFULLY_DELETED": "تم حذف لوحة الإعلان للمنتج بنجاح.",
+    "PRODUCT_BANNER_HAS_BEEN_SUCCESSFULLY_RESTORED": "تم استعادة لوحة الإعلان للمنتج بنجاح.",
+    "THE_PRODUCT_BANNER_HAS_BEEN_PERMANENTLY_DELETED": "تم حذف لوحة الإعلان للمنتج بشكل دائم.",
+    "PRODUCT_BANNERS_HAVE_BEEN_PERMANENTLY_DELETED": "تم حذف لوحات الإعلان للمنتج بشكل دائم.",
+    "PRODUCT_HAS_BEEN_SUCCESSFULLY_DISAPPROVED": "تم رفض المنتج بنجاح",
+    "PRODUCT_HAS_BEEN_SUCCESSFULLY_APPROVED": "تم الموافقة على المنتج بنجاح",
+    "YOU_CANT_DISPLAY_THE_PRODUCT_BANNER": "لا يمكنك عرض لوحة الإعلان للمنتج. يُسمح فقط بـ 3 لوحات إعلان للمنتج.",
+    "PRODUCT_BANNER_HAS_BEEN_SUCCESSFULLY_DISPLAYED": "تم عرض لوحة الإعلان للمنتج بنجاح.",
+    "PRODUCT_BANNER_HAS_BEEN_SUCCESSFULLY_HIDDEN": "تم إخفاء لوحة الإعلان للمنتج بنجاح.",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_CAMPAIGN_BANNER": "هل أنت متأكد من رغبتك في حذف لوحة الإعلان لهذه الحملة؟",
+    "YOU_WILL_BE_ABLE_TO_RESTORE_THIS_CAMPAIGN_BANNER_IN_THE_TRASH": "ستتمكن من استعادة لوحة الإعلان لهذه الحملة في سلة المهملات!",
+    "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_CAMPAIGN_BANNER": "هل أنت متأكد من رغبتك في استعادة لوحة الإعلان لهذه الحملة؟",
+    "CAMPAIGN_BANNER_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "ستتم حذف لوحة الإعلان لهذه الحملة في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "ALL_CAMPAIGN_BANNERS_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف جميع لافتات الحملات في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "ARE_YOU_SURE_YOU_WANT_TO_SHOW_THIS_CAMPAIGN_BANNER": "هل أنت متأكد من رغبتك في عرض لافتة الحملة هذه؟",
+    "ARE_YOU_SURE_YOU_WANT_TO_HIDE_THIS_CAMPAIGN_BANNER": "هل أنت متأكد من رغبتك في إخفاء لافتة الحملة هذه؟",
+    "CAMPAIGN_BANNER_HAS_BEEN_SUCCESSFULLY_CREATED": "تم إنشاء لافتة الحملة بنجاح.",
+    "CAMPAIGN_BANNER_HAS_BEEN_SUCCESSFULLY_UPDATED": "تم تحديث لافتة الحملة بنجاح.",
+    "CAMPAIGN_BANNER_HAS_BEEN_SUCCESSFULLY_DELETED": "تم حذف لافتة الحملة بنجاح.",
+    "CAMPAIGN_BANNER_HAS_BEEN_SUCCESSFULLY_RESTORED": "تم استعادة لافتة الحملة بنجاح.",
+    "THE_CAMPAIGN_BANNER_HAS_BEEN_PERMANENTLY_DELETED": "تم حذف لافتة الحملة بشكل دائم.",
+    "CAMPAIGN_BANNERS_HAVE_BEEN_PERMANENTLY_DELETED": "تم حذف لوحات الحملات بشكل دائم.",
+    "CAMPAIGN_BANNER_HAS_BEEN_SUCCESSFULLY_DISPLAYED": "تم عرض لافتة الحملة بنجاح.",
+    "CAMPAIGN_BANNER_HAS_BEEN_SUCCESSFULLY_HIDDEN": "تم إخفاء لافتة الحملة بنجاح.",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_LANGUAGE": "هل أنت متأكد من رغبتك في حذف هذه اللغة؟",
+    "YOU_WILL_BE_ABLE_TO_RESTORE_THIS_LANGUAGE_IN_THE_TRASH": "ستتمكن من استعادة هذه اللغة في سلة المهملات!",
+    "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_LANGUAGE": "هل أنت متأكد من رغبتك في استعادة هذه اللغة؟",
+    "LANGUAGE_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "ستتم حذف اللغة في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "ALL_LANGUAGES_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف جميع اللغات في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "LANGUAGE_HAS_BEEN_SUCCESSFULLY_CREATED": "تم إنشاء اللغة بنجاح.",
+    "LANGUAGE_HAS_BEEN_SUCCESSFULLY_UPDATED": "تم تحديث اللغة بنجاح.",
+    "LANGUAGE_HAS_BEEN_SUCCESSFULLY_DELETED": "تم حذف اللغة بنجاح.",
+    "LANGUAGE_HAS_BEEN_SUCCESSFULLY_RESTORED": "تم استعادة اللغة بنجاح.",
+    "THE_LANGUAGE_HAS_BEEN_PERMANENTLY_DELETED": "تم حذف اللغة بشكل دائم.",
+    "LANGUAGES_HAVE_BEEN_PERMANENTLY_DELETED": "تم حذف اللغات بشكل دائم.",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_PRODUCT_REVIEW": "هل أنت متأكد من رغبتك في حذف مراجعة المنتج هذه؟",
+    "YOU_WILL_BE_ABLE_TO_RESTORE_THIS_PRODUCT_REVIEW_IN_THE_TRASH": "ستتمكن من استعادة مراجعة المنتج هذه في سلة المهملات!",
+    "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_PRODUCT_REVIEW": "هل أنت متأكد من رغبتك في استعادة مراجعة المنتج هذه؟",
+    "PRODUCT_REVIEW_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "ستتم حذف مراجعة المنتج في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "ALL_PRODUCT_REVIEWS_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف جميع مراجعات المنتج في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "PRODUCT_REVIEW_HAS_BEEN_SUCCESSFULLY_PUBLISHED": "تم نشر مراجعة المنتج بنجاح.",
+    "PRODUCT_REVIEW_HAS_BEEN_SUCCESSFULLY_UNPUBLISHED": "تم إلغاء نشر مراجعة المنتج بنجاح.",
+    "PRODUCT_REVIEW_HAS_BEEN_SUCCESSFULLY_DELETED": "تم حذف مراجعة المنتج بنجاح.",
+    "PRODUCT_REVIEW_HAS_BEEN_SUCCESSFULLY_RESTORED": "تم استعادة مراجعة المنتج بنجاح.",
+    "THE_PRODUCT_REVIEW_HAS_BEEN_PERMANENTLY_DELETED": "تم حذف مراجعة المنتج بشكل دائم.",
+    "PRODUCT_REVIEWS_HAVE_BEEN_PERMANENTLY_DELETED": "تم حذف مراجعات المنتج بشكل دائم.",
+    "REVIEW": "مراجعة",
+    "SEARCH_BY_REVIEW": "البحث حسب المراجعة",
+    "TRASH_PRODUCT_REVIEWS": "مراجعات المنتج في السلة",
+    "PUBLISH": "نشر",
+    "UNPUBLISH": "عدم نشر",
+    "YES_PUBLISH": "نعم، نشر",
+    "YES_UNPUBLISH": "نعم، عدم نشر",
+    "PRODUCT_REVIEWS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "سيتم حذف مراجعات المنتج في سلة المهملات تلقائيًا بعد 60 يومًا",
+    "ARE_YOU_SURE_YOU_WANT_TO_SET_PUBLISH_THIS_PRODUCT_REVIEW": "هل أنت متأكد من رغبتك في نشر هذه المراجعة للمنتج؟",
+    "ARE_YOU_SURE_YOU_WANT_TO_SET_UNPUBLISH_THIS_PRODUCT_REVIEW": "هل أنت متأكد من رغبتك في عدم نشر هذه المراجعة للمنتج؟",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_SHOP_REVIEW": "هل أنت متأكد من رغبتك في حذف هذه المراجعة للمتجر؟",
+    "YOU_WILL_BE_ABLE_TO_RESTORE_THIS_SHOP_REVIEW_IN_THE_TRASH": "سيتمكن من استعادة هذه المراجعة للمتجر في سلة المهملات!",
+    "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_SHOP_REVIEW": "هل أنت متأكد من رغبتك في استعادة هذه المراجعة للمتجر؟",
+    "SHOP_REVIEW_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف مراجعة المتجر في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "ALL_SHOP_REVIEWS_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف جميع مراجعات المتجر في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "SHOP_REVIEW_HAS_BEEN_SUCCESSFULLY_PUBLISHED": "تم نشر مراجعة المتجر بنجاح.",
+    "SHOP_REVIEW_HAS_BEEN_SUCCESSFULLY_UNPUBLISHED": "تم إلغاء نشر مراجعة المتجر بنجاح.",
+    "SHOP_REVIEW_HAS_BEEN_SUCCESSFULLY_DELETED": "تم حذف مراجعة المتجر بنجاح.",
+    "SHOP_REVIEW_HAS_BEEN_SUCCESSFULLY_RESTORED": "تم استعادة مراجعة المتجر بنجاح.",
+    "THE_SHOP_REVIEW_HAS_BEEN_PERMANENTLY_DELETED": "تم حذف مراجعة المتجر بشكل دائم.",
+    "SHOP_REVIEWS_HAVE_BEEN_PERMANENTLY_DELETED": "تم حذف مراجعات المتجر بشكل دائم.",
+    "TRASH_SHOP_REVIEWS": "مراجعات المتجر في السلة",
+    "SHOP_REVIEWS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "سيتم حذف مراجعات المتجر في سلة المهملات تلقائيًا بعد 60 يومًا",
+    "ARE_YOU_SURE_YOU_WANT_TO_SET_PUBLISH_THIS_SHOP_REVIEW": "هل أنت متأكد من رغبتك في نشر هذه مراجعة المتجر؟",
+    "ARE_YOU_SURE_YOU_WANT_TO_SET_UNPUBLISH_THIS_SHOP_REVIEW": "هل أنت متأكد من رغبتك في إلغاء نشر هذه مراجعة المتجر؟",
+    "ADD_ADMIN": "إضافة مشرف",
+    "ADMIN_ROLE": "دور المشرف",
+    "ENTER_NAME": "أدخل الاسم",
+    "ENTER_EMAIL_ADDRESS": "أدخل عنوان البريد الإلكتروني",
+    "ENTER_PHONE_NUMBER": "أدخل رقم الهاتف",
+    "ENTER_ADDRESS": "أدخل العنوان",
+    "SELECT_BIRTHDAY_DATE": "اختر تاريخ الولادة",
+    "ROLE": "الدور",
+    "SELECT_ROLE": "اختر الدور",
+    "CREATE_ADMIN_USER": "إنشاء مستخدم مشرف",
+    "EDIT_ADMIN_USER": "تعديل مستخدم مشرف",
+    "TRASH_ADMIN_USERS": "مستخدمون مشرفون في السلة",
+    "ONLINE_STATUS": "حالة الاتصال عبر الإنترنت",
+    "ADMIN_HAS_BEEN_SUCCESSFULLY_CREATED": "تم إنشاء المشرف بنجاح.",
+    "ADMIN_HAS_BEEN_SUCCESSFULLY_UPDATED": "تم تحديث المشرف بنجاح.",
+    "ADMIN_HAS_BEEN_SUCCESSFULLY_DELETED": "تم حذف المشرف بنجاح.",
+    "ADMIN_HAS_BEEN_SUCCESSFULLY_RESTORED": "تم استعادة المشرف بنجاح.",
+    "THE_ADMIN_HAS_BEEN_PERMANENTLY_DELETED": "تم حذف المشرف بشكل دائم.",
+    "ADMINS_HAVE_BEEN_PERMANENTLY_DELETED": "تم حذف المشرفين بشكل دائم.",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_ADMIN_USER": "هل أنت متأكد من رغبتك في حذف مستخدم المشرف هذا؟",
+    "YOU_WILL_BE_ABLE_TO_RESTORE_THIS_ADMIN_USER_IN_THE_TRASH": "سيتمكن من استعادة مستخدم المشرف هذا في سلة المهملات!",
+    "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_ADMIN_USER": "هل أنت متأكد من رغبتك في استعادة مستخدم المشرف هذا؟",
+    "ADMIN_USER_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف مستخدم المشرف في سلة المهملات بشكل دائم! لا يمكنك استعادته.",
+    "ALL_ADMIN_USERS_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف جميع مستخدمي المشرف في سلة المهملات بشكل دائم! لا يمكنك استعادتهم.",
+    "ADMIN_USERS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "سيتم حذف مستخدمي المشرف في سلة المهملات تلقائيًا بعد 60 يومًا",
+    "USER_HAS_BEEN_SUCCESSFULLY_DELETED": "تم حذف المستخدم بنجاح.",
+    "USER_HAS_BEEN_SUCCESSFULLY_RESTORED": "تم استعادة المستخدم بنجاح.",
+    "THE_USER_HAS_BEEN_PERMANENTLY_DELETED": "تم حذف المستخدم بشكل دائم.",
+    "USERS_HAVE_BEEN_PERMANENTLY_DELETED": "تم حذف المستخدمين بشكل دائم.",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_USER": "هل أنت متأكد من رغبتك في حذف هذا المستخدم؟",
+    "YOU_WILL_BE_ABLE_TO_RESTORE_THIS_USER_IN_THE_TRASH": "سيتمكن من استعادة هذا المستخدم في سلة المهملات!",
+    "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_USER": "هل أنت متأكد من رغبتك في استعادة هذا المستخدم؟",
+    "USER_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف المستخدم في سلة المهملات بشكل دائم! لا يمكنك استعادته.",
+    "ALL_USERS_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف جميع المستخدمين في سلة المهملات بشكل دائم! لا يمكنك استعادتهم.",
+    "USERS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "سيتم حذف المستخدمين في سلة المهملات تلقائيًا بعد 60 يومًا",
+    "SELLER_HAS_BEEN_SUCCESSFULLY_DELETED": "تم حذف البائع بنجاح.",
+    "SELLER_HAS_BEEN_SUCCESSFULLY_RESTORED": "تم استعادة البائع بنجاح.",
+    "THE_SELLER_HAS_BEEN_PERMANENTLY_DELETED": "تم حذف البائع بشكل دائم.",
+    "SELLERS_HAVE_BEEN_PERMANENTLY_DELETED": "تم حذف البائعين بشكل دائم.",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_SELLER": "هل أنت متأكد من رغبتك في حذف هذا البائع؟",
+    "YOU_WILL_BE_ABLE_TO_RESTORE_THIS_SELLER_IN_THE_TRASH": "سيتمكن من استعادة هذا البائع في سلة المهملات!",
+    "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_SELLER": "هل أنت متأكد من رغبتك في استعادة هذا البائع؟",
+    "SELLER_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف البائع في سلة المهملات بشكل دائم! لا يمكنك استعادته.",
+    "ALL_SELLERS_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف جميع البائعين في سلة المهملات بشكل دائم! لا يمكنك استعادتهم.",
+    "SELLERS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "سيتم حذف البائعين في سلة المهملات تلقائيًا بعد 60 يومًا",
+    "SELLER_HAS_BEEN_SUCCESSFULLY_INACTIVE": "تم تعطيل البائع بنجاح",
+    "SELLER_HAS_BEEN_SUCCESSFULLY_ACTIVE": "تم تفعيل البائع بنجاح",
+    "TRASH_REGISTERED_ACCOUNTS": "حسابات مسجلة في السلة",
+    "SEARCH_BY_SHOP_NAME": "البحث حسب اسم المتجر",
+    "SELLERS": "البائعين",
+    "TRASH_SELLERS": "البائعين في السلة",
+    "ARE_YOU_SURE_YOU_WANT_TO_SET_ACTIVE_THIS_SELLER": "هل أنت متأكد من رغبتك في تفعيل هذا البائع؟",
+    "ARE_YOU_SURE_YOU_WANT_TO_SET_INACTIVE_THIS_SELLER": "هل أنت متأكد من رغبتك في تعطيل هذا البائع؟",
+    "YES_ACTIVE": "نعم، تفعيل",
+    "YES_INACTIVE": "نعم، تعطيل",
+    "ADD_BLOG_CATEGORY": "إضافة فئة المدونة",
+    "ADD_BLOG_POST": "إضافة مقال المدونة",
+    "TRASH_BLOG_CATEGORIES": "فئات المدونة في السلة",
+    "TRASH_BLOG_POSTS": "مقالات المدونة في السلة",
+    "CREATE_BLOG_CATEGORY": "إنشاء فئة المدونة",
+    "CREATE_BLOG_POST": "إنشاء مقال المدونة",
+    "EDIT_BLOG_CATEGORY": "تعديل فئة المدونة",
+    "EDIT_BLOG_POST": "تعديل مقال المدونة",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_BLOG_CATEGORY": "هل أنت متأكد من رغبتك في حذف فئة المدونة هذه؟",
+    "YOU_WILL_BE_ABLE_TO_RESTORE_THIS_BLOG_CATEGORY_IN_THE_TRASH": "سيتمكن من استعادة فئة المدونة هذه في سلة المهملات!",
+    "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_BLOG_CATEGORY": "هل أنت متأكد من رغبتك في استعادة فئة المدونة هذه؟",
+    "BLOG_CATEGORY_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف فئة المدونة في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "ALL_BLOG_CATEGORIES_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف جميع فئات المدونة في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "BLOG_CATEGORIES_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "سيتم حذف فئات المدونة في سلة المهملات تلقائيًا بعد 60 يومًا",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_BLOG_POST": "هل أنت متأكد من رغبتك في حذف مقال المدونة هذا؟",
+    "YOU_WILL_BE_ABLE_TO_RESTORE_THIS_BLOG_POST_IN_THE_TRASH": "سيتمكن من استعادة مقال المدونة هذا في سلة المهملات!",
+    "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_BLOG_POST": "هل أنت متأكد من رغبتك في استعادة مقال المدونة هذا؟",
+    "BLOG_POST_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف مقال المدونة في سلة المهملات بشكل دائم! لا يمكنك استعادته.",
+    "ALL_BLOG_POSTS_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK": "سيتم حذف جميع مقالات المدونة في سلة المهملات بشكل دائم! لا يمكنك استعادتها.",
+    "BLOG_POSTS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS": "سيتم حذف مقالات المدونة في سلة المهملات تلقائيًا بعد 60 يومًا",
+    "BLOG_CATEGORY_NAME": "اسم فئة المدونة",
+    "BLOG_CATEGORY_HAS_BEEN_SUCCESSFULLY_CREATED": "تم إنشاء فئة المدونة بنجاح.",
+    "BLOG_CATEGORY_HAS_BEEN_SUCCESSFULLY_UPDATED": "تم تحديث فئة المدونة بنجاح.",
+    "BLOG_CATEGORY_HAS_BEEN_SUCCESSFULLY_DELETED": "تم حذف فئة المدونة بنجاح.",
+    "BLOG_CATEGORY_HAS_BEEN_SUCCESSFULLY_RESTORED": "تم استعادة فئة المدونة بنجاح.",
+    "THE_BLOG_CATEGORY_HAS_BEEN_PERMANENTLY_DELETED": "تم حذف فئة المدونة بشكل دائم.",
+    "BLOG_CATEGORIES_HAVE_BEEN_PERMANENTLY_DELETED": "تم حذف فئات المدونة بشكل دائم.",
+    "BLOG_POST_HAS_BEEN_SUCCESSFULLY_CREATED": "تم إنشاء مقال المدونة بنجاح.",
+    "BLOG_POST_HAS_BEEN_SUCCESSFULLY_UPDATED": "تم تحديث مقال المدونة بنجاح.",
+    "BLOG_POST_HAS_BEEN_SUCCESSFULLY_DELETED": "تم حذف مقال المدونة بنجاح.",
+    "BLOG_POST_HAS_BEEN_SUCCESSFULLY_RESTORED": "تم استعادة مقال المدونة بنجاح.",
+    "THE_BLOG_POST_HAS_BEEN_PERMANENTLY_DELETED": "تم حذف مقال المدونة بشكل دائم.",
+    "BLOG_POSTS_HAVE_BEEN_PERMANENTLY_DELETED": "تم حذف مقالات المدونة بشكل دائم.",
+    "BLOG_POST_TITLE": "عنوان مقال المدونة",
+    "ENTER_BLOG_POST_TITLE": "أدخل عنوان مقال المدونة",
+    "ENTER_BLOG_POST_DESCRIPTION": "أدخل وصف مقال المدونة",
+    "BLOG_CATEGORY": "فئة المدونة",
+    "SELECT_BLOG_CATEGORY": "اختر فئة المدونة",
+    "ENTER_BLOG_TAGS": "أدخل علامات المدونة"
+}

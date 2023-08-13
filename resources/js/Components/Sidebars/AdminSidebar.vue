@@ -413,29 +413,6 @@
               </li>
             </ul>
           </li>
-
-          <!-- Language Section -->
-          <li v-if="languageMenu" class="items-center">
-            <Link
-              :href="route('admin.languages.index')"
-              :data="{
-                page: 1,
-                per_page: 10,
-                sort: 'id',
-                direction: 'desc',
-              }"
-              class="text-xs uppercase py-3 font-bold block"
-              :class="{
-                'text-blue-500 hover:text-blue-600':
-                  $page.url.startsWith('/admin/languages'),
-                'text-slate-700 hover:text-slate-500':
-                  !$page.url.startsWith('/admin/languages'),
-              }"
-            >
-              <i class="fa-solid fa-language mr-2 text-sm"></i>
-              {{ __("LANGUAGES") }}
-            </Link>
-          </li>
         </ul>
 
         <hr

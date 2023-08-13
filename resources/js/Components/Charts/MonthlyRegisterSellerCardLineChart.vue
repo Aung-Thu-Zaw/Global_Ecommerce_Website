@@ -156,7 +156,7 @@ onMounted(() => {
             {{ __("OVERVIEW") }}
           </h6>
           <h2 class="text-blueGray-700 text-xl font-semibold">
-            {{ __("TOTAL_REGISTERED_VENDORS") }}
+            {{ __("TOTAL_REGISTERED_SELLERS") }}
           </h2>
         </div>
       </div>

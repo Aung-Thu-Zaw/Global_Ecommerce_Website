@@ -74,15 +74,6 @@ class PermissionSeeder extends Seeder
         Permission::create(["name"=>"shipping-area.trash.restore","group"=>"shipping-area"]);
         Permission::create(["name"=>"shipping-area.trash.delete","group"=>"shipping-area"]);
 
-        Permission::create(["name"=>"language.menu","group"=>"language"]);
-        Permission::create(["name"=>"language.add","group"=>"language"]);
-        Permission::create(["name"=>"language.detail","group"=>"language"]);
-        Permission::create(["name"=>"language.edit","group"=>"language"]);
-        Permission::create(["name"=>"language.delete","group"=>"language"]);
-        Permission::create(["name"=>"language.trash.list","group"=>"language"]);
-        Permission::create(["name"=>"language.trash.restore","group"=>"language"]);
-        Permission::create(["name"=>"language.trash.delete","group"=>"language"]);
-
         Permission::create(["name"=>"order-manage.menu","group"=>"order-manage"]);
         Permission::create(["name"=>"order-manage.detail","group"=>"order-manage"]);
         Permission::create(["name"=>"order-manage.control","group"=>"order-manage"]);
