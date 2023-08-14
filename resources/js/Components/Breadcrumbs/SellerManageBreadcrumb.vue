@@ -41,8 +41,9 @@ import { Link } from "@inertiajs/vue3";
           </svg>
           <span
             class="ml-1 font-medium text-gray-500 md:ml-2 dark:hover:text-white"
-            >{{ __("SELLER_MANAGE") }}</span
           >
+            {{ __("SELLER_MANAGE") }}
+          </span>
         </div>
       </li>
       <slot />

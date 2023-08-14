@@ -63,8 +63,9 @@ defineProps({
             </svg>
             <span
               class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-              >{{ faqSubCategory?.name }}</span
             >
+              {{ faqSubCategory?.name }}
+            </span>
           </div>
         </li>
         <slot />
