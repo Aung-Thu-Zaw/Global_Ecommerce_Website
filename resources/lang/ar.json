@@ -686,5 +686,7 @@
     "ENTER_BLOG_POST_DESCRIPTION": "أدخل وصف مقال المدونة",
     "BLOG_CATEGORY": "فئة المدونة",
     "SELECT_BLOG_CATEGORY": "اختر فئة المدونة",
-    "ENTER_BLOG_TAGS": "أدخل علامات المدونة"
+    "ENTER_BLOG_TAGS": "أدخل علامات المدونة",
+    "WEBSITE_SETTING_HAS_BEEN_SUCCESSFULLY_UPDATED":"Website Setting has been successfully updated.",
+    "SEO_SETTING_HAS_BEEN_SUCCESSFULLY_UPDATED":"Seo Setting has been successfully updated."
 }

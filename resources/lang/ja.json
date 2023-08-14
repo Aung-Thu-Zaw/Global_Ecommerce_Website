@@ -686,5 +686,7 @@
     "ENTER_BLOG_POST_DESCRIPTION": "ブログ記事の説明を入力してください",
     "BLOG_CATEGORY": "ブログカテゴリ",
     "SELECT_BLOG_CATEGORY": "ブログカテゴリを選択",
-    "ENTER_BLOG_TAGS": "ブログタグを入力してください"
+    "ENTER_BLOG_TAGS": "ブログタグを入力してください",
+    "WEBSITE_SETTING_HAS_BEEN_SUCCESSFULLY_UPDATED":"Website Setting has been successfully updated.",
+    "SEO_SETTING_HAS_BEEN_SUCCESSFULLY_UPDATED":"Seo Setting has been successfully updated."
 }

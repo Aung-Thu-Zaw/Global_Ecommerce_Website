@@ -23,6 +23,6 @@ class AdminPrivacyPolicyController extends Controller
     {
         (new UpdatePrivacyPolicyAction())->handle($request->validated(), $page);
 
-        return back()->with("success", "Privacy policy has been successfully updated.");
+        return back()->with("success", "PRIVACY_POLICY_HAS_BEEN_SUCCESSFULLY_UPDATED");
     }
 }

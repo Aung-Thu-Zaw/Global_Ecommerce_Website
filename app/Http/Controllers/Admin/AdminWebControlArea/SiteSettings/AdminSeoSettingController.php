@@ -23,6 +23,6 @@ class AdminSeoSettingController extends Controller
     {
         (new UpdateSeoSettingAction())->handle($request->validated(), $seoSetting);
 
-        return back()->with("success", "SEO Setting has been successfully updated.");
+        return back()->with("success", "SEO_SETTING_HAS_BEEN_SUCCESSFULLY_UPDATED");
     }
 }

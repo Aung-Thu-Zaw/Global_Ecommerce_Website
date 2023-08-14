@@ -686,5 +686,7 @@
     "ENTER_BLOG_POST_DESCRIPTION": "ब्लॉग पोस्ट विवरण दर्ज करें",
     "BLOG_CATEGORY": "ब्लॉग श्रेणी",
     "SELECT_BLOG_CATEGORY": "ब्लॉग श्रेणी का चयन करें",
-    "ENTER_BLOG_TAGS": "ब्लॉग टैग दर्ज करें"
+    "ENTER_BLOG_TAGS": "ब्लॉग टैग दर्ज करें",
+    "WEBSITE_SETTING_HAS_BEEN_SUCCESSFULLY_UPDATED":"Website Setting has been successfully updated.",
+    "SEO_SETTING_HAS_BEEN_SUCCESSFULLY_UPDATED":"Seo Setting has been successfully updated."
 }

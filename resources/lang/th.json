@@ -686,5 +686,7 @@
     "ENTER_BLOG_POST_DESCRIPTION": "ใส่คำอธิบายโพสต์บล็อก",
     "BLOG_CATEGORY": "หมวดหมู่บล็อก",
     "SELECT_BLOG_CATEGORY": "เลือกหมวดหมู่บล็อก",
-    "ENTER_BLOG_TAGS": "ใส่แท็กบล็อก"
+    "ENTER_BLOG_TAGS": "ใส่แท็กบล็อก",
+    "WEBSITE_SETTING_HAS_BEEN_SUCCESSFULLY_UPDATED":"Website Setting has been successfully updated.",
+    "SEO_SETTING_HAS_BEEN_SUCCESSFULLY_UPDATED":"Seo Setting has been successfully updated."
 }

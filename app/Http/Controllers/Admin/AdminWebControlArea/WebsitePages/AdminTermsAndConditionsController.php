@@ -23,6 +23,6 @@ class AdminTermsAndConditionsController extends Controller
     {
         (new UpdateTermsAndConditionsAction())->handle($request->validated(), $page);
 
-        return back()->with("success", "Terms and conditions has been successfully updated.");
+        return back()->with("success", "TERMS_AND_CONDITIONS_HAS_BEEN_SUCCESSFULLY_UPDATED");
     }
 }

@@ -686,5 +686,7 @@
     "ENTER_BLOG_POST_DESCRIPTION": "Entrez la description de l'article de blog",
     "BLOG_CATEGORY": "Catégorie de blog",
     "SELECT_BLOG_CATEGORY": "Sélectionnez une catégorie de blog",
-    "ENTER_BLOG_TAGS": "Entrez les tags du blog"
+    "ENTER_BLOG_TAGS": "Entrez les tags du blog",
+    "WEBSITE_SETTING_HAS_BEEN_SUCCESSFULLY_UPDATED":"Website Setting has been successfully updated.",
+    "SEO_SETTING_HAS_BEEN_SUCCESSFULLY_UPDATED":"Seo Setting has been successfully updated."
 }

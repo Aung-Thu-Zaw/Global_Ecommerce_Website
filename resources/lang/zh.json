@@ -686,5 +686,7 @@
     "ENTER_BLOG_POST_DESCRIPTION": "输入博客文章描述",
     "BLOG_CATEGORY": "博客分类",
     "SELECT_BLOG_CATEGORY": "选择博客分类",
-    "ENTER_BLOG_TAGS": "输入博客标签"
+    "ENTER_BLOG_TAGS": "输入博客标签",
+    "WEBSITE_SETTING_HAS_BEEN_SUCCESSFULLY_UPDATED":"Website Setting has been successfully updated.",
+    "SEO_SETTING_HAS_BEEN_SUCCESSFULLY_UPDATED":"Seo Setting has been successfully updated."
 }

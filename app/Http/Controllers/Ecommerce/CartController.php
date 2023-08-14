@@ -16,19 +16,20 @@ class CartController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $cart=Cart::where("user_id", auth()->id())->first();
-
+        $shops=[];
         $cartItems=[];
+
+        $cart=Cart::where("user_id", auth()->id())->first();
 
         if($cart) {
             $cartItems=CartItem::where("cart_id", $cart->id)->get();
+
+            $shopIds=$cartItems->pluck("shop_id")->unique()->values();
+
+            $shops = User::select("id", "shop_name")->whereIn('id', $shopIds)->get();
+
+            $cartItems->load(["product.shop","product.brand","product.sizes","product.colors"]);
         }
-
-        $shopIds=$cartItems->pluck("shop_id")->unique()->values();
-
-        $shops = User::select("id", "shop_name")->whereIn('id', $shopIds)->get();
-
-        $cartItems->load(["product.shop","product.brand","product.sizes","product.colors"]);
 
         $coupon=session("coupon") ?? "";
 

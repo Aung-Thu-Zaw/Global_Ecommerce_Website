@@ -686,5 +686,7 @@
     "ENTER_BLOG_POST_DESCRIPTION": "블로그 글 설명을 입력하세요",
     "BLOG_CATEGORY": "블로그 카테고리",
     "SELECT_BLOG_CATEGORY": "블로그 카테고리 선택",
-    "ENTER_BLOG_TAGS": "블로그 태그 입력"
+    "ENTER_BLOG_TAGS": "블로그 태그 입력",
+    "WEBSITE_SETTING_HAS_BEEN_SUCCESSFULLY_UPDATED":"Website Setting has been successfully updated.",
+    "SEO_SETTING_HAS_BEEN_SUCCESSFULLY_UPDATED":"Seo Setting has been successfully updated."
 }

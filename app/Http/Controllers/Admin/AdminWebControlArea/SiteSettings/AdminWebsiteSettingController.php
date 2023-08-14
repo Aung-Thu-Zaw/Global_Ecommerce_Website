@@ -23,7 +23,7 @@ class AdminWebsiteSettingController extends Controller
     {
         (new UpdateWebsiteSettingAction())->handle($request->validated(), $websiteSetting);
 
-        return back()->with("success", "Website Setting has been successfully updated.");
+        return back()->with("success", "WEBSITE_SETTING_HAS_BEEN_SUCCESSFULLY_UPDATED");
     }
 
 }
