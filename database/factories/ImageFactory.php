@@ -17,7 +17,7 @@ class ImageFactory extends Factory
     public function definition()
     {
         return [
-            "product_id"=>fake()->numberBetween(1, 230),
+            "product_id"=>fake()->numberBetween(1, 405),
             "img_path"=>fake()->imageUrl(),
         ];
     }

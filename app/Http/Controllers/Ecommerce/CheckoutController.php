@@ -17,7 +17,6 @@ class CheckoutController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-
         $cart=Cart::findOrFail(auth()->id());
 
         $cartItems=$cart->cartItems;

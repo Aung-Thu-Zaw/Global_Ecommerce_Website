@@ -12,7 +12,6 @@ class ConversationController extends Controller
 {
     public function store(ConversationRequest $request): RedirectResponse
     {
-
         Conversation::firstOrCreate([
             "customer_id"=>$request->customer_id,
             "vendor_id"=>$request->vendor_id
@@ -21,13 +20,11 @@ class ConversationController extends Controller
             "vendor_id"=>$request->vendor_id
         ]);
 
-
         return back();
     }
 
     public function markMessageAsSeen(Conversation $conversation): RedirectResponse
     {
-
         $messages = Message::where('conversation_id', $conversation->id)->where("user_id", "!=", request()->user_id)->get();
 
         foreach ($messages as $message) {

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ShopReviewRequest;
 use App\Models\ShopReview;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class ShopReviewController extends Controller
 {

@@ -44,7 +44,6 @@ class CartController extends Controller
                         ->where('end_date', '>=', now())
                         ->first();
 
-
         if (!$coupon) {
             return back()->with("error", 'Coupon code is invalid.');
         }
@@ -56,6 +55,7 @@ class CartController extends Controller
         }
 
         $usedCount = $coupon->users()->wherePivotNotNull('used_at')->count();
+
         if($usedCount >= $coupon->max_uses) {
             return back()->with("error", "You're late. The coupon code is limited.");
         }
@@ -71,12 +71,10 @@ class CartController extends Controller
         return back()->with("success", "Coupon code is applied.");
     }
 
-
-
     public function removeCoupon(): RedirectResponse
     {
-
         $user=User::findOrFail(auth()->id());
+
         $coupon=session("coupon");
 
         $user->coupons()->detach($coupon->id);

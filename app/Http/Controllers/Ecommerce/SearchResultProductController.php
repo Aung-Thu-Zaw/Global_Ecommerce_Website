@@ -32,11 +32,16 @@ class SearchResultProductController extends Controller
         $brands=null;
 
         if(request("category")) {
-            $category=Category::where("slug", request("category"))->first();
+            $category=Category::whereSlug(request("category"))->first();
+
             if($category) {
+
                 $brands=Brand::where("category_id", $category->id)->get();
+
             }
+
         } else {
+
             $brands=Brand::all();
         }
 

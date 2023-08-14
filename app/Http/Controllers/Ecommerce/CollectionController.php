@@ -12,9 +12,7 @@ class CollectionController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $collections=Collection::select("id", "title", "slug")
-                               ->with(["products:id,collection_id,image,status"])
-                               ->paginate(20);
+        $collections=Collection::select("id", "title", "slug")->with(["products:id,collection_id,image,status"])->paginate(20);
 
         return inertia("Ecommerce/Collections/Index", compact("collections"));
     }

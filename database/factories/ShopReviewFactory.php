@@ -17,8 +17,8 @@ class ShopReviewFactory extends Factory
     public function definition()
     {
         return [
-            "shop_id"=>fake()->numberBetween(4, 64),
-            "user_id"=>fake()->numberBetween(1, 263),
+            "shop_id"=>fake()->numberBetween(3, 40),
+            "user_id"=>fake()->numberBetween(5, 113),
             "review_text"=>fake()->paragraph(),
             "rating"=>fake()->numberBetween(1, 5),
             "status"=>fake()->randomElement(["pending","published","unpublished"]),

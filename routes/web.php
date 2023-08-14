@@ -95,7 +95,7 @@ Route::controller(HelpCenterController::class)
      ->group(function () {
          Route::get("/", "index")->name("index");
          Route::get("/questions/search-result", "searchResult")->name("questions.search");
-         //  Route::get("/phone-call", "contactPhoneCall")->name("call");
+         Route::get("/phone-call", "contactPhoneCall")->name("call");
      });
 
 Route::post('/subscribe', [SubscriberController::class, 'store'])->name("subscribe.store");

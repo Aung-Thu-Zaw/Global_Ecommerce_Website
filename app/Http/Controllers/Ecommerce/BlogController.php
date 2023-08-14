@@ -26,9 +26,9 @@ class BlogController extends Controller
 
     public function tagBlog(string $blogTagSlug): Response|ResponseFactory
     {
-        $blogCategories=BlogCategory::withCount("blogPosts")->where("status", "show")->get();
+        $blogCategories=BlogCategory::withCount("blogPosts")->whereStatus("show")->get();
 
-        $blogTag=BlogTag::where("slug", $blogTagSlug)->first();
+        $blogTag=BlogTag::whereSlug($blogTagSlug)->first();
 
         if($blogTag) {
             $blogPosts=$blogTag->blogPosts()->with(["author:id,name","blogCategory:id,name"])
@@ -49,7 +49,7 @@ class BlogController extends Controller
         $blogPost->load(["author:id,name","blogCategory:id,name","blogTags:id,name,slug"]);
 
         $relatedBlogPosts=BlogPost::with(["author:id,name","blogCategory:id,name"])
-                                  ->where("blog_category_id", $blogPost->blog_category_id)
+                                  ->whereblogCategoryId($blogPost->blog_category_id)
                                   ->where("slug", "!=", $blogPost->slug)
                                   ->limit(10)
                                   ->get();
