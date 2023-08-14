@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\AdminWebControlArea\FaqCategories;
 use App\Actions\Admin\AdminWebControlArea\FaqCategories\Categories\CreateFaqCategoryAction;
 use App\Actions\Admin\AdminWebControlArea\FaqCategories\Categories\PermanentlyDeleteAllTrashFaqCategoryAction;
 use App\Actions\Admin\AdminWebControlArea\FaqCategories\Categories\UpdateFaqCategoryAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FaqCategoryRequest;
 use App\Models\FaqCategory;
@@ -16,6 +17,8 @@ use Illuminate\Http\Request;
 
 class AdminFaqCategoryController extends Controller
 {
+    use HandlesQueryStringParameters;
+
     public function index(): Response|ResponseFactory
     {
         $faqCategories=FaqCategory::search(request("search"))
@@ -40,14 +43,12 @@ class AdminFaqCategoryController extends Controller
     {
         (new CreateFaqCategoryAction())->handle($request->validated());
 
-        $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
-
-        return to_route("admin.faq-categories.categories.index", $queryStringParams)->with("success", "Faq Category has been successfully created.");
+        return to_route("admin.faq-categories.categories.index", $this->getQueryStringParams($request))->with("success", "FAQ_CATEGORY_HAS_BEEN_SUCCESSFULLY_CREATED");
     }
 
     public function edit(Request $request, FaqCategory $faqCategory): Response|ResponseFactory
     {
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+        $queryStringParams=$this->getQueryStringParams($request);
 
         return inertia("Admin/AdminWebControlArea/FaqCategories/Categories/Edit", compact("faqCategory", "queryStringParams"));
     }
@@ -56,18 +57,14 @@ class AdminFaqCategoryController extends Controller
     {
         (new UpdateFaqCategoryAction())->handle($request->validated(), $faqCategory);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route("admin.faq-categories.categories.index", $queryStringParams)->with("success", "Faq Category has been successfully updated.");
+        return to_route("admin.faq-categories.categories.index", $this->getQueryStringParams($request))->with("success", "FAQ_CATEGORY_HAS_BEEN_SUCCESSFULLY_UPDATED");
     }
 
     public function destroy(Request $request, FaqCategory $faqCategory): RedirectResponse
     {
         $faqCategory->delete();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route("admin.faq-categories.categories.index", $queryStringParams)->with("success", "Faq Category has been successfully deleted.");
+        return to_route("admin.faq-categories.categories.index", $this->getQueryStringParams($request))->with("success", "FAQ_CATEGORY_HAS_BEEN_SUCCESSFULLY_DELETED");
     }
 
     public function trash(): Response|ResponseFactory
@@ -83,34 +80,28 @@ class AdminFaqCategoryController extends Controller
 
     public function restore(Request $request, int $trashFaqCategoryId): RedirectResponse
     {
-        $faqCategory = FaqCategory::onlyTrashed()->findOrFail($trashFaqCategoryId);
+        $trashFaqCategory = FaqCategory::onlyTrashed()->findOrFail($trashFaqCategoryId);
 
-        $faqCategory->restore();
+        $trashFaqCategory->restore();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.faq-categories.categories.trash', $queryStringParams)->with("success", "Faq Category has been successfully restored.");
+        return to_route('admin.faq-categories.categories.trash', $this->getQueryStringParams($request))->with("success", "FAQ_CATEGORY_HAS_BEEN_SUCCESSFULLY_RESTORED");
     }
 
     public function forceDelete(Request $request, int $trashFaqCategoryId): RedirectResponse
     {
-        $faqCategory = FaqCategory::onlyTrashed()->findOrFail($trashFaqCategoryId);
+        $trashFaqCategory = FaqCategory::onlyTrashed()->findOrFail($trashFaqCategoryId);
 
-        $faqCategory->forceDelete();
+        $trashFaqCategory->forceDelete();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.faq-categories.categories.trash', $queryStringParams)->with("success", "The faq category has been permanently deleted.");
+        return to_route('admin.faq-categories.categories.trash', $this->getQueryStringParams($request))->with("success", "THE_FAQ_CATEGORY_HAS_BEEN_PERMANENTLY_DELETED");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $faqCategories = FaqCategory::onlyTrashed()->get();
+        $trashFaqCategories = FaqCategory::onlyTrashed()->get();
 
-        (new PermanentlyDeleteAllTrashFaqCategoryAction())->handle($faqCategories);
+        (new PermanentlyDeleteAllTrashFaqCategoryAction())->handle($trashFaqCategories);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.faq-categories.categories.trash', $queryStringParams)->with("success", "Faq Categories have been successfully deleted.");
+        return to_route('admin.faq-categories.categories.trash', $this->getQueryStringParams($request))->with("success", "FAQ_CATEGORIES_HAVE_BEEN_PERMANENTLY_DELETED");
     }
 }

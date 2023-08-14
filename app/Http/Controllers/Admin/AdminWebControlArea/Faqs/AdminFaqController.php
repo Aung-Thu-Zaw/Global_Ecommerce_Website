@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\AdminWebControlArea\Faqs;
 use App\Actions\Admin\AdminWebControlArea\Faqs\CreateFaqAction;
 use App\Actions\Admin\AdminWebControlArea\Faqs\PermanentlyDeleteAllTrashFaqAction;
 use App\Actions\Admin\AdminWebControlArea\Faqs\UpdateFaqAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FaqRequest;
 use App\Models\Faq;
@@ -17,6 +18,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 class AdminFaqController extends Controller
 {
+    use HandlesQueryStringParameters;
+
     public function index(): Response|ResponseFactory
     {
         $faqs=Faq::search(request("search"))
@@ -43,16 +46,14 @@ class AdminFaqController extends Controller
     {
         (new CreateFaqAction())->handle($request->validated());
 
-        $queryStringParams=["page"=>"1","per_page"=>$request->per_page,"sort"=>"id","direction"=>"desc"];
-
-        return to_route("admin.faqs.index", $queryStringParams)->with("success", "Faq has been successfully created.");
+        return to_route("admin.faqs.index", $this->getQueryStringParams($request))->with("success", "FAQ_HAS_BEEN_SUCCESSFULLY_CREATED");
     }
 
     public function edit(Request $request, Faq $faq): Response|ResponseFactory
     {
         $faqSubCategories=FaqSubCategory::all();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+        $queryStringParams=$this->getQueryStringParams($request);
 
         return inertia("Admin/AdminWebControlArea/Faqs/Edit", compact("faq", "faqSubCategories", "queryStringParams"));
     }
@@ -61,18 +62,14 @@ class AdminFaqController extends Controller
     {
         (new UpdateFaqAction())->handle($request->validated(), $faq);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route("admin.faqs.index", $queryStringParams)->with("success", "Faq has been successfully updated.");
+        return to_route("admin.faqs.index", $this->getQueryStringParams($request))->with("success", "FAQ_HAS_BEEN_SUCCESSFULLY_UPDATED");
     }
 
     public function destroy(Request $request, Faq $faq): RedirectResponse
     {
         $faq->delete();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route("admin.faqs.index", $queryStringParams)->with("success", "Faq has been successfully deleted.");
+        return to_route("admin.faqs.index", $this->getQueryStringParams($request))->with("success", "FAQ_HAS_BEEN_SUCCESSFULLY_DELETED");
     }
 
     public function trash(): Response|ResponseFactory
@@ -91,34 +88,28 @@ class AdminFaqController extends Controller
 
     public function restore(Request $request, int $trashFaqId): RedirectResponse
     {
-        $faq = Faq::onlyTrashed()->findOrFail($trashFaqId);
+        $trashFaq = Faq::onlyTrashed()->findOrFail($trashFaqId);
 
-        $faq->restore();
+        $trashFaq->restore();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.faqs.trash', $queryStringParams)->with("success", "Faq has been successfully restored.");
+        return to_route('admin.faqs.trash', $this->getQueryStringParams($request))->with("success", "FAQ_HAS_BEEN_SUCCESSFULLY_RESTORED");
     }
 
     public function forceDelete(Request $request, int $trashFaqId): RedirectResponse
     {
-        $faq = Faq::onlyTrashed()->findOrFail($trashFaqId);
+        $trashFaq = Faq::onlyTrashed()->findOrFail($trashFaqId);
 
-        $faq->forceDelete();
+        $trashFaq->forceDelete();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.faqs.trash', $queryStringParams)->with("success", "The faq has been permanently deleted.");
+        return to_route('admin.faqs.trash', $this->getQueryStringParams($request))->with("success", "THE_FAQ_HAS_BEEN_PERMANENTLY_DELETED");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $faqs = Faq::onlyTrashed()->get();
+        $trashFaqs = Faq::onlyTrashed()->get();
 
-        (new PermanentlyDeleteAllTrashFaqAction())->handle($faqs);
+        (new PermanentlyDeleteAllTrashFaqAction())->handle($trashFaqs);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.faqs.trash', $queryStringParams)->with("success", "Faq Categories have been successfully deleted.");
+        return to_route('admin.faqs.trash', $this->getQueryStringParams($request))->with("success", "FAQS_HAVE_BEEN_PERMANENTLY_DELETED");
     }
 }

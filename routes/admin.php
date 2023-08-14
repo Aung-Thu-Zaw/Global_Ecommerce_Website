@@ -601,7 +601,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::get("/create", "create")->middleware('permission:faq-category.add')->name("create");
                     Route::post("/", "store")->middleware('permission:faq-category.add')->name("store");
                     Route::get("/{faq_category}/edit", "edit")->middleware('permission:faq-category.edit')->name("edit");
-                    Route::post("/{faq_category}", "update")->middleware('permission:faq-category.edit')->name("update");
+                    Route::patch("/{faq_category}", "update")->middleware('permission:faq-category.edit')->name("update");
                     Route::delete("/{faq_category}", "destroy")->middleware('permission:faq-category.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:faq-category.trash.list')->name("trash");
                     Route::post("/trash/{trash_faq_category_id}/restore", "restore")->middleware('permission:faq-category.trash.restore')->name("trash.restore");
@@ -618,7 +618,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::get("/create", "create")->middleware('permission:faq-category.add')->name("create");
                     Route::post("/", "store")->middleware('permission:faq-category.add')->name("store");
                     Route::get("/{faq_sub_category}/edit", "edit")->middleware('permission:faq-category.edit')->name("edit");
-                    Route::post("/{faq_sub_category}", "update")->middleware('permission:faq-category.edit')->name("update");
+                    Route::patch("/{faq_sub_category}", "update")->middleware('permission:faq-category.edit')->name("update");
                     Route::delete("/{faq_sub_category}", "destroy")->middleware('permission:faq-category.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:faq-category.trash.list')->name("trash");
                     Route::post("/trash/{trash_faq_sub_category_id}/restore", "restore")->middleware('permission:faq-category.trash.restore')->name("trash.restore");
@@ -634,7 +634,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::get("/create", "create")->middleware('permission:faq.add')->name("create");
                     Route::post("/", "store")->middleware('permission:faq.add')->name("store");
                     Route::get("/{faq}/edit", "edit")->middleware('permission:faq.edit')->name("edit");
-                    Route::post("/{faq}", "update")->middleware('permission:faq.edit')->name("update");
+                    Route::patch("/{faq}", "update")->middleware('permission:faq.edit')->name("update");
                     Route::delete("/{faq}", "destroy")->middleware('permission:faq.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:faq.trash.list')->name("trash");
                     Route::post("/trash/{trash_faq_id}/restore", "restore")->middleware('permission:faq.trash.restore')->name("trash.restore");
