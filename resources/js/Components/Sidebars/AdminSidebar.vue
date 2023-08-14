@@ -1461,7 +1461,7 @@ export default {
       categoriesIsHidden: true,
       bannersIsHidden: true,
       shippingAreaIsHidden: true,
-      vendorManageIsHidden: true,
+      sellerManageIsHidden: true,
       userManageIsHidden: true,
       orderManageIsHidden: true,
       settingManageIsHidden: true,
@@ -1482,26 +1482,6 @@ export default {
   },
 
   computed: {
-    vendorManage() {
-      if (
-        this.$page.url.startsWith("/admin/vendor-manage/inactive-vendors") ||
-        this.$page.url.startsWith("/admin/vendor-manage/active-vendors")
-      ) {
-        return (this.vendorManageIsHidden = false);
-      }
-    },
-    userManage() {
-      if (
-        this.$page.url.startsWith(
-          "/admin/registered-accounts/registered-users"
-        ) ||
-        this.$page.url.startsWith(
-          "/admin/registered-accounts/registered-vendors"
-        )
-      ) {
-        return (this.userManageIsHidden = false);
-      }
-    },
     orderManage() {
       if (
         this.$page.url.startsWith("/admin/order-manage/pending-orders") ||

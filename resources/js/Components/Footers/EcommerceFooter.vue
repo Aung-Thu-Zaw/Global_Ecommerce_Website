@@ -19,7 +19,7 @@ import { Link } from "@inertiajs/vue3";
             <ul class="mt-2 space-y-1">
               <li>
                 <Link
-                  :href="route('vendor.register')"
+                  :href="route('seller.register')"
                   class="opacity-70 hover:opacity-100"
                 >
                   {{ __("JOIN_US") }}
@@ -84,7 +84,10 @@ import { Link } from "@inertiajs/vue3";
                 </Link>
               </li>
               <li>
-                <Link :href="route('faqs.index')" class="opacity-70 hover:opacity-100">
+                <Link
+                  :href="route('faqs.index')"
+                  class="opacity-70 hover:opacity-100"
+                >
                   {{ __("FAQS") }}
                 </Link>
               </li>

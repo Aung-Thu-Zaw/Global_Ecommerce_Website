@@ -2,7 +2,7 @@
 import { router, usePage } from "@inertiajs/vue3";
 import MessageBox from "@/Components/MessageBox.vue";
 import ConversationCardForCustomer from "@/Components/Cards/ConversationCardForCustomer.vue";
-import ConversationCardForVendor from "@/Components/Cards/ConversationCardForSeller.vue";
+import ConversationCardForSeller from "@/Components/Cards/ConversationCardForSeller.vue";
 import { computed, onMounted, onUpdated, ref, watch } from "vue";
 
 const props = defineProps({
@@ -107,10 +107,10 @@ watch(
             <div
               v-else-if="
                 $page.props.auth.user &&
-                $page.props.auth.user.id === conversation.vendor_id
+                $page.props.auth.user.id === conversation.seller_id
               "
             >
-              <ConversationCardForVendor
+              <ConversationCardForSeller
                 :conversation="conversation"
                 @click="handleSelectedConversation(conversation.id)"
                 :class="{

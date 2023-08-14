@@ -98,20 +98,20 @@ const status = (last_activity) => {
   <div
     v-else-if="
       $page.props.auth.user &&
-      $page.props.auth.user.id !== conversation.vendor_id
+      $page.props.auth.user.id !== conversation.seller_id
     "
     class="border-b-2 border-b-slate-300 shadow-md py-3 flex items-center px-3"
   >
     <img
-      :src="conversation.vendor.avatar"
+      :src="conversation.seller.avatar"
       alt=""
       class="w-10 h-10 object-cover rounded-full ring-2 ring-slate-400 mr-3"
     />
     <div class="text-left text-md font-semibold text-slate-700">
       <h1>
-        {{ conversation.vendor.shop_name }}
+        {{ conversation.seller.shop_name }}
         <span
-          v-if="conversation.vendor.offical"
+          v-if="conversation.seller.offical"
           class="text-green-500 text-sm font-bold"
         >
           <i class="fa-solid fa-circle-check"></i>
@@ -119,17 +119,17 @@ const status = (last_activity) => {
       </h1>
 
       <span
-        v-if="status(conversation.vendor.last_activity) === 'online'"
+        v-if="status(conversation.seller.last_activity) === 'online'"
         class="animate-pulse text-[.7rem] text-green-500"
       >
         <i class="fa-solid fa-circle text-[.6rem]"></i>
         Active
       </span>
       <span
-        v-else-if="status(conversation.vendor.last_activity) === 'offline'"
+        v-else-if="status(conversation.seller.last_activity) === 'offline'"
         class="text-[.7rem] text-gray-400"
       >
-        {{ dayjs(conversation.vendor.last_activity).fromNow() }}
+        {{ dayjs(conversation.seller.last_activity).fromNow() }}
       </span>
     </div>
   </div>
