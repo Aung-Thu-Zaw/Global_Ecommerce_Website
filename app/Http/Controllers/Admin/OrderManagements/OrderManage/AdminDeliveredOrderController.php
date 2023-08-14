@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\DeliveryInformation;
 use App\Models\Order;
+use App\Http\Traits\HandlesQueryStringParameters;
 use App\Models\OrderItem;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
 class AdminDeliveredOrderController extends Controller
 {
+    use HandlesQueryStringParameters;
+
     public function index(): Response|ResponseFactory
     {
         $deliveredOrders=Order::search(request("search"))
@@ -29,7 +32,7 @@ class AdminDeliveredOrderController extends Controller
 
         $orderItems=OrderItem::with("product.shop")->where("order_id", $order->id)->get();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+        $queryStringParams=$this->getQueryStringParams($request);
 
         return inertia("Admin/OrderManagements/OrderManage/DeliveredOrders/Detail", compact("queryStringParams", "order", "deliveryInformation", "orderItems"));
     }

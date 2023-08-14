@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\OrderManagements\OrderManage;
 use App\Http\Controllers\Controller;
 use App\Jobs\Orders\SendConfirmedOrderEmailToCustomer;
 use App\Models\DeliveryInformation;
+use App\Http\Traits\HandlesQueryStringParameters;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\RedirectResponse;
@@ -14,6 +15,8 @@ use Inertia\ResponseFactory;
 
 class AdminPendingOrderController extends Controller
 {
+    use HandlesQueryStringParameters;
+
     public function index(): Response|ResponseFactory
     {
         $pendingOrders=Order::search(request("search"))
@@ -31,7 +34,7 @@ class AdminPendingOrderController extends Controller
 
         $orderItems=OrderItem::with("product.shop")->where("order_id", $order->id)->get();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+        $queryStringParams=$this->getQueryStringParams($request);
 
         return inertia("Admin/OrderManagements/OrderManage/PendingOrders/Detail", compact("queryStringParams", "order", "deliveryInformation", "orderItems"));
     }
@@ -47,9 +50,6 @@ class AdminPendingOrderController extends Controller
 
         SendConfirmedOrderEmailToCustomer::dispatch($order);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route("admin.orders.pending.index", $queryStringParams)->with("success", "Order is confirmed");
+        return to_route("admin.orders.pending.index", $this->getQueryStringParams($request))->with("success", "Order is confirmed");
     }
-
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\OrderManagements\OrderManage;
 
 use App\Http\Controllers\Controller;
 use App\Models\DeliveryInformation;
+use App\Http\Traits\HandlesQueryStringParameters;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\RedirectResponse;
@@ -13,6 +14,8 @@ use Inertia\ResponseFactory;
 
 class AdminConfirmedOrderController extends Controller
 {
+    use HandlesQueryStringParameters;
+
     public function index(): Response|ResponseFactory
     {
         $confirmedOrders=Order::search(request("search"))
@@ -30,7 +33,7 @@ class AdminConfirmedOrderController extends Controller
 
         $orderItems=OrderItem::with("product.shop")->where("order_id", $order->id)->get();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+        $queryStringParams=$this->getQueryStringParams($request);
 
         return inertia("Admin/OrderManagements/OrderManage/ConfirmedOrders/Detail", compact("queryStringParams", "order", "deliveryInformation", "orderItems"));
     }
@@ -42,8 +45,6 @@ class AdminConfirmedOrderController extends Controller
             "processing_date"=>now()->format("Y-m-d")
         ]);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route("admin.orders.confirmed.index", $queryStringParams)->with("success", "Order is processing");
+        return to_route("admin.orders.confirmed.index", $this->getQueryStringParams($request))->with("success", "Order is processing");
     }
 }

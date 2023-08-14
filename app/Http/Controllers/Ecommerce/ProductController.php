@@ -84,8 +84,8 @@ class ProductController extends Controller
         $productReviewsAvg=ProductReview::whereProductId($product->id)->avg("rating");
 
         $conversation=Conversation::with(["messages.user:id,avatar","customer:id,name,avatar,last_activity","seller:id,shop_name,avatar,offical,last_activity"])
-                                  ->whereCustomerId(auth()->id())
-                                  ->WhereSellerId($product->seller_id)
+                                  ->where("customer_id", auth()->id())
+                                  ->where("seller_id", $product->seller_id)
                                   ->first();
 
         return inertia("Ecommerce/Products/Detail", compact(
