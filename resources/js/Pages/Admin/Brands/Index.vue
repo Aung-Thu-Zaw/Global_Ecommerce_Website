@@ -25,7 +25,7 @@ const props = defineProps({
   brands: Object,
 });
 
-// Define  Variables
+// Define Variables
 const swal = inject("$swal");
 const isFilterBoxOpened = ref(false);
 const createdFrom = ref(

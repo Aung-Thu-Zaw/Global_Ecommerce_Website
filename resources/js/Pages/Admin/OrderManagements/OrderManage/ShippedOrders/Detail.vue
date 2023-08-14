@@ -37,7 +37,7 @@ const handleDeliveredOrder = async (id) => {
   if (result.isConfirmed) {
     processing.value = true;
 
-    router.post(
+    router.patch(
       route("admin.orders.shipped.update", {
         order: props.order.id,
         page: props.queryStringParams.page,

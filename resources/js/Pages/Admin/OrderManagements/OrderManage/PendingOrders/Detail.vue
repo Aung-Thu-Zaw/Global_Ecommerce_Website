@@ -1,10 +1,10 @@
 <script setup>
+import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/OrderManageBreadcrumb.vue";
-import OrderDetailCard from "@/Components/Cards/OrderDetailCard.vue";
-import DeliveryInformationCard from "@/Components/Cards/DeliveryInformationCard.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
-import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import OrderDetailCard from "@/Components/Cards/OrderDetailCard.vue";
+import DeliveryInformationCard from "@/Components/Cards/DeliveryInformationCard.vue";
 import { Link, usePage, Head, router } from "@inertiajs/vue3";
 import { inject, ref, computed } from "vue";
 import { toast } from "vue3-toastify";
@@ -37,7 +37,7 @@ const handleConfirmOrder = async (id) => {
   if (result.isConfirmed) {
     processing.value = true;
 
-    router.post(
+    router.patch(
       route("admin.orders.pending.update", {
         order: props.order.id,
         page: props.queryStringParams.page,

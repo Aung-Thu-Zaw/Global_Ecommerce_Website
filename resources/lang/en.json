@@ -788,5 +788,11 @@
     "ENTER_QUESTION": "Enter Question",
     "ANSWER": "Answer",
     "FAQ_SUBCATEGORY": "Faq SubCategory",
-    "SELECT_FAQ_SUBCATEGORY": "Select Faq SubCategory"
+    "SELECT_FAQ_SUBCATEGORY": "Select Faq SubCategory",
+    "INVOICE": "Invoice",
+    "PAYMENT": "Payment",
+    "AMOUNT": "Amount",
+    "ORDER_STATUS": "Order Status",
+    "ORDER_DATE": "Order Date",
+    "SEARCH_BY_INVOICE": "Search by invoice"
 }

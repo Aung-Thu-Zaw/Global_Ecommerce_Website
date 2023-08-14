@@ -17,36 +17,36 @@ class CashOnDeliveryController extends Controller
 {
     public function cashPaymentProcess(Request $request): RedirectResponse
     {
-        $user=User::findOrFail(auth()->id());
+        $user = User::findOrFail(auth()->id());
 
-        $order=Order::create([
-            "user_id"=>$user->id,
-            "delivery_information_id"=>$user->deliveryInformation ? $user->deliveryInformation->id : null,
-            'payment_type'=>"cash on delivery",
-            'payment_method'=>"cash on delivery",
-            'total_amount'=>$request->total_price,
-            'order_no'=>"#".uniqid(),
-            'currency'=>"usd",
-            'invoice_no'=>'GLOBAL E-COMMERCE'.mt_rand(100000000, 999999999),
-            'order_date'=>Carbon::now()->format("Y-m-d"),
-            'order_status'=>"pending",
+        $order = Order::create([
+            "user_id" => $user->id,
+            "delivery_information_id" => $user->deliveryInformation ? $user->deliveryInformation->id : null,
+            'payment_type' => "cash on delivery",
+            'payment_method' => "cash on delivery",
+            'total_amount' => $request->total_price,
+            'order_no' => "#".uniqid(),
+            'currency' => "usd",
+            'invoice_no' => 'GLOBAL E-COMMERCE'.mt_rand(100000000, 999999999),
+            'order_date' => Carbon::now()->format("Y-m-d"),
+            'order_status' => "pending",
         ]);
 
 
         foreach ($request->cart_items as $item) {
             OrderItem::create([
-                "order_id"=>$order->id,
-                "product_id"=>$item["product"]["id"],
-                "vendor_id"=>$item["product"]["shop"]["id"],
-                "color"=>$item["color"] ?? null,
-                "size"=>$item["size"] ?? null,
-                "qty"=>$item["qty"],
-                "price"=>$item["total_price"],
+                "order_id" => $order->id,
+                "product_id" => $item["product"]["id"],
+                "shop_id" => $item["product"]["shop"]["id"],
+                "color" => $item["color"] ?? null,
+                "size" => $item["size"] ?? null,
+                "qty" => $item["qty"],
+                "price" => $item["total_price"],
             ]);
         }
 
 
-        $placedOrder=Order::with(["deliveryInformation","orderItems.product.shop"])->where("id", $order->id)->first();
+        $placedOrder = Order::with(["deliveryInformation","orderItems.product.shop"])->where("id", $order->id)->first();
 
 
         Mail::to($placedOrder->deliveryInformation->email)->send(new OrderPlacedMail($placedOrder));
@@ -55,11 +55,11 @@ class CashOnDeliveryController extends Controller
             session()->forget("coupon");
         }
 
-        $cart=Cart::where("user_id", auth()->id())->first();
+        $cart = Cart::where("user_id", auth()->id())->first();
 
         if($cart) {
 
-            $cartItems=$cart->cartItems;
+            $cartItems = $cart->cartItems;
 
             $cartItems->each(function ($item) {
 

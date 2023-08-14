@@ -789,5 +789,11 @@
     "ENTER_QUESTION": "မေးခွန်းထည့်ပါ။",
     "ANSWER": "အဖြေ",
     "FAQ_SUBCATEGORY": "Faq အမျိုးအစားခွဲ",
-    "SELECT_FAQ_SUBCATEGORY": "Faq အမျိုးအစားခွဲကို ရွေးပါ။"
+    "SELECT_FAQ_SUBCATEGORY": "Faq အမျိုးအစားခွဲကို ရွေးပါ။",
+    "INVOICE": "ပြေစာ",
+    "PAYMENT": "ငွေပေးချေမှု",
+    "AMOUNT": "ပမာဏ",
+    "ORDER_STATUS": "အော်ဒါ အခြေအနေ",
+    "ORDER_DATE": "အော်ဒါရက်စွဲ",
+    "SEARCH_BY_INVOICE":"ပြေစာဖြင့်ရှာပါ။"
 }

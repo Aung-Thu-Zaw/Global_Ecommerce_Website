@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Actions\Admin\Brands\CreateBrandAction;
 use App\Actions\Admin\Brands\PermanentlyDeleteAllTrashBrandAction;
-use App\Http\Traits\HandlesQueryStringParameters;
 use App\Actions\Admin\Brands\UpdateBrandAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BrandRequest;
 use App\Models\Brand;

@@ -232,7 +232,7 @@ Route::middleware(["admin","verified","user.role:admin"])
            //             Route::get("/create", "create")->middleware('permission:shipping-area.add')->name("create");
            //             Route::post("/", "store")->middleware('permission:shipping-area.add')->name("store");
            //             Route::get("/{country}/edit", "edit")->middleware('permission:shipping-area.edit')->name("edit");
-           //             Route::post("/{country}", "update")->middleware('permission:shipping-area.edit')->name("update");
+           //             Route::patch("/{country}", "update")->middleware('permission:shipping-area.edit')->name("update");
            //             Route::delete("/{country}", "destroy")->middleware('permission:shipping-area.delete')->name("destroy");
            //             Route::get("/trash", "trash")->middleware('permission:shipping-area.trash.list')->name("trash");
            //             Route::post("/trash/{trash_country_id}/restore", "restore")->middleware('permission:shipping-area.trash.restore')->name("trash.restore");
@@ -248,7 +248,7 @@ Route::middleware(["admin","verified","user.role:admin"])
            //             Route::get("/create", "create")->middleware('permission:shipping-area.add')->name("create");
            //             Route::post("/", "store")->middleware('permission:shipping-area.add')->name("store");
            //             Route::get("/{region}/edit", "edit")->middleware('permission:shipping-area.edit')->name("edit");
-           //             Route::post("/{region}", "update")->middleware('permission:shipping-area.edit')->name("update");
+           //             Route::patch("/{region}", "update")->middleware('permission:shipping-area.edit')->name("update");
            //             Route::delete("/{region}", "destroy")->middleware('permission:shipping-area.delete')->name("destroy");
            //             Route::get("/trash", "trash")->middleware('permission:shipping-area.trash.list')->name("trash");
            //             Route::post("/trash/{trash_region_id}/restore", "restore")->middleware('permission:shipping-area.trash.restore')->name("trash.restore");
@@ -264,7 +264,7 @@ Route::middleware(["admin","verified","user.role:admin"])
            //             Route::get("/create", "create")->middleware('permission:shipping-area.add')->name("create");
            //             Route::post("/", "store")->middleware('permission:shipping-area.add')->name("store");
            //             Route::get("/{city}/edit", "edit")->middleware('permission:shipping-area.edit')->name("edit");
-           //             Route::post("/{city}", "update")->middleware('permission:shipping-area.edit')->name("update");
+           //             Route::patch("/{city}", "update")->middleware('permission:shipping-area.edit')->name("update");
            //             Route::delete("/{city}", "destroy")->middleware('permission:shipping-area.delete')->name("destroy");
            //             Route::get("/trash", "trash")->middleware('permission:shipping-area.trash.list')->name("trash");
            //             Route::post("/trash/{trash_city_id}/restore", "restore")->middleware('permission:shipping-area.trash.restore')->name("trash.restore");
@@ -280,7 +280,7 @@ Route::middleware(["admin","verified","user.role:admin"])
            //             Route::get("/create", "create")->middleware('permission:shipping-area.add')->name("create");
            //             Route::post("/", "store")->middleware('permission:shipping-area.add')->name("store");
            //             Route::get("/{township}/edit", "edit")->middleware('permission:shipping-area.edit')->name("edit");
-           //             Route::post("/{township}", "update")->middleware('permission:shipping-area.edit')->name("update");
+           //             Route::patch("/{township}", "update")->middleware('permission:shipping-area.edit')->name("update");
            //             Route::delete("/{township}", "destroy")->middleware('permission:shipping-area.delete')->name("destroy");
            //             Route::get("/trash", "trash")->middleware('permission:shipping-area.trash.list')->name("trash");
            //             Route::post("/trash/{trash_township_id}/restore", "restore")->middleware('permission:shipping-area.trash.restore')->name("trash.restore");

@@ -80,7 +80,7 @@ class StripeController extends Controller
             OrderItem::create([
                 "order_id"=>$order->id,
                 "product_id"=>$item["product"]["id"],
-                "vendor_id"=>$item["product"]["shop"]["id"],
+                "shop_id"=>$item["product"]["shop"]["id"],
                 "color"=>$item["color"] ?? null,
                 "size"=>$item["size"] ?? null,
                 "qty"=>$item["qty"],
