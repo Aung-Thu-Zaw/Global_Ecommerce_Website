@@ -13,10 +13,13 @@ class FilteredByDateScope implements Scope
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $builder
      * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param Builder<Model> $builder
+     *
      * @return void
      */
     public function apply(Builder $builder, Model $model)
     {
+
         $builder->when(request("created_from"), function ($query, $createdFrom) {
             $query->whereDate('created_at', '>=', $createdFrom);
         })

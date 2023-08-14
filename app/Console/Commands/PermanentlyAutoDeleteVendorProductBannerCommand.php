@@ -2,19 +2,19 @@
 
 namespace App\Console\Commands;
 
-use App\Actions\Vendor\ProductBanners\PermanentlyDeleteAllTrashVendorProductBannerAction;
-use App\Models\VendorProductBanner;
+use App\Actions\Seller\ProductBanners\PermanentlyDeleteAllTrashSellerProductBannerAction;
+use App\Models\SellerProductBanner;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
-class PermanentlyAutoDeleteVendorProductBannerCommand extends Command
+class PermanentlyAutoDeleteSellerProductBannerCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'vendor_product_banner:delete';
+    protected $signature = 'seller_product_banner:delete';
 
     /**
      * The console command description.
@@ -28,10 +28,8 @@ class PermanentlyAutoDeleteVendorProductBannerCommand extends Command
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $vendorProductBanners=VendorProductBanner::onlyTrashed()
-                                                 ->where('deleted_at', '<=', $cutoffDate)
-                                                 ->get();
+        $sellerProductBanners=SellerProductBanner::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
-        (new PermanentlyDeleteAllTrashVendorProductBannerAction())->handle($vendorProductBanners);
+        (new PermanentlyDeleteAllTrashSellerProductBannerAction())->handle($sellerProductBanners);
     }
 }

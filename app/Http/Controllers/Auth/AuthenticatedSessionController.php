@@ -28,16 +28,14 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        $gender=auth()->user()->gender==="male" ? "Mr." : "Mrs.";
+        $user = User::findOrFail(auth()->id());
 
-        return to_route(User::find(auth()->id())->getRedirectRouteName())->with("success", "Welcome Back $gender".auth()->user()->name." 😍");
+        return redirect()->route($user->getRedirectRouteName())->with("success", "Welcome Back " . $user->name . " 😍");
     }
 
     public function destroy(Request $request): RedirectResponse
     {
-        $user=auth()->user();
-
-        $gender=$user->gender==="male" || $user->gender === "other" ? "Mr." : "Mrs.";
+        $user=User::findOrFail(auth()->id());
 
         Auth::guard('web')->logout();
 
@@ -45,6 +43,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return to_route(User::find($user->id)->logoutRedirect())->with("success", 'See you later '.$gender.$user->name .' 🤗');
+        return to_route($user->logoutRedirect())->with("success", 'See you later '.$user->name .' 🤗');
     }
 }

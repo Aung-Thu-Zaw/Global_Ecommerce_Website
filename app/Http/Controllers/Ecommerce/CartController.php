@@ -25,6 +25,7 @@ class CartController extends Controller
         }
 
         $shopIds=$cartItems->pluck("shop_id")->unique()->values();
+
         $shops = User::select("id", "shop_name")->whereIn('id', $shopIds)->get();
 
         $cartItems->load(["product.shop","product.brand","product.sizes","product.colors"]);
@@ -63,9 +64,7 @@ class CartController extends Controller
             return back()->with("error", 'Coupon code is not valid for this amount.');
         }
 
-        if ($user) {
-            $user->coupons()->attach($coupon->id, ['used_at' => now()]);
-        }
+        $user->coupons()->attach($coupon->id, ['used_at' => now()]);
 
         session()->put('coupon', $coupon);
 
@@ -77,13 +76,10 @@ class CartController extends Controller
     public function removeCoupon(): RedirectResponse
     {
 
-        /** @var \App\Models\User|null $user */
-        $user = auth()->user();
+        $user=User::findOrFail(auth()->id());
         $coupon=session("coupon");
 
-        if ($user) {
-            $user->coupons()->detach($coupon->id);
-        }
+        $user->coupons()->detach($coupon->id);
 
         session()->forget("coupon");
 

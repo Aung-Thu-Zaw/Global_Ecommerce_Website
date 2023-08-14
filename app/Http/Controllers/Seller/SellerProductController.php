@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Seller;
 
 use App\Actions\Seller\Products\CreateProductAction;
-use App\Actions\Seller\Products\PermanentlyDeleteAllTrashProductAction;
-use App\Actions\Seller\Products\PermanentlyDeleteTrashProductAction;
+use App\Actions\Products\PermanentlyDeleteAllTrashProductAction;
+use App\Actions\Products\PermanentlyDeleteTrashProductAction;
 use App\Actions\Seller\Products\UpdateProductAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;

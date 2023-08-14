@@ -44,7 +44,7 @@ class UserAccountDeletedNotification extends Notification implements ShouldBroad
     public function toArray($notifiable)
     {
         return [
-            "message" =>$this->user->role==='vendor' ? "Vendor Account Deleted." : "User Account Deleted.",
+            "message" =>$this->user->role==='seller' ? "Seller Account Deleted." : "User Account Deleted.",
             "user"=>$this->user
         ];
     }
@@ -59,7 +59,7 @@ class UserAccountDeletedNotification extends Notification implements ShouldBroad
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" =>$this->user->role==='vendor' ? "Vendor Account Deleted." : "User Account Deleted.",
+            "message" =>$this->user->role==='seller' ? "Seller Account Deleted." : "User Account Deleted.",
             "user"=>$this->user
         ]);
     }

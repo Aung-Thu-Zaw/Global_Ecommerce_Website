@@ -17,11 +17,11 @@ class ProductQuestionController extends Controller
     {
         $productQuestion=ProductQuestion::create($request->validated());
 
-        $vendor=User::findOrFail($request->shop_id);
+        $seller=User::findOrFail($request->shop_id);
 
         $product=Product::findOrFail($request->product_id);
 
-        $vendor->notify(new NewProductQuestionFromUserNotification($productQuestion, $product));
+        $seller->notify(new NewProductQuestionFromUserNotification($productQuestion, $product));
 
         return back();
     }
@@ -38,7 +38,6 @@ class ProductQuestionController extends Controller
 
     public function destroyQuestion(int $questionId): RedirectResponse
     {
-
         $productQuestion=ProductQuestion::findOrFail($questionId);
 
         $productQuestion->delete();

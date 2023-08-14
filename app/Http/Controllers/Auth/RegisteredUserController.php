@@ -38,6 +38,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return to_route(User::find(auth()->id())->getRedirectRouteName())->with("success", "Account is created successfully");
+        return to_route($user->getRedirectRouteName())->with("success", "Account is created successfully");
     }
 }

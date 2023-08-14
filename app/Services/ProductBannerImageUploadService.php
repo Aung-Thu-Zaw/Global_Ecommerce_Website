@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\ProductBanner;
+use App\Models\SellerProductBanner;
 use App\Models\VendorProductBanner;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -37,28 +38,40 @@ class ProductBannerImageUploadService
         return $finalName;
     }
 
-    public function updateImageForVendor(Request $request, VendorProductBanner $vendorProductBanner): string
-    {
-        if ($request->hasFile("image")) {
-            $request->validate([
-                "image"=>["required","image","mimes:png,jpg,jpeg,svg,webp,gif"]
-            ]);
+    // public function updateImageForVendor(UploadedFile $image, string $sellerProductBannerImage): string
+    // {
+    //     if(is_string($sellerProductBannerImage)) {
 
-            VendorProductBanner::deleteImage($vendorProductBanner);
+    //         SellerProductBanner::deleteImage($sellerProductBannerImage);
+    //     }
 
-            $file=$request->file("image");
+    //     $originalName=$image->getClientOriginalName();
 
-            /** @var \Illuminate\Http\UploadedFile $file */
+    //     $finalName=time()."-".$originalName;
 
-            $originalName=$file->getClientOriginalName();
-            $extension=$file->extension();
-            $finalName= Str::slug(pathinfo($originalName, PATHINFO_FILENAME), '-')."."."$extension";
+    //     $image->move(storage_path("app/public/product-banners/"), $finalName);
 
-            $file->move(storage_path("app/public/product-banners/"), $finalName);
+    //     return $finalName;
+    //     // if ($request->hasFile("image")) {
+    //     //     $request->validate([
+    //     //         "image"=>["required","image","mimes:png,jpg,jpeg,svg,webp,gif"]
+    //     //     ]);
 
-            return $finalName;
-        } else {
-            return $vendorProductBanner->image;
-        }
-    }
+    //     //     VendorProductBanner::deleteImage($vendorProductBanner);
+
+    //     //     $file=$request->file("image");
+
+    //     //     /** @var \Illuminate\Http\UploadedFile $file */
+
+    //     //     $originalName=$file->getClientOriginalName();
+    //     //     $extension=$file->extension();
+    //     //     $finalName= Str::slug(pathinfo($originalName, PATHINFO_FILENAME), '-')."."."$extension";
+
+    //     //     $file->move(storage_path("app/public/product-banners/"), $finalName);
+
+    //     //     return $finalName;
+    //     // } else {
+    //     //     return $vendorProductBanner->image;
+    //     // }
+    // }
 }

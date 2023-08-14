@@ -35,16 +35,16 @@ class RegisteredUserNotification extends Notification implements ShouldBroadcast
         return ['database', 'broadcast'];
     }
 
-     /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array<string|int>
-     */
+    /**
+    * Get the array representation of the notification.
+    *
+    * @param  mixed  $notifiable
+    * @return array<string|int>
+    */
     public function toArray($notifiable)
     {
         return [
-            "message" =>$this->user->role==='vendor' ? "New Vendor Registered." : "New User Registered.",
+            "message" =>$this->user->role==='seller' ? "New Seller Registered." : "New User Registered.",
             "user"=>$this->user
         ];
     }
@@ -59,7 +59,7 @@ class RegisteredUserNotification extends Notification implements ShouldBroadcast
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" =>$this->user->role==='vendor' ? "New Vendor Registered." : "New User Registered.",
+            "message" =>$this->user->role==='seller' ? "New Seller Registered." : "New User Registered.",
             "user"=>$this->user
         ]);
     }

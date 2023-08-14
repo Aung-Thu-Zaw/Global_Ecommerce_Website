@@ -7,6 +7,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductReview;
+use App\Models\SellerProductBanner;
 use App\Models\ShopReview;
 use App\Models\VendorProductBanner;
 use App\Models\User;
@@ -43,7 +44,7 @@ class ShopController extends Controller
 
         $followers=$user->followers;
 
-        $vendorProductBanners=VendorProductBanner::select("id", "user_id", "image", "url")
+        $sellerProductBanners=SellerProductBanner::select("id", "user_id", "image", "url")
                                                  ->whereUserId($shop ? $shop->id : "")
                                                  ->whereStatus("show")
                                                  ->orderBy("id", "desc")
@@ -104,7 +105,7 @@ class ShopController extends Controller
             "shop",
             "followings",
             "followers",
-            "vendorProductBanners",
+            "sellerProductBanners",
             "vendorRandomProducts",
             "vendorProducts",
             "categories",
