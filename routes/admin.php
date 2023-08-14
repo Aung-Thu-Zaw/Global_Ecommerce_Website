@@ -139,7 +139,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::post("/", "store")->middleware('permission:product.add')->name("store");
                     Route::get("/{product}/edit", "edit")->middleware('permission:product.edit')->name("edit");
                     Route::post("/{product}", "update")->middleware('permission:product.edit')->name("update");
-                    Route::post("/{product}/status", "handleStatus")->middleware('permission:product.control')->name("handle.status");
+                    Route::patch("/{product}/status", "handleStatus")->middleware('permission:product.control')->name("handle.status");
                     Route::delete("/{product}", "destroy")->middleware('permission:product.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:product.trash.list')->name("trash");
                     Route::post("/trash/{trash_product_id}/restore", "restore")->middleware('permission:product.trash.restore')->name("trash.restore");
@@ -224,69 +224,69 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:banner.trash.delete')->name("trash.permanently.delete");
                 });
 
-           Route::controller(AdminCountryController::class)
-                ->prefix("/countries")
-                ->name("countries.")
-                ->group(function () {
-                    Route::get("/", "index")->middleware('permission:shipping-area.menu')->name("index");
-                    Route::get("/create", "create")->middleware('permission:shipping-area.add')->name("create");
-                    Route::post("/", "store")->middleware('permission:shipping-area.add')->name("store");
-                    Route::get("/{country}/edit", "edit")->middleware('permission:shipping-area.edit')->name("edit");
-                    Route::post("/{country}", "update")->middleware('permission:shipping-area.edit')->name("update");
-                    Route::delete("/{country}", "destroy")->middleware('permission:shipping-area.delete')->name("destroy");
-                    Route::get("/trash", "trash")->middleware('permission:shipping-area.trash.list')->name("trash");
-                    Route::post("/trash/{trash_country_id}/restore", "restore")->middleware('permission:shipping-area.trash.restore')->name("trash.restore");
-                    Route::delete("/trash/{trash_country_id}/force-delete", "forceDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.force.delete");
-                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.permanently.delete");
-                });
+           //    Route::controller(AdminCountryController::class)
+           //         ->prefix("/countries")
+           //         ->name("countries.")
+           //         ->group(function () {
+           //             Route::get("/", "index")->middleware('permission:shipping-area.menu')->name("index");
+           //             Route::get("/create", "create")->middleware('permission:shipping-area.add')->name("create");
+           //             Route::post("/", "store")->middleware('permission:shipping-area.add')->name("store");
+           //             Route::get("/{country}/edit", "edit")->middleware('permission:shipping-area.edit')->name("edit");
+           //             Route::post("/{country}", "update")->middleware('permission:shipping-area.edit')->name("update");
+           //             Route::delete("/{country}", "destroy")->middleware('permission:shipping-area.delete')->name("destroy");
+           //             Route::get("/trash", "trash")->middleware('permission:shipping-area.trash.list')->name("trash");
+           //             Route::post("/trash/{trash_country_id}/restore", "restore")->middleware('permission:shipping-area.trash.restore')->name("trash.restore");
+           //             Route::delete("/trash/{trash_country_id}/force-delete", "forceDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.force.delete");
+           //             Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.permanently.delete");
+           //         });
 
-           Route::controller(AdminRegionController::class)
-                ->prefix("/regions")
-                ->name("regions.")
-                ->group(function () {
-                    Route::get("/", "index")->middleware('permission:shipping-area.menu')->name("index");
-                    Route::get("/create", "create")->middleware('permission:shipping-area.add')->name("create");
-                    Route::post("/", "store")->middleware('permission:shipping-area.add')->name("store");
-                    Route::get("/{region}/edit", "edit")->middleware('permission:shipping-area.edit')->name("edit");
-                    Route::post("/{region}", "update")->middleware('permission:shipping-area.edit')->name("update");
-                    Route::delete("/{region}", "destroy")->middleware('permission:shipping-area.delete')->name("destroy");
-                    Route::get("/trash", "trash")->middleware('permission:shipping-area.trash.list')->name("trash");
-                    Route::post("/trash/{trash_region_id}/restore", "restore")->middleware('permission:shipping-area.trash.restore')->name("trash.restore");
-                    Route::delete("/trash/{trash_region_id}/force-delete", "forceDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.force.delete");
-                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.permanently.delete");
-                });
+           //    Route::controller(AdminRegionController::class)
+           //         ->prefix("/regions")
+           //         ->name("regions.")
+           //         ->group(function () {
+           //             Route::get("/", "index")->middleware('permission:shipping-area.menu')->name("index");
+           //             Route::get("/create", "create")->middleware('permission:shipping-area.add')->name("create");
+           //             Route::post("/", "store")->middleware('permission:shipping-area.add')->name("store");
+           //             Route::get("/{region}/edit", "edit")->middleware('permission:shipping-area.edit')->name("edit");
+           //             Route::post("/{region}", "update")->middleware('permission:shipping-area.edit')->name("update");
+           //             Route::delete("/{region}", "destroy")->middleware('permission:shipping-area.delete')->name("destroy");
+           //             Route::get("/trash", "trash")->middleware('permission:shipping-area.trash.list')->name("trash");
+           //             Route::post("/trash/{trash_region_id}/restore", "restore")->middleware('permission:shipping-area.trash.restore')->name("trash.restore");
+           //             Route::delete("/trash/{trash_region_id}/force-delete", "forceDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.force.delete");
+           //             Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.permanently.delete");
+           //         });
 
-           Route::controller(AdminCityController::class)
-                ->prefix("/cities")
-                ->name("cities.")
-                ->group(function () {
-                    Route::get("/", "index")->middleware('permission:shipping-area.menu')->name("index");
-                    Route::get("/create", "create")->middleware('permission:shipping-area.add')->name("create");
-                    Route::post("/", "store")->middleware('permission:shipping-area.add')->name("store");
-                    Route::get("/{city}/edit", "edit")->middleware('permission:shipping-area.edit')->name("edit");
-                    Route::post("/{city}", "update")->middleware('permission:shipping-area.edit')->name("update");
-                    Route::delete("/{city}", "destroy")->middleware('permission:shipping-area.delete')->name("destroy");
-                    Route::get("/trash", "trash")->middleware('permission:shipping-area.trash.list')->name("trash");
-                    Route::post("/trash/{trash_city_id}/restore", "restore")->middleware('permission:shipping-area.trash.restore')->name("trash.restore");
-                    Route::delete("/trash/{trash_city_id}/force-delete", "forceDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.force.delete");
-                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.permanently.delete");
-                });
+           //    Route::controller(AdminCityController::class)
+           //         ->prefix("/cities")
+           //         ->name("cities.")
+           //         ->group(function () {
+           //             Route::get("/", "index")->middleware('permission:shipping-area.menu')->name("index");
+           //             Route::get("/create", "create")->middleware('permission:shipping-area.add')->name("create");
+           //             Route::post("/", "store")->middleware('permission:shipping-area.add')->name("store");
+           //             Route::get("/{city}/edit", "edit")->middleware('permission:shipping-area.edit')->name("edit");
+           //             Route::post("/{city}", "update")->middleware('permission:shipping-area.edit')->name("update");
+           //             Route::delete("/{city}", "destroy")->middleware('permission:shipping-area.delete')->name("destroy");
+           //             Route::get("/trash", "trash")->middleware('permission:shipping-area.trash.list')->name("trash");
+           //             Route::post("/trash/{trash_city_id}/restore", "restore")->middleware('permission:shipping-area.trash.restore')->name("trash.restore");
+           //             Route::delete("/trash/{trash_city_id}/force-delete", "forceDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.force.delete");
+           //             Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.permanently.delete");
+           //         });
 
-           Route::controller(AdminTownshipController::class)
-                ->prefix("/townships")
-                ->name("townships.")
-                ->group(function () {
-                    Route::get("/", "index")->middleware('permission:shipping-area.menu')->name("index");
-                    Route::get("/create", "create")->middleware('permission:shipping-area.add')->name("create");
-                    Route::post("/", "store")->middleware('permission:shipping-area.add')->name("store");
-                    Route::get("/{township}/edit", "edit")->middleware('permission:shipping-area.edit')->name("edit");
-                    Route::post("/{township}", "update")->middleware('permission:shipping-area.edit')->name("update");
-                    Route::delete("/{township}", "destroy")->middleware('permission:shipping-area.delete')->name("destroy");
-                    Route::get("/trash", "trash")->middleware('permission:shipping-area.trash.list')->name("trash");
-                    Route::post("/trash/{trash_township_id}/restore", "restore")->middleware('permission:shipping-area.trash.restore')->name("trash.restore");
-                    Route::delete("/trash/{trash_township_id}/force-delete", "forceDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.force.delete");
-                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.permanently.delete");
-                });
+           //    Route::controller(AdminTownshipController::class)
+           //         ->prefix("/townships")
+           //         ->name("townships.")
+           //         ->group(function () {
+           //             Route::get("/", "index")->middleware('permission:shipping-area.menu')->name("index");
+           //             Route::get("/create", "create")->middleware('permission:shipping-area.add')->name("create");
+           //             Route::post("/", "store")->middleware('permission:shipping-area.add')->name("store");
+           //             Route::get("/{township}/edit", "edit")->middleware('permission:shipping-area.edit')->name("edit");
+           //             Route::post("/{township}", "update")->middleware('permission:shipping-area.edit')->name("update");
+           //             Route::delete("/{township}", "destroy")->middleware('permission:shipping-area.delete')->name("destroy");
+           //             Route::get("/trash", "trash")->middleware('permission:shipping-area.trash.list')->name("trash");
+           //             Route::post("/trash/{trash_township_id}/restore", "restore")->middleware('permission:shipping-area.trash.restore')->name("trash.restore");
+           //             Route::delete("/trash/{trash_township_id}/force-delete", "forceDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.force.delete");
+           //             Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:shipping-area.trash.delete')->name("trash.permanently.delete");
+           //         });
 
            // ******************** Admin Dashboard Order Managements ********************
 
@@ -299,7 +299,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:order-manage.menu')->name("index");
                     Route::get("/{order}", "show")->middleware('permission:order-manage.detail')->name("show");
-                    Route::post("/{order}", "update")->middleware('permission:order-manage.control')->name("update");
+                    Route::patch("/{order}", "update")->middleware('permission:order-manage.control')->name("update");
                 });
 
            // Admin Confirmed Orders Section
@@ -309,7 +309,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:order-manage.menu')->name("index");
                     Route::get("/{order}", "show")->middleware('permission:order-manage.detail')->name("show");
-                    Route::post("/{order}", "update")->middleware('permission:order-manage.control')->name("update");
+                    Route::patch("/{order}", "update")->middleware('permission:order-manage.control')->name("update");
                 });
 
            // Admin Processing Orders Section
@@ -319,7 +319,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:order-manage.menu')->name("index");
                     Route::get("/{order}", "show")->middleware('permission:order-manage.detail')->name("show");
-                    Route::post("/{order}", "update")->middleware('permission:order-manage.control')->name("update");
+                    Route::patch("/{order}", "update")->middleware('permission:order-manage.control')->name("update");
                 });
 
            // Admin Shipped Orders Section
@@ -329,7 +329,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:order-manage.menu')->name("index");
                     Route::get("/{order}", "show")->middleware('permission:order-manage.detail')->name("show");
-                    Route::post("/{order}", "update")->middleware('permission:order-manage.control')->name("update");
+                    Route::patch("/{order}", "update")->middleware('permission:order-manage.control')->name("update");
                 });
 
            // Admin Delivered Orders Section
@@ -338,7 +338,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                  ->name("orders.delivered.")
                  ->group(function () {
                      Route::get("/", "index")->middleware('permission:order-manage.menu')->name("index");
-                     Route::get("/{order}", "show")->middleware('permission:order-manage.detail')->name("show");
+                     Route::patch("/{order}", "show")->middleware('permission:order-manage.detail')->name("show");
                  });
 
            // ========== Admin Return Order Section ==========
@@ -350,7 +350,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:return-order-manage.menu')->name("index");
                     Route::get("/{order}", "show")->middleware('permission:return-order-manage.detail')->name("show");
-                    Route::post("/{order}", "update")->middleware('permission:return-order-manage.control')->name("update");
+                    Route::patch("/{order}", "update")->middleware('permission:return-order-manage.control')->name("update");
                 });
 
            // Admin Approved Return Orders Section
@@ -360,7 +360,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:return-order-manage.menu')->name("index");
                     Route::get("/{order}", "show")->middleware('permission:return-order-manage.detail')->name("show");
-                    Route::post("/{order}", "update")->middleware('permission:return-order-manage.control')->name("update");
+                    Route::patch("/{order}", "update")->middleware('permission:return-order-manage.control')->name("update");
                 });
 
            // Admin Refunded Return Orders Section
@@ -381,7 +381,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->group(function () {
                     Route::get("/", "index")->middleware('permission:cancel-order-manage.menu')->name("index");
                     Route::get("/{order}", "show")->middleware('permission:cancel-order-manage.detail')->name("show");
-                    Route::post("/{order}", "update")->middleware('permission:cancel-order-manage.control')->name("update");
+                    Route::patch("/{order}", "update")->middleware('permission:cancel-order-manage.control')->name("update");
                 });
 
            // Admin Approved Cancel Orders Section
@@ -488,7 +488,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::get("/create", "create")->middleware('permission:role-and-permission.add')->name("create");
                     Route::post("/", "store")->middleware('permission:role-and-permission.add')->name("store");
                     Route::get("/{role}/edit", "edit")->middleware('permission:role-and-permission.edit')->name("edit");
-                    Route::post("/{role}", "update")->middleware('permission:role-and-permission.edit')->name("update");
+                    Route::patch("/{role}", "update")->middleware('permission:role-and-permission.edit')->name("update");
                     Route::delete("/{role}", "destroy")->middleware('permission:role-and-permission.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:role-and-permission.trash.list')->name("trash");
                     Route::post("/trash/{trash_role_id}/restore", "restore")->middleware('permission:role-and-permission.trash.restore')->name("trash.restore");
@@ -508,7 +508,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::get("/create", "create")->middleware('permission:role-in-permissions.add')->name("create");
                     Route::post("/", "store")->middleware('permission:role-in-permissions.add')->name("store");
                     Route::get("/{role}/edit", "edit")->middleware(['permission:role-in-permissions.edit','restrict.superadmin.data'])->name("edit");
-                    Route::post("/{role}", "update")->middleware(['permission:role-in-permissions.edit','restrict.superadmin.data'])->name("update");
+                    Route::patch("/{role}", "update")->middleware(['permission:role-in-permissions.edit','restrict.superadmin.data'])->name("update");
                     Route::delete("/{role}", "destroy")->middleware(['permission:role-in-permissions.delete','restrict.superadmin.data'])->name("destroy");
                 });
 
@@ -567,7 +567,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->name("seo-settings.")
                 ->group(function () {
                     Route::get("/", "edit")->middleware('permission:setting.menu')->name("edit");
-                    Route::post("/{seo_setting}", "update")->middleware('permission:setting.edit')->name("update");
+                    Route::patch("/{seo_setting}", "update")->middleware('permission:setting.edit')->name("update");
                 });
 
            // ========== Admin Pages Section ==========
@@ -578,7 +578,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->name("pages.privacy-policy.")
                 ->group(function () {
                     Route::get("/", "edit")->middleware('permission:page.menu')->name("edit");
-                    Route::post("/{page}", "update")->middleware('permission:page.edit')->name("update");
+                    Route::patch("/{page}", "update")->middleware('permission:page.edit')->name("update");
                 });
 
            // Admin Terms And Conditions Section
@@ -587,7 +587,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->name("pages.terms-and-conditions.")
                 ->group(function () {
                     Route::get("/", "edit")->middleware('permission:page.menu')->name("edit");
-                    Route::post("/{page}", "update")->middleware('permission:page.edit')->name("update");
+                    Route::patch("/{page}", "update")->middleware('permission:page.edit')->name("update");
                 });
 
            // ========== Admin Faq Categories Section ==========

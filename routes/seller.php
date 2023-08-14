@@ -60,33 +60,32 @@ Route::middleware(["seller","user.role:seller"])
 
          // Seller Product Banners Section
          Route::controller(SellerProductBannerController::class)
-         ->prefix("/product-banners")
-         ->name("product-banners.")
-         ->group(function () {
-             Route::get("/", "index")->name("index");
-             Route::get("/create", "create")->name("create");
-             Route::post("/", "store")->name("store");
-             Route::get("/{seller_product_banner}/edit", "edit")->name("edit");
-             Route::post("/{seller_product_banner}", "update")->name("update");
-             Route::delete("/{seller_product_banner}", "destroy")->name("destroy");
-             Route::get("/trash", "trash")->name("trash");
-             Route::post("/trash/{seller_product_banner}/restore", "restore")->name("restore");
-             Route::delete("/trash/{seller_product_banner}/force-delete", "forceDelete")->name("force.delete");
-             Route::delete("/trash/permanently-delete", "permanentlyDelete")->name("permanently.delete");
-             Route::post("/{seller_product_banner}/show", "handleShow")->name("show");
-             Route::post("/{seller_product_banner}/hide", "handleHide")->name("hide");
-         });
+              ->prefix("/product-banners")
+              ->name("product-banners.")
+              ->group(function () {
+                  Route::get("/", "index")->name("index");
+                  Route::get("/create", "create")->name("create");
+                  Route::post("/", "store")->name("store");
+                  Route::get("/{seller_product_banner}/edit", "edit")->name("edit");
+                  Route::post("/{seller_product_banner}", "update")->name("update");
+                  Route::delete("/{seller_product_banner}", "destroy")->name("destroy");
+                  Route::get("/trash", "trash")->name("trash");
+                  Route::post("/trash/{seller_product_banner}/restore", "restore")->name("restore");
+                  Route::delete("/trash/{seller_product_banner}/force-delete", "forceDelete")->name("force.delete");
+                  Route::delete("/trash/permanently-delete", "permanentlyDelete")->name("permanently.delete");
+                  Route::post("/{seller_product_banner}/show", "handleShow")->name("show");
+                  Route::post("/{seller_product_banner}/hide", "handleHide")->name("hide");
+              });
 
          // Seller Orders
          Route::controller(SellerOrderController::class)
-         ->prefix("/orders")
-         ->name("orders.")
-         ->group(function () {
-             Route::get("/", "index")->name("index");
-             Route::get("/details/{id}", "show")->name("show");
-             Route::post("/{id}", "update")->name("update");
-
-         });
+              ->prefix("/orders")
+              ->name("orders.")
+              ->group(function () {
+                  Route::get("/", "index")->name("index");
+                  Route::get("/{order}/details", "show")->name("show");
+                  Route::post("/{order}", "update")->name("update");
+              });
 
          // Seller Product Reviews Section
          Route::controller(SellerProductReviewController::class)
@@ -94,7 +93,7 @@ Route::middleware(["seller","user.role:seller"])
               ->name("product-reviews.")
               ->group(function () {
                   Route::get("/", "index")->name("index");
-                  Route::get("/{product_review}", "show")->name("show");
+                  Route::get("/{product_review}/details", "show")->name("show");
               });
 
          // Seller Shop Reviews Section
@@ -103,10 +102,9 @@ Route::middleware(["seller","user.role:seller"])
               ->name("shop-reviews.")
               ->group(function () {
                   Route::get("/", "index")->name("index");
-                  Route::get("/{shop_review}", "show")->name("show");
+                  Route::get("/{shop_review}/details", "show")->name("show");
               });
 
          // Seller Dashboard Guide Section
          Route::get("/guide", [SellerDashboardGuideController::class,"index"])->name("dashboard.guide");
-
      });
