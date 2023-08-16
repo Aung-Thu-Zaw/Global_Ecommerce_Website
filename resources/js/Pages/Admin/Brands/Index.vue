@@ -62,13 +62,8 @@ const brandTrashList = computed(() => {
 
 // Query String Parameteres
 const params = reactive({
-  search: usePage().props.ziggy.query?.search,
-  page: usePage().props.ziggy.query?.page,
-  per_page: usePage().props.ziggy.query?.per_page,
   sort: usePage().props.ziggy.query?.sort,
   direction: usePage().props.ziggy.query?.direction,
-  created_from: usePage().props.ziggy.query?.created_from,
-  created_until: usePage().props.ziggy.query?.created_until,
 });
 
 // Update Sorting Table Column
@@ -79,13 +74,13 @@ const updateSorting = (sort = "id") => {
   router.get(
     route("admin.brands.index"),
     {
-      search: params.search,
-      page: params.page,
-      per_page: params.per_page,
+      search: usePage().props.ziggy.query?.search,
+      page: usePage().props.ziggy.query?.page,
+      per_page: usePage().props.ziggy.query?.per_page,
       sort: params.sort,
       direction: params.direction,
-      created_from: params.created_from,
-      created_until: params.created_until,
+      created_from: usePage().props.ziggy.query?.created_from,
+      created_until: usePage().props.ziggy.query?.created_until,
     },
     {
       replace: true,
@@ -99,12 +94,12 @@ const handleDelete = (brand) => {
   router.delete(
     route("admin.brands.destroy", {
       brand: brand,
-      page: params.page,
-      per_page: params.per_page,
+      page: usePage().props.ziggy.query?.page,
+      per_page: usePage().props.ziggy.query?.per_page,
       sort: params.sort,
       direction: params.direction,
-      created_from: params.created_from,
-      created_until: params.created_until,
+      created_from: usePage().props.ziggy.query?.created_from,
+      created_until: usePage().props.ziggy.query?.created_until,
     }),
     {
       preserveScroll: true,

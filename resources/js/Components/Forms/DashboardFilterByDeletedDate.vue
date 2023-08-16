@@ -2,7 +2,7 @@
 import ResetFilterButton from "@/Components/Buttons/ResetFilterButton.vue";
 import datepicker from "vue3-datepicker";
 import { router, usePage } from "@inertiajs/vue3";
-import { watch, ref, reactive, computed } from "vue";
+import { watch, ref, computed } from "vue";
 
 const props = defineProps({
   href: String,
@@ -37,32 +37,17 @@ const formattedDeletedUntil = computed(() => {
   return year && month && day ? `${year}-${month}-${day}` : undefined;
 });
 
-// Query String Parameteres
-const params = reactive({
-  search: usePage().props.ziggy.query?.search,
-  page: usePage().props.ziggy.query?.page,
-  per_page: usePage().props.ziggy.query?.per_page,
-  sort: usePage().props.ziggy.query?.sort,
-  direction: usePage().props.ziggy.query?.direction,
-  deleted_from: usePage().props.ziggy.query.deleted_from
-    ? usePage().props.ziggy.query.deleted_from
-    : formattedDeletedFrom,
-  deleted_until: usePage().props.ziggy.query.deleted_until
-    ? usePage().props.ziggy.query.deleted_until
-    : formattedDeletedUntil,
-});
-
 // Filtered By Only Deleted From
 const filteredByDeletedFrom = () => {
   router.get(
     route(props.href),
     {
-      search: params.search,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
+      search: usePage().props.ziggy.query?.search,
+      per_page: usePage().props.ziggy.query?.per_page,
+      sort: usePage().props.ziggy.query?.sort,
+      direction: usePage().props.ziggy.query?.direction,
       deleted_from: formattedDeletedFrom.value,
-      deleted_until: params.deleted_until,
+      deleted_until: usePage().props.ziggy.query?.deleted_until,
     },
     {
       replace: true,
@@ -79,11 +64,11 @@ const filteredByDeletedUntil = () => {
   router.get(
     route(props.href),
     {
-      search: params.search,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-      deleted_from: params.deleted_from,
+      search: usePage().props.ziggy.query?.search,
+      per_page: usePage().props.ziggy.query?.per_page,
+      sort: usePage().props.ziggy.query?.sort,
+      direction: usePage().props.ziggy.query?.direction,
+      deleted_from: usePage().props.ziggy.query?.deleted_from,
       deleted_until: formattedDeletedUntil.value,
     },
     {
@@ -103,10 +88,10 @@ const resetFilteredDate = () => {
   router.get(
     route(props.href),
     {
-      search: params.search,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
+      search: usePage().props.ziggy.query?.search,
+      per_page: usePage().props.ziggy.query?.per_page,
+      sort: usePage().props.ziggy.query?.sort,
+      direction: usePage().props.ziggy.query?.direction,
     },
     {
       replace: true,
@@ -118,9 +103,9 @@ const resetFilteredDate = () => {
 
 // Watching Deleted From Datepicker
 watch(
-  () => params.deleted_from,
+  () => deletedFrom.value,
   () => {
-    if (params.deleted_from === "") {
+    if (deletedFrom.value === "") {
       resetFilteredDate();
     } else {
       filteredByDeletedFrom();
@@ -130,9 +115,9 @@ watch(
 
 // Watching Deleted Unitl Datepicker
 watch(
-  () => params.deleted_until,
+  () => deletedUntil.value,
   () => {
-    if (params.deleted_until === "") {
+    if (deletedUntil.value === "") {
       resetFilteredDate();
     } else {
       filteredByDeletedUntil();
@@ -185,10 +170,7 @@ watch(
       </div>
     </div>
 
-    <div
-      v-if="params.deleted_from || params.deleted_until"
-      class="w-full flex items-center"
-    >
+    <div v-if="deletedFrom || deletedUntil" class="w-full flex items-center">
       <ResetFilterButton @click="resetFilteredDate" />
     </div>
   </div>

@@ -50,13 +50,8 @@ const brandTrashDelete = computed(() => {
 
 // Query String Parameteres
 const params = reactive({
-  search: usePage().props.ziggy.query?.search,
-  page: usePage().props.ziggy.query?.page,
-  per_page: usePage().props.ziggy.query?.per_page,
   sort: usePage().props.ziggy.query?.sort,
   direction: usePage().props.ziggy.query?.direction,
-  deleted_from: usePage().props.ziggy.query?.deleted_from,
-  deleted_until: usePage().props.ziggy.query?.deleted_until,
 });
 
 // Update Sorting Table Column
@@ -67,13 +62,13 @@ const updateSorting = (sort = "id") => {
   router.get(
     route("admin.brands.trash"),
     {
-      search: params.search,
-      page: params.page,
-      per_page: params.per_page,
+      search: usePage().props.ziggy.query?.search,
+      page: usePage().props.ziggy.query?.page,
+      per_page: usePage().props.ziggy.query?.per_page,
       sort: params.sort,
       direction: params.direction,
-      deleted_from: params.deleted_from,
-      deleted_until: params.deleted_until,
+      deleted_from: usePage().props.ziggy.query?.deleted_from,
+      deleted_until: usePage().props.ziggy.query?.deleted_until,
     },
     {
       replace: true,
@@ -101,12 +96,12 @@ const handleRestoreTrashBrand = async (trashBrandId) => {
     router.post(
       route("admin.brands.trash.restore", {
         trash_brand_id: trashBrandId,
-        page: params.page,
-        per_page: params.per_page,
+        page: usePage().props.ziggy.query?.page,
+        per_page: usePage().props.ziggy.query?.per_page,
         sort: params.sort,
         direction: params.direction,
-        deleted_from: params.deleted_from,
-        deleted_until: params.deleted_until,
+        deleted_from: usePage().props.ziggy.query?.deleted_from,
+        deleted_until: usePage().props.ziggy.query?.deleted_until,
       }),
       {},
       {
@@ -146,12 +141,12 @@ const handleDeleteTrashBrand = async (trashBrandId) => {
     router.delete(
       route("admin.brands.trash.force.delete", {
         trash_brand_id: trashBrandId,
-        page: params.page,
-        per_page: params.per_page,
+        page: usePage().props.ziggy.query?.page,
+        per_page: usePage().props.ziggy.query?.per_page,
         sort: params.sort,
         direction: params.direction,
-        deleted_from: params.deleted_from,
-        deleted_until: params.deleted_until,
+        deleted_from: usePage().props.ziggy.query?.deleted_from,
+        deleted_until: usePage().props.ziggy.query?.deleted_until,
       }),
       {
         preserveScroll: true,
@@ -189,12 +184,12 @@ const handlePermanentlyDeleteTrashBrands = async () => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.brands.trash.permanently.delete", {
-        page: params.page,
-        per_page: params.per_page,
+        page: usePage().props.ziggy.query?.page,
+        per_page: usePage().props.ziggy.query?.per_page,
         sort: params.sort,
         direction: params.direction,
-        deleted_from: params.deleted_from,
-        deleted_until: params.deleted_until,
+        deleted_from: usePage().props.ziggy.query?.deleted_from,
+        deleted_until: usePage().props.ziggy.query?.deleted_until,
       }),
       {
         preserveScroll: true,

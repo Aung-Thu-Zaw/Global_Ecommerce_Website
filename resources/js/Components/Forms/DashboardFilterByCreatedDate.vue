@@ -2,7 +2,7 @@
 import ResetFilterButton from "@/Components/Buttons/ResetFilterButton.vue";
 import datepicker from "vue3-datepicker";
 import { router, usePage } from "@inertiajs/vue3";
-import { watch, ref, reactive, computed } from "vue";
+import { watch, ref, computed } from "vue";
 
 const props = defineProps({
   href: String,
@@ -37,32 +37,17 @@ const formattedCreatedUntil = computed(() => {
   return year && month && day ? `${year}-${month}-${day}` : undefined;
 });
 
-// Query String Parameteres
-const params = reactive({
-  search: usePage().props.ziggy.query?.search,
-  page: usePage().props.ziggy.query?.page,
-  per_page: usePage().props.ziggy.query?.per_page,
-  sort: usePage().props.ziggy.query?.sort,
-  direction: usePage().props.ziggy.query?.direction,
-  created_from: usePage().props.ziggy.query.created_from
-    ? usePage().props.ziggy.query.created_from
-    : formattedCreatedFrom,
-  created_until: usePage().props.ziggy.query.created_until
-    ? usePage().props.ziggy.query.created_until
-    : formattedCreatedUntil,
-});
-
 // Filtered By Only Created From
 const filteredByCreatedFrom = () => {
   router.get(
     route(props.href),
     {
-      search: params.search,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
+      search: usePage().props.ziggy.query?.search,
+      per_page: usePage().props.ziggy.query?.per_page,
+      sort: usePage().props.ziggy.query?.sort,
+      direction: usePage().props.ziggy.query?.direction,
       created_from: formattedCreatedFrom.value,
-      created_until: params.created_until,
+      created_until: usePage().props.ziggy.query?.created_until,
     },
     {
       replace: true,
@@ -79,11 +64,11 @@ const filteredByCreatedUntil = () => {
   router.get(
     route(props.href),
     {
-      search: params.search,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-      created_from: params.created_from,
+      search: usePage().props.ziggy.query?.search,
+      per_page: usePage().props.ziggy.query?.per_page,
+      sort: usePage().props.ziggy.query?.sort,
+      direction: usePage().props.ziggy.query?.direction,
+      created_from: usePage().props.ziggy.query?.created_from,
       created_until: formattedCreatedUntil.value,
     },
     {
@@ -103,10 +88,10 @@ const resetFilteredDate = () => {
   router.get(
     route(props.href),
     {
-      search: params.search,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
+      search: usePage().props.ziggy.query?.search,
+      per_page: usePage().props.ziggy.query?.per_page,
+      sort: usePage().props.ziggy.query?.sort,
+      direction: usePage().props.ziggy.query?.direction,
     },
     {
       replace: true,
@@ -118,9 +103,9 @@ const resetFilteredDate = () => {
 
 // Watching Created From Datepicker
 watch(
-  () => params.created_from,
+  () => createdFrom.value,
   () => {
-    if (params.created_from === "") {
+    if (createdFrom.value === "") {
       resetFilteredDate();
     } else {
       filteredByCreatedFrom();
@@ -130,9 +115,9 @@ watch(
 
 // Watching Created Unitl Datepicker
 watch(
-  () => params.created_until,
+  () => createdUntil.value,
   () => {
-    if (params.created_until === "") {
+    if (createdUntil.value === "") {
       resetFilteredDate();
     } else {
       filteredByCreatedUntil();
@@ -185,10 +170,7 @@ watch(
       </div>
     </div>
 
-    <div
-      v-if="params.created_from || params.created_until"
-      class="w-full flex items-center"
-    >
+    <div v-if="createdFrom || createdUntil" class="w-full flex items-center">
       <ResetFilterButton @click="resetFilteredDate" />
     </div>
   </div>
