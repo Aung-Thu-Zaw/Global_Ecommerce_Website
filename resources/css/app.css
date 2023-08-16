@@ -19,13 +19,7 @@
         @apply text-sm px-5 py-2 border-[3px]  border-green-700 font-semibold rounded-[4px] shadow-md bg-green-600 text-white  transition-all hover:bg-green-700 mr-3 my-1;
     }
 
-    .filter-btn {
-        @apply text-sm border px-5 py-3 rounded-md ml-5 border-slate-300 hover:bg-gray-50 text-gray-600 hover:text-gray-700;
-    }
 
-    .search-input {
-        @apply rounded-md border border-gray-300 focus:ring-0 focus:border-gray-300 text-sm p-3 w-full;
-    }
 
     .remove-search {
         @apply absolute top-4 right-5 text-slate-600 cursor-pointer hover:text-red-600;
@@ -47,9 +41,7 @@
         @apply h-[50px] rounded-sm object-cover shadow-lg ring-2 ring-slate-300;
     }
 
-    .perpage-selectbox {
-        @apply py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm;
-    }
+
 }
 
 .arrow-icon {

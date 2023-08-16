@@ -7,7 +7,7 @@ import TextInput from "@/Components/Forms/TextInput.vue";
 import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
 import SaveButton from "@/Components/Buttons/SaveButton.vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { Link, useForm, Head } from "@inertiajs/vue3";
+import { useForm, Head } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import { ref } from "vue";
 
@@ -48,7 +48,10 @@ const handleCreateBrand = async () => {
 
   form.post(
     route("admin.brands.store", {
+      page: 1,
       per_page: props.per_page,
+      sort: "id",
+      direction: "desc",
     }),
     {
       replace: true,
@@ -85,25 +88,24 @@ const handleCreateBrand = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >{{ __("CREATE") }}</span
               >
+                {{ __("CREATE") }}
+              </span>
             </div>
           </li>
         </Breadcrumb>
 
         <!-- Go Back button -->
         <div>
-          <Link
-            as="button"
-            :href="route('admin.brands.index')"
-            :data="{
+          <GoBackButton
+            href="admin.brands.index"
+            :queryStringParams="{
+              page: 1,
               per_page: props.per_page,
               sort: 'id',
               direction: 'desc',
             }"
-          >
-            <GoBackButton />
-          </Link>
+          />
         </div>
       </div>
 
@@ -127,8 +129,8 @@ const handleCreateBrand = async () => {
               type="text"
               class="mt-1 block w-full"
               v-model="form.name"
-              required
               :placeholder="__('ENTER_BRAND_NAME')"
+              required
             />
 
             <InputError class="mt-2" :message="form.errors.name" />
@@ -174,9 +176,9 @@ const handleCreateBrand = async () => {
               class="file-input"
               type="file"
               id="image"
-              required
               @input="form.image = $event.target.files[0]"
               @change="getPreviewPhotoPath($event.target.files[0])"
+              required
             />
 
             <span class="text-xs text-gray-500">
@@ -195,19 +197,3 @@ const handleCreateBrand = async () => {
     </div>
   </AdminDashboardLayout>
 </template>
-
-<style>
-.ck-editor__editable_inline {
-  min-height: 250px;
-  border-radius: 200px;
-}
-
-:root {
-  --ck-border-radius: 0.375rem;
-  --ck-color-focus-border: rgb(209 213 219);
-  --ck-font-size-base: 0.7rem;
-  --ck-color-shadow-drop: none;
-  --ck-color-shadow-inner: none;
-}
-</style>
-

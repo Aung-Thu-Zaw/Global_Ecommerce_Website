@@ -140,7 +140,7 @@ const totalItems = computed(() => {
             <!-- Sign In Button -->
             <Link
               as="button"
-              class="px-3 py-2 inline-block text-center text-white bg-blue-500 shadow-sm border border-gray-200 rounded-md hover:bg-blue-700 uppercase"
+              class="px-3 py-2 inline-block text-center text-white bg-blue-600 shadow-sm border border-gray-200 rounded-md hover:bg-blue-700 uppercase"
               :href="route('login')"
             >
               <i class="w-5 fa fa-user"></i>

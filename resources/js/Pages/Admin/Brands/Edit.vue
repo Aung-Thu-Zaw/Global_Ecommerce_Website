@@ -120,18 +120,10 @@ const handleEditBrand = async () => {
 
         <!-- Go Back button -->
         <div>
-          <Link
-            as="button"
-            :href="route('admin.brands.index')"
-            :data="{
-              page: queryStringParams.page,
-              per_page: queryStringParams.per_page,
-              sort: queryStringParams.sort,
-              direction: queryStringParams.direction,
-            }"
-          >
-            <GoBackButton />
-          </Link>
+          <GoBackButton
+            href="admin.brands.index"
+            :queryStringParams="queryStringParams"
+          />
         </div>
       </div>
 
@@ -219,19 +211,3 @@ const handleEditBrand = async () => {
     </div>
   </AdminDashboardLayout>
 </template>
-
-<style>
-.ck-editor__editable_inline {
-  min-height: 250px;
-  border-radius: 200px;
-}
-
-:root {
-  --ck-border-radius: 0.375rem;
-  --ck-color-focus-border: rgb(209 213 219);
-  --ck-font-size-base: 0.7rem;
-  --ck-color-shadow-drop: none;
-  --ck-color-shadow-inner: none;
-}
-</style>
-
