@@ -178,8 +178,8 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::get("/{slider_banner}/edit", "edit")->middleware('permission:banner.edit')->name("edit");
                     Route::post("/{slider_banner}", "update")->middleware('permission:banner.edit')->name("update");
                     Route::delete("/{slider_banner}", "destroy")->middleware('permission:banner.delete')->name("destroy");
-                    Route::post("/{slider_banner}/show", "handleShow")->middleware('permission:banner.control')->name("show");
-                    Route::post("/{slider_banner}/hide", "handleHide")->middleware('permission:banner.control')->name("hide");
+                    Route::patch("/{slider_banner}/show", "handleShow")->middleware('permission:banner.control')->name("show");
+                    Route::patch("/{slider_banner}/hide", "handleHide")->middleware('permission:banner.control')->name("hide");
                     Route::get("/trash", "trash")->middleware('permission:banner.trash.list')->name("trash");
                     Route::post("/trash/{trash_slider_banner_id}/restore", "restore")->middleware('permission:banner.trash.restore')->name("trash.restore");
                     Route::delete("/trash/{trash_slider_banner_id}/force-delete", "forceDelete")->middleware('permission:banner.trash.delete')->name("trash.force.delete");
@@ -197,8 +197,8 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::get("/{product_banner}/edit", "edit")->middleware('permission:banner.edit')->name("edit");
                     Route::post("/{product_banner}", "update")->middleware('permission:banner.edit')->name("update");
                     Route::delete("/{product_banner}", "destroy")->middleware('permission:banner.delete')->name("destroy");
-                    Route::post("/{product_banner}/show", "handleShow")->middleware('permission:banner.control')->name("show");
-                    Route::post("/{product_banner}/hide", "handleHide")->middleware('permission:banner.control')->name("hide");
+                    Route::patch("/{product_banner}/show", "handleShow")->middleware('permission:banner.control')->name("show");
+                    Route::patch("/{product_banner}/hide", "handleHide")->middleware('permission:banner.control')->name("hide");
                     Route::get("/trash", "trash")->middleware('permission:banner.trash.list')->name("trash");
                     Route::post("/trash/{trash_product_banner_id}/restore", "restore")->middleware('permission:banner.trash.restore')->name("trash.restore");
                     Route::delete("/trash/{trash_product_banner_id}/force-delete", "forceDelete")->middleware('permission:banner.trash.delete')->name("trash.force.delete");
@@ -217,8 +217,8 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::post("/{campaign_banner}", "update")->middleware('permission:banner.edit')->name("update");
                     Route::delete("/{campaign_banner}", "destroy")->middleware('permission:banner.delete')->name("destroy");
                     Route::get("/trash", "trash")->middleware('permission:banner.trash.list')->name("trash");
-                    Route::post("/{campaign_banner}/show", "handleShow")->middleware('permission:banner.control')->name("show");
-                    Route::post("/{campaign_banner}/hide", "handleHide")->middleware('permission:banner.control')->name("hide");
+                    Route::patch("/{campaign_banner}/show", "handleShow")->middleware('permission:banner.control')->name("show");
+                    Route::patch("/{campaign_banner}/hide", "handleHide")->middleware('permission:banner.control')->name("hide");
                     Route::post("/trash/{trash_campaign_banner_id}/restore", "restore")->middleware('permission:banner.trash.restore')->name("trash.restore");
                     Route::delete("/trash/{trash_campaign_banner_id}/force-delete", "forceDelete")->middleware('permission:banner.trash.delete')->name("trash.force.delete");
                     Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:banner.trash.delete')->name("trash.permanently.delete");
