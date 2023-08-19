@@ -26,7 +26,7 @@ const props = defineProps({
   trashBrands: Object,
 });
 
-// Define  Variables
+// Define Variables
 const swal = inject("$swal");
 const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
 

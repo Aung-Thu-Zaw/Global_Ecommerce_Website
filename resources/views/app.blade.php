@@ -43,8 +43,7 @@
 
 <body class="font-sans antialiased w-full min-h-screen h-full bg-white border text-dark">
 
-
-    {{-- <x-translations /> --}}
+    <x-translations />
     @inertia
 </body>
 

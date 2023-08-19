@@ -6,7 +6,7 @@ import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
 import SaveButton from "@/Components/Buttons/SaveButton.vue";
-import { Link, useForm, Head } from "@inertiajs/vue3";
+import { useForm, Head } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import { ref } from "vue";
 
@@ -83,17 +83,15 @@ const handleCreateCollection = async () => {
 
         <!-- Go Back button -->
         <div>
-          <Link
-            as="button"
-            :href="route('admin.collections.index')"
-            :data="{
+          <GoBackButton
+            href="admin.collections.index"
+            :queryStringParams="{
+              page: 1,
               per_page: props.per_page,
               sort: 'id',
               direction: 'desc',
             }"
-          >
-            <GoBackButton />
-          </Link>
+          />
         </div>
       </div>
 
