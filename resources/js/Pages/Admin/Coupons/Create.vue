@@ -61,7 +61,10 @@ const handleCreateCoupon = async () => {
   processing.value = true;
   form.post(
     route("admin.coupons.store", {
+      page: 1,
       per_page: props.per_page,
+      sort: "id",
+      direction: "desc",
     }),
     {
       replace: true,
@@ -98,24 +101,24 @@ const handleCreateCoupon = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >{{ __("CREATE") }}</span
               >
+                {{ __("CREATE") }}
+              </span>
             </div>
           </li>
         </Breadcrumb>
 
         <!-- Go Back button -->
         <div>
-          <Link
-            :href="route('admin.coupons.index')"
-            :data="{
+          <GoBackButton
+            href="admin.coupons.index"
+            :queryStringParams="{
+              page: 1,
               per_page: props.per_page,
               sort: 'id',
               direction: 'desc',
             }"
-          >
-            <GoBackButton />
-          </Link>
+          />
         </div>
       </div>
 

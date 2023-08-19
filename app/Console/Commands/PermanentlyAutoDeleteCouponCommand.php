@@ -28,7 +28,7 @@ class PermanentlyAutoDeleteCouponCommand extends Command
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $coupons=Coupon::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
+        $coupons = Coupon::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
         (new PermanentlyDeleteAllTrashCouponAction())->handle($coupons);
     }
