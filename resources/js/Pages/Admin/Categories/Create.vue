@@ -45,7 +45,10 @@ const handleCreateCategory = async () => {
   processing.value = true;
   form.post(
     route("admin.categories.store", {
+      page: 1,
       per_page: props.per_page,
+      sort: "id",
+      direction: "desc",
     }),
     {
       replace: true,
@@ -82,25 +85,23 @@ const handleCreateCategory = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >{{ __("CREATE") }}</span
-              >
+                >{{ __("CREATE") }}
+              </span>
             </div>
           </li>
         </Breadcrumb>
 
         <!-- Go Back button -->
         <div>
-          <Link
-            as="button"
-            :href="route('admin.categories.index')"
-            :data="{
+          <GoBackButton
+            href="admin.categories.index"
+            :queryStringParams="{
+              page: 1,
               per_page: props.per_page,
               sort: 'id',
               direction: 'desc',
             }"
-          >
-            <GoBackButton />
-          </Link>
+          />
         </div>
       </div>
 
@@ -139,7 +140,9 @@ const handleCreateCategory = async () => {
               class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
               v-model="form.parent_id"
             >
-              <option value="" selected disabled>{{ __("SELECT_PARENT_CATEGORY") }}</option>
+              <option value="" selected disabled>
+                {{ __("SELECT_PARENT_CATEGORY") }}
+              </option>
               <option
                 v-for="category in categories"
                 :key="category"

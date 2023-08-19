@@ -13,6 +13,7 @@ trait HandlesQueryStringParameters
     protected function getQueryStringParams(Request $request): array
     {
         return [
+            "search" => $request->search ?? null,
             "page" => $request->page ?? "1",
             "per_page" => $request->per_page ?? "10",
             "sort" => $request->sort ?? "id",

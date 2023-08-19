@@ -94,6 +94,7 @@ const handleRestoreTrashCollection = async (trashCollectionId) => {
     router.post(
       route("admin.collections.trash.restore", {
         trash_collection_id: trashCollectionId,
+        search: usePage().props.ziggy.query?.search,
         page: usePage().props.ziggy.query?.page,
         per_page: usePage().props.ziggy.query?.per_page,
         sort: params.sort,
@@ -139,6 +140,7 @@ const handleDeleteTrashCollection = async (trashCollectionId) => {
     router.delete(
       route("admin.collections.trash.force.delete", {
         trash_collection_id: trashCollectionId,
+        search: usePage().props.ziggy.query?.search,
         page: usePage().props.ziggy.query?.page,
         per_page: usePage().props.ziggy.query?.per_page,
         sort: params.sort,

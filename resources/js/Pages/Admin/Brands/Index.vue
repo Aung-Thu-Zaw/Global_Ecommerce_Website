@@ -94,6 +94,7 @@ const handleDelete = (brand) => {
   router.delete(
     route("admin.brands.destroy", {
       brand: brand,
+      search: usePage().props.ziggy.query?.search,
       page: usePage().props.ziggy.query?.page,
       per_page: usePage().props.ziggy.query?.per_page,
       sort: params.sort,

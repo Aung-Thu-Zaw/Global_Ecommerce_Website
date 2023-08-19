@@ -96,6 +96,7 @@ const handleRestoreTrashBrand = async (trashBrandId) => {
     router.post(
       route("admin.brands.trash.restore", {
         trash_brand_id: trashBrandId,
+        search: usePage().props.ziggy.query?.search,
         page: usePage().props.ziggy.query?.page,
         per_page: usePage().props.ziggy.query?.per_page,
         sort: params.sort,
@@ -141,6 +142,7 @@ const handleDeleteTrashBrand = async (trashBrandId) => {
     router.delete(
       route("admin.brands.trash.force.delete", {
         trash_brand_id: trashBrandId,
+        search: usePage().props.ziggy.query?.search,
         page: usePage().props.ziggy.query?.page,
         per_page: usePage().props.ziggy.query?.per_page,
         sort: params.sort,

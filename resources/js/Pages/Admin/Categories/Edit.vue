@@ -87,8 +87,9 @@ const handleEditCategory = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >{{ category.name }}</span
               >
+                {{ category.name }}
+              </span>
             </div>
           </li>
           <li aria-current="page">
@@ -117,18 +118,10 @@ const handleEditCategory = async () => {
 
         <!-- Go Back button -->
         <div>
-          <Link
-            as="button"
-            :href="route('admin.categories.index')"
-            :data="{
-              page: queryStringParams.page,
-              per_page: queryStringParams.per_page,
-              sort: queryStringParams.sort,
-              direction: queryStringParams.direction,
-            }"
-          >
-            <GoBackButton />
-          </Link>
+          <GoBackButton
+            href="admin.categories.index"
+            :queryStringParams="queryStringParams"
+          />
         </div>
       </div>
 

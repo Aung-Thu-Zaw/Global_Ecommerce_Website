@@ -37,7 +37,10 @@ const handleCreateCollection = async () => {
 
   form.post(
     route("admin.collections.store", {
+      page: 1,
       per_page: props.per_page,
+      sort: "id",
+      direction: "desc",
     }),
     {
       replace: true,

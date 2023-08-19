@@ -114,6 +114,7 @@ const handleDeleteCollection = async (collection) => {
     router.delete(
       route("admin.collections.destroy", {
         collection: collection,
+        search: usePage().props.ziggy.query?.search,
         page: usePage().props.ziggy.query?.page,
         per_page: usePage().props.ziggy.query?.per_page,
         sort: params.sort,
