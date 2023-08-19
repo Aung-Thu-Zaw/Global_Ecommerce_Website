@@ -690,8 +690,7 @@ const handleEditProduct = async () => {
                     <img
                       ref="previewPhoto"
                       :src="form.image"
-                      alt=""
-                      class="h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300 mx-2"
+                      class="preview-img"
                     />
                   </div>
 
@@ -708,13 +707,13 @@ const handleEditProduct = async () => {
                         <img
                           :src="multiPreviewPhoto"
                           alt=""
-                          class="h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300 mr-6"
+                          class="h-[100px] object-cover rounded-sm shadow-md my-3 border-2 border-gray-300 mr-2"
                         />
                         <span
-                          class="absolute top-0 right-4 bg-slate-300 text-slate-600 w-5 h-5 flex items-center justify-center rounded-full hover:bg-slate-500 hover:text-slate-300 transition-all"
+                          class="absolute top-1 right-1 bg-slate-300 text-slate-600 w-4 h-4 flex items-center justify-center rounded-full hover:bg-slate-500 hover:text-slate-300 transition-all"
                           @click="removeImage(index)"
                         >
-                          <i class="fas fa-xmark text-sm"></i>
+                          <i class="fas fa-xmark text-xs"></i>
                         </span>
                       </div>
                     </div>
@@ -732,14 +731,13 @@ const handleEditProduct = async () => {
                       >
                         <img
                           :src="image.img_path"
-                          alt=""
-                          class="h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300 mx-2"
+                          class="w-full h-[100px] object-cover rounded-sm shadow-md mt-3 border-2 border-gray-300"
                         />
 
                         <button
                           @click="handleDeleteProductMultiImage(image.id)"
                           type="button"
-                          class="bg-red-600 rounded-md px-10 py-2 text-sm text-white hover:bg-red-800 transition-all"
+                          class="bg-red-600 w-full rounded-sm px-5 py-2 text-sm text-white hover:bg-red-700 transition-all"
                         >
                           {{ __("DELETE") }}
                         </button>

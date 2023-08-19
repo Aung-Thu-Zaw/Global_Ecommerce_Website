@@ -283,7 +283,7 @@ if (usePage().props.flash.successMessage) {
               {{ coupon.created_at }}
             </Td>
 
-            <Td v-if="couponEdit || couponDelete">
+            <Td v-if="couponEdit || couponDelete" class="flex items-center">
               <!-- Edit Button -->
               <div v-if="couponEdit">
                 <EditButton href="admin.coupons.edit" :id="coupon.id" />

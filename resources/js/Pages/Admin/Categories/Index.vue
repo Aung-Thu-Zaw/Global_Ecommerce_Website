@@ -276,7 +276,7 @@ if (usePage().props.flash.successMessage) {
               {{ category.created_at }}
             </Td>
 
-            <Td v-if="categoryEdit || categoryDelete">
+            <Td v-if="categoryEdit || categoryDelete" class="flex items-center">
               <!-- Edit Button -->
               <div v-if="categoryEdit">
                 <EditButton

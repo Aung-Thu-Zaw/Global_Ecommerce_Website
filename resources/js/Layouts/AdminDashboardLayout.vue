@@ -35,4 +35,22 @@ onMounted(() => {
   --ck-color-shadow-drop: none;
   --ck-color-shadow-inner: none;
 }
+
+/* .scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #999 #f0f0f0;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #999;
+  border-radius: 3px;
+} */
 </style>

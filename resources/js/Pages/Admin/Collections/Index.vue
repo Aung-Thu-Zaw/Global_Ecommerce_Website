@@ -230,7 +230,10 @@ if (usePage().props.flash.successMessage) {
               {{ collection.created_at }}
             </Td>
 
-            <Td v-if="collectionEdit || collectionDelete">
+            <Td
+              v-if="collectionEdit || collectionDelete"
+              class="flex items-center"
+            >
               <!-- Edit Button -->
               <div v-if="collectionEdit">
                 <EditButton

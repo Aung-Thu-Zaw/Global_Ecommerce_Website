@@ -257,7 +257,7 @@ if (usePage().props.flash.successMessage) {
               {{ brand.created_at }}
             </Td>
 
-            <Td v-if="brandEdit || brandDelete">
+            <Td v-if="brandEdit || brandDelete" class="flex items-center">
               <!-- Edit Button -->
               <div v-if="brandEdit">
                 <EditButton href="admin.brands.edit" :slug="brand.slug" />

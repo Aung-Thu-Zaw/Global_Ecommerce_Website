@@ -385,7 +385,10 @@ const handlePermanentlyDeleteTrashCoupons = async () => {
               {{ trashCoupon.deleted_at }}
             </Td>
 
-            <Td v-if="couponTrashRestore || couponTrashDelete">
+            <Td
+              v-if="couponTrashRestore || couponTrashDelete"
+              class="flex items-center"
+            >
               <!-- Restore Button -->
               <div v-if="couponTrashRestore">
                 <RestoreButton

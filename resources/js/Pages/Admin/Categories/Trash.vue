@@ -329,7 +329,10 @@ const handlePermanentlyDeleteTrashCategories = async () => {
               {{ trashCategory.deleted_at }}
             </Td>
 
-            <Td v-if="categoryTrashRestore || categoryTrashDelete">
+            <Td
+              v-if="categoryTrashRestore || categoryTrashDelete"
+              class="flex items-center"
+            >
               <!-- Restore Button -->
               <div v-if="categoryTrashRestore">
                 <RestoreButton

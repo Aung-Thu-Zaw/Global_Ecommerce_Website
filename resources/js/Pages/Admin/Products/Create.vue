@@ -667,14 +667,13 @@ const handleCreateProduct = async () => {
                       >
                         <img
                           :src="multiPreviewPhoto"
-                          alt=""
-                          class="h-[120px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300 mr-6"
+                          class="h-[100px] object-cover rounded-sm shadow-md my-3 border-2 border-gray-300 mr-2"
                         />
                         <span
-                          class="absolute top-0 right-4 bg-slate-300 text-slate-600 w-5 h-5 flex items-center justify-center rounded-full hover:bg-slate-500 hover:text-slate-300 transition-all"
+                          class="absolute top-1 right-1 bg-slate-300 text-slate-600 w-4 h-4 flex items-center justify-center rounded-full hover:bg-slate-500 hover:text-slate-300 transition-all"
                           @click="removeImage(index)"
                         >
-                          <i class="fas fa-xmark text-sm"></i>
+                          <i class="fas fa-xmark text-xs"></i>
                         </span>
                       </div>
                     </div>

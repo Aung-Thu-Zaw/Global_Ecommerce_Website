@@ -350,7 +350,7 @@ if (usePage().props.flash.successMessage) {
             </Td>
 
             <Td
-              class="w-[550px] flex"
+              class="min-w-[570px] w-auto flex items-center"
               v-if="
                 productEdit || productDelete || productDetail || productControl
               "

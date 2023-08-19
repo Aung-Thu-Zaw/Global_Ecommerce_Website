@@ -360,7 +360,10 @@ const handlePermanentlyDeleteTrashProducts = async () => {
               {{ trashProduct.deleted_at }}
             </Td>
 
-            <Td v-if="productTrashRestore || productTrashDelete">
+            <Td
+              v-if="productTrashRestore || productTrashDelete"
+              class="flex items-center"
+            >
               <!-- Restore Button -->
               <div v-if="productTrashRestore">
                 <RestoreButton

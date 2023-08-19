@@ -338,7 +338,7 @@ const handlePermanentlyDeleteTrashBrands = async () => {
               {{ trashBrand.deleted_at }}
             </Td>
 
-            <Td v-if="brandTrashRestore || brandTrashDelete">
+            <Td v-if="brandTrashRestore || brandTrashDelete" class="flex items-center">
               <!-- Restore Button -->
               <div v-if="brandTrashRestore">
                 <RestoreButton
