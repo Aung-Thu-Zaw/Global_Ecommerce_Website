@@ -72,26 +72,20 @@ const formattedAmount = (amount) => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >{{ __("DETAILS") }}</span
               >
+                {{ __("DETAILS") }}
+              </span>
             </div>
           </li>
         </Breadcrumb>
 
         <!-- Go Back button -->
+
         <div>
-          <Link
-            as="button"
-            :href="route('admin.products.index')"
-            :data="{
-              page: props.queryStringParams.page,
-              per_page: props.queryStringParams.per_page,
-              sort: props.queryStringParams.sort,
-              direction: props.queryStringParams.direction,
-            }"
-          >
-            <GoBackButton />
-          </Link>
+          <GoBackButton
+            href="admin.products.index"
+            :queryStringParams="queryStringParams"
+          />
         </div>
       </div>
 

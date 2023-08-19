@@ -202,8 +202,9 @@ const handleEditProduct = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >{{ product.name }}</span
               >
+                {{ product.name }}
+              </span>
             </div>
           </li>
           <li aria-current="page">
@@ -224,25 +225,18 @@ const handleEditProduct = async () => {
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
               >
-                {{ __("EDIT") }}</span
-              >
+                {{ __("EDIT") }}
+              </span>
             </div>
           </li>
         </Breadcrumb>
 
         <!-- Go Back Button -->
         <div>
-          <Link
-            :href="route('admin.products.index')"
-            :data="{
-              page: queryStringParams.page,
-              per_page: queryStringParams.per_page,
-              sort: queryStringParams.sort,
-              direction: queryStringParams.direction,
-            }"
-          >
-            <GoBackButton />
-          </Link>
+          <GoBackButton
+            href="admin.products.index"
+            :queryStringParams="queryStringParams"
+          />
         </div>
       </div>
 
@@ -766,19 +760,3 @@ const handleEditProduct = async () => {
     </div>
   </AdminDashboardLayout>
 </template>
-
-
-<style>
-.ck-editor__editable_inline {
-  min-height: 400px;
-  border-radius: 200px;
-}
-
-:root {
-  --ck-border-radius: 0.375rem;
-  --ck-color-focus-border: rgb(209 213 219);
-  --ck-font-size-base: 0.7rem;
-  --ck-color-shadow-drop: none;
-  --ck-color-shadow-inner: none;
-}
-</style>

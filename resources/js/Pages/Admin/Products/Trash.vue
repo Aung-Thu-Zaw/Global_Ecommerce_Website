@@ -5,7 +5,9 @@ import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
 import RestoreButton from "@/Components/Buttons/RestoreButton.vue";
 import DeleteForeverButton from "@/Components/Buttons/DeleteForeverButton.vue";
 import EmptyTrashButton from "@/Components/Buttons/EmptyTrashButton.vue";
-import ResetFilterButton from "@/Components/Buttons/ResetFilterButton.vue";
+import DashboardSearchInputForm from "@/Components/Forms/DashboardSearchInputForm.vue";
+import DashboardPerPageSelectBox from "@/Components/Forms/DashboardPerPageSelectBox.vue";
+import DashboardFilterByDeletedDate from "@/Components/Forms/DashboardFilterByDeletedDate.vue";
 import NoDiscountStatus from "@/Components/Status/NoDiscountStatus.vue";
 import DiscountStatus from "@/Components/Status/DiscountStatus.vue";
 import SortingArrows from "@/Components/Table/SortingArrows.vue";
@@ -18,233 +20,63 @@ import Td from "@/Components/Table/Td.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import { __ } from "@/Translations/translations-inside-setup.js";
-import datepicker from "vue3-datepicker";
-import { reactive, watch, inject, computed, ref } from "vue";
-import { router, Link, Head, usePage } from "@inertiajs/vue3";
+import { reactive, inject, computed, ref } from "vue";
+import { router, Head, usePage } from "@inertiajs/vue3";
 
 // Define the Props
 const props = defineProps({
   trashProducts: Object,
 });
 
-// Define  Variables
+// Define Variables
 const swal = inject("$swal");
-const isFilterBoxOpened = ref(false);
-const deletedFrom = ref(
-  usePage().props.ziggy.query.deleted_from
-    ? new Date(usePage().props.ziggy.query.deleted_from)
-    : ""
-);
-const deletedUntil = ref(
-  usePage().props.ziggy.query.deleted_until
-    ? new Date(usePage().props.ziggy.query.deleted_until)
-    : ""
-);
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
 
-// Formatted Date
-const formattedDeletedFrom = computed(() => {
-  const year = deletedFrom.value ? deletedFrom.value.getFullYear() : "";
-  const month = deletedFrom.value ? deletedFrom.value.getMonth() + 1 : "";
-  const day = deletedFrom.value ? deletedFrom.value.getDate() : "";
-
-  return year && month && day ? `${year}-${month}-${day}` : undefined;
+// Product Trash Restore Permission
+const productTrashRestore = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "product.trash.restore"
+      )
+    : false;
 });
 
-const formattedDeletedUntil = computed(() => {
-  const year = deletedUntil.value ? deletedUntil.value.getFullYear() : "";
-  const month = deletedUntil.value ? deletedUntil.value.getMonth() + 1 : "";
-  const day = deletedUntil.value ? deletedUntil.value.getDate() : "";
-
-  return year && month && day ? `${year}-${month}-${day}` : undefined;
+// Product Trash Delete Permission
+const productTrashDelete = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "product.trash.delete"
+      )
+    : false;
 });
 
 // Query String Parameteres
 const params = reactive({
-  search: usePage().props.ziggy.query?.search,
-  page: usePage().props.ziggy.query?.page,
-  per_page: usePage().props.ziggy.query?.per_page,
   sort: usePage().props.ziggy.query?.sort,
   direction: usePage().props.ziggy.query?.direction,
-  deleted_from: usePage().props.ziggy.query.deleted_from
-    ? usePage().props.ziggy.query.deleted_from
-    : formattedDeletedFrom,
-  deleted_until: usePage().props.ziggy.query.deleted_until
-    ? usePage().props.ziggy.query.deleted_until
-    : formattedDeletedUntil,
 });
-
-// Handle Search
-const handleSearch = () => {
-  router.get(
-    route("admin.products.trash"),
-    {
-      search: params.search,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-      deleted_from: params.deleted_from,
-      deleted_until: params.deleted_until,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
-
-// Remove Search Param
-const removeSearch = () => {
-  params.search = "";
-  router.get(
-    route("admin.products.trash"),
-    {
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-      deleted_from: params.deleted_from,
-      deleted_until: params.deleted_until,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
-
-// Filtered By Only Deleted From
-const filteredByDeletedFrom = () => {
-  router.get(
-    route("admin.products.trash"),
-    {
-      search: params.search,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-      deleted_from: formattedDeletedFrom.value,
-      deleted_until: params.deleted_until,
-    },
-    {
-      replace: true,
-      preserveState: true,
-      onSuccess: () => {
-        isFilterBoxOpened.value = true;
-      },
-    }
-  );
-};
-
-// Filtered By Only Deleted Until
-const filteredByDeletedUntil = () => {
-  router.get(
-    route("admin.products.trash"),
-    {
-      search: params.search,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-      deleted_from: params.deleted_from,
-      deleted_until: formattedDeletedUntil.value,
-    },
-    {
-      replace: true,
-      preserveState: true,
-      onSuccess: () => {
-        isFilterBoxOpened.value = true;
-      },
-    }
-  );
-};
-
-// Handle Reset Filtered Date
-const resetFilteredDate = () => {
-  deletedFrom.value = "";
-  deletedUntil.value = "";
-  router.get(
-    route("admin.products.trash"),
-    {
-      search: params.search,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-    },
-    {
-      replace: true,
-      preserveState: true,
-      onSuccess: () => (isFilterBoxOpened.value = false),
-    }
-  );
-};
-
-// Handle Query String Parameter
-const handleQueryStringParameter = () => {
-  router.get(
-    route("admin.products.trash"),
-    {
-      search: params.search,
-      page: params.page,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-      deleted_from: params.deleted_from,
-      deleted_until: params.deleted_until,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
-
-// Watching Search Box
-watch(
-  () => params.search,
-  () => {
-    if (params.search === "") {
-      removeSearch();
-    } else {
-      handleSearch();
-    }
-  }
-);
-
-// Watching Perpage Select Box
-watch(
-  () => params.per_page,
-  () => {
-    handleQueryStringParameter();
-  }
-);
-
-// Watching Deleted From Datepicker
-watch(
-  () => params.deleted_from,
-  () => {
-    if (params.deleted_from === "") {
-      resetFilteredDate();
-    } else {
-      filteredByDeletedFrom();
-    }
-  }
-);
-
-// Watching Deleted Unitl Datepicker
-watch(
-  () => params.deleted_until,
-  () => {
-    if (params.deleted_until === "") {
-      resetFilteredDate();
-    } else {
-      filteredByDeletedUntil();
-    }
-  }
-);
 
 // Update Sorting Table Column
 const updateSorting = (sort = "id") => {
   params.sort = sort;
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
-  handleQueryStringParameter();
+  router.get(
+    route("admin.products.trash"),
+    {
+      search: usePage().props.ziggy.query?.search,
+      page: usePage().props.ziggy.query?.page,
+      per_page: usePage().props.ziggy.query?.per_page,
+      sort: params.sort,
+      direction: params.direction,
+      deleted_from: usePage().props.ziggy.query?.deleted_from,
+      deleted_until: usePage().props.ziggy.query?.deleted_until,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 
 // Formatted Amount
@@ -276,12 +108,13 @@ const handleRestoreTrashProduct = async (trashProductId) => {
     router.post(
       route("admin.products.trash.restore", {
         trash_product_id: trashProductId,
-        page: params.page,
-        per_page: params.per_page,
+        search: usePage().props.ziggy.query?.search,
+        page: usePage().props.ziggy.query?.page,
+        per_page: usePage().props.ziggy.query?.per_page,
         sort: params.sort,
         direction: params.direction,
-        deleted_from: params.deleted_from,
-        deleted_until: params.deleted_until,
+        deleted_from: usePage().props.ziggy.query?.deleted_from,
+        deleted_until: usePage().props.ziggy.query?.deleted_until,
       }),
       {},
       {
@@ -321,12 +154,13 @@ const handleDeleteTrashProduct = async (trashProductId) => {
     router.delete(
       route("admin.products.trash.force.delete", {
         trash_product_id: trashProductId,
-        page: params.page,
-        per_page: params.per_page,
+        search: usePage().props.ziggy.query?.search,
+        page: usePage().props.ziggy.query?.page,
+        per_page: usePage().props.ziggy.query?.per_page,
         sort: params.sort,
         direction: params.direction,
-        deleted_from: params.deleted_from,
-        deleted_until: params.deleted_until,
+        deleted_from: usePage().props.ziggy.query?.deleted_from,
+        deleted_until: usePage().props.ziggy.query?.deleted_until,
       }),
       {
         preserveScroll: true,
@@ -364,12 +198,12 @@ const handlePermanentlyDeleteTrashProducts = async () => {
   if (result.isConfirmed) {
     router.delete(
       route("admin.products.trash.permanently.delete", {
-        page: params.page,
-        per_page: params.per_page,
+        page: usePage().props.ziggy.query?.page,
+        per_page: usePage().props.ziggy.query?.per_page,
         sort: params.sort,
         direction: params.direction,
-        deleted_from: params.deleted_from,
-        deleted_until: params.deleted_until,
+        deleted_from: usePage().props.ziggy.query?.deleted_from,
+        deleted_until: usePage().props.ziggy.query?.deleted_until,
       }),
       {
         preserveScroll: true,
@@ -385,27 +219,6 @@ const handlePermanentlyDeleteTrashProducts = async () => {
     );
   }
 };
-
-// Define Permissions Variables
-const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
-
-// Product Trash Restore Permission
-const productTrashRestore = computed(() => {
-  return permissions.value.length
-    ? permissions.value.some(
-        (permission) => permission.name === "product.trash.restore"
-      )
-    : false;
-});
-
-// Product Trash Delete Permission
-const productTrashDelete = computed(() => {
-  return permissions.value.length
-    ? permissions.value.some(
-        (permission) => permission.name === "product.trash.delete"
-      )
-    : false;
-});
 </script>
 
 <template>
@@ -442,104 +255,31 @@ const productTrashDelete = computed(() => {
 
         <!-- Go Back Button -->
         <div>
-          <Link
-            as="button"
-            :href="route('admin.products.index')"
-            :data="{
+          <GoBackButton
+            href="admin.products.index"
+            :queryStringParams="{
               page: 1,
               per_page: 10,
               sort: 'id',
               direction: 'desc',
             }"
-          >
-            <GoBackButton />
-          </Link>
+          />
         </div>
       </div>
 
       <div class="flex items-center justify-end mb-5">
         <!-- Search Box -->
-        <form class="w-[350px] relative">
-          <input
-            type="text"
-            class="search-input"
-            :placeholder="__('SEARCH_BY_NAME')"
-            v-model="params.search"
-          />
-
-          <i
-            v-if="params.search"
-            class="fa-solid fa-xmark remove-search"
-            @click="removeSearch"
-          ></i>
-        </form>
+        <DashboardSearchInputForm
+          href="admin.products.trash"
+          placeholder="SEARCH_BY_NAME"
+        />
         <!-- Perpage Select Box -->
         <div class="ml-5">
-          <select class="perpage-selectbox" v-model="params.per_page">
-            <option value="" selected disabled>Select</option>
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="75">75</option>
-            <option value="100">100</option>
-          </select>
+          <DashboardPerPageSelectBox href="admin.products.trash" />
         </div>
 
         <!-- Filter By Date -->
-        <button
-          @click="isFilterBoxOpened = !isFilterBoxOpened"
-          class="filter-btn"
-        >
-          <span class="">
-            <i class="fa-solid fa-filter"></i>
-          </span>
-        </button>
-
-        <div
-          v-if="isFilterBoxOpened"
-          class="w-[400px] border border-gray-300 shadow-lg absolute bg-white top-64 right-10 z-30 px-5 py-4 rounded-md"
-        >
-          <div class="flex items-center justify-end">
-            <span
-              @click="isFilterBoxOpened = false"
-              class="text-lg text-gray-500 hover:text-gray-800 cursor-pointer"
-            >
-              <i class="fa-solid fa-xmark"></i>
-            </span>
-          </div>
-          <div class="w-full mb-6">
-            <span class="font-bold text-sm text-gray-700 mb-5"
-              >Deleted from</span
-            >
-            <div>
-              <datepicker
-                class="w-full rounded-md p-3 border-gray-300 bg-white focus:ring-0 focus:border-gray-400 text-sm"
-                :placeholder="__('SELECT_DATE')"
-                v-model="deletedFrom"
-              />
-            </div>
-          </div>
-          <div class="w-full mb-3">
-            <span class="font-bold text-sm text-gray-700 mb-5"
-              >Deleted until</span
-            >
-            <div>
-              <datepicker
-                class="w-full rounded-md p-3 border-gray-300 bg-white focus:ring-0 focus:border-gray-400 text-sm"
-                :placeholder="__('SELECT_DATE')"
-                v-model="deletedUntil"
-              />
-            </div>
-          </div>
-
-          <div
-            v-if="params.deleted_from || params.deleted_until"
-            class="w-full flex items-center"
-          >
-            <ResetFilterButton @click="resetFilteredDate" />
-          </div>
-        </div>
+        <DashboardFilterByDeletedDate href="admin.products.trash" />
       </div>
 
       <!-- Product Permanently Delete Button -->
@@ -622,16 +362,18 @@ const productTrashDelete = computed(() => {
 
             <Td v-if="productTrashRestore || productTrashDelete">
               <!-- Restore Button -->
-              <RestoreButton
-                v-if="productTrashRestore"
-                @click="handleRestoreTrashProduct(trashProduct.id)"
-              />
+              <div v-if="productTrashRestore">
+                <RestoreButton
+                  @click="handleRestoreTrashProduct(trashProduct.id)"
+                />
+              </div>
 
               <!-- Delete Button -->
-              <DeleteForeverButton
-                v-if="productTrashDelete"
-                @click="handleDeleteTrashProduct(trashProduct.id)"
-              />
+              <div v-if="productTrashDelete">
+                <DeleteForeverButton
+                  @click="handleDeleteTrashProduct(trashProduct.id)"
+                />
+              </div>
             </Td>
           </Tr>
         </tbody>
