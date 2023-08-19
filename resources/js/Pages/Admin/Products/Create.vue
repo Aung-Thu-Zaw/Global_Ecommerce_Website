@@ -47,6 +47,7 @@ const form = useForm({
   category_id: "",
   seller_id: "",
   status: "pending",
+  return_policy: "",
   hot_deal: false,
   special_offer: false,
   featured: false,
@@ -480,6 +481,31 @@ const handleCreateProduct = async () => {
 
                       <InputError class="mt-2" :message="form.errors.qty" />
                     </div>
+                  </div>
+
+                  <!-- Product Return Policy Field -->
+                  <div class="mb-6">
+                    <InputLabel
+                      for="return_policy"
+                      :value="__('RETURN_POLICY')"
+                    />
+
+                    <select
+                      v-model="form.return_policy"
+                      class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+                    >
+                      <option value="" selected disabled>
+                        {{ __("SELECT_RETURN_DAYS") }}
+                      </option>
+                      <option value="7days">7 Days</option>
+                      <option value="10days">10 Days</option>
+                      <option value="14days">14 Days</option>
+                    </select>
+
+                    <InputError
+                      class="mt-2"
+                      :message="form.errors.return_policy"
+                    />
                   </div>
 
                   <!-- Product Brand Field -->

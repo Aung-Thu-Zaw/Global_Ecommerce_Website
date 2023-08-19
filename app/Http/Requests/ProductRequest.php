@@ -25,33 +25,34 @@ class ProductRequest extends FormRequest
      */
     public function rules()
     {
-        $rules= [
-            "brand_id"=>["nullable","numeric",Rule::exists("brands", "id")],
-            "category_id"=>["required","numeric",Rule::exists("categories", "id")],
-            "seller_id"=>["required","numeric",Rule::exists("users", "id")],
-            "collection_id"=>["nullable","numeric",Rule::exists("collections", "id")],
-            "name"=>["required","string"],
-            "code"=>["required","string"],
-            "qty"=>["required","numeric"],
-            "price"=>["required","numeric"],
-            "discount"=>["nullable","numeric"],
-            "description"=>["required","string"],
-            "hot_deal"=>["nullable","boolean"],
-            "featured"=>["nullable","boolean"],
-            "special_offer"=>["nullable","boolean"],
-            "sizes"=>["nullable","array"],
-            "colors"=>["nullable","array"],
-            "types"=>["nullable","array"],
-            "status"=>["required","string",Rule::in(["pending","approved","disapproved"])],
-            "captcha_token"=> ["required",new RecaptchaRule()],
+        $rules = [
+            "brand_id" => ["nullable","numeric",Rule::exists("brands", "id")],
+            "category_id" => ["required","numeric",Rule::exists("categories", "id")],
+            "seller_id" => ["required","numeric",Rule::exists("users", "id")],
+            "collection_id" => ["nullable","numeric",Rule::exists("collections", "id")],
+            "name" => ["required","string"],
+            "code" => ["required","string"],
+            "qty" => ["required","numeric"],
+            "price" => ["required","numeric"],
+            "discount" => ["nullable","numeric"],
+            "description" => ["required","string"],
+            "hot_deal" => ["nullable","boolean"],
+            "featured" => ["nullable","boolean"],
+            "special_offer" => ["nullable","boolean"],
+            "sizes" => ["nullable","array"],
+            "colors" => ["nullable","array"],
+            "types" => ["nullable","array"],
+            "status" => ["required","string",Rule::in(["pending","approved","disapproved"])],
+            "return_policy" => ["nullable","string",Rule::in(["7days","10days","14days"])],
+            "captcha_token" => ["required",new RecaptchaRule()],
         ];
 
         if ($this->hasFile("image")) {
-            $rules["image"]=["required","image","mimes:png,jpg,jpeg,svg,webp,gif","max:5120"];
+            $rules["image"] = ["required","image","mimes:png,jpg,jpeg,svg,webp,gif","max:5120"];
         }
 
         if ($this->hasFile("multi_image")) {
-            $rules["multi_image.*"]=["required","image","mimes:png,jpg,jpeg,svg,webp,gif","max:5120"];
+            $rules["multi_image.*"] = ["required","image","mimes:png,jpg,jpeg,svg,webp,gif","max:5120"];
         }
 
         return $rules;
@@ -79,16 +80,16 @@ class ProductRequest extends FormRequest
             "description.required" => "Product description is required.",
             "status.required" => "Product status is required.",
             "status.string" => "The status must be a string.",
-            "status.in"=>"The selected status is invalid.",
-            "image.required"=>"The image field is required.",
-            "image.image"=>"The image must be an image.",
-            "image.mimes"=>"The image must be a file of type: png,jpg,jpeg,svg,webp or gif.",
-            "image.max"=>"The image must not be greater than 5120 kilobytes.'",
-            "multi_image.required"=>"The multi_image field is required.",
-            "multi_image.multi_image"=>"The multi image must be an multi_image.",
-            "multi_image.mimes"=>"The multi image must be a file of type: png,jpg,jpeg,svg,webp or gif.",
-            "multi_image.max"=>"The multi image must not be greater than 5120 kilobytes.'",
-            "captcha_token.required"=>"The captcha token is required",
+            "status.in" => "The selected status is invalid.",
+            "image.required" => "The image field is required.",
+            "image.image" => "The image must be an image.",
+            "image.mimes" => "The image must be a file of type: png,jpg,jpeg,svg,webp or gif.",
+            "image.max" => "The image must not be greater than 5120 kilobytes.'",
+            "multi_image.required" => "The multi_image field is required.",
+            "multi_image.multi_image" => "The multi image must be an multi_image.",
+            "multi_image.mimes" => "The multi image must be a file of type: png,jpg,jpeg,svg,webp or gif.",
+            "multi_image.max" => "The multi image must not be greater than 5120 kilobytes.'",
+            "captcha_token.required" => "The captcha token is required",
         ];
     }
 }

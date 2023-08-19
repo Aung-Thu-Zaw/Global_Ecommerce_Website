@@ -795,5 +795,7 @@
     "AMOUNT": "ပမာဏ",
     "ORDER_STATUS": "အော်ဒါ အခြေအနေ",
     "ORDER_DATE": "အော်ဒါရက်စွဲ",
-    "SEARCH_BY_INVOICE":"ပြေစာဖြင့်ရှာပါ။"
+    "SEARCH_BY_INVOICE": "ပြေစာဖြင့်ရှာပါ။",
+    "RETURN_POLICY": "ပြန်လည်ပေးပို့ခြင်းဆိုင်ရာမူဝါဒ",
+    "SELECT_RETURN_DAYS": "Return Days ကို ရွေးပါ။"
 }

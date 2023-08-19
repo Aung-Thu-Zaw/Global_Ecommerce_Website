@@ -794,5 +794,7 @@
     "AMOUNT": "Amount",
     "ORDER_STATUS": "Order Status",
     "ORDER_DATE": "Order Date",
-    "SEARCH_BY_INVOICE": "Search by invoice"
+    "SEARCH_BY_INVOICE": "Search by invoice",
+    "RETURN_POLICY": "Return Policy",
+    "SELECT_RETURN_DAYS": "Select Return Days"
 }

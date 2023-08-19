@@ -52,6 +52,7 @@ const form = useForm({
   collection_id: props.product.collection_id,
   seller_id: props.product.seller_id,
   status: props.product.status,
+  return_policy: props.product.return_policy,
   hot_deal: props.product.hot_deal,
   special_offer: props.product.special_offer,
   featured: props.product.featured,
@@ -516,6 +517,46 @@ const handleEditProduct = async () => {
 
                       <InputError class="mt-2" :message="form.errors.qty" />
                     </div>
+                  </div>
+
+                  <!-- Product Return Policy Field -->
+                  <div class="mb-6">
+                    <InputLabel
+                      for="return_policy"
+                      :value="__('RETURN_POLICY')"
+                    />
+
+                    <select
+                      v-model="form.return_policy"
+                      class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+                    >
+                      <option value="" selected disabled>
+                        {{ __("SELECT_RETURN_DAYS") }}
+                      </option>
+                      <option
+                        value="7days"
+                        :selected="form.return_policy === '7days'"
+                      >
+                        7 Days
+                      </option>
+                      <option
+                        value="10days"
+                        :selected="form.return_policy === '10days'"
+                      >
+                        10 Days
+                      </option>
+                      <option
+                        value="14days"
+                        :selected="form.return_policy === '14days'"
+                      >
+                        14 Days
+                      </option>
+                    </select>
+
+                    <InputError
+                      class="mt-2"
+                      :message="form.errors.return_policy"
+                    />
                   </div>
 
                   <!-- Product Brand Field -->

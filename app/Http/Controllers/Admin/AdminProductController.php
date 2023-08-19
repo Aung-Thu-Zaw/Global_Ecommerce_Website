@@ -26,7 +26,7 @@ class AdminProductController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $products=Product::search(request("search"))
+        $products = Product::search(request("search"))
                          ->orderBy(request("sort", "id"), request("direction", "desc"))
                          ->paginate(request("per_page", 10))
                          ->appends(request()->all());
@@ -38,22 +38,22 @@ class AdminProductController extends Controller
     {
         $product->load("brand:id,name", "shop:id,shop_name", "images", "colors", "sizes", "types");
 
-        $queryStringParams=$this->getQueryStringParams($request);
+        $queryStringParams = $this->getQueryStringParams($request);
 
         return inertia("Admin/Products/Details", compact("product", "queryStringParams"));
     }
 
     public function create(): Response|ResponseFactory
     {
-        $per_page=request("per_page");
+        $per_page = request("per_page");
 
-        $brands=Brand::all();
+        $brands = Brand::all();
 
-        $categories=Category::all();
+        $categories = Category::all();
 
-        $collections=Collection::all();
+        $collections = Collection::all();
 
-        $sellers=User::select("id", "name", "shop_name")->where([["status","active"],["role","seller"]])->get();
+        $sellers = User::select("id", "name", "shop_name")->where([["status","active"],["role","seller"]])->get();
 
         return inertia("Admin/Products/Create", compact("per_page", "brands", "categories", "collections", "sellers"));
     }
@@ -67,17 +67,17 @@ class AdminProductController extends Controller
 
     public function edit(Request $request, Product $product): Response|ResponseFactory
     {
-        $brands=Brand::all();
+        $brands = Brand::all();
 
-        $categories=Category::all();
+        $categories = Category::all();
 
-        $collections=Collection::all();
+        $collections = Collection::all();
 
-        $sellers=User::select("id", "name", "shop_name")->where([["status","active"],["role","seller"]])->get();
+        $sellers = User::select("id", "name", "shop_name")->where([["status","active"],["role","seller"]])->get();
 
         $product->load(["sizes","colors","types","images"]);
 
-        $queryStringParams=$this->getQueryStringParams($request);
+        $queryStringParams = $this->getQueryStringParams($request);
 
         return inertia("Admin/Products/Edit", compact("product", "queryStringParams", "brands", "categories", "collections", "sellers"));
     }
@@ -98,7 +98,7 @@ class AdminProductController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashProducts=Product::search(request("search"))
+        $trashProducts = Product::search(request("search"))
                               ->onlyTrashed()
                               ->orderBy(request("sort", "id"), request("direction", "desc"))
                               ->paginate(request("per_page", 10))
@@ -136,11 +136,11 @@ class AdminProductController extends Controller
 
     public function handleStatus(Request $request, Product $product): RedirectResponse
     {
-        $product->update(["status"=>$request->status]);
+        $product->update(["status" => $request->status]);
 
         (new CreatedNewProductApporvedOrDisapprovedNotificationSendToSellerDashboardService())->send($product);
 
-        $message=$request->status==="disapproved" ? "PRODUCT_HAS_BEEN_SUCCESSFULLY_DISAPPROVED" : "PRODUCT_HAS_BEEN_SUCCESSFULLY_APPROVED";
+        $message = $request->status === "disapproved" ? "PRODUCT_HAS_BEEN_SUCCESSFULLY_DISAPPROVED" : "PRODUCT_HAS_BEEN_SUCCESSFULLY_APPROVED";
 
         return to_route('admin.products.index', $this->getQueryStringParams($request))->with("success", $message);
     }
