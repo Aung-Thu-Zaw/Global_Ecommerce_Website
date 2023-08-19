@@ -3,14 +3,16 @@
 
 <head>
     <meta charset="utf-8">
+    {{--
     <meta name="title" content="{{ $meta->meta_title }}">
     <meta name="author" content=" {{ $meta->meta_author }}">
     <meta name="keywords" content=" {{ $meta->meta_keyword }}">
-    <meta name="description" content="{{ $meta->meta_description }}">
+    <meta name="description" content="{{ $meta->meta_description }}"> --}}
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title inertia>{{ config('app.name', 'Laravel') }}</title>
-    <link rel="shortcut icon" href="{{ $setting->favicon }}" type="image">
+    {{--
+    <link rel="shortcut icon" href="{{ $setting->favicon }}" type="image"> --}}
     <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.6/dist/full.css" rel="stylesheet" type="text/css" />
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css" />
 
@@ -40,7 +42,9 @@
 </head>
 
 <body class="font-sans antialiased w-full min-h-screen h-full bg-white border text-dark">
-    <x-translations />
+
+
+    {{-- <x-translations /> --}}
     @inertia
 </body>
 

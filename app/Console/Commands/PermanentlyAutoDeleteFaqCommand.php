@@ -7,7 +7,7 @@ use App\Models\Faq;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
-class PermanentlyAutoDeleteFaqCategoryCommand extends Command
+class PermanentlyAutoDeleteFaqCommand extends Command
 {
     /**
      * The name and signature of the console command.

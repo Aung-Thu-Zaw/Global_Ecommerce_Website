@@ -6,6 +6,7 @@ use App\Models\SeoSetting;
 use App\Models\WebsiteSetting;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -30,7 +31,12 @@ class AppServiceProvider extends ServiceProvider
     {
         Model::preventLazyLoading(! app()->isProduction());
 
-        View::share("meta", SeoSetting::findOrFail(1));
-        View::share("setting", WebsiteSetting::select("favicon")->first());
+        // if (Schema::hasTable('seo_settings')) {
+        //     View::share("meta", SeoSetting::findOrFail(1));
+        // }
+
+        // if (Schema::hasTable('website_settings')) {
+        //     View::share("setting", WebsiteSetting::select("favicon")->first());
+        // }
     }
 }
