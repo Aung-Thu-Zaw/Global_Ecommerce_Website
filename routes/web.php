@@ -61,6 +61,7 @@ Route::controller(ProductController::class)
      ->prefix("/products")
      ->name("products.")
      ->group(function () {
+         Route::get('/flash-sale-products', "flashSaleProducts")->name("flash-sales");
          Route::get('/new-products', "newProducts")->name("new");
          Route::get('/featured-products', "featuredProducts")->name("featured");
          Route::get('/hot-deal-products', "hotDealProducts")->name("hot-deal");

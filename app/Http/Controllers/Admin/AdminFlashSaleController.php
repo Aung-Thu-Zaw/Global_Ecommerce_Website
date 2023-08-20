@@ -18,7 +18,7 @@ class AdminFlashSaleController extends Controller
     {
         $flashSale = FlashSale::findOrFail(1);
 
-        $products = Product::select("id", "name")->get();
+        $products = Product::select("id", "name")->where("status", "approved")->get();
 
         $flashSaleItems = FlashSaleItem::with("product")->where("flash_sale_id", $flashSale->id)->paginate(10);
 

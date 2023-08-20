@@ -805,5 +805,6 @@
     "FLASH_SALE_PRODUCT_HAS_BEEN_SUCCESSFULLY_ADDED": "Flash sale product has been successfully added.",
     "FLASH_SALE_PRODUCT_HAS_BEEN_SUCCESSFULLY_REMOVED": "Flash sale product has been successfully removed.",
     "ARE_YOU_SURE_YOU_WANT_TO_REMOVE_THIS_PRODUCT": "Are you sure you want to remove this product?",
-    "YES_REMOVE_IT": "Yes, Remove It!"
+    "YES_REMOVE_IT": "Yes, Remove It!",
+    "FLASH_SALE_PRODUCTS":"Flash Sale Products"
 }
