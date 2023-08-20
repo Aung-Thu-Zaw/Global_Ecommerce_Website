@@ -46,6 +46,7 @@ class DatabaseSeeder extends Seeder
                 FaqCategorySeeder::class,
                 FaqSubCategorySeeder::class,
                 FaqSeeder::class,
+                FlashSaleSeeder::class
             ]
         );
     }

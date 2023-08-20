@@ -203,6 +203,29 @@
             </Link>
           </li>
 
+          <!-- Flash Sale Section -->
+          <li v-if="flashSaleMenu" class="items-center">
+            <Link
+              :href="route('admin.flash-sales.edit')"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url.startsWith('/admin/flash-sales'),
+                'text-slate-700 hover:text-slate-500':
+                  !$page.url.startsWith('/admin/flash-sales'),
+              }"
+            >
+              <i class="fa-solid fa-bolt-lightning mr-2 text-sm"></i>
+              {{ __("FLASH_SALES") }}
+            </Link>
+          </li>
+
           <!-- Banner Sections -->
           <li v-if="bannerMenu" class="items-center">
             <ul class="md:flex-col md:min-w-full flex flex-col list-none">
@@ -1629,6 +1652,14 @@ export default {
       return this.permissions.length
         ? this.permissions.some(
             (permission) => permission.name === "coupon.menu"
+          )
+        : false;
+    },
+
+    flashSaleMenu() {
+      return this.permissions.length
+        ? this.permissions.some(
+            (permission) => permission.name === "flash-sale.menu"
           )
         : false;
     },

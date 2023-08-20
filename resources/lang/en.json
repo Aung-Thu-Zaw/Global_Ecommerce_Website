@@ -796,5 +796,14 @@
     "ORDER_DATE": "Order Date",
     "SEARCH_BY_INVOICE": "Search by invoice",
     "RETURN_POLICY": "Return Policy",
-    "SELECT_RETURN_DAYS": "Select Return Days"
+    "SELECT_RETURN_DAYS": "Select Return Days",
+    "FLASH_SALES": "Flash Sales",
+    "END_DATE": "End Date",
+    "SELECT_END_DATE": "Select End Date",
+    "SELECT_PRODUCT": "Select Product",
+    "FLASH_SALE_HAS_BEEN_SUCCESSFULLY_UPDATED": "Flash sale has been successfully updated.",
+    "FLASH_SALE_PRODUCT_HAS_BEEN_SUCCESSFULLY_ADDED": "Flash sale product has been successfully added.",
+    "FLASH_SALE_PRODUCT_HAS_BEEN_SUCCESSFULLY_REMOVED": "Flash sale product has been successfully removed.",
+    "ARE_YOU_SURE_YOU_WANT_TO_REMOVE_THIS_PRODUCT": "Are you sure you want to remove this product?",
+    "YES_REMOVE_IT": "Yes, Remove It!"
 }

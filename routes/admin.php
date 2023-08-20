@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminCouponController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminDashboardNotificationController;
+use App\Http\Controllers\Admin\AdminFlashSaleController;
 use App\Http\Controllers\MultiImageController;
 use App\Http\Controllers\Admin\Banners\AdminProductBannerController;
 use App\Http\Controllers\Admin\UserManagements\AdminSellerManageController;
@@ -163,6 +164,17 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::post("/trash/{trash_coupon_id}/restore", "restore")->middleware('permission:coupon.trash.restore')->name("trash.restore");
                     Route::delete("/trash/{trash_coupon_id}/force-delete", "forceDelete")->middleware('permission:coupon.trash.delete')->name("trash.force.delete");
                     Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:coupon.trash.delete')->name("trash.permanently.delete");
+                });
+
+           // Admin Flash Sales Section
+           Route::controller(AdminFlashSaleController::class)
+                ->prefix("/flash-sales")
+                ->name("flash-sales.")
+                ->group(function () {
+                    Route::get("/edit", "edit")->middleware('permission:flash-sale.edit')->name("edit");
+                    Route::patch("/{flash_sale}", "update")->middleware('permission:flash-sale.edit')->name("update");
+                    Route::post("/add-product", "addFlashSaleProduct")->middleware('permission:flash-sale.edit')->name("add-product");
+                    Route::delete("/{flash_sale_product_id}/remove-product", "removeFlashSaleProduct")->middleware('permission:flash-sale.edit')->name("remove-product");
                 });
 
            // ========== Admin Banners Section ==========

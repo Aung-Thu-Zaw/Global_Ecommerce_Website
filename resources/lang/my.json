@@ -797,5 +797,14 @@
     "ORDER_DATE": "အော်ဒါရက်စွဲ",
     "SEARCH_BY_INVOICE": "ပြေစာဖြင့်ရှာပါ။",
     "RETURN_POLICY": "ပြန်လည်ပေးပို့ခြင်းဆိုင်ရာမူဝါဒ",
-    "SELECT_RETURN_DAYS": "Return Days ကို ရွေးပါ။"
+    "SELECT_RETURN_DAYS": "Return Days ကို ရွေးပါ။",
+    "FLASH_SALES": "အမြန်လျှော့ဈေး",
+    "END_DATE": "ကုန်ဆုံးရက်စွဲ",
+    "SELECT_END_DATE": "ကုန်ဆုံးရက်ကို ရွေးပါ။",
+    "SELECT_PRODUCT": "ထုတ်ကုန်ကိုရွေးချယ်ပါ။",
+    "FLASH_SALE_HAS_BEEN_SUCCESSFULLY_UPDATED": "Flash sale ကို အောင်မြင်စွာ မွမ်းမံပြီးပါပြီ။",
+    "FLASH_SALE_PRODUCT_HAS_BEEN_SUCCESSFULLY_ADDED": "Flash sale ထုတ်ကုန်ကို အောင်မြင်စွာ ထည့်သွင်းပြီးပါပြီ။",
+    "FLASH_SALE_PRODUCT_HAS_BEEN_SUCCESSFULLY_REMOVED": "Flash sale ထုတ်ကုန်ကို အောင်မြင်စွာ ဖယ်ရှားလိုက်ပါပြီ။",
+    "ARE_YOU_SURE_YOU_WANT_TO_REMOVE_THIS_PRODUCT": "ဤထုတ်ကုန်ကို ဖယ်ရှားလိုသည်မှာ သေချာပါသလား။",
+    "YES_REMOVE_IT": "ဟုတ်ကဲ့၊ ဖယ်ရှားပါ"
 }
