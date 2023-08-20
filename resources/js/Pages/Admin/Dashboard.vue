@@ -4,22 +4,21 @@ import AdminHeaderStats from "@/Components/Headers/AdminHeaderStats.vue";
 import MonthlyOrderCardBarChart from "@/Components/Charts/MonthlyOrderCardBarChart.vue";
 import MonthlySalesCardLineChart from "@/Components/Charts/MonthlySalesCardLineChart.vue";
 import MonthlyRegisterUserCardLineChart from "@/Components/Charts/MonthlyRegisterUserCardLineChart.vue";
-import MonthlyRegisterVendorCardLineChart from "@/Components/Charts/MonthlyRegisterSellerCardLineChart.vue";
+import MonthlyRegisterSellerCardLineChart from "@/Components/Charts/MonthlyRegisterSellerCardLineChart.vue";
 import CardPageVisits from "@/Components/Cards/CardPageVisits.vue";
 import CardSocialTraffic from "@/Components/Cards/CardSocialTraffic.vue";
+import { usePage, Head } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-import { usePage, Head } from "@inertiajs/vue3";
-import { watch } from "vue";
 
 // Define the props
 defineProps({
   totalUsers: Number,
-  totalVendors: Number,
+  totalSellers: Number,
   totalOrders: Number,
   todaySales: Number,
   percentageChangeForUser: Number,
-  percentageChangeForVendor: Number,
+  percentageChangeForSeller: Number,
   percentageChangeForOrder: Number,
   percentageChangeForSales: Number,
   thisYearMonthlySaleLables: Object,
@@ -34,10 +33,10 @@ defineProps({
   thisYearMonthlyUserRegisterData: Object,
   lastYearMonthlyUserRegisterLables: Object,
   lastYearMonthlyUserRegisterData: Object,
-  thisYearMonthlyVendorRegisterLables: Object,
-  thisYearMonthlyVendorRegisterData: Object,
-  lastYearMonthlyVendorRegisterLables: Object,
-  lastYearMonthlyVendorRegisterData: Object,
+  thisYearMonthlySellerRegisterLables: Object,
+  thisYearMonthlySellerRegisterData: Object,
+  lastYearMonthlySellerRegisterLables: Object,
+  lastYearMonthlySellerRegisterData: Object,
   socialTraffics: Object,
 });
 
@@ -47,17 +46,6 @@ if (usePage().props.flash.successMessage) {
     autoClose: 2000,
   });
 }
-
-// watch(
-//   () => usePage().props.flash.successMessage,
-//   () => {
-//     if (usePage().props.flash.successMessage) {
-//       toast.success(usePage().props.flash.successMessage, {
-//         autoClose: 2000,
-//       });
-//     }
-//   }
-// );
 </script>
 
 <template>
@@ -67,11 +55,11 @@ if (usePage().props.flash.successMessage) {
     <!-- Status Cards -->
     <AdminHeaderStats
       :totalUsers="totalUsers"
-      :totalVendors="totalVendors"
+      :totalSellers="totalSellers"
       :totalOrders="totalOrders"
       :todaySales="todaySales"
       :percentageChangeForUser="percentageChangeForUser"
-      :percentageChangeForVendor="percentageChangeForVendor"
+      :percentageChangeForSeller="percentageChangeForSeller"
       :percentageChangeForOrder="percentageChangeForOrder"
       :percentageChangeForSales="percentageChangeForSales"
     />
@@ -93,20 +81,20 @@ if (usePage().props.flash.successMessage) {
               :lastYearMonthlyUserRegisterData="lastYearMonthlyUserRegisterData"
             />
           </div>
-          <!-- Monthly Registered Vendor Chart -->
+          <!-- Monthly Registered Seller Chart -->
           <div class="w-full xl:w-1/2 mb-12 xl:mb-0 px-4">
-            <MonthlyRegisterVendorCardLineChart
-              :thisYearMonthlyVendorRegisterLables="
-                thisYearMonthlyVendorRegisterLables
+            <MonthlyRegisterSellerCardLineChart
+              :thisYearMonthlySellerRegisterLables="
+                thisYearMonthlySellerRegisterLables
               "
-              :thisYearMonthlyVendorRegisterData="
-                thisYearMonthlyVendorRegisterData
+              :thisYearMonthlySellerRegisterData="
+                thisYearMonthlySellerRegisterData
               "
-              :lastYearMonthlyVendorRegisterLables="
-                lastYearMonthlyVendorRegisterLables
+              :lastYearMonthlySellerRegisterLables="
+                lastYearMonthlySellerRegisterLables
               "
-              :lastYearMonthlyVendorRegisterData="
-                lastYearMonthlyVendorRegisterData
+              :lastYearMonthlySellerRegisterData="
+                lastYearMonthlySellerRegisterData
               "
             />
           </div>

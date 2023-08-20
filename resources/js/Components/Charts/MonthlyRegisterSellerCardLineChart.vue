@@ -3,10 +3,10 @@ import Chart from "chart.js";
 import { computed, onMounted } from "vue";
 
 const props = defineProps({
-  thisYearMonthlyVendorRegisterLables: Object,
-  thisYearMonthlyVendorRegisterData: Object,
-  lastYearMonthlyVendorRegisterLables: Object,
-  lastYearMonthlyVendorRegisterData: Object,
+  thisYearMonthlySellerRegisterLables: Object,
+  thisYearMonthlySellerRegisterData: Object,
+  lastYearMonthlySellerRegisterLables: Object,
+  lastYearMonthlySellerRegisterData: Object,
 });
 
 const monthNames = [
@@ -25,7 +25,7 @@ const monthNames = [
 ];
 
 const formattedMonths = computed(() => {
-  return props.thisYearMonthlyVendorRegisterLables.map(
+  return props.thisYearMonthlySellerRegisterLables.map(
     (month) => monthNames[month - 1]
   );
 });
@@ -40,7 +40,7 @@ onMounted(() => {
           label: new Date().getFullYear(),
           backgroundColor: "#d74c1d",
           borderColor: "#d74c1d",
-          data: props.thisYearMonthlyVendorRegisterData,
+          data: props.thisYearMonthlySellerRegisterData,
           fill: false,
           tension: 0.1,
         },
@@ -49,7 +49,7 @@ onMounted(() => {
           fill: false,
           backgroundColor: "#006b9c",
           borderColor: "#006b9c",
-          data: props.lastYearMonthlyVendorRegisterData,
+          data: props.lastYearMonthlySellerRegisterData,
           tension: 0.1,
         },
       ],
@@ -59,7 +59,7 @@ onMounted(() => {
       responsive: true,
       title: {
         display: false,
-        text: "Vendor Register",
+        text: "Seller Register",
         fontColor: "gray",
       },
       legend: {
@@ -139,7 +139,7 @@ onMounted(() => {
     },
   };
   var ctx = document
-    .getElementById("vendor-register-line-chart")
+    .getElementById("seller-register-line-chart")
     .getContext("2d");
   window.myLine = new Chart(ctx, config);
 });
@@ -164,7 +164,7 @@ onMounted(() => {
     <div class="p-4 flex-auto">
       <!-- Chart -->
       <div class="relative h-350-px">
-        <canvas id="vendor-register-line-chart"></canvas>
+        <canvas id="seller-register-line-chart"></canvas>
       </div>
     </div>
   </div>

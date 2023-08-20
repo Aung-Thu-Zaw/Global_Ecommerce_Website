@@ -4,11 +4,11 @@ import { computed } from "vue";
 
 const props = defineProps({
   totalUsers: Number,
-  totalVendors: Number,
+  totalSellers: Number,
   totalOrders: Number,
   todaySales: Number,
   percentageChangeForUser: Number,
-  percentageChangeForVendor: Number,
+  percentageChangeForSeller: Number,
   percentageChangeForOrder: Number,
   percentageChangeForSales: Number,
 });
@@ -17,8 +17,8 @@ const formatpercentageChangeForUser = computed(() =>
   props.percentageChangeForUser.toFixed(1)
 );
 
-const formatpercentageChangeForVendor = computed(() =>
-  props.percentageChangeForVendor.toFixed(1)
+const formatpercentageChangeForSeller = computed(() =>
+  props.percentageChangeForSeller.toFixed(1)
 );
 
 const formatpercentageChangeForOrder = computed(() =>
@@ -54,12 +54,12 @@ const formatpercentageChangeForSales = computed(() =>
 
           <div class="w-full lg:w-6/12 xl:w-3/12 px-5 py-3">
             <CardStats
-              :statSubtitle="__('TOTAL_VENDORS')"
-              :statTitle="totalVendors"
-              :statArrow="formatpercentageChangeForVendor > 0 ? 'up' : 'down'"
-              :statPercent="formatpercentageChangeForVendor"
+              :statSubtitle="__('TOTAL_SELLERS')"
+              :statTitle="totalSellers"
+              :statArrow="formatpercentageChangeForSeller > 0 ? 'up' : 'down'"
+              :statPercent="formatpercentageChangeForSeller"
               :statPercentColor="
-                formatpercentageChangeForVendor > 0
+                formatpercentageChangeForSeller > 0
                   ? 'text-green-500'
                   : 'text-red-500'
               "
