@@ -172,60 +172,59 @@ const flashSaleEdit = computed(() => {
         <Breadcrumb />
       </div>
 
-      <div class="border shadow-md p-10 mb-5">
-        <form @submit.prevent="handleEditFlashSale">
-          <!-- Flash Sale Date Component -->
-          <div class="mb-6">
-            <InputLabel for="end_date" :value="__('END_DATE') + ' *'" />
+      <div class="grid grid-cols-2 gap-3 mb-5">
+        <div class="border shadow-md p-10">
+          <form @submit.prevent="handleEditFlashSale">
+            <!-- Flash Sale Date Component -->
+            <div class="mb-6">
+              <InputLabel for="end_date" :value="__('END_DATE') + ' *'" />
 
-            <datepicker
-              class="p-3 w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 placeholder:text-gray-400 placeholder:text-sm"
-              :placeholder="__('SELECT_END_DATE')"
-              v-model="endDate"
-            />
+              <datepicker
+                class="p-3 w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 placeholder:text-gray-400 placeholder:text-sm"
+                :placeholder="__('SELECT_END_DATE')"
+                v-model="endDate"
+              />
 
-            <InputError class="mt-2" :message="form.errors.end_date" />
-          </div>
+              <InputError class="mt-2" :message="form.errors.end_date" />
+            </div>
 
-          <!-- Save Button -->
-          <div v-if="flashSaleEdit" class="mb-3 w-[200px]">
-            <SaveButton :processing="processing1" />
-          </div>
-        </form>
-      </div>
+            <!-- Save Button -->
+            <div v-if="flashSaleEdit" class="mb-3 w-[200px]">
+              <SaveButton :processing="processing1" />
+            </div>
+          </form>
+        </div>
 
-      <div class="border shadow-md p-10 mb-5">
-        <h1 class="font-semibold text-lg text-slate-500 mb-5">
-          Add Flash Sale Products
-        </h1>
-        <form @submit.prevent="handleAddFlashSaleProduct">
-          <!-- Product Select Box -->
-          <div class="mb-6">
-            <InputLabel for="end-date" :value="__('ADD_PRODUCT') + ' *'" />
+        <div class="border shadow-md p-10">
+          <form @submit.prevent="handleAddFlashSaleProduct">
+            <!-- Product Select Box -->
+            <div class="mb-6">
+              <InputLabel for="end-date" :value="__('ADD_PRODUCT') + ' *'" />
 
-            <select
-              class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-              v-model="product"
-            >
-              <option selected disabled>
-                {{ __("SELECT_PRODUCT") }}
-              </option>
-
-              <option
-                v-for="product in products"
-                :key="product.id"
-                :value="product.id"
+              <select
+                class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+                v-model="product"
               >
-                {{ product.name }}
-              </option>
-            </select>
-          </div>
+                <option selected disabled>
+                  {{ __("SELECT_PRODUCT") }}
+                </option>
 
-          <!-- Save Button -->
-          <div v-if="flashSaleEdit" class="mb-3 w-[200px]">
-            <SaveButton :processing="processing2" />
-          </div>
-        </form>
+                <option
+                  v-for="product in products"
+                  :key="product.id"
+                  :value="product.id"
+                >
+                  {{ product.name }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Save Button -->
+            <div v-if="flashSaleEdit" class="mb-3 w-[200px]">
+              <SaveButton :processing="processing2" />
+            </div>
+          </form>
+        </div>
       </div>
 
       <div>

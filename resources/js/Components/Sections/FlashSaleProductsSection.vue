@@ -13,7 +13,6 @@ const endDate = ref(new Date(props.flashSale.end_date).getTime());
 
 const timeLeft = computed(() => endDate.value - currentTime.value);
 
-
 const days = computed(() => {
   const remainingDays = Math.floor(timeLeft.value / (1000 * 60 * 60 * 24));
   return remainingDays >= 0 ? remainingDays : 0;
@@ -65,19 +64,19 @@ onMounted(() => {
           <div
             class="flex flex-col items-center justify-between font-semibold bg-blue-600 text-white w-14 h-14 p-3 rounded-sm shadow-md"
           >
-            <span class="text-sm animate-pulse">{{ days }}</span>
+            <span class="text-sm">{{ days }}</span>
             <span class="text-[.7rem]">Days</span>
           </div>
           <div
             class="flex flex-col items-center justify-between font-semibold bg-blue-600 text-white w-14 h-14 p-3 rounded-sm shadow-md"
           >
-            <span class="text-sm animate-pulse">{{ hours }}</span>
+            <span class="text-sm">{{ hours }}</span>
             <span class="text-[.7rem]">Hours</span>
           </div>
           <div
             class="flex flex-col items-center justify-between font-semibold bg-blue-600 text-white w-14 h-14 p-3 rounded-sm shadow-md"
           >
-            <span class="text-sm animate-pulse">{{ minutes }}</span>
+            <span class="text-sm">{{ minutes }}</span>
             <span class="text-[.7rem]">Minutes</span>
           </div>
           <div
