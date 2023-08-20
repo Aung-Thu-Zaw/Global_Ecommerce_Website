@@ -114,7 +114,8 @@ const handleEditBlogPost = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >{{ blogPost.title }}
+              >
+                {{ blogPost.title }}
               </span>
             </div>
           </li>
@@ -135,26 +136,19 @@ const handleEditBlogPost = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >{{ __("EDIT") }}</span
               >
+                {{ __("EDIT") }}
+              </span>
             </div>
           </li>
         </Breadcrumb>
 
         <!-- Go Back button -->
         <div>
-          <Link
-            as="button"
-            :href="route('admin.blogs.posts.index')"
-            :data="{
-              page: props.queryStringParams.page,
-              per_page: props.queryStringParams.per_page,
-              sort: props.queryStringParams.sort,
-              direction: props.queryStringParams.direction,
-            }"
-          >
-            <GoBackButton />
-          </Link>
+          <GoBackButton
+            href="admin.blogs.posts.index"
+            :queryStringParams="queryStringParams"
+          />
         </div>
       </div>
 
@@ -277,19 +271,3 @@ const handleEditBlogPost = async () => {
     </div>
   </AdminDashboardLayout>
 </template>
-
-<style>
-.ck-editor__editable_inline {
-  min-height: 250px;
-  border-radius: 200px;
-}
-
-:root {
-  --ck-border-radius: 0.375rem;
-  --ck-color-focus-border: rgb(209 213 219);
-  --ck-font-size-base: 0.7rem;
-  --ck-color-shadow-drop: none;
-  --ck-color-shadow-inner: none;
-}
-</style>
-

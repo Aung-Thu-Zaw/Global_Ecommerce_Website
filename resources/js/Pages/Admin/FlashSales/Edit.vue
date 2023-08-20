@@ -189,7 +189,7 @@ const flashSaleEdit = computed(() => {
             </div>
 
             <!-- Save Button -->
-            <div v-if="flashSaleEdit" class="mb-3 w-[200px]">
+            <div v-if="flashSaleEdit" class="mb-3">
               <SaveButton :processing="processing1" />
             </div>
           </form>
@@ -220,7 +220,7 @@ const flashSaleEdit = computed(() => {
             </div>
 
             <!-- Save Button -->
-            <div v-if="flashSaleEdit" class="mb-3 w-[200px]">
+            <div v-if="flashSaleEdit" class="mb-3">
               <SaveButton :processing="processing2" />
             </div>
           </form>
