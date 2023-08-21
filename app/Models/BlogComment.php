@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Attributes\SearchUsingFullText;
@@ -75,4 +76,14 @@ class BlogComment extends Model
     {
         return $this->belongsTo(BlogPost::class);
     }
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\HasOne<BlogCommentReply>
+    */
+    public function blogCommentReply(): HasOne
+    {
+        return $this->hasOne(BlogCommentReply::class);
+    }
+
+
 }

@@ -94,7 +94,7 @@ const handleRemoveBlogCategory = () => {
 
 <template>
   <AppLayout>
-    <Head title="Blogs" />
+    <Head :title="__('BLOGS')" />
 
     <div class="min-h-screen bg-gray-50 mt-40 w-full py-6">
       <div class="w-[1500px] mx-auto">
@@ -116,9 +116,9 @@ const handleRemoveBlogCategory = () => {
                     clip-rule="evenodd"
                   ></path>
                 </svg>
-                <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">{{
-                  __("BLOGS")
-                }}</span>
+                <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">
+                  {{ __("BLOGS") }}
+                </span>
               </div>
             </li>
           </Breadcrumb>
@@ -139,16 +139,18 @@ const handleRemoveBlogCategory = () => {
               class="text-sm font-bold text-slate-600 px-5 py-3 border-t border-b flex items-center justify-between mb-5"
             >
               <!-- Search Blogs Input -->
-              <form class="w-[350px] relative">
+              <form
+                class="w-[350px] rounded-md flex items-center justify-between border border-gray-400 focus:border-gray-400 p-1"
+              >
                 <input
                   type="text"
-                  class="search-input border border-gray-400 focus:border-gray-400"
+                  class="border-0 focus:ring-0 text-sm bg-gray-50 w-full"
                   :placeholder="__('SEARCH_BLOG')"
                   v-model="params.search_blog"
                 />
                 <i
                   v-if="params.search_blog"
-                  class="fa-solid fa-xmark remove-search"
+                  class="fa-solid fa-xmark mr-2 text-slate-600 cursor-pointer hover:text-red-600"
                   @click="removeSearch"
                 ></i>
               </form>

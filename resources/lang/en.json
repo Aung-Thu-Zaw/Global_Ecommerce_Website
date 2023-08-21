@@ -816,9 +816,13 @@
     "SEARCH_BY_PERMISSION_NAME": "Search by permission name",
     "PERMISSION_NAME": "Permission Name",
     "GROUP": "Group",
-    "BLOG_COMMENTS":"Blog Comments",
-    "SEARCH_BY_COMMENT":"Search by comment",
-    "BLOG_NAME":"Blog Name",
-    "COMMENTER_NAME":"Commenter Name",
-    "COMMENT":"Comment"
+    "BLOG_COMMENTS": "Blog Comments",
+    "SEARCH_BY_COMMENT": "Search by comment",
+    "BLOG_NAME": "Blog Name",
+    "COMMENTER_NAME": "Commenter Name",
+    "COMMENT": "Comment",
+    "WRITE_COMMENT": "Write comment",
+    "TOTAL_COMMENTS": "Total Comments",
+    "IF_YOU_WANT_TO_WRITE_COMMENTS_YOU_NEED_TO_LOGIN_FIRST_HERE": "If you want to write comments you need to login first. Here",
+    "COMMENTS_NOT_YET": "Comments Not Yet"
 }

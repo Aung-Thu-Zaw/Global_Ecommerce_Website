@@ -3,10 +3,12 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
 import RelatedBlogCard from "@/Components/Cards/RelatedBlogCard.vue";
 import BlogCategoryCard from "@/Components/Cards/BlogCategoryCard.vue";
+import BlogCommentSection from "@/Components/Sections/BlogCommentSection.vue";
 import { Head, Link } from "@inertiajs/vue3";
 
 defineProps({
   blogPost: Object,
+  blogComments: Object,
   blogCategories: Object,
   relatedBlogPosts: Object,
 });
@@ -114,11 +116,12 @@ defineProps({
 
           <!-- Blogs Detail -->
           <div class="w-full pl-10">
-            <img
-              :src="blogPost.image"
-              alt=""
-              class="h-[400px] rounded-t-md object-cover border shadow-sm border-slate-300"
-            />
+            <div class="border border-gray-300 shadow-lg rounded-md p-2">
+              <img
+                :src="blogPost.image"
+                class="w-full max-h-[600px] object-cover"
+              />
+            </div>
 
             <h1 class="font-bold text-2xl text-slate-700 mt-8 mb-2">
               {{ blogPost.title }}
@@ -128,12 +131,12 @@ defineProps({
               <span
                 class="text-xs font-bold bg-gray-300 py-1 px-3 rounded-sm shadow mr-3"
               >
-                {{ blogPost.blog_category.name }}
+                {{ blogPost.blog_category?.name }}
               </span>
 
               <span class="font-bold text-slate-600 text-sm mr-3">
                 <i class="fa-solid fa-user mr-2"></i>
-                {{ blogPost.author.name }}
+                {{ blogPost.author?.name }}
               </span>
 
               <span class="font-bold text-slate-600 text-sm">
@@ -144,12 +147,15 @@ defineProps({
 
             <hr class="my-3" />
 
-            <p v-html="blogPost.description" class="text-ms text-slate-600"></p>
+            <p
+              v-html="blogPost.description"
+              class="text-ms text-slate-600 mb-5"
+            ></p>
 
             <!-- Tags -->
             <div
               v-if="blogPost.blog_tags.length"
-              class="flex items-center my-5"
+              class="flex items-center mb-5"
             >
               <span class="font-bold text-gray-600 mr-3"
                 >{{ __("BLOG_TAGS") }} :</span
@@ -164,12 +170,17 @@ defineProps({
                     sort: 'id',
                     direction: 'desc',
                   }"
-                  class="px-3 py-1 bg-blue-600 rounded-full text-white text-xs capitalize font-medium"
+                  class="px-3 py-1 bg-blue-600 rounded-full text-white text-xs capitalize font-bold hover:bg-blue-700 transition-all"
                 >
                   {{ blogTag.name }}
                 </Link>
               </div>
             </div>
+
+            <BlogCommentSection
+              :blogPost="blogPost"
+              :blogComments="blogComments"
+            />
           </div>
         </div>
       </div>

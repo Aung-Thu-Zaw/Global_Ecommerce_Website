@@ -821,5 +821,9 @@
     "SEARCH_BY_COMMENT": "မှတ်ချက်ဖြင့်ရှာဖွေပါ။",
     "BLOG_NAME": "ဘလော့အမည်",
     "COMMENTER_NAME": "မှတ်ချက်ပေးသူအမည်",
-    "COMMENT": "မှတ်ချက်"
+    "COMMENT": "မှတ်ချက်",
+    "WRITE_COMMENT": "မှတ်ချက်ရေးပါ။",
+    "TOTAL_COMMENTS": "စုစုပေါင်းမှတ်ချက်များ",
+    "IF_YOU_WANT_TO_WRITE_COMMENTS_YOU_NEED_TO_LOGIN_FIRST_HERE": "မှတ်ချက်များရေးလိုပါက ဦးစွာဝင်ရောက်ရန် လိုအပ်ပါသည်။ ဒီမှာ",
+    "COMMENTS_NOT_YET": "မှတ်ချက်များ မရသေးပါ။"
 }

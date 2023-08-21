@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
                 BlogCategorySeeder::class,
                 BlogPostSeeder::class,
                 BlogCommentSeeder::class,
+                BlogCommentReplySeeder::class,
                 ProductReviewSeeder::class,
                 ShopReviewSeeder::class,
                 SellerProductBannerSeeder::class,

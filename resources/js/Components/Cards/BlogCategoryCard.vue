@@ -32,7 +32,7 @@ defineProps({
     >
       <img
         :src="blogCategory.image"
-        class="w-10 h-10 object-cover rounded-full ring-2 ring-slate-300"
+        class="w-10 h-10 object-cover rounded-full border-2 border-gray-400 shadow"
       />
       {{ blogCategory.name }}
       <span

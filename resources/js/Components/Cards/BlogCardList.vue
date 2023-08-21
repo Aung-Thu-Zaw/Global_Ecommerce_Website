@@ -13,7 +13,6 @@ defineProps({
     <img
       class="h-[250px] w-[250px] object-cover object-center"
       :src="post.image"
-      alt=""
     />
 
     <div class="flex flex-col items-center justify-between w-full h-full">
@@ -21,7 +20,7 @@ defineProps({
         <div class="flex items-center justify-between mb-3">
           <span class="font-bold text-slate-400 text-[.7rem]">
             <i class="fa-solid fa-user mr-2"></i>
-            {{ post.author.name }}
+            {{ post.author?.name }}
           </span>
           <span class="font-bold text-slate-400 text-[.7rem]">
             <i class="fa-solid fa-clock mr-2"></i>
@@ -33,7 +32,7 @@ defineProps({
           <span
             class="text-xs font-bold bg-gray-300 mb-3 py-1 px-3 rounded-sm shadow"
           >
-            {{ post.blog_category.name }}
+            {{ post.blog_category?.name }}
           </span>
           <h5
             class="my-2 text-lg font-bold tracking-tight text-gray-700 dark:text-white"
@@ -50,11 +49,11 @@ defineProps({
         <Link
           :href="route('blogs.show', post.slug)"
           :data="{
-            sort: $page.props.ziggy.query.sort,
-            direction: $page.props.ziggy.query.direction,
-            view: $page.props.ziggy.query.view,
+            sort: $page.props.ziggy.query?.sort,
+            direction: $page.props.ziggy.query?.direction,
+            view: $page.props.ziggy.query?.view,
           }"
-          class="inline-flex items-center text-sm font-medium text-center text-slate-700 hover:text-blue-700 rounded-lg hover:animate-bounce"
+          class="inline-flex items-center text-sm font-medium text-center text-slate-700 hover:text-blue-700 rounded-lg"
         >
           {{ __("READ_MORE") }}
           <svg

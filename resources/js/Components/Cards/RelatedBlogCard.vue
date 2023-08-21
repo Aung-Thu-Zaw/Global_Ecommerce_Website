@@ -18,9 +18,9 @@ defineProps({
       <Link
         :href="route('blogs.show', blogPost.slug)"
         :data="{
-          sort: $page.props.ziggy.query.sort,
-          direction: $page.props.ziggy.query.direction,
-          view: $page.props.ziggy.query.view,
+          sort: $page.props.ziggy.query?.sort,
+          direction: $page.props.ziggy.query?.direction,
+          view: $page.props.ziggy.query?.view,
         }"
         class="hover:text-blue-700 text-md font-semibold text-gray-700 line-clamp-2"
       >
@@ -29,7 +29,7 @@ defineProps({
       <div class="flex items-center justify-between mb-3">
         <span class="font-bold text-slate-400 text-[.7rem]">
           <i class="fa-solid fa-user mr-2"></i>
-          {{ blogPost.author.name }}
+          {{ blogPost.author?.name }}
         </span>
         <span class="font-bold text-slate-400 text-[.7rem]">
           <i class="fa-solid fa-clock mr-2"></i>
