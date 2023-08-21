@@ -813,8 +813,12 @@
     "CREATE_ROLE": "Create Role",
     "EDIT_ROLE": "Edit Role",
     "TRASH_R0LES": "Trash Roles",
-
-    "SEARCH_BY_PERMISSION_NAME":"Search by permission name",
-    "PERMISSION_NAME":"Permission Name",
-    "GROUP":"Group"
+    "SEARCH_BY_PERMISSION_NAME": "Search by permission name",
+    "PERMISSION_NAME": "Permission Name",
+    "GROUP": "Group",
+    "BLOG_COMMENTS":"Blog Comments",
+    "SEARCH_BY_COMMENT":"Search by comment",
+    "BLOG_NAME":"Blog Name",
+    "COMMENTER_NAME":"Commenter Name",
+    "COMMENT":"Comment"
 }

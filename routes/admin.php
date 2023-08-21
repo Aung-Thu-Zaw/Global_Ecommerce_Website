@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\AdminWebControlArea\WebsitePages\AdminTermsAndCon
 use App\Http\Controllers\Admin\Banners\AdminSliderBannerController;
 use App\Http\Controllers\Admin\BlogManagements\AdminBlogCategoryController;
 use App\Http\Controllers\Admin\BlogManagements\AdminBlogPostController;
+use App\Http\Controllers\Admin\BlogManagements\AdminBlogCommentController;
 use App\Http\Controllers\Admin\UserManagements\AdminRegisteredAccountController;
 use App\Http\Controllers\Admin\OrderManagements\CancelOrderManage\AdminApprovedCancelOrderController;
 use App\Http\Controllers\Admin\OrderManagements\CancelOrderManage\AdminRequestedCancelOrderController;
@@ -558,6 +559,19 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::post("/trash/{trash_blog_post_id}/restore", "restore")->middleware('permission:blog-post.trash.restore')->name("trash.restore");
                     Route::delete("/trash/{trash_blog_post_id}/force-delete", "forceDelete")->middleware('permission:blog-post.trash.delete')->name("trash.force.delete");
                     Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:blog-post.trash.delete')->name("trash.permanently.delete");
+                });
+
+           // Admin Blog Comments Section
+           Route::controller(AdminBlogCommentController::class)
+                ->prefix("/blogs/comments")
+                ->name("blogs.comments.")
+                ->group(function () {
+                    Route::get("/", "index")->middleware('permission:blog-comment.menu')->name("index");
+                    Route::delete("/{blog_comment}", "destroy")->middleware('permission:blog-comment.delete')->name("destroy");
+                    Route::get("/trash", "trash")->middleware('permission:blog-comment.trash.list')->name("trash");
+                    Route::post("/trash/{trash_blog_comment_id}/restore", "restore")->middleware('permission:blog-comment.trash.restore')->name("trash.restore");
+                    Route::delete("/trash/{trash_blog_comment_id}/force-delete", "forceDelete")->middleware('permission:blog-comment.trash.delete')->name("trash.force.delete");
+                    Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:blog-comment.trash.delete')->name("trash.permanently.delete");
                 });
 
            // ******************** Admin Dashboard Admin Web Control Area ********************

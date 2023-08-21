@@ -1111,6 +1111,31 @@
               {{ __("BLOG_POSTS") }}
             </Link>
           </li>
+
+          <!-- Blog Comment Section -->
+          <li v-if="blogCommentMenu" class="items-center">
+            <Link
+              :href="route('admin.blogs.comments.index')"
+              :data="{
+                page: 1,
+                per_page: 10,
+                sort: 'id',
+                direction: 'desc',
+              }"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600': $page.url.startsWith(
+                  '/admin/blogs/comments'
+                ),
+                'text-slate-700 hover:text-slate-500': !$page.url.startsWith(
+                  '/admin/blogs/comments'
+                ),
+              }"
+            >
+              <i class="fa-solid fa-comment mr-2 text-sm"></i>
+              {{ __("BLOG_COMMENTS") }}
+            </Link>
+          </li>
         </ul>
 
         <hr v-if="settingMenu || pageMenu" class="my-4 md:min-w-full" />
@@ -1780,6 +1805,14 @@ export default {
       return this.permissions.length
         ? this.permissions.some(
             (permission) => permission.name === "blog-post.menu"
+          )
+        : false;
+    },
+
+    blogCommentMenu() {
+      return this.permissions.length
+        ? this.permissions.some(
+            (permission) => permission.name === "blog-comment.menu"
           )
         : false;
     },

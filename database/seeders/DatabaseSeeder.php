@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
                 TownshipSeeder::class,
                 BlogCategorySeeder::class,
                 BlogPostSeeder::class,
+                BlogCommentSeeder::class,
                 ProductReviewSeeder::class,
                 ShopReviewSeeder::class,
                 SellerProductBannerSeeder::class,

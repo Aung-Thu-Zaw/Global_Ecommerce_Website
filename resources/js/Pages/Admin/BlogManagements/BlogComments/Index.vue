@@ -1,12 +1,8 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/BlogPostBreadcrumb.vue";
-import CreateButton from "@/Components/Buttons/CreateButton.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/BlogCommentBreadcrumb.vue";
 import TrashButton from "@/Components/Buttons/TrashButton.vue";
-import EditButton from "@/Components/Buttons/EditButton.vue";
 import DeleteButton from "@/Components/Buttons/DeleteButton.vue";
-import ActiveStatus from "@/Components/Status/ActiveStatus.vue";
-import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
 import DashboardSearchInputForm from "@/Components/Forms/DashboardSearchInputForm.vue";
 import DashboardPerPageSelectBox from "@/Components/Forms/DashboardPerPageSelectBox.vue";
 import DashboardFilterByCreatedDate from "@/Components/Forms/DashboardFilterByCreatedDate.vue";
@@ -25,45 +21,27 @@ import { router, Head, usePage } from "@inertiajs/vue3";
 
 // Define the props
 const props = defineProps({
-  blogPosts: Object,
+  blogComments: Object,
 });
 
 // Define Variables
 const swal = inject("$swal");
 const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
 
-// Create New Blog Post Permission
-const blogPostAdd = computed(() => {
+// Blog Comment Delete Permission
+const blogCommentDelete = computed(() => {
   return permissions.value.length
     ? permissions.value.some(
-        (permission) => permission.name === "blog-post.add"
+        (permission) => permission.name === "blog-comment.delete"
       )
     : false;
 });
 
-// Blog Post Edit Permission
-const blogPostEdit = computed(() => {
+// Blog Comment Trash List Permission
+const blogCommentTrashList = computed(() => {
   return permissions.value.length
     ? permissions.value.some(
-        (permission) => permission.name === "blog-post.edit"
-      )
-    : false;
-});
-
-// Blog Post Delete Permission
-const blogPostDelete = computed(() => {
-  return permissions.value.length
-    ? permissions.value.some(
-        (permission) => permission.name === "blog-post.delete"
-      )
-    : false;
-});
-
-// Blog Post Trash List Permission
-const blogPostTrashList = computed(() => {
-  return permissions.value.length
-    ? permissions.value.some(
-        (permission) => permission.name === "blog-post.trash.list"
+        (permission) => permission.name === "blog-comment.trash.list"
       )
     : false;
 });
@@ -80,7 +58,7 @@ const updateSorting = (sort = "id") => {
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    route("admin.blogs.posts.index"),
+    route("admin.blogs.comments.index"),
     {
       search: usePage().props.ziggy.query?.search,
       page: usePage().props.ziggy.query?.page,
@@ -97,12 +75,12 @@ const updateSorting = (sort = "id") => {
   );
 };
 
-// Handle Delete Blog Post
-const handleDeleteBlogPost = async (blogPost) => {
+// Handle Delete Blog Comment
+const handleDeleteBlogComment = async (blogComment) => {
   const result = await swal({
     icon: "question",
-    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_BLOG_POST"),
-    text: __("YOU_WILL_BE_ABLE_TO_RESTORE_THIS_BLOG_POST_IN_THE_TRASH"),
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_BLOG_COMMENT"),
+    text: __("YOU_WILL_BE_ABLE_TO_RESTORE_THIS_BLOG_COMMENT_IN_THE_TRASH"),
     showCancelButton: true,
     confirmButtonText: __("YES_DELETE_IT"),
     cancelButtonText: __("CANCEL"),
@@ -115,8 +93,8 @@ const handleDeleteBlogPost = async (blogPost) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.blogs.posts.destroy", {
-        blog_post: blogPost,
+      route("admin.blogs.comments.destroy", {
+        blog_comment: blogComment,
         search: usePage().props.ziggy.query?.search,
         page: usePage().props.ziggy.query?.page,
         per_page: usePage().props.ziggy.query?.per_page,
@@ -150,7 +128,7 @@ if (usePage().props.flash.successMessage) {
 
 <template>
   <AdminDashboardLayout>
-    <Head :title="__('BLOG_POSTS')" />
+    <Head :title="__('BLOG_COMMENTS')" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -158,31 +136,26 @@ if (usePage().props.flash.successMessage) {
         <Breadcrumb />
 
         <!-- Trash Button -->
-        <div v-if="blogPostTrashList">
-          <TrashButton href="admin.blogs.posts.trash" />
+        <div v-if="blogCommentTrashList">
+          <TrashButton href="admin.blogs.comments.trash" />
         </div>
       </div>
 
       <div class="mb-5 flex items-center justify-between">
-        <!-- Create Blog Post Button -->
-        <div v-if="blogPostAdd">
-          <CreateButton href="admin.blogs.posts.create" name="ADD_BLOG_POST" />
-        </div>
-
         <div class="flex items-center ml-auto">
           <!-- Search Box -->
           <DashboardSearchInputForm
-            href="admin.blogs.posts.index"
-            placeholder="SEARCH_BY_NAME"
+            href="admin.blogs.comments.index"
+            placeholder="SEARCH_BY_COMMENT"
           />
 
           <!-- Perpage Select Box -->
           <div class="ml-5">
-            <DashboardPerPageSelectBox href="admin.blogs.posts.index" />
+            <DashboardPerPageSelectBox href="admin.blogs.comments.index" />
           </div>
 
           <!-- Filter By Date -->
-          <DashboardFilterByCreatedDate href="admin.blogs.posts.index" />
+          <DashboardFilterByCreatedDate href="admin.blogs.comments.index" />
         </div>
       </div>
 
@@ -194,16 +167,13 @@ if (usePage().props.flash.successMessage) {
             <SortingArrows :params="params" sort="id" />
           </HeaderTh>
 
-          <HeaderTh> {{ __("IMAGE") }} </HeaderTh>
+          <HeaderTh> {{ __("BLOG_NAME") }} </HeaderTh>
 
-          <HeaderTh @click="updateSorting('title')">
-            {{ __("TITLE") }}
-            <SortingArrows :params="params" sort="title" />
-          </HeaderTh>
+          <HeaderTh> {{ __("COMMENTER_NAME") }} </HeaderTh>
 
-          <HeaderTh @click="updateSorting('description')">
-            {{ __("DESCRIPTION") }}
-            <SortingArrows :params="params" sort="description" />
+          <HeaderTh @click="updateSorting('comment')">
+            {{ __("COMMENT") }}
+            <SortingArrows :params="params" sort="comment" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('created_at')">
@@ -211,52 +181,41 @@ if (usePage().props.flash.successMessage) {
             <SortingArrows :params="params" sort="created_at" />
           </HeaderTh>
 
-          <HeaderTh v-if="blogPostEdit || blogPostDelete">
-            {{ __("ACTION") }}
-          </HeaderTh>
+          <HeaderTh v-if="blogCommentDelete"> {{ __("ACTION") }} </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="blogPosts.data.length">
-          <Tr v-for="blogPost in blogPosts.data" :key="blogPost.id">
+        <tbody v-if="blogComments.data.length">
+          <Tr v-for="blogComment in blogComments.data" :key="blogComment.id">
             <BodyTh>
-              {{ blogPost.id }}
+              {{ blogComment.id }}
             </BodyTh>
 
             <Td>
-              <img :src="blogPost.image" class="image" />
-            </Td>
-
-            <Td class="line-clamp-1 w-[400px]">
-              {{ blogPost.title }}
-            </Td>
-
-            <Td>
-              <span
-                v-html="blogPost.description"
-                class="line-clamp-1 w-[400px]"
-              >
+              <span class="line-clamp-1 w-[300px]">
+                {{ blogComment.blog_post?.title }}
               </span>
             </Td>
 
-            <Td class="w-[150px]">
-              {{ blogPost.created_at }}
+            <Td>
+              {{ blogComment.user?.name }}
             </Td>
 
-            <Td
-              v-if="blogPostEdit || blogPostDelete"
-              class="w-[300px] flex items-center"
-            >
-              <!-- Edit Button -->
-              <div v-if="blogPostEdit">
-                <EditButton
-                  href="admin.blogs.posts.edit"
-                  :slug="blogPost.slug"
-                />
-              </div>
+            <Td>
+              <span class="line-clamp-1 w-[300px]">
+                {{ blogComment.comment }}
+              </span>
+            </Td>
 
+            <Td>
+              {{ blogComment.created_at }}
+            </Td>
+
+            <Td v-if="blogCommentDelete" class="flex items-center">
               <!-- Delete Button -->
-              <div v-if="blogPostDelete">
-                <DeleteButton @click="handleDeleteBlogPost(blogPost.slug)" />
+              <div v-if="blogCommentDelete">
+                <DeleteButton
+                  @click="handleDeleteBlogComment(blogComment.id)"
+                />
               </div>
             </Td>
           </Tr>
@@ -265,15 +224,15 @@ if (usePage().props.flash.successMessage) {
       <!-- Blog Post Table End -->
 
       <!-- No Data Row -->
-      <NotAvaliableData v-if="!blogPosts.data.length" />
+      <NotAvaliableData v-if="!blogComments.data.length" />
 
       <!-- Pagination -->
-      <div v-if="blogPosts.data.length" class="mt-6">
+      <div v-if="blogComments.data.length" class="mt-6">
         <p class="text-center text-sm text-gray-600 mb-3 font-bold">
-          Showing {{ blogPosts.from }} - {{ blogPosts.to }} of
-          {{ blogPosts.total }}
+          Showing {{ blogComments.from }} - {{ blogComments.to }} of
+          {{ blogComments.total }}
         </p>
-        <Pagination :links="blogPosts.links" />
+        <Pagination :links="blogComments.links" />
       </div>
     </div>
   </AdminDashboardLayout>

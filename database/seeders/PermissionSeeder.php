@@ -158,6 +158,12 @@ class PermissionSeeder extends Seeder
         Permission::create(["name" => "blog-post.trash.restore","group" => "blog-post"]);
         Permission::create(["name" => "blog-post.trash.delete","group" => "blog-post"]);
 
+        Permission::create(["name" => "blog-comment.menu","group" => "blog-comment"]);
+        Permission::create(["name" => "blog-comment.delete","group" => "blog-comment"]);
+        Permission::create(["name" => "blog-comment.trash.list","group" => "blog-comment"]);
+        Permission::create(["name" => "blog-comment.trash.restore","group" => "blog-comment"]);
+        Permission::create(["name" => "blog-comment.trash.delete","group" => "blog-comment"]);
+
         Permission::create(["name" => "setting.menu","group" => "setting"]);
         Permission::create(["name" => "setting.edit","group" => "setting"]);
 

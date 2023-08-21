@@ -816,5 +816,10 @@
     "TRASH_R0LES": "အမှိုက်အခန်းကဏ္ဍ",
     "SEARCH_BY_PERMISSION_NAME": "ခွင့်ပြုချက်အမည်ဖြင့်ရှာဖွေပါ။",
     "PERMISSION_NAME": "ခွင့်ပြုချက်အမည်",
-    "GROUP": "အဖွဲ့"
+    "GROUP": "အဖွဲ့",
+    "BLOG_COMMENTS": "ဘလော့ဂ်မှတ်ချက်များ",
+    "SEARCH_BY_COMMENT": "မှတ်ချက်ဖြင့်ရှာဖွေပါ။",
+    "BLOG_NAME": "ဘလော့အမည်",
+    "COMMENTER_NAME": "မှတ်ချက်ပေးသူအမည်",
+    "COMMENT": "မှတ်ချက်"
 }
