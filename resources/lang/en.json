@@ -806,5 +806,15 @@
     "FLASH_SALE_PRODUCT_HAS_BEEN_SUCCESSFULLY_REMOVED": "Flash sale product has been successfully removed.",
     "ARE_YOU_SURE_YOU_WANT_TO_REMOVE_THIS_PRODUCT": "Are you sure you want to remove this product?",
     "YES_REMOVE_IT": "Yes, Remove It!",
-    "FLASH_SALE_PRODUCTS":"Flash Sale Products"
+    "FLASH_SALE_PRODUCTS": "Flash Sale Products",
+    "ADD_ROLE": "Add Role",
+    "ROLE_NAME": "Role Name",
+    "SEARCH_BY_ROLE_NAME": "Search by role name",
+    "CREATE_ROLE": "Create Role",
+    "EDIT_ROLE": "Edit Role",
+    "TRASH_R0LES": "Trash Roles",
+
+    "SEARCH_BY_PERMISSION_NAME":"Search by permission name",
+    "PERMISSION_NAME":"Permission Name",
+    "GROUP":"Group"
 }

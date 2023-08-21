@@ -807,5 +807,14 @@
     "FLASH_SALE_PRODUCT_HAS_BEEN_SUCCESSFULLY_REMOVED": "Flash sale ထုတ်ကုန်ကို အောင်မြင်စွာ ဖယ်ရှားလိုက်ပါပြီ။",
     "ARE_YOU_SURE_YOU_WANT_TO_REMOVE_THIS_PRODUCT": "ဤထုတ်ကုန်ကို ဖယ်ရှားလိုသည်မှာ သေချာပါသလား။",
     "YES_REMOVE_IT": "ဟုတ်ကဲ့၊ ဖယ်ရှားပါ",
-    "FLASH_SALE_PRODUCTS": "အမြန်လျှော့ဈေး ထုတ်ကုန်များ"
+    "FLASH_SALE_PRODUCTS": "အမြန်လျှော့ဈေး ထုတ်ကုန်များ",
+    "ADD_ROLE": "အခန်းကဏ္ဍ ထည့်ပါ",
+    "ROLE_NAME": "အခန်းကဏ္ဍအမည်",
+    "SEARCH_BY_ROLE_NAME": "အခန်းကဏ္ဍအမည်ဖြင့်ရှာဖွေပါ။",
+    "CREATE_ROLE": "အခန်းကဏ္ဍကိုဖန်တီးပါ",
+    "EDIT_ROLE": "အခန်းကဏ္ဍကို တည်းဖြတ်ပါ",
+    "TRASH_R0LES": "အမှိုက်အခန်းကဏ္ဍ",
+    "SEARCH_BY_PERMISSION_NAME": "ခွင့်ပြုချက်အမည်ဖြင့်ရှာဖွေပါ။",
+    "PERMISSION_NAME": "ခွင့်ပြုချက်အမည်",
+    "GROUP": "အဖွဲ့"
 }

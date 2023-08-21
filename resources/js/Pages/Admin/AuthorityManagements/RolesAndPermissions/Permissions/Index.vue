@@ -1,16 +1,20 @@
 <script setup>
-import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
+import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/RoleAndPermissionBreadcrumb.vue";
+import DashboardSearchInputForm from "@/Components/Forms/DashboardSearchInputForm.vue";
+import DashboardPerPageSelectBox from "@/Components/Forms/DashboardPerPageSelectBox.vue";
+import DashboardFilterByCreatedDate from "@/Components/Forms/DashboardFilterByCreatedDate.vue";
 import SortingArrows from "@/Components/Table/SortingArrows.vue";
-import Tr from "@/Components/Table/Tr.vue";
-import Td from "@/Components/Table/Td.vue";
+import TableContainer from "@/Components/Table/TableContainer.vue";
+import TableHeader from "@/Components/Table/TableHeader.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
-import TableHeader from "@/Components/Table/TableHeader.vue";
-import TableContainer from "@/Components/Table/TableContainer.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/RoleAndPermissionBreadcrumb.vue";
+import Tr from "@/Components/Table/Tr.vue";
+import Td from "@/Components/Table/Td.vue";
+import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject } from "vue";
+import { __ } from "@/Translations/translations-inside-setup.js";
+import { reactive } from "vue";
 import { router, Head, usePage } from "@inertiajs/vue3";
 
 // Define the props
@@ -18,109 +22,46 @@ const props = defineProps({
   permissions: Object,
 });
 
-// Define Alert Variables
-const swal = inject("$swal");
-
 // Query String Parameteres
 const params = reactive({
-  search: usePage().props.ziggy.query?.search,
-  page: usePage().props.ziggy.query?.page,
-  per_page: usePage().props.ziggy.query?.per_page,
   sort: usePage().props.ziggy.query?.sort,
   direction: usePage().props.ziggy.query?.direction,
 });
-
-// Handle Search
-const handleSearch = () => {
-  router.get(
-    route("admin.permissions.index"),
-    {
-      search: params.search,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
-
-// Remove Search Param
-const removeSearch = () => {
-  params.search = "";
-  router.get(
-    route("admin.permissions.index"),
-    {
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
-
-// Handle Query String Parameter
-const handleQueryStringParameter = () => {
-  router.get(
-    route("admin.permissions.index"),
-    {
-      search: params.search,
-      page: params.page,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
-
-// Watching Search Box
-watch(
-  () => params.search,
-  () => {
-    if (params.search === "") {
-      removeSearch();
-    } else {
-      handleSearch();
-    }
-  }
-);
-
-// Watching Perpage Select Box
-watch(
-  () => params.per_page,
-  () => {
-    handleQueryStringParameter();
-  }
-);
 
 // Update Sorting Table Column
 const updateSorting = (sort = "id") => {
   params.sort = sort;
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
-  handleQueryStringParameter();
+  router.get(
+    route("admin.permissions.index"),
+    {
+      search: usePage().props.ziggy.query?.search,
+      page: usePage().props.ziggy.query?.page,
+      per_page: usePage().props.ziggy.query?.per_page,
+      sort: params.sort,
+      direction: params.direction,
+      created_from: usePage().props.ziggy.query?.created_from,
+      created_until: usePage().props.ziggy.query?.created_until,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 
 if (usePage().props.flash.successMessage) {
   swal({
     icon: "success",
-    title: usePage().props.flash.successMessage,
+    title: __(usePage().props.flash.successMessage),
   });
 }
 </script>
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Permissions" />
+    <Head :title="__('PERMISSIONS')" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -143,8 +84,9 @@ if (usePage().props.flash.successMessage) {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Permissions</span
               >
+                {{ __("PERMISSIONS") }}
+              </span>
             </div>
           </li>
         </Breadcrumb>
@@ -152,32 +94,19 @@ if (usePage().props.flash.successMessage) {
 
       <div class="mb-5 flex items-center justify-between">
         <div class="flex items-center ml-auto">
-          <form class="w-[350px] relative">
-            <input
-              type="text"
-              class="search-input"
-              placeholder="Search by permission name"
-              v-model="params.search"
-            />
-            <i
-              v-if="params.search"
-              class="fa-solid fa-xmark remove-search"
-              @click="removeSearch"
-            ></i>
-          </form>
+          <!-- Search Box -->
+          <DashboardSearchInputForm
+            href="admin.permissions.index"
+            placeholder="SEARCH_BY_PERMISSION_NAME"
+          />
 
           <!-- Perpage Select Box -->
           <div class="ml-5">
-            <select class="perpage-selectbox" v-model="params.per_page">
-              <option value="" disabled>Select</option>
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="75">75</option>
-              <option value="100">100</option>
-            </select>
+            <DashboardPerPageSelectBox href="admin.permissions.index" />
           </div>
+
+          <!-- Filter By Date -->
+          <DashboardFilterByCreatedDate href="admin.permissions.index" />
         </div>
       </div>
 
@@ -190,17 +119,17 @@ if (usePage().props.flash.successMessage) {
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('name')">
-            Permissions Name
+            {{ __("PERMISSION_NAME") }}
             <SortingArrows :params="params" sort="name" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('group')">
-            Group
+            {{ __("GROUP") }}
             <SortingArrows :params="params" sort="group" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('created_at')">
-            Created At
+            {{ __("CREATED_DATE") }}
             <SortingArrows :params="params" sort="created_at" />
           </HeaderTh>
         </TableHeader>
