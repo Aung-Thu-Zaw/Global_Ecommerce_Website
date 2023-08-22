@@ -27,9 +27,9 @@ defineProps({
               <Link
                 :href="route('blogs.index')"
                 :data="{
-                  sort: $page.props.ziggy.query.sort,
-                  direction: $page.props.ziggy.query.direction,
-                  view: $page.props.ziggy.query.view,
+                  sort: $page.props.ziggy.query?.sort,
+                  direction: $page.props.ziggy.query?.direction,
+                  view: $page.props.ziggy.query?.view,
                 }"
               >
                 <div class="flex items-center">
@@ -177,6 +177,7 @@ defineProps({
               </div>
             </div>
 
+            <!-- Blog Comment Section -->
             <BlogCommentSection
               :blogPost="blogPost"
               :blogComments="blogComments"

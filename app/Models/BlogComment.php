@@ -52,6 +52,16 @@ class BlogComment extends Model
     }
 
     /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogCommentReply, never>
+    */
+    protected function updatedAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => date("j/F/Y h:i:s A", strtotime($value)),
+        );
+    }
+
+    /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogPost, never>
     */
     protected function deletedAt(): Attribute

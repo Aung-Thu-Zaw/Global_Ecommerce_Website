@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Ecommerce\BlogCommentController;
+use App\Http\Controllers\Ecommerce\BlogCommentReplyController;
 use App\Http\Controllers\Ecommerce\BlogController;
 use App\Http\Controllers\Ecommerce\CancelOrderAndItemController;
 use App\Http\Controllers\Ecommerce\CartController;
@@ -160,6 +162,27 @@ Route::middleware(["auth","verified"])->group(function () {
     Route::post("/product/track-interaction", [UserProductInteractionController::class,"store"])->name("product.track-interaction");
 
     Route::post('/track-my-orders', [TrackMyOrderController::class,"trackMyOrder"])->name("order.track");
+
+    Route::controller(BlogCommentController::class)
+         ->prefix("/blogs/comments")
+         ->name("blogs.comments.")
+         ->group(function () {
+             Route::post("/", "store")->name("store");
+             Route::patch("/{blog_comment}", "update")->name("update");
+             Route::delete("/{blog_comment}", "destroy")->name("destroy");
+         });
+
+    Route::controller(BlogCommentReplyController::class)
+         ->prefix("/blogs/comments/reply")
+         ->name("blogs.comments.reply.")
+         ->group(function () {
+             Route::post("/", "store")->name("store");
+             Route::patch("/{blog_comment_reply}/update", "update")->name("update");
+             Route::delete("/{blog_comment_reply}/destroy", "destroy")->name("destroy");
+         });
+
+
+
 
     Route::controller(ProductQuestionController::class)
          ->prefix("/products/ask-questions")

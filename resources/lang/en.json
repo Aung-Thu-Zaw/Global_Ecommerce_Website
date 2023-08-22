@@ -824,5 +824,10 @@
     "WRITE_COMMENT": "Write comment",
     "TOTAL_COMMENTS": "Total Comments",
     "IF_YOU_WANT_TO_WRITE_COMMENTS_YOU_NEED_TO_LOGIN_FIRST_HERE": "If you want to write comments you need to login first. Here",
-    "COMMENTS_NOT_YET": "Comments Not Yet"
+    "COMMENTS_NOT_YET": "Comments Not Yet",
+    "EDIT_REPLY": "Edit Reply",
+    "DELETE_REPLY": "Delete Reply",
+    "EDIT_COMMENT": "Edit Comment",
+    "DELETE_COMMENT": "Delete Comment",
+    "REPLY_THIS_COMMENT": "Reply This Comment"
 }

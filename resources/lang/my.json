@@ -825,5 +825,10 @@
     "WRITE_COMMENT": "မှတ်ချက်ရေးပါ။",
     "TOTAL_COMMENTS": "စုစုပေါင်းမှတ်ချက်များ",
     "IF_YOU_WANT_TO_WRITE_COMMENTS_YOU_NEED_TO_LOGIN_FIRST_HERE": "မှတ်ချက်များရေးလိုပါက ဦးစွာဝင်ရောက်ရန် လိုအပ်ပါသည်။ ဒီမှာ",
-    "COMMENTS_NOT_YET": "မှတ်ချက်များ မရသေးပါ။"
+    "COMMENTS_NOT_YET": "မှတ်ချက်များ မရသေးပါ။",
+    "EDIT_REPLY": "ပြန်ကြားချက်ကို တည်းဖြတ်ပါ",
+    "DELETE_REPLY": "ပြန်ကြားချက်ကိုဖျက်ပါ",
+    "EDIT_COMMENT": "မှတ်ချက်ကို တည်းဖြတ်ပါ",
+    "DELETE_COMMENT": "မှတ်ချက်ကိုဖျက်ပါ",
+    "REPLY_THIS_COMMENT": "ဤမှတ်ချက်ကို ဖြေကြားပါ"
 }

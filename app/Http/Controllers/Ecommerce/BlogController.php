@@ -49,7 +49,7 @@ class BlogController extends Controller
 
         $blogPost->load(["author:id,name","blogCategory:id,name","blogTags:id,name,slug"]);
 
-        $blogComments = BlogComment::with(["user:id,name,avatar","blogPost:id,title","blogCommentReply.author:id,name,avatar"])->where("blog_post_id", $blogPost->id)->paginate(5);
+        $blogComments = BlogComment::with(["user:id,name,avatar","blogPost:id,title","blogCommentReply.author:id,name,avatar"])->where("blog_post_id", $blogPost->id)->orderBy("id", "desc")->paginate(5);
 
         $relatedBlogPosts = BlogPost::with(["author:id,name","blogCategory:id,name"])
                                   ->whereblogCategoryId($blogPost->blog_category_id)
