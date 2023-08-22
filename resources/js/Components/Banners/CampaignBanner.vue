@@ -6,9 +6,11 @@ defineProps({
 
 <template>
   <section v-if="campaignBanner" class="container mx-auto my-3 p-5">
-    <div class="h-[200px] w-full flex items-center justify-center">
-      <a :href="campaignBanner.url" target="_blank" class="h-full">
-        <img :src="campaignBanner.image" alt="" class="h-full object-cover" />
+    <div
+      class="min-h-[120px] max-h-[300px] w-full flex items-center justify-center"
+    >
+      <a :href="campaignBanner.url" target="_blank">
+        <img :src="campaignBanner.image" class="object-cover" />
       </a>
     </div>
   </section>

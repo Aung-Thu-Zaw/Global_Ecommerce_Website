@@ -36,7 +36,6 @@ class ProductRequest extends FormRequest
             "price" => ["required","numeric"],
             "discount" => ["nullable","numeric"],
             "description" => ["required","string"],
-            "hot_deal" => ["nullable","boolean"],
             "featured" => ["nullable","boolean"],
             "special_offer" => ["nullable","boolean"],
             "sizes" => ["nullable","array"],

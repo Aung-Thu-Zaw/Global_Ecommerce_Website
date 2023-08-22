@@ -24,7 +24,6 @@ return new class () extends Migration {
             $table->decimal('price', 8, 2);
             $table->decimal('discount', 8, 2)->nullable();
             $table->text("description");
-            $table->boolean("hot_deal")->default(false);
             $table->boolean("special_offer")->default(false);
             $table->boolean("featured")->default(false);
             $table->enum("status", ["pending","approved","disapproved"])->default("pending");

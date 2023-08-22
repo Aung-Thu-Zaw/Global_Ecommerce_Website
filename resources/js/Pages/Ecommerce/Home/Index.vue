@@ -6,7 +6,6 @@ import CollectionSection from "@/Components/Sections/CollectionSection.vue";
 import ProductsForYourSection from "@/Components/Sections/ProductsForYourSection.vue";
 import NewProductsSection from "@/Components/Sections/NewProductsSection.vue";
 import FlashSaleProductsSection from "@/Components/Sections/FlashSaleProductsSection.vue";
-import HotDealProductsSection from "@/Components/Sections/HotDealProductsSection.vue";
 import FeaturedProductsSection from "@/Components/Sections/FeaturedProductsSection.vue";
 import CampaignBanner from "@/Components/Banners/CampaignBanner.vue";
 import ProductBanner from "@/Components/Banners/ProductBanner.vue";
@@ -24,7 +23,6 @@ defineProps({
   flashSale: Object,
   newProducts: Object,
   featuredProducts: Object,
-  hotDealProducts: Object,
   flashSaleProducts: Object,
   randomProducts: Object,
   socialMedia: Object,
@@ -58,9 +56,6 @@ if (usePage().props.flash.successMessage) {
         :flashSale="flashSale"
         :flashSaleProducts="flashSaleProducts"
       />
-
-      <!-- Hot Deal Products Section  -->
-      <HotDealProductsSection :hotDealProducts="hotDealProducts" />
 
       <!-- New Products Section  -->
       <NewProductsSection :newProducts="newProducts" />

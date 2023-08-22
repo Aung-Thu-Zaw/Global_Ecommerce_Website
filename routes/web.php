@@ -66,7 +66,6 @@ Route::controller(ProductController::class)
          Route::get('/flash-sale-products', "flashSaleProducts")->name("flash-sales");
          Route::get('/new-products', "newProducts")->name("new");
          Route::get('/featured-products', "featuredProducts")->name("featured");
-         Route::get('/hot-deal-products', "hotDealProducts")->name("hot-deal");
          Route::get('/{product}', "show")->name("show");
      });
 
@@ -180,9 +179,6 @@ Route::middleware(["auth","verified"])->group(function () {
              Route::patch("/{blog_comment_reply}/update", "update")->name("update");
              Route::delete("/{blog_comment_reply}/destroy", "destroy")->name("destroy");
          });
-
-
-
 
     Route::controller(ProductQuestionController::class)
          ->prefix("/products/ask-questions")

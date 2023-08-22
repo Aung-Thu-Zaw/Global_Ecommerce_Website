@@ -252,16 +252,7 @@ const formattedAmount = (amount) => {
                   {{ product.featured ? "Yes" : "No" }}
                 </span>
               </div>
-              <div class="bg-white border-b py-3 flex items-center">
-                <span
-                  class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
-                >
-                  Hot Deal
-                </span>
-                <span class="w-1/2 block">
-                  {{ product.hot_deal ? "Yes" : "No" }}</span
-                >
-              </div>
+
               <div class="border-b py-3 bg-gray-50 flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"

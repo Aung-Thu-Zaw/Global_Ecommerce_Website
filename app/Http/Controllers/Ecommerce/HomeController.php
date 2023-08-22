@@ -57,14 +57,6 @@ class HomeController extends Controller
                             ->limit(5)
                             ->get();
 
-        $hotDealProducts = Product::select("id", "seller_id", "image", "name", "slug", "price", "discount", "special_offer")
-                                ->with(["productReviews:id,product_id,rating","shop:id,offical"])
-                                ->whereStatus("approved")
-                                ->whereHotDeal(1)
-                                ->orderBy("id", "desc")
-                                ->limit(5)
-                                ->get();
-
         $featuredProducts = Product::select("id", "seller_id", "image", "name", "slug", "price", "discount", "special_offer")
                                  ->with(["productReviews:id,product_id,rating","shop:id,offical"])
                                  ->whereStatus("approved")
@@ -90,7 +82,6 @@ class HomeController extends Controller
             "flashSale",
             "newProducts",
             "featuredProducts",
-            "hotDealProducts",
             "flashSaleProducts",
             "randomProducts",
             "socialMedia"

@@ -28,10 +28,9 @@ class Product extends Model
     * @var string[]
     */
     protected array $cascadeDeletes = ['category'];
-    protected $guarded=[];
+    protected $guarded = [];
 
     protected $casts = [
-        'hot_deal' => 'boolean',
         'special_offer' => 'boolean',
         'featured' => 'boolean',
     ];
@@ -247,7 +246,7 @@ class Product extends Model
     public function scopeFilterBy(Builder $query, array $filterBy): void
     {
         $query->when(
-            $filterBy["search"]??null,
+            $filterBy["search"] ?? null,
             function ($query, $search) {
                 $query->where(
                     function ($query) use ($search) {
@@ -274,13 +273,13 @@ class Product extends Model
         });
 
 
-        $query->when($filterBy["category"]?? null, function ($query, $categorySlug) {
+        $query->when($filterBy["category"] ?? null, function ($query, $categorySlug) {
             $query->whereHas("category", function ($query) use ($categorySlug) {
                 $query->where("slug", $categorySlug);
             });
         });
 
-        $query->when($filterBy["brand"]?? null, function ($query, $brandSlug) {
+        $query->when($filterBy["brand"] ?? null, function ($query, $brandSlug) {
             $query->whereHas("brand", function ($query) use ($brandSlug) {
                 $query->where("slug", $brandSlug);
             });

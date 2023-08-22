@@ -48,7 +48,6 @@ const form = useForm({
   seller_id: "",
   status: "pending",
   return_policy: "",
-  hot_deal: false,
   special_offer: false,
   featured: false,
   captcha_token: null,
@@ -606,26 +605,7 @@ const handleCreateProduct = async () => {
                     <InputError class="mt-2" :message="form.errors.seller_id" />
                   </div>
 
-                  <div class="grid grid-cols-3 gap-3">
-                    <!-- Product Hot Deal Checkbox Field -->
-                    <div
-                      class="flex items-center pl-4 border border-gray-200 rounded-md dark:border-gray-700 mb-6"
-                    >
-                      <input
-                        checked
-                        id="bordered-checkbox-2"
-                        type="checkbox"
-                        name="bordered-checkbox"
-                        v-model="form.hot_deal"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                      />
-                      <label
-                        for="bordered-checkbox-2"
-                        class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                        >{{ __("HOT_DEAL") }}</label
-                      >
-                    </div>
-
+                  <div class="grid grid-cols-2 gap-3">
                     <!-- Product Special Offer Checkbox Field -->
                     <div
                       class="flex items-center pl-4 border border-gray-200 rounded-md dark:border-gray-700 mb-6"
