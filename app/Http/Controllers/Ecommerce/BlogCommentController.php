@@ -6,13 +6,16 @@ use App\Actions\Ecommerce\Blogs\CreateBlogCommentAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BlogCommentRequest;
 use App\Models\BlogComment;
+use App\Services\BroadcastNotifications\NewBlogCommentNotificationSendToAdminDashboardService;
 use Illuminate\Http\RedirectResponse;
 
 class BlogCommentController extends Controller
 {
     public function store(BlogCommentRequest $request): RedirectResponse
     {
-        (new CreateBlogCommentAction())->handle($request->validated());
+        $blogComment = (new CreateBlogCommentAction())->handle($request->validated());
+
+        (new NewBlogCommentNotificationSendToAdminDashboardService())->send($blogComment);
 
         return back();
     }

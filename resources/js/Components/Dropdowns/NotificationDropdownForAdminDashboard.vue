@@ -6,7 +6,8 @@ import DeletedUserNotificationCard from "@/Components/Cards/DeletedUserNotificat
 import DeletedVendorNotificationCard from "@/Components/Cards/DeletedSellerNotificationCard.vue";
 import NewsletterSubscribedNotificationCard from "@/Components/Cards/NewsletterSubscribedNotificationCard.vue";
 import NewSuggestionNotificationCard from "@/Components/Cards/NewSuggestionNotificationCard.vue";
-import VendorCreateNewProductNotificationCard from "@/Components/Cards/SellerCreateNewProductNotificationCard.vue";
+import SellerCreateNewProductNotificationCard from "@/Components/Cards/SellerCreateNewProductNotificationCard.vue";
+import NewBlogCommentNotificationCard from "@/Components/Cards/NewBlogCommentNotificationCard.vue";
 import { usePage, router } from "@inertiajs/vue3";
 import { computed, onMounted, onUpdated, ref } from "vue";
 
@@ -89,6 +90,19 @@ onMounted(() => {
           data: {
             message: notification.message,
             product: notification.product,
+          },
+        });
+      } else if (
+        notification.type ===
+        "App\\Notifications\\Blogs\\NewBlogCommentFromUserNotification"
+      ) {
+        notifications.value.unshift({
+          id: notification.id,
+          type: notification.type,
+          data: {
+            message: notification.message,
+            blog: notification.blog,
+            comment: notification.comment,
           },
         });
       }
@@ -193,7 +207,8 @@ const handleMarkAllAsRead = () => {
       <NewsletterSubscribedNotificationCard :notification="notification" />
       <NewSuggestionNotificationCard :notification="notification" />
       <OrderPlacedNotificationCard :notification="notification" />
-      <VendorCreateNewProductNotificationCard :notification="notification" />
+      <SellerCreateNewProductNotificationCard :notification="notification" />
+      <NewBlogCommentNotificationCard :notification="notification" />
     </div>
 
     <div class="w-full text-center py-3" v-if="!sortedNotifications.length">

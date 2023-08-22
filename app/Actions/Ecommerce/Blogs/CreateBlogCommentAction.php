@@ -9,12 +9,14 @@ class CreateBlogCommentAction
     /**
      * @param array<mixed> $data
      */
-    public function handle(array $data): void
+    public function handle(array $data): BlogComment
     {
-        BlogComment::create([
+        $blogComment = BlogComment::create([
             "blog_post_id" => $data["blog_post_id"],
             "user_id" => $data["user_id"],
             "comment" => $data["comment"],
         ]);
+
+        return $blogComment;
     }
 }

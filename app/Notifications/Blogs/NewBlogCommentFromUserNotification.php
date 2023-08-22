@@ -1,15 +1,17 @@
 <?php
 
-namespace App\Notifications\ProductQuestions;
+namespace App\Notifications\Blogs;
 
-use App\Models\Product;
-use App\Models\ProductQuestion;
+use App\Models\BlogComment;
+use App\Models\BlogPost;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewProductQuestionFromUserNotification extends Notification implements ShouldBroadcast
+class NewBlogCommentFromUserNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;
 
@@ -18,7 +20,7 @@ class NewProductQuestionFromUserNotification extends Notification implements Sho
      *
      * @return void
      */
-    public function __construct(protected ProductQuestion $productQuestion, protected Product $product)
+    public function __construct(protected BlogPost $blogPost, protected BlogComment $blogComment)
     {
         //
     }
@@ -43,9 +45,9 @@ class NewProductQuestionFromUserNotification extends Notification implements Sho
     public function toArray($notifiable)
     {
         return [
-            "message" => "Your product has received a new question from a customer.",
-            "product" => $this->product->slug,
-            "question" => $this->productQuestion->question_text,
+            "message" => "Your blog received a new comment from a user.",
+            "blog" => $this->blogPost->slug,
+            "comment" => $this->blogComment->comment,
 
         ];
     }
@@ -60,10 +62,9 @@ class NewProductQuestionFromUserNotification extends Notification implements Sho
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" => "Your product has received a new question from a customer.",
-            "product" => $this->product->slug,
-            "question" => $this->productQuestion->question_text,
-
+            "message" => "Your blog received a new comment from a user.",
+            "blog" => $this->blogPost->slug,
+            "comment" => $this->blogComment->comment,
         ]);
     }
 }
