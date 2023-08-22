@@ -126,23 +126,57 @@ defineProps({
             <h1 class="font-bold text-2xl text-slate-700 mt-8 mb-2">
               {{ blogPost.title }}
             </h1>
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center">
+                <span
+                  class="text-xs font-bold bg-gray-300 py-1 px-3 rounded-sm shadow mr-3"
+                >
+                  {{ blogPost.blog_category?.name }}
+                </span>
 
-            <div class="flex items-center mb-3">
-              <span
-                class="text-xs font-bold bg-gray-300 py-1 px-3 rounded-sm shadow mr-3"
-              >
-                {{ blogPost.blog_category?.name }}
-              </span>
+                <span class="font-bold text-slate-600 text-sm mr-3">
+                  <i class="fa-solid fa-user mr-2"></i>
+                  {{ blogPost.author?.name }}
+                </span>
 
-              <span class="font-bold text-slate-600 text-sm mr-3">
-                <i class="fa-solid fa-user mr-2"></i>
-                {{ blogPost.author?.name }}
-              </span>
-
-              <span class="font-bold text-slate-600 text-sm">
-                <i class="fa-solid fa-clock mr-2"></i>
-                {{ blogPost.created_at }}
-              </span>
+                <span class="font-bold text-slate-600 text-sm">
+                  <i class="fa-solid fa-clock mr-2"></i>
+                  {{ blogPost.created_at }}
+                </span>
+              </div>
+              <div class="flex items-center">
+                <span class="font-bold text-slate-600 mr-3">
+                  <i class="fa-solid fa-share-nodes"></i> Share :
+                </span>
+                <a :href="$page.props.socialShares.facebook" target="_blank">
+                  <i
+                    class="fa-brands fa-facebook mr-3 text-lg text-blue-600"
+                  ></i>
+                </a>
+                <a :href="$page.props.socialShares.twitter" target="_blank">
+                  <i class="fa-brands fa-twitter mr-3 text-lg text-sky-600"></i>
+                </a>
+                <a :href="$page.props.socialShares.linkedin" target="_blank">
+                  <i
+                    class="fa-brands fa-linkedin mr-3 text-lg text-blue-800"
+                  ></i>
+                </a>
+                <a :href="$page.props.socialShares.reddit" target="_blank">
+                  <i
+                    class="fa-brands fa-reddit mr-3 text-lg text-orange-500"
+                  ></i>
+                </a>
+                <a :href="$page.props.socialShares.telegram" target="_blank">
+                  <i
+                    class="fa-brands fa-telegram mr-3 text-lg text-blue-500"
+                  ></i>
+                </a>
+                <a :href="$page.props.socialShares.whatsapp" target="_blank">
+                  <i
+                    class="fa-brands fa-whatsapp mr-3 text-lg text-emerald-600"
+                  ></i>
+                </a>
+              </div>
             </div>
 
             <hr class="my-3" />

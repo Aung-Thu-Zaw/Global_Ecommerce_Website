@@ -137,16 +137,18 @@ const handleRemoveBlogTag = () => {
               class="text-sm font-bold text-slate-600 px-5 py-3 border-t border-b flex items-center justify-between mb-5"
             >
               <!-- Search Blogs Input -->
-              <form class="w-[350px] relative">
+              <form
+                class="w-[350px] rounded-md flex items-center justify-between border border-gray-400 focus:border-gray-400 p-1"
+              >
                 <input
                   type="text"
-                  class="search-input border border-gray-400 focus:border-gray-400"
+                  class="border-0 focus:ring-0 text-sm bg-gray-50 w-full"
                   :placeholder="__('SEARCH_BLOG')"
                   v-model="params.search_blog"
                 />
                 <i
                   v-if="params.search_blog"
-                  class="fa-solid fa-xmark remove-search"
+                  class="fa-solid fa-xmark mr-2 text-slate-600 cursor-pointer hover:text-red-600"
                   @click="removeSearch"
                 ></i>
               </form>
@@ -196,9 +198,8 @@ const handleRemoveBlogTag = () => {
                       }"
                       class="px-2 py-1 rounded-md cursor-pointer hover:bg-gray-300 transition-none"
                       :class="{
-                        'bg-gray-400 text-white':
-                         params.view === 'grid',
-                        'bg-gray-200':params.view !== 'grid',
+                        'bg-gray-400 text-white': params.view === 'grid',
+                        'bg-gray-200': params.view !== 'grid',
                       }"
                     >
                       <i class="fa-solid fa-grip"></i>
@@ -215,8 +216,7 @@ const handleRemoveBlogTag = () => {
                       }"
                       class="ml-3 px-2 py-1 rounded-md cursor-pointer hover:bg-gray-300 transition-none"
                       :class="{
-                        'bg-gray-400 text-white':
-                          params.view === 'list',
+                        'bg-gray-400 text-white': params.view === 'list',
                         'bg-gray-200': params.view !== 'list',
                       }"
                     >

@@ -70,7 +70,9 @@ const description = computed(() => {
           src="../assets/images/400.jpg"
           class="h-[500px]"
         />
-        <p class="text-3xl font-bold text-gray-600 mb-10">{{ description }}</p>
+        <p class="text-3xl font-bold text-gray-600 mb-10">
+          {{ description }}
+        </p>
 
         <Link
           as="button"
