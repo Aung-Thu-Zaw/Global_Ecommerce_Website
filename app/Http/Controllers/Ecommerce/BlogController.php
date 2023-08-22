@@ -22,12 +22,16 @@ class BlogController extends Controller
                            ->paginate(20)
                            ->withQueryString();
 
-        return inertia("Ecommerce/Blogs/Index", compact("blogCategories", "blogPosts"));
+        $blogTags = BlogTag::latest()->get();
+
+        return inertia("Ecommerce/Blogs/Index", compact("blogCategories", "blogPosts", "blogTags"));
     }
 
     public function tagBlog(string $blogTagSlug): Response|ResponseFactory
     {
         $blogCategories = BlogCategory::withCount("blogPosts")->whereStatus("show")->get();
+
+        $blogTags = BlogTag::latest()->get();
 
         $blogTag = BlogTag::whereSlug($blogTagSlug)->first();
 
@@ -37,10 +41,11 @@ class BlogController extends Controller
                                ->orderBy(request("sort", "id"), request("direction", "desc"))
                                ->paginate(20)
                                ->withQueryString();
-            return inertia("Ecommerce/Blogs/TagBlogs", compact("blogCategories", "blogTag", "blogPosts"));
+
+            return inertia("Ecommerce/Blogs/TagBlogs", compact("blogCategories", "blogTags", "blogTag", "blogPosts"));
         }
 
-        return inertia("Ecommerce/Blogs/TagBlogs", compact("blogCategories", "blogTag"));
+        return inertia("Ecommerce/Blogs/TagBlogs", compact("blogCategories", "blogTags", "blogTag"));
     }
 
     public function show(BlogPost $blogPost): Response|ResponseFactory

@@ -1,6 +1,7 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
+import BlogTagCard from "@/Components/Cards/BlogTagCard.vue";
 import BlogCard from "@/Components/Cards/BlogCard.vue";
 import BlogCategoryCard from "@/Components/Cards/BlogCategoryCard.vue";
 import BlogCardList from "@/Components/Cards/BlogCardList.vue";
@@ -10,6 +11,7 @@ import { reactive, watch } from "vue";
 
 const props = defineProps({
   blogCategories: Object,
+  blogTags: Object,
   blogTag: Object,
   blogPosts: Object,
 });
@@ -123,13 +125,19 @@ const handleRemoveBlogTag = () => {
         </div>
 
         <div class="flex items-start space-x-3">
-          <!-- Blog Category Cards  -->
-          <div v-if="blogCategories.length" class="w-[400px]">
+          <div class="w-[400px]">
+            <!-- Blog Categories -->
             <ul
-              class="h-auto space-y-3 text-center text-md font-bold text-slate-700"
+              v-if="blogCategories.length"
+              class="h-auto space-y-3 text-center text-md font-bold text-slate-700 mb-10"
             >
               <BlogCategoryCard :blogCategories="blogCategories" />
             </ul>
+
+            <!-- Blog Tags -->
+            <div v-if="blogTags.length">
+              <BlogTagCard :blogTags="blogTags" />
+            </div>
           </div>
 
           <div class="w-full">
