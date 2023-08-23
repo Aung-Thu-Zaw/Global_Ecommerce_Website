@@ -838,5 +838,10 @@
     "REGISTERED_WITH_GOOGLE_AUTH": "'Google' အထောက်အထားဖြင့် မှတ်ပုံတင်ထားသည်။",
     "REGISTERED_WITH_FACEBOOK_AUTH": "'Facebook' အထောက်အထားဖြင့် မှတ်ပုံတင်ထားသည်",
     "USER_ACCOUNT_HAS_BEEN_DELETED": "အသုံးပြုသူအကောင့်ကို ဖျက်လိုက်ပါပြီ။",
-    "SELLER_ACCOUNT_HAS_BEEN_DELETED": "ရောင်းသူအကောင့်ကို ဖျက်လိုက်ပါပြီ။"
+    "SELLER_ACCOUNT_HAS_BEEN_DELETED": "ရောင်းသူအကောင့်ကို ဖျက်လိုက်ပါပြီ။",
+    "EMAIL": "အီးမေးလ်",
+    "ENTER_YOUR_ADDRESS":"သင့်လိပ်စာကို ထည့်ပါ။",
+    "PROFILE_UPDATED_SUCCESSFULLY":"ပရိုဖိုင်ကို အောင်မြင်စွာ မွမ်းမံပြီးပါပြီ။",
+    "YOUR_ACCOUNT_IS_DELETED_SUCCESSFULLY":"သင့်အကောင့်ကို အောင်မြင်စွာ ဖျက်လိုက်ပါပြီ။",
+    "PASSWORD_UPDATED_SUCCESSFULLY":"စကားဝှက်ကို အောင်မြင်စွာ မွမ်းမံပြီးပါပြီ။"
 }

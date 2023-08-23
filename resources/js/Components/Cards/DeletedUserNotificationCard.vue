@@ -69,7 +69,7 @@ const handleNotificationReadAt = () => {
             'text-slate-600': !notification.read_at,
             'text-gray-500': notification.read_at,
           }"
-          >Email : {{ notification.data.user.email }}</span
+          >{{ __("EMAIL") }} : {{ notification.data.user.email }}</span
         >
       </div>
       <div

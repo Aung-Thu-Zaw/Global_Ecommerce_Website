@@ -49,7 +49,7 @@ class MyAccountController extends Controller
             $user->save();
         }
 
-        return to_route('my-account.edit', 'tab=edit-profile')->with("success", "Profile updated successfully");
+        return to_route('my-account.edit', 'tab=edit-profile')->with("success", "PROFILE_UPDATED_SUCCESSFULLY");
     }
 
 
@@ -58,7 +58,7 @@ class MyAccountController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $user=$request->user();
+        $user = $request->user();
 
         if($user) {
 
@@ -67,6 +67,6 @@ class MyAccountController extends Controller
             event(new AccountDeleted($user));
         }
 
-        return Redirect::to('/')->with("success", "Your account is deleted successfully.");
+        return Redirect::to('/')->with("success", "YOUR_ACCOUNT_IS_DELETED_SUCCESSFULLY");
     }
 }

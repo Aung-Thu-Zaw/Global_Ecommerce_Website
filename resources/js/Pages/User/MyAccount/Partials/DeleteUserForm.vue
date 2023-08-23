@@ -39,67 +39,73 @@ const closeModal = () => {
 
 <template>
   <section class="space-y-6">
-    <header>
-      <h2 class="text-lg font-medium text-gray-900">
-        {{ __("DELETE_ACCOUNT") }}
-      </h2>
-
-      <p class="mt-1 text-sm text-gray-600">
-        {{
-          __(
-            "ONCE_YOUR_ACCOUNT_IS_DELETED_ALL_OF_ITS_RESOURCES_AND_DATA_WILL_BE_PERMANENTLY_DELETED_BEFPORE_DELETING_YOUR_ACCOUNT_PLEASE_DOWNLOAD_ANY_DATA_OR_INFORMATION_THAT_YOU_WISH_TO_RETAIN"
-          )
-        }}
-      </p>
-    </header>
-
-    <DangerButton @click="confirmUserDeletion">
-      {{ __("DELETE_ACCOUNT") }}
-    </DangerButton>
-
-    <Modal :show="confirmingUserDeletion" @close="closeModal">
-      <div class="p-6">
+    <div class="border border-gray-300 w-full shadow rounded-md p-10">
+      <header>
         <h2 class="text-lg font-medium text-gray-900">
-          {{ __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_YOUR_ACCOUNT") }}?
+          {{ __("DELETE_ACCOUNT") }}
         </h2>
 
-        <div
-          v-if="
-            !$page.props.auth.user.google_id &&
-            !$page.props.auth.user.facebook_id
-          "
-          class="mt-6"
-        >
-          <InputLabel for="password" :value="__('PASSWORD')" class="sr-only" />
+        <p class="mt-1 mb-3 text-sm text-gray-600">
+          {{
+            __(
+              "ONCE_YOUR_ACCOUNT_IS_DELETED_ALL_OF_ITS_RESOURCES_AND_DATA_WILL_BE_PERMANENTLY_DELETED_BEFPORE_DELETING_YOUR_ACCOUNT_PLEASE_DOWNLOAD_ANY_DATA_OR_INFORMATION_THAT_YOU_WISH_TO_RETAIN"
+            )
+          }}
+        </p>
+      </header>
 
-          <TextInput
-            id="password"
-            ref="passwordInput"
-            v-model="form.password"
-            type="password"
-            class="mt-1 block w-3/4"
-            :placeholder="__('PASSWORD')"
-            @keyup.enter="deleteUser"
-          />
+      <DangerButton @click="confirmUserDeletion">
+        {{ __("DELETE_ACCOUNT") }}
+      </DangerButton>
 
-          <InputError :message="form.errors.password" class="mt-2" />
-        </div>
+      <Modal :show="confirmingUserDeletion" @close="closeModal">
+        <div class="p-6">
+          <h2 class="text-lg font-medium text-gray-900">
+            {{ __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_YOUR_ACCOUNT") }}?
+          </h2>
 
-        <div class="mt-6 flex justify-end">
-          <SecondaryButton @click="closeModal">
-            {{ __("CANCEL") }}
-          </SecondaryButton>
-
-          <DangerButton
-            class="ml-3"
-            :class="{ 'opacity-25': form.processing }"
-            :disabled="form.processing"
-            @click="deleteUser"
+          <div
+            v-if="
+              !$page.props.auth.user.google_id &&
+              !$page.props.auth.user.facebook_id
+            "
+            class="mt-6"
           >
-            {{ __("DELETE_ACCOUNT") }}
-          </DangerButton>
+            <InputLabel
+              for="password"
+              :value="__('PASSWORD')"
+              class="sr-only"
+            />
+
+            <TextInput
+              id="password"
+              ref="passwordInput"
+              v-model="form.password"
+              type="password"
+              class="mt-1 block w-3/4"
+              :placeholder="__('PASSWORD')"
+              @keyup.enter="deleteUser"
+            />
+
+            <InputError :message="form.errors.password" class="mt-2" />
+          </div>
+
+          <div class="mt-6 flex justify-end">
+            <SecondaryButton @click="closeModal">
+              {{ __("CANCEL") }}
+            </SecondaryButton>
+
+            <DangerButton
+              class="ml-3"
+              :class="{ 'opacity-25': form.processing }"
+              :disabled="form.processing"
+              @click="deleteUser"
+            >
+              {{ __("DELETE_ACCOUNT") }}
+            </DangerButton>
+          </div>
         </div>
-      </div>
-    </Modal>
+      </Modal>
+    </div>
   </section>
 </template>

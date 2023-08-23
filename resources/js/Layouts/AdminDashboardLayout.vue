@@ -36,7 +36,7 @@ onMounted(() => {
   --ck-color-shadow-inner: none;
 }
 
-/* .scrollbar {
+.scrollbar {
   scrollbar-width: thin;
   scrollbar-color: #999 #f0f0f0;
 }
@@ -52,5 +52,5 @@ onMounted(() => {
 .scrollbar::-webkit-scrollbar-thumb {
   background-color: #999;
   border-radius: 3px;
-} */
+}
 </style>

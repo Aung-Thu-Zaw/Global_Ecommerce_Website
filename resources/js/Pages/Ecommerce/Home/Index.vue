@@ -11,6 +11,7 @@ import FeaturedProductsSection from "@/Components/Sections/FeaturedProductsSecti
 import CampaignBanner from "@/Components/Banners/CampaignBanner.vue";
 import ProductBanner from "@/Components/Banners/ProductBanner.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
+import { __ } from "@/Translations/translations-inside-setup.js";
 import { usePage, Head } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -30,7 +31,7 @@ defineProps({
 });
 
 if (usePage().props.flash.successMessage) {
-  toast.success(usePage().props.flash.successMessage, {
+  toast.success(__(usePage().props.flash.successMessage), {
     autoClose: 2000,
   });
 }

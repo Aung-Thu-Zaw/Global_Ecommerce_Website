@@ -69,7 +69,7 @@ const handleNotificationReadAt = () => {
             'text-slate-600': !notification.read_at,
             'text-gray-500': notification.read_at,
           }"
-          >Shop Name : {{ notification.data.user.shop_name }}</span
+          >{{ __("SHOP_NAME") }} : {{ notification.data.user.shop_name }}</span
         >
       </div>
       <div

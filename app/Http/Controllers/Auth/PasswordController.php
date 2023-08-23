@@ -28,6 +28,6 @@ class PasswordController extends Controller
 
         }
 
-        return to_route('my-account.edit', 'tab=change-password')->with("success", "Password updated successfully");
+        return to_route('my-account.edit', 'tab=change-password')->with("success", "PASSWORD_UPDATED_SUCCESSFULLY");
     }
 }
