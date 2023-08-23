@@ -44,8 +44,8 @@ class NewsletterSubscribedNotification extends Notification implements ShouldBro
     public function toArray($notifiable)
     {
         return [
-            "message" =>"A new subscriber has subscribed to the website newsletter.",
-            "subscriber"=>$this->subscriber
+            "message" => "A_NEW_SUBSCRIBER_HAS_SUBSCRIBED_TO_THE_WEBSITE_NEWSLETTER",
+            "subscriber" => $this->subscriber
         ];
     }
 
@@ -59,8 +59,8 @@ class NewsletterSubscribedNotification extends Notification implements ShouldBro
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" =>"A new subscriber has subscribed to the website newsletter.",
-            "subscriber"=>$this->subscriber
+            "message" => "A_NEW_SUBSCRIBER_HAS_SUBSCRIBED_TO_THE_WEBSITE_NEWSLETTER",
+            "subscriber" => $this->subscriber
         ]);
     }
 }

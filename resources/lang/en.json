@@ -845,5 +845,8 @@
     "PASSWORD_UPDATED_SUCCESSFULLY": "Password updated successfully",
     "ENSURE_YOUR_ACCOUNT_IS_USING_A_LONG_RANDOM_PASSWORD_TO_STAY_SECURE": "Ensure your account is using a long random password to stay secure.",
     "YOUR_BLOG_RECEIVED_A_NEW_COMMENT_FROM_A_USER": "Your blog received a new comment from a user.",
-    "YOUR_COMMENT_HAS_BEEN_REPLIED_TO_BY_THE_AUTHOR":"Your comment has been replied to by the author."
+    "YOUR_COMMENT_HAS_BEEN_REPLIED_TO_BY_THE_AUTHOR": "Your comment has been replied to by the author.",
+    "A_NEW_SUBSCRIBER_HAS_SUBSCRIBED_TO_THE_WEBSITE_NEWSLETTER": "A new subscriber has subscribed to the website newsletter.",
+    "SUBSCRIBER":"Subscriber"
+    
 }

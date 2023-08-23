@@ -205,23 +205,28 @@ const handleMarkAllAsRead = () => {
       <DeletedSellerNotificationCard :notification="notification" />
       <DeletedUserNotificationCard :notification="notification" />
       <NewBlogCommentNotificationCard :notification="notification" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       <NewsletterSubscribedNotificationCard :notification="notification" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
       <NewSuggestionNotificationCard :notification="notification" />
+
       <OrderPlacedNotificationCard :notification="notification" />
       <SellerCreateNewProductNotificationCard :notification="notification" />
     </div>

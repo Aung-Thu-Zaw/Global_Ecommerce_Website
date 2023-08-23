@@ -845,5 +845,7 @@
     "YOUR_ACCOUNT_IS_DELETED_SUCCESSFULLY": "သင့်အကောင့်ကို အောင်မြင်စွာ ဖျက်လိုက်ပါပြီ။",
     "PASSWORD_UPDATED_SUCCESSFULLY": "စကားဝှက်ကို အောင်မြင်စွာ မွမ်းမံပြီးပါပြီ။",
     "YOUR_BLOG_RECEIVED_A_NEW_COMMENT_FROM_A_USER": "သင့်ဘလော့ဂ်သည် သုံးစွဲသူတစ်ဦးထံမှ မှတ်ချက်အသစ်တစ်ခု ရရှိခဲ့သည်။",
-    "YOUR_COMMENT_HAS_BEEN_REPLIED_TO_BY_THE_AUTHOR": "သင့်မှတ်ချက်ကို စာရေးဆရာမှ စာပြန်ထားသည်။"
+    "YOUR_COMMENT_HAS_BEEN_REPLIED_TO_BY_THE_AUTHOR": "သင့်မှတ်ချက်ကို စာရေးဆရာမှ စာပြန်ထားသည်။",
+    "A_NEW_SUBSCRIBER_HAS_SUBSCRIBED_TO_THE_WEBSITE_NEWSLETTER": "စာရင်းသွင်းသူအသစ်သည် ဝဘ်ဆိုက်သတင်းလွှာကို စာရင်းသွင်းထားသည်။",
+    "SUBSCRIBER":"စာရင်းသွင်းသူ"
 }
