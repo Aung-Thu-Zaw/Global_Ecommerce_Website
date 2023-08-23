@@ -5,7 +5,6 @@ namespace App\Notifications\AccountRegistered;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -49,7 +48,7 @@ class RegisteredUserEmailNotification extends Notification
         ->line("Name: ".$this->user->name)
         ->line("Email: ".$this->user->email)
         ->line("Registration Date: ".Carbon::parse($this->user->created_at)->format("Y-m-d"))
-        ->action('See More Details', route('admin.users.registered.show', $this->user->id));
+        ->action('See More Details', route('admin.registered-accounts.show', $this->user->id));
 
     }
 

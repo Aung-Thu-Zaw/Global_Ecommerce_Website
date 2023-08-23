@@ -1,9 +1,9 @@
 <script setup>
-import RegisteredVendorNotificationCard from "@/Components/Cards/RegisteredSellerNotificationCard.vue";
+import RegisteredSellerNotificationCard from "@/Components/Cards/RegisteredSellerNotificationCard.vue";
 import RegisteredUserNotificationCard from "@/Components/Cards/RegisteredUserNotificationCard.vue";
 import OrderPlacedNotificationCard from "@/Components/Cards/OrderPlacedNotificationCard.vue";
 import DeletedUserNotificationCard from "@/Components/Cards/DeletedUserNotificationCard.vue";
-import DeletedVendorNotificationCard from "@/Components/Cards/DeletedSellerNotificationCard.vue";
+import DeletedSellerNotificationCard from "@/Components/Cards/DeletedSellerNotificationCard.vue";
 import NewsletterSubscribedNotificationCard from "@/Components/Cards/NewsletterSubscribedNotificationCard.vue";
 import NewSuggestionNotificationCard from "@/Components/Cards/NewSuggestionNotificationCard.vue";
 import SellerCreateNewProductNotificationCard from "@/Components/Cards/SellerCreateNewProductNotificationCard.vue";
@@ -82,7 +82,7 @@ onMounted(() => {
         });
       } else if (
         notification.type ===
-        "App\\Notifications\\Products\\VendorCreateNewProductNotification"
+        "App\\Notifications\\Products\\SellerCreateNewProductNotification"
       ) {
         notifications.value.unshift({
           id: notification.id,
@@ -200,10 +200,27 @@ const handleMarkAllAsRead = () => {
       :key="notification.id"
       class="divide-y divide-gray-300"
     >
-      <RegisteredVendorNotificationCard :notification="notification" />
+      <RegisteredSellerNotificationCard :notification="notification" />
       <RegisteredUserNotificationCard :notification="notification" />
-      <DeletedVendorNotificationCard :notification="notification" />
+
+
+
+      <DeletedSellerNotificationCard :notification="notification" />
       <DeletedUserNotificationCard :notification="notification" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       <NewsletterSubscribedNotificationCard :notification="notification" />
       <NewSuggestionNotificationCard :notification="notification" />
       <OrderPlacedNotificationCard :notification="notification" />

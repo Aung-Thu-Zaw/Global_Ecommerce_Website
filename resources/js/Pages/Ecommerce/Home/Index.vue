@@ -1,4 +1,5 @@
 <script setup>
+import SuccessAlert from "@/Components/Alerts/SuccessAlert.vue";
 import HeaderMainSection from "@/Components/Headers/HeaderMainSection.vue";
 import SubscribeNewsLetterSection from "@/Components/Sections/SubscribeNewsLetterSection.vue";
 import WhyChooseUsSection from "@/Components/Sections/WhyChooseUsSection.vue";
@@ -39,6 +40,11 @@ if (usePage().props.flash.successMessage) {
   <AppLayout>
     <Head title="Global Online Shopping" />
     <div class="min-h-screen bg-gray-50 mt-40 w-full">
+      <!-- Verify Email Alert -->
+      <SuccessAlert
+        v-if="$page.props.auth.user && !$page.props.auth.user.email_verified_at"
+      />
+
       <!-- Header Main Section -->
       <HeaderMainSection
         :categories="categories"

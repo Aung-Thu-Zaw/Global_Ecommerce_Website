@@ -5,11 +5,10 @@ namespace App\Notifications\AccountDeleted;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class VendorAccountDeletedEmailNotification extends Notification
+class SellerAccountDeletedEmailNotification extends Notification
 {
     use Queueable;
 
@@ -43,15 +42,15 @@ class VendorAccountDeletedEmailNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage())
-                    ->subject("Vendor Account Deleted")
+                    ->subject("Seller Account Deleted")
                     ->greeting("Hello ".$notifiable->name.",")
-                    ->line("The following vendor account has been deleted:")
+                    ->line("The following seller account has been deleted:")
                     ->line("Id: ".$this->user->id)
                     ->line("Shop Name: ".$this->user->name)
                     ->line("Name: ".$this->user->name)
                     ->line("Email: ".$this->user->email)
                     ->line("Deleted Date: ".Carbon::parse($this->user->deleted_at)->format("Y-m-d"))
                     ->line("Please review the deletion and take any necessary actions.")
-                    ->action('See More Details', route('admin.vendors.registered.trash', ["page"=>1,"per_page"=>10,"sort"=>"id","direction"=>"desc"]));
+                    ->action('See More Details', route('admin.registered-accounts.trash', ["page" => 1,"per_page" => 10,"sort" => "id","direction" => "desc"]));
     }
 }

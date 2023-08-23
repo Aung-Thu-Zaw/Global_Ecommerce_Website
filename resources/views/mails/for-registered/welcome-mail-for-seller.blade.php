@@ -43,7 +43,7 @@
                     </p>
 
                     <p class="text-md font-normal text-slate-800 ">
-                        Thank you for creating a vendor account <span class="text-yellow-600 font-bold">"{{ $shopName
+                        Thank you for creating a seller account <span class="text-yellow-600 font-bold">"{{ $shopName
                             }}"</span> on
                         our e-commerce platform. We appreciate your interest
                         in joining our vibrant

@@ -10,7 +10,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Address;
 
-class RegisteredVendorWelcomeMail extends Mailable
+class RegisteredSellerWelcomeMail extends Mailable
 {
     use Queueable;
     use SerializesModels;
@@ -34,7 +34,7 @@ class RegisteredVendorWelcomeMail extends Mailable
     {
         return new Envelope(
             from: new Address('noreply@support.globalecommerce.com', 'Global E-commerce'),
-            subject: 'Welcome to Our E-commerce Platform as a Vendor!',
+            subject: 'Welcome to Our E-commerce Platform as a Seller!',
         );
     }
 
@@ -46,7 +46,7 @@ class RegisteredVendorWelcomeMail extends Mailable
     public function content()
     {
         return new Content(
-            view: 'mails.for-registered.welcome-mail-for-vendor',
+            view: 'mails.for-registered.welcome-mail-for-seller',
             with: [
                 'name' => $this->user->name,
                 'shopName' => $this->user->shop_name,

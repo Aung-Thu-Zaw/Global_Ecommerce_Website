@@ -10,7 +10,7 @@ const props = defineProps({
 });
 const goToDetailPage = () => {
   router.get(
-    route("admin.vendors.registered.show", props.notification.data.user.id)
+    route("admin.registered-accounts.show", props.notification.data.user.id)
   );
 };
 
@@ -33,7 +33,7 @@ const handleNotificationReadAt = () => {
       notification.type ===
         'App\\Notifications\\AccountRegistered\\RegisteredUserNotification' &&
       notification.data.user &&
-      notification.data.user.role === 'vendor'
+      notification.data.user.role === 'seller'
     "
     @click="handleNotificationReadAt"
     class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
@@ -57,7 +57,7 @@ const handleNotificationReadAt = () => {
           'text-gray-500': notification.read_at,
         }"
       >
-        {{ notification.data.message }}
+        {{ __(notification.data.message) }}
 
         <span
           class="font-bold text-sm block"

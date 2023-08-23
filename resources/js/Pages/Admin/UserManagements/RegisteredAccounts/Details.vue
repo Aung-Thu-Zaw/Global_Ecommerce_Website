@@ -126,7 +126,7 @@ const defaultAvatar = computed(() =>
 
       <div class="border shadow-md p-10">
         <div class="mb-5 flex items-center justify-center">
-          <img
+          <!-- <img
             v-if="defaultAvatar"
             src="../../../../../assets/images/user.webp"
             class="w-48 h-48 rounded-full object-cover ring-4 ring-slate-300 mb-5"
@@ -135,7 +135,7 @@ const defaultAvatar = computed(() =>
             v-else
             :src="user.avatar"
             class="w-48 h-48 rounded-full object-cover ring-4 ring-slate-300 mb-5"
-          />
+          /> -->
         </div>
 
         <p class="text-lg font-bold capitalize mb-5 text-center">

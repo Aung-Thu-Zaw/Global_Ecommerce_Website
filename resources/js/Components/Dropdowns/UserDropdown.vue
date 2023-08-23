@@ -12,8 +12,8 @@
         >
           <img
             alt=""
-            class="w-full h-full object-cover rounded-full align-middle border-none shadow-lg ring-2 ring-slate-400"
-            :src="$page.props.auth.user.avatar"
+            class="w-full h-full object-cover rounded-full align-middle border-none shadow-lg ring-1 ring-slate-300"
+            :src="$page.props.auth.user?.avatar"
           />
         </span>
 

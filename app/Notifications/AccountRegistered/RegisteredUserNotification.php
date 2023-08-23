@@ -5,9 +5,7 @@ namespace App\Notifications\AccountRegistered;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class RegisteredUserNotification extends Notification implements ShouldBroadcast
@@ -44,8 +42,8 @@ class RegisteredUserNotification extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-            "message" =>$this->user->role==='seller' ? "New Seller Registered." : "New User Registered.",
-            "user"=>$this->user
+            "message" => $this->user->role === 'seller' ? "NEW_SELLER_REGISTERED" : "NEW_USER_REGISTERED",
+            "user" => $this->user
         ];
     }
 
@@ -59,8 +57,8 @@ class RegisteredUserNotification extends Notification implements ShouldBroadcast
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" =>$this->user->role==='seller' ? "New Seller Registered." : "New User Registered.",
-            "user"=>$this->user
+            "message" => $this->user->role === 'seller' ? "NEW_SELLER_REGISTERED" : "NEW_USER_REGISTERED",
+            "user" => $this->user
         ]);
     }
 }

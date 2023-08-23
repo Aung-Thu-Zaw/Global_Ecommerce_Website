@@ -830,5 +830,12 @@
     "EDIT_COMMENT": "Edit Comment",
     "DELETE_COMMENT": "Delete Comment",
     "REPLY_THIS_COMMENT": "Reply This Comment",
-    "THANK_YOU_FOR_SUBSCRIBING_TO_OUR_NEWSLETTER":"Thank you for subscribing to our newsletter."
+    "THANK_YOU_FOR_SUBSCRIBING_TO_OUR_NEWSLETTER": "Thank you for subscribing to our newsletter.",
+    "NEW_SELLER_REGISTERED": "New Seller Registered.",
+    "NEW_USER_REGISTERED": "New User Registered.",
+    "YOUR_ACCOUNT_HAS_BEEN_SUCCESSFULLY_REGISTERED_PLEASE_VERIFY_YOUR_EMAIL_IN_YOUR_EMAIL_INBOX_OR_SPAN_BOX": "Your account has been successfully registered 🎉.Please verify your email in your email inbox or spam box.",
+    "REGISTERED_WITH_GOOGLE_AUTH":"Registered with 'Google' auth.",
+    "REGISTERED_WITH_FACEBOOK_AUTH":"Registered with 'Facebook' auth.",
+    "USER_ACCOUNT_HAS_BEEN_DELETED":"User account has been deleted.",
+    "SELLER_ACCOUNT_HAS_BEEN_DELETED":"Seller account has been deleted."
 }

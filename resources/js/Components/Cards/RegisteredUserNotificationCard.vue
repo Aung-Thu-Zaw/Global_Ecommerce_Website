@@ -11,7 +11,7 @@ const props = defineProps({
 
 const goToDetailPage = () => {
   router.get(
-    route("admin.users.registered.show", props.notification.data.user.id)
+    route("admin.registered-accounts.show", props.notification.data.user.id)
   );
 };
 
@@ -58,16 +58,16 @@ const handleNotificationReadAt = () => {
           'text-gray-500': notification.read_at,
         }"
       >
-        {{ notification.data.message }}
+        {{ __(notification.data.message) }}
         {{
           notification.data.user.google_id
-            ? 'Registered with "Google" auth.'
+            ? __("REGISTERED_WITH_GOOGLE_AUTH")
             : ""
         }}
 
         {{
           notification.data.user.facebook_id
-            ? 'Registered with "Facebook" auth.'
+            ? __("REGISTERED_WITH_FACEBOOK_AUTH")
             : ""
         }}
 

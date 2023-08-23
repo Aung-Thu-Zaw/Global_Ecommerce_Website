@@ -51,6 +51,6 @@ class UserAccountDeletedEmailNotification extends Notification
                     ->line("Email: ".$this->user->email)
                     ->line("Deleted Date: ".Carbon::parse($this->user->deleted_at)->format("Y-m-d"))
                     ->line("Please review the deletion and take any necessary actions.")
-                    ->action('See More Details', route('admin.users.registered.trash', ["page"=>1,"per_page"=>10,"sort"=>"id","direction"=>"desc"]));
+                    ->action('See More Details', route('admin.registered-accounts.trash', ["page"=>1,"per_page"=>10,"sort"=>"id","direction"=>"desc"]));
     }
 }

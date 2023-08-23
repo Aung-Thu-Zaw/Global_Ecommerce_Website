@@ -64,7 +64,7 @@
                         We sincerely appreciate the time you spent as a user on our platform and hope that you had a
                         positive experience. If there are any specific reasons or feedback you would like to share
                         regarding your decision to delete your account, we would greatly appreciate hearing from you.
-                        Your input helps us improve our services for our community of users and vendors.
+                        Your input helps us improve our services for our community of users and sellers.
                     </p>
                     <br>
                     <p class="text-md font-normal text-slate-800 ">

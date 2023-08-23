@@ -1,8 +1,7 @@
 <script setup>
-import { Link, router } from "@inertiajs/vue3";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { computed } from "vue";
+import { router } from "@inertiajs/vue3";
 
 dayjs.extend(relativeTime);
 
@@ -11,7 +10,7 @@ const props = defineProps({
 });
 
 const goToDetailPage = () => {
-  router.get(route("admin.users.registered.trash"), {
+  router.get(route("admin.registered-accounts.trash"), {
     page: 1,
     per_page: 10,
     sort: "id",
@@ -62,7 +61,7 @@ const handleNotificationReadAt = () => {
           'text-gray-500': notification.read_at,
         }"
       >
-        {{ notification.data.message }}
+        {{ __(notification.data.message) }}
 
         <span
           class="font-bold text-sm block"

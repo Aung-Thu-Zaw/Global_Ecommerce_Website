@@ -5,11 +5,10 @@ namespace App\Notifications\AccountRegistered;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class RegisteredVendorEmailNotification extends Notification
+class RegisteredSellerEmailNotification extends Notification
 {
     use Queueable;
 
@@ -43,14 +42,12 @@ class RegisteredVendorEmailNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage())
-        ->subject("New Vendor Registered")
+        ->subject("New Seller Registered")
         ->greeting("Dear ".$notifiable->name.",")
-        ->line("A new vendor has registered on our platform. Please review the details below:")
+        ->line("A new seller has registered on our platform. Please review the details below:")
         ->line("Shop Name: ".$this->user->shop_name)
         ->line("Email: ".$this->user->email)
         ->line("Registration Date: ".Carbon::parse($this->user->created_at)->format("Y-m-d"))
-        ->action('See More Details', route('admin.vendors.registered.show', $this->user->id));
+        ->action('See More Details', route('admin.registered-accounts.show', $this->user->id));
     }
-
-
 }
