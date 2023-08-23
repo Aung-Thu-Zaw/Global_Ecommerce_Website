@@ -2,6 +2,7 @@
 import ChatBox from "@/Components/ChatBox.vue";
 import SuggestionModal from "@/Components/Modals/SuggestionModal.vue";
 import FeedbackModal from "@/Components/Modals/FeedbackModal.vue";
+import NotificationDropdownForUser from "@/Components/Dropdowns/NotificationDropdownForUser.vue";
 import { usePage } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
 
@@ -38,6 +39,10 @@ const totalMessages = computed(() => {
     class="fixed bottom-0 top-0 right-0 w-auto px-3 rounded-sm shadow-lg bg-gray-50 border-l transition-all"
   >
     <div class="h-full flex flex-col items-center justify-center space-y-5">
+      <NotificationDropdownForUser
+        v-if="$page.props.auth.user && $page.props.auth.user.role !== 'admin'"
+      />
+
       <div class="relative">
         <button
           @click="isVisibleChatbox = !isVisibleChatbox"
@@ -58,7 +63,7 @@ const totalMessages = computed(() => {
         <div
           id="chat-box"
           role="tooltip"
-          class="absolute invisible inline-block p-2 text-sm font-medium text-white bg-gray-600 rounded-md shadow-lg border opacity-0 tooltip w-[100px]"
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium transition-opacity duration-300 bg-white border text-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700 w-[90px]"
         >
           Chat Box
           <div class="tooltip-arrow" data-popper-arrow></div>
@@ -80,7 +85,7 @@ const totalMessages = computed(() => {
         <div
           id="suggestion"
           role="tooltip"
-          class="absolute invisible inline-block p-2 text-sm font-medium text-white bg-gray-600 rounded-md shadow-lg border opacity-0 tooltip w-[150px]"
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium transition-opacity duration-300 bg-white border text-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
         >
           Suggestions
           <div class="tooltip-arrow" data-popper-arrow></div>
@@ -101,9 +106,9 @@ const totalMessages = computed(() => {
         <div
           id="feedbacks"
           role="tooltip"
-          class="absolute invisible inline-block p-2 text-sm font-medium text-white bg-gray-600 rounded-md shadow-lg border opacity-0 tooltip w-[200px]"
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium transition-opacity duration-300 bg-white border text-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
         >
-          Feedback For Website
+          Feedback
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import ProductCard from "@/Components/Cards/ProductCard.vue";
-import ProductCardList from "@/Components/Cards/ProductCardList.vue";
+import ProductCard from "@/Components/Cards/Products/ProductCard.vue";
+import ProductCardList from "@/Components/Cards/Products/ProductCardList.vue";
 import EcommerceFilterSidebarForSearchResult from "@/Components/Sidebars/EcommerceFilterSidebarForSearchResult.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";

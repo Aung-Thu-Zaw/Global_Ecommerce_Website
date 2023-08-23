@@ -1,6 +1,6 @@
 <script setup>
-import ProductCard from "@/Components/Cards/ProductCard.vue";
-import ProductCardList from "@/Components/Cards/ProductCardList.vue";
+import ProductCard from "@/Components/Cards/Products/ProductCard.vue";
+import ProductCardList from "@/Components/Cards/Products/ProductCardList.vue";
 import { reactive, ref, watch } from "vue";
 import { usePage, router, Link } from "@inertiajs/vue3";
 import EcommerceFilterSidebarForShop from "@/Components/Sidebars/EcommerceFilterSidebarForShop.vue";

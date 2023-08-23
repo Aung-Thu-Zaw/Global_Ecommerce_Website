@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Ecommerce;
+namespace App\Http\Controllers\Ecommerce\Blogs;
 
 use App\Http\Controllers\Controller;
 use App\Models\BlogCategory;

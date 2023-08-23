@@ -4,7 +4,7 @@ import { computed } from "vue";
 import { Link } from "@inertiajs/vue3";
 import TotalAverageRatingStarWithProgressBar from "@/Components/RatingStars/TotalAverageRatingStarWithProgressBar.vue";
 import TotalReviewAvgStars from "@/Components/RatingStars/TotalReviewAvgStars.vue";
-import ProductReviewerReviewCard from "@/Components/Cards/ProductReviewerReviewCard.vue";
+import ProductReviewerReviewCard from "@/Components/Cards/Products/ProductReviewerReviewCard.vue";
 
 const props = defineProps({
   paginateProductReviews: Object,

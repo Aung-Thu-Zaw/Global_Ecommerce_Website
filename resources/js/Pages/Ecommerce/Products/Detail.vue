@@ -2,7 +2,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
 import Information from "@/Components/Information.vue";
-import ShopInformationCard from "@/Components/Cards/ShopInformationCard.vue";
+import ShopInformationCard from "@/Components/Cards/Shops/ShopInformationCard.vue";
 import RelatedProductSection from "@/Components/Sections/RelatedProductSection.vue";
 import { computed, reactive, ref } from "vue";
 import { router, usePage, Head, Link } from "@inertiajs/vue3";

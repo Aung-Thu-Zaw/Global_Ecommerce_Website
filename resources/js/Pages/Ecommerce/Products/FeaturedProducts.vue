@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import ProductCard from "@/Components/Cards/ProductCard.vue";
+import ProductCard from "@/Components/Cards/Products/ProductCard.vue";
 import { ref } from "vue";
 import { Head, usePage, router } from "@inertiajs/vue3";
 

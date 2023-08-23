@@ -1,6 +1,6 @@
 <script setup>
-import ShopReviewCard from "@/Components/Cards/ShopReviewCard.vue";
-import ShopReplyCard from "@/Components/Cards/ShopReplyCard.vue";
+import ShopReviewCard from "@/Components/Cards/Shops/ShopReviewCard.vue";
+import ShopReplyCard from "@/Components/Cards/Shops/ShopReplyCard.vue";
 import ShopReviewForm from "@/Components/Forms/ShopReviewForm.vue";
 import { computed } from "vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";

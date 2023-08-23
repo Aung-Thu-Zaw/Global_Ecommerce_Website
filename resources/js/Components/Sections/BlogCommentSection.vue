@@ -1,6 +1,6 @@
 <script setup>
-import BlogCommentCard from "@/Components/Cards/BlogCommentCard.vue";
-import BlogReplyCard from "@/Components/Cards/BlogReplyCard.vue";
+import BlogCommentCard from "@/Components/Cards/Blogs/BlogCommentCard.vue";
+import BlogReplyCard from "@/Components/Cards/Blogs/BlogReplyCard.vue";
 import BlogCommentCreateForm from "@/Components/Forms/Blogs/BlogCommentCreateForm.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import { Link } from "@inertiajs/vue3";

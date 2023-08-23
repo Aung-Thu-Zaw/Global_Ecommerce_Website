@@ -1,13 +1,13 @@
 <script setup>
-import RegisteredSellerNotificationCard from "@/Components/Cards/RegisteredSellerNotificationCard.vue";
-import RegisteredUserNotificationCard from "@/Components/Cards/RegisteredUserNotificationCard.vue";
-import OrderPlacedNotificationCard from "@/Components/Cards/OrderPlacedNotificationCard.vue";
-import DeletedUserNotificationCard from "@/Components/Cards/DeletedUserNotificationCard.vue";
-import DeletedSellerNotificationCard from "@/Components/Cards/DeletedSellerNotificationCard.vue";
-import NewsletterSubscribedNotificationCard from "@/Components/Cards/NewsletterSubscribedNotificationCard.vue";
-import NewSuggestionNotificationCard from "@/Components/Cards/NewSuggestionNotificationCard.vue";
-import SellerCreateNewProductNotificationCard from "@/Components/Cards/SellerCreateNewProductNotificationCard.vue";
-import NewBlogCommentNotificationCard from "@/Components/Cards/NewBlogCommentNotificationCard.vue";
+import RegisteredSellerNotificationCard from "@/Components/Cards/Notifications/RegisteredSellerNotificationCard.vue";
+import RegisteredUserNotificationCard from "@/Components/Cards/Notifications/RegisteredUserNotificationCard.vue";
+import OrderPlacedNotificationCard from "@/Components/Cards/Notifications/OrderPlacedNotificationCard.vue";
+import DeletedUserNotificationCard from "@/Components/Cards/Notifications/DeletedUserNotificationCard.vue";
+import DeletedSellerNotificationCard from "@/Components/Cards/Notifications/DeletedSellerNotificationCard.vue";
+import NewsletterSubscribedNotificationCard from "@/Components/Cards/Notifications/NewsletterSubscribedNotificationCard.vue";
+import NewSuggestionNotificationCard from "@/Components/Cards/Notifications/NewSuggestionNotificationCard.vue";
+import SellerCreateNewProductNotificationCard from "@/Components/Cards/Notifications/SellerCreateNewProductNotificationCard.vue";
+import NewBlogCommentNotificationCard from "@/Components/Cards/Notifications/NewBlogCommentNotificationCard.vue";
 import { usePage, router } from "@inertiajs/vue3";
 import { computed, onMounted, onUpdated, ref } from "vue";
 
@@ -204,7 +204,8 @@ const handleMarkAllAsRead = () => {
       <RegisteredUserNotificationCard :notification="notification" />
       <DeletedSellerNotificationCard :notification="notification" />
       <DeletedUserNotificationCard :notification="notification" />
-      
+      <NewBlogCommentNotificationCard :notification="notification" />
+
 
 
 
@@ -223,7 +224,6 @@ const handleMarkAllAsRead = () => {
       <NewSuggestionNotificationCard :notification="notification" />
       <OrderPlacedNotificationCard :notification="notification" />
       <SellerCreateNewProductNotificationCard :notification="notification" />
-      <NewBlogCommentNotificationCard :notification="notification" />
     </div>
 
     <div class="w-full text-center py-3" v-if="!sortedNotifications.length">

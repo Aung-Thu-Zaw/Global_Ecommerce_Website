@@ -1,7 +1,7 @@
 
 <script setup>
-import ProductReplyCard from "@/Components/Cards/ProductReplyCard.vue";
-import ProductReviewCard from "@/Components/Cards/ProductReviewCard.vue";
+import ProductReplyCard from "@/Components/Cards/Products/ProductReplyCard.vue";
+import ProductReviewCard from "@/Components/Cards/Products/ProductReviewCard.vue";
 import ProductReviewForm from "@/Components/Forms/ProductReviewForm.vue";
 import { Link } from "@inertiajs/vue3";
 import Pagination from "@/Components/Paginations/Pagination.vue";

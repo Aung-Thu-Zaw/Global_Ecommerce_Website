@@ -1,10 +1,10 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
-import BlogTagCard from "@/Components/Cards/BlogTagCard.vue";
-import BlogCard from "@/Components/Cards/BlogCard.vue";
-import BlogCategoryCard from "@/Components/Cards/BlogCategoryCard.vue";
-import BlogCardList from "@/Components/Cards/BlogCardList.vue";
+import BlogTagCard from "@/Components/Cards/Blogs/BlogTagCard.vue";
+import BlogCard from "@/Components/Cards/Blogs/BlogCard.vue";
+import BlogCategoryCard from "@/Components/Cards/Blogs/BlogCategoryCard.vue";
+import BlogCardList from "@/Components/Cards/Blogs/BlogCardList.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import { usePage, Head, Link, router } from "@inertiajs/vue3";
 import { reactive, watch } from "vue";

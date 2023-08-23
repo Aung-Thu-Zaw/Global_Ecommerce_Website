@@ -1,18 +1,21 @@
 <?php
 
-namespace App\Http\Controllers\Ecommerce;
+namespace App\Http\Controllers\Ecommerce\Blogs;
 
 use App\Actions\Ecommerce\Blogs\CreateBlogCommentReplyAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BlogCommentReplyRequest;
 use App\Models\BlogCommentReply;
+use App\Services\BroadcastNotifications\BlogCommentReplyFromAuthorNotificationSendToUserService;
 use Illuminate\Http\RedirectResponse;
 
 class BlogCommentReplyController extends Controller
 {
     public function store(BlogCommentReplyRequest $request): RedirectResponse
     {
-        (new CreateBlogCommentReplyAction())->handle($request->validated());
+        $blogCommentReply = (new CreateBlogCommentReplyAction())->handle($request->validated());
+
+        (new BlogCommentReplyFromAuthorNotificationSendToUserService())->send($blogCommentReply);
 
         return back();
     }

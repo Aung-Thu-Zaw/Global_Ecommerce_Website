@@ -2,7 +2,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
 import RelatedBlogCard from "@/Components/Cards/RelatedBlogCard.vue";
-import BlogCategoryCard from "@/Components/Cards/BlogCategoryCard.vue";
+import BlogCategoryCard from "@/Components/Cards/Blogs/BlogCategoryCard.vue";
 import BlogCommentSection from "@/Components/Sections/BlogCommentSection.vue";
 import { Head, Link } from "@inertiajs/vue3";
 

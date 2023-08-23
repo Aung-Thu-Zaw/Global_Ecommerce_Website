@@ -1,6 +1,6 @@
 <script setup>
-import QuestionCard from "@/Components/Cards/QuestionCard.vue";
-import AnswerCard from "@/Components/Cards/AnswerCard.vue";
+import QuestionCard from "@/Components/Cards/Products/ProductQuestionCard.vue";
+import AnswerCard from "@/Components/Cards/Products/ProductQuestionAnswerCard.vue";
 import { useForm, usePage, Link } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import Pagination from "@/Components/Paginations/Pagination.vue";

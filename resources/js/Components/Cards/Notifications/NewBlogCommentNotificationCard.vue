@@ -1,7 +1,7 @@
 <script setup>
-import { router } from "@inertiajs/vue3";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { router } from "@inertiajs/vue3";
 
 dayjs.extend(relativeTime);
 
@@ -52,7 +52,7 @@ const handleNotificationReadAt = () => {
           'text-gray-500': notification.read_at,
         }"
       >
-        {{ notification.data.message }}
+        {{ __(notification.data.message) }}
 
         <span
           class="font-bold text-sm block line-clamp-1"

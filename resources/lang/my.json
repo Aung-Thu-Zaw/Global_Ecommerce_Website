@@ -840,8 +840,10 @@
     "USER_ACCOUNT_HAS_BEEN_DELETED": "အသုံးပြုသူအကောင့်ကို ဖျက်လိုက်ပါပြီ။",
     "SELLER_ACCOUNT_HAS_BEEN_DELETED": "ရောင်းသူအကောင့်ကို ဖျက်လိုက်ပါပြီ။",
     "EMAIL": "အီးမေးလ်",
-    "ENTER_YOUR_ADDRESS":"သင့်လိပ်စာကို ထည့်ပါ။",
-    "PROFILE_UPDATED_SUCCESSFULLY":"ပရိုဖိုင်ကို အောင်မြင်စွာ မွမ်းမံပြီးပါပြီ။",
-    "YOUR_ACCOUNT_IS_DELETED_SUCCESSFULLY":"သင့်အကောင့်ကို အောင်မြင်စွာ ဖျက်လိုက်ပါပြီ။",
-    "PASSWORD_UPDATED_SUCCESSFULLY":"စကားဝှက်ကို အောင်မြင်စွာ မွမ်းမံပြီးပါပြီ။"
+    "ENTER_YOUR_ADDRESS": "သင့်လိပ်စာကို ထည့်ပါ။",
+    "PROFILE_UPDATED_SUCCESSFULLY": "ပရိုဖိုင်ကို အောင်မြင်စွာ မွမ်းမံပြီးပါပြီ။",
+    "YOUR_ACCOUNT_IS_DELETED_SUCCESSFULLY": "သင့်အကောင့်ကို အောင်မြင်စွာ ဖျက်လိုက်ပါပြီ။",
+    "PASSWORD_UPDATED_SUCCESSFULLY": "စကားဝှက်ကို အောင်မြင်စွာ မွမ်းမံပြီးပါပြီ။",
+    "YOUR_BLOG_RECEIVED_A_NEW_COMMENT_FROM_A_USER": "သင့်ဘလော့ဂ်သည် သုံးစွဲသူတစ်ဦးထံမှ မှတ်ချက်အသစ်တစ်ခု ရရှိခဲ့သည်။",
+    "YOUR_COMMENT_HAS_BEEN_REPLIED_TO_BY_THE_AUTHOR": "သင့်မှတ်ချက်ကို စာရေးဆရာမှ စာပြန်ထားသည်။"
 }

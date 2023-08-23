@@ -1,5 +1,5 @@
 <script setup>
-import ProductCard from "@/Components/Cards/ProductCard.vue";
+import ProductCard from "@/Components/Cards/Products/ProductCard.vue";
 import { computed, onMounted, ref } from "vue";
 import { Link } from "@inertiajs/vue3";
 

@@ -1,7 +1,7 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import ShopCard from "@/Components/Cards/ShopCard.vue";
+import ShopCard from "@/Components/Cards/Shops/ShopCard.vue";
 import { Head, usePage, router } from "@inertiajs/vue3";
 import { reactive, watch } from "vue";
 

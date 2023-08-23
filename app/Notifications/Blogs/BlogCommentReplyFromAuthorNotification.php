@@ -2,16 +2,15 @@
 
 namespace App\Notifications\Blogs;
 
-use App\Models\BlogComment;
+use App\Models\BlogCommentReply;
 use App\Models\BlogPost;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewBlogCommentFromUserNotification extends Notification implements ShouldBroadcast
+class BlogCommentReplyFromAuthorNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -20,7 +19,7 @@ class NewBlogCommentFromUserNotification extends Notification implements ShouldB
      *
      * @return void
      */
-    public function __construct(protected BlogPost $blogPost, protected BlogComment $blogComment)
+    public function __construct(protected BlogPost $blogPost, protected BlogCommentReply $blogCommentReply)
     {
         //
     }
@@ -45,9 +44,9 @@ class NewBlogCommentFromUserNotification extends Notification implements ShouldB
     public function toArray($notifiable)
     {
         return [
-            "message" => "YOUR_BLOG_RECEIVED_A_NEW_COMMENT_FROM_A_USER",
+            "message" => "YOUR_COMMENT_HAS_BEEN_REPLIED_TO_BY_THE_AUTHOR",
             "blog" => $this->blogPost->slug,
-            "comment" => $this->blogComment->comment,
+            "reply" => $this->blogCommentReply->reply_text,
 
         ];
     }
@@ -62,9 +61,9 @@ class NewBlogCommentFromUserNotification extends Notification implements ShouldB
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" => "YOUR_BLOG_RECEIVED_A_NEW_COMMENT_FROM_A_USER",
+            "message" => "YOUR_COMMENT_HAS_BEEN_REPLIED_TO_BY_THE_AUTHOR",
             "blog" => $this->blogPost->slug,
-            "comment" => $this->blogComment->comment,
+            "reply" => $this->blogCommentReply->reply_text,
         ]);
     }
 }

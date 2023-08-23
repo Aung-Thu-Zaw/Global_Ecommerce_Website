@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Ecommerce;
+namespace App\Http\Controllers\Ecommerce\Blogs;
 
 use App\Actions\Ecommerce\Blogs\CreateBlogCommentAction;
 use App\Http\Controllers\Controller;
@@ -19,7 +19,6 @@ class BlogCommentController extends Controller
 
         return back();
     }
-
 
     public function update(BlogCommentRequest $request, BlogComment $blogComment): RedirectResponse
     {

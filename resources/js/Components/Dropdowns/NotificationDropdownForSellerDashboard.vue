@@ -1,8 +1,8 @@
 <script setup>
-import FollowedShopNotificationCard from "@/Components/Cards/FollowedShopNotificationCard.vue";
-import ProductQuestionNotificationCard from "@/Components/Cards/ProductQuestionNotificationCard.vue";
-import ApprovedCreatedNewProductNotificationCard from "@/Components/Cards/ApprovedCreatedNewProductNotificationCard.vue";
-import DisapprovedCreatedNewProductNotificationCard from "@/Components/Cards/DisapprovedCreatedNewProductNotificationCard.vue";
+import FollowedShopNotificationCard from "@/Components/Cards/Notifications/FollowedShopNotificationCard.vue";
+import ProductQuestionNotificationCard from "@/Components/Cards/Notifications/ProductQuestionNotificationCard.vue";
+import ApprovedCreatedNewProductNotificationCard from "@/Components/Cards/Notifications/ApprovedCreatedNewProductNotificationCard.vue";
+import DisapprovedCreatedNewProductNotificationCard from "@/Components/Cards/Notifications/DisapprovedCreatedNewProductNotificationCard.vue";
 import { usePage, router } from "@inertiajs/vue3";
 import { computed, onMounted, ref } from "vue";
 

@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Ecommerce\BlogCommentController;
-use App\Http\Controllers\Ecommerce\BlogCommentReplyController;
-use App\Http\Controllers\Ecommerce\BlogController;
+use App\Http\Controllers\Ecommerce\Blogs\BlogCommentController;
+use App\Http\Controllers\Ecommerce\Blogs\BlogCommentReplyController;
+use App\Http\Controllers\Ecommerce\Blogs\BlogController;
 use App\Http\Controllers\Ecommerce\CancelOrderAndItemController;
 use App\Http\Controllers\Ecommerce\CartController;
 use App\Http\Controllers\Ecommerce\CartItemController;
@@ -16,6 +16,7 @@ use App\Http\Controllers\Ecommerce\HelpCenterController;
 use App\Http\Controllers\Ecommerce\LanguageController;
 use App\Http\Controllers\User\FollowedShopController;
 use App\Http\Controllers\Ecommerce\MessageController;
+use App\Http\Controllers\Ecommerce\NotificationController;
 use App\Http\Controllers\Ecommerce\Payments\PaymentController;
 use App\Http\Controllers\Ecommerce\Payments\CashOnDeliveryController;
 use App\Http\Controllers\Ecommerce\Payments\StripeController;
@@ -130,6 +131,15 @@ Route::controller(MyAccountController::class)
 
 // For Authenticated And Verified Users
 Route::middleware(["auth","verified"])->group(function () {
+
+    // Dashboard Notification
+    Route::controller(NotificationController::class)
+         ->prefix("/notifications")
+         ->name("notifications.")
+         ->group(function () {
+             Route::post("/{notification_id}/read", "reatNotification")->name("read");
+             Route::post("/read-all", "markAllAsRead")->name("read-all");
+         });
 
     Route::controller(CartController::class)
          ->prefix("/cart")
