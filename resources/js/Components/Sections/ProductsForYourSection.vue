@@ -50,7 +50,7 @@ const loadMoreProduct = () => {
       </div>
 
       <div
-        v-if="products"
+        v-if="products.length"
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
       >
         <div v-for="product in products" :key="product.id" data-aos="zoom-in">

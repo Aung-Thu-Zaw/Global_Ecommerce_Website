@@ -218,7 +218,7 @@ const submit = () => {
           <p class="text-center text-sm">
             {{ __("ALREADY_HAS_A_SELLER_ACCOUNT") }}?
             <Link
-              :href="route('vendor.login')"
+              :href="route('seller.login')"
               class="text-blue-600 font-bold hover:cursor-pointer hover:underline"
             >
               {{ __("SIGN_IN") }}

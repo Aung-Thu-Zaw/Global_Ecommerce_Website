@@ -26,12 +26,12 @@ defineProps({
       </div>
 
       <!-- Collection Card -->
-      <nav
+      <div
         v-if="collections.length"
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1"
       >
         <CollectionCard :collections="collections" />
-      </nav>
+      </div>
       <div v-else>
         <p class="text-center text-xl font-bold text-red-600 animate-bounce">
           {{ __("NO_COLLECTION_FOUND") }}!

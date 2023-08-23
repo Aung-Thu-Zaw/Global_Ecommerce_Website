@@ -23,7 +23,7 @@ const totalItems = computed(() => {
   <nav class="bg-blue-600 text-white">
     <div class="flex items-center justify-between px-10">
       <!-- Title -->
-      <span class="text-sm font-bold">GLOBAL E-COMMERCE WEBSITE</span>
+      <span class="text-sm font-bold uppercase">Global E-commerce Website</span>
       <nav class="hidden lg:flex flex-1 items-center justify-end py-1">
         <!-- Help Center -->
         <Link

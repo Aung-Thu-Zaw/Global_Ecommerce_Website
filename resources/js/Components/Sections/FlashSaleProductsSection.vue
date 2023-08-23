@@ -1,7 +1,7 @@
 <script setup>
 import ProductCard from "@/Components/Cards/ProductCard.vue";
-import { Link } from "@inertiajs/vue3";
 import { computed, onMounted, ref } from "vue";
+import { Link } from "@inertiajs/vue3";
 
 const props = defineProps({
   flashSale: Object,
@@ -49,7 +49,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="py-10">
+  <section v-if="flashSaleProducts.length" class="py-10">
     <div
       class="container max-w-screen-xl mx-auto p-4 border border-slate-300 bg-white rounded-md shadow-md"
     >
@@ -104,7 +104,7 @@ onMounted(() => {
           v-for="flashSaleProduct in flashSaleProducts"
           :key="flashSaleProduct.id"
         >
-          <ProductCard :product="flashSaleProduct.product"></ProductCard>
+          <ProductCard :product="flashSaleProduct.product" />
         </div>
       </div>
       <div v-else>

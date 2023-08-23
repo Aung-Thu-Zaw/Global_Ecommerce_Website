@@ -12,12 +12,12 @@ class SubscriberController extends Controller
 {
     public function store(SubscriberRequest $request): RedirectResponse
     {
-        $subscriber=Subscriber::create([
-            "email"=>$request->email
+        $subscriber = Subscriber::create([
+            "email" => $request->email
         ]);
 
         event(new SubscribedNewsletter($subscriber));
 
-        return back()->with("success", "Thank you for subscribing to our newsletter.");
+        return back()->with("success", "THANK_YOU_FOR_SUBSCRIBING_TO_OUR_NEWSLETTER");
     }
 }

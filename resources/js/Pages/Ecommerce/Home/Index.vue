@@ -10,9 +10,9 @@ import FeaturedProductsSection from "@/Components/Sections/FeaturedProductsSecti
 import CampaignBanner from "@/Components/Banners/CampaignBanner.vue";
 import ProductBanner from "@/Components/Banners/ProductBanner.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
+import { usePage, Head } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-import { usePage, Head } from "@inertiajs/vue3";
 
 defineProps({
   categories: Object,
@@ -21,9 +21,9 @@ defineProps({
   campaignBanner: Object,
   productBanners: Object,
   flashSale: Object,
+  flashSaleProducts: Object,
   newProducts: Object,
   featuredProducts: Object,
-  flashSaleProducts: Object,
   randomProducts: Object,
   socialMedia: Object,
 });

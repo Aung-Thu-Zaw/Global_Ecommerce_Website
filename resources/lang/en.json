@@ -829,5 +829,6 @@
     "DELETE_REPLY": "Delete Reply",
     "EDIT_COMMENT": "Edit Comment",
     "DELETE_COMMENT": "Delete Comment",
-    "REPLY_THIS_COMMENT": "Reply This Comment"
+    "REPLY_THIS_COMMENT": "Reply This Comment",
+    "THANK_YOU_FOR_SUBSCRIBING_TO_OUR_NEWSLETTER":"Thank you for subscribing to our newsletter."
 }

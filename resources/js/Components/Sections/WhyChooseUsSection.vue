@@ -1,3 +1,5 @@
+<script setup></script>
+
 <template>
   <section class="bg-white py-12">
     <div class="container max-w-screen-xl mx-auto px-4">

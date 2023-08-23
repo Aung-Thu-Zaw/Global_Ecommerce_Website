@@ -29,33 +29,34 @@ import { Link } from "@inertiajs/vue3";
   <!-- Dropdown menu -->
   <div
     id="dropdownSellers"
-    class="z-40 hidden bg-white shadow-md w-[300px] h-[350px]"
+    class="z-40 hidden bg-white shadow-md w-[320px] h-[350px] border border-slate-300"
   >
     <ul
       class="h-full py-2 overflow-y-auto text-gray-700 scrollbar"
       aria-labelledby="dropdownSellersButton"
     >
-      <li v-for="vendor in $page.props.vendors" :key="vendor.id">
+      <li v-for="seller in $page.props.sellers" :key="seller.id">
         <Link
-          :href="route('shop.show', vendor.uuid)"
+          :href="route('shop.show', seller.uuid)"
           :data="{ tab: 'home' }"
           class="flex items-center px-4 py-2 hover:bg-gray-100"
         >
           <img
             class="w-6 h-6 mr-2 rounded-full"
-            :src="vendor.avatar"
+            :src="seller.avatar"
             alt="Jese image"
           />
-          {{ vendor.shop_name }}
-          <span v-if="vendor.offical" class="text-green-400 rounded-xl">
+          {{ seller.shop_name }}
+          <span v-if="seller.offical" class="text-green-400 rounded-xl">
             <i class="fa-solid fa-circle-check ml-2"></i>
           </span>
         </Link>
       </li>
     </ul>
     <Link
+      as="button"
       :href="route('shop.index')"
-      class="flex items-center justify-center p-3 text-sm font-medium text-blue-600 border-2 border-gray-200 bg-white rounded-b-lg hover:bg-gray-100"
+      class="flex items-center justify-center p-3 w-full text-sm font-bold text-slate-600 border bg-white hover:bg-gray-100 hover:text-blue-600 border-slate-300"
     >
       <i class="fas fa-eye mr-2"></i>
       {{ __("VIEW_MORE") }}
