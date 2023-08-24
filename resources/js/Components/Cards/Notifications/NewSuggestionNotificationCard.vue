@@ -1,5 +1,5 @@
 <script setup>
-import ReportBugNotificationCard from "@/Components/Cards/ReportBugNotificationCard.vue";
+import ReportBugNotificationCard from "@/Components/Cards/Notifications/ReportBugNotificationCard.vue";
 import RequestFeatureNotificationCard from "@/Components/Cards/Notifications/RequestFeatureNotificationCard.vue";
 
 const props = defineProps({

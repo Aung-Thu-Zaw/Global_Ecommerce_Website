@@ -22,6 +22,6 @@ class SuggestionForWebsite
      */
     public function __construct(Suggestion $suggestion)
     {
-        $this->suggestion=$suggestion;
+        $this->suggestion = $suggestion;
     }
 }

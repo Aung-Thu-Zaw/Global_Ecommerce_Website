@@ -11,7 +11,7 @@ const props = defineProps({
 
 const goToDetailPage = () => {
   router.get(
-    route("admin.suggestions.show", props.notification.data.suggestion.id)
+    route("admin.website-feedbacks.show", props.notification.data.feedback.id)
   );
 };
 
@@ -33,17 +33,16 @@ const handleNotificationReadAt = () => {
     @click="handleNotificationReadAt"
     v-if="
       notification.type ===
-        'App\\Notifications\\WebsiteSuggestion\\NewSuggestionNotification' &&
-      notification.data.suggestion.type === 'request_feature'
+      'App\\Notifications\\WebsiteFeedback\\NewWebsiteFeedbackNotification'
     "
     class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
-      class="flex-shrink-0 bg-sky-300 text-sky-700 ring-2 ring-sky-500 w-10 h-10 rounded-md flex items-center justify-center p-3 font-bold"
+      class="flex-shrink-0 bg-primary-300 text-primary-700 ring-2 ring-primary-500 w-10 h-10 rounded-md flex items-center justify-center p-3 font-bold"
     >
       <i
-        class="fa-solid fa-gear"
+        class="fa-solid fa-star"
         :class="{
           'animate-pulse': !notification.read_at,
         }"
@@ -66,13 +65,13 @@ const handleNotificationReadAt = () => {
             'text-slate-600': !notification.read_at,
             'text-gray-500': notification.read_at,
           }"
-          >From : {{ notification.data.suggestion.email }}
+          >From : {{ notification.data.feedback.email }}
         </span>
       </div>
       <div
         class="text-xs font-bold dark:text-blue-500"
         :class="{
-          'text-sky-500': !notification.read_at,
+          'text-primary-500': !notification.read_at,
           'text-gray-500': notification.read_at,
         }"
       >

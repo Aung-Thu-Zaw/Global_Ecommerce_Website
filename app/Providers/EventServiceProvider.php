@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Events\AccountDeleted;
+use App\Events\FeedbackForWebsite;
 use App\Events\RegisteredWithSocialite;
 use App\Events\SubscribedNewsletter;
 use App\Events\SuggestionForWebsite;
@@ -18,6 +19,9 @@ use App\Listeners\AccountRegisteredWithSocialite\SendWelcomeEmailToRegisteredWit
 use App\Listeners\SubscribedNewsletter\SendNewSubscriberEmailNotificationToAdmin;
 use App\Listeners\SubscribedNewsletter\SendNewSubscriberNotificationToAdminDashboard;
 use App\Listeners\SubscribedNewsletter\SendThankForSubscribeWebsiteEmailToSubscriber;
+use App\Listeners\WebsiteFeedback\SendNewWebsiteFeedbackEmailNotificationToAdmin;
+use App\Listeners\WebsiteFeedback\SendNewWebsiteFeedbackNotificationToAdminDashboard;
+use App\Listeners\WebsiteFeedback\SendThankForFeedbackEmailToFeedbackSubmitter;
 use App\Listeners\WebsiteSuggestion\SendNewSuggestionEmailNotificationToAdmin;
 use App\Listeners\WebsiteSuggestion\SendNewSuggestionNotificationToAdminDashboard;
 use App\Listeners\WebsiteSuggestion\SendThankForSuggestionEmailToSuggestionSubmitter;
@@ -58,6 +62,11 @@ class EventServiceProvider extends ServiceProvider
             SendNewSuggestionNotificationToAdminDashboard::class,
             SendNewSuggestionEmailNotificationToAdmin::class,
             SendThankForSuggestionEmailToSuggestionSubmitter::class,
+        ],
+        FeedbackForWebsite::class=>[
+            SendNewWebsiteFeedbackNotificationToAdminDashboard::class,
+            SendNewWebsiteFeedbackEmailNotificationToAdmin::class,
+            SendThankForFeedbackEmailToFeedbackSubmitter::class,
         ]
     ];
 

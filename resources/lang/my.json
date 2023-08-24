@@ -847,5 +847,10 @@
     "YOUR_BLOG_RECEIVED_A_NEW_COMMENT_FROM_A_USER": "သင့်ဘလော့ဂ်သည် သုံးစွဲသူတစ်ဦးထံမှ မှတ်ချက်အသစ်တစ်ခု ရရှိခဲ့သည်။",
     "YOUR_COMMENT_HAS_BEEN_REPLIED_TO_BY_THE_AUTHOR": "သင့်မှတ်ချက်ကို စာရေးဆရာမှ စာပြန်ထားသည်။",
     "A_NEW_SUBSCRIBER_HAS_SUBSCRIBED_TO_THE_WEBSITE_NEWSLETTER": "စာရင်းသွင်းသူအသစ်သည် ဝဘ်ဆိုက်သတင်းလွှာကို စာရင်းသွင်းထားသည်။",
-    "SUBSCRIBER":"စာရင်းသွင်းသူ"
+    "SUBSCRIBER": "စာရင်းသွင်းသူ",
+    "THANKS_FOR_YOUR_SUGGESTION": "သင့်အကြံပြုချက်အတွက် ကျေးဇူးတင်ပါသည်။",
+    "A_NEW_SUGGESTION_ABOUT_OF_REPORTING_BUGS": "အမှားအယွင်းများကို သတင်းပို့ခြင်းဆိုင်ရာ အကြံပြုချက်အသစ်။",
+    "A_NEW_SUGGESTION_ABOUT_OF_FEATURE_REQUESTED": "အင်္ဂါရပ်နှင့်ပတ်သက်၍ အကြံပြုချက်အသစ်တစ်ခု တောင်းဆိုထားသည်။",
+    "THANK_FOR_YOUR_FEEDBACK": "သင့်အကြံပြုချက်အတွက် ကျေးဇူးတင်ပါသည်။",
+    "NEW_WEBSITE_FEEDBACK_FROM_USER": "အသုံးပြုသူထံမှ ဝဘ်ဆိုက် တုံ့ပြန်ချက်အသစ်။"
 }

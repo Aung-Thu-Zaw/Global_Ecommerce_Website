@@ -2,23 +2,20 @@
 
 namespace App\Http\Controllers\Ecommerce;
 
+use App\Actions\Ecommerce\CreateSuggestionAction;
 use App\Events\SuggestionForWebsite;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SuggestionRequest;
-use App\Models\Suggestion;
-use App\Services\SuggestionMultiImageUploadService;
 use Illuminate\Http\RedirectResponse;
 
 class SuggestionController extends Controller
 {
-    public function store(SuggestionRequest $request, SuggestionMultiImageUploadService $suggestionMultiImageUploadService): RedirectResponse
+    public function store(SuggestionRequest $request): RedirectResponse
     {
-        $suggestion=Suggestion::create($request->validated());
-
-        $suggestionMultiImageUploadService->createMultiImage($request, $suggestion);
+        $suggestion = (new CreateSuggestionAction())->handle($request->validated());
 
         event(new SuggestionForWebsite($suggestion));
 
-        return back()->with("success", "Thank for your suggestion.");
+        return back()->with("success", "THANKS_FOR_YOUR_SUGGESTION");
     }
 }

@@ -3,34 +3,28 @@
 namespace App\Services;
 
 use App\Models\Image;
-use App\Models\Product;
 use App\Models\Suggestion;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
 
 class SuggestionMultiImageUploadService
 {
-    public function createMultiImage(Request $request, Suggestion $suggestion): void
+    /**
+     * @param array<UploadedFile> $images
+     */
+    public function createMultiImage(array $images, Suggestion $suggestion): void
     {
-        if ($request->multi_image) {
-            $request->validate([
-                "multi_image"=>["required","array"]
-            ]);
+        foreach ($images as $image) {
 
-            foreach ($request->multi_image as $image) {
-                $originalName=$image->getClientOriginalName();
-                $extension=$image->extension();
+            $originalName = $image->getClientOriginalName();
 
-                $finalName= Str::slug('suggestion-'.$originalName, '-')."."."$extension";
+            $finalName = "suggestion"."-".time()."-".$originalName;
 
-                $image->move(storage_path("app/public/suggestions/"), $finalName);
+            $image->move(storage_path("app/public/suggestions/"), $finalName);
 
-
-                $image=new Image();
-                $image->suggestion_id=$suggestion->id;
-                $image->img_path=$finalName;
-                $image->save();
-            }
+            $image = new Image();
+            $image->suggestion_id = $suggestion->id;
+            $image->img_path = $finalName;
+            $image->save();
         }
     }
 }

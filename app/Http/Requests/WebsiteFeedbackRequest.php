@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\RecaptchaRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class WebsiteFeedbackRequest extends FormRequest
@@ -24,9 +25,10 @@ class WebsiteFeedbackRequest extends FormRequest
     public function rules()
     {
         return [
-            "email"=>["required","email","string"],
-            "feedback_text"=>["required","string"],
-            "rating"=>["required","numeric"],
+            "email" => ["required","email","string"],
+            "feedback_text" => ["required","string"],
+            "rating" => ["required","numeric"],
+            "captcha_token"  => ["required",new RecaptchaRule()],
         ];
     }
 
@@ -43,6 +45,8 @@ class WebsiteFeedbackRequest extends FormRequest
             "feedback_text.string" =>  "The feedback text must be a string.",
             "rating.required" =>  "The rating is required.",
             "rating.numeric" =>  "The rating must be a number.",
+            "captcha_token.required" => "The captcha token is required",
+
         ];
     }
 }

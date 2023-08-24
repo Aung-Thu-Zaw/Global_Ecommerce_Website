@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\RecaptchaRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -25,9 +26,10 @@ class SuggestionRequest extends FormRequest
     public function rules()
     {
         return [
-            "email"=>["required","email","string"],
-            "description"=>["required","string"],
-            "type"=>["required",Rule::in(["request_feature","report_bug"])]
+            "email" => ["required","email","string"],
+            "description" => ["required","string"],
+            "type" => ["required",Rule::in(["request_feature","report_bug"])],
+            "captcha_token"  => ["required",new RecaptchaRule()],
         ];
     }
 
@@ -43,7 +45,8 @@ class SuggestionRequest extends FormRequest
             "description.required" => "The description field is required.",
             "description.string" => "The description must be a string.",
             "type.required" => "The type field is required.",
-            "type.in"=>"The selected type is invalid.",
+            "type.in" => "The selected type is invalid.",
+            "captcha_token.required" => "The captcha token is required",
         ];
     }
 }

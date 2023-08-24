@@ -847,6 +847,10 @@
     "YOUR_BLOG_RECEIVED_A_NEW_COMMENT_FROM_A_USER": "Your blog received a new comment from a user.",
     "YOUR_COMMENT_HAS_BEEN_REPLIED_TO_BY_THE_AUTHOR": "Your comment has been replied to by the author.",
     "A_NEW_SUBSCRIBER_HAS_SUBSCRIBED_TO_THE_WEBSITE_NEWSLETTER": "A new subscriber has subscribed to the website newsletter.",
-    "SUBSCRIBER":"Subscriber"
-    
+    "SUBSCRIBER": "Subscriber",
+    "THANKS_FOR_YOUR_SUGGESTION": "Thanks for your suggestion.",
+    "A_NEW_SUGGESTION_ABOUT_OF_REPORTING_BUGS": "A new suggestion about of reporting bugs.",
+    "A_NEW_SUGGESTION_ABOUT_OF_FEATURE_REQUESTED": "A new suggestion about of feature requested.",
+    "THANK_FOR_YOUR_FEEDBACK": "Thank for your feedback.",
+    "NEW_WEBSITE_FEEDBACK_FROM_USER": "New website feedback from user."
 }

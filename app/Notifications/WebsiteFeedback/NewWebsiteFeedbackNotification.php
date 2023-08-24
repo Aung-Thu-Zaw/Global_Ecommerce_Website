@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Notifications\WebsiteSuggestion;
+namespace App\Notifications\WebsiteFeedback;
 
-use App\Models\Suggestion;
+use App\Models\WebsiteFeedback;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -10,7 +10,7 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewSuggestionNotification extends Notification implements ShouldBroadcast
+class NewWebsiteFeedbackNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;
 
@@ -19,7 +19,7 @@ class NewSuggestionNotification extends Notification implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(protected Suggestion $suggestion)
+    public function __construct(protected WebsiteFeedback $websiteFeedback)
     {
         //
     }
@@ -44,8 +44,8 @@ class NewSuggestionNotification extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-            "message" => $this->suggestion->type === 'report_bug' ? "A_NEW_SUGGESTION_ABOUT_OF_REPORTING_BUGS" : "A_NEW_SUGGESTION_ABOUT_OF_FEATURE_REQUESTED",
-            "suggestion" => $this->suggestion
+            "message" => "NEW_WEBSITE_FEEDBACK_FROM_USER",
+            "feedback" => $this->websiteFeedback
         ];
     }
 
@@ -59,8 +59,8 @@ class NewSuggestionNotification extends Notification implements ShouldBroadcast
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" => $this->suggestion->type === 'report_bug' ? "A_NEW_SUGGESTION_ABOUT_OF_REPORTING_BUGS" : "A_NEW_SUGGESTION_ABOUT_OF_FEATURE_REQUESTED",
-            "suggestion" => $this->suggestion
+            "message" => "NEW_WEBSITE_FEEDBACK_FROM_USER",
+            "feedback" => $this->websiteFeedback
         ]);
     }
 }

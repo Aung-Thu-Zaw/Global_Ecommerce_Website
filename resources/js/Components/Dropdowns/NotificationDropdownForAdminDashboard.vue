@@ -6,6 +6,7 @@ import DeletedUserNotificationCard from "@/Components/Cards/Notifications/Delete
 import DeletedSellerNotificationCard from "@/Components/Cards/Notifications/DeletedSellerNotificationCard.vue";
 import NewsletterSubscribedNotificationCard from "@/Components/Cards/Notifications/NewsletterSubscribedNotificationCard.vue";
 import NewSuggestionNotificationCard from "@/Components/Cards/Notifications/NewSuggestionNotificationCard.vue";
+import NewWebsiteFeedbackNotificationCard from "@/Components/Cards/Notifications/NewWebsiteFeedbackNotificationCard.vue";
 import SellerCreateNewProductNotificationCard from "@/Components/Cards/Notifications/SellerCreateNewProductNotificationCard.vue";
 import NewBlogCommentNotificationCard from "@/Components/Cards/Notifications/NewBlogCommentNotificationCard.vue";
 import { usePage, router } from "@inertiajs/vue3";
@@ -78,6 +79,18 @@ onMounted(() => {
           data: {
             message: notification.message,
             suggestion: notification.suggestion,
+          },
+        });
+      } else if (
+        notification.type ===
+        "App\\Notifications\\WebsiteFeedback\\NewWebsiteFeedbackNotification"
+      ) {
+        notifications.value.unshift({
+          id: notification.id,
+          type: notification.type,
+          data: {
+            message: notification.message,
+            feedback: notification.feedback,
           },
         });
       } else if (
@@ -207,27 +220,10 @@ const handleMarkAllAsRead = () => {
       <NewBlogCommentNotificationCard :notification="notification" />
       <NewsletterSubscribedNotificationCard :notification="notification" />
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-
       <NewSuggestionNotificationCard :notification="notification" />
+      <NewWebsiteFeedbackNotificationCard :notification="notification" />
 
-      <OrderPlacedNotificationCard :notification="notification" />
+      <!-- <OrderPlacedNotificationCard :notification="notification" /> -->
       <SellerCreateNewProductNotificationCard :notification="notification" />
     </div>
 
