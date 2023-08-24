@@ -43,8 +43,8 @@ class AdminApprovedCreatedNewProductNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            "message" =>"An administrator has approved your product.",
-            "product"=>$this->product,
+            "message" => "AN_ADMINSITRATOR_HAS_APPROVED_YOUR_PRODUCT",
+            "product" => $this->product,
         ];
     }
 
@@ -59,8 +59,8 @@ class AdminApprovedCreatedNewProductNotification extends Notification
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" =>"An administrator has approved your product.",
-            "product"=>$this->product,
+            "message" => "AN_ADMINSITRATOR_HAS_APPROVED_YOUR_PRODUCT",
+            "product" => $this->product,
         ]);
     }
 }

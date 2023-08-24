@@ -13,9 +13,9 @@ const props = defineProps({
   shop: Object,
   followings: Object,
   followers: Object,
-  vendorProductBanners: Object,
-  vendorRandomProducts: Object,
-  vendorProducts: Object,
+  sellerProductBanners: Object,
+  sellerRandomProducts: Object,
+  sellerProducts: Object,
   categories: Object,
   brands: Object,
   paginateProductReviews: Object,
@@ -212,15 +212,15 @@ const handelRemoveSearch = () => {
               "
             >
               <Home
-                :vendorProductBanners="vendorProductBanners"
-                :vendorRandomProducts="vendorRandomProducts"
+                :sellerProductBanners="sellerProductBanners"
+                :sellerRandomProducts="sellerRandomProducts"
               />
             </div>
 
             <!-- All Products Tag -->
             <div v-else-if="$page.props.ziggy.query.tab === 'all-products'">
               <AllProducts
-                :vendorProducts="vendorProducts"
+                :sellerProducts="sellerProducts"
                 :categories="categories"
                 :brands="brands"
                 :shop="shop"

@@ -43,8 +43,8 @@ class AdminDisapprovedCreatedNewProductNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            "message" =>"Product not approved. Please review and make necessary changes.",
-            "product"=>$this->product,
+            "message" => "PRODUCT_NOT_APPROVED_PLEASE_REVIEW_AND_MAKE_NECESSARY_CHANGES",
+            "product" => $this->product,
         ];
     }
 
@@ -59,8 +59,8 @@ class AdminDisapprovedCreatedNewProductNotification extends Notification
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" =>"Product not approved. Please review and make necessary changes.",
-            "product"=>$this->product,
+            "message" => "PRODUCT_NOT_APPROVED_PLEASE_REVIEW_AND_MAKE_NECESSARY_CHANGES",
+            "product" => $this->product,
         ]);
     }
 }

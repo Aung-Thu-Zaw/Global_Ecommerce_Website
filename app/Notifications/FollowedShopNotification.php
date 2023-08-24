@@ -44,7 +44,8 @@ class FollowedShopNotification extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-            "message" => $this->user->name." is followed your shop.",
+            "message" => "IS_FOLLOWED_YOUR_SHOP",
+            "name" => $this->user->name
         ];
     }
 
@@ -58,7 +59,8 @@ class FollowedShopNotification extends Notification implements ShouldBroadcast
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" => $this->user->name." is followed your shop.",
+            "message" => "IS_FOLLOWED_YOUR_SHOP",
+            "name" => $this->user->name
         ]);
     }
 }

@@ -11,13 +11,13 @@ const props = defineProps({
 
 const goToDetailPage = () => {
   router.get(
-    route("vendor.products.show", props.notification.data.product.slug)
+    route("seller.products.show", props.notification.data.product.slug)
   );
 };
 
 const handleNotificationReadAt = () => {
   router.post(
-    route("vendor.notifications.read", props.notification.id),
+    route("seller.notifications.read", props.notification.id),
     {},
     {
       onSuccess: () => {
@@ -56,7 +56,7 @@ const handleNotificationReadAt = () => {
           'text-gray-500': notification.read_at,
         }"
       >
-        {{ notification.data.message }}
+        {{ __(notification.data.message) }}
 
         <span
           class="font-bold text-sm block"
@@ -64,7 +64,7 @@ const handleNotificationReadAt = () => {
             'text-slate-600': !notification.read_at,
             'text-gray-500': notification.read_at,
           }"
-          >Product : {{ notification.data.product.name }}</span
+          >{{ __("PRODUCT_NAME") }} : {{ notification.data.product.name }}</span
         >
       </div>
       <div

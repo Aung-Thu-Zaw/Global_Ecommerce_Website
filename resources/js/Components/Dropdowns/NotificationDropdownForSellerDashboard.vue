@@ -25,6 +25,7 @@ onMounted(() => {
           type: notification.type,
           data: {
             message: notification.message,
+            name: notification.name,
           },
         });
       } else if (
@@ -150,12 +151,18 @@ const handleMarkAllAsRead = () => {
       :key="notification.id"
       class="divide-y divide-gray-300 dark:divide-gray-700"
     >
-      <FollowedShopNotificationCard :notification="notification" />
-      <ProductQuestionNotificationCard :notification="notification" />
       <ApprovedCreatedNewProductNotificationCard :notification="notification" />
       <DisapprovedCreatedNewProductNotificationCard
         :notification="notification"
       />
+      <FollowedShopNotificationCard :notification="notification" />
+
+
+
+
+      
+
+      <ProductQuestionNotificationCard :notification="notification" />
     </div>
 
     <div class="w-full text-center py-3" v-if="!notifications.length">

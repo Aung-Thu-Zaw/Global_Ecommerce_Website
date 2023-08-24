@@ -854,5 +854,8 @@
     "THANK_FOR_YOUR_FEEDBACK": "သင့်အကြံပြုချက်အတွက် ကျေးဇူးတင်ပါသည်။",
     "NEW_WEBSITE_FEEDBACK_FROM_USER": "အသုံးပြုသူထံမှ ဝဘ်ဆိုက် တုံ့ပြန်ချက်အသစ်။",
     "A_SELLER_HAS_CREATED_A_NEW_PRODUCT": "ရောင်းချသူတစ်ဦးသည် ထုတ်ကုန်အသစ်တစ်ခုကို ဖန်တီးခဲ့သည်။",
-    "SUBMITTER": "တင်ပြသူ"
+    "SUBMITTER": "တင်ပြသူ",
+    "AN_ADMINSITRATOR_HAS_APPROVED_YOUR_PRODUCT": "စီမံခန့်ခွဲသူတစ်ဦးသည် သင့်ထုတ်ကုန်ကို အတည်ပြုခဲ့သည်။",
+    "PRODUCT_NOT_APPROVED_PLEASE_REVIEW_AND_MAKE_NECESSARY_CHANGES": "ထုတ်ကုန်ကို အတည်မပြုပါ။ ကျေးဇူးပြု၍ ပြန်လည်သုံးသပ်ပြီး လိုအပ်သော အပြောင်းအလဲများ ပြုလုပ်ပါ။",
+    "IS_FOLLOWED_YOUR_SHOP": "က မင်းရဲ့ဆိုင်ကို Follow လုပ်ခဲ့သည်။"
 }

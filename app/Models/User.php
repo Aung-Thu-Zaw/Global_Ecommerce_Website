@@ -34,7 +34,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasRoles;
     use HasPermissions;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     protected $hidden = [
         'password',
@@ -51,8 +51,8 @@ class User extends Authenticatable implements MustVerifyEmail
     public function toSearchableArray(): array
     {
         return [
-            'name'=>$this->name,
-            'shop_name'=>$this->shop_name,
+            'name' => $this->name,
+            'shop_name' => $this->shop_name,
         ];
     }
 
@@ -177,9 +177,9 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
     * @return \Illuminate\Database\Eloquent\Relations\HasMany<ShopReview>
     */
-    public function shopReviewsForVendor(): HasMany
+    public function shopReviewsForSeller(): HasMany
     {
-        return $this->hasMany(ShopReview::class, "vendor_id");
+        return $this->hasMany(ShopReview::class, "shop_id");
     }
 
     /**
@@ -193,18 +193,18 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getRedirectRouteName(): string
     {
         return match ((string)$this->role) {
-            "admin"=>"admin.dashboard",
-            "seller"=>"seller.dashboard",
-            "user"=>"home",
+            "admin" => "admin.dashboard",
+            "seller" => "seller.dashboard",
+            "user" => "home",
         };
     }
 
     public function logoutRedirect(): string
     {
         return match ((string)$this->role) {
-            "admin"=>"admin.login",
-            "seller"=>"seller.login",
-            "user"=>"home",
+            "admin" => "admin.login",
+            "seller" => "seller.login",
+            "user" => "home",
         };
     }
 

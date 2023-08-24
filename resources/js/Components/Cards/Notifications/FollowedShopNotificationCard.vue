@@ -16,7 +16,7 @@ const goToDetailPage = () => {
 
 const handleNotificationReadAt = () => {
   router.post(
-    route("vendor.notifications.read", props.notification.id),
+    route("seller.notifications.read", props.notification.id),
     {},
     {
       onSuccess: () => {
@@ -48,7 +48,7 @@ const handleNotificationReadAt = () => {
           'text-gray-500': notification.read_at,
         }"
       >
-        {{ notification.data.message }}
+        {{ notification.data.name + " " + __(notification.data.message) }}
       </div>
       <div
         class="text-xs font-bold"
