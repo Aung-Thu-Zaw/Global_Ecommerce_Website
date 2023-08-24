@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Admin\AuthorityManagements\RolesAndPermissions;
 
-use App\Actions\Admin\AuthorityManagements\RolesAndPermissions\Roles\CreateRoleAction;
-use App\Actions\Admin\AuthorityManagements\RolesAndPermissions\Roles\PermanentlyDeleteAllTrashRoleAction;
-use App\Actions\Admin\AuthorityManagements\RolesAndPermissions\Roles\UpdateRoleAction;
+use App\Actions\Admin\AuthorityManagements\RolesAndPermissions\PermanentlyDeleteAllTrashRoleAction;
 use App\Http\Traits\HandlesQueryStringParameters;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RoleRequest;
@@ -20,7 +18,7 @@ class AdminRoleController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $roles = Role::search(request("search"))
+        $roles = Role::filterBy(request(["search","created_from","created_until","deleted_from","deleted_until"]))
                    ->orderBy(request("sort", "id"), request("direction", "desc"))
                    ->paginate(request("per_page", 10))
                    ->appends(request()->all());
@@ -37,7 +35,7 @@ class AdminRoleController extends Controller
 
     public function store(RoleRequest $request): RedirectResponse
     {
-        (new CreateRoleAction())->handle($request->validated());
+        Role::create(["name" => $request->name]);
 
         return to_route("admin.roles.index", $this->getQueryStringParams($request))->with("success", "ROLE_HAS_BEEN_SUCCESSFULLY_CREATED");
     }
@@ -51,7 +49,7 @@ class AdminRoleController extends Controller
 
     public function update(RoleRequest $request, Role $role): RedirectResponse
     {
-        (new UpdateRoleAction())->handle($request->validated(), $role);
+        $role->update(["name" => $request->name]);
 
         return to_route("admin.roles.index", $this->getQueryStringParams($request))->with("success", "ROLE_HAS_BEEN_SUCCESSFULLY_UPDATED");
     }
@@ -65,7 +63,7 @@ class AdminRoleController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashRoles = Role::search(request("search"))
+        $trashRoles = Role::filterBy(request(["search","created_from","created_until","deleted_from","deleted_until"]))
                         ->onlyTrashed()
                         ->orderBy(request("sort", "id"), request("direction", "desc"))
                         ->paginate(request("per_page", 10))

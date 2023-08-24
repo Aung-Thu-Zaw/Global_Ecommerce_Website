@@ -11,10 +11,10 @@ class AdminPermissionController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $permissions=Permission::search(request("search"))
-                               ->orderBy(request("sort", "id"), request("direction", "desc"))
-                               ->paginate(request("per_page", 10))
-                               ->appends(request()->all());
+        $permissions = Permission::filterBy(request(["search","created_from","created_until","deleted_from","deleted_until"]))
+                                 ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                 ->paginate(request("per_page", 10))
+                                 ->appends(request()->all());
 
         return inertia("Admin/AuthorityManagements/RolesAndPermissions/Permissions/Index", compact("permissions"));
     }

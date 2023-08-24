@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Actions\Admin\AuthorityManagements\RolesAndPermissions\Roles\PermanentlyDeleteAllTrashRoleAction;
+use App\Actions\Admin\AuthorityManagements\RolesAndPermissions\PermanentlyDeleteAllTrashRoleAction;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Spatie\Permission\Models\Role;
@@ -28,7 +28,7 @@ class PermanentlyAutoDeleteRoleCommand extends Command
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $roles=Role::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
+        $roles = Role::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
         (new PermanentlyDeleteAllTrashRoleAction())->handle($roles);
     }

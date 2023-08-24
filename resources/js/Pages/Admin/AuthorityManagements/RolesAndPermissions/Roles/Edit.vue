@@ -34,7 +34,7 @@ const handleEditRole = async () => {
   form.captcha_token = await executeRecaptcha("edit_role");
 
   processing.value = true;
-  form.post(
+  form.patch(
     route("admin.roles.update", {
       role: props.role.id,
       page: props.queryStringParams.page,
