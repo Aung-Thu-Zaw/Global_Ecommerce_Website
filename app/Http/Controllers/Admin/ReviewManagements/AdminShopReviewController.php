@@ -35,7 +35,7 @@ class AdminShopReviewController extends Controller
 
         $queryStringParams=$this->getQueryStringParams($request);
 
-        return inertia("Admin/ReviewManagements/ShopReviews/Details", compact("shopReview", "queryStringParams"));
+        return inertia("Admin/ReviewManagements/ShopReviews/Detail", compact("shopReview", "queryStringParams"));
     }
 
     public function update(Request $request, ShopReview $shopReview): RedirectResponse

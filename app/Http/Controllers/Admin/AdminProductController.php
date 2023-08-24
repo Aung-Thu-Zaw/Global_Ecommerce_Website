@@ -40,7 +40,7 @@ class AdminProductController extends Controller
 
         $queryStringParams = $this->getQueryStringParams($request);
 
-        return inertia("Admin/Products/Details", compact("product", "queryStringParams"));
+        return inertia("Admin/Products/Detail", compact("product", "queryStringParams"));
     }
 
     public function create(): Response|ResponseFactory

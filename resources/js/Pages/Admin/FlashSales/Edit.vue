@@ -17,6 +17,7 @@ import InputLabel from "@/Components/Forms/InputLabel.vue";
 import SaveButton from "@/Components/Buttons/SaveButton.vue";
 import DeleteButton from "@/Components/Buttons/DeleteButton.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
+import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import { __ } from "@/Translations/translations-inside-setup.js";
 import datepicker from "vue3-datepicker";
 import { usePage, useForm, Head, router } from "@inertiajs/vue3";
