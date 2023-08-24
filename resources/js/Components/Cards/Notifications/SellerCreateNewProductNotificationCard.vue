@@ -1,7 +1,7 @@
 <script setup>
-import { router } from "@inertiajs/vue3";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { router } from "@inertiajs/vue3";
 
 dayjs.extend(relativeTime);
 
@@ -33,13 +33,13 @@ const handleNotificationReadAt = () => {
     @click="handleNotificationReadAt"
     v-if="
       notification.type ===
-      'App\\Notifications\\Products\\VendorCreateNewProductNotification'
+      'App\\Notifications\\Products\\SellerCreateNewProductNotification'
     "
     class="flex px-4 py-3 hover:bg-gray-100 cursor-pointer"
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
-      class="flex-shrink-0 bg-primary-300 text-primary-700 ring-2 ring-primary-500 w-10 h-10 rounded-md flex items-center justify-center p-3 font-bold"
+      class="flex-shrink-0 bg-teal-300 text-teal-700 ring-2 ring-teal-500 w-10 h-10 rounded-md flex items-center justify-center p-3 font-bold"
     >
       <i
         class="fa-solid fa-basket-shopping"
@@ -56,7 +56,7 @@ const handleNotificationReadAt = () => {
           'text-gray-500': notification.read_at,
         }"
       >
-        {{ notification.data.message }}
+        {{ __(notification.data.message) }}
 
         <span
           class="font-bold text-sm block"
@@ -64,13 +64,13 @@ const handleNotificationReadAt = () => {
             'text-slate-600': !notification.read_at,
             'text-gray-500': notification.read_at,
           }"
-          >Product : {{ notification.data.product.name }}</span
+          >{{ __("PRODUCT_NAME") }} : {{ notification.data.product.name }}</span
         >
       </div>
       <div
         class="text-xs font-bold dark:text-blue-500"
         :class="{
-          'text-primary-500': !notification.read_at,
+          'text-teal-500': !notification.read_at,
           'text-gray-500': notification.read_at,
         }"
       >

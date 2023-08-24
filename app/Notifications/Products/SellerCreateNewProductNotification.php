@@ -20,7 +20,7 @@ class SellerCreateNewProductNotification extends Notification implements ShouldB
      *
      * @return void
      */
-    public function __construct(protected User $user, protected Product $product)
+    public function __construct(protected Product $product)
     {
         //
     }
@@ -45,8 +45,8 @@ class SellerCreateNewProductNotification extends Notification implements ShouldB
     public function toArray($notifiable)
     {
         return [
-            "message" =>"New product created by ".$this->user->shop_name,
-            "product"=>$this->product,
+            "message" => "A_SELLER_HAS_CREATED_A_NEW_PRODUCT",
+            "product" => $this->product,
         ];
     }
 
@@ -61,8 +61,8 @@ class SellerCreateNewProductNotification extends Notification implements ShouldB
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" =>"New product created by ".$this->user->shop_name,
-            "product"=>$this->product,
+            "message" => "A_SELLER_HAS_CREATED_A_NEW_PRODUCT",
+            "product" => $this->product,
         ]);
     }
 }

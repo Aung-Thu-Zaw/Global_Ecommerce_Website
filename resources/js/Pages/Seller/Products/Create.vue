@@ -40,7 +40,7 @@ const form = useForm({
   qty: "",
   brand_id: "",
   category_id: "",
-  user_id: usePage().props.auth.user?.id,
+  seller_id: usePage().props.auth.user?.id,
   status: "pending",
   hot_deal: false,
   special_offer: false,

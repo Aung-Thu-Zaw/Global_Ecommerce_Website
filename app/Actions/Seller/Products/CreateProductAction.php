@@ -28,7 +28,6 @@ class CreateProductAction
             "price"=>$data["price"],
             "discount"=>$data["discount"],
             "description"=>$data["description"],
-            "hot_deal"=>$data["hot_deal"],
             "featured"=>$data["featured"],
             "special_offer"=>$data["special_offer"],
             "status"=>$data["status"],

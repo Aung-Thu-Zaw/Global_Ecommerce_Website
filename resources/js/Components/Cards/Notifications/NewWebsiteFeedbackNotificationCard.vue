@@ -65,7 +65,7 @@ const handleNotificationReadAt = () => {
             'text-slate-600': !notification.read_at,
             'text-gray-500': notification.read_at,
           }"
-          >From : {{ notification.data.feedback.email }}
+          >{{ __("SUBMITTER") }} : {{ notification.data.feedback.email }}
         </span>
       </div>
       <div

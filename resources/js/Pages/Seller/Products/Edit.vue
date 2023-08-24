@@ -45,7 +45,7 @@ const form = useForm({
   qty: props.product.qty,
   brand_id: props.product.brand_id,
   category_id: props.product.category_id,
-  user_id: props.product.user_id,
+  seller_id: props.product.seller_id,
   status: props.product.status,
   hot_deal: props.product.hot_deal,
   special_offer: props.product.special_offer,

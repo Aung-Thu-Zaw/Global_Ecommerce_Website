@@ -19,20 +19,19 @@ class UpdateProductAction
         $image = isset($data["image"]) ? (new ProductImageUploadService())->updateImage($data["image"], $product->image) : $product->image;
 
         $product->update([
-            "brand_id"=>$data["brand_id"],
-            "category_id"=>$data["category_id"],
-            "seller_id"=>$data["seller_id"],
-            "name"=>$data["name"],
-            "code"=>$data["code"],
-            "qty"=>$data["qty"],
-            "price"=>$data["price"],
-            "discount"=>$data["discount"],
-            "description"=>$data["description"],
-            "hot_deal"=>$data["hot_deal"],
-            "featured"=>$data["featured"],
-            "special_offer"=>$data["special_offer"],
-            "status"=>$data["status"],
-            "image"=>$image,
+            "brand_id" => $data["brand_id"],
+            "category_id" => $data["category_id"],
+            "seller_id" => $data["seller_id"],
+            "name" => $data["name"],
+            "code" => $data["code"],
+            "qty" => $data["qty"],
+            "price" => $data["price"],
+            "discount" => $data["discount"],
+            "description" => $data["description"],
+            "featured" => $data["featured"],
+            "special_offer" => $data["special_offer"],
+            "status" => $data["status"],
+            "image" => $image,
         ]);
 
         if(isset($data["sizes"])) {
