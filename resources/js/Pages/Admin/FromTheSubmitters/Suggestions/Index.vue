@@ -1,166 +1,32 @@
 <script setup>
-import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
+import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/SuggestionBreadcrumb.vue";
+import TrashButton from "@/Components/Buttons/TrashButton.vue";
+import DetailButton from "@/Components/Buttons/DetailButton.vue";
+import DeleteButton from "@/Components/Buttons/DeleteButton.vue";
+import DashboardSearchInputForm from "@/Components/Forms/DashboardSearchInputForm.vue";
+import DashboardPerPageSelectBox from "@/Components/Forms/DashboardPerPageSelectBox.vue";
+import DashboardFilterByCreatedDate from "@/Components/Forms/DashboardFilterByCreatedDate.vue";
 import SortingArrows from "@/Components/Table/SortingArrows.vue";
-import Tr from "@/Components/Table/Tr.vue";
-import Td from "@/Components/Table/Td.vue";
+import TableContainer from "@/Components/Table/TableContainer.vue";
+import TableHeader from "@/Components/Table/TableHeader.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
-import TableHeader from "@/Components/Table/TableHeader.vue";
-import TableContainer from "@/Components/Table/TableContainer.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/SuggestionBreadcrumb.vue";
+import Tr from "@/Components/Table/Tr.vue";
+import Td from "@/Components/Table/Td.vue";
+import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { reactive, watch, inject, computed, ref } from "vue";
-import { router, Link, Head, usePage } from "@inertiajs/vue3";
+import { __ } from "@/Translations/translations-inside-setup.js";
+import { inject, computed, ref, reactive } from "vue";
+import { router, Head, usePage } from "@inertiajs/vue3";
 
 // Define the props
 const props = defineProps({
   suggestions: Object,
 });
 
-// Define Alert Variables
+// Define Variables
 const swal = inject("$swal");
-
-// Formatted Suggestion Type
-const formatSuggestionType = (suggestionType) => {
-  const words = suggestionType.split("_");
-  const capitalizedWords = words.map(
-    (word) => word.charAt(0).toUpperCase() + word.slice(1)
-  );
-  const formattedString = capitalizedWords.join(" ");
-
-  return formattedString;
-};
-
-// Query String Parameteres
-const params = reactive({
-  search: usePage().props.ziggy.query?.search,
-  page: usePage().props.ziggy.query?.page,
-  per_page: usePage().props.ziggy.query?.per_page,
-  sort: usePage().props.ziggy.query?.sort,
-  direction: usePage().props.ziggy.query?.direction,
-});
-
-// Handle Search
-const handleSearch = () => {
-  router.get(
-    route("admin.suggestions.index"),
-    {
-      search: params.search,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
-
-// Remove Search Param
-const removeSearch = () => {
-  params.search = "";
-  router.get(
-    route("admin.suggestions.index"),
-    {
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
-
-// Handle Query String Parameter
-const handleQueryStringParameter = () => {
-  router.get(
-    route("admin.suggestions.index"),
-    {
-      search: params.search,
-      page: params.page,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
-
-// Watching Search Box
-watch(
-  () => params.search,
-  () => {
-    if (params.search === "") {
-      removeSearch();
-    } else {
-      handleSearch();
-    }
-  }
-);
-
-// Watching Perpage Select Box
-watch(
-  () => params.per_page,
-  () => {
-    handleQueryStringParameter();
-  }
-);
-
-// Update Sorting Table Column
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
-  handleQueryStringParameter();
-};
-
-// Handle Suggestion Delete
-const handleDeleteSuggestion = async (suggestionId) => {
-  const result = await swal({
-    icon: "question",
-    title: "Are you sure you want to delete this suggestion?",
-    text: "You will be able to restore this suggestion in the trash!",
-    showCancelButton: true,
-    confirmButtonText: "Yes, Delete it!",
-    confirmButtonColor: "#d52222",
-    cancelButtonColor: "#626262",
-    timer: 20000,
-    timerProgressBar: true,
-    reverseButtons: true,
-  });
-
-  if (result.isConfirmed) {
-    router.delete(
-      route("admin.suggestions.destroy", {
-        suggestion: suggestionId,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      }),
-      {
-        preserveScroll: true,
-        onSuccess: () => {
-          if (usePage().props.flash.successMessage) {
-            swal({
-              icon: "success",
-              title: usePage().props.flash.successMessage,
-            });
-          }
-        },
-      }
-    );
-  }
-};
-
-// Define Permissions Variables
 const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
 
 // Suggestion Trash List Permission
@@ -189,11 +55,94 @@ const suggestionDelete = computed(() => {
       )
     : false;
 });
+
+// Formatted Suggestion Type
+const formatSuggestionType = (suggestionType) => {
+  const words = suggestionType.split("_");
+  const capitalizedWords = words.map(
+    (word) => word.charAt(0).toUpperCase() + word.slice(1)
+  );
+  const formattedString = capitalizedWords.join(" ");
+
+  return formattedString;
+};
+
+// Query String Parameteres
+const params = reactive({
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
+});
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  router.get(
+    route("admin.suggestions.index"),
+    {
+      search: usePage().props.ziggy.query?.search,
+      page: usePage().props.ziggy.query?.page,
+      per_page: usePage().props.ziggy.query?.per_page,
+      sort: params.sort,
+      direction: params.direction,
+      created_from: usePage().props.ziggy.query?.created_from,
+      created_until: usePage().props.ziggy.query?.created_until,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
+
+// Handle Suggestion Delete
+const handleDeleteSuggestion = async (suggestionId) => {
+  const result = await swal({
+    icon: "question",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_SUGGESTION"),
+    text: __("YOU_WILL_BE_ABLE_TO_RESTORE_THIS_SUGGESTION_IN_THE_TRASH"),
+    showCancelButton: true,
+    confirmButtonText: __("YES_DELETE_IT"),
+    cancelButtonText: __("CANCEL"),
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.delete(
+      route("admin.suggestions.destroy", {
+        suggestion: suggestionId,
+        search: usePage().props.ziggy.query?.search,
+        page: usePage().props.ziggy.query?.page,
+        per_page: usePage().props.ziggy.query?.per_page,
+        sort: params.sort,
+        direction: params.direction,
+        created_from: usePage().props.ziggy.query?.created_from,
+        created_until: usePage().props.ziggy.query?.created_until,
+      }),
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: __(usePage().props.flash.successMessage),
+            });
+          }
+        },
+      }
+    );
+  }
+};
 </script>
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Suggestions" />
+    <Head :title="__('SUGGESTIONS')" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -202,54 +151,25 @@ const suggestionDelete = computed(() => {
 
         <!-- Trash Button -->
         <div v-if="suggestionTrashList">
-          <Link
-            as="button"
-            :href="route('admin.suggestions.trash')"
-            :data="{
-              page: 1,
-              per_page: 10,
-              sort: 'id',
-              direction: 'desc',
-            }"
-            class="trash-btn group"
-          >
-            <span class="group-hover:animate-pulse">
-              <i class="fa-solid fa-trash-can-arrow-up"></i>
-              Trash
-            </span>
-          </Link>
+          <TrashButton href="admin.suggestions.trash" />
         </div>
       </div>
 
       <div class="mb-5 flex items-center justify-between">
         <div class="flex items-center ml-auto">
           <!-- Search Box -->
-          <form class="w-[350px] relative">
-            <input
-              type="text"
-              class="search-input"
-              placeholder="Search by email"
-              v-model="params.search"
-            />
-            <i
-              v-if="params.search"
-              class="fa-solid fa-xmark remove-search"
-              @click="removeSearch"
-            ></i>
-          </form>
+          <DashboardSearchInputForm
+            href="admin.suggestions.index"
+            placeholder="SEARCH_BY_EMAIL"
+          />
 
           <!-- Perpage Select Box -->
           <div class="ml-5">
-            <select class="perpage-selectbox" v-model="params.per_page">
-              <option value="" disabled>Select</option>
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="75">75</option>
-              <option value="100">100</option>
-            </select>
+            <DashboardPerPageSelectBox href="admin.suggestions.index" />
           </div>
+
+          <!-- Filter By Date -->
+          <DashboardFilterByCreatedDate href="admin.suggestions.index" />
         </div>
       </div>
 
@@ -262,22 +182,22 @@ const suggestionDelete = computed(() => {
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('email')">
-            Email
+            {{ __("EMAIL") }}
             <SortingArrows :params="params" sort="email" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('type')">
-            Suggestion Type
+            {{ __("SUGGESTION_TYPE") }}
             <SortingArrows :params="params" sort="type" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('created_at')">
-            Created At
+            {{ __("CREATED_DATE") }}
             <SortingArrows :params="params" sort="created_at" />
           </HeaderTh>
 
           <HeaderTh v-if="suggestionDelete || suggestionDetail">
-            Action
+            {{ __("ACTION") }}
           </HeaderTh>
         </TableHeader>
 
@@ -299,38 +219,22 @@ const suggestionDelete = computed(() => {
               {{ suggestion.created_at }}
             </Td>
 
-            <Td v-if="suggestionDelete || suggestionDetail">
+            <Td
+              v-if="suggestionDelete || suggestionDetail"
+              class="flex items-center"
+            >
               <!-- Delete Button -->
-              <button
-                v-if="suggestionDelete"
-                @click="handleDeleteSuggestion(suggestion.id)"
-                class="delete-btn group"
-                type="button"
-              >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-trash-can"></i>
-                  Delete
-                </span>
-              </button>
+              <div v-if="suggestionDelete">
+                <DeleteButton @click="handleDeleteSuggestion(suggestion.id)" />
+              </div>
 
               <!-- Detail Button -->
-              <Link
-                v-if="suggestionDetail"
-                as="button"
-                :href="route('admin.suggestions.show', suggestion.id)"
-                :data="{
-                  page: params.page,
-                  per_page: params.per_page,
-                  sort: params.sort,
-                  direction: params.direction,
-                }"
-                class="detail-btn group"
-              >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-eye"></i>
-                  Details
-                </span>
-              </Link>
+              <div v-if="suggestionDetail">
+                <DetailButton
+                  href="admin.suggestions.show"
+                  :id="suggestion.id"
+                />
+              </div>
             </Td>
           </Tr>
         </tbody>

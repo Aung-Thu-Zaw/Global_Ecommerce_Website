@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Admin\FromTheSubmitters\Subscribers;
+namespace App\Actions\Admin\FromTheSubmitters\Suggestions;
 
 use App\Models\Image;
 use App\Models\Suggestion;
@@ -16,7 +16,7 @@ class PermanentlyDeleteAllTrashSuggestionsAction
     {
         $suggestions->each(function ($suggestion) {
 
-            $multiImages=Image::where("suggestion_id", $suggestion->id)->get();
+            $multiImages = Image::where("suggestion_id", $suggestion->id)->get();
 
             $multiImages->each(function ($image) {
                 Image::deleteImage($image);

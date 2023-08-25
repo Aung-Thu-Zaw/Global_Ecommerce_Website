@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\FilteredByDateScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,7 +16,7 @@ class Subscriber extends Model
     use SoftDeletes;
     use Searchable;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     /**
     *     @return array<string>
@@ -25,6 +26,16 @@ class Subscriber extends Model
         return [
             'email' => $this->email,
         ];
+    }
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope(new FilteredByDateScope());
     }
 
     /**

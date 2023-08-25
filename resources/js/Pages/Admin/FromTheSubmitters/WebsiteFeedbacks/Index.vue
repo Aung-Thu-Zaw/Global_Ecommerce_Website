@@ -1,156 +1,33 @@
 <script setup>
-import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
+import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/WebsiteFeedbackBreadcrumb.vue";
+import TrashButton from "@/Components/Buttons/TrashButton.vue";
+import DetailButton from "@/Components/Buttons/DetailButton.vue";
+import DeleteButton from "@/Components/Buttons/DeleteButton.vue";
+import DashboardSearchInputForm from "@/Components/Forms/DashboardSearchInputForm.vue";
+import DashboardPerPageSelectBox from "@/Components/Forms/DashboardPerPageSelectBox.vue";
+import DashboardFilterByCreatedDate from "@/Components/Forms/DashboardFilterByCreatedDate.vue";
+import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
 import SortingArrows from "@/Components/Table/SortingArrows.vue";
-import Tr from "@/Components/Table/Tr.vue";
-import Td from "@/Components/Table/Td.vue";
+import TableContainer from "@/Components/Table/TableContainer.vue";
+import TableHeader from "@/Components/Table/TableHeader.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
-import TableHeader from "@/Components/Table/TableHeader.vue";
-import TableContainer from "@/Components/Table/TableContainer.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/WebsiteFeedbackBreadcrumb.vue";
+import Tr from "@/Components/Table/Tr.vue";
+import Td from "@/Components/Table/Td.vue";
+import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
-import { reactive, watch, inject, computed, ref } from "vue";
-import { router, Link, Head, usePage } from "@inertiajs/vue3";
+import { __ } from "@/Translations/translations-inside-setup.js";
+import { inject, computed, ref, reactive } from "vue";
+import { router, Head, usePage } from "@inertiajs/vue3";
 
 // Define the props
 const props = defineProps({
   websiteFeedbacks: Object,
 });
 
-// Define Alert Variables
+// Define Variables
 const swal = inject("$swal");
-
-// Query String Parameteres
-const params = reactive({
-  search: usePage().props.ziggy.query?.search,
-  page: usePage().props.ziggy.query?.page,
-  per_page: usePage().props.ziggy.query?.per_page,
-  sort: usePage().props.ziggy.query?.sort,
-  direction: usePage().props.ziggy.query?.direction,
-});
-
-// Handle Search
-const handleSearch = () => {
-  router.get(
-    route("admin.website-feedbacks.index"),
-    {
-      search: params.search,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
-
-// Remove Search Param
-const removeSearch = () => {
-  params.search = "";
-  router.get(
-    route("admin.website-feedbacks.index"),
-    {
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
-
-// Handle Query String Parameter
-const handleQueryStringParameter = () => {
-  router.get(
-    route("admin.website-feedbacks.index"),
-    {
-      search: params.search,
-      page: params.page,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
-
-// Watching Search Box
-watch(
-  () => params.search,
-  () => {
-    if (params.search === "") {
-      removeSearch();
-    } else {
-      handleSearch();
-    }
-  }
-);
-
-// Watching Perpage Select Box
-watch(
-  () => params.per_page,
-  () => {
-    handleQueryStringParameter();
-  }
-);
-
-// Update Sorting Table Column
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
-  handleQueryStringParameter();
-};
-
-// Handle Delete Website Feedback
-const handleDeleteWebsiteFeedback = async (websiteFeedbackId) => {
-  const result = await swal({
-    icon: "question",
-    title: "Are you sure you want to delete this website feedback?",
-    text: "You will be able to restore this website feedback in the trash!",
-    showCancelButton: true,
-    confirmButtonText: "Yes, Delete it!",
-    confirmButtonColor: "#d52222",
-    cancelButtonColor: "#626262",
-    timer: 20000,
-    timerProgressBar: true,
-    reverseButtons: true,
-  });
-
-  if (result.isConfirmed) {
-    router.delete(
-      route("admin.website-feedbacks.destroy", {
-        website_feedback: websiteFeedbackId,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      }),
-      {
-        preserveScroll: true,
-        onSuccess: () => {
-          if (usePage().props.flash.successMessage) {
-            swal({
-              icon: "success",
-              title: usePage().props.flash.successMessage,
-            });
-          }
-        },
-      }
-    );
-  }
-};
-
-// Define Permissions Variables
 const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
 
 // Website Feedback Trash List Permission
@@ -179,11 +56,83 @@ const websiteFeedbackDelete = computed(() => {
       )
     : false;
 });
+
+// Query String Parameteres
+const params = reactive({
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
+});
+
+// Update Sorting Table Column
+const updateSorting = (sort = "id") => {
+  params.sort = sort;
+  params.direction = params.direction === "asc" ? "desc" : "asc";
+
+  router.get(
+    route("admin.website-feedbacks.index"),
+    {
+      search: usePage().props.ziggy.query?.search,
+      page: usePage().props.ziggy.query?.page,
+      per_page: usePage().props.ziggy.query?.per_page,
+      sort: params.sort,
+      direction: params.direction,
+      created_from: usePage().props.ziggy.query?.created_from,
+      created_until: usePage().props.ziggy.query?.created_until,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
+};
+
+// Handle Delete Website Feedback
+const handleDeleteWebsiteFeedback = async (websiteFeedbackId) => {
+  const result = await swal({
+    icon: "question",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_WEBSITE_FEEDBACK"),
+    text: __("YOU_WILL_BE_ABLE_TO_RESTORE_THIS_WEBSITE_FEEDBACK_IN_THE_TRASH"),
+    showCancelButton: true,
+    confirmButtonText: __("YES_DELETE_IT"),
+    cancelButtonText: __("CANCEL"),
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
+    timer: 20000,
+    timerProgressBar: true,
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    router.delete(
+      route("admin.website-feedbacks.destroy", {
+        website_feedback: websiteFeedbackId,
+        search: usePage().props.ziggy.query?.search,
+        page: usePage().props.ziggy.query?.page,
+        per_page: usePage().props.ziggy.query?.per_page,
+        sort: params.sort,
+        direction: params.direction,
+        created_from: usePage().props.ziggy.query?.created_from,
+        created_until: usePage().props.ziggy.query?.created_until,
+      }),
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: __(usePage().props.flash.successMessage),
+            });
+          }
+        },
+      }
+    );
+  }
+};
 </script>
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Website Feedbacks" />
+    <Head :title="__('WEBSITE_FEEDBACKS')" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -192,54 +141,25 @@ const websiteFeedbackDelete = computed(() => {
 
         <!-- Trash Button -->
         <div v-if="websiteFeedbackTrashList">
-          <Link
-            as="button"
-            :href="route('admin.website-feedbacks.trash')"
-            :data="{
-              page: 1,
-              per_page: 10,
-              sort: 'id',
-              direction: 'desc',
-            }"
-            class="trash-btn group"
-          >
-            <span class="group-hover:animate-pulse">
-              <i class="fa-solid fa-trash-can-arrow-up"></i>
-              Trash
-            </span>
-          </Link>
+          <TrashButton href="admin.website-feedbacks.trash" />
         </div>
       </div>
 
       <div class="mb-5 flex items-center justify-between">
         <div class="flex items-center ml-auto">
           <!-- Search Box -->
-          <form class="w-[350px] relative">
-            <input
-              type="text"
-              class="search-input"
-              placeholder="Search by email"
-              v-model="params.search"
-            />
-            <i
-              v-if="params.search"
-              class="fa-solid fa-xmark remove-search"
-              @click="removeSearch"
-            ></i>
-          </form>
+          <DashboardSearchInputForm
+            href="admin.website-feedbacks.index"
+            placeholder="SEARCH_BY_EMAIL"
+          />
 
           <!-- Perpage Select Box -->
           <div class="ml-5">
-            <select class="perpage-selectbox" v-model="params.per_page">
-              <option value="" disabled>Select</option>
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="75">75</option>
-              <option value="100">100</option>
-            </select>
+            <DashboardPerPageSelectBox href="admin.website-feedbacks.index" />
           </div>
+
+          <!-- Filter By Date -->
+          <DashboardFilterByCreatedDate href="admin.website-feedbacks.index" />
         </div>
       </div>
 
@@ -252,22 +172,22 @@ const websiteFeedbackDelete = computed(() => {
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('email')">
-            Email
+            {{ __("EMAIL") }}
             <SortingArrows :params="params" sort="email" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('rating')">
-            Rating
+            {{ __("RATING") }}
             <SortingArrows :params="params" sort="rating" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('created_at')">
-            Created At
+            {{ __("CREATED_DATE") }}
             <SortingArrows :params="params" sort="created_at" />
           </HeaderTh>
 
           <HeaderTh v-if="websiteFeedbackDelete || websiteFeedbackDetail">
-            Action
+            {{ __("ACTION") }}
           </HeaderTh>
         </TableHeader>
 
@@ -292,40 +212,24 @@ const websiteFeedbackDelete = computed(() => {
               {{ websiteFeedback.created_at }}
             </Td>
 
-            <Td v-if="websiteFeedbackDelete || websiteFeedbackDetail">
+            <Td
+              v-if="websiteFeedbackDelete || websiteFeedbackDetail"
+              class="flex items-center"
+            >
               <!-- Delete Button -->
-              <button
-                v-if="websiteFeedbackDelete"
-                @click="handleDeleteWebsiteFeedback(websiteFeedback.id)"
-                class="delete-btn group"
-                type="button"
-              >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-trash-can"></i>
-                  Delete
-                </span>
-              </button>
+              <div v-if="websiteFeedbackDelete">
+                <DeleteButton
+                  @click="handleDeleteWebsiteFeedback(websiteFeedback.id)"
+                />
+              </div>
 
               <!-- Detail Button -->
-              <Link
-                v-if="websiteFeedbackDetail"
-                as="button"
-                :href="
-                  route('admin.website-feedbacks.show', websiteFeedback.id)
-                "
-                :data="{
-                  page: params.page,
-                  per_page: params.per_page,
-                  sort: params.sort,
-                  direction: params.direction,
-                }"
-                class="detail-btn group"
-              >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-eye"></i>
-                  Details
-                </span>
-              </Link>
+              <div v-if="websiteFeedbackDetail">
+                <DetailButton
+                  href="admin.website-feedbacks.show"
+                  :id="websiteFeedback.id"
+                />
+              </div>
             </Td>
           </Tr>
         </tbody>

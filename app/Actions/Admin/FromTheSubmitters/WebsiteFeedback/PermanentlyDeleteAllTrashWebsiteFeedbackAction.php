@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Admin\FromTheSubmitters\Subscribers;
+namespace App\Actions\Admin\FromTheSubmitters\WebsiteFeedback;
 
 use App\Models\WebsiteFeedback;
 use Illuminate\Support\Collection;

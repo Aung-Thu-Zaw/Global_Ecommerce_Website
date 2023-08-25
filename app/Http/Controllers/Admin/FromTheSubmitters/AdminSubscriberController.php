@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\FromTheSubmitters;
 
 use App\Actions\Admin\FromTheSubmitters\Subscribers\PermanentlyDeleteAllTrashSubscriberAction;
 use App\Http\Controllers\Controller;
+use App\Http\Traits\HandlesQueryStringParameters;
 use App\Models\Subscriber;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,9 +13,11 @@ use Inertia\ResponseFactory;
 
 class AdminSubscriberController extends Controller
 {
+    use HandlesQueryStringParameters;
+
     public function index(): Response|ResponseFactory
     {
-        $subscribers=Subscriber::search(request("search"))
+        $subscribers = Subscriber::search(request("search"))
                                ->orderBy(request("sort", "id"), request("direction", "desc"))
                                ->paginate(request("per_page", 10))
                                ->appends(request()->all());
@@ -26,14 +29,12 @@ class AdminSubscriberController extends Controller
     {
         $subscriber->delete();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route("admin.subscribers.index", $queryStringParams)->with("success", "Subscriber has been successfully deleted.");
+        return to_route("admin.subscribers.index", $this->getQueryStringParams($request))->with("success", "SUBSCRIBER_HAS_BEEN_SUCCESSFULLY_DELETED");
     }
 
     public function trash(): Response|ResponseFactory
     {
-        $trashSubscribers=Subscriber::search(request("search"))
+        $trashSubscribers = Subscriber::search(request("search"))
                                     ->onlyTrashed()
                                     ->orderBy(request("sort", "id"), request("direction", "desc"))
                                     ->paginate(request("per_page", 10))
@@ -44,34 +45,28 @@ class AdminSubscriberController extends Controller
 
     public function restore(Request $request, int $trashSubscriberId): RedirectResponse
     {
-        $subscriber = Subscriber::onlyTrashed()->findOrFail($trashSubscriberId);
+        $trashSubscriber = Subscriber::onlyTrashed()->findOrFail($trashSubscriberId);
 
-        $subscriber->restore();
+        $trashSubscriber->restore();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.subscribers.trash', $queryStringParams)->with("success", "Subscriber has been successfully restored.");
+        return to_route('admin.subscribers.trash', $this->getQueryStringParams($request))->with("success", "SUBSCRIBER_HAS_BEEN_SUCCESSFULLY_RESTORED");
     }
 
     public function forceDelete(Request $request, int $trashSubscriberId): RedirectResponse
     {
-        $subscriber = Subscriber::onlyTrashed()->findOrFail($trashSubscriberId);
+        $trashSubscriber = Subscriber::onlyTrashed()->findOrFail($trashSubscriberId);
 
-        $subscriber->forceDelete();
+        $trashSubscriber->forceDelete();
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.subscribers.trash', $queryStringParams)->with("success", "The subscriber has been permanently deleted");
+        return to_route('admin.subscribers.trash', $this->getQueryStringParams($request))->with("success", "THE_SUBSCRIBER_HAS_BEEN_PERMANENTLY_DELETED");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $subscribers = Subscriber::onlyTrashed()->get();
+        $trashSubscribers = Subscriber::onlyTrashed()->get();
 
-        (new PermanentlyDeleteAllTrashSubscriberAction())->handle($subscribers);
+        (new PermanentlyDeleteAllTrashSubscriberAction())->handle($trashSubscribers);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
-
-        return to_route('admin.subscribers.trash', $queryStringParams)->with("success", "Subscribers have been successfully deleted.");
+        return to_route('admin.subscribers.trash', $this->getQueryStringParams($request))->with("success", "SUBSCRIBERS_HAVE_BEEN_PERMANENTLY_DELETED");
     }
 }

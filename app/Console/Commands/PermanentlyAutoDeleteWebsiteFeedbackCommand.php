@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Actions\Admin\FromTheSubmitters\Subscribers\PermanentlyDeleteAllTrashWebsiteFeedbackAction;
+use App\Actions\Admin\FromTheSubmitters\WebsiteFeedback\PermanentlyDeleteAllTrashWebsiteFeedbackAction;
 use App\Models\WebsiteFeedback;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -28,7 +28,7 @@ class PermanentlyAutoDeleteWebsiteFeedbackCommand extends Command
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $websiteFeedbacks=WebsiteFeedback::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
+        $websiteFeedbacks = WebsiteFeedback::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
         (new PermanentlyDeleteAllTrashWebsiteFeedbackAction())->handle($websiteFeedbacks);
     }
