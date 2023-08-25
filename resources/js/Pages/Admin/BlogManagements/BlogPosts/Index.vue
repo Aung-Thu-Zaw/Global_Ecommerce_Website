@@ -5,8 +5,6 @@ import CreateButton from "@/Components/Buttons/CreateButton.vue";
 import TrashButton from "@/Components/Buttons/TrashButton.vue";
 import EditButton from "@/Components/Buttons/EditButton.vue";
 import DeleteButton from "@/Components/Buttons/DeleteButton.vue";
-import ActiveStatus from "@/Components/Status/ActiveStatus.vue";
-import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
 import DashboardSearchInputForm from "@/Components/Forms/DashboardSearchInputForm.vue";
 import DashboardPerPageSelectBox from "@/Components/Forms/DashboardPerPageSelectBox.vue";
 import DashboardFilterByCreatedDate from "@/Components/Forms/DashboardFilterByCreatedDate.vue";

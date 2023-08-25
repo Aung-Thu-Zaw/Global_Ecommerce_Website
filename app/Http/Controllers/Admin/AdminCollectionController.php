@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Actions\Admin\Collections\CreateCollectionAction;
-use App\Actions\Admin\Collections\PermanentlyDeleteAllTrashCollectionAction;
-use App\Actions\Admin\Collections\UpdateCollectionAction;
-use App\Http\Traits\HandlesQueryStringParameters;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CollectionRequest;
-use App\Models\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Http\Requests\CollectionRequest;
+use App\Models\Collection;
+use App\Actions\Admin\Collections\CreateCollectionAction;
+use App\Actions\Admin\Collections\PermanentlyDeleteAllTrashCollectionAction;
+use App\Actions\Admin\Collections\UpdateCollectionAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 
 class AdminCollectionController extends Controller
 {
@@ -21,20 +21,20 @@ class AdminCollectionController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $collections=Collection::search(request("search"))
-                               ->query(function (Builder $builder) {
-                                   $builder->with("products:id,collection_id");
-                               })
-                               ->orderBy(request("sort", "id"), request("direction", "desc"))
-                               ->paginate(request("per_page", 10))
-                               ->appends(request()->all());
+        $collections = Collection::search(request("search"))
+                                 ->query(function (Builder $builder) {
+                                     $builder->with("products:id,collection_id");
+                                 })
+                                 ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                 ->paginate(request("per_page", 10))
+                                 ->appends(request()->all());
 
         return inertia("Admin/Collections/Index", compact("collections"));
     }
 
     public function create(): Response|ResponseFactory
     {
-        $per_page=request("per_page");
+        $per_page = request("per_page");
 
         return inertia("Admin/Collections/Create", compact("per_page"));
     }
@@ -48,7 +48,7 @@ class AdminCollectionController extends Controller
 
     public function edit(Request $request, Collection $collection): Response|ResponseFactory
     {
-        $queryStringParams=$this->getQueryStringParams($request);
+        $queryStringParams = $this->getQueryStringParams($request);
 
         return inertia("Admin/Collections/Edit", compact("collection", "queryStringParams"));
     }
@@ -69,11 +69,11 @@ class AdminCollectionController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashCollections=Collection::search(request("search"))
-                                    ->onlyTrashed()
-                                    ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                    ->paginate(request("per_page", 10))
-                                    ->appends(request()->all());
+        $trashCollections = Collection::search(request("search"))
+                                      ->onlyTrashed()
+                                      ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                      ->paginate(request("per_page", 10))
+                                      ->appends(request()->all());
 
         return inertia("Admin/Collections/Trash", compact("trashCollections"));
     }

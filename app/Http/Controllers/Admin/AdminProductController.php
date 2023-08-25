@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Actions\Admin\Products\CreateProductAction;
-use App\Actions\Products\PermanentlyDeleteAllTrashProductAction;
-use App\Actions\Admin\Products\UpdateProductAction;
-use App\Actions\Products\PermanentlyDeleteTrashProductAction;
-use App\Services\BroadcastNotifications\CreatedNewProductApporvedOrDisapprovedNotificationSendToSellerDashboardService;
-use App\Http\Traits\HandlesQueryStringParameters;
 use App\Http\Controllers\Controller;
+use Inertia\Response;
+use Inertia\ResponseFactory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Collection;
 use App\Models\Product;
 use App\Models\User;
-use Inertia\Response;
-use Inertia\ResponseFactory;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use App\Actions\Admin\Products\CreateProductAction;
+use App\Actions\Admin\Products\UpdateProductAction;
+use App\Actions\Products\PermanentlyDeleteAllTrashProductAction;
+use App\Actions\Products\PermanentlyDeleteTrashProductAction;
+use App\Services\BroadcastNotifications\CreatedNewProductApporvedOrDisapprovedNotificationSendToSellerDashboardService;
+use App\Http\Traits\HandlesQueryStringParameters;
 
 class AdminProductController extends Controller
 {
@@ -27,9 +27,9 @@ class AdminProductController extends Controller
     public function index(): Response|ResponseFactory
     {
         $products = Product::search(request("search"))
-                         ->orderBy(request("sort", "id"), request("direction", "desc"))
-                         ->paginate(request("per_page", 10))
-                         ->appends(request()->all());
+                           ->orderBy(request("sort", "id"), request("direction", "desc"))
+                           ->paginate(request("per_page", 10))
+                           ->appends(request()->all());
 
         return inertia("Admin/Products/Index", compact("products"));
     }
@@ -99,10 +99,10 @@ class AdminProductController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashProducts = Product::search(request("search"))
-                              ->onlyTrashed()
-                              ->orderBy(request("sort", "id"), request("direction", "desc"))
-                              ->paginate(request("per_page", 10))
-                              ->appends(request()->all());
+                                ->onlyTrashed()
+                                ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                ->paginate(request("per_page", 10))
+                                ->appends(request()->all());
 
         return inertia("Admin/Products/Trash", compact("trashProducts"));
     }

@@ -7,7 +7,7 @@ import TextInput from "@/Components/Forms/TextInput.vue";
 import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
 import SaveButton from "@/Components/Buttons/SaveButton.vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { Link, useForm, Head, router } from "@inertiajs/vue3";
+import { useForm, Head, router } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import { ref, computed } from "vue";
 

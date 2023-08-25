@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin\BlogManagements;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
-use App\Models\BlogComment;
 use Inertia\Response;
 use Inertia\ResponseFactory;
+use App\Models\BlogComment;
 
 class AdminBlogCommentController extends Controller
 {

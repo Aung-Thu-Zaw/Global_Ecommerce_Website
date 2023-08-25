@@ -3,54 +3,55 @@
 namespace App\Http\Controllers\Admin\OrderManagements\CancelOrderManage;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\DeliveryInformation;
-use App\Models\Order;
-use App\Models\OrderItem;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 use Inertia\ResponseFactory;
+use App\Models\DeliveryInformation;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Http\Traits\HandlesQueryStringParameters;
+use Illuminate\Http\Request;
 
 class AdminRequestedCancelOrderController extends Controller
 {
+    use HandlesQueryStringParameters;
+
     public function index(): Response|ResponseFactory
     {
-        $requestedCancelOrders=Order::search(request("search"))
-                                  ->where("cancel_status", "requested")
-                                  ->where("payment_type", "cash on delivery")
-                                  ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                  ->paginate(request("per_page", 10))
-                                  ->appends(request()->all());
+        $requestedCancelOrders = Order::search(request("search"))
+                                      ->where("cancel_status", "requested")
+                                      ->where("payment_type", "cash on delivery")
+                                      ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                      ->paginate(request("per_page", 10))
+                                      ->appends(request()->all());
 
         return inertia("Admin/OrderManagements/ReturnOrderManage/RequestedCancelOrders/Index", compact("requestedCancelOrders"));
     }
 
-    public function show(int $id): Response|ResponseFactory
+    public function show(Request $request, Order $order): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $queryStringParams = $this->getQueryStringParams($request);
 
-        $requestedCancelOrderDetail=Order::findOrFail($id);
+        $deliveryInformation = DeliveryInformation::where("user_id", $order->user_id)->first();
 
-        $deliveryInformation=DeliveryInformation::where("user_id", $requestedCancelOrderDetail->user_id)->first();
+        $orderItems = OrderItem::with("product.shop")->where("order_id", $order->id)->get();
 
-        $orderItems=OrderItem::with("product.shop")->where("order_id", $requestedCancelOrderDetail->id)->get();
-
-        return inertia("Admin/OrderManagements/ReturnOrderManage/RequestedCancelOrders/Detail", compact("paginate", "requestedCancelOrderDetail", "deliveryInformation", "orderItems"));
+        return inertia("Admin/OrderManagements/ReturnOrderManage/RequestedCancelOrders/Detail", compact("queryStringParams", "order", "deliveryInformation", "orderItems"));
     }
 
-    public function update(int $id): RedirectResponse
+    public function update(Order $order): RedirectResponse
     {
-        $order=Order::with(["deliveryInformation","orderItems.product.shop"])->findOrFail($id);
+        $order->load(["deliveryInformation","orderItems.product.shop"]);
 
         $order->update([
-            "cancel_status"=>"approved",
-            "cancel_approved_date"=>now()->format("Y-m-d")
+            "cancel_status" => "approved",
+            "cancel_approved_date" => now()->format("Y-m-d")
         ]);
 
         $order->orderItems()->each(function ($orderItem) {
             $orderItem->update([
-                "cancel_status"=>"approved",
-                "cancel_approved_date"=>now()->format("Y-m-d")
+                "cancel_status" => "approved",
+                "cancel_approved_date" => now()->format("Y-m-d")
                 ]);
         });
 

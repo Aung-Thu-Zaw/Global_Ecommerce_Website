@@ -3,16 +3,16 @@
 namespace App\Http\Controllers\Admin\OrderManagements\OrderManage;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\Orders\SendShippedOrderEmailToCustomer;
-use App\Models\DeliveryInformation;
-use App\Http\Traits\HandlesQueryStringParameters;
-use App\Models\Order;
-use App\Models\OrderItem;
-use App\Services\Products\UpdateProductQuantityService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
+use App\Models\DeliveryInformation;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Jobs\Orders\SendShippedOrderEmailToCustomer;
+use App\Http\Traits\HandlesQueryStringParameters;
+use App\Services\Products\UpdateProductQuantityService;
 
 class AdminProcessingOrderController extends Controller
 {
@@ -20,22 +20,22 @@ class AdminProcessingOrderController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $processingOrders=Order::search(request("search"))
-                               ->where("order_status", "processing")
-                               ->orderBy(request("sort", "id"), request("direction", "desc"))
-                               ->paginate(request("per_page", 10))
-                               ->appends(request()->all());
+        $processingOrders = Order::search(request("search"))
+                                 ->where("order_status", "processing")
+                                 ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                 ->paginate(request("per_page", 10))
+                                 ->appends(request()->all());
 
         return inertia("Admin/OrderManagements/OrderManage/ProcessingOrders/Index", compact("processingOrders"));
     }
 
     public function show(Request $request, Order $order): Response|ResponseFactory
     {
-        $deliveryInformation=DeliveryInformation::where("user_id", $order->user_id)->first();
+        $deliveryInformation = DeliveryInformation::where("user_id", $order->user_id)->first();
 
-        $orderItems=OrderItem::with("product.shop")->where("order_id", $order->id)->get();
+        $orderItems = OrderItem::with("product.shop")->where("order_id", $order->id)->get();
 
-        $queryStringParams=$this->getQueryStringParams($request);
+        $queryStringParams = $this->getQueryStringParams($request);
 
         return inertia("Admin/OrderManagements/OrderManage/ProcessingOrders/Detail", compact("queryStringParams", "order", "deliveryInformation", "orderItems"));
     }
@@ -47,8 +47,8 @@ class AdminProcessingOrderController extends Controller
         $order->load(["orderItems.product.shop"]);
 
         $order->update([
-            "order_status"=>"shipped",
-            "shipped_date"=>now()->format("Y-m-d")
+            "order_status" => "shipped",
+            "shipped_date" => now()->format("Y-m-d")
         ]);
 
         SendShippedOrderEmailToCustomer::dispatch($order);

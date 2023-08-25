@@ -3,7 +3,7 @@ import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/WebsiteFeedbackBreadcrumb.vue";
 import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
 import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
-import { Link, Head } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 
 const props = defineProps({
   queryStringParams: Array,

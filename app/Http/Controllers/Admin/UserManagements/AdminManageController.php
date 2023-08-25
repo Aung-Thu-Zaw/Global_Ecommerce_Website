@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers\Admin\UserManagements;
 
-use App\Actions\Admin\UserManagements\AdminManage\CreateAdminAction;
-use App\Actions\Admin\UserManagements\AdminManage\UpdateAdminAction;
-use App\Actions\Admin\UserManagements\PermanentlyDeleteAllTrashUserAction;
-use App\Http\Traits\HandlesQueryStringParameters;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AdminManageRequest;
-use Illuminate\Http\Request;
-use App\Models\User;
-use App\Services\AdminManage\AdminAssignRoleService;
-use Illuminate\Database\Eloquent\Builder;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use App\Http\Requests\AdminManageRequest;
+use App\Models\User;
 use Spatie\Permission\Models\Role;
+use App\Actions\Admin\UserManagements\AdminManage\CreateAdminAction;
+use App\Actions\Admin\UserManagements\AdminManage\UpdateAdminAction;
+use App\Actions\Admin\UserManagements\PermanentlyDeleteAllTrashUserAction;
+use App\Services\AdminManage\AdminAssignRoleService;
+use App\Http\Traits\HandlesQueryStringParameters;
 
 class AdminManageController extends Controller
 {
@@ -23,12 +22,13 @@ class AdminManageController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $admins = User::with("roles")->filterBy(request(["search","created_from","created_until"]))
-                    ->where("role", "admin")
-                    ->where("status", "active")
-                    ->orderBy(request("sort", "id"), request("direction", "desc"))
-                    ->paginate(request("per_page", 10))
-                    ->appends(request()->all());
+        $admins = User::with("roles")
+                      ->filterBy(request(["search","created_from","created_until"]))
+                      ->where("role", "admin")
+                      ->where("status", "active")
+                      ->orderBy(request("sort", "id"), request("direction", "desc"))
+                      ->paginate(request("per_page", 10))
+                      ->appends(request()->all());
 
         return inertia("Admin/UserManagements/AdminManage/Index", compact("admins"));
     }
@@ -62,11 +62,11 @@ class AdminManageController extends Controller
 
     public function edit(Request $request, User $user): Response|ResponseFactory
     {
-        $queryStringParams = $this->getQueryStringParams($request);
-
         $roles = Role::all();
 
         $user->load("roles");
+
+        $queryStringParams = $this->getQueryStringParams($request);
 
         return inertia("Admin/UserManagements/AdminManage/Edit", compact("user", "roles", "queryStringParams"));
     }
@@ -89,11 +89,12 @@ class AdminManageController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashAdmins = User::with("roles")->filterBy(request(["search","deleted_from","deleted_until"]))
-                         ->onlyTrashed()
-                         ->orderBy(request("sort", "id"), request("direction", "desc"))
-                         ->paginate(request("per_page", 10))
-                         ->appends(request()->all());
+        $trashAdmins = User::with("roles")
+                           ->filterBy(request(["search","deleted_from","deleted_until"]))
+                           ->onlyTrashed()
+                           ->orderBy(request("sort", "id"), request("direction", "desc"))
+                           ->paginate(request("per_page", 10))
+                           ->appends(request()->all());
 
         return inertia("Admin/UserManagements/AdminManage/Trash", compact("trashAdmins"));
     }

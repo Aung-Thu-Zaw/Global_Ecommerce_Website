@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Admin\OrderManagements\OrderManage;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\Orders\SendDeliveredOrderEmailToCustomer;
-use App\Models\DeliveryInformation;
-use App\Http\Traits\HandlesQueryStringParameters;
-use App\Models\Order;
-use App\Models\OrderItem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
+use App\Models\DeliveryInformation;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Jobs\Orders\SendDeliveredOrderEmailToCustomer;
+use App\Http\Traits\HandlesQueryStringParameters;
 
 class AdminShippedOrderController extends Controller
 {
@@ -19,22 +19,22 @@ class AdminShippedOrderController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $shippedOrders=Order::search(request("search"))
-                            ->where("order_status", "shipped")
-                            ->orderBy(request("sort", "id"), request("direction", "desc"))
-                            ->paginate(request("per_page", 10))
-                            ->appends(request()->all());
+        $shippedOrders = Order::search(request("search"))
+                              ->where("order_status", "shipped")
+                              ->orderBy(request("sort", "id"), request("direction", "desc"))
+                              ->paginate(request("per_page", 10))
+                              ->appends(request()->all());
 
         return inertia("Admin/OrderManagements/OrderManage/ShippedOrders/Index", compact("shippedOrders"));
     }
 
     public function show(Request $request, Order $order): Response|ResponseFactory
     {
-        $deliveryInformation=DeliveryInformation::where("user_id", $order->user_id)->first();
+        $deliveryInformation = DeliveryInformation::where("user_id", $order->user_id)->first();
 
-        $orderItems=OrderItem::with("product.shop")->where("order_id", $order->id)->get();
+        $orderItems = OrderItem::with("product.shop")->where("order_id", $order->id)->get();
 
-        $queryStringParams=$this->getQueryStringParams($request);
+        $queryStringParams = $this->getQueryStringParams($request);
 
         return inertia("Admin/OrderManagements/OrderManage/ShippedOrders/Detail", compact("queryStringParams", "order", "deliveryInformation", "orderItems"));
     }
@@ -44,8 +44,8 @@ class AdminShippedOrderController extends Controller
         $order->load(["orderItems.product.shop"]);
 
         $order->update([
-            "order_status"=>"delivered",
-            "delivered_date"=>now()->format("Y-m-d")
+            "order_status" => "delivered",
+            "delivered_date" => now()->format("Y-m-d")
         ]);
 
         SendDeliveredOrderEmailToCustomer::dispatch($order);

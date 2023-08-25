@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Actions\Admin\Categories\CreateCategoryAction;
-use App\Actions\Admin\Categories\UpdateCategoryAction;
-use App\Actions\Admin\Categories\PermanentlyDeleteAllTrashCategoryAction;
-use App\Http\Traits\HandlesQueryStringParameters;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CategoryRequest;
-use App\Models\Category;
 use Illuminate\Database\Eloquent\Builder;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Http\Requests\CategoryRequest;
+use App\Models\Category;
+use App\Actions\Admin\Categories\CreateCategoryAction;
+use App\Actions\Admin\Categories\UpdateCategoryAction;
+use App\Actions\Admin\Categories\PermanentlyDeleteAllTrashCategoryAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 
 class AdminCategoryController extends Controller
 {
@@ -21,22 +21,22 @@ class AdminCategoryController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $categories=Category::search(request("search"))
-                            ->query(function (Builder $builder) {
-                                $builder->with("children");
-                            })
-                            ->orderBy(request("sort", "id"), request("direction", "desc"))
-                            ->paginate(request("per_page", 10))
-                            ->appends(request()->all());
+        $categories = Category::search(request("search"))
+                              ->query(function (Builder $builder) {
+                                  $builder->with("children");
+                              })
+                              ->orderBy(request("sort", "id"), request("direction", "desc"))
+                              ->paginate(request("per_page", 10))
+                              ->appends(request()->all());
 
         return inertia("Admin/Categories/Index", compact("categories"));
     }
 
     public function create(): Response|ResponseFactory
     {
-        $per_page=request("per_page");
+        $per_page = request("per_page");
 
-        $categories=Category::select("id", "parent_id", "name")->get();
+        $categories = Category::select("id", "parent_id", "name")->get();
 
         return inertia("Admin/Categories/Create", compact("per_page", "categories"));
     }
@@ -50,9 +50,9 @@ class AdminCategoryController extends Controller
 
     public function edit(Request $request, Category $category): Response|ResponseFactory
     {
-        $categories=Category::select("id", "parent_id", "name")->get();
+        $categories = Category::select("id", "parent_id", "name")->get();
 
-        $queryStringParams=$this->getQueryStringParams($request);
+        $queryStringParams = $this->getQueryStringParams($request);
 
         return inertia("Admin/Categories/Edit", compact("category", "categories", "queryStringParams"));
     }
@@ -73,11 +73,11 @@ class AdminCategoryController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashCategories=Category::search(request("search"))
-                                 ->onlyTrashed()
-                                 ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                 ->paginate(request("per_page", 10))
-                                 ->appends(request()->all());
+        $trashCategories = Category::search(request("search"))
+                                   ->onlyTrashed()
+                                   ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                   ->paginate(request("per_page", 10))
+                                   ->appends(request()->all());
 
         return inertia("Admin/Categories/Trash", compact("trashCategories"));
     }

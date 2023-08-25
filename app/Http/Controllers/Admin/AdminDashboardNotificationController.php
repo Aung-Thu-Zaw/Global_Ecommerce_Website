@@ -3,19 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Services\ReadNotificationService;
 
 class AdminDashboardNotificationController extends Controller
 {
     public function reatNotification(string $notificationId): RedirectResponse
     {
-        $user=User::findOrFail(auth()->id());
-
-        $notification=$user->notifications()->findOrFail($notificationId);
-
-        $notification->update(['read_at' => now()]);
+        (new ReadNotificationService())->read($notificationId);
 
         return back();
     }
@@ -26,12 +22,7 @@ class AdminDashboardNotificationController extends Controller
             "notifications" => ["required", "array"]
         ]);
 
-        $user=User::findOrFail(auth()->id());
-
-        foreach($request->notifications as $notification) {
-            $notification=$user->notifications()->findOrFail($notification["id"]);
-            $notification->update(['read_at' => now()]);
-        }
+        (new ReadNotificationService())->readAll($request->notifications);
 
         return back();
     }

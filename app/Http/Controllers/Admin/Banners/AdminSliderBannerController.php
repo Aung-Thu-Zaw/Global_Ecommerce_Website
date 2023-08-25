@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Admin\Banners;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Http\Requests\SliderBannerRequest;
+use Inertia\Response;
+use Inertia\ResponseFactory;
+use Illuminate\Http\RedirectResponse;
+use App\Models\SliderBanner;
 use App\Actions\Admin\Banners\SliderBanners\CreateSliderBannerAction;
 use App\Actions\Admin\Banners\SliderBanners\PermanentlyDeleteAllTrashSliderBannerAction;
 use App\Actions\Admin\Banners\SliderBanners\UpdateSliderBannerAction;
 use App\Http\Traits\HandlesQueryStringParameters;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\SliderBannerRequest;
-use App\Models\SliderBanner;
-use Illuminate\Http\Request;
-use Inertia\Response;
-use Inertia\ResponseFactory;
-use Illuminate\Http\RedirectResponse;
 
 class AdminSliderBannerController extends Controller
 {
@@ -20,17 +20,17 @@ class AdminSliderBannerController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $sliderBanners=SliderBanner::search(request("search"))
-                                   ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                   ->paginate(request("per_page", 10))
-                                   ->appends(request()->all());
+        $sliderBanners = SliderBanner::search(request("search"))
+                                     ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                     ->paginate(request("per_page", 10))
+                                     ->appends(request()->all());
 
         return inertia("Admin/Banners/Slider-Banners/Index", compact("sliderBanners"));
     }
 
     public function create(): Response|ResponseFactory
     {
-        $per_page=request("per_page");
+        $per_page = request("per_page");
 
         return inertia("Admin/Banners/Slider-Banners/Create", compact("per_page"));
     }
@@ -44,7 +44,7 @@ class AdminSliderBannerController extends Controller
 
     public function edit(Request $request, SliderBanner $sliderBanner): Response|ResponseFactory
     {
-        $queryStringParams=$this->getQueryStringParams($request);
+        $queryStringParams = $this->getQueryStringParams($request);
 
         return inertia("Admin/Banners/Slider-Banners/Edit", compact("sliderBanner", "queryStringParams"));
     }
@@ -65,11 +65,11 @@ class AdminSliderBannerController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashSliderBanners=SliderBanner::search(request("search"))
-                                        ->onlyTrashed()
-                                        ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                        ->paginate(request("per_page", 10))
-                                        ->appends(request()->all());
+        $trashSliderBanners = SliderBanner::search(request("search"))
+                                          ->onlyTrashed()
+                                          ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                          ->paginate(request("per_page", 10))
+                                          ->appends(request()->all());
 
         return inertia("Admin/Banners/Slider-Banners/Trash", compact("trashSliderBanners"));
     }
@@ -105,7 +105,7 @@ class AdminSliderBannerController extends Controller
 
     public function handleShow(Request $request, int $sliderBannerId): RedirectResponse
     {
-        $countsliderBanner=SliderBanner::where("status", "show")->count();
+        $countsliderBanner = SliderBanner::where("status", "show")->count();
 
         if ($countsliderBanner >= 6) {
 
@@ -116,7 +116,7 @@ class AdminSliderBannerController extends Controller
 
         if($sliderBanner) {
 
-            $sliderBanner->update(["status"=>"show"]);
+            $sliderBanner->update(["status" => "show"]);
         }
 
         return to_route('admin.slider-banners.index', $this->getQueryStringParams($request))->with("success", "SLIDER_BANNER_HAS_BEEN_SUCCESSFULLY_DISPLAYED");
@@ -128,7 +128,7 @@ class AdminSliderBannerController extends Controller
 
         if($sliderBanner) {
 
-            $sliderBanner->update(["status"=>"hide"]);
+            $sliderBanner->update(["status" => "hide"]);
         }
 
         return to_route('admin.slider-banners.index', $this->getQueryStringParams($request))->with("success", "SLIDER_BANNER_HAS_BEEN_SUCCESSFULLY_HIDDEN");

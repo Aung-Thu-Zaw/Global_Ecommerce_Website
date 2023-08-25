@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Admin\ReviewManagements;
 
-use App\Actions\Admin\ReviewManagements\ShopReviews\PermanentlyDeleteAllTrashShopReviewAction;
-use App\Http\Traits\HandlesQueryStringParameters;
 use App\Http\Controllers\Controller;
-use App\Models\ShopReview;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\ShopReview;
+use App\Actions\Admin\ReviewManagements\ShopReviews\PermanentlyDeleteAllTrashShopReviewAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 
 class AdminShopReviewController extends Controller
 {
@@ -18,13 +18,13 @@ class AdminShopReviewController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $shopReviews=ShopReview::search(request("search"))
-                               ->query(function (Builder $builder) {
-                                   $builder->with(["shop:id,shop_name"]);
-                               })
-                               ->orderBy(request("sort", "id"), request("direction", "desc"))
-                               ->paginate(request("per_page", 10))
-                               ->appends(request()->all());
+        $shopReviews = ShopReview::search(request("search"))
+                                 ->query(function (Builder $builder) {
+                                     $builder->with(["shop:id,shop_name"]);
+                                 })
+                                 ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                 ->paginate(request("per_page", 10))
+                                 ->appends(request()->all());
 
         return inertia("Admin/ReviewManagements/ShopReviews/Index", compact("shopReviews"));
     }
@@ -33,16 +33,16 @@ class AdminShopReviewController extends Controller
     {
         $shopReview->load(["shop:id,shop_name","user:id,name,email"]);
 
-        $queryStringParams=$this->getQueryStringParams($request);
+        $queryStringParams = $this->getQueryStringParams($request);
 
         return inertia("Admin/ReviewManagements/ShopReviews/Detail", compact("shopReview", "queryStringParams"));
     }
 
     public function update(Request $request, ShopReview $shopReview): RedirectResponse
     {
-        $shopReview->update(["status"=>$request->status]);
+        $shopReview->update(["status" => $request->status]);
 
-        $message=$request->status==="unpublished" ? "SHOP_REVIEW_HAS_BEEN_SUCCESSFULLY_UNPUBLISHED" : "SHOP_REVIEW_HAS_BEEN_SUCCESSFULLY_PUBLISHED";
+        $message = $request->status === "unpublished" ? "SHOP_REVIEW_HAS_BEEN_SUCCESSFULLY_UNPUBLISHED" : "SHOP_REVIEW_HAS_BEEN_SUCCESSFULLY_PUBLISHED";
 
         return to_route('admin.shop-reviews.index', $this->getQueryStringParams($request))->with("success", $message);
     }
@@ -56,14 +56,14 @@ class AdminShopReviewController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashShopReviews=ShopReview::search(request("search"))
-                                    ->query(function (Builder $builder) {
-                                        $builder->with(["shop:id,shop_name"]);
-                                    })
-                                    ->onlyTrashed()
-                                    ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                    ->paginate(request("per_page", 10))
-                                    ->appends(request()->all());
+        $trashShopReviews = ShopReview::search(request("search"))
+                                      ->query(function (Builder $builder) {
+                                          $builder->with(["shop:id,shop_name"]);
+                                      })
+                                      ->onlyTrashed()
+                                      ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                      ->paginate(request("per_page", 10))
+                                      ->appends(request()->all());
 
         return inertia("Admin/ReviewManagements/ShopReviews/Trash", compact("trashShopReviews"));
     }

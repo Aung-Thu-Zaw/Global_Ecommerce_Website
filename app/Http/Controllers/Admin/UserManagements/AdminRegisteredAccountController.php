@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Admin\UserManagements;
 
-use App\Actions\Admin\UserManagements\PermanentlyDeleteAllTrashUserAction;
 use App\Http\Controllers\Controller;
-use App\Http\Traits\HandlesQueryStringParameters;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
+use App\Models\User;
+use App\Actions\Admin\UserManagements\PermanentlyDeleteAllTrashUserAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 
 class AdminRegisteredAccountController extends Controller
 {
@@ -18,9 +18,9 @@ class AdminRegisteredAccountController extends Controller
     public function index(): Response|ResponseFactory
     {
         $users = User::filterBy(request(["search","created_from","created_until"]))
-                   ->orderBy(request("sort", "id"), request("direction", "desc"))
-                   ->paginate(request("per_page", 10))
-                   ->appends(request()->all());
+                     ->orderBy(request("sort", "id"), request("direction", "desc"))
+                     ->paginate(request("per_page", 10))
+                     ->appends(request()->all());
 
         return inertia("Admin/UserManagements/RegisteredAccounts/Index", compact("users"));
     }
@@ -42,10 +42,10 @@ class AdminRegisteredAccountController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashUsers = User::filterBy(request(["search","deleted_from","deleted_until"]))
-                        ->onlyTrashed()
-                        ->orderBy(request("sort", "id"), request("direction", "desc"))
-                        ->paginate(request("per_page", 10))
-                        ->appends(request()->all());
+                          ->onlyTrashed()
+                          ->orderBy(request("sort", "id"), request("direction", "desc"))
+                          ->paginate(request("per_page", 10))
+                          ->appends(request()->all());
 
         return inertia("Admin/UserManagements/RegisteredAccounts/Trash", compact("trashUsers"));
     }

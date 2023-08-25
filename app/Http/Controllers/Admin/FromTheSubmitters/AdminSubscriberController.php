@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Admin\FromTheSubmitters;
 
-use App\Actions\Admin\FromTheSubmitters\Subscribers\PermanentlyDeleteAllTrashSubscriberAction;
 use App\Http\Controllers\Controller;
-use App\Http\Traits\HandlesQueryStringParameters;
-use App\Models\Subscriber;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
+use App\Models\Subscriber;
+use App\Actions\Admin\FromTheSubmitters\Subscribers\PermanentlyDeleteAllTrashSubscriberAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 
 class AdminSubscriberController extends Controller
 {
@@ -18,9 +18,9 @@ class AdminSubscriberController extends Controller
     public function index(): Response|ResponseFactory
     {
         $subscribers = Subscriber::search(request("search"))
-                               ->orderBy(request("sort", "id"), request("direction", "desc"))
-                               ->paginate(request("per_page", 10))
-                               ->appends(request()->all());
+                                 ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                 ->paginate(request("per_page", 10))
+                                 ->appends(request()->all());
 
         return inertia("Admin/FromTheSubmitters/Subscribers/Index", compact("subscribers"));
     }
@@ -35,10 +35,10 @@ class AdminSubscriberController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashSubscribers = Subscriber::search(request("search"))
-                                    ->onlyTrashed()
-                                    ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                    ->paginate(request("per_page", 10))
-                                    ->appends(request()->all());
+                                      ->onlyTrashed()
+                                      ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                      ->paginate(request("per_page", 10))
+                                      ->appends(request()->all());
 
         return inertia("Admin/FromTheSubmitters/Subscribers/Trash", compact("trashSubscribers"));
     }

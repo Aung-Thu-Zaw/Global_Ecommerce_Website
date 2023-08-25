@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Actions\Admin\Brands\CreateBrandAction;
-use App\Actions\Admin\Brands\PermanentlyDeleteAllTrashBrandAction;
-use App\Actions\Admin\Brands\UpdateBrandAction;
-use App\Http\Traits\HandlesQueryStringParameters;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\BrandRequest;
-use App\Models\Brand;
-use App\Models\Category;
 use Illuminate\Database\Eloquent\Builder;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Http\Requests\BrandRequest;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Actions\Admin\Brands\CreateBrandAction;
+use App\Actions\Admin\Brands\UpdateBrandAction;
+use App\Actions\Admin\Brands\PermanentlyDeleteAllTrashBrandAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 
 class AdminBrandController extends Controller
 {
@@ -22,22 +22,22 @@ class AdminBrandController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $brands=Brand::search(request("search"))
-                     ->query(function (Builder $builder) {
-                         $builder->with("products:id,brand_id");
-                     })
-                     ->orderBy(request("sort", "id"), request("direction", "desc"))
-                     ->paginate(request("per_page", 10))
-                     ->appends(request()->all());
+        $brands = Brand::search(request("search"))
+                       ->query(function (Builder $builder) {
+                           $builder->with("products:id,brand_id");
+                       })
+                       ->orderBy(request("sort", "id"), request("direction", "desc"))
+                       ->paginate(request("per_page", 10))
+                       ->appends(request()->all());
 
         return inertia("Admin/Brands/Index", compact("brands"));
     }
 
     public function create(): Response|ResponseFactory
     {
-        $per_page=request("per_page");
+        $per_page = request("per_page");
 
-        $categories=Category::all();
+        $categories = Category::all();
 
         return inertia("Admin/Brands/Create", compact("per_page", "categories"));
     }
@@ -51,9 +51,9 @@ class AdminBrandController extends Controller
 
     public function edit(Request $request, Brand $brand): Response|ResponseFactory
     {
-        $categories=Category::all();
+        $categories = Category::all();
 
-        $queryStringParams=$this->getQueryStringParams($request);
+        $queryStringParams = $this->getQueryStringParams($request);
 
         return inertia("Admin/Brands/Edit", compact("brand", "categories", "queryStringParams"));
     }
@@ -74,7 +74,7 @@ class AdminBrandController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashBrands=Brand::search(request("search"))
+        $trashBrands = Brand::search(request("search"))
                           ->onlyTrashed()
                           ->orderBy(request("sort", "id"), request("direction", "desc"))
                           ->paginate(request("per_page", 10))

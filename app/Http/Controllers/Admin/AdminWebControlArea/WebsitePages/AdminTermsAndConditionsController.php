@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Admin\AdminWebControlArea\WebsitePages;
 
-use App\Actions\Admin\AdminWebControlArea\WebsitePages\TermsAndConditions\UpdateTermsAndConditionsAction;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\TermsAndConditionsRequest;
-use App\Models\Page;
-use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
 use Inertia\ResponseFactory;
+use App\Models\Page;
+use App\Http\Requests\TermsAndConditionsRequest;
+use App\Actions\Admin\AdminWebControlArea\WebsitePages\TermsAndConditions\UpdateTermsAndConditionsAction;
 
 class AdminTermsAndConditionsController extends Controller
 {
     public function edit(): Response|ResponseFactory
     {
-        $termsAndConditions=Page::findOrFail(2);
+        $termsAndConditions = Page::findOrFail(2);
 
         return inertia("Admin/AdminWebControlArea/WebsitePages/TermsAndConditions/Edit", compact("termsAndConditions"));
     }

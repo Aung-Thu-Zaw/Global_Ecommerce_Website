@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Admin\FromTheSubmitters;
 
-use App\Actions\Admin\FromTheSubmitters\Suggestions\PermanentlyDeleteAllTrashSuggestionsAction;
-use App\Actions\Admin\FromTheSubmitters\Suggestions\PermanentlyDeleteTrashSuggestionsAction;
 use App\Http\Controllers\Controller;
-use App\Http\Traits\HandlesQueryStringParameters;
-use App\Models\Suggestion;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
+use App\Models\Suggestion;
+use App\Actions\Admin\FromTheSubmitters\Suggestions\PermanentlyDeleteAllTrashSuggestionsAction;
+use App\Actions\Admin\FromTheSubmitters\Suggestions\PermanentlyDeleteTrashSuggestionsAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 
 class AdminSuggestionController extends Controller
 {
@@ -19,9 +19,9 @@ class AdminSuggestionController extends Controller
     public function index(): Response|ResponseFactory
     {
         $suggestions = Suggestion::search(request("search"))
-                               ->orderBy(request("sort", "id"), request("direction", "desc"))
-                               ->paginate(request("per_page", 10))
-                               ->appends(request()->all());
+                                 ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                 ->paginate(request("per_page", 10))
+                                 ->appends(request()->all());
 
         return inertia("Admin/FromTheSubmitters/Suggestions/Index", compact("suggestions"));
     }
@@ -45,10 +45,10 @@ class AdminSuggestionController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashSuggestions = Suggestion::search(request("search"))
-                                    ->onlyTrashed()
-                                    ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                    ->paginate(request("per_page", 10))
-                                    ->appends(request()->all());
+                                      ->onlyTrashed()
+                                      ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                      ->paginate(request("per_page", 10))
+                                      ->appends(request()->all());
 
         return inertia("Admin/FromTheSubmitters/Suggestions/Trash", compact("trashSuggestions"));
     }

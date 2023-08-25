@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Admin\ReviewManagements;
 
-use App\Actions\Admin\ReviewManagements\ProductReviews\PermanentlyDeleteAllTrashProductReviewAction;
-use App\Http\Traits\HandlesQueryStringParameters;
 use App\Http\Controllers\Controller;
-use App\Models\ProductReview;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\ProductReview;
+use App\Actions\Admin\ReviewManagements\ProductReviews\PermanentlyDeleteAllTrashProductReviewAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 
 class AdminProductReviewController extends Controller
 {
@@ -18,13 +18,13 @@ class AdminProductReviewController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $productReviews=ProductReview::search(request("search"))
-                                     ->query(function (Builder $builder) {
-                                         $builder->with(["product:id,name"]);
-                                     })
-                                     ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                     ->paginate(request("per_page", 10))
-                                     ->appends(request()->all());
+        $productReviews = ProductReview::search(request("search"))
+                                       ->query(function (Builder $builder) {
+                                           $builder->with(["product:id,name"]);
+                                       })
+                                       ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                       ->paginate(request("per_page", 10))
+                                       ->appends(request()->all());
 
         return inertia("Admin/ReviewManagements/ProductReviews/Index", compact("productReviews"));
     }
@@ -33,16 +33,16 @@ class AdminProductReviewController extends Controller
     {
         $productReview->load(["product:id,name","user:id,name,email"]);
 
-        $queryStringParams=$this->getQueryStringParams($request);
+        $queryStringParams = $this->getQueryStringParams($request);
 
         return inertia("Admin/ReviewManagements/ProductReviews/Detail", compact("productReview", "queryStringParams"));
     }
 
     public function update(Request $request, ProductReview $productReview): RedirectResponse
     {
-        $productReview->update(["status"=>$request->status]);
+        $productReview->update(["status" => $request->status]);
 
-        $message=$request->status==="unpublished" ? "PRODUCT_REVIEW_HAS_BEEN_SUCCESSFULLY_UNPUBLISHED" : "PRODUCT_REVIEW_HAS_BEEN_SUCCESSFULLY_PUBLISHED";
+        $message = $request->status === "unpublished" ? "PRODUCT_REVIEW_HAS_BEEN_SUCCESSFULLY_UNPUBLISHED" : "PRODUCT_REVIEW_HAS_BEEN_SUCCESSFULLY_PUBLISHED";
 
         return to_route('admin.product-reviews.index', $this->getQueryStringParams($request))->with("success", $message);
     }
@@ -56,14 +56,14 @@ class AdminProductReviewController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashProductReviews=ProductReview::search(request("search"))
-                                          ->query(function (Builder $builder) {
-                                              $builder->with(["product:id,name"]);
-                                          })
-                                          ->onlyTrashed()
-                                          ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                          ->paginate(request("per_page", 10))
-                                          ->appends(request()->all());
+        $trashProductReviews = ProductReview::search(request("search"))
+                                            ->query(function (Builder $builder) {
+                                                $builder->with(["product:id,name"]);
+                                            })
+                                            ->onlyTrashed()
+                                            ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                            ->paginate(request("per_page", 10))
+                                            ->appends(request()->all());
 
         return inertia("Admin/ReviewManagements/ProductReviews/Trash", compact("trashProductReviews"));
     }

@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Admin\AdminWebControlArea\FaqCategories;
 
-use App\Actions\Admin\AdminWebControlArea\FaqCategories\Categories\CreateFaqCategoryAction;
-use App\Actions\Admin\AdminWebControlArea\FaqCategories\Categories\PermanentlyDeleteAllTrashFaqCategoryAction;
-use App\Actions\Admin\AdminWebControlArea\FaqCategories\Categories\UpdateFaqCategoryAction;
-use App\Http\Traits\HandlesQueryStringParameters;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\FaqCategoryRequest;
-use App\Models\FaqCategory;
 use Illuminate\Database\Eloquent\Builder;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Http\Requests\FaqCategoryRequest;
+use App\Models\FaqCategory;
+use App\Actions\Admin\AdminWebControlArea\FaqCategories\Categories\CreateFaqCategoryAction;
+use App\Actions\Admin\AdminWebControlArea\FaqCategories\Categories\PermanentlyDeleteAllTrashFaqCategoryAction;
+use App\Actions\Admin\AdminWebControlArea\FaqCategories\Categories\UpdateFaqCategoryAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 
 class AdminFaqCategoryController extends Controller
 {
@@ -21,7 +21,7 @@ class AdminFaqCategoryController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $faqCategories=FaqCategory::search(request("search"))
+        $faqCategories = FaqCategory::search(request("search"))
                                   ->query(function (Builder $builder) {
                                       $builder->with("faqSubCategories");
                                   })
@@ -34,7 +34,7 @@ class AdminFaqCategoryController extends Controller
 
     public function create(): Response|ResponseFactory
     {
-        $per_page=request("per_page");
+        $per_page = request("per_page");
 
         return inertia("Admin/AdminWebControlArea/FaqCategories/Categories/Create", compact("per_page"));
     }
@@ -48,7 +48,7 @@ class AdminFaqCategoryController extends Controller
 
     public function edit(Request $request, FaqCategory $faqCategory): Response|ResponseFactory
     {
-        $queryStringParams=$this->getQueryStringParams($request);
+        $queryStringParams = $this->getQueryStringParams($request);
 
         return inertia("Admin/AdminWebControlArea/FaqCategories/Categories/Edit", compact("faqCategory", "queryStringParams"));
     }
@@ -69,7 +69,7 @@ class AdminFaqCategoryController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashFaqCategories=FaqCategory::search(request("search"))
+        $trashFaqCategories = FaqCategory::search(request("search"))
                                        ->onlyTrashed()
                                        ->orderBy(request("sort", "id"), request("direction", "desc"))
                                        ->paginate(request("per_page", 10))

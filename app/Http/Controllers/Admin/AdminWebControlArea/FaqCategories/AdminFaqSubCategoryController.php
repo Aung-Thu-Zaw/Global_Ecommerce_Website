@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Admin\AdminWebControlArea\FaqCategories;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Builder;
+use Inertia\Response;
+use Inertia\ResponseFactory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use App\Http\Requests\FaqSubCategoryRequest;
+use App\Models\FaqCategory;
+use App\Models\FaqSubCategory;
 use App\Actions\Admin\AdminWebControlArea\FaqCategories\SubCategories\CreateFaqSubCategoryAction;
 use App\Actions\Admin\AdminWebControlArea\FaqCategories\SubCategories\PermanentlyDeleteAllTrashFaqSubCategoryAction;
 use App\Actions\Admin\AdminWebControlArea\FaqCategories\SubCategories\UpdateFaqSubCategoryAction;
 use App\Http\Traits\HandlesQueryStringParameters;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\FaqSubCategoryRequest;
-use App\Models\FaqCategory;
-use App\Models\FaqSubCategory;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
-use Inertia\Response;
-use Inertia\ResponseFactory;
 
 class AdminFaqSubCategoryController extends Controller
 {
@@ -22,22 +22,22 @@ class AdminFaqSubCategoryController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $faqSubCategories=FaqSubCategory::search(request("search"))
-                                        ->query(function (Builder $builder) {
-                                            $builder->with("faqCategory");
-                                        })
-                                        ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                        ->paginate(request("per_page", 10))
-                                        ->appends(request()->all());
+        $faqSubCategories = FaqSubCategory::search(request("search"))
+                                          ->query(function (Builder $builder) {
+                                              $builder->with("faqCategory");
+                                          })
+                                          ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                          ->paginate(request("per_page", 10))
+                                          ->appends(request()->all());
 
         return inertia("Admin/AdminWebControlArea/FaqCategories/SubCategories/Index", compact("faqSubCategories"));
     }
 
     public function create(): Response|ResponseFactory
     {
-        $per_page=request("per_page");
+        $per_page = request("per_page");
 
-        $faqCategories=FaqCategory::all();
+        $faqCategories = FaqCategory::all();
 
         return inertia("Admin/AdminWebControlArea/FaqCategories/SubCategories/Create", compact("per_page", "faqCategories"));
     }
@@ -51,9 +51,9 @@ class AdminFaqSubCategoryController extends Controller
 
     public function edit(Request $request, FaqSubCategory $faqSubCategory): Response|ResponseFactory
     {
-        $queryStringParams=$this->getQueryStringParams($request);
+        $queryStringParams = $this->getQueryStringParams($request);
 
-        $faqCategories=FaqCategory::all();
+        $faqCategories = FaqCategory::all();
 
         return inertia("Admin/AdminWebControlArea/FaqCategories/SubCategories/Edit", compact("faqSubCategory", "faqCategories", "queryStringParams"));
     }
@@ -74,7 +74,7 @@ class AdminFaqSubCategoryController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashFaqSubCategories=FaqSubCategory::search(request("search"))
+        $trashFaqSubCategories = FaqSubCategory::search(request("search"))
                                              ->onlyTrashed()
                                              ->orderBy(request("sort", "id"), request("direction", "desc"))
                                              ->paginate(request("per_page", 10))

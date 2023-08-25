@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Admin\UserManagements;
 
-use App\Actions\Admin\UserManagements\PermanentlyDeleteAllTrashUserAction;
 use App\Http\Controllers\Controller;
-use App\Http\Traits\HandlesQueryStringParameters;
-use App\Models\User;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Actions\Admin\UserManagements\PermanentlyDeleteAllTrashUserAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 
 class AdminSellerManageController extends Controller
 {
@@ -18,10 +18,10 @@ class AdminSellerManageController extends Controller
     public function index(): Response|ResponseFactory
     {
         $sellers = User::filterBy(request(["search","created_from","created_until"]))
-                     ->where("role", "seller")
-                     ->orderBy(request("sort", "id"), request("direction", "desc"))
-                     ->paginate(request("per_page", 10))
-                     ->appends(request()->all());
+                       ->where("role", "seller")
+                       ->orderBy(request("sort", "id"), request("direction", "desc"))
+                       ->paginate(request("per_page", 10))
+                       ->appends(request()->all());
 
         return inertia("Admin/UserManagements/SellerManage/Index", compact("sellers"));
     }
@@ -52,11 +52,11 @@ class AdminSellerManageController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashSellers = User::filterBy(request(["search","deleted_from","deleted_until"]))
-                          ->onlyTrashed()
-                          ->where("role", "seller")
-                          ->orderBy(request("sort", "id"), request("direction", "desc"))
-                          ->paginate(request("per_page", 10))
-                          ->appends(request()->all());
+                            ->onlyTrashed()
+                            ->where("role", "seller")
+                            ->orderBy(request("sort", "id"), request("direction", "desc"))
+                            ->paginate(request("per_page", 10))
+                            ->appends(request()->all());
 
         return inertia("Admin/UserManagements/SellerManage/Trash", compact("trashSellers"));
     }

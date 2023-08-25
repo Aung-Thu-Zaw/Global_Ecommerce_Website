@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Admin\FromTheSubmitters;
 
-use App\Actions\Admin\FromTheSubmitters\WebsiteFeedback\PermanentlyDeleteAllTrashWebsiteFeedbackAction;
 use App\Http\Controllers\Controller;
-use App\Models\WebsiteFeedback;
 use Illuminate\Http\RedirectResponse;
-use App\Http\Traits\HandlesQueryStringParameters;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
+use App\Models\WebsiteFeedback;
+use App\Actions\Admin\FromTheSubmitters\WebsiteFeedback\PermanentlyDeleteAllTrashWebsiteFeedbackAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 
 class AdminWebsiteFeedbackController extends Controller
 {
@@ -18,9 +18,9 @@ class AdminWebsiteFeedbackController extends Controller
     public function index(): Response|ResponseFactory
     {
         $websiteFeedbacks = WebsiteFeedback::search(request("search"))
-                                         ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                         ->paginate(request("per_page", 10))
-                                         ->appends(request()->all());
+                                           ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                           ->paginate(request("per_page", 10))
+                                           ->appends(request()->all());
 
         return inertia("Admin/FromTheSubmitters/WebsiteFeedbacks/Index", compact("websiteFeedbacks"));
     }
@@ -42,10 +42,10 @@ class AdminWebsiteFeedbackController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashWebsiteFeedbacks = WebsiteFeedback::search(request("search"))
-                                              ->onlyTrashed()
-                                              ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                              ->paginate(request("per_page", 10))
-                                              ->appends(request()->all());
+                                                ->onlyTrashed()
+                                                ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                                ->paginate(request("per_page", 10))
+                                                ->appends(request()->all());
 
         return inertia("Admin/FromTheSubmitters/WebsiteFeedbacks/Trash", compact("trashWebsiteFeedbacks"));
     }

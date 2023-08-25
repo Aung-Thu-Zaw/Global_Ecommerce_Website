@@ -7,7 +7,7 @@ import TextInput from "@/Components/Forms/TextInput.vue";
 import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
 import SaveButton from "@/Components/Buttons/SaveButton.vue";
 import datepicker from "vue3-datepicker";
-import { Link, useForm, Head } from "@inertiajs/vue3";
+import { useForm, Head } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import { ref, computed } from "vue";
 

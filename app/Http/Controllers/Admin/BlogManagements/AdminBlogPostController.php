@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Admin\BlogManagements;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Http\Requests\BlogPostRequest;
+use Inertia\Response;
+use Inertia\ResponseFactory;
+use Illuminate\Http\RedirectResponse;
+use App\Models\BlogCategory;
+use App\Models\BlogPost;
 use App\Actions\Admin\BlogManagements\BlogPosts\CreateBlogPostAction;
 use App\Actions\Admin\BlogManagements\BlogPosts\PermanentlyDeleteAllTrashBlogPostAction;
 use App\Actions\Admin\BlogManagements\BlogPosts\UpdateBlogPostAction;
 use App\Http\Traits\HandlesQueryStringParameters;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\BlogPostRequest;
-use App\Models\BlogCategory;
-use App\Models\BlogPost;
-use Illuminate\Http\Request;
-use Inertia\Response;
-use Inertia\ResponseFactory;
-use Illuminate\Http\RedirectResponse;
 
 class AdminBlogPostController extends Controller
 {
@@ -21,19 +21,19 @@ class AdminBlogPostController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $blogPosts=BlogPost::search(request("search"))
-                           ->orderBy(request("sort", "id"), request("direction", "desc"))
-                           ->paginate(request("per_page", 10))
-                           ->appends(request()->all());
+        $blogPosts = BlogPost::search(request("search"))
+                             ->orderBy(request("sort", "id"), request("direction", "desc"))
+                             ->paginate(request("per_page", 10))
+                             ->appends(request()->all());
 
         return inertia("Admin/BlogManagements/BlogPosts/Index", compact("blogPosts"));
     }
 
     public function create(): Response|ResponseFactory
     {
-        $per_page=request("per_page");
+        $per_page = request("per_page");
 
-        $blogCategories=BlogCategory::all();
+        $blogCategories = BlogCategory::all();
 
         return inertia("Admin/BlogManagements/BlogPosts/Create", compact("per_page", "blogCategories"));
     }
@@ -47,9 +47,9 @@ class AdminBlogPostController extends Controller
 
     public function edit(Request $request, BlogPost $blogPost): Response|ResponseFactory
     {
-        $queryStringParams=$this->getQueryStringParams($request);
+        $queryStringParams = $this->getQueryStringParams($request);
 
-        $blogCategories=BlogCategory::all();
+        $blogCategories = BlogCategory::all();
 
         $blogPost->load(["blogTags"]);
 
@@ -72,11 +72,11 @@ class AdminBlogPostController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashBlogPosts=BlogPost::search(request("search"))
-                                ->onlyTrashed()
-                                ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                ->paginate(request("per_page", 10))
-                                ->appends(request()->all());
+        $trashBlogPosts = BlogPost::search(request("search"))
+                                  ->onlyTrashed()
+                                  ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                  ->paginate(request("per_page", 10))
+                                  ->appends(request()->all());
 
         return inertia("Admin/BlogManagements/BlogPosts/Trash", compact("trashBlogPosts"));
     }
@@ -87,7 +87,7 @@ class AdminBlogPostController extends Controller
 
         $trashBlogPost->restore();
 
-        return to_route('admin.blogs.posts.trash', $this->getQueryStringParams($request))->with("success",  "BLOG_POST_HAS_BEEN_SUCCESSFULLY_RESTORED");
+        return to_route('admin.blogs.posts.trash', $this->getQueryStringParams($request))->with("success", "BLOG_POST_HAS_BEEN_SUCCESSFULLY_RESTORED");
     }
 
     public function forceDelete(Request $request, int $trashBlogPostId): RedirectResponse

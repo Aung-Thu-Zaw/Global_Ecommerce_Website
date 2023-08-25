@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Inertia\Response;
+use Inertia\ResponseFactory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use App\Rules\RecaptchaRule;
 use App\Models\FlashSale;
 use App\Models\FlashSaleItem;
 use App\Models\Product;
-use App\Rules\RecaptchaRule;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Inertia\Response;
-use Inertia\ResponseFactory;
 
 class AdminFlashSaleController extends Controller
 {
@@ -62,6 +62,5 @@ class AdminFlashSaleController extends Controller
         }
 
         return back()->with("success", "FLASH_SALE_PRODUCT_HAS_BEEN_SUCCESSFULLY_REMOVED");
-
     }
 }

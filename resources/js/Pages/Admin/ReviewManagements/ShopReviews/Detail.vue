@@ -6,7 +6,7 @@ import PendingStatus from "@/Components/Status/PendingStatus.vue";
 import PublishedStatus from "@/Components/Status/PublishedStatus.vue";
 import UnpublishedStatus from "@/Components/Status/UnpublishedStatus.vue";
 import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
-import { Link, Head } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 
 const props = defineProps({
   queryStringParams: Array,

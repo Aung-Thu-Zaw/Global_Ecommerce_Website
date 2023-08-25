@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Admin\AuthorityManagements;
 
-use App\Actions\Admin\AuthorityManagements\RoleInPermissions\CreateRoleInPermissionsAction;
-use App\Actions\Admin\AuthorityManagements\RoleInPermissions\UpdateRoleInPermissionsAction;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RoleInPermissionRequest;
-use App\Http\Traits\HandlesQueryStringParameters;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Http\Requests\RoleInPermissionRequest;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use App\Actions\Admin\AuthorityManagements\RoleInPermissions\CreateRoleInPermissionsAction;
+use App\Actions\Admin\AuthorityManagements\RoleInPermissions\UpdateRoleInPermissionsAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 
 class AdminRoleInPermissionController extends Controller
 {
@@ -21,10 +21,11 @@ class AdminRoleInPermissionController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $rolesWithPermissions = Role::with("permissions")->filterBy(request(["search","created_from","created_until"]))
-                                  ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                  ->paginate(request("per_page", 10))
-                                  ->appends(request()->all());
+        $rolesWithPermissions = Role::with("permissions")
+                                    ->filterBy(request(["search","created_from","created_until"]))
+                                    ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                    ->paginate(request("per_page", 10))
+                                    ->appends(request()->all());
 
         return inertia("Admin/AuthorityManagements/RoleInPermissions/Index", compact("rolesWithPermissions"));
     }

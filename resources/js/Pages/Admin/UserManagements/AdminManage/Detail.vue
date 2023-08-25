@@ -5,7 +5,7 @@ import InputContainer from "@/Components/Forms/InputContainer.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
-import { Link, Head } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 
 const props = defineProps({
   queryStringParams: Array,

@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Admin\Banners;
 
-use App\Actions\Admin\Banners\CampaignBanners\CreateCampaignBannerAction;
-use App\Actions\Admin\Banners\CampaignBanners\PermanentlyDeleteAllTrashCampaignBannerAction;
-use App\Actions\Admin\Banners\CampaignBanners\UpdateCampaignBannerAction;
-use App\Http\Traits\HandlesQueryStringParameters;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CampaignBannerRequest;
-use App\Models\CampaignBanner;
 use Illuminate\Http\Request;
+use App\Http\Requests\CampaignBannerRequest;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use App\Models\CampaignBanner;
+use App\Actions\Admin\Banners\CampaignBanners\CreateCampaignBannerAction;
+use App\Actions\Admin\Banners\CampaignBanners\PermanentlyDeleteAllTrashCampaignBannerAction;
+use App\Actions\Admin\Banners\CampaignBanners\UpdateCampaignBannerAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 
 class AdminCampaignBannerController extends Controller
 {
@@ -21,10 +21,10 @@ class AdminCampaignBannerController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $campaignBanners=CampaignBanner::search(request("search"))
-                                       ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                       ->paginate(request("per_page", 10))
-                                       ->appends(request()->all());
+        $campaignBanners = CampaignBanner::search(request("search"))
+                                         ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                         ->paginate(request("per_page", 10))
+                                         ->appends(request()->all());
 
 
         return inertia("Admin/Banners/Campaign-Banners/Index", compact("campaignBanners"));
@@ -32,7 +32,7 @@ class AdminCampaignBannerController extends Controller
 
     public function create(): Response|ResponseFactory
     {
-        $per_page=request("per_page");
+        $per_page = request("per_page");
 
         return inertia("Admin/Banners/Campaign-Banners/Create", compact("per_page"));
     }
@@ -46,7 +46,7 @@ class AdminCampaignBannerController extends Controller
 
     public function edit(Request $request, CampaignBanner $campaignBanner): Response|ResponseFactory
     {
-        $queryStringParams=$this->getQueryStringParams($request);
+        $queryStringParams = $this->getQueryStringParams($request);
 
         return inertia("Admin/Banners/Campaign-Banners/Edit", compact("campaignBanner", "queryStringParams"));
     }
@@ -67,11 +67,11 @@ class AdminCampaignBannerController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashCampaignBanners=CampaignBanner::search(request("search"))
-                                            ->onlyTrashed()
-                                            ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                            ->paginate(request("per_page", 10))
-                                            ->appends(request()->all());
+        $trashCampaignBanners = CampaignBanner::search(request("search"))
+                                              ->onlyTrashed()
+                                              ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                              ->paginate(request("per_page", 10))
+                                              ->appends(request()->all());
 
         return inertia("Admin/Banners/Campaign-Banners/Trash", compact("trashCampaignBanners"));
     }
@@ -107,13 +107,13 @@ class AdminCampaignBannerController extends Controller
 
     public function handleShow(Request $request, int $campaignBannerId): RedirectResponse
     {
-        DB::table("campaign_banners")->update(["status"=>"hide"]);
+        DB::table("campaign_banners")->update(["status" => "hide"]);
 
         $campaignBanner = CampaignBanner::where([["id", $campaignBannerId],["status","hide"]])->first();
 
         if($campaignBanner) {
 
-            $campaignBanner->update(["status"=>"show"]);
+            $campaignBanner->update(["status" => "show"]);
         }
 
         return to_route('admin.campaign-banners.index', $this->getQueryStringParams($request))->with("success", "CAMPAIGN_BANNER_HAS_BEEN_SUCCESSFULLY_DISPLAYED");
@@ -125,7 +125,7 @@ class AdminCampaignBannerController extends Controller
 
         if($campaignBanner) {
 
-            $campaignBanner->update(["status"=>"hide"]);
+            $campaignBanner->update(["status" => "hide"]);
         }
 
         return to_route('admin.campaign-banners.index', $this->getQueryStringParams($request))->with("success", "CAMPAIGN_BANNER_HAS_BEEN_SUCCESSFULLY_HIDDEN");

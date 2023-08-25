@@ -7,7 +7,7 @@ import ApprovedStatus from "@/Components/Status/ApprovedStatus.vue";
 import DisapprovedStatus from "@/Components/Status/DisapprovedStatus.vue";
 import DiscountStatus from "@/Components/Status/DiscountStatus.vue";
 import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
-import { Link, Head } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 
 // Define the props
 const props = defineProps({

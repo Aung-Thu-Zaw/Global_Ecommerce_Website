@@ -16,9 +16,8 @@ import Td from "@/Components/Table/Td.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import { __ } from "@/Translations/translations-inside-setup.js";
-import datepicker from "vue3-datepicker";
-import { reactive, watch, inject, computed, ref } from "vue";
-import { router, Link, Head, usePage } from "@inertiajs/vue3";
+import { reactive, inject, computed, ref } from "vue";
+import { router, Head, usePage } from "@inertiajs/vue3";
 
 // Define the Props
 const props = defineProps({

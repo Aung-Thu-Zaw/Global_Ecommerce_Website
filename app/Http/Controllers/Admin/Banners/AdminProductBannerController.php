@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Admin\Banners;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Http\Requests\ProductBannerRequest;
+use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
+use Inertia\ResponseFactory;
+use App\Models\ProductBanner;
 use App\Actions\Admin\Banners\ProductBanners\CreateProductBannerAction;
 use App\Actions\Admin\Banners\ProductBanners\PermanentlyDeleteAllTrashProductBannerAction;
 use App\Actions\Admin\Banners\ProductBanners\UpdateProductBannerAction;
 use App\Http\Traits\HandlesQueryStringParameters;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductBannerRequest;
-use App\Models\ProductBanner;
-use Illuminate\Http\Request;
-use Inertia\Response;
-use Illuminate\Http\RedirectResponse;
-use Inertia\ResponseFactory;
 
 class AdminProductBannerController extends Controller
 {
@@ -20,17 +20,17 @@ class AdminProductBannerController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $productBanners=ProductBanner::search(request("search"))
-                                     ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                     ->paginate(request("per_page", 10))
-                                     ->appends(request()->all());
+        $productBanners = ProductBanner::search(request("search"))
+                                       ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                       ->paginate(request("per_page", 10))
+                                       ->appends(request()->all());
 
         return inertia("Admin/Banners/Product-Banners/Index", compact("productBanners"));
     }
 
     public function create(): Response|ResponseFactory
     {
-        $per_page=request("per_page");
+        $per_page = request("per_page");
 
         return inertia("Admin/Banners/Product-Banners/Create", compact("per_page"));
     }
@@ -44,7 +44,7 @@ class AdminProductBannerController extends Controller
 
     public function edit(Request $request, ProductBanner $productBanner): Response|ResponseFactory
     {
-        $queryStringParams=$this->getQueryStringParams($request);
+        $queryStringParams = $this->getQueryStringParams($request);
 
         return inertia("Admin/Banners/Product-Banners/Edit", compact("productBanner", "queryStringParams"));
     }
@@ -65,11 +65,11 @@ class AdminProductBannerController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashProductBanners=ProductBanner::search(request("search"))
-                                          ->onlyTrashed()
-                                          ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                          ->paginate(request("per_page", 10))
-                                          ->appends(request()->all());
+        $trashProductBanners = ProductBanner::search(request("search"))
+                                            ->onlyTrashed()
+                                            ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                            ->paginate(request("per_page", 10))
+                                            ->appends(request()->all());
 
         return inertia("Admin/Banners/Product-Banners/Trash", compact("trashProductBanners"));
     }
@@ -105,7 +105,7 @@ class AdminProductBannerController extends Controller
 
     public function handleShow(Request $request, int $productBannerId): RedirectResponse
     {
-        $countProductBanners=ProductBanner::where("status", "show")->count();
+        $countProductBanners = ProductBanner::where("status", "show")->count();
 
         if ($countProductBanners >= 3) {
 
@@ -116,7 +116,7 @@ class AdminProductBannerController extends Controller
 
         if($productBanner) {
 
-            $productBanner->update(["status"=>"show"]);
+            $productBanner->update(["status" => "show"]);
         }
 
         return to_route('admin.product-banners.index', $this->getQueryStringParams($request))->with("success", "PRODUCT_BANNER_HAS_BEEN_SUCCESSFULLY_DISPLAYED");
@@ -128,7 +128,7 @@ class AdminProductBannerController extends Controller
 
         if($productBanner) {
 
-            $productBanner->update(["status"=>"hide"]);
+            $productBanner->update(["status" => "hide"]);
         }
 
         return to_route('admin.product-banners.index', $this->getQueryStringParams($request))->with("success", "PRODUCT_BANNER_HAS_BEEN_SUCCESSFULLY_HIDDEN");

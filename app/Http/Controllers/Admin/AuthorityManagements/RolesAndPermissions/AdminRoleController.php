@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Admin\AuthorityManagements\RolesAndPermissions;
 
-use App\Actions\Admin\AuthorityManagements\RolesAndPermissions\PermanentlyDeleteAllTrashRoleAction;
-use App\Http\Traits\HandlesQueryStringParameters;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RoleRequest;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\RoleRequest;
 use Spatie\Permission\Models\Role;
+use App\Actions\Admin\AuthorityManagements\RolesAndPermissions\PermanentlyDeleteAllTrashRoleAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 
 class AdminRoleController extends Controller
 {
@@ -19,9 +19,9 @@ class AdminRoleController extends Controller
     public function index(): Response|ResponseFactory
     {
         $roles = Role::filterBy(request(["search","created_from","created_until"]))
-                   ->orderBy(request("sort", "id"), request("direction", "desc"))
-                   ->paginate(request("per_page", 10))
-                   ->appends(request()->all());
+                     ->orderBy(request("sort", "id"), request("direction", "desc"))
+                     ->paginate(request("per_page", 10))
+                     ->appends(request()->all());
 
         return inertia("Admin/AuthorityManagements/RolesAndPermissions/Roles/Index", compact("roles"));
     }
@@ -64,10 +64,10 @@ class AdminRoleController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashRoles = Role::filterBy(request(["search","deleted_from","deleted_until"]))
-                        ->onlyTrashed()
-                        ->orderBy(request("sort", "id"), request("direction", "desc"))
-                        ->paginate(request("per_page", 10))
-                        ->appends(request()->all());
+                          ->onlyTrashed()
+                          ->orderBy(request("sort", "id"), request("direction", "desc"))
+                          ->paginate(request("per_page", 10))
+                          ->appends(request()->all());
 
         return inertia("Admin/AuthorityManagements/RolesAndPermissions/Roles/Trash", compact("trashRoles"));
     }

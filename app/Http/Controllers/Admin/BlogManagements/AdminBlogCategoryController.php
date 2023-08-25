@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Admin\BlogManagements;
 
+use App\Http\Controllers\Controller;
+use Inertia\Response;
+use Inertia\ResponseFactory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use App\Http\Requests\BlogCategoryRequest;
+use App\Models\BlogCategory;
 use App\Actions\Admin\BlogManagements\BlogCategories\CreateBlogCategoryAction;
 use App\Actions\Admin\BlogManagements\BlogCategories\PermanentlyDeleteAllTrashBlogCategoryAction;
 use App\Actions\Admin\BlogManagements\BlogCategories\UpdateBlogCategoryAction;
 use App\Http\Traits\HandlesQueryStringParameters;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Http\Requests\BlogCategoryRequest;
-use App\Models\BlogCategory;
-use Inertia\Response;
-use Inertia\ResponseFactory;
-use Illuminate\Http\RedirectResponse;
 
 class AdminBlogCategoryController extends Controller
 {
@@ -20,17 +20,17 @@ class AdminBlogCategoryController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $blogCategories=BlogCategory::search(request("search"))
-                                    ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                    ->paginate(request("per_page", 10))
-                                    ->appends(request()->all());
+        $blogCategories = BlogCategory::search(request("search"))
+                                      ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                      ->paginate(request("per_page", 10))
+                                      ->appends(request()->all());
 
         return inertia("Admin/BlogManagements/BlogCategories/Index", compact("blogCategories"));
     }
 
     public function create(): Response|ResponseFactory
     {
-        $per_page=request("per_page");
+        $per_page = request("per_page");
 
         return inertia("Admin/BlogManagements/BlogCategories/Create", compact("per_page"));
     }
@@ -44,7 +44,7 @@ class AdminBlogCategoryController extends Controller
 
     public function edit(Request $request, BlogCategory $blogCategory): Response|ResponseFactory
     {
-        $queryStringParams=$this->getQueryStringParams($request);
+        $queryStringParams = $this->getQueryStringParams($request);
 
         return inertia("Admin/BlogManagements/BlogCategories/Edit", compact("blogCategory", "queryStringParams"));
     }
@@ -65,11 +65,11 @@ class AdminBlogCategoryController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashBlogCategories=BlogCategory::search(request("search"))
-                                         ->onlyTrashed()
-                                         ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                         ->paginate(request("per_page", 10))
-                                         ->appends(request()->all());
+        $trashBlogCategories = BlogCategory::search(request("search"))
+                                           ->onlyTrashed()
+                                           ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                           ->paginate(request("per_page", 10))
+                                           ->appends(request()->all());
 
         return inertia("Admin/BlogManagements/BlogCategories/Trash", compact("trashBlogCategories"));
     }

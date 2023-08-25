@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use Inertia\Response;
+use Inertia\ResponseFactory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use App\Http\Requests\CouponRequest;
+use App\Models\Coupon;
 use App\Actions\Admin\Coupons\CreateCouponAction;
 use App\Actions\Admin\Coupons\PermanentlyDeleteAllTrashCouponAction;
 use App\Actions\Admin\Coupons\UpdateCouponAction;
 use App\Http\Traits\HandlesQueryStringParameters;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Http\Requests\CouponRequest;
-use App\Models\Coupon;
-use Inertia\Response;
-use Inertia\ResponseFactory;
-use Illuminate\Http\RedirectResponse;
 
 class AdminCouponController extends Controller
 {
@@ -20,17 +20,17 @@ class AdminCouponController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $coupons=Coupon::search(request("search"))
-                       ->orderBy(request("sort", "id"), request("direction", "desc"))
-                       ->paginate(request("per_page", 10))
-                       ->appends(request()->all());
+        $coupons = Coupon::search(request("search"))
+                         ->orderBy(request("sort", "id"), request("direction", "desc"))
+                         ->paginate(request("per_page", 10))
+                         ->appends(request()->all());
 
         return inertia("Admin/Coupons/Index", compact("coupons"));
     }
 
     public function create(): Response|ResponseFactory
     {
-        $per_page=request("per_page");
+        $per_page = request("per_page");
 
         return inertia("Admin/Coupons/Create", compact("per_page"));
     }
@@ -44,7 +44,7 @@ class AdminCouponController extends Controller
 
     public function edit(Request $request, Coupon $coupon): Response|ResponseFactory
     {
-        $queryStringParams=$this->getQueryStringParams($request);
+        $queryStringParams = $this->getQueryStringParams($request);
 
         return inertia("Admin/Coupons/Edit", compact("coupon", "queryStringParams"));
     }
@@ -65,18 +65,18 @@ class AdminCouponController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashCoupons=Coupon::search(request("search"))
-                            ->onlyTrashed()
-                            ->orderBy(request("sort", "id"), request("direction", "desc"))
-                            ->paginate(request("per_page", 10))
-                            ->appends(request()->all());
+        $trashCoupons = Coupon::search(request("search"))
+                              ->onlyTrashed()
+                              ->orderBy(request("sort", "id"), request("direction", "desc"))
+                              ->paginate(request("per_page", 10))
+                              ->appends(request()->all());
 
         return inertia("Admin/Coupons/Trash", compact("trashCoupons"));
     }
 
     public function restore(Request $request, int $trashCouponId): RedirectResponse
     {
-        $trashCoupon=Coupon::onlyTrashed()->findOrFail($trashCouponId);
+        $trashCoupon = Coupon::onlyTrashed()->findOrFail($trashCouponId);
 
         $trashCoupon->restore();
 
@@ -85,7 +85,7 @@ class AdminCouponController extends Controller
 
     public function forceDelete(Request $request, int $trashCouponId): RedirectResponse
     {
-        $trashCoupon= Coupon::onlyTrashed()->findOrFail($trashCouponId);
+        $trashCoupon = Coupon::onlyTrashed()->findOrFail($trashCouponId);
 
         $trashCoupon->forceDelete();
 
