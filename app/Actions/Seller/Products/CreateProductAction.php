@@ -31,6 +31,7 @@ class CreateProductAction
             "featured"=>$data["featured"],
             "special_offer"=>$data["special_offer"],
             "status"=>$data["status"],
+            "return_policy"=>$data["return_policy"],
             "image"=>$image,
         ]);
 

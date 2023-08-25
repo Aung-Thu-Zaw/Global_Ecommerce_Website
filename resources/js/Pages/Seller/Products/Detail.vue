@@ -4,8 +4,10 @@ import Breadcrumb from "@/Components/Breadcrumbs/ProductBreadcrumb.vue";
 import NoDiscountStatus from "@/Components/Status/NoDiscountStatus.vue";
 import PendingStatus from "@/Components/Status/PendingStatus.vue";
 import ApprovedStatus from "@/Components/Status/ApprovedStatus.vue";
+import DisapprovedStatus from "@/Components/Status/DisapprovedStatus.vue";
 import DiscountStatus from "@/Components/Status/DiscountStatus.vue";
-import { Link, Head } from "@inertiajs/vue3";
+import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
+import { Head } from "@inertiajs/vue3";
 
 // Define the props
 const props = defineProps({
@@ -71,56 +73,41 @@ const formattedAmount = (amount) => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Details</span
               >
+                {{ __("DETAILS") }}
+              </span>
             </div>
           </li>
         </Breadcrumb>
 
         <!-- Go Back button -->
+
         <div>
-          <Link
-            as="button"
-            :href="route('vendor.products.index')"
-            :data="{
-              page: props.queryStringParams.page,
-              per_page: props.queryStringParams.per_page,
-              sort: props.queryStringParams.sort,
-              direction: props.queryStringParams.direction,
-            }"
-            class="goback-btn"
-          >
-            <span>
-              <i class="fa-solid fa-circle-left"></i>
-              Go Back
-            </span>
-          </Link>
+          <GoBackButton
+            href="seller.products.index"
+            :queryStringParams="queryStringParams"
+          />
         </div>
       </div>
 
       <!-- Product Detail -->
       <div class="p-5 border shadow-md rounded-sm my-5">
-        <h1 class="font-bold text-slate-700 text-2xl border-b-4 px-10 py-3">
-          Product Details
-        </h1>
-
-        <div v-if="product" class="my-3">
-          <div class="flex items-center my-3 space-x-2">
-            <div>
+        <div v-if="product" class="my-3 w-full">
+          <div class="flex items-center flex-wrap my-3 space-x-2 w-full">
+            <div class="mb-3">
               <img
                 :src="product.image"
-                alt=""
-                class="h-36 rounded-md shadow ring-2 ring-slate-300"
+                class="h-36 rounded-sm shadow border-2 border-slate-300"
               />
             </div>
-            <div v-for="image in product.images" :key="image.id">
+            <div v-for="image in product.images" :key="image.id" class="mb-3">
               <img
                 :src="image.img_path"
-                alt=""
-                class="h-36 rounded-md shadow ring-2 ring-slate-300"
+                class="h-36 rounded-sm shadow border-2 border-slate-300"
               />
             </div>
           </div>
+
           <div
             class="w-full text-sm text-left text-gray-500 border overflow-hidden shadow rounded-md my-5"
           >
@@ -135,16 +122,14 @@ const formattedAmount = (amount) => {
                   {{ product.name }}
                 </span>
               </div>
-              <div
-                v-if="product.sizes.length"
-                class="border-b py-3 bg-gray-50 flex items-center"
-              >
+
+              <div class="border-b py-3 bg-gray-50 flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
                   Avaliable Product Sizes
                 </span>
-                <span class="w-1/2 block space-x-3">
+                <span v-if="product.sizes.length" class="w-1/2 block space-x-3">
                   <span
                     v-for="size in product.sizes"
                     :key="size.id"
@@ -154,16 +139,14 @@ const formattedAmount = (amount) => {
                   </span>
                 </span>
               </div>
-              <div
-                v-if="product.types.length"
-                class="border-b py-3 bg-gray-50 flex items-center"
-              >
+
+              <div class="border-b py-3 bg-white flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
                   Avaliable Product Types
                 </span>
-                <span class="w-1/2 block space-x-3">
+                <span v-if="product.types.length" class="w-1/2 block space-x-3">
                   <span
                     v-for="productType in product.types"
                     :key="productType.id"
@@ -173,16 +156,17 @@ const formattedAmount = (amount) => {
                   </span>
                 </span>
               </div>
-              <div
-                v-if="product.colors.length"
-                class="bg-white border-b py-3 flex items-center"
-              >
+
+              <div class="bg-gray-50 border-b py-3 flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
                   Avaliable Product Colors
                 </span>
-                <span class="w-1/2 block space-x-3">
+                <span
+                  v-if="product.colors.length"
+                  class="w-1/2 block space-x-3"
+                >
                   <span
                     v-for="color in product.colors"
                     :key="color.id"
@@ -192,7 +176,8 @@ const formattedAmount = (amount) => {
                   </span>
                 </span>
               </div>
-              <div class="border-b py-3 bg-gray-50 flex items-center">
+
+              <div class="border-b py-3 bg-white flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
@@ -202,7 +187,8 @@ const formattedAmount = (amount) => {
                   {{ product.code }}
                 </span>
               </div>
-              <div class="bg-white border-b py-3 flex items-center">
+
+              <div class="bg-gray-50 border-b py-3 flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
@@ -212,7 +198,8 @@ const formattedAmount = (amount) => {
                   {{ product.qty }}
                 </span>
               </div>
-              <div class="border-b py-3 bg-gray-50 flex items-center">
+
+              <div class="border-b py-3 bg-white flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
@@ -222,7 +209,8 @@ const formattedAmount = (amount) => {
                   $ {{ formattedAmount(product.price) }}
                 </span>
               </div>
-              <div class="bg-white border-b py-3 flex items-center">
+
+              <div class="bg-gray-50 border-b py-3 flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
@@ -242,7 +230,8 @@ const formattedAmount = (amount) => {
                   <NoDiscountStatus v-else />
                 </span>
               </div>
-              <div class="bg-gray-50 border-b py-3 flex items-center">
+
+              <div class="bg-white border-b py-3 flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
@@ -252,7 +241,8 @@ const formattedAmount = (amount) => {
                   {{ product.special_offer ? "Yes" : "No" }}
                 </span>
               </div>
-              <div class="border-b py-3 bg-white flex items-center">
+
+              <div class="border-b py-3 bg-gray-50 flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
@@ -262,17 +252,8 @@ const formattedAmount = (amount) => {
                   {{ product.featured ? "Yes" : "No" }}
                 </span>
               </div>
-              <div class="bg-gray-50 border-b py-3 flex items-center">
-                <span
-                  class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
-                >
-                  Hot Deal
-                </span>
-                <span class="w-1/2 block">
-                  {{ product.hot_deal ? "Yes" : "No" }}</span
-                >
-              </div>
-              <div class="border-b py-3 bg-white flex items-center">
+
+              <div class="border-b py-3 bg-gray-50 flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
@@ -283,12 +264,16 @@ const formattedAmount = (amount) => {
                     {{ product.status }}
                   </PendingStatus>
 
-                  <ApprovedStatus v-else>
+                  <DisapprovedStatus v-if="product.status === 'disapproved'">
+                    {{ product.status }}
+                  </DisapprovedStatus>
+
+                  <ApprovedStatus v-if="product.status === 'approved'">
                     {{ product.status }}
                   </ApprovedStatus>
                 </span>
               </div>
-              <div class="bg-gray-50 border-b py-3 flex items-center">
+              <div class="bg-white border-b py-3 flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
@@ -299,17 +284,17 @@ const formattedAmount = (amount) => {
                 </span>
               </div>
 
-              <div class="border-b py-3 bg-white flex items-center">
+              <div class="border-b py-3 bg-gray-50 flex items-center">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >
-                  Vendor
+                  Shop Name
                 </span>
                 <span class="w-1/2 block">
                   {{ product.shop.shop_name }}
                 </span>
               </div>
-              <div class="border-b py-3 bg-gray-50 flex items-start">
+              <div class="border-b py-3 bg-white flex items-start">
                 <span
                   class="px-10 w-1/2 font-medium text-gray-900 whitespace-nowrap"
                 >

@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers\Seller;
 
-use App\Actions\Seller\Products\CreateProductAction;
-use App\Actions\Products\PermanentlyDeleteAllTrashProductAction;
-use App\Actions\Products\PermanentlyDeleteTrashProductAction;
-use App\Actions\Seller\Products\UpdateProductAction;
-use App\Http\Traits\HandlesQueryStringParameters;
 use App\Http\Controllers\Controller;
+use Inertia\Response;
+use Inertia\ResponseFactory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Services\BroadcastNotifications\SellerCreatesANewProductNotificationSendToAdminDashboardService;
-use Inertia\Response;
-use Inertia\ResponseFactory;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use App\Actions\Seller\Products\CreateProductAction;
+use App\Actions\Seller\Products\UpdateProductAction;
+use App\Actions\Products\PermanentlyDeleteAllTrashProductAction;
+use App\Actions\Products\PermanentlyDeleteTrashProductAction;
+use App\Http\Traits\HandlesQueryStringParameters;
 
 class SellerProductController extends Controller
 {
@@ -39,7 +39,7 @@ class SellerProductController extends Controller
 
         $queryStringParams = $this->getQueryStringParams($request);
 
-        return inertia("Seller/Products/Details", compact("product", "queryStringParams"));
+        return inertia("Seller/Products/Detail", compact("product", "queryStringParams"));
     }
 
     public function create(): Response|ResponseFactory

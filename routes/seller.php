@@ -51,9 +51,9 @@ Route::middleware(["seller","user.role:seller"])
                   Route::post("/{product}", "update")->name("update");
                   Route::delete("/{product}", "destroy")->name("destroy");
                   Route::get("/trash", "trash")->name("trash");
-                  Route::post("/trash/{trash_product_id}/restore", "restore")->name("restore");
-                  Route::delete("/trash/{trash_product_id}/force-delete", "forceDelete")->name("force.delete");
-                  Route::delete("/trash/permanently-delete", "permanentlyDelete")->name("permanently.delete");
+                  Route::post("/trash/{trash_product_id}/restore", "restore")->name("trash.restore");
+                  Route::delete("/trash/{trash_product_id}/force-delete", "forceDelete")->name("trash.force.delete");
+                  Route::delete("/trash/permanently-delete", "permanentlyDelete")->name("trash.permanently.delete");
               });
 
          Route::delete('products/{product_id}/images/{image_id}', [MultiImageController::class,"destroy"])->name("image.destroy");
