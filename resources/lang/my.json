@@ -916,6 +916,7 @@
     "TRASH_SUBSCRIBERS": "အမှိုက်စာရင်းသွင်းသူများ",
     "TRASH_WEBSITE_FEEDBACKS": "အမှိုက်ပုံး ဝဘ်ဆိုဒ် တုံ့ပြန်ချက်များ",
     "TRASH_SUGGESTIONS": "အမှိုက်အကြံပြုချက်များ",
-    "WEBSITE_FEEDBACK_DETAILS":"ဝဘ်ဆိုက် တုံ့ပြန်ချက်အသေးစိတ်",
-    "SUGGESTION_TYPE":"အကြံပြုချက် အမျိုးအစား"
+    "WEBSITE_FEEDBACK_DETAILS": "ဝဘ်ဆိုက် တုံ့ပြန်ချက်အသေးစိတ်",
+    "SUGGESTION_TYPE": "အကြံပြုချက် အမျိုးအစား",
+    "SUBCATEGORY": "အမျိုးအစားခွဲ"
 }

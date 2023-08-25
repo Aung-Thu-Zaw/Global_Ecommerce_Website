@@ -41,7 +41,7 @@ const handleEditFaq = async () => {
   processing.value = true;
   form.patch(
     route("admin.faqs.update", {
-      faq: props.faq.id,
+      faq: props.faq.slug,
       page: props.queryStringParams.page,
       per_page: props.queryStringParams.per_page,
       sort: props.queryStringParams.sort,
@@ -82,7 +82,8 @@ const handleEditFaq = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >{{ faq.question }}
+              >
+                {{ faq.question }}
               </span>
             </div>
           </li>
@@ -103,26 +104,19 @@ const handleEditFaq = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >{{ __("EDIT") }}</span
               >
+                {{ __("EDIT") }}
+              </span>
             </div>
           </li>
         </Breadcrumb>
 
         <!-- Go Back button -->
         <div>
-          <Link
-            as="button"
-            :href="route('admin.faqs.index')"
-            :data="{
-              page: queryStringParams.page,
-              per_page: queryStringParams.per_page,
-              sort: queryStringParams.sort,
-              direction: queryStringParams.direction,
-            }"
-          >
-            <GoBackButton />
-          </Link>
+          <GoBackButton
+            href="admin.faqs.index"
+            :queryStringParams="queryStringParams"
+          />
         </div>
       </div>
 
@@ -192,20 +186,3 @@ const handleEditFaq = async () => {
     </div>
   </AdminDashboardLayout>
 </template>
-
-
-
-<style>
-.ck-editor__editable_inline {
-  min-height: 250px;
-  border-radius: 200px;
-}
-
-:root {
-  --ck-border-radius: 0.375rem;
-  --ck-color-focus-border: rgb(209 213 219);
-  --ck-font-size-base: 0.7rem;
-  --ck-color-shadow-drop: none;
-  --ck-color-shadow-inner: none;
-}
-</style>

@@ -916,6 +916,7 @@
     "TRASH_SUBSCRIBERS": "Trash Subscribers",
     "TRASH_WEBSITE_FEEDBACKS": "Trash Website Feedbacks",
     "TRASH_SUGGESTIONS": "Trash Suggestions",
-    "WEBSITE_FEEDBACK_DETAILS":"Website Feedback Details",
-    "SUGGESTION_TYPE":"Suggestion Type"
+    "WEBSITE_FEEDBACK_DETAILS": "Website Feedback Details",
+    "SUGGESTION_TYPE": "Suggestion Type",
+    "SUBCATEGORY": "SubCategory"
 }
