@@ -38,7 +38,7 @@ const handleEditSeoSetting = async () => {
 
   processing.value = true;
 
-  form.post(
+  form.patch(
     route("admin.seo-settings.update", {
       seo_setting: props.seoSetting.id,
     }),

@@ -38,7 +38,7 @@ const handleEditPrivacyPolicy = async () => {
 
   processing.value = true;
 
-  form.post(
+  form.patch(
     route("admin.pages.privacy-policy.update", {
       page: props.privacyPolicy.id,
     }),

@@ -38,7 +38,7 @@ const handleEditTermsAndConditions = async () => {
 
   processing.value = true;
 
-  form.post(
+  form.patch(
     route("admin.pages.terms-and-conditions.update", {
       page: props.termsAndConditions.id,
     }),
