@@ -35,7 +35,10 @@ const handleCreateFaqCatrgory = async () => {
   processing.value = true;
   form.post(
     route("admin.faq-categories.categories.store", {
+      page: 1,
       per_page: props.per_page,
+      sort: "id",
+      direction: "desc",
     }),
     {
       replace: true,
@@ -72,8 +75,9 @@ const handleCreateFaqCatrgory = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >{{ __("CATEGORIES") }}</span
               >
+                {{ __("CATEGORIES") }}
+              </span>
             </div>
           </li>
           <li aria-current="page">
@@ -93,25 +97,24 @@ const handleCreateFaqCatrgory = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >{{ __("CREATE") }}</span
               >
+                {{ __("CREATE") }}
+              </span>
             </div>
           </li>
         </Breadcrumb>
 
         <!-- Go Back button -->
         <div>
-          <Link
-            as="button"
-            :href="route('admin.faq-categories.categories.index')"
-            :data="{
+          <GoBackButton
+            href="admin.faq-categories.categories.index"
+            :queryStringParams="{
+              page: 1,
               per_page: props.per_page,
               sort: 'id',
               direction: 'desc',
             }"
-          >
-            <GoBackButton />
-          </Link>
+          />
         </div>
       </div>
 
