@@ -17,7 +17,7 @@ class AdminRegisteredAccountController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $users=User::search(request("search"))
+        $users = User::filterBy(request(["search","created_from","created_until"]))
                    ->orderBy(request("sort", "id"), request("direction", "desc"))
                    ->paginate(request("per_page", 10))
                    ->appends(request()->all());
@@ -27,7 +27,7 @@ class AdminRegisteredAccountController extends Controller
 
     public function show(Request $request, User $user): Response|ResponseFactory
     {
-        $queryStringParams=$this->getQueryStringParams($request);
+        $queryStringParams = $this->getQueryStringParams($request);
 
         return inertia("Admin/UserManagements/RegisteredAccounts/Detail", compact("user", "queryStringParams"));
     }
@@ -41,7 +41,7 @@ class AdminRegisteredAccountController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashUsers=User::search(request("search"))
+        $trashUsers = User::filterBy(request(["search","deleted_from","deleted_until"]))
                         ->onlyTrashed()
                         ->orderBy(request("sort", "id"), request("direction", "desc"))
                         ->paginate(request("per_page", 10))

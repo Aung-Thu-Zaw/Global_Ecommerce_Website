@@ -17,7 +17,7 @@ class AdminSellerManageController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $sellers = User::search(request("search"))
+        $sellers = User::filterBy(request(["search","created_from","created_until"]))
                      ->where("role", "seller")
                      ->orderBy(request("sort", "id"), request("direction", "desc"))
                      ->paginate(request("per_page", 10))
@@ -51,7 +51,7 @@ class AdminSellerManageController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashSellers = User::search(request("search"))
+        $trashSellers = User::filterBy(request(["search","deleted_from","deleted_until"]))
                           ->onlyTrashed()
                           ->where("role", "seller")
                           ->orderBy(request("sort", "id"), request("direction", "desc"))

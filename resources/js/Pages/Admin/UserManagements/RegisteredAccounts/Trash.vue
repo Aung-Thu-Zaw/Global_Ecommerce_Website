@@ -5,6 +5,7 @@ import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
 import RestoreButton from "@/Components/Buttons/RestoreButton.vue";
 import DeleteForeverButton from "@/Components/Buttons/DeleteForeverButton.vue";
 import EmptyTrashButton from "@/Components/Buttons/EmptyTrashButton.vue";
+import RoleStatus from "@/Components/Status/RoleStatus.vue";
 import DashboardSearchInputForm from "@/Components/Forms/DashboardSearchInputForm.vue";
 import DashboardPerPageSelectBox from "@/Components/Forms/DashboardPerPageSelectBox.vue";
 import DashboardFilterByDeletedDate from "@/Components/Forms/DashboardFilterByDeletedDate.vue";

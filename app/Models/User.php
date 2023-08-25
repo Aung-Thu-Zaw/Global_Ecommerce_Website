@@ -21,6 +21,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 use Overtrue\LaravelFollow\Traits\Follower;
 use Overtrue\LaravelFollow\Traits\Followable;
+use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -56,6 +57,40 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    /**
+    * @param array<string> $filterBy
+    * @param Builder<User> $query
+    */
+
+    public function scopeFilterBy(Builder $query, array $filterBy): void
+    {
+
+        $query->when(
+            $filterBy["search"] ?? null,
+            function ($query, $search) {
+                $query->where(
+                    function ($query) use ($search) {
+                        $query->where("name", "LIKE", "%".$search."%")
+                        ->orWhere("shop_name", "LIKE", "%".$search."%");
+                    }
+                );
+            }
+        );
+
+        $query->when($filterBy["created_from"] ?? null, function ($query, $createdFrom) {
+            $query->whereDate('created_at', '>=', $createdFrom);
+        })
+        ->when($filterBy["created_until"] ?? null, function ($query, $createdUntil) {
+            $query->whereDate('created_at', '<=', $createdUntil);
+        })
+        ->when($filterBy["deleted_from"] ?? null, function ($query, $deletedFrom) {
+            $query->whereDate('deleted_at', '>=', $deletedFrom);
+        })
+        ->when($filterBy["deleted_until"] ?? null, function ($query, $deletedUntil) {
+            $query->whereDate('deleted_at', '<=', $deletedUntil);
+        });
+
+    }
 
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<User, never>

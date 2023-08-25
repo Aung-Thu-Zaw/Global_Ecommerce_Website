@@ -23,10 +23,7 @@ class AdminManageController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $admins=User::search(request("search"))
-                    ->query(function (Builder $builder) {
-                        $builder->with("roles");
-                    })
+        $admins = User::with("roles")->filterBy(request(["search","created_from","created_until"]))
                     ->where("role", "admin")
                     ->where("status", "active")
                     ->orderBy(request("sort", "id"), request("direction", "desc"))
@@ -38,7 +35,7 @@ class AdminManageController extends Controller
 
     public function show(Request $request, User $user): Response|ResponseFactory
     {
-        $queryStringParams=$this->getQueryStringParams($request);
+        $queryStringParams = $this->getQueryStringParams($request);
 
         $user->load("roles");
 
@@ -47,16 +44,16 @@ class AdminManageController extends Controller
 
     public function create(): Response|ResponseFactory
     {
-        $per_page=request("per_page");
+        $per_page = request("per_page");
 
-        $roles=Role::all();
+        $roles = Role::all();
 
         return inertia("Admin/UserManagements/AdminManage/Create", compact("per_page", "roles"));
     }
 
     public function store(AdminManageRequest $request, AdminAssignRoleService $adminAssignRoleService): RedirectResponse
     {
-        $admin=(new CreateAdminAction())->handle($request->validated());
+        $admin = (new CreateAdminAction())->handle($request->validated());
 
         $adminAssignRoleService->assign($admin, $request->assign_role);
 
@@ -65,9 +62,9 @@ class AdminManageController extends Controller
 
     public function edit(Request $request, User $user): Response|ResponseFactory
     {
-        $queryStringParams=$this->getQueryStringParams($request);
+        $queryStringParams = $this->getQueryStringParams($request);
 
-        $roles=Role::all();
+        $roles = Role::all();
 
         $user->load("roles");
 
@@ -76,7 +73,7 @@ class AdminManageController extends Controller
 
     public function update(AdminManageRequest $request, User $user, AdminAssignRoleService $adminAssignRoleService): RedirectResponse
     {
-        $admin=(new UpdateAdminAction())->handle($request->validated(), $user);
+        $admin = (new UpdateAdminAction())->handle($request->validated(), $user);
 
         $adminAssignRoleService->updateAssign($admin, $request->assign_role);
 
@@ -92,10 +89,7 @@ class AdminManageController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashAdmins=User::search(request("search"))
-                         ->query(function (Builder $builder) {
-                             $builder->with("roles");
-                         })
+        $trashAdmins = User::with("roles")->filterBy(request(["search","deleted_from","deleted_until"]))
                          ->onlyTrashed()
                          ->orderBy(request("sort", "id"), request("direction", "desc"))
                          ->paginate(request("per_page", 10))
@@ -106,7 +100,7 @@ class AdminManageController extends Controller
 
     public function restore(Request $request, int $trashAdminId): RedirectResponse
     {
-        $trashAdmin=User::onlyTrashed()->findOrFail($trashAdminId);
+        $trashAdmin = User::onlyTrashed()->findOrFail($trashAdminId);
 
         $trashAdmin->restore();
 
@@ -115,7 +109,7 @@ class AdminManageController extends Controller
 
     public function forceDelete(Request $request, int $trashAdminId): RedirectResponse
     {
-        $trashAdmin=User::onlyTrashed()->findOrFail($trashAdminId);
+        $trashAdmin = User::onlyTrashed()->findOrFail($trashAdminId);
 
         User::deleteUserAvatar($trashAdmin->avatar);
 

@@ -2,6 +2,9 @@
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/SellerManageBreadcrumb.vue";
 import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
+import InputContainer from "@/Components/Forms/InputContainer.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
 import { Head } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -77,11 +80,14 @@ const props = defineProps({
         <div class="mb-10 flex items-center justify-between">
           <img
             :src="user.avatar"
-            alt=""
-            class="w-48 h-48 rounded-md object-cover ring-4 mb-5"
+            class="w-48 h-48 rounded-md object-cover ring-2 ring-slate-300 mb-5 shadow"
           />
           <h2
-            class="uppercase text-md text-red-600 font-bold px-3 py-2 bg-red-100 rounded-md"
+            class="uppercase text-md font-bold px-3 py-2 rounded-md"
+            :class="{
+              'bg-red-100  text-red-600': user.status === 'inactive',
+              'bg-green-100  text-green-600': user.status === 'active',
+            }"
           >
             Shop is {{ user.status }}
           </h2>

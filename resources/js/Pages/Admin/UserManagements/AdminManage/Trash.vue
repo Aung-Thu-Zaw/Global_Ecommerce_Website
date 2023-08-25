@@ -352,7 +352,7 @@ const handlePermanentlyDeleteTrashAdmins = async () => {
               class="flex items-center"
             >
               <!-- Restore Button -->
-              <div v-if="brandTrashRestore">
+              <div v-if="adminManageTrashRestore">
                 <RestoreButton
                   @click="handleRestoreTrashAdmin(trashAdmin.id)"
                 />

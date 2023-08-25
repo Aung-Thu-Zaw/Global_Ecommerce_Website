@@ -82,7 +82,7 @@ const props = defineProps({
           <img
             :src="user.avatar"
             alt=""
-            class="w-48 h-48 rounded-full object-cover ring-4 ring-slate-300 mb-5"
+            class="w-48 h-48 rounded-full object-cover ring-2 ring-slate-300 mb-5"
           />
         </div>
 

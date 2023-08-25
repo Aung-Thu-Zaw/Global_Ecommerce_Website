@@ -268,7 +268,7 @@ if (usePage().props.flash.successMessage) {
               {{ seller.id }}
             </BodyTh>
 
-            <Td>
+            <Td class="w-[400px]">
               {{ seller.shop_name }}
             </Td>
 
@@ -293,7 +293,7 @@ if (usePage().props.flash.successMessage) {
               v-if="
                 sellerManageControl || sellerManageDelete || sellerManageDetail
               "
-              class="flex items-center"
+              class="w-[500px] flex items-center"
             >
               <!-- Control Button -->
               <button

@@ -21,7 +21,7 @@ class AdminRoleInPermissionController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $rolesWithPermissions = Role::with("permissions")->filterBy(request(["search","created_from","created_until","deleted_from","deleted_until"]))
+        $rolesWithPermissions = Role::with("permissions")->filterBy(request(["search","created_from","created_until"]))
                                   ->orderBy(request("sort", "id"), request("direction", "desc"))
                                   ->paginate(request("per_page", 10))
                                   ->appends(request()->all());
