@@ -17,7 +17,7 @@ class AdminSellerManageController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $sellers=User::search(request("search"))
+        $sellers = User::search(request("search"))
                      ->where("role", "seller")
                      ->orderBy(request("sort", "id"), request("direction", "desc"))
                      ->paginate(request("per_page", 10))
@@ -28,16 +28,16 @@ class AdminSellerManageController extends Controller
 
     public function show(Request $request, User $user): Response|ResponseFactory
     {
-        $queryStringParams=$this->getQueryStringParams($request);
+        $queryStringParams = $this->getQueryStringParams($request);
 
-        return inertia("Admin/UserManagements/SellerManage/Details", compact("user", "queryStringParams"));
+        return inertia("Admin/UserManagements/SellerManage/Detail", compact("user", "queryStringParams"));
     }
 
     public function update(Request $request, User $user): RedirectResponse
     {
-        $user->update(["status"=>$request->status]);
+        $user->update(["status" => $request->status]);
 
-        $message=$request->status==="inactive" ? "SELLER_HAS_BEEN_SUCCESSFULLY_INACTIVE" : "SELLER_HAS_BEEN_SUCCESSFULLY_ACTIVE";
+        $message = $request->status === "inactive" ? "SELLER_HAS_BEEN_SUCCESSFULLY_INACTIVE" : "SELLER_HAS_BEEN_SUCCESSFULLY_ACTIVE";
 
         return to_route('admin.seller-manage.index', $this->getQueryStringParams($request))->with("success", $message);
     }
@@ -51,7 +51,7 @@ class AdminSellerManageController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashSellers=User::search(request("search"))
+        $trashSellers = User::search(request("search"))
                           ->onlyTrashed()
                           ->where("role", "seller")
                           ->orderBy(request("sort", "id"), request("direction", "desc"))
@@ -63,7 +63,7 @@ class AdminSellerManageController extends Controller
 
     public function restore(Request $request, int $trashSellerId): RedirectResponse
     {
-        $trashSeller=User::onlyTrashed()->findOrFail($trashSellerId);
+        $trashSeller = User::onlyTrashed()->findOrFail($trashSellerId);
 
         $trashSeller->restore();
 
@@ -72,7 +72,7 @@ class AdminSellerManageController extends Controller
 
     public function forceDelete(Request $request, int $trashSellerId): RedirectResponse
     {
-        $trashSeller=User::onlyTrashed()->findOrFail($trashSellerId);
+        $trashSeller = User::onlyTrashed()->findOrFail($trashSellerId);
 
         User::deleteUserAvatar($trashSeller->avatar);
 

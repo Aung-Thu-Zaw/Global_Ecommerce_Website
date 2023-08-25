@@ -56,16 +56,6 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    // /**
-    //  * The "booted" method of the model.
-    //  *
-    //  * @return void
-    //  */
-    // protected static function booted()
-    // {
-    //     static::addGlobalScope(new FilteredByDateScope());
-    // }
-
 
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<User, never>
@@ -189,6 +179,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Message::class);
     }
+
 
     public function getRedirectRouteName(): string
     {

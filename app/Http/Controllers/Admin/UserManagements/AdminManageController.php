@@ -42,7 +42,7 @@ class AdminManageController extends Controller
 
         $user->load("roles");
 
-        return inertia("Admin/UserManagements/AdminManage/Details", compact("user", "queryStringParams"));
+        return inertia("Admin/UserManagements/AdminManage/Detail", compact("user", "queryStringParams"));
     }
 
     public function create(): Response|ResponseFactory

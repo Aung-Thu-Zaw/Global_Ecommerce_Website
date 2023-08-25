@@ -1,10 +1,11 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/AdminManageBreadcrumb.vue";
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/AdminManageBreadcrumb.vue";
 import InputContainer from "@/Components/Forms/InputContainer.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
-import { Head, Link } from "@inertiajs/vue3";
+import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
+import { Link, Head } from "@inertiajs/vue3";
 
 const props = defineProps({
   queryStringParams: Array,
@@ -37,8 +38,9 @@ const props = defineProps({
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >{{ user.name }}</span
               >
+                {{ user.name }}
+              </span>
             </div>
           </li>
           <li aria-current="page">
@@ -58,30 +60,19 @@ const props = defineProps({
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Details</span
               >
+                {{ __("DETAILS") }}
+              </span>
             </div>
           </li>
         </Breadcrumb>
 
         <!-- Go Back Button -->
         <div>
-          <Link
-            as="button"
-            :href="route('admin.admin-manage.index')"
-            :data="{
-              page: props.queryStringParams.page,
-              per_page: props.queryStringParams.per_page,
-              sort: props.queryStringParams.sort,
-              direction: props.queryStringParams.direction,
-            }"
-            class="goback-btn"
-          >
-            <span>
-              <i class="fa-solid fa-circle-left"></i>
-              Go Back
-            </span>
-          </Link>
+          <GoBackButton
+            href="admin.admin-manage.index"
+            :queryStringParams="queryStringParams"
+          />
         </div>
       </div>
 

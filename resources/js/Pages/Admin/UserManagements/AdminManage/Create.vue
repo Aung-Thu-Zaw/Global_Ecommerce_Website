@@ -64,7 +64,10 @@ const handleCreateAdminUser = async () => {
   processing.value = true;
   form.post(
     route("admin.admin-manage.store", {
+      page: 1,
       per_page: props.per_page,
+      sort: "id",
+      direction: "desc",
     }),
     {
       replace: true,
@@ -101,25 +104,24 @@ const handleCreateAdminUser = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >{{ __("CREATE") }}</span
               >
+                {{ __("CREATE") }}
+              </span>
             </div>
           </li>
         </Breadcrumb>
 
         <!-- Go Back button -->
         <div>
-          <Link
-            as="button"
-            :href="route('admin.admin-manage.index')"
-            :data="{
+          <GoBackButton
+            href="admin.admin-manage.index"
+            :queryStringParams="{
+              page: 1,
               per_page: props.per_page,
               sort: 'id',
               direction: 'desc',
             }"
-          >
-            <GoBackButton />
-          </Link>
+          />
         </div>
       </div>
 

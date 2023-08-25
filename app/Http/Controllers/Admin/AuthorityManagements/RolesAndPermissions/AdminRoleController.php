@@ -18,7 +18,7 @@ class AdminRoleController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $roles = Role::filterBy(request(["search","created_from","created_until","deleted_from","deleted_until"]))
+        $roles = Role::filterBy(request(["search","created_from","created_until"]))
                    ->orderBy(request("sort", "id"), request("direction", "desc"))
                    ->paginate(request("per_page", 10))
                    ->appends(request()->all());
@@ -63,7 +63,7 @@ class AdminRoleController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashRoles = Role::filterBy(request(["search","created_from","created_until","deleted_from","deleted_until"]))
+        $trashRoles = Role::filterBy(request(["search","deleted_from","deleted_until"]))
                         ->onlyTrashed()
                         ->orderBy(request("sort", "id"), request("direction", "desc"))
                         ->paginate(request("per_page", 10))

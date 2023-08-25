@@ -29,7 +29,7 @@ class AdminRegisteredAccountController extends Controller
     {
         $queryStringParams=$this->getQueryStringParams($request);
 
-        return inertia("Admin/UserManagements/RegisteredAccounts/Details", compact("user", "queryStringParams"));
+        return inertia("Admin/UserManagements/RegisteredAccounts/Detail", compact("user", "queryStringParams"));
     }
 
     public function destroy(Request $request, User $user): RedirectResponse
