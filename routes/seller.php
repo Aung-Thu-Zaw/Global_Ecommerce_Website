@@ -84,7 +84,7 @@ Route::middleware(["seller","user.role:seller"])
               ->group(function () {
                   Route::get("/", "index")->name("index");
                   Route::get("/{order}/details", "show")->name("show");
-                  Route::post("/{order}", "update")->name("update");
+                  Route::patch("/{order}", "update")->name("update");
               });
 
          // Seller Product Reviews Section
