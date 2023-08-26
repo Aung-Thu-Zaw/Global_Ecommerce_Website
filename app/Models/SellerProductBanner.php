@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\FilteredByDateScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -14,7 +15,7 @@ class SellerProductBanner extends Model
     use SoftDeletes;
     use Searchable;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     /**
     *     @return array<string>
@@ -28,9 +29,29 @@ class SellerProductBanner extends Model
     }
 
     /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope(new FilteredByDateScope());
+    }
+
+    /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<SellerProductBanner, never>
     */
     protected function createdAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => date("j-F-Y", strtotime($value)),
+        );
+    }
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Casts\Attribute<SellerProductBanner, never>
+    */
+    protected function deletedAt(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => date("j-F-Y", strtotime($value)),

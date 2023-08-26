@@ -25,14 +25,14 @@ class AdminSliderBannerController extends Controller
                                      ->paginate(request("per_page", 10))
                                      ->appends(request()->all());
 
-        return inertia("Admin/Banners/Slider-Banners/Index", compact("sliderBanners"));
+        return inertia("Admin/Banners/SliderBanners/Index", compact("sliderBanners"));
     }
 
     public function create(): Response|ResponseFactory
     {
         $per_page = request("per_page");
 
-        return inertia("Admin/Banners/Slider-Banners/Create", compact("per_page"));
+        return inertia("Admin/Banners/SliderBanners/Create", compact("per_page"));
     }
 
     public function store(SliderBannerRequest $request): RedirectResponse
@@ -46,7 +46,7 @@ class AdminSliderBannerController extends Controller
     {
         $queryStringParams = $this->getQueryStringParams($request);
 
-        return inertia("Admin/Banners/Slider-Banners/Edit", compact("sliderBanner", "queryStringParams"));
+        return inertia("Admin/Banners/SliderBanners/Edit", compact("sliderBanner", "queryStringParams"));
     }
 
     public function update(SliderBannerRequest $request, SliderBanner $sliderBanner): RedirectResponse
@@ -71,7 +71,7 @@ class AdminSliderBannerController extends Controller
                                           ->paginate(request("per_page", 10))
                                           ->appends(request()->all());
 
-        return inertia("Admin/Banners/Slider-Banners/Trash", compact("trashSliderBanners"));
+        return inertia("Admin/Banners/SliderBanners/Trash", compact("trashSliderBanners"));
     }
 
     public function restore(Request $request, int $trashSliderBannerId): RedirectResponse

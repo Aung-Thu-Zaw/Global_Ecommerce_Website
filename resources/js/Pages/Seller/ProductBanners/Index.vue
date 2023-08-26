@@ -1,80 +1,43 @@
 <script setup>
+import SellerDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/BannerBreadcrumb.vue";
+import CreateButton from "@/Components/Buttons/CreateButton.vue";
+import TrashButton from "@/Components/Buttons/TrashButton.vue";
+import EditButton from "@/Components/Buttons/EditButton.vue";
+import DeleteButton from "@/Components/Buttons/DeleteButton.vue";
 import ActiveStatus from "@/Components/Status/ActiveStatus.vue";
 import InactiveStatus from "@/Components/Status/InactiveStatus.vue";
-import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import Tr from "@/Components/Table/Tr.vue";
-import Td from "@/Components/Table/Td.vue";
+import DashboardSearchInputForm from "@/Components/Forms/DashboardSearchInputForm.vue";
+import DashboardPerPageSelectBox from "@/Components/Forms/DashboardPerPageSelectBox.vue";
+import DashboardFilterByCreatedDate from "@/Components/Forms/DashboardFilterByCreatedDate.vue";
+import SortingArrows from "@/Components/Table/SortingArrows.vue";
+import TableContainer from "@/Components/Table/TableContainer.vue";
+import TableHeader from "@/Components/Table/TableHeader.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
-import TableHeader from "@/Components/Table/TableHeader.vue";
-import TableContainer from "@/Components/Table/TableContainer.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/BannerBreadcrumb.vue";
+import Tr from "@/Components/Table/Tr.vue";
+import Td from "@/Components/Table/Td.vue";
+import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import SellerDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
-import { Link, Head, router, usePage } from "@inertiajs/vue3";
-import { reactive, watch, inject } from "vue";
+import { __ } from "@/Translations/translations-inside-setup.js";
+import { inject, reactive } from "vue";
+import { router, Head, usePage } from "@inertiajs/vue3";
 
+// Define the props
 const props = defineProps({
   sellerProductBanners: Object,
 });
 
+// Define Variables
 const swal = inject("$swal");
 
+// Query String Parameteres
 const params = reactive({
-  search: null,
-  page: props.sellerProductBanners.current_page
-    ? props.sellerProductBanners.current_page
-    : 1,
-  per_page: props.sellerProductBanners.per_page
-    ? props.sellerProductBanners.per_page
-    : 10,
-  sort: "id",
-  direction: "desc",
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
 });
 
-const handleSearchBox = () => {
-  params.search = "";
-};
-
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("seller.product-banners.index"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("seller.product-banners.index"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
+// Update Sorting Table Column
 const updateSorting = (sort = "id") => {
   params.sort = sort;
   params.direction = params.direction === "asc" ? "desc" : "asc";
@@ -82,91 +45,124 @@ const updateSorting = (sort = "id") => {
   router.get(
     route("seller.product-banners.index"),
     {
-      search: params.search,
-      page: params.page,
-      per_page: params.per_page,
+      search: usePage().props.ziggy.query?.search,
+      page: usePage().props.ziggy.query?.page,
+      per_page: usePage().props.ziggy.query?.per_page,
       sort: params.sort,
       direction: params.direction,
+      created_from: usePage().props.ziggy.query?.created_from,
+      created_until: usePage().props.ziggy.query?.created_until,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
+// Handle Show Product Banner
 const handleShow = async (hideProductBannerId) => {
   const result = await swal({
-    icon: "info",
-    title: "Are you sure you want to show this product banner?",
+    icon: "question",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_SHOW_THIS_PRODUCT_BANNER"),
     showCancelButton: true,
-    confirmButtonText: "Yes, show",
-    confirmButtonColor: "#4d9be9",
+    confirmButtonText: __("YES_SHOW"),
+    cancelButtonText: __("CANCEL"),
+    confirmButtonColor: "#2562c4",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
   });
 
   if (result.isConfirmed) {
-    router.post(
+    router.patch(
       route("seller.product-banners.show", {
-        id: hideProductBannerId,
-        page: params.page,
-        per_page: params.per_page,
-      })
+        seller_product_banner: hideProductBannerId,
+        search: usePage().props.ziggy.query?.search,
+        page: usePage().props.ziggy.query?.page,
+        per_page: usePage().props.ziggy.query?.per_page,
+        sort: params.sort,
+        direction: params.direction,
+        created_from: usePage().props.ziggy.query?.created_from,
+        created_until: usePage().props.ziggy.query?.created_until,
+      }),
+      {},
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: __(usePage().props.flash.successMessage),
+            });
+          }
+          if (usePage().props.flash.errorMessage) {
+            swal({
+              icon: "error",
+              title: __(usePage().props.flash.errorMessage),
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      if (usePage().props.flash.successMessage) {
-        swal({
-          icon: "success",
-          title: usePage().props.flash.successMessage,
-        });
-      }
-
-      if (usePage().props.flash.errorMessage) {
-        swal({
-          icon: "error",
-          title: usePage().props.flash.errorMessage,
-        });
-      }
-    }, 500);
   }
 };
 
+// Handle Hide Product Banner
 const handleHide = async (showProductBannerId) => {
   const result = await swal({
-    icon: "info",
-    title: "Are you sure you want to hide this product banner?",
+    icon: "question",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_HIDE_THIS_PRODUCT_BANNER"),
     showCancelButton: true,
-    confirmButtonText: "Yes, hide",
-    confirmButtonColor: "#4d9be9",
+    confirmButtonText: __("YES_HIDE"),
+    cancelButtonText: __("CANCEL"),
+    confirmButtonColor: "#2562c4",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
   });
 
   if (result.isConfirmed) {
-    router.post(
+    router.patch(
       route("seller.product-banners.hide", {
-        id: showProductBannerId,
-        page: params.page,
-        per_page: params.per_page,
-      })
+        seller_product_banner: showProductBannerId,
+        search: usePage().props.ziggy.query?.search,
+        page: usePage().props.ziggy.query?.page,
+        per_page: usePage().props.ziggy.query?.per_page,
+        sort: params.sort,
+        direction: params.direction,
+        created_from: usePage().props.ziggy.query?.created_from,
+        created_until: usePage().props.ziggy.query?.created_until,
+      }),
+      {},
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: __(usePage().props.flash.successMessage),
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
-const handleDelete = async (productBannerId) => {
+// Handle Delete Banner
+const handleDeleteProductBanner = async (productBannerId) => {
   const result = await swal({
-    icon: "warning",
-    title: "Are you sure you want to delete this product banner?",
-    text: "You will be able to restore this product banner in the trash!",
+    icon: "question",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_PRODUCT_BANNER"),
+    text: __("YOU_WILL_BE_ABLE_TO_RESTORE_THIS_PRODUCT_BANNER_IN_THE_TRASH"),
     showCancelButton: true,
-    confirmButtonText: "Yes, delete it!",
-    confirmButtonColor: "#ef4444",
+    confirmButtonText: __("YES_DELETE_IT"),
+    cancelButtonText: __("CANCEL"),
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -175,34 +171,45 @@ const handleDelete = async (productBannerId) => {
   if (result.isConfirmed) {
     router.delete(
       route("seller.product-banners.destroy", {
-        vendor_product_banner: productBannerId,
-        page: params.page,
-        per_page: params.per_page,
-      })
+        seller_product_banner: productBannerId,
+        search: usePage().props.ziggy.query?.search,
+        page: usePage().props.ziggy.query?.page,
+        per_page: usePage().props.ziggy.query?.per_page,
+        sort: params.sort,
+        direction: params.direction,
+        created_from: usePage().props.ziggy.query?.created_from,
+        created_until: usePage().props.ziggy.query?.created_until,
+      }),
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: __(usePage().props.flash.successMessage),
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
 if (usePage().props.flash.successMessage) {
   swal({
     icon: "success",
-    title: usePage().props.flash.successMessage,
+    title: __(usePage().props.flash.successMessage),
   });
 }
 </script>
 
 <template>
   <SellerDashboardLayout>
-    <Head title="Product Banners" />
+    <Head :title="__('PRODUCT_BANNERS')" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -221,243 +228,163 @@ if (usePage().props.flash.successMessage) {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Product Banners</span
               >
+                {{ __("PRODUCT_BANNERS") }}
+              </span>
             </div>
           </li>
         </Breadcrumb>
-        <div>
-          <Link
-            as="button"
-            :href="route('seller.product-banners.trash')"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
-          >
-            <i class="fa-solid fa-trash"></i>
 
-            Trash
-          </Link>
+        <!-- Trash Button -->
+        <div>
+          <TrashButton href="seller.product-banners.trash" />
         </div>
       </div>
 
       <div class="mb-5 flex items-center justify-between">
-        <Link
-          :href="route('seller.product-banners.create')"
-          :data="{
-            per_page: params.per_page,
-          }"
-          class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700"
-        >
-          <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
-          Add Product Banner</Link
-        >
-        <div class="flex items-center">
-          <form class="w-[350px] relative">
-            <input
-              type="text"
-              class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-              placeholder="Search"
-              v-model="params.search"
-            />
+        <!-- Create Product Banner Button -->
+        <div>
+          <CreateButton
+            href="seller.product-banners.create"
+            name="ADD_PRODUCT_BANNER"
+          />
+        </div>
 
-            <i
-              v-if="params.search"
-              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-              @click="handleSearchBox"
-            ></i>
-          </form>
+        <div class="flex items-center">
+          <!-- Search Box -->
+          <DashboardSearchInputForm
+            href="seller.product-banners.index"
+            placeholder="SEARCH_BY_URL"
+          />
+
+          <!-- Perpage Select Box -->
           <div class="ml-5">
-            <select
-              class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-              v-model="params.per_page"
-            >
-              <option value="" disabled>Select</option>
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="75">75</option>
-              <option value="100">100</option>
-            </select>
+            <DashboardPerPageSelectBox href="seller.product-banners.index" />
           </div>
+
+          <!-- Filter By Date -->
+          <DashboardFilterByCreatedDate href="seller.product-banners.index" />
         </div>
       </div>
 
+      <!-- Product Banner Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="id" />
           </HeaderTh>
-          <HeaderTh> Image </HeaderTh>
+
+          <HeaderTh> {{ __("IMAGE") }} </HeaderTh>
 
           <HeaderTh @click="updateSorting('url')">
-            URL
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'url',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'url',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'url',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'url',
-              }"
-            ></i>
+            {{ __("URL") }}
+            <SortingArrows :params="params" sort="url" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('status')">
-            Status
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'status',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'status',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'status',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'status',
-              }"
-            ></i>
+            {{ __("STATUS") }}
+            <SortingArrows :params="params" sort="status" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('created_at')">
-            Created At
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'created_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'created_at',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'created_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'created_at',
-              }"
-            ></i>
+            {{ __("CREATED_DATE") }}
+            <SortingArrows :params="params" sort="created_at" />
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+
+          <HeaderTh>
+            {{ __("ACTION") }}
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="sellerProductBanners.data.length">
           <Tr
-            v-for="sellerProductBanner in sellerProductBanners.data"
-            :key="sellerProductBanner.id"
+            v-for="productBanner in sellerProductBanners.data"
+            :key="productBanner.id"
           >
-            <BodyTh>{{ sellerProductBanner.id }}</BodyTh>
+            <BodyTh>
+              {{ productBanner.id }}
+            </BodyTh>
             <Td>
-              <img
-                :src="sellerProductBanner.image"
-                class="h-[50px] rounded-sm object-cover shadow-lg ring-2 ring-slate-300"
-                alt=""
-              />
+              <img :src="productBanner.image" class="image" />
             </Td>
-            <Td>{{ sellerProductBanner.url }}</Td>
+
             <Td>
-              <ActiveStatus v-if="sellerProductBanner.status == 'show'">
-                {{ sellerProductBanner.status }}
+              {{ productBanner.url }}
+            </Td>
+
+            <Td>
+              <ActiveStatus v-if="productBanner.status == 'show'">
+                {{ productBanner.status }}
               </ActiveStatus>
-              <InactiveStatus v-if="sellerProductBanner.status == 'hide'">
-                {{ sellerProductBanner.status }}
+              <InactiveStatus v-if="productBanner.status == 'hide'">
+                {{ productBanner.status }}
               </InactiveStatus>
             </Td>
-            <Td>{{ sellerProductBanner.created_at }}</Td>
+
             <Td>
+              {{ productBanner.created_at }}
+            </Td>
+
+            <Td class="w-[450px] flex items-center">
+              <!-- Show Button -->
               <button
-                v-if="sellerProductBanner.status == 'hide'"
-                @click="handleShow(sellerProductBanner.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-emerald-600 text-white hover:bg-emerald-700 mr-3 my-1"
+                v-if="productBanner.status == 'hide'"
+                @click="handleShow(productBanner.id)"
+                class="text-sm px-5 py-2 border-[3px] border-green-700 font-semibold rounded-[4px] shadow-md bg-green-600 text-white transition-all hover:bg-green-700 mr-3 my-1 group"
+                type="button"
               >
-                <i class="fa-solid fa-eye"></i>
-                Show
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-eye"></i>
+                  {{ __("SHOW") }}
+                </span>
               </button>
+
+              <!-- Hide Button -->
               <button
-                v-if="sellerProductBanner.status == 'show'"
-                @click="handleHide(sellerProductBanner.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-orange-600 text-white hover:bg-orange-700 mr-3 my-1"
+                v-if="productBanner.status == 'show'"
+                @click="handleHide(productBanner.id)"
+                class="text-sm px-5 py-2 border-[3px] border-orange-700 font-semibold rounded-[4px] shadow-md bg-orange-600 text-white transition-all hover:bg-orange-700 mr-3 my-1 group"
+                type="button"
               >
-                <i class="fa-solid fa-eye-slash"></i>
-                Hide
+                <span class="group-hover:animate-pulse">
+                  <i class="fa-solid fa-eye-slash"></i>
+                  {{ __("HIDE") }}
+                </span>
               </button>
-              <Link
-                as="button"
-                :href="
-                  route('seller.product-banners.edit', sellerProductBanner.id)
-                "
-                :data="{
-                  page: params.page,
-                  per_page: params.per_page,
-                }"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
-              >
-                <i class="fa-solid fa-edit"></i>
-                Edit
-              </Link>
-              <button
-                @click="handleDelete(sellerProductBanner.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
-              >
-                <i class="fa-solid fa-xmark"></i>
-                Delete
-              </button>
+
+              <!-- Edit Button -->
+              <div>
+                <EditButton
+                  href="seller.product-banners.edit"
+                  :id="productBanner.id"
+                />
+              </div>
+
+              <!-- Delete Button -->
+              <div>
+                <DeleteButton
+                  @click="handleDeleteProductBanner(productBanner.id)"
+                />
+              </div>
             </Td>
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Product Banner Table End -->
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!sellerProductBanners.data.length" />
 
-      <Pagination class="mt-6" :links="sellerProductBanners.links" />
+      <!-- Pagination -->
+      <div v-if="sellerProductBanners.data.length" class="mt-6">
+        <p class="text-center text-sm text-gray-600 mb-3 font-bold">
+          Showing {{ sellerProductBanners.from }} -
+          {{ sellerProductBanners.to }} of
+          {{ sellerProductBanners.total }}
+        </p>
+        <Pagination :links="sellerProductBanners.links" />
+      </div>
     </div>
   </SellerDashboardLayout>
 </template>

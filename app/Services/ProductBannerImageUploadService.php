@@ -13,9 +13,9 @@ class ProductBannerImageUploadService
 {
     public function createImage(UploadedFile $image): string
     {
-        $originalName=$image->getClientOriginalName();
+        $originalName = $image->getClientOriginalName();
 
-        $finalName=time()."-".$originalName;
+        $finalName = time()."-".$originalName;
 
         $image->move(storage_path("app/public/product-banners/"), $finalName);
 
@@ -29,49 +29,13 @@ class ProductBannerImageUploadService
             ProductBanner::deleteImage($productBannerImage);
         }
 
-        $originalName=$image->getClientOriginalName();
+        $originalName = $image->getClientOriginalName();
 
-        $finalName=time()."-".$originalName;
+        $finalName = time()."-".$originalName;
 
         $image->move(storage_path("app/public/product-banners/"), $finalName);
 
         return $finalName;
     }
 
-    // public function updateImageForVendor(UploadedFile $image, string $sellerProductBannerImage): string
-    // {
-    //     if(is_string($sellerProductBannerImage)) {
-
-    //         SellerProductBanner::deleteImage($sellerProductBannerImage);
-    //     }
-
-    //     $originalName=$image->getClientOriginalName();
-
-    //     $finalName=time()."-".$originalName;
-
-    //     $image->move(storage_path("app/public/product-banners/"), $finalName);
-
-    //     return $finalName;
-    //     // if ($request->hasFile("image")) {
-    //     //     $request->validate([
-    //     //         "image"=>["required","image","mimes:png,jpg,jpeg,svg,webp,gif"]
-    //     //     ]);
-
-    //     //     VendorProductBanner::deleteImage($vendorProductBanner);
-
-    //     //     $file=$request->file("image");
-
-    //     //     /** @var \Illuminate\Http\UploadedFile $file */
-
-    //     //     $originalName=$file->getClientOriginalName();
-    //     //     $extension=$file->extension();
-    //     //     $finalName= Str::slug(pathinfo($originalName, PATHINFO_FILENAME), '-')."."."$extension";
-
-    //     //     $file->move(storage_path("app/public/product-banners/"), $finalName);
-
-    //     //     return $finalName;
-    //     // } else {
-    //     //     return $vendorProductBanner->image;
-    //     // }
-    // }
 }

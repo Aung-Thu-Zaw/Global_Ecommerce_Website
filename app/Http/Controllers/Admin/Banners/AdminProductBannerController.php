@@ -25,14 +25,14 @@ class AdminProductBannerController extends Controller
                                        ->paginate(request("per_page", 10))
                                        ->appends(request()->all());
 
-        return inertia("Admin/Banners/Product-Banners/Index", compact("productBanners"));
+        return inertia("Admin/Banners/ProductBanners/Index", compact("productBanners"));
     }
 
     public function create(): Response|ResponseFactory
     {
         $per_page = request("per_page");
 
-        return inertia("Admin/Banners/Product-Banners/Create", compact("per_page"));
+        return inertia("Admin/Banners/ProductBanners/Create", compact("per_page"));
     }
 
     public function store(ProductBannerRequest $request): RedirectResponse
@@ -46,7 +46,7 @@ class AdminProductBannerController extends Controller
     {
         $queryStringParams = $this->getQueryStringParams($request);
 
-        return inertia("Admin/Banners/Product-Banners/Edit", compact("productBanner", "queryStringParams"));
+        return inertia("Admin/Banners/ProductBanners/Edit", compact("productBanner", "queryStringParams"));
     }
 
     public function update(ProductBannerRequest $request, ProductBanner $productBanner): RedirectResponse
@@ -71,7 +71,7 @@ class AdminProductBannerController extends Controller
                                             ->paginate(request("per_page", 10))
                                             ->appends(request()->all());
 
-        return inertia("Admin/Banners/Product-Banners/Trash", compact("trashProductBanners"));
+        return inertia("Admin/Banners/ProductBanners/Trash", compact("trashProductBanners"));
     }
 
     public function restore(Request $request, int $trashProductBannerId): RedirectResponse

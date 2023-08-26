@@ -70,11 +70,11 @@ Route::middleware(["seller","user.role:seller"])
                   Route::post("/{seller_product_banner}", "update")->name("update");
                   Route::delete("/{seller_product_banner}", "destroy")->name("destroy");
                   Route::get("/trash", "trash")->name("trash");
-                  Route::post("/trash/{seller_product_banner}/restore", "restore")->name("restore");
-                  Route::delete("/trash/{seller_product_banner}/force-delete", "forceDelete")->name("force.delete");
-                  Route::delete("/trash/permanently-delete", "permanentlyDelete")->name("permanently.delete");
-                  Route::post("/{seller_product_banner}/show", "handleShow")->name("show");
-                  Route::post("/{seller_product_banner}/hide", "handleHide")->name("hide");
+                  Route::post("/trash/{trash_seller_product_banner_id}/restore", "restore")->name("trash.restore");
+                  Route::delete("/trash/{trash_seller_product_banner_id}/force-delete", "forceDelete")->name("trash.force.delete");
+                  Route::delete("/trash/permanently-delete", "permanentlyDelete")->name("trash.permanently.delete");
+                  Route::patch("/{seller_product_banner}/show", "handleShow")->name("show");
+                  Route::patch("/{seller_product_banner}/hide", "handleHide")->name("hide");
               });
 
          // Seller Orders

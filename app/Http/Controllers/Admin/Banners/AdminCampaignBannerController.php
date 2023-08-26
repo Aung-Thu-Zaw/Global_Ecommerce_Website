@@ -27,14 +27,14 @@ class AdminCampaignBannerController extends Controller
                                          ->appends(request()->all());
 
 
-        return inertia("Admin/Banners/Campaign-Banners/Index", compact("campaignBanners"));
+        return inertia("Admin/Banners/CampaignBanners/Index", compact("campaignBanners"));
     }
 
     public function create(): Response|ResponseFactory
     {
         $per_page = request("per_page");
 
-        return inertia("Admin/Banners/Campaign-Banners/Create", compact("per_page"));
+        return inertia("Admin/Banners/CampaignBanners/Create", compact("per_page"));
     }
 
     public function store(CampaignBannerRequest $request): RedirectResponse
@@ -48,7 +48,7 @@ class AdminCampaignBannerController extends Controller
     {
         $queryStringParams = $this->getQueryStringParams($request);
 
-        return inertia("Admin/Banners/Campaign-Banners/Edit", compact("campaignBanner", "queryStringParams"));
+        return inertia("Admin/Banners/CampaignBanners/Edit", compact("campaignBanner", "queryStringParams"));
     }
 
     public function update(CampaignBannerRequest $request, CampaignBanner $campaignBanner): RedirectResponse
@@ -73,7 +73,7 @@ class AdminCampaignBannerController extends Controller
                                               ->paginate(request("per_page", 10))
                                               ->appends(request()->all());
 
-        return inertia("Admin/Banners/Campaign-Banners/Trash", compact("trashCampaignBanners"));
+        return inertia("Admin/Banners/CampaignBanners/Trash", compact("trashCampaignBanners"));
     }
 
     public function restore(Request $request, int $trashCampaignBannerId): RedirectResponse

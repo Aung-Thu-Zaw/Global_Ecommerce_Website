@@ -1,78 +1,40 @@
 <script setup>
-import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import Tr from "@/Components/Table/Tr.vue";
-import Td from "@/Components/Table/Td.vue";
+import SellerDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/BannerBreadcrumb.vue";
+import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
+import RestoreButton from "@/Components/Buttons/RestoreButton.vue";
+import DeleteForeverButton from "@/Components/Buttons/DeleteForeverButton.vue";
+import EmptyTrashButton from "@/Components/Buttons/EmptyTrashButton.vue";
+import DashboardSearchInputForm from "@/Components/Forms/DashboardSearchInputForm.vue";
+import DashboardPerPageSelectBox from "@/Components/Forms/DashboardPerPageSelectBox.vue";
+import DashboardFilterByDeletedDate from "@/Components/Forms/DashboardFilterByDeletedDate.vue";
+import SortingArrows from "@/Components/Table/SortingArrows.vue";
+import TableContainer from "@/Components/Table/TableContainer.vue";
+import TableHeader from "@/Components/Table/TableHeader.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
-import TableHeader from "@/Components/Table/TableHeader.vue";
-import TableContainer from "@/Components/Table/TableContainer.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/BannerBreadcrumb.vue";
+import Tr from "@/Components/Table/Tr.vue";
+import Td from "@/Components/Table/Td.vue";
+import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import SellerDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
-import { inject, reactive, watch } from "vue";
-import { router, Link, Head, usePage } from "@inertiajs/vue3";
+import { __ } from "@/Translations/translations-inside-setup.js";
+import { reactive, inject, computed, ref } from "vue";
+import { router, Head, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
   trashSellerProductBanners: Object,
 });
 
+// Define Variables
 const swal = inject("$swal");
 
+// Query String Parameteres
 const params = reactive({
-  search: null,
-  page: props.trashSellerProductBanners.current_page
-    ? props.trashSellerProductBanners.current_page
-    : 1,
-  per_page: props.trashSellerProductBanners.per_page
-    ? props.trashSellerProductBanners.per_page
-    : 10,
-  sort: "id",
-  direction: "desc",
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
 });
 
-const handleSearchBox = () => {
-  params.search = "";
-};
-
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("seller.product-banners.trash"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("seller.product-banners.trash"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
+// Update Sorting Table Column
 const updateSorting = (sort = "id") => {
   params.sort = sort;
   params.direction = params.direction === "asc" ? "desc" : "asc";
@@ -80,23 +42,31 @@ const updateSorting = (sort = "id") => {
   router.get(
     route("seller.product-banners.trash"),
     {
-      search: params.search,
-      page: params.page,
-      per_page: params.per_page,
+      search: usePage().props.ziggy.query?.search,
+      page: usePage().props.ziggy.query?.page,
+      per_page: usePage().props.ziggy.query?.per_page,
       sort: params.sort,
       direction: params.direction,
+      deleted_from: usePage().props.ziggy.query?.deleted_from,
+      deleted_until: usePage().props.ziggy.query?.deleted_until,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
-const handleRestore = async (trashBannerId) => {
+// Handle Trash Product Banner Restore
+const handleRestoreTrashProductBanner = async (trashBannerProductId) => {
   const result = await swal({
-    icon: "info",
-    title: "Are you sure you want to restore this product banner?",
+    icon: "question",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_PRODUCT_BANNER"),
     showCancelButton: true,
-    confirmButtonText: "Yes, restore",
-    confirmButtonColor: "#4d9be9",
+    confirmButtonText: __("YES_RESTORE_IT"),
+    cancelButtonText: __("CANCEL"),
+    confirmButtonColor: "#2562c4",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -104,29 +74,45 @@ const handleRestore = async (trashBannerId) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("seller.product-banners.restore", {
-        id: trashBannerId,
-        page: params.page,
-        per_page: params.per_page,
-      })
+      route("seller.product-banners.trash.restore", {
+        trash_seller_product_banner_id: trashBannerProductId,
+        search: usePage().props.ziggy.query?.search,
+        page: usePage().props.ziggy.query?.page,
+        per_page: usePage().props.ziggy.query?.per_page,
+        sort: params.sort,
+        direction: params.direction,
+        deleted_from: usePage().props.ziggy.query?.deleted_from,
+        deleted_until: usePage().props.ziggy.query?.deleted_until,
+      }),
+      {},
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: __(usePage().props.flash.successMessage),
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
-const handleDelete = async (trashBannerId) => {
+// Handle Trash Product Banner Delete
+const handleDeleteTrashProductBanner = async (trashBannerProductId) => {
   const result = await swal({
-    icon: "warning",
-    title: "Are you sure you want to delete it from the trash?",
-    text: "Product Banner in the trash will be permanetly deleted! You can't get it back.",
+    icon: "question",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_IT_FROM_THE_TRASH"),
+    text: __(
+      "PRODUCT_BANNER_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK"
+    ),
     showCancelButton: true,
-    confirmButtonText: "Yes, delete it !",
-    confirmButtonColor: "#ef4444",
+    confirmButtonText: __("YES_DELETE_IT"),
+    cancelButtonText: __("CANCEL"),
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -134,57 +120,83 @@ const handleDelete = async (trashBannerId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("seller.product-banners.forceDelete", {
-        id: trashBannerId,
-        page: params.page,
-        per_page: params.per_page,
-      })
+      route("seller.product-banners.trash.force.delete", {
+        trash_seller_product_banner_id: trashBannerProductId,
+        search: usePage().props.ziggy.query?.search,
+        page: usePage().props.ziggy.query?.page,
+        per_page: usePage().props.ziggy.query?.per_page,
+        sort: params.sort,
+        direction: params.direction,
+        deleted_from: usePage().props.ziggy.query?.deleted_from,
+        deleted_until: usePage().props.ziggy.query?.deleted_until,
+      }),
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: __(usePage().props.flash.successMessage),
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
-const handlePermanentlyDelete = async () => {
+// Handle Trash Product Banner Delete Permanently
+const handlePermanentlyDeleteProductBanners = async () => {
   const result = await swal({
-    icon: "warning",
-    title: "Are you sure you want to delete it from the trash?",
-    text: "All product banners in the trash will be permanetly deleted! You can't get it back.",
+    icon: "question",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_IT_FROM_THE_TRASH"),
+    text: __(
+      "ALL_PRODUCT_BANNERS_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK"
+    ),
     showCancelButton: true,
-    confirmButtonText: "Yes, delete it !",
-    confirmButtonColor: "#ef4444",
+    confirmButtonText: __("YES_DELETE_IT"),
+    cancelButtonText: __("CANCEL"),
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
   });
 
   if (result.isConfirmed) {
-    router.get(
-      route("seller.product-banners.permanentlyDelete", {
-        page: params.page,
-        per_page: params.per_page,
-      })
+    router.delete(
+      route("seller.product-banners.trash.permanently.delete", {
+        search: usePage().props.ziggy.query?.search,
+        page: usePage().props.ziggy.query?.page,
+        per_page: usePage().props.ziggy.query?.per_page,
+        sort: params.sort,
+        direction: params.direction,
+        deleted_from: usePage().props.ziggy.query?.deleted_from,
+        deleted_until: usePage().props.ziggy.query?.deleted_until,
+      }),
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: __(usePage().props.flash.successMessage),
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 </script>
 
 <template>
   <SellerDashboardLayout>
-    <Head title="Trash Product Banners" />
+    <Head :title="__('TRASH_PRODUCT_BANNERS')" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -203,8 +215,9 @@ const handlePermanentlyDelete = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Product Banners</span
               >
+                {{ __("PRODUCT_BANNERS") }}
+              </span>
             </div>
           </li>
           <li aria-current="page">
@@ -224,145 +237,75 @@ const handlePermanentlyDelete = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Trash</span
               >
+                {{ __("TRASH") }}
+              </span>
             </div>
           </li>
         </Breadcrumb>
 
+        <!-- Go Back Button -->
         <div>
-          <Link
-            :href="route('seller.product-banners.index')"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
-          >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
-          </Link>
+          <GoBackButton
+            href="seller.product-banners.index"
+            :queryStringParams="{
+              page: 1,
+              per_page: 10,
+              sort: 'id',
+              direction: 'desc',
+            }"
+          />
         </div>
       </div>
 
       <div class="flex items-center justify-end mb-5">
-        <form class="w-[350px] relative">
-          <input
-            type="text"
-            class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-            placeholder="Search"
-            v-model="params.search"
-          />
-
-          <i
-            v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-            @click="handleSearchBox"
-          ></i>
-        </form>
+        <!-- Search Box -->
+        <DashboardSearchInputForm
+          href="seller.product-banners.trash"
+          placeholder="SEARCH_BY_URL"
+        />
+        <!-- Perpage Select Box -->
         <div class="ml-5">
-          <select
-            class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-            v-model="params.per_page"
-          >
-            <option value="" selected disabled>Select</option>
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="75">75</option>
-            <option value="100">100</option>
-          </select>
+          <DashboardPerPageSelectBox href="seller.product-banners.trash" />
         </div>
+
+        <!-- Filter By Date -->
+        <DashboardFilterByDeletedDate href="seller.product-banners.trash" />
       </div>
 
       <p class="text-left text-sm font-bold mb-2 text-warning-600">
-        Product Banners in the Trash will be automatically deleted after 60
-        days.
-        <button
-          @click="handlePermanentlyDelete"
-          class="text-primary-500 rounded-md px-2 py-1 hover:bg-primary-200 hover:text-primary-600 transition-all hover:animate-bounce"
-        >
-          Empty the trash now
-        </button>
+        {{
+          __(
+            "PRODUCT_BANNERS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS"
+          )
+        }}
+
+        <EmptyTrashButton @click="handlePermanentlyDeleteProductBanners" />
       </p>
 
+      <!-- Trash Product Banner Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="id" />
           </HeaderTh>
-          <HeaderTh> Image </HeaderTh>
+
+          <HeaderTh> {{ __("IMAGE") }} </HeaderTh>
 
           <HeaderTh @click="updateSorting('url')">
-            URL
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'url',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'url',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'url',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'url',
-              }"
-            ></i>
+            {{ __("URL") }}
+            <SortingArrows :params="params" sort="url" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('deleted_at')">
-            Deleted At
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'deleted_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'deleted_at',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'deleted_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'deleted_at',
-              }"
-            ></i>
+            {{ __("DELETED_DATE") }}
+            <SortingArrows :params="params" sort="deleted_at" />
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+
+          <HeaderTh>
+            {{ __("ACTION") }}
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="trashSellerProductBanners.data.length">
@@ -370,39 +313,58 @@ const handlePermanentlyDelete = async () => {
             v-for="trashSellerProductBanner in trashSellerProductBanners.data"
             :key="trashSellerProductBanner.id"
           >
-            <BodyTh>{{ trashSellerProductBanner.id }}</BodyTh>
+            <BodyTh>
+              {{ trashSellerProductBanner.id }}
+            </BodyTh>
+
             <Td>
-              <img
-                :src="trashSellerProductBanner.image"
-                class="h-[50px] rounded-sm object-cover shadow-lg ring-2 ring-slate-300"
-                alt=""
-              />
+              <img :src="trashSellerProductBanner.image" class="image" />
             </Td>
-            <Td>{{ trashSellerProductBanner.url }}</Td>
-            <Td>{{ trashSellerProductBanner.deleted_at }}</Td>
+
             <Td>
-              <button
-                @click="handleRestore(trashSellerProductBanner.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
-              >
-                <i class="fa-solid fa-recycle"></i>
-                Restore
-              </button>
-              <button
-                @click="handleDelete(trashSellerProductBanner.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
-              >
-                <i class="fa-solid fa-trash"></i>
-                Delete Forever
-              </button>
+              {{ trashSellerProductBanner.url }}
+            </Td>
+
+            <Td>
+              {{ trashSellerProductBanner.deleted_at }}
+            </Td>
+
+            <Td class="flex items-center">
+              <!-- Restore Button -->
+              <div>
+                <RestoreButton
+                  @click="
+                    handleRestoreTrashProductBanner(trashSellerProductBanner.id)
+                  "
+                />
+              </div>
+
+              <!-- Delete Button -->
+              <div>
+                <DeleteForeverButton
+                  @click="
+                    handleDeleteTrashProductBanner(trashSellerProductBanner.id)
+                  "
+                />
+              </div>
             </Td>
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Trash Product Banner Table End -->
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!trashSellerProductBanners.data.length" />
 
-      <Pagination class="mt-6" :links="trashSellerProductBanners.links" />
+      <!-- Pagination -->
+      <div v-if="trashSellerProductBanners.data.length" class="mt-6">
+        <p class="text-center text-sm text-gray-600 mb-3 font-bold">
+          Showing {{ trashSellerProductBanners.from }} -
+          {{ trashSellerProductBanners.to }} of
+          {{ trashSellerProductBanners.total }}
+        </p>
+        <Pagination :links="trashSellerProductBanners.links" />
+      </div>
     </div>
   </SellerDashboardLayout>
 </template>

@@ -15,10 +15,10 @@ class UpdateSellerProductBannerAction
         $image = isset($data["image"]) ? (new ProductBannerImageUploadService())->updateImage($data["image"], $sellerProductBanner->image) : $sellerProductBanner->image;
 
         $sellerProductBanner->update([
-            "seller_id"=>$data["seller_id"],
-            "url"=>$data["url"],
-            "status"=>$data["status"],
-            "image"=>$image
+            "seller_id" => $data["seller_id"],
+            "url" => $data["url"],
+            "status" => $data["status"],
+            "image" => $image
         ]);
     }
 }

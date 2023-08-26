@@ -1,61 +1,47 @@
 <script setup>
 import SellerDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/BannerBreadcrumb.vue";
+import { Link, useForm, Head, usePage } from "@inertiajs/vue3";
+import { useReCaptcha } from "vue-recaptcha-v3";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
-import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
-import SaveButton from "@/Components/Buttons/SaveButton.vue";
-import { usePage, useForm, Head } from "@inertiajs/vue3";
-import { useReCaptcha } from "vue-recaptcha-v3";
+import FormButton from "@/Components/Buttons/FormButton.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/BannerBreadcrumb.vue";
 import { ref } from "vue";
 
-// Define the props
 const props = defineProps({
-  per_page: String,
+  paginate: Array,
+  vendorProductBanner: Object,
 });
 
-// Define Variables
-const processing = ref(false);
 const previewPhoto = ref("");
-
-// Handle Preview Image
 const getPreviewPhotoPath = (path) => {
   previewPhoto.value.src = URL.createObjectURL(path);
 };
 
-// Slider Banner Create Form Data
 const form = useForm({
-  seller_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
-  image: "",
-  url: "",
-  status: "hide",
+  user_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
+  url: props.vendorProductBanner.url,
+  image: props.vendorProductBanner.image,
   captcha_token: null,
 });
 
-// Destructing ReCaptcha
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
-
-// Handle Create Slider Banner
-const handleCreateProductBanner = async () => {
+const handleEditVendorProductBanner = async () => {
   await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("create_product_banner");
+  form.captcha_token = await executeRecaptcha("edit_product_banner");
+  submit();
+};
 
-  processing.value = true;
-
+const submit = () => {
   form.post(
-    route("seller.product-banners.store", {
-      page: 1,
-      per_page: props.per_page,
-      sort: "id",
-      direction: "desc",
+    route("vendor.product-banners.update", {
+      vendor_product_banner: props.vendorProductBanner.id,
+      page: props.paginate.page,
+      per_page: props.paginate.per_page,
     }),
     {
-      replace: true,
-      preserveState: true,
-      onFinish: () => {
-        processing.value = false;
-      },
+      onFinish: () => form.reset(),
     }
   );
 };
@@ -63,10 +49,9 @@ const handleCreateProductBanner = async () => {
 
 <template>
   <SellerDashboardLayout>
-    <Head :title="__('CREATE_PRODUCT_BANNER')" />
+    <Head title="Edit Product Banner" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
-        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -85,9 +70,8 @@ const handleCreateProductBanner = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                >Product Banners</span
               >
-                {{ __("PRODUCT_BANNERS") }}
-              </span>
             </div>
           </li>
           <li aria-current="page">
@@ -107,38 +91,37 @@ const handleCreateProductBanner = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                >Edit</span
               >
-                {{ __("CREATE") }}
-              </span>
             </div>
           </li>
         </Breadcrumb>
 
-        <!-- Go Back button -->
         <div>
-          <GoBackButton
-            href="seller.product-banners.index"
-            :queryStringParams="{
-              page: 1,
-              per_page: props.per_page,
-              sort: 'id',
-              direction: 'desc',
+          <Link
+            :href="route('vendor.product-banners.index')"
+            :data="{
+              page: props.paginate.page,
+              per_page: props.paginate.per_page,
             }"
-          />
+            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
+          >
+            <i class="fa-solid fa-arrow-left"></i>
+            Go Back
+          </Link>
         </div>
       </div>
 
       <div class="border shadow-md p-10">
-        <!-- Preview Image -->
         <div class="mb-6">
           <img
             ref="previewPhoto"
-            src="https://media.istockphoto.com/id/1357365823/vector/default-image-icon-vector-missing-picture-page-for-website-design-or-mobile-app-no-photo.jpg?s=612x612&w=0&k=20&c=PM_optEhHBTZkuJQLlCjLz-v3zzxp-1mpNQZsdjrbns="
-            class="preview-img"
+            :src="form.image"
+            alt=""
+            class="h-[100px] object-cover rounded-sm shadow-md my-3 ring-2 ring-slate-300"
           />
         </div>
-        <form @submit.prevent="handleCreateProductBanner">
-          <!-- Product Banner Url Input -->
+        <form @submit.prevent="handleEditVendorProductBanner">
           <div class="mb-6">
             <InputLabel for="url" value="URL *" />
 
@@ -148,38 +131,37 @@ const handleCreateProductBanner = async () => {
               class="mt-1 block w-full"
               v-model="form.url"
               required
-              :placeholder="__('ENTER_URL')"
+              placeholder="Enter Banner URL"
             />
 
             <InputError class="mt-2" :message="form.errors.url" />
           </div>
 
-          <!-- Product Banner File Input -->
           <div class="mb-6">
-            <InputLabel for="image" :value="__('IMAGE') + ' *'" />
+            <InputLabel for="image" value="Image *" />
 
             <input
-              class="file-input"
+              class="relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-neutral-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out file:-mx-3 file:-my-1.5 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-1.5 file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[margin-inline-end:0.75rem] file:[border-inline-end-width:1px] hover:file:bg-neutral-200 focus:border-primary focus:bg-white focus:text-neutral-700 focus:shadow-[0_0_0_1px] focus:shadow-primary focus:outline-none dark:bg-transparent dark:text-neutral-200 dark:focus:bg-transparent"
               type="file"
               id="image"
-              required
               @input="form.image = $event.target.files[0]"
               @change="getPreviewPhotoPath($event.target.files[0])"
             />
 
             <span class="text-xs text-gray-500">
-              SVG, PNG, JPG, JPEG, WEBP or GIF (Max File size : 5 MB)
+              SVG, PNG, JPG, JPEG, WEBP or GIF
             </span>
 
             <InputError class="mt-2" :message="form.errors.image" />
           </div>
 
-          <!-- Save Button -->
           <div class="mb-6">
-            <SaveButton :processing="processing" />
+            <FormButton>Update</FormButton>
           </div>
         </form>
       </div>
     </div>
   </SellerDashboardLayout>
 </template>
+
+

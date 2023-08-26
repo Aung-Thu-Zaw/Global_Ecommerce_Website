@@ -918,5 +918,6 @@
     "TRASH_SUGGESTIONS": "Trash Suggestions",
     "WEBSITE_FEEDBACK_DETAILS": "Website Feedback Details",
     "SUGGESTION_TYPE": "Suggestion Type",
-    "SUBCATEGORY": "SubCategory"
+    "SUBCATEGORY": "SubCategory",
+    "YOU_CANT_DISPLAY_THE_SELLER_PRODUCT_BANNER": "You can't display the product banner. Only 6 product banners are allowed."
 }

@@ -15,10 +15,10 @@ class CreateSellerProductBannerAction
         $image = isset($data["image"]) ? (new ProductBannerImageUploadService())->createImage($data["image"]) : null;
 
         SellerProductBanner::create([
-            "seller_id"=>$data["seller_id"],
-            "url"=>$data["url"],
-            "status"=>"hide",
-            "image"=>$image
+            "seller_id" => $data["seller_id"],
+            "url" => $data["url"],
+            "status" => "hide",
+            "image" => $image
         ]);
     }
 }

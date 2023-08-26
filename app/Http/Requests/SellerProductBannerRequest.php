@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\RecaptchaRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -24,10 +25,18 @@ class SellerProductBannerRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            "seller_id"=>["required","numeric",Rule::exists("users", "id")],
-            "url"=>["required","url"],
+        $rules = [
+          "seller_id" => ["required","numeric",Rule::exists("users", "id")],
+          "url" => ["required","url"],
+          "status" => ["required","string",Rule::in(["show","hide"])],
+          "captcha_token"  => ["required",new RecaptchaRule()],
         ];
+
+        if ($this->hasFile("image")) {
+            $rules["image"] = ["required","image","mimes:png,jpg,jpeg,svg,webp,gif","max:5120"];
+        }
+
+        return $rules;
     }
 
     /**
@@ -41,6 +50,14 @@ class SellerProductBannerRequest extends FormRequest
             "seller_id.exists" =>  "The selected seller id is invalid.",
             "url.required" =>  "The url is required.",
             "url.url" => "The url must be a valid URL.",
+            "status.required" => "The status field is required.",
+            "status.string" => "The status must be a string.",
+            "status.in" => "The selected status is invalid.",
+            "image.required" => "The image field is required.",
+            "image.image" => "The image must be an image.",
+            "image.mimes" => "The image must be a file of type: png,jpg,jpeg,svg,webp or gif.",
+            "image.max" => "The image must not be greater than 5120 kilobytes.'",
+            "captcha_token.required" => "The captcha token is required",
         ];
     }
 }
