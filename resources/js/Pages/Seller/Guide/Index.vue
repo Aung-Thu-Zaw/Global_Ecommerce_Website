@@ -21,13 +21,13 @@ const props = defineProps({
       <div
         id="accordion-color"
         data-accordion="collapse"
-        data-active-classes="bg-blue-100 dark:bg-gray-800 text-blue-600 dark:text-white"
+        data-active-classes="bg-blue-100  text-blue-600 "
       >
         <div v-for="guide in sellerDashboardGuides" :key="guide.id">
           <h2 :id="'accordion-color-heading-' + guide.id">
             <button
               type="button"
-              class="flex items-center justify-between w-full p-5 font-medium text-left text-gray-500 border border-gray-200 focus:ring-0 hover:bg-blue-100"
+              class="flex items-center justify-between w-full p-5 font-medium text-left text-gray-500 border border-gray-300 focus:ring-0 hover:bg-blue-100"
               :data-accordion-target="'#accordion-color-body-' + guide.id"
               aria-expanded="true"
               :aria-controls="'accordion-color-body-' + guide.id"

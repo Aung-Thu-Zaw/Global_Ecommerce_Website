@@ -44,7 +44,7 @@ const totalMessages = computed(() => {
     <div class="h-full flex flex-col items-center justify-center space-y-5">
       <!-- Notification -->
       <NotificationDropdownForUser
-        v-if="$page.props.auth.user && $page.props.auth.user.role !== 'admin'"
+        v-if="$page.props.auth.user && $page.props.auth.user.role === 'user'"
       />
 
       <!-- Chat box -->

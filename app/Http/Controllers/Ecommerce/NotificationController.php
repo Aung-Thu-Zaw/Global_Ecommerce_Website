@@ -4,18 +4,14 @@ namespace App\Http\Controllers\Ecommerce;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Services\ReadNotificationService;
 use Illuminate\Http\RedirectResponse;
 
 class NotificationController extends Controller
 {
     public function reatNotification(string $notificationId): RedirectResponse
     {
-        $user = User::findOrFail(auth()->id());
-
-        $notification = $user->notifications()->findOrFail($notificationId);
-
-        $notification->update(['read_at' => now()]);
+        (new ReadNotificationService())->read($notificationId);
 
         return back();
     }
@@ -26,14 +22,7 @@ class NotificationController extends Controller
             "notifications" => ["required", "array"]
         ]);
 
-        $user = User::findOrFail(auth()->id());
-
-        foreach($request->notifications as $notification) {
-
-            $notification = $user->notifications()->findOrFail($notification["id"]);
-
-            $notification->update(['read_at' => now()]);
-        }
+        (new ReadNotificationService())->readAll($request->notifications);
 
         return back();
     }

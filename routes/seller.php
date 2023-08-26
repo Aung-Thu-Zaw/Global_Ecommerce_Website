@@ -34,8 +34,8 @@ Route::middleware(["seller","user.role:seller"])
               ->prefix("/notifications")
               ->name("notifications.")
               ->group(function () {
-                  Route::post("/{notification_id}/read", "reatNotification")->name("read");
-                  Route::post("/read-all", "markAllAsRead")->name("read-all");
+                  Route::patch("/{notification_id}/read", "reatNotification")->name("read");
+                  Route::patch("/read-all", "markAllAsRead")->name("read-all");
               });
 
          // Seller Products Section

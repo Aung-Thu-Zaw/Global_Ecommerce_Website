@@ -66,8 +66,8 @@ Route::middleware(["admin","verified","user.role:admin"])
                 ->prefix("/notifications")
                 ->name("notifications.")
                 ->group(function () {
-                    Route::post("/{notification_id}/read", "reatNotification")->name("read");
-                    Route::post("/read-all", "markAllAsRead")->name("read-all");
+                    Route::patch("/{notification_id}/read", "reatNotification")->name("read");
+                    Route::patch("/read-all", "markAllAsRead")->name("read-all");
                 });
 
            // Dashboard Social Traffics

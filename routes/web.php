@@ -70,7 +70,7 @@ Route::controller(ProductController::class)
          Route::get('/{product}', "show")->name("show");
      });
 
-Route::post('/search/histories/{search_history}', [SearchHistoryController::class,"update"])->name("user.search.history.update");
+Route::patch('/search/histories/{search_history}', [SearchHistoryController::class,"update"])->name("user.search.history.update");
 
 Route::get("products", [SearchResultProductController::class,"index"])->name("product.search");
 
@@ -137,8 +137,8 @@ Route::middleware(["auth","verified"])->group(function () {
          ->prefix("/notifications")
          ->name("notifications.")
          ->group(function () {
-             Route::post("/{notification_id}/read", "reatNotification")->name("read");
-             Route::post("/read-all", "markAllAsRead")->name("read-all");
+             Route::patch("/{notification_id}/read", "reatNotification")->name("read");
+             Route::patch("/read-all", "markAllAsRead")->name("read-all");
          });
 
     Route::controller(CartController::class)
@@ -154,7 +154,7 @@ Route::middleware(["auth","verified"])->group(function () {
          ->name("cart-items.")
          ->group(function () {
              Route::post('/', "store")->name("store");
-             Route::post('/{cart_item}', "update")->name("update");
+             Route::patch('/{cart_item}', "update")->name("update");
              Route::delete('/{cart_item}', "destroy")->name("destroy");
          });
 
@@ -191,39 +191,39 @@ Route::middleware(["auth","verified"])->group(function () {
          });
 
     Route::controller(ProductQuestionController::class)
-         ->prefix("/products/ask-questions")
-         ->name("product.question.")
+         ->prefix("/products/questions/ask-questions")
+         ->name("products.questions.")
          ->group(function () {
-             Route::post("/", "storeQuestion")->name("store");
-             Route::post("/{question_id}/update", "updateQuestion")->name("update");
-             Route::post("/{question_id}/destroy", "destroyQuestion")->name("destroy");
+             Route::post("/", "store")->name("store");
+             Route::patch("/{product_question}/update", "update")->name("update");
+             Route::delete("/{product_question}/destroy", "destroy")->name("destroy");
          });
 
     Route::controller(ProductAnswerController::class)
-         ->prefix("/products/ask-questions/answer")
-         ->name("product.question.answer.")
+         ->prefix("/products/questions/answer")
+         ->name("product.questions.answer.")
          ->group(function () {
-             Route::post("/", "storeAnswer")->name("store");
-             Route::post("/{answer_id}/update", "updateAnswer")->name("update");
-             Route::post("/{answer_id}/destroy", "destroyAnswer")->name("destroy");
+             Route::post("/", "store")->name("store");
+             Route::patch("/{product_answer}/update", "update")->name("update");
+             Route::delete("/{product_answer}/destroy", "destroy")->name("destroy");
          });
 
     Route::controller(ProductReviewController::class)
          ->prefix("/products/reviews")
-         ->name("product.review.")
+         ->name("products.reviews.")
          ->group(function () {
-             Route::post("/", "storeReview")->name("store");
-             Route::post("/{review_id}/update", "updateReview")->name("update");
-             Route::post("/{review_id}/destroy", "destroyReview")->name("destroy");
+             Route::post("/", "store")->name("store");
+             Route::patch("/{product_review}/update", "update")->name("update");
+             Route::delete("/{product_review}/destroy", "destroy")->name("destroy");
          });
 
     Route::controller(ProductReviewReplyController::class)
          ->prefix("/products/reviews/reply")
-         ->name("product.review.reply.")
+         ->name("products.reviews.reply.")
          ->group(function () {
-             Route::post("/", "storeProductReviewReply")->name("store");
-             Route::post("/{reply_id}/update", "updateProductReviewReply")->name("update");
-             Route::post("/{reply_id}/destroy", "destroyProductReviewReply")->name("destroy");
+             Route::post("/", "store")->name("store");
+             Route::patch("/{reply}/update", "update")->name("update");
+             Route::delete("/{reply}/destroy", "destroy")->name("destroy");
          });
 
     Route::controller(ShopController::class)
@@ -238,20 +238,20 @@ Route::middleware(["auth","verified"])->group(function () {
 
     Route::controller(ShopReviewController::class)
          ->prefix("/shop/reviews")
-         ->name("shop.review.")
+         ->name("shop.reviews.")
          ->group(function () {
-             Route::post("/", "storeReview")->name("store");
-             Route::post("/{review_id}/update", "updateReview")->name("update");
-             Route::post("/{review_id}/destroy", "destroyReview")->name("destroy");
+             Route::post("/", "store")->name("store");
+             Route::patch("/{shop_review}/update", "update")->name("update");
+             Route::delete("/{shop_review}/destroy", "destroy")->name("destroy");
          });
 
     Route::controller(ShopReviewReplyController::class)
          ->prefix("/shop/reviews/reply")
-         ->name("shop.review.reply.")
+         ->name("shop.reviews.reply.")
          ->group(function () {
-             Route::post("/", "storeShopReviewReply")->name("store");
-             Route::post("/{reply_id}/update", "updateShopReviewReply")->name("update");
-             Route::post("/{reply_id}/destroy", "destroyShopReviewReply")->name("destroy");
+             Route::post("/", "store")->name("store");
+             Route::patch("/{reply}/update", "update")->name("update");
+             Route::delete("/{reply}/destroy", "destroy")->name("destroy");
          });
 
     Route::controller(MyOrderController::class)
@@ -280,8 +280,8 @@ Route::middleware(["auth","verified"])->group(function () {
          });
 
     Route::controller(MyWatchlistController::class)
-         ->prefix("/watchlist")
-         ->name("watchlist.")
+         ->prefix("/watchlists")
+         ->name("watchlists.")
          ->group(function () {
              Route::get('/', "index")->name("index");
              Route::post('/', "store")->name("store");
