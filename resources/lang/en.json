@@ -919,5 +919,7 @@
     "WEBSITE_FEEDBACK_DETAILS": "Website Feedback Details",
     "SUGGESTION_TYPE": "Suggestion Type",
     "SUBCATEGORY": "SubCategory",
-    "YOU_CANT_DISPLAY_THE_SELLER_PRODUCT_BANNER": "You can't display the product banner. Only 6 product banners are allowed."
+    "YOU_CANT_DISPLAY_THE_SELLER_PRODUCT_BANNER": "You can't display the product banner. Only 6 product banners are allowed.",
+    "PRODUCT_REVIEW_DETAILS": "Product Review Details",
+    "SHOP_REVIEW_DETAILS": "Shop Review Details"
 }

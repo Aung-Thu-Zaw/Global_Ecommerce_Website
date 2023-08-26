@@ -1,112 +1,64 @@
 <script setup>
-import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
+import SellerDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/ProductReviewBreadcrumb.vue";
+import PendingStatus from "@/Components/Status/PendingStatus.vue";
+import PublishedStatus from "@/Components/Status/PublishedStatus.vue";
+import UnpublishedStatus from "@/Components/Status/UnpublishedStatus.vue";
+import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
+import TrashButton from "@/Components/Buttons/TrashButton.vue";
+import DeleteButton from "@/Components/Buttons/DeleteButton.vue";
+import DetailButton from "@/Components/Buttons/DetailButton.vue";
+import DashboardSearchInputForm from "@/Components/Forms/DashboardSearchInputForm.vue";
+import DashboardPerPageSelectBox from "@/Components/Forms/DashboardPerPageSelectBox.vue";
+import DashboardFilterByCreatedDate from "@/Components/Forms/DashboardFilterByCreatedDate.vue";
 import SortingArrows from "@/Components/Table/SortingArrows.vue";
-import Tr from "@/Components/Table/Tr.vue";
-import Td from "@/Components/Table/Td.vue";
+import TableContainer from "@/Components/Table/TableContainer.vue";
+import TableHeader from "@/Components/Table/TableHeader.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
-import TableHeader from "@/Components/Table/TableHeader.vue";
-import TableContainer from "@/Components/Table/TableContainer.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/ProductReviewBreadcrumb.vue";
-import PublishedStatus from "@/Components/Status/PublishedStatus.vue";
-import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
+import Tr from "@/Components/Table/Tr.vue";
+import Td from "@/Components/Table/Td.vue";
+import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import SellerDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
-import { reactive, watch } from "vue";
-import { router, Link, Head, usePage } from "@inertiajs/vue3";
+import { __ } from "@/Translations/translations-inside-setup.js";
+import { inject, computed, ref, reactive } from "vue";
+import { router, Head, usePage } from "@inertiajs/vue3";
 
 // Define the props
 const props = defineProps({
   productReviews: Object,
 });
 
+// Define Variables
+const swal = inject("$swal");
+
 // Query String Parameteres
 const params = reactive({
-  search: usePage().props.ziggy.query?.search,
-  page: usePage().props.ziggy.query?.page,
-  per_page: usePage().props.ziggy.query?.per_page,
   sort: usePage().props.ziggy.query?.sort,
   direction: usePage().props.ziggy.query?.direction,
 });
-
-// Handle Search
-const handleSearch = () => {
-  router.get(
-    route("seller.product-reviews.index"),
-    {
-      search: params.search,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
-
-// Remove Search Param
-const removeSearch = () => {
-  params.search = "";
-  router.get(
-    route("seller.product-reviews.index"),
-    {
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
-
-// Handle Query String Parameter
-const handleQueryStringParameter = () => {
-  router.get(
-    route("seller.product-reviews.index"),
-    {
-      search: params.search,
-      page: params.page,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
-
-// Watching Search Box
-watch(
-  () => params.search,
-  () => {
-    if (params.search === "") {
-      removeSearch();
-    } else {
-      handleSearch();
-    }
-  }
-);
-
-// Watching Perpage Select Box
-watch(
-  () => params.per_page,
-  () => {
-    handleQueryStringParameter();
-  }
-);
 
 // Update Sorting Table Column
 const updateSorting = (sort = "id") => {
   params.sort = sort;
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
-  handleQueryStringParameter();
+  router.get(
+    route("seller.product-reviews.index"),
+    {
+      search: usePage().props.ziggy.query?.search,
+      page: usePage().props.ziggy.query?.page,
+      per_page: usePage().props.ziggy.query?.per_page,
+      sort: params.sort,
+      direction: params.direction,
+      created_from: usePage().props.ziggy.query?.created_from,
+      created_until: usePage().props.ziggy.query?.created_until,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 </script>
 
@@ -123,36 +75,22 @@ const updateSorting = (sort = "id") => {
       <div class="mb-5 flex items-center justify-between">
         <div class="flex items-center ml-auto">
           <!-- Search Box -->
-          <form class="w-[350px] relative">
-            <input
-              type="text"
-              class="search-input"
-              placeholder="Search by review text"
-              v-model="params.search"
-            />
-            <i
-              v-if="params.search"
-              class="fa-solid fa-xmark remove-search"
-              @click="removeSearch"
-            ></i>
-          </form>
+          <DashboardSearchInputForm
+            href="seller.product-reviews.index"
+            placeholder="SEARCH_BY_REVIEW"
+          />
 
           <!-- Perpage Select Box -->
           <div class="ml-5">
-            <select class="perpage-selectbox" v-model="params.per_page">
-              <option value="" disabled>Select</option>
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="75">75</option>
-              <option value="100">100</option>
-            </select>
+            <DashboardPerPageSelectBox href="seller.product-reviews.index" />
           </div>
+
+          <!-- Filter By Date -->
+          <DashboardFilterByCreatedDate href="seller.product-reviews.index" />
         </div>
       </div>
 
-      <!-- Product Review Table End -->
+      <!-- Product Review Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
@@ -160,23 +98,31 @@ const updateSorting = (sort = "id") => {
             <SortingArrows :params="params" sort="id" />
           </HeaderTh>
 
-          <HeaderTh> Product Name </HeaderTh>
-
-          <HeaderTh> Reviewer Name </HeaderTh>
+          <HeaderTh> {{ __("PRODUCT_NAME") }} </HeaderTh>
 
           <HeaderTh @click="updateSorting('review_text')">
-            Review Text
+            {{ __("REVIEW") }}
             <SortingArrows :params="params" sort="review_text" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('rating')">
-            Rating
+            {{ __("RATING") }}
             <SortingArrows :params="params" sort="rating" />
           </HeaderTh>
 
-          <HeaderTh>Status</HeaderTh>
+          <HeaderTh @click="updateSorting('status')">
+            {{ __("STATUS") }}
+            <SortingArrows :params="params" sort="status" />
+          </HeaderTh>
 
-          <HeaderTh> Action </HeaderTh>
+          <HeaderTh @click="updateSorting('created_at')">
+            {{ __("CREATED_DATE") }}
+            <SortingArrows :params="params" sort="created_at" />
+          </HeaderTh>
+
+          <HeaderTh>
+            {{ __("ACTION") }}
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="productReviews.data.length">
@@ -189,20 +135,14 @@ const updateSorting = (sort = "id") => {
             </BodyTh>
 
             <Td>
-              <span class="line-clamp-1 w-[300px]">
+              <span v-if="productReview.product" class="line-clamp-1 w-[150px]">
                 {{ productReview.product.name }}
               </span>
             </Td>
 
             <Td>
-              {{ productReview.user.name }}
-            </Td>
-
-            <Td>
-              <span
-                v-html="productReview.review_text"
-                class="line-clamp-1 w-[300px]"
-              >
+              <span class="line-clamp-1 w-[200px]">
+                {{ productReview.review_text }}
               </span>
             </Td>
 
@@ -211,33 +151,34 @@ const updateSorting = (sort = "id") => {
             </Td>
 
             <Td>
-              <PublishedStatus v-if="productReview.status === 1">
-                published
+              <PendingStatus v-if="productReview.status === 'pending'">
+                {{ productReview.status }}
+              </PendingStatus>
+              <PublishedStatus v-if="productReview.status === 'published'">
+                {{ productReview.status }}
               </PublishedStatus>
+              <UnpublishedStatus v-if="productReview.status === 'unpublished'">
+                {{ productReview.status }}
+              </UnpublishedStatus>
             </Td>
 
             <Td>
-              <Link
-                :href="route('seller.product-reviews.show', productReview.id)"
-                as="button"
-                :data="{
-                  page: params.page,
-                  per_page: params.per_page,
-                  sort: params.sort,
-                  direction: params.direction,
-                }"
-                class="detail-btn group"
-              >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-eye"></i>
-                  Details
-                </span>
-              </Link>
+              {{ productReview.created_at }}
+            </Td>
+
+            <Td class="flex items-center">
+              <!-- Detail Button -->
+              <div>
+                <DetailButton
+                  href="seller.product-reviews.show"
+                  :id="productReview.id"
+                />
+              </div>
             </Td>
           </Tr>
         </tbody>
       </TableContainer>
-      <!-- Product Review Table End -->
+      <!-- Product Review Review Table End -->
 
       <!-- No Data Row -->
       <NotAvaliableData v-if="!productReviews.data.length" />

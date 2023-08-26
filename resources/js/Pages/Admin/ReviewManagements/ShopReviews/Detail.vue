@@ -16,7 +16,7 @@ const props = defineProps({
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Shop Review Details" />
+    <Head :title="__('SHOP_REVIEW_DETAILS')" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">

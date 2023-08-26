@@ -2,8 +2,11 @@
 import SellerDashboardLayout from "@/Layouts/SellerDashboardLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ProductReviewBreadcrumb.vue";
 import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
+import PendingStatus from "@/Components/Status/PendingStatus.vue";
 import PublishedStatus from "@/Components/Status/PublishedStatus.vue";
-import { Link, Head } from "@inertiajs/vue3";
+import UnpublishedStatus from "@/Components/Status/UnpublishedStatus.vue";
+import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
+import { Head } from "@inertiajs/vue3";
 
 const props = defineProps({
   queryStringParams: Array,
@@ -13,7 +16,7 @@ const props = defineProps({
 
 <template>
   <SellerDashboardLayout>
-    <Head title="Product Review Details" />
+    <Head :title="__('PRODUCT_REVIEW_DETAILS')" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -58,29 +61,18 @@ const props = defineProps({
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Details</span
               >
+                {{ __("DETAILS") }}
+              </span>
             </div>
           </li>
         </Breadcrumb>
         <!-- Go Back Button -->
         <div>
-          <Link
-            as="button"
-            :href="route('seller.product-reviews.index')"
-            :data="{
-              page: props.queryStringParams.page,
-              per_page: props.queryStringParams.per_page,
-              sort: props.queryStringParams.sort,
-              direction: props.queryStringParams.direction,
-            }"
-            class="goback-btn"
-          >
-            <span>
-              <i class="fa-solid fa-circle-left"></i>
-              Go Back
-            </span>
-          </Link>
+          <GoBackButton
+            href="seller.product-reviews.index"
+            :queryStringParams="queryStringParams"
+          />
         </div>
       </div>
 
@@ -153,10 +145,18 @@ const props = defineProps({
                 >
                   Status
                 </span>
-                <span class="w-1/2 block">
-                  <PublishedStatus v-if="productReview.status === 1">
-                    published
+                <span class="w-1/2 block capitalize">
+                  <PendingStatus v-if="productReview.status === 'pending'">
+                    {{ productReview.status }}
+                  </PendingStatus>
+                  <PublishedStatus v-if="productReview.status === 'published'">
+                    {{ productReview.status }}
                   </PublishedStatus>
+                  <UnpublishedStatus
+                    v-if="productReview.status === 'unpublished'"
+                  >
+                    {{ productReview.status }}
+                  </UnpublishedStatus>
                 </span>
               </div>
 
