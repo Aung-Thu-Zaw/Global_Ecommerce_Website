@@ -8,20 +8,23 @@ use Inertia\Response;
 use Inertia\ResponseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use App\Http\Traits\HandlesQueryStringParameters;
 
 class SellerShopReviewController extends Controller
 {
+    use HandlesQueryStringParameters;
+
     public function index(): Response|ResponseFactory
     {
-        $shopReviews=ShopReview::search(request("search"))
-                               ->query(function (Builder $builder) {
-                                   $builder->with(["user:id,name","shop:id,shop_name"]);
-                               })
-                               ->where("status", 1)
-                               ->where("vendor_id", auth()->id())
-                               ->orderBy(request("sort", "id"), request("direction", "desc"))
-                               ->paginate(request("per_page", 10))
-                               ->appends(request()->all());
+        $shopReviews = ShopReview::search(request("search"))
+                                 ->query(function (Builder $builder) {
+                                     $builder->with(["user:id,name","shop:id,shop_name"]);
+                                 })
+                                 ->where("status", "published")
+                                 ->where("shop_id", auth()->id())
+                                 ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                 ->paginate(request("per_page", 10))
+                                 ->appends(request()->all());
 
         return inertia("Seller/ShopReviews/Index", compact("shopReviews"));
     }
@@ -30,8 +33,8 @@ class SellerShopReviewController extends Controller
     {
         $shopReview->load(["shop:id,shop_name","user:id,name,email"]);
 
-        $queryStringParams=["page"=>$request->page,"per_page"=>$request->per_page,"sort"=>$request->sort,"direction"=>$request->direction];
+        $queryStringParams = $this->getQueryStringParams($request);
 
-        return inertia("Seller/ShopReviews/Details", compact("shopReview", "queryStringParams"));
+        return inertia("Seller/ShopReviews/Detail", compact("shopReview", "queryStringParams"));
     }
 }
