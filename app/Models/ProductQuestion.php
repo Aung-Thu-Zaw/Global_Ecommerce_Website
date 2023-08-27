@@ -12,7 +12,7 @@ class ProductQuestion extends Model
 {
     use HasFactory;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductQuestion, never>
@@ -27,9 +27,9 @@ class ProductQuestion extends Model
     /**
     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,ProductQuestion>
     */
-    public function user(): BelongsTo
+    public function seller(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, "seller_id");
     }
 
     /**

@@ -2,44 +2,38 @@
 
 namespace App\Http\Controllers\Ecommerce;
 
+use App\Actions\Ecommerce\Products\CreateProductQuestionAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductQuestionRequest;
 use App\Models\Product;
 use App\Models\ProductQuestion;
 use App\Models\User;
 use App\Notifications\ProductQuestions\NewProductQuestionFromUserNotification;
+use App\Services\BroadcastNotifications\NewProductQuestionNotificationSendToSellerDashboardService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class ProductQuestionController extends Controller
 {
-    public function storeQuestion(ProductQuestionRequest $request): RedirectResponse
+    public function store(ProductQuestionRequest $request): RedirectResponse
     {
-        $productQuestion=ProductQuestion::create($request->validated());
+        $productQuestion = (new CreateProductQuestionAction())->handle($request->validated());
 
-        $seller=User::findOrFail($request->shop_id);
-
-        $product=Product::findOrFail($request->product_id);
-
-        $seller->notify(new NewProductQuestionFromUserNotification($productQuestion, $product));
+        (new NewProductQuestionNotificationSendToSellerDashboardService())->send($productQuestion);
 
         return back();
     }
 
 
-    public function updateQuestion(ProductQuestionRequest $request, int $questionId): RedirectResponse
+    public function update(ProductQuestionRequest $request, ProductQuestion $productQuestion): RedirectResponse
     {
-        $productQuestion=ProductQuestion::findOrFail($questionId);
-
-        $productQuestion->update(["question_text"=>$request->question_text]);
+        $productQuestion->update(["question_text" => $request->question_text]);
 
         return back();
     }
 
-    public function destroyQuestion(int $questionId): RedirectResponse
+    public function destroy(ProductQuestion $productQuestion): RedirectResponse
     {
-        $productQuestion=ProductQuestion::findOrFail($questionId);
-
         $productQuestion->delete();
 
         return back();

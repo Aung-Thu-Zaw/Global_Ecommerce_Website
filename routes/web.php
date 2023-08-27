@@ -190,6 +190,24 @@ Route::middleware(["auth","verified"])->group(function () {
              Route::delete("/{blog_comment_reply}/destroy", "destroy")->name("destroy");
          });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         
+
     Route::controller(ProductQuestionController::class)
          ->prefix("/products/questions/ask-questions")
          ->name("products.questions.")

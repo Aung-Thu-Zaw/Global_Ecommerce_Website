@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\RecaptchaRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -25,10 +26,11 @@ class ProductQuestionRequest extends FormRequest
     public function rules()
     {
         return [
-            "user_id"=>["required","numeric",Rule::exists("users", "id")],
-            "product_id"=>["required","numeric",Rule::exists("products", "id")],
-            "shop_id"=>["required","numeric",Rule::exists("users", "id")],
-            "question_text"=>["required","string"],
+            "user_id" => ["required","numeric",Rule::exists("users", "id")],
+            "product_id" => ["required","numeric",Rule::exists("products", "id")],
+            "shop_id" => ["required","numeric",Rule::exists("users", "id")],
+            "question_text" => ["required","string"],
+            "captcha_token"  => ["required",new RecaptchaRule()],
         ];
     }
 
@@ -49,6 +51,7 @@ class ProductQuestionRequest extends FormRequest
             "shop_id.exists" =>  "The selected user id is invalid.",
             "question_text.required" =>  "The question text is required.",
             "question_text.string" =>  "The question text must be a string.",
+            "captcha_token.required" => "The captcha token is required",
         ];
     }
 }
