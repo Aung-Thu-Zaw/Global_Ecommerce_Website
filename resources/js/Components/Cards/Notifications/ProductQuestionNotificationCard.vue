@@ -15,8 +15,8 @@ const goToQuestion = () => {
 };
 
 const handleNotificationReadAt = () => {
-  router.post(
-    route("vendor.notifications.read", props.notification.id),
+  router.patch(
+    route("seller.notifications.read", props.notification.id),
     {},
     {
       onSuccess: () => {

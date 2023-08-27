@@ -149,7 +149,7 @@ const sortedNotifications = computed(() => {
 });
 
 const handleMarkAllAsRead = () => {
-  router.post(
+  router.patch(
     route("admin.notifications.read-all"),
     {
       notifications: totalUnreadNotifications.value,

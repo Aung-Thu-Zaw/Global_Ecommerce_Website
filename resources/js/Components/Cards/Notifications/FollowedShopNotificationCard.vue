@@ -15,7 +15,7 @@ const goToDetailPage = () => {
 };
 
 const handleNotificationReadAt = () => {
-  router.post(
+  router.patch(
     route("seller.notifications.read", props.notification.id),
     {},
     {

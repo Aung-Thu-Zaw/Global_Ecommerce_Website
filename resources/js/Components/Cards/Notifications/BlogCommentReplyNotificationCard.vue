@@ -14,7 +14,7 @@ const goToBlog = () => {
 };
 
 const handleNotificationReadAt = () => {
-  router.post(
+  router.patch(
     route("notifications.read", props.notification.id),
     {},
     {
