@@ -45,7 +45,7 @@ class BlogController extends Controller
             return inertia("Ecommerce/Blogs/TagBlogs", compact("blogCategories", "blogTags", "blogTag", "blogPosts"));
         }
 
-        return inertia("Ecommerce/Blogs/TagBlogs", compact("blogCategories", "blogTags", "blogTag"));
+        return inertia("Ecommerce/Blogs/TagBlog", compact("blogCategories", "blogTags", "blogTag"));
     }
 
     public function show(BlogPost $blogPost): Response|ResponseFactory
@@ -62,6 +62,6 @@ class BlogController extends Controller
                                   ->limit(10)
                                   ->get();
 
-        return inertia("Ecommerce/Blogs/Details", compact('blogPost', 'blogComments', 'blogCategories', 'relatedBlogPosts'));
+        return inertia("Ecommerce/Blogs/Detail", compact('blogPost', 'blogComments', 'blogCategories', 'relatedBlogPosts'));
     }
 }

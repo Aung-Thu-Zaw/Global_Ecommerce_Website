@@ -1,8 +1,7 @@
 <script setup>
-import { router } from "@inertiajs/vue3";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { computed } from "vue";
+import { router } from "@inertiajs/vue3";
 
 dayjs.extend(relativeTime);
 
@@ -10,40 +9,38 @@ const props = defineProps({
   notification: Object,
 });
 
-const goToQuestion = () => {
+const goToProductDetail = () => {
   router.get(route("products.show", props.notification.data.product));
 };
 
 const handleNotificationReadAt = () => {
   router.patch(
-    route("seller.notifications.read", props.notification.id),
+    route("notifications.read", props.notification.id),
     {},
     {
       onSuccess: () => {
-        goToQuestion();
+        goToProductDetail();
       },
     }
   );
 };
 </script>
 
-
-
 <template>
   <div
     @click="handleNotificationReadAt"
     v-if="
       notification.type ===
-      'App\\Notifications\\ProductQuestions\\NewProductQuestionFromUserNotification'
+      'App\\Notifications\\ProductQuestions\\ProductQuestionAnswerFromSellerNotification'
     "
     :href="route('products.show', notification.data.product)"
-    class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+    class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer w-full"
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
-      class="flex-shrink-0 bg-purple-300 text-purple-700 ring-2 ring-purple-500 w-10 h-10 rounded-md flex items-center justify-center p-3 font-bold"
+      class="flex-shrink-0 bg-sky-300 text-sky-700 ring-2 ring-sky-500 w-10 h-10 rounded-md flex items-center justify-center p-3 font-bold"
     >
-      <i class="fa-solid fa-question"></i>
+      <i class="fa-solid fa-a"></i>
     </div>
     <div class="w-full pl-3">
       <div
@@ -62,13 +59,13 @@ const handleNotificationReadAt = () => {
             'text-gray-500': notification.read_at,
           }"
         >
-          {{ notification.data.question }}
+          {{ notification.data.answer }}
         </span>
       </div>
       <div
         class="text-xs font-bold"
         :class="{
-          'text-purple-500': !notification.read_at,
+          'text-sky-500': !notification.read_at,
           'text-gray-500': notification.read_at,
         }"
       >

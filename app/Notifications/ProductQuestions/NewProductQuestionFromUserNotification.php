@@ -43,7 +43,7 @@ class NewProductQuestionFromUserNotification extends Notification implements Sho
     public function toArray($notifiable)
     {
         return [
-            "message" => "Your product has received a new question from a customer.",
+            "message" => "YOUR_PRODUCT_HAS_RECEIVED_A_NEW_QUESTION_FROM_A_CUSTOMER",
             "product" => $this->product->slug,
             "question" => $this->productQuestion->question_text,
 
@@ -60,7 +60,7 @@ class NewProductQuestionFromUserNotification extends Notification implements Sho
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" => "Your product has received a new question from a customer.",
+            "message" => "YOUR_PRODUCT_HAS_RECEIVED_A_NEW_QUESTION_FROM_A_CUSTOMER",
             "product" => $this->product->slug,
             "question" => $this->productQuestion->question_text,
 

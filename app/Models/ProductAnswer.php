@@ -26,9 +26,9 @@ class ProductAnswer extends Model
     /**
     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,ProductAnswer>
     */
-    public function user(): BelongsTo
+    public function seller(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,"seller_id");
     }
 
     /**

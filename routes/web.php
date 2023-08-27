@@ -206,11 +206,11 @@ Route::middleware(["auth","verified"])->group(function () {
 
 
 
-         
+
 
     Route::controller(ProductQuestionController::class)
-         ->prefix("/products/questions/ask-questions")
-         ->name("products.questions.")
+         ->prefix("/product/ask-questions")
+         ->name("product.questions.")
          ->group(function () {
              Route::post("/", "store")->name("store");
              Route::patch("/{product_question}/update", "update")->name("update");

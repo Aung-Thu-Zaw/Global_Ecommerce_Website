@@ -157,7 +157,7 @@ const handleMarkAllAsRead = () => {
       />
       <FollowedShopNotificationCard :notification="notification" />
 
-      <!-- <ProductQuestionNotificationCard :notification="notification" /> -->
+      <ProductQuestionNotificationCard :notification="notification" />
     </div>
 
     <div class="w-full text-center py-3" v-if="!notifications.length">

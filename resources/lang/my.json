@@ -921,5 +921,12 @@
     "SUBCATEGORY": "အမျိုးအစားခွဲ",
     "YOU_CANT_DISPLAY_THE_SELLER_PRODUCT_BANNER": "ထုတ်ကုန်နဖူးစည်းကို သင်ပြသ၍မရပါ။ ထုတ်ကုန်နဖူးစည်း 6 ခုသာခွင့်ပြုသည်။",
     "PRODUCT_REVIEW_DETAILS": "ထုတ်ကုန်သုံးသပ်ချက်အသေးစိတ်",
-    "SHOP_REVIEW_DETAILS": "ဆိုင်သုံးသပ်ချက်အသေးစိတ်"
+    "SHOP_REVIEW_DETAILS": "ဆိုင်သုံးသပ်ချက်အသေးစိတ်",
+    "ANSWER_THIS_QUESTION": "ဒီမေးခွန်းကို ဖြေပါ။",
+    "EDIT_QUESTION": "မေးခွန်းကို တည်းဖြတ်ပါ",
+    "DELETE_QUESTION": "မေးခွန်းကိုဖျက်ပါ",
+    "YOUR_PRODUCT_HAS_RECEIVED_A_NEW_QUESTION_FROM_A_CUSTOMER": "သင့်ထုတ်ကုန်သည် ဖောက်သည်တစ်ဦးထံမှ မေးခွန်းအသစ်တစ်ခု လက်ခံရရှိထားသည်။",
+    "YOUR_QUESTION_HAS_BEEN_ANSWERED_TO_BY_THE_SELLER": "သင့်မေးခွန်းကို ရောင်းချသူမှ အဖြေပေးထားပါသည်။",
+    "EDIT_ANSWER": "အဖြေကို တည်းဖြတ်ပါ",
+    "DELETE_ANSWER": "အဖြေကိုဖျက်ပါ"
 }

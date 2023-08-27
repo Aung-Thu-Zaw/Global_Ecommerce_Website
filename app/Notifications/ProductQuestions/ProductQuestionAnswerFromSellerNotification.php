@@ -1,16 +1,18 @@
 <?php
 
-namespace App\Notifications\Blogs;
+namespace App\Notifications\ProductQuestions;
 
-use App\Models\BlogCommentReply;
-use App\Models\BlogPost;
+use App\Models\Product;
+use App\Models\ProductAnswer;
+use App\Models\ProductQuestion;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class BlogCommentReplyFromAuthorNotification extends Notification implements ShouldQueue
+class ProductQuestionAnswerFromSellerNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;
 
@@ -19,7 +21,7 @@ class BlogCommentReplyFromAuthorNotification extends Notification implements Sho
      *
      * @return void
      */
-    public function __construct(protected BlogPost $blogPost, protected BlogCommentReply $blogCommentReply)
+    public function __construct(protected Product $product, protected ProductAnswer $productAnswer)
     {
         //
     }
@@ -44,9 +46,9 @@ class BlogCommentReplyFromAuthorNotification extends Notification implements Sho
     public function toArray($notifiable)
     {
         return [
-            "message" => "YOUR_COMMENT_HAS_BEEN_REPLIED_TO_BY_THE_AUTHOR",
-            "blog" => $this->blogPost->slug,
-            "reply" => $this->blogCommentReply->reply_text,
+            "message" => "YOUR_QUESTION_HAS_BEEN_ANSWERED_TO_BY_THE_SELLER",
+            "product" => $this->product->slug,
+            "answer" => $this->productAnswer->answer_text,
         ];
     }
 
@@ -60,9 +62,9 @@ class BlogCommentReplyFromAuthorNotification extends Notification implements Sho
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" => "YOUR_COMMENT_HAS_BEEN_REPLIED_TO_BY_THE_AUTHOR",
-            "blog" => $this->blogPost->slug,
-            "reply" => $this->blogCommentReply->reply_text,
+            "message" => "YOUR_QUESTION_HAS_BEEN_ANSWERED_TO_BY_THE_SELLER",
+            "product" => $this->product->slug,
+            "answer" => $this->productAnswer->answer_text,
         ]);
     }
 }

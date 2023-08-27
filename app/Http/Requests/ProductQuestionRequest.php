@@ -28,7 +28,7 @@ class ProductQuestionRequest extends FormRequest
         return [
             "user_id" => ["required","numeric",Rule::exists("users", "id")],
             "product_id" => ["required","numeric",Rule::exists("products", "id")],
-            "shop_id" => ["required","numeric",Rule::exists("users", "id")],
+            "seller_id" => ["required","numeric",Rule::exists("users", "id")],
             "question_text" => ["required","string"],
             "captcha_token"  => ["required",new RecaptchaRule()],
         ];
@@ -46,9 +46,9 @@ class ProductQuestionRequest extends FormRequest
             "user_id.required" =>  "The user id is required.",
             "user_id.numeric" =>  "The user id must be a number.",
             "user_id.exists" =>  "The selected user id is invalid.",
-            "shop_id.required" =>  "The user id is required.",
-            "shop_id.numeric" =>  "The user id must be a number.",
-            "shop_id.exists" =>  "The selected user id is invalid.",
+            "seller_id.required" =>  "The seller id is required.",
+            "seller_id.numeric" =>  "The seller id must be a number.",
+            "seller_id.exists" =>  "The selected seller id is invalid.",
             "question_text.required" =>  "The question text is required.",
             "question_text.string" =>  "The question text must be a string.",
             "captcha_token.required" => "The captcha token is required",

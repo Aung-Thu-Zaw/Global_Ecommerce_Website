@@ -6,6 +6,7 @@ use App\Actions\Ecommerce\Products\CreateProductQuestionAnswerAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductAnswerRequest;
 use App\Models\ProductAnswer;
+use App\Services\BroadcastNotifications\ProductQuestionAnswerFromSellerNotificationSendToUserService;
 use Illuminate\Http\RedirectResponse;
 
 class ProductAnswerController extends Controller
@@ -14,7 +15,7 @@ class ProductAnswerController extends Controller
     {
         $productQuestionAnswer = (new CreateProductQuestionAnswerAction())->handle($request->validated());
 
-        // (new BlogCommentReplyFromAuthorNotificationSendToUserService())->send($productQuestionAnswer);
+        (new ProductQuestionAnswerFromSellerNotificationSendToUserService())->send($productQuestionAnswer);
 
         return back();
     }
