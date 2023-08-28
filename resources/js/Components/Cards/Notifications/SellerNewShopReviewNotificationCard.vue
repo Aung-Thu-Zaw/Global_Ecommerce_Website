@@ -39,10 +39,10 @@ const handleNotificationReadAt = () => {
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
-      class="flex-shrink-0 bg-teal-300 text-teal-700 ring-2 ring-teal-500 w-10 h-10 rounded-md flex items-center justify-center p-3 font-bold"
+      class="flex-shrink-0 bg-pink-300 text-pink-700 ring-2 ring-pink-500 w-10 h-10 rounded-md flex items-center justify-center p-3 font-bold"
     >
       <i
-        class="fa-solid fa-basket-shopping"
+        class="fa-solid fa-store"
         :class="{
           'animate-pulse': !notification.read_at,
         }"
@@ -71,7 +71,7 @@ const handleNotificationReadAt = () => {
       <div
         class="text-xs font-bold dark:text-blue-500"
         :class="{
-          'text-teal-500': !notification.read_at,
+          'text-pink-500': !notification.read_at,
           'text-gray-500': notification.read_at,
         }"
       >
