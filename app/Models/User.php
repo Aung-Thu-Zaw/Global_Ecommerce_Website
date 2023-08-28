@@ -202,7 +202,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
     * @return \Illuminate\Database\Eloquent\Relations\HasMany<ShopReview>
     */
-    public function shopReviewsForSeller(): HasMany
+    public function shopReviews(): HasMany
     {
         return $this->hasMany(ShopReview::class, "shop_id");
     }

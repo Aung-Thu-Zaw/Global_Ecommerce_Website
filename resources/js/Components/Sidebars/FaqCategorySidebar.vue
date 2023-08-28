@@ -97,7 +97,8 @@ defineProps({
                         $page.props.ziggy.query.category !==
                         faqSubCategory.slug,
                     }"
-                    >{{ faqSubCategory.name }}
+                  >
+                    {{ faqSubCategory.name }}
                   </Link>
                 </li>
               </ul>

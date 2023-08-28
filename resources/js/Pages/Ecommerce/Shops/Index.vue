@@ -3,7 +3,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import ShopProfileCard from "@/Components/Cards/Shops/ShopProfileCard.vue";
 import { Head, usePage, router } from "@inertiajs/vue3";
-import { reactive, watch } from "vue";
+import { reactive } from "vue";
 
 const props = defineProps({
   sellerShops: Object,
@@ -20,18 +20,6 @@ const handleSearch = () => {
     search_shop: params.search_shop,
   });
 };
-
-// Watching Search Form
-watch(
-  () => params.search_shop,
-  () => {
-    if (params.search_shop === "") {
-      router.get(route("shop.index"));
-    } else {
-      handleSearch();
-    }
-  }
-);
 
 // Remove Query String Search
 const removeSearch = () => {
@@ -63,16 +51,19 @@ const removeSearch = () => {
 
         <div class="flex items-center justify-end">
           <!-- Shop Search Form Input -->
-          <form @submit.prevent="handleSearch" class="w-[350px] relative">
+          <form
+            @submit.prevent="handleSearch"
+            class="w-[350px] rounded-md flex items-center justify-between border border-gray-400 focus:border-gray-400 p-1"
+          >
             <input
               type="text"
-              class="search-input border border-gray-400 focus:border-gray-400"
-              placeholder="Search by name"
+              class="border-0 focus:ring-0 text-sm bg-gray-50 w-full"
+              :placeholder="__('SEARCH_BY_NAME')"
               v-model="params.search_shop"
             />
             <i
               v-if="params.search_shop"
-              class="fa-solid fa-xmark remove-search"
+              class="fa-solid fa-xmark mr-2 text-slate-600 cursor-pointer hover:text-red-600"
               @click="removeSearch"
             ></i>
           </form>

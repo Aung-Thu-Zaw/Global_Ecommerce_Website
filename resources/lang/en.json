@@ -928,5 +928,6 @@
     "YOUR_PRODUCT_HAS_RECEIVED_A_NEW_QUESTION_FROM_A_CUSTOMER": "Your product has received a new question from a customer.",
     "YOUR_QUESTION_HAS_BEEN_ANSWERED_TO_BY_THE_SELLER": "Your question has been answered to by the seller.",
     "EDIT_ANSWER": "Edit Answer",
-    "DELETE_ANSWER": "Delete Answer"
+    "DELETE_ANSWER": "Delete Answer",
+    "ACCOUNT_IS_CREATED_SUCCESSFULLY": "Account is created successfully."
 }

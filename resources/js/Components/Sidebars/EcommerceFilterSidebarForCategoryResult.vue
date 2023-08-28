@@ -104,7 +104,7 @@ watch(
 <template>
   <aside class="md:w-1/3 lg:w-1/4 px-4">
     <div
-      class="hidden md:block px-6 py-4 border border-gray-200 bg-white rounded shadow-sm"
+      class="hidden md:block px-6 py-4 border border-gray-200 bg-white rounded shadow-sm text-[.85rem]"
     >
       <!-- Filter Categories -->
       <div v-if="category.children.length">

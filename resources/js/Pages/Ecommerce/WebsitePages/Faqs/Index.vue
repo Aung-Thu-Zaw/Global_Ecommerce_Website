@@ -66,7 +66,7 @@ defineProps({
                       class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
                     >
                       {{
-                        $page.props.ziggy.query.search
+                        $page.props.ziggy.query.search_question
                           ? "Search Result(s)"
                           : "All"
                       }}

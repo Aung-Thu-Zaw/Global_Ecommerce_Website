@@ -928,5 +928,6 @@
     "YOUR_PRODUCT_HAS_RECEIVED_A_NEW_QUESTION_FROM_A_CUSTOMER": "သင့်ထုတ်ကုန်သည် ဖောက်သည်တစ်ဦးထံမှ မေးခွန်းအသစ်တစ်ခု လက်ခံရရှိထားသည်။",
     "YOUR_QUESTION_HAS_BEEN_ANSWERED_TO_BY_THE_SELLER": "သင့်မေးခွန်းကို ရောင်းချသူမှ အဖြေပေးထားပါသည်။",
     "EDIT_ANSWER": "အဖြေကို တည်းဖြတ်ပါ",
-    "DELETE_ANSWER": "အဖြေကိုဖျက်ပါ"
+    "DELETE_ANSWER": "အဖြေကိုဖျက်ပါ",
+    "ACCOUNT_IS_CREATED_SUCCESSFULLY": "အကောင့်ကို အောင်မြင်စွာ ဖန်တီးထားပါသည်။"
 }

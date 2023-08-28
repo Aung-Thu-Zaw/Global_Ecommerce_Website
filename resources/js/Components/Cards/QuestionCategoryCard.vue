@@ -20,8 +20,8 @@ defineProps({
     >
       <i v-html="faqSubCategory.icon"></i>
     </span>
-    <span class="text-gray-700 font-bold text-sm mt-3">{{
-      faqSubCategory.name
-    }}</span>
+    <span class="text-gray-700 font-bold text-sm mt-3">
+      {{ faqSubCategory.name }}
+    </span>
   </Link>
 </template>

@@ -42,7 +42,7 @@ class BlogController extends Controller
                                ->paginate(20)
                                ->withQueryString();
 
-            return inertia("Ecommerce/Blogs/TagBlogs", compact("blogCategories", "blogTags", "blogTag", "blogPosts"));
+            return inertia("Ecommerce/Blogs/TagBlog", compact("blogCategories", "blogTags", "blogTag", "blogPosts"));
         }
 
         return inertia("Ecommerce/Blogs/TagBlog", compact("blogCategories", "blogTags", "blogTag"));

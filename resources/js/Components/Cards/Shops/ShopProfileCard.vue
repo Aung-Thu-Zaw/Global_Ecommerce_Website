@@ -1,9 +1,29 @@
 <script setup>
+import TotalRatingStars from "@/Components/RatingStars/TotalRatingStars.vue";
 import { Link } from "@inertiajs/vue3";
 
 defineProps({
   sellerShops: Object,
 });
+
+const calculateAverageRating = (reviews) => {
+  let totalRating = 0;
+  let validReviewCount = 0;
+
+  for (const review of reviews) {
+    if (review.rating >= 1 && review.rating <= 5) {
+      totalRating += review.rating;
+      validReviewCount++;
+    }
+  }
+
+  if (validReviewCount === 0) {
+    return 0;
+  }
+
+  const averageRating = totalRating / validReviewCount;
+  return averageRating.toFixed(2);
+};
 </script>
 
 <template>
@@ -27,6 +47,12 @@ defineProps({
             <i class="fa-solid fa-circle-check ml-2"></i>
           </span>
         </h1>
+
+        <div v-if="sellerShop.shop_reviews.length" class="mt-3">
+          <TotalRatingStars
+            :rating="calculateAverageRating(sellerShop.shop_reviews)"
+          />
+        </div>
       </div>
     </div>
     <div

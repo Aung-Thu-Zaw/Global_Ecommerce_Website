@@ -45,8 +45,8 @@ const props = defineProps({
           class="text-sm font-bold my-5 text-gray-700"
         >
           {{ faqs.total }} {{ __("QUESTION_FOUND_FOR_SEARCH_RESULT") }}
-          <span class="text-blue-600"
-            >"{{ $page.props.ziggy.query?.search_question }}"
+          <span class="text-blue-600">
+            "{{ $page.props.ziggy.query?.search_question }}"
           </span>
         </p>
 

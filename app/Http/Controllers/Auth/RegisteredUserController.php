@@ -30,14 +30,14 @@ class RegisteredUserController extends Controller
      */
     public function store(RegisterRequest $request): RedirectResponse
     {
-        $user=(new CreateUserAction())->execute($request->validated()+["role"=>$request->role?? "user","status"=>$request->status?? "active"]);
+        $user = (new CreateUserAction())->execute($request->validated() + ["role" => $request->role ?? "user","status" => $request->status ?? "active"]);
 
         event(new Registered($user));
 
-        Cart::create(["user_id"=>$user->id]);
+        Cart::create(["user_id" => $user->id]);
 
         Auth::login($user);
 
-        return to_route($user->getRedirectRouteName())->with("success", "Account is created successfully");
+        return to_route($user->getRedirectRouteName())->with("success", "ACCOUNT_IS_CREATED_SUCCESSFULLY");
     }
 }

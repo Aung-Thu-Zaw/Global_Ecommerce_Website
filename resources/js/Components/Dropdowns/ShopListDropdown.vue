@@ -56,7 +56,7 @@ import { Link } from "@inertiajs/vue3";
     <Link
       as="button"
       :href="route('shop.index')"
-      class="flex items-center justify-center p-3 w-full text-sm font-bold text-slate-600 border bg-white hover:bg-gray-100 hover:text-blue-600 border-slate-300"
+      class="flex items-center justify-center p-3 shadow-md w-full text-sm font-bold text-slate-600 border bg-white hover:bg-gray-100 hover:text-blue-600 border-slate-300"
     >
       <i class="fas fa-eye mr-2"></i>
       {{ __("VIEW_MORE") }}

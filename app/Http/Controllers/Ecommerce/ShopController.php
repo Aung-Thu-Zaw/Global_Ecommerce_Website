@@ -21,14 +21,14 @@ class ShopController extends Controller
     public function index(): Response | ResponseFactory
     {
         $sellerShops = User::search(request("search_shop"))
-                         ->query(function (Builder $builder) {
-                             $builder->with(["followers:id","products"])
-                                     ->select("id", "uuid", "shop_name", "avatar");
-                         })
-                         ->where("status", "active")
-                         ->where("role", "seller")
-                         ->paginate(30)
-                         ->appends(request()->all());
+                           ->query(function (Builder $builder) {
+                               $builder->with(["followers:id","products:id,seller_id","shopReviews:id,shop_id,rating"])
+                                       ->select("id", "uuid", "shop_name", "avatar");
+                           })
+                           ->where("status", "active")
+                           ->where("role", "seller")
+                           ->paginate(30)
+                           ->appends(request()->all());
 
         return inertia("Ecommerce/Shops/Index", compact("sellerShops"));
     }

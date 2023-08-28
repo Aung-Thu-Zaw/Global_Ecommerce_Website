@@ -5,6 +5,7 @@ import { Link } from "@inertiajs/vue3";
 <template>
   <div>
     <Link
+      as="button"
       :href="route('my-account.edit')"
       :data="{ tab: 'edit-profile' }"
       class="border border-gray-300 cursor-pointer w-[280px] h-[120px] rounded-md hover:shadow-md p-5 flex flex-col items-center justify-center"
@@ -14,12 +15,13 @@ import { Link } from "@inertiajs/vue3";
       >
         <i class="fa-solid fa-user-gear"></i>
       </span>
-      <span class="text-gray-700 font-bold text-sm mt-3">My Account</span>
+      <span class="text-gray-700 font-bold text-sm mt-3"> My Account </span>
     </Link>
   </div>
 
   <div>
     <Link
+      as="button"
       :href="route('my-orders.index')"
       :data="{ tab: 'all-orders' }"
       class="border border-gray-300 cursor-pointer w-[280px] h-[120px] rounded-md hover:shadow-md p-5 flex flex-col items-center justify-center"
@@ -29,12 +31,13 @@ import { Link } from "@inertiajs/vue3";
       >
         <i class="fa-solid fa-boxes-packing"></i>
       </span>
-      <span class="text-gray-700 font-bold text-sm mt-3">My Orders</span>
+      <span class="text-gray-700 font-bold text-sm mt-3"> My Orders </span>
     </Link>
   </div>
 
   <div>
     <Link
+      as="button"
       :href="route('return-orders.index')"
       :data="{ tab: 'requested-return-orders' }"
       class="border border-gray-300 cursor-pointer w-[280px] h-[120px] rounded-md hover:shadow-md p-5 flex flex-col items-center justify-center"
@@ -44,14 +47,15 @@ import { Link } from "@inertiajs/vue3";
       >
         <i class="fa-solid fa-money-check-dollar"></i>
       </span>
-      <span class="text-gray-700 font-bold text-sm mt-3"
-        >Return Orders And Items</span
-      >
+      <span class="text-gray-700 font-bold text-sm mt-3">
+        Return Orders And Items
+      </span>
     </Link>
   </div>
 
   <div>
     <Link
+      as="button"
       :href="route('cancel-orders.index')"
       :data="{ tab: 'requested-cancel-orders' }"
       class="border border-gray-300 cursor-pointer w-[280px] h-[120px] rounded-md hover:shadow-md p-5 flex flex-col items-center justify-center"
@@ -61,9 +65,9 @@ import { Link } from "@inertiajs/vue3";
       >
         <i class="fa-solid fa-truck-fast"></i>
       </span>
-      <span class="text-gray-700 font-bold text-sm mt-3"
-        >Cancel Orders And Items</span
-      >
+      <span class="text-gray-700 font-bold text-sm mt-3">
+        Cancel Orders And Items
+      </span>
     </Link>
   </div>
 </template>
