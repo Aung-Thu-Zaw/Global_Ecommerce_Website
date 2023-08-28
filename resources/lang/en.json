@@ -929,5 +929,7 @@
     "YOUR_QUESTION_HAS_BEEN_ANSWERED_TO_BY_THE_SELLER": "Your question has been answered to by the seller.",
     "EDIT_ANSWER": "Edit Answer",
     "DELETE_ANSWER": "Delete Answer",
-    "ACCOUNT_IS_CREATED_SUCCESSFULLY": "Account is created successfully."
+    "ACCOUNT_IS_CREATED_SUCCESSFULLY": "Account is created successfully.",
+    "RECEIVED_A_NEW_PRODUCT_REVIEW_FROM_A_CUSTOMER": "Received a new product review from a customer.",
+    "RECEIVED_A_NEW_SHOP_REVIEW_FROM_A_CUSTOMER": "Received a new shop review from a customer."
 }

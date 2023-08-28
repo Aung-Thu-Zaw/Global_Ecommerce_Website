@@ -3,6 +3,8 @@ import FollowedShopNotificationCard from "@/Components/Cards/Notifications/Follo
 import ProductQuestionNotificationCard from "@/Components/Cards/Notifications/ProductQuestionNotificationCard.vue";
 import ApprovedCreatedNewProductNotificationCard from "@/Components/Cards/Notifications/ApprovedCreatedNewProductNotificationCard.vue";
 import DisapprovedCreatedNewProductNotificationCard from "@/Components/Cards/Notifications/DisapprovedCreatedNewProductNotificationCard.vue";
+import SellerNewProductReviewNotificationCard from "@/Components/Cards/Notifications/SellerNewProductReviewNotificationCard.vue";
+import SellerNewShopReviewNotificationCard from "@/Components/Cards/Notifications/SellerNewShopReviewNotificationCard.vue";
 import { usePage, router } from "@inertiajs/vue3";
 import { computed, onMounted, ref } from "vue";
 
@@ -56,6 +58,20 @@ onMounted(() => {
             product: notification.product,
           },
         });
+      } else if (
+        notification.type ===
+          "App\\Notifications\\Reviews\\NewProductReviewFromCustomerNotification" ||
+        notification.type ===
+          "App\\Notifications\\Reviews\\NewShopReviewFromCustomerNotification"
+      ) {
+        notifications.value.unshift({
+          id: notification.id,
+          type: notification.type,
+          data: {
+            message: notification.message,
+            review: notification.review,
+          },
+        });
       }
     }
   );
@@ -103,7 +119,7 @@ const handleMarkAllAsRead = () => {
 
 <template>
   <button
-    id="vendorDropdownNotificationButton"
+    id="sellerDropdownNotificationButton"
     data-dropdown-toggle="vendorDropdownNotification"
     data-dropdown-placement="bottom"
     data-dropdown-trigger="hover"
@@ -128,7 +144,7 @@ const handleMarkAllAsRead = () => {
   <div
     id="vendorDropdownNotification"
     class="z-20 w-1/2 hidden h-auto max-h-[800px] overflow-auto max-w-sm bg-white divide-y divide-gray-200 rounded-[5px] border-slate-300 shadow border scrollbar"
-    aria-labelledby="vendorDropdownNotificationButton"
+    aria-labelledby="sellerDropdownNotificationButton"
   >
     <div
       class="flex items-center justify-between px-4 py-3 font-semibold text-center text-gray-700 rounded-t-lg bg-gray-50"
@@ -156,8 +172,9 @@ const handleMarkAllAsRead = () => {
         :notification="notification"
       />
       <FollowedShopNotificationCard :notification="notification" />
-
       <ProductQuestionNotificationCard :notification="notification" />
+      <SellerNewProductReviewNotificationCard :notification="notification" />
+      <SellerNewShopReviewNotificationCard :notification="notification" />
     </div>
 
     <div class="w-full text-center py-3" v-if="!notifications.length">

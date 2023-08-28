@@ -1,11 +1,11 @@
 <script setup>
 import ShopReviewCard from "@/Components/Cards/Shops/ShopReviewCard.vue";
 import ShopReplyCard from "@/Components/Cards/Shops/ShopReplyCard.vue";
-import ShopReviewForm from "@/Components/Forms/ShopReviewForm.vue";
-import { computed } from "vue";
+import ShopReviewForm from "@/Components/Forms/Reviews/ShopReviewForm.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import TotalAverageRatingStarWithProgressBar from "@/Components/RatingStars/TotalAverageRatingStarWithProgressBar.vue";
 import TotalReviewAvgStars from "@/Components/RatingStars/TotalReviewAvgStars.vue";
+import { computed } from "vue";
 
 const props = defineProps({
   paginateShopReviews: Object,
@@ -97,11 +97,13 @@ const fiveStarsRating = computed(() => {
               </div>
             </div>
 
-            <!-- Pagination -->
+            <!-- Shop Reviews Pagination -->
             <div>
               <Pagination class="mt-6" :links="paginateShopReviews.links" />
             </div>
           </div>
+
+          <!-- Reviews do not exist -->
           <div v-else>
             <div class="font-bold text-center text-sm text-slate-600 my-10">
               <i class="fa-solid fa-star text-3xl mb-5 animate-bounce"></i>
@@ -119,6 +121,7 @@ const fiveStarsRating = computed(() => {
 
         <hr v-if="shopReviews.length" />
 
+        <!-- Review Form -->
         <div
           v-if="$page.props.auth.user && $page.props.auth.user.id !== shop.id"
         >

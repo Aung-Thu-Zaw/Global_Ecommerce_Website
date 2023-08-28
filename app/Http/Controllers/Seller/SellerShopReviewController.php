@@ -20,7 +20,6 @@ class SellerShopReviewController extends Controller
                                  ->query(function (Builder $builder) {
                                      $builder->with(["user:id,name","shop:id,shop_name"]);
                                  })
-                                 ->where("status", "published")
                                  ->where("shop_id", auth()->id())
                                  ->orderBy(request("sort", "id"), request("direction", "desc"))
                                  ->paginate(request("per_page", 10))

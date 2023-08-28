@@ -10,7 +10,7 @@ use App\Models\ProductReview;
 use App\Models\SellerProductBanner;
 use App\Models\ShopReview;
 use App\Models\User;
-use App\Notifications\FollowedShopNotification;
+use App\Services\UserShopInteractionService;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 use Inertia\ResponseFactory;
@@ -37,68 +37,76 @@ class ShopController extends Controller
     {
         $user = User::findOrFail(auth()->id());
 
-        $shop = User::whereUuid($shopUUID)->whereStatus("active")->first();
+        $shop = User::whereUuid($shopUUID)->where("status", "active")->first();
 
         $followings = $user->followings;
 
         $followers = $user->followers;
 
         $sellerProductBanners = SellerProductBanner::select("id", "seller_id", "image", "url")
-                                                 ->whereSellerId($shop ? $shop->id : "")
-                                                 ->whereStatus("show")
-                                                 ->orderBy("id", "desc")
-                                                 ->get();
+                                                   ->where("seller_id", $shop ? $shop->id : null)
+                                                   ->where("status", "show")
+                                                   ->orderBy("id", "desc")
+                                                   ->get();
 
         $sellerRandomProducts = Product::select("id", "seller_id", "image", "name", "slug", "price", "discount", "special_offer")
-                                     ->with(["productReviews:id,product_id,rating","shop:id,offical"])
-                                     ->whereSellerId($shop ? $shop->id : "")
-                                     ->whereStatus("approved")
-                                     ->inRandomOrder()
-                                     ->limit(20)
-                                     ->get();
+                                       ->with(["productReviews:id,product_id,rating","shop:id,offical"])
+                                       ->where("seller_id", $shop ? $shop->id : null)
+                                       ->where("status", "approved")
+                                       ->inRandomOrder()
+                                       ->limit(20)
+                                       ->get();
 
         $sellerProducts = Product::select("id", "seller_id", "image", "name", "description", "slug", "price", "discount", "special_offer")
-                               ->with(["productReviews:id,product_id,rating","shop:id,offical","images"])
-                               ->filterBy(request(["search","category","brand","rating","price"]))
-                               ->whereSellerId($shop ? $shop->id : "")
-                               ->whereStatus("approved")
-                               ->orderBy(request("sort", "id"), request("direction", "desc"))
-                               ->paginate(20)
-                               ->withQueryString();
+                                 ->with(["productReviews:id,product_id,rating","shop:id,offical","images"])
+                                 ->filterBy(request(["search","category","brand","rating","price"]))
+                                 ->where("seller_id", $shop ? $shop->id : null)
+                                 ->where("status", "approved")
+                                 ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                 ->paginate(20)
+                                 ->withQueryString();
 
         $paginateProductReviews = ProductReview::with(["product.sizes","product.colors","product.types","product.brand","user.orders.orderItems","reply.user:id,shop_name,avatar"])
-                                             ->whereShopId($shop ? $shop->id : "")
-                                             ->whereStatus(1)
-                                             ->orderBy("id", "desc")
-                                             ->paginate(5);
+                                               ->where("shop_id", $shop ? $shop->id : null)
+                                               ->where("status", "published")
+                                               ->orderBy("id", "desc")
+                                               ->paginate(5);
 
-        $productReviews = ProductReview::whereShopId($shop ? $shop->id : "")->whereStatus(1)->get();
+        $productReviews = ProductReview::where("shop_id", $shop ? $shop->id : null)
+                                       ->where("status", "published")
+                                       ->get();
 
-        $productReviewsAvg = ProductReview::whereShopId($shop ? $shop->id : "")->whereStatus(1)->avg("rating");
+        $productReviewsAvg = ProductReview::where("shop_id", $shop ? $shop->id : null)
+                                          ->where("status", "published")
+                                          ->avg("rating");
 
         $paginateShopReviews = ShopReview::with(["user:id,name,avatar","reply.user:id,shop_name,avatar"])
-                                       ->whereShopId($shop ? $shop->id : "")
-                                       ->whereStatus(1)
-                                       ->orderBy("id", "desc")
-                                       ->paginate(5);
+                                         ->where("shop_id", $shop ? $shop->id : null)
+                                         ->where("status", "published")
+                                         ->orderBy("id", "desc")
+                                         ->paginate(5);
 
-        $shopReviews = ShopReview::whereShopId($shop ? $shop->id : "")->whereStatus(1)->get();
+        $shopReviews = ShopReview::where("shop_id", $shop ? $shop->id : null)
+                                 ->where("status", "published")
+                                 ->get();
 
-        $shopReviewsAvg = ShopReview::whereShopId($shop ? $shop->id : "")->whereStatus(1)->avg("rating");
+        $shopReviewsAvg = ShopReview::where("shop_id", $shop ? $shop->id : null)
+                                    ->where("status", "published")
+                                    ->avg("rating");
 
         $categories = Category::join('products', 'categories.id', '=', 'products.category_id')
-                            ->join('users', 'products.seller_id', '=', 'users.id')
-                            ->where('users.id', $shop ? $shop->id : "")
-                            ->distinct()
-                            ->select('categories.*')
-                            ->get();
+                              ->join('users', 'products.seller_id', '=', 'users.id')
+                              ->where('users.id', $shop ? $shop->id : null)
+                              ->distinct()
+                              ->select('categories.*')
+                              ->get();
 
         $brands = Brand::join('products', 'brands.id', '=', 'products.brand_id')
-                     ->join('users', 'products.seller_id', '=', 'users.id')
-                     ->where('users.id', $shop ? $shop->id : "")
-                     ->distinct()
-                     ->select('brands.*')
-                     ->get();
+                       ->join('users', 'products.seller_id', '=', 'users.id')
+                       ->where('users.id', $shop ? $shop->id : null)
+                       ->distinct()
+                       ->select('brands.*')
+                       ->get();
 
         return inertia("Ecommerce/Shops/Show", compact(
             "shop",
@@ -120,24 +128,14 @@ class ShopController extends Controller
 
     public function followShop(int $shopId): RedirectResponse
     {
-        $shop = User::findOrFail($shopId);
-
-        $user = User::findOrFail(auth()->id());
-
-        $user->follow($shop);
-
-        $shop->notify(new FollowedShopNotification($user));
+        (new UserShopInteractionService())->follow($shopId);
 
         return back();
     }
 
     public function unfollowShop(int $shopId): RedirectResponse
     {
-        $shop = User::findOrFail($shopId);
-
-        $user = User::findOrFail(auth()->id());
-
-        $user->unfollow($shop);
+        (new UserShopInteractionService())->unfollow($shopId);
 
         return back();
     }

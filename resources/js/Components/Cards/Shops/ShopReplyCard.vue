@@ -1,6 +1,5 @@
 <script setup>
 import { router } from "@inertiajs/vue3";
-import ShopReplyEditForm from "@/Components/Forms/ShopReplyEditForm.vue";
 import { ref } from "vue";
 
 const props = defineProps({ paginateShopReview: Object });
@@ -79,13 +78,6 @@ const handleDeleteReply = () => {
           <i class="fa-solid fa-trash"></i>
           Delete Reply
         </button>
-      </div>
-
-      <div v-if="isEditShopReplyFormVisible" class="w-full">
-        <ShopReplyEditForm
-          :paginateShopReview="paginateShopReview"
-          @isVisible="isEditShopReplyFormVisible = false"
-        />
       </div>
     </div>
   </div>

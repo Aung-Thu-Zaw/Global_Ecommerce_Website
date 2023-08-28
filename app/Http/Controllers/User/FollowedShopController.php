@@ -14,20 +14,20 @@ class FollowedShopController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $user=User::findOrFail(auth()->id());
+        $user = User::findOrFail(auth()->id());
 
-        $followedShops=$user->followings()->with('followable')->get();
+        $followedShops = $user->followings()->with('followable')->get();
 
         $followedShopIds = $followedShops->pluck('followable_id')->toArray();
 
         if ($followedShops->isEmpty()) {
 
-            $mostViewedProducts=UserProductInteraction::whereUserId($user->id)
+            $mostViewedProducts = UserProductInteraction::whereUserId($user->id)
                                                       ->groupBy('product_id')
                                                       ->pluck('product_id')
                                                       ->toArray();
 
-            $recommendedProducts = Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
+            $recommendedProducts = Product::select("id", "seller_id", "image", "name", "slug", "price", "discount", "special_offer")
                                           ->with(["productReviews:id,product_id,rating","shop:id,offical"])
                                           ->whereStatus("active")
                                           ->whereIn('id', $mostViewedProducts)
@@ -39,10 +39,10 @@ class FollowedShopController extends Controller
 
         } else {
 
-            $justForYouProducts = Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
+            $justForYouProducts = Product::select("id", "seller_id", "image", "name", "slug", "price", "discount", "special_offer")
                                          ->with(["productReviews:id,product_id,rating","shop:id,offical"])
                                          ->whereStatus("active")
-                                         ->whereIn("user_id", $followedShopIds)
+                                         ->whereIn("seller_id", $followedShopIds)
                                          ->inRandomOrder()
                                          ->limit(15)
                                          ->get();
@@ -54,9 +54,9 @@ class FollowedShopController extends Controller
 
     public function unfollowShop(int $shopId): RedirectResponse
     {
-        $user=User::findOrFail(auth()->id());
+        $user = User::findOrFail(auth()->id());
 
-        $shop=User::findOrFail($shopId);
+        $shop = User::findOrFail($shopId);
 
         $user->unfollow($shop);
 

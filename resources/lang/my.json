@@ -929,5 +929,7 @@
     "YOUR_QUESTION_HAS_BEEN_ANSWERED_TO_BY_THE_SELLER": "သင့်မေးခွန်းကို ရောင်းချသူမှ အဖြေပေးထားပါသည်။",
     "EDIT_ANSWER": "အဖြေကို တည်းဖြတ်ပါ",
     "DELETE_ANSWER": "အဖြေကိုဖျက်ပါ",
-    "ACCOUNT_IS_CREATED_SUCCESSFULLY": "အကောင့်ကို အောင်မြင်စွာ ဖန်တီးထားပါသည်။"
+    "ACCOUNT_IS_CREATED_SUCCESSFULLY": "အကောင့်ကို အောင်မြင်စွာ ဖန်တီးထားပါသည်။",
+    "RECEIVED_A_NEW_PRODUCT_REVIEW_FROM_A_CUSTOMER": "ဖောက်သည်တစ်ဦးထံမှ ထုတ်ကုန်အသစ်သုံးသပ်ချက်ကို လက်ခံရရှိခဲ့သည်။",
+    "RECEIVED_A_NEW_SHOP_REVIEW_FROM_A_CUSTOMER": "ဖောက်သည်တစ်ဦးထံမှ ဆိုင်သုံးသပ်ချက်အသစ်ကို ရရှိခဲ့သည်။"
 }

@@ -9,6 +9,8 @@ import NewSuggestionNotificationCard from "@/Components/Cards/Notifications/NewS
 import NewWebsiteFeedbackNotificationCard from "@/Components/Cards/Notifications/NewWebsiteFeedbackNotificationCard.vue";
 import SellerCreateNewProductNotificationCard from "@/Components/Cards/Notifications/SellerCreateNewProductNotificationCard.vue";
 import NewBlogCommentNotificationCard from "@/Components/Cards/Notifications/NewBlogCommentNotificationCard.vue";
+import AdminNewProductReviewNotificationCard from "@/Components/Cards/Notifications/AdminNewProductReviewNotificationCard.vue";
+import AdminNewShopReviewNotificationCard from "@/Components/Cards/Notifications/AdminNewShopReviewNotificationCard.vue";
 import { usePage, router } from "@inertiajs/vue3";
 import { computed, onMounted, onUpdated, ref } from "vue";
 
@@ -118,6 +120,20 @@ onMounted(() => {
             comment: notification.comment,
           },
         });
+      } else if (
+        notification.type ===
+          "App\\Notifications\\Reviews\\NewProductReviewFromCustomerNotification" ||
+        notification.type ===
+          "App\\Notifications\\Reviews\\NewShopReviewFromCustomerNotification"
+      ) {
+        notifications.value.unshift({
+          id: notification.id,
+          type: notification.type,
+          data: {
+            message: notification.message,
+            review: notification.review,
+          },
+        });
       }
     }
   );
@@ -222,6 +238,9 @@ const handleMarkAllAsRead = () => {
       <NewSuggestionNotificationCard :notification="notification" />
       <NewWebsiteFeedbackNotificationCard :notification="notification" />
       <SellerCreateNewProductNotificationCard :notification="notification" />
+      <AdminNewProductReviewNotificationCard :notification="notification" />
+      <AdminNewShopReviewNotificationCard :notification="notification" />
+
       <!-- <OrderPlacedNotificationCard :notification="notification" /> -->
     </div>
 

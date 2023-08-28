@@ -1,6 +1,5 @@
 <script setup>
-import ShopReviewReplyForm from "@/Components/Forms/ShopReviewReplyForm.vue";
-import ShopReviewEditForm from "@/Components/Forms/ShopReviewEditForm.vue";
+import ShopReviewReplyForm from "@/Components/Forms/Reviews/ShopReviewReplyForm.vue";
 import ProductRatingStar from "@/Components/RatingStars/ProductRatingStar.vue";
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
@@ -93,13 +92,6 @@ const handleDeleteReview = () => {
           <i class="fa-solid fa-flag"></i>
           Delete Review
         </button>
-      </div>
-
-      <div v-if="isEditShopReviewFormVisible" class="w-full">
-        <ShopReviewEditForm
-          :paginateShopReview="paginateShopReview"
-          @isVisible="isEditShopReviewFormVisible = false"
-        />
       </div>
 
       <div v-if="isShopReplyFormVisible" class="w-full">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\RecaptchaRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -25,18 +26,19 @@ class ProductReviewRequest extends FormRequest
     public function rules()
     {
         return [
-            "product_id"=>["required","numeric",Rule::exists("products", "id")],
-            "shop_id"=>["required","numeric",Rule::exists("users", "id")],
-            "user_id"=>["required","numeric",Rule::exists("users", "id")],
-            "review_text"=>["required","string"],
-            "status"=>["required","string",Rule::in(["pending","published","unpublished"])],
-            "rating"=>["required","numeric"],
+            "product_id" => ["required","numeric",Rule::exists("products", "id")],
+            "shop_id" => ["required","numeric",Rule::exists("users", "id")],
+            "user_id" => ["required","numeric",Rule::exists("users", "id")],
+            "review_text" => ["required","string"],
+            "status" => ["required","string",Rule::in(["pending","published","unpublished"])],
+            "rating" => ["required","numeric"],
+            "captcha_token"  => ["required",new RecaptchaRule()],
         ];
     }
 
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     public function messages(): array
     {
         return [
@@ -53,6 +55,7 @@ class ProductReviewRequest extends FormRequest
             "review_text.string" =>  "The review text must be a string.",
             "rating.required" =>  "The rating is required.",
             "rating.numeric" =>  "The rating must be a number.",
+            "captcha_token.required" => "The captcha token is required",
         ];
     }
 }

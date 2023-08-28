@@ -1,4 +1,5 @@
 <script setup>
+import InputError from "@/Components/Forms/InputError.vue";
 import { useForm, usePage } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 
@@ -6,25 +7,23 @@ const props = defineProps({ product: Object });
 
 const form = useForm({
   product_id: props.product.id,
-  vendor_id: props.product.user_id,
+  shop_id: props.product.seller_id,
   user_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
   review_text: "",
   rating: 1,
+  status: "pending",
   captcha_token: null,
 });
 
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 const handleCreateReview = async () => {
   await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("create_review");
-  submit();
-};
-
-const submit = () => {
-  form.post(route("product.review.store"), {
+  form.captcha_token = await executeRecaptcha("create_product_review");
+  form.post(route("product.reviews.store"), {
     replace: true,
     preserveScroll: true,
-    onFinish: () => (form.review_text = ""),
+    preserveState: true,
+    onSuccess: () => (form.review_text = ""),
   });
 };
 </script>
@@ -313,17 +312,27 @@ const submit = () => {
         </div>
       </div>
 
-      <textarea
-        cols="30"
-        rows="10"
-        class="w-full h-[200px] rounded-md border-2 border-slate-400 focus:ring-0 focus:border-slate-400"
-        placeholder="Write Comment"
-        v-model="form.review_text"
-      ></textarea>
+      <div>
+        <textarea
+          cols="30"
+          rows="10"
+          class="w-full h-[200px] rounded-md border-2 border-slate-400 focus:ring-0 focus:border-slate-400"
+          placeholder="Write Comment"
+          v-model="form.review_text"
+        ></textarea>
+      </div>
+
+      <InputError class="mt-2" :message="form.errors.review_text" />
+
       <button
-        class="bg-blue-600 font-bold text-white w-full py-2 rounded-sm hover:bg-blue-700 my-5"
+        class="font-bold text-white w-full py-2 rounded-sm my-5"
+        :class="{
+          'bg-gray-400': !form.review_text,
+          'bg-blue-600 hover:bg-blue-700': form.review_text,
+        }"
+        :disabled="!form.review_text"
       >
-        {{ __("ADD_REVIEW") }}
+        {{ __("SUBMIT") }}
       </button>
     </form>
   </div>

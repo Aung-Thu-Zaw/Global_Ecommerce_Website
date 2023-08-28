@@ -183,6 +183,7 @@ const fiveStarsRating = computed(() => {
       </div>
     </div>
 
+    <!-- Reviews do not exist -->
     <div v-else class="my-20">
       <div class="font-bold text-center text-sm text-slate-600 my-10">
         <i class="fa-solid fa-star text-3xl mb-5 animate-bounce"></i>

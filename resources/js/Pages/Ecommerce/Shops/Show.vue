@@ -180,7 +180,7 @@ const handelRemoveSearch = () => {
           <div>
             <form @submit.prevent="handleSearch" class="flex items-center">
               <div
-                class="border-2 border-slate-400 rounded-sm focus:ring-0 focus:border-slate-400 mr-2 w-[300px] flex items-center justify-between"
+                class="border border-slate-300 rounded-sm focus:ring-0 mr-2 w-[300px] flex items-center justify-between"
               >
                 <input
                   type="text"
