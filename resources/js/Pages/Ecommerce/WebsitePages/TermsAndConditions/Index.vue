@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 
 defineProps({
   termsAndConditions: Object,
@@ -9,7 +9,7 @@ defineProps({
 
 <template>
   <AppLayout>
-    <Head title="Terms And Conditions" />
+    <Head :title="__('TERMS_AND_CONDITIONS')" />
 
     <div class="min-h-screen bg-gray-50 mt-40 w-full">
       <div class="container mx-auto py-8">

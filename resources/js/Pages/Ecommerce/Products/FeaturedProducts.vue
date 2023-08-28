@@ -1,17 +1,16 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import ProductCard from "@/Components/Cards/Products/ProductCard.vue";
-import { ref } from "vue";
+import ProductCard from "@/Components/Cards/Products/ProductCardGrid.vue";
 import { Head, usePage, router } from "@inertiajs/vue3";
+import { ref } from "vue";
 
 const props = defineProps({
   featuredProducts: Object,
 });
 
+// Define Variables
 const isLoading = ref(false);
-
 const products = ref(props.featuredProducts.data);
-
 const url = usePage().url;
 
 // Handle Load More Button
@@ -41,7 +40,7 @@ const loadMoreProduct = () => {
 
 <template>
   <AppLayout>
-    <Head title="All Featured Products" />
+    <Head :title="__('ALL_FEATURE_PRODUCTS')" />
 
     <!-- Title -->
     <section class="container mx-auto mt-40 py-10">
@@ -60,13 +59,12 @@ const loadMoreProduct = () => {
       </div>
 
       <!-- Products -->
-
       <div
         v-if="products"
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
       >
         <div v-for="product in products" :key="product.id">
-          <ProductCard :product="product"></ProductCard>
+          <ProductCard :product="product" />
         </div>
       </div>
       <div v-else>

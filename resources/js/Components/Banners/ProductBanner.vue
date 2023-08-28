@@ -6,11 +6,11 @@ defineProps({
 
 <template>
   <section v-if="productBanners.length" class="container mx-auto">
-    <div class="flex items-center justify-between flex-wrap">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
       <div
         v-for="productBanner in productBanners"
         :key="productBanner.id"
-        class="w-[300px] h-[300px] lg:w-[350px] lg:h-[350px] rounded-md overflow-hidden mx-3 mb-5 shadow-lg border-2 border-gray-200"
+        class="rounded-md overflow-hidden mx-3 mb-5 shadow-lg border-2 border-gray-200"
       >
         <a :href="productBanner.url" :key="productBanner.id" class="h-full">
           <img :src="productBanner.image" alt="" class="h-full object-cover" />

@@ -15,14 +15,14 @@ defineProps({
 
 <template>
   <AppLayout>
-    <Head title="FAQs" />
+    <Head :title="__('FAQS')" />
 
     <div class="min-h-[1400px] h-auto bg-gray-50 mt-40 w-full">
       <div class="container mx-auto py-8">
         <h1 class="font-bold text-2xl">{{ __("FREQUENTLY_ASK_QUESTIONS") }}</h1>
 
         <div class="flex items-start justify-between mt-10">
-          <!-- Categories Sidebar -->
+          <!-- Faq Categories Sidebar -->
           <FaqCategorySidebar :faqCategories="faqCategories" />
 
           <div class="w-[1000px] ml-5">
@@ -34,8 +34,8 @@ defineProps({
               class="text-sm font-bold my-5 text-gray-700"
             >
               {{ faqs.total }} {{ __("QUESTION_FOUND_FOR_SEARCH_RESULT") }}
-              <span class="text-blue-600"
-                >"{{ $page.props.ziggy.query?.search_question }}"
+              <span class="text-blue-600">
+                "{{ $page.props.ziggy.query?.search_question }}"
               </span>
             </p>
 
@@ -43,7 +43,7 @@ defineProps({
             <div
               class="border border-slate-400 p-6 bg-white w-full rounded-md shadow-md"
             >
-              <!-- Breadcrumb -->
+              <!-- Faq Breadcrumb Start -->
               <Breadcrumb :faqSubCategory="faqSubCategory">
                 <li aria-current="page">
                   <div class="flex items-center">
@@ -64,18 +64,20 @@ defineProps({
                     </svg>
                     <span
                       class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                      >{{
+                    >
+                      {{
                         $page.props.ziggy.query.search
                           ? "Search Result(s)"
                           : "All"
-                      }}</span
-                    >
+                      }}
+                    </span>
                   </div>
                 </li>
               </Breadcrumb>
+              <!-- Faq Breadcrumb End -->
 
-              <!-- Faq Questions -->
               <div class="w-full">
+                <!-- Faq Questions -->
                 <ul
                   class="list-disc list-inside space-y-4 text-sm text-gray-700"
                 >
@@ -103,7 +105,7 @@ defineProps({
                 </p>
               </div>
 
-              <!-- Pagination -->
+              <!-- Question Pagination -->
               <div class="mt-10 mb-5">
                 <Pagination :links="faqs.links" />
               </div>

@@ -1,17 +1,16 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import ProductCard from "@/Components/Cards/Products/ProductCard.vue";
-import { ref } from "vue";
+import ProductCard from "@/Components/Cards/Products/ProductCardGrid.vue";
 import { usePage, router, Head } from "@inertiajs/vue3";
+import { ref } from "vue";
 
 const props = defineProps({
   newProducts: Object,
 });
 
+// Define Variables
 const isLoading = ref(false);
-
 const products = ref(props.newProducts.data);
-
 const url = usePage().url;
 
 // Handle Load More Button
@@ -42,7 +41,7 @@ const loadMoreProduct = () => {
 
 <template>
   <AppLayout>
-    <Head title="All New Products" />
+    <Head :title="__('ALL_NEW_PRODUCTS')" />
 
     <section class="container mx-auto mt-40 py-10">
       <!-- Title -->
@@ -66,12 +65,12 @@ const loadMoreProduct = () => {
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
       >
         <div v-for="product in products" :key="product.id">
-          <ProductCard :product="product"></ProductCard>
+          <ProductCard :product="product" />
         </div>
       </div>
       <div v-else>
         <p class="text-center text-xl font-bold text-red-600 animate-bounce">
-            {{ __("NO_PRODUCT_FOUND") }}!
+          {{ __("NO_PRODUCT_FOUND") }}!
         </p>
       </div>
 
@@ -93,7 +92,7 @@ const loadMoreProduct = () => {
           @click="loadMoreProduct"
           class="border-2 border-slate-500 text-slate-600 rounded-sm px-5 py-2 shadow-md font-bold hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all"
         >
-        {{ __("LOAD_MORE_PRODUCTS") }}
+          {{ __("LOAD_MORE_PRODUCTS") }}
         </button>
       </div>
       <p v-else class="my-5 text-slate-600 text-center">

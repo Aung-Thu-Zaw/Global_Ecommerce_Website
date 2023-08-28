@@ -1,10 +1,10 @@
 <script setup>
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import { computed } from "vue";
-import { Link } from "@inertiajs/vue3";
 import TotalAverageRatingStarWithProgressBar from "@/Components/RatingStars/TotalAverageRatingStarWithProgressBar.vue";
 import TotalReviewAvgStars from "@/Components/RatingStars/TotalReviewAvgStars.vue";
 import ProductReviewerReviewCard from "@/Components/Cards/Products/ProductReviewerReviewCard.vue";
+import { computed } from "vue";
+import { Link } from "@inertiajs/vue3";
 
 const props = defineProps({
   paginateProductReviews: Object,

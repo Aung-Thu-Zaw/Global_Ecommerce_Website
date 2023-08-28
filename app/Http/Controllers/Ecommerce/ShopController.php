@@ -22,7 +22,7 @@ class ShopController extends Controller
     {
         $sellerShops = User::search(request("search_shop"))
                          ->query(function (Builder $builder) {
-                             $builder->with(["followers:id","products:id,seller_id"])
+                             $builder->with(["followers:id","products"])
                                      ->select("id", "uuid", "shop_name", "avatar");
                          })
                          ->where("status", "active")

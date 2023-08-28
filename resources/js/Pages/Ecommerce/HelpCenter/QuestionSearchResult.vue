@@ -1,8 +1,8 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Head, Link } from "@inertiajs/vue3";
 import QuestionSearchForm from "@/Components/Forms/QuestionSearchForm.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
+import { Head, Link } from "@inertiajs/vue3";
 
 const props = defineProps({
   faqs: Object,
@@ -11,14 +11,13 @@ const props = defineProps({
 
 <template>
   <AppLayout>
-    <Head title="Help Center" />
+    <Head :title="__('HELP_CENTER')" />
 
     <div class="min-h-[2300px] h-auto bg-gray-50 mt-40 w-full">
       <div class="container mx-auto py-8">
         <h1 class="font-bold text-2xl">Global E-commerce Help Center</h1>
       </div>
 
-      <!-- Question Search Input -->
       <div class="mb-5 pt-5 pb-10">
         <img
           src="../../../assets/images/faq.png"
@@ -28,26 +27,30 @@ const props = defineProps({
           <h1 class="font-bold text-dark mb-5 text-3xl">
             Hi, How can we help?
           </h1>
+
+          <!-- Question Search Form Input -->
           <div>
             <QuestionSearchForm />
           </div>
         </div>
       </div>
 
-      <!-- Search Results -->
-
+      <!-- Search Result Questions -->
       <div
         class="container mx-auto border bg-white p-10 rounded-md shadow-lg mb-10"
       >
+        <!-- Question Search Text -->
         <p
           v-if="$page.props.ziggy.query?.search_question"
           class="text-sm font-bold my-5 text-gray-700"
         >
           {{ faqs.total }} {{ __("QUESTION_FOUND_FOR_SEARCH_RESULT") }}
           <span class="text-blue-600"
-            >"{{ $page.props.ziggy.query?.search_question }}"</span
-          >
+            >"{{ $page.props.ziggy.query?.search_question }}"
+          </span>
         </p>
+
+        <!-- Questions -->
         <ul class="list-disc">
           <li v-for="faq in faqs.data" :key="faq.id">
             <Link
@@ -74,7 +77,7 @@ const props = defineProps({
         </p>
       </div>
 
-      <!-- Pagination -->
+      <!-- Question Pagination -->
       <div class="mt-10 mb-5">
         <Pagination :links="faqs.links" />
       </div>

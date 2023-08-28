@@ -38,7 +38,7 @@ import { router, Head } from "@inertiajs/vue3";
 export default {
   components: {
     AppLayout,
-    Head
+    Head,
   },
   data() {
     return {
@@ -92,7 +92,7 @@ export default {
         this.paymentMethodId = paymentMethod.id;
 
         router.post(
-          route("payment.stripePaymentProcess", {
+          route("payment.stripe", {
             payment_method_id: this.paymentMethodId,
             total_price: this.totalPrice,
             cart_items: this.cartItems,

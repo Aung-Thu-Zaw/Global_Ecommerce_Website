@@ -2,28 +2,28 @@
 import { Link } from "@inertiajs/vue3";
 
 defineProps({
-  vendorShops: Object,
+  sellerShops: Object,
 });
 </script>
 
 <template>
   <div
-    v-for="vendorShop in vendorShops"
-    :key="vendorShop.id"
+    v-for="sellerShop in sellerShops"
+    :key="sellerShop.id"
     class="shadow-md bg-white rounded-md flex items-center h-[180px]"
   >
     <div
       class="flex flex-col items-center justify-center w-[300px] h-full border-r border-r-slate-300 p-2"
     >
       <img
-        :src="vendorShop.avatar"
+        :src="sellerShop.avatar"
         alt=""
         class="rounded-full w-12 h-12 object-cover ring-1 ring-gray-400 shadow-md"
       />
       <div class="mt-3 flex flex-col items-center justify-between">
         <h1 class="font-bold text-sm text-slate-600 text-center line-clamp-2">
-          {{ vendorShop.shop_name }}
-          <span v-if="vendorShop.offical" class="text-green-400 rounded-xl">
+          {{ sellerShop.shop_name }}
+          <span v-if="sellerShop.offical" class="text-green-400 rounded-xl">
             <i class="fa-solid fa-circle-check ml-2"></i>
           </span>
         </h1>
@@ -40,7 +40,7 @@ defineProps({
             Products
           </p>
           <p class="text-sm text-gray-500 text-center">
-            {{ vendorShop.products.length }}
+            {{ sellerShop.products.length }}
           </p>
         </div>
         <div>
@@ -50,14 +50,14 @@ defineProps({
             Followers
           </p>
           <p class="text-sm text-gray-500 text-center">
-            {{ vendorShop.followers.length }}
+            {{ sellerShop.followers.length }}
           </p>
         </div>
       </div>
 
       <Link
         as="button"
-        :href="route('shop.show', vendorShop.uuid)"
+        :href="route('shop.show', sellerShop.uuid)"
         :data="{ tab: 'home' }"
         class="border border-blue-600 px-2 py-2 text-blue-600 text-xs font-bold rounded-sm shadow hover:bg-blue-600 hover:text-white transition-all"
       >

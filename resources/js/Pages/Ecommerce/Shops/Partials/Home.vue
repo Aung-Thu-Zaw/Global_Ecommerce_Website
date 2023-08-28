@@ -1,6 +1,6 @@
 <script setup>
-import ProductCard from "@/Components/Cards/Products/ProductCard.vue";
-import { Link } from "@inertiajs/vue3";
+import ProductCard from "@/Components/Cards/Products/ProductCardGrid.vue";
+import ProductBanner from "@/Components/Banners/ProductBanner.vue";
 
 defineProps({
   sellerProductBanners: Object,
@@ -11,39 +11,24 @@ defineProps({
 
 <template>
   <section>
-    <!-- Seller Product Banner -->
+    <!-- Seller Product Banners -->
     <div class="w-full my-5">
-      <div
-        v-if="sellerProductBanners.length"
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
-      >
+      <ProductBanner :productBanners="sellerProductBanners" />
+    </div>
+
+    <!-- Random Display Products section -->
+    <section>
+      <div v-if="sellerRandomProducts.length" class="my-5">
+        <h1 class="text-2xl text-slate-700 font-bold my-10">Just For You</h1>
+
         <div
-          v-for="sellerProductBanner in sellerProductBanners"
-          :key="sellerProductBanner.id"
-          class="w-full max-w-sm bg-white border border-gray-200 rounded-sm shadow mx-auto"
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
         >
-          <Link :href="sellerProductBanner.url">
-            <img
-              class="rounded-sm h-full object-center object-contain"
-              :src="sellerProductBanner.image"
-              alt="product image"
-            />
-          </Link>
+          <div v-for="product in sellerRandomProducts" :key="product.id">
+            <ProductCard :product="product"></ProductCard>
+          </div>
         </div>
       </div>
-    </div>
-
-    <!-- Random Display Products -->
-    <div v-if="sellerRandomProducts.length" class="my-5">
-      <h1 class="text-2xl text-slate-700 font-bold my-10">Just For You</h1>
-
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
-      >
-        <div v-for="product in sellerRandomProducts" :key="product.id">
-          <ProductCard :product="product"></ProductCard>
-        </div>
-      </div>
-    </div>
+    </section>
   </section>
 </template>

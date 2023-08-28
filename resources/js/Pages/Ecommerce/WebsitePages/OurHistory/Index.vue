@@ -1,17 +1,19 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 </script>
 
 <template>
   <AppLayout>
-    <Head title="Our History" />
+    <Head :title="__('OUR_HISTORY')" />
 
     <div class="min-h-[500px] bg-gray-50 mt-40 w-full">
       <div class="container mx-auto py-8">
         <h1 class="font-bold text-2xl mb-5">
           History of Global E-commerce Website
         </h1>
+
+        <!-- History of E-commerce -->
         <p class="text-[.9rem]">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis
           impedit explicabo, nostrum voluptatum hic iste ipsam reiciendis

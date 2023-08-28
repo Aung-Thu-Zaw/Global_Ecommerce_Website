@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import ProductCard from "@/Components/Cards/Products/ProductCard.vue";
+import ProductCard from "@/Components/Cards/Products/ProductCardGrid.vue";
 import { computed, onMounted, ref } from "vue";
 import { usePage, router, Head } from "@inertiajs/vue3";
 
@@ -9,10 +9,9 @@ const props = defineProps({
   flashSaleProducts: Object,
 });
 
+// Define Variables
 const isLoading = ref(false);
-
 const products = ref(props.flashSaleProducts.data);
-
 const url = usePage().url;
 
 // Handle Load More Button
@@ -39,6 +38,7 @@ const loadMoreProduct = () => {
   );
 };
 
+// Calculate Times
 const currentTime = ref(new Date().getTime());
 const endDate = ref(new Date(props.flashSale.end_date).getTime());
 
@@ -82,7 +82,7 @@ onMounted(() => {
 
 <template>
   <AppLayout>
-    <Head title="All Flash Sale Products" />
+    <Head :title="__('ALL_FLASH_SALE_PRODUCTS')" />
 
     <!-- Title -->
     <section class="container mx-auto mt-40 py-10">
@@ -100,6 +100,7 @@ onMounted(() => {
             {{ __("FLASH_SALE_PRODUCTS") }}
           </p>
 
+          <!-- Countdown Timer -->
           <div class="flex items-center space-x-5">
             <div
               class="flex flex-col items-center justify-between font-semibold border text-white w-16 h-16 p-3 rounded-sm shadow-md"
@@ -135,7 +136,7 @@ onMounted(() => {
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
       >
         <div v-for="product in products" :key="product.id">
-          <ProductCard :product="product.product"></ProductCard>
+          <ProductCard :product="product.product" />
         </div>
       </div>
       <div v-else>

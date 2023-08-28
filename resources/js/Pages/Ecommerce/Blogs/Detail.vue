@@ -21,7 +21,7 @@ defineProps({
     <div class="min-h-screen bg-gray-50 mt-40 w-full py-6">
       <div class="container mx-auto">
         <div class="border-b py-3 mb-5">
-          <!-- Breadcrumb -->
+          <!-- Home Blog Breadcrumb Start -->
           <Breadcrumb>
             <li aria-current="page">
               <Link
@@ -75,11 +75,12 @@ defineProps({
               </div>
             </li>
           </Breadcrumb>
+          <!-- Home Blog Breadcrumb End -->
         </div>
 
         <div class="flex items-start space-x-3">
-          <!-- Blog Category Cards  -->
           <div class="w-[400px]">
+            <!-- Sidebar Blog Categories -->
             <div v-if="blogCategories.length" class="w-full mb-10">
               <ul
                 class="h-auto space-y-3 text-center text-md font-bold text-slate-700"
@@ -88,7 +89,7 @@ defineProps({
               </ul>
             </div>
 
-            <!-- Related Blog Posts -->
+            <!-- Related Blogs Start -->
             <div
               v-if="relatedBlogPosts.length"
               class="border shadow-lg rounded-sm border-slate-400"
@@ -112,9 +113,10 @@ defineProps({
                 <RelatedBlogCard :blogPost="blogPost" />
               </div>
             </div>
+            <!-- Related Blogs End -->
           </div>
 
-          <!-- Blogs Detail -->
+          <!-- Blog Details -->
           <div class="w-full pl-10">
             <div class="border border-gray-300 shadow-lg rounded-md p-2">
               <img
@@ -126,6 +128,7 @@ defineProps({
             <h1 class="font-bold text-2xl text-slate-700 mt-8 mb-2">
               {{ blogPost.title }}
             </h1>
+
             <div class="flex items-center justify-between mb-3">
               <div class="flex items-center">
                 <span
@@ -144,6 +147,8 @@ defineProps({
                   {{ blogPost.created_at }}
                 </span>
               </div>
+
+              <!-- Share Blog Social Icons Start -->
               <div class="flex items-center">
                 <span class="font-bold text-slate-600 mr-3">
                   <i class="fa-solid fa-share-nodes"></i> Share :
@@ -177,16 +182,18 @@ defineProps({
                   ></i>
                 </a>
               </div>
+              <!-- Share Blog Social Icons End -->
             </div>
 
             <hr class="my-3" />
 
+            <!-- Blog Description -->
             <p
               v-html="blogPost.description"
               class="text-ms text-slate-600 mb-5"
             ></p>
 
-            <!-- Tags -->
+            <!-- Blog Tags Start -->
             <div
               v-if="blogPost.blog_tags.length"
               class="flex items-center mb-5"
@@ -210,6 +217,7 @@ defineProps({
                 </Link>
               </div>
             </div>
+            <!-- Blog Tags End -->
 
             <!-- Blog Comment Section -->
             <BlogCommentSection

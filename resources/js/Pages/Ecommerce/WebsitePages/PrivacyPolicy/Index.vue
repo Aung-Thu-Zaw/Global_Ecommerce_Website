@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 
 defineProps({
   privacyPolicy: Object,
@@ -9,7 +9,7 @@ defineProps({
 
 <template>
   <AppLayout>
-    <Head title="Privacy Policy" />
+    <Head :title="__('PRIVACY_POLICY')" />
 
     <div class="min-h-screen bg-gray-50 mt-40 w-full">
       <div class="container mx-auto py-8">

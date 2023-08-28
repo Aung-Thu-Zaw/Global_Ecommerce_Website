@@ -1,8 +1,8 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import ProductCard from "@/Components/Cards/Products/ProductCard.vue";
+import ProductCard from "@/Components/Cards/Products/ProductCardGrid.vue";
 import ProductCardList from "@/Components/Cards/Products/ProductCardList.vue";
-import EcommerceFilterSidebarForSearchResult from "@/Components/Sidebars/EcommerceFilterSidebarForSearchResult.vue";
+import FilterSidebar from "@/Components/Sidebars/EcommerceFilterSidebarForSearchResult.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import { reactive, ref, watch } from "vue";
@@ -116,11 +116,11 @@ const handleRemoveBrand = () => {
 
 <template>
   <AppLayout>
-    <Head title="Search Results" />
+    <Head :title="__('SEARCH_RESULT')" />
 
     <section class="container mt-40 mx-auto py-10">
       <div class="mb-5 px-4">
-        <!-- Breadcrumb -->
+        <!-- Breadcrumb Start -->
         <div class="border-b py-3">
           <Breadcrumb>
             <li aria-current="page">
@@ -140,20 +140,19 @@ const handleRemoveBrand = () => {
                 </svg>
                 <span
                   class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                  >Search Result</span
                 >
+                  {{ __("SEARCH_RESULT") }}
+                </span>
               </div>
             </li>
           </Breadcrumb>
+          <!-- Breadcrumb End -->
         </div>
       </div>
       <div class="container max-w-screen-xl mx-auto px-4">
         <div class="flex flex-col md:flex-row -mx-4">
           <!-- Ecommerce Filter Sidebar -->
-          <EcommerceFilterSidebarForSearchResult
-            :categories="categories"
-            :brands="brands"
-          />
+          <FilterSidebar :categories="categories" :brands="brands" />
 
           <main class="md:w-2/3 lg:w-3/4 px-4">
             <div
@@ -161,9 +160,9 @@ const handleRemoveBrand = () => {
             >
               <p v-if="$page.props.ziggy.query?.search">
                 {{ products.total }} {{ __("ITEMS_FOUND_FOR_THE_RESULT") }}
-                <span class="text-blue-600"
-                  >"{{ $page.props.ziggy.query?.search }}"</span
-                >
+                <span class="text-blue-600">
+                  "{{ $page.props.ziggy.query?.search }}"
+                </span>
               </p>
 
               <div class="flex items-center ml-auto">
@@ -189,12 +188,13 @@ const handleRemoveBrand = () => {
                   </select>
                 </div>
 
-                <!-- Dynamic View -->
+                <!-- Product Grid View And List View -->
                 <div class="flex items-center ml-3">
                   <span class="w-[50px]">{{ __("VIEW") }} : </span>
                   <div class="flex items-center justify-between">
                     <!-- Grid View -->
                     <Link
+                      as="button"
                       :href="route('product.search')"
                       :data="{
                         search: params.search,
@@ -218,6 +218,7 @@ const handleRemoveBrand = () => {
 
                     <!-- List View -->
                     <Link
+                      as="button"
                       :href="route('product.search')"
                       :data="{
                         search: params.search,
@@ -370,7 +371,7 @@ const handleRemoveBrand = () => {
                 </p>
               </div>
 
-              <!-- Pagination -->
+              <!-- Product Pagination -->
               <Pagination class="mt-6" :links="products.links" />
             </div>
           </main>

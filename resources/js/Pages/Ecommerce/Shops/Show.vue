@@ -95,13 +95,14 @@ const handelRemoveSearch = () => {
         <div
           class="border-b border-gray-200 dark:border-gray-700 self-start w-full flex items-center justify-between"
         >
+          <!-- Tabs Start -->
           <ul
             class="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400"
             id="myTab"
             data-tabs-toggle="#myTabContent"
             role="tablist"
           >
-            <!-- Home Tag -->
+            <!-- Home Tab -->
             <li class="mr-2" role="presentation">
               <Link
                 :href="route('shop.show', shop.uuid)"
@@ -118,7 +119,7 @@ const handelRemoveSearch = () => {
               </Link>
             </li>
 
-            <!-- All Products Tag -->
+            <!-- All Products Tab -->
             <li class="mr-2" role="presentation">
               <Link
                 :href="route('shop.show', shop.uuid)"
@@ -139,7 +140,7 @@ const handelRemoveSearch = () => {
               </Link>
             </li>
 
-            <!-- Shop Rating And Review Tag -->
+            <!-- Shop Rating And Review Tab -->
             <li class="mr-2" role="presentation">
               <Link
                 :href="route('shop.show', shop.uuid)"
@@ -156,7 +157,7 @@ const handelRemoveSearch = () => {
               </Link>
             </li>
 
-            <!-- Product Rating And Review Tag -->
+            <!-- Product Rating And Review Tab -->
             <li class="mr-2" role="presentation">
               <Link
                 :href="route('shop.show', shop.uuid)"
@@ -173,8 +174,9 @@ const handelRemoveSearch = () => {
               </Link>
             </li>
           </ul>
+          <!-- Tabs End -->
 
-          <!-- Search Box -->
+          <!-- Product Search Form Input -->
           <div>
             <form @submit.prevent="handleSearch" class="flex items-center">
               <div
@@ -201,10 +203,10 @@ const handelRemoveSearch = () => {
           </div>
         </div>
 
-        <!-- Nav Tags Result -->
+        <!-- Nav Tabs Result -->
         <div id="myTabContet" class="w-full">
           <div class="w-full">
-            <!-- Home Tag -->
+            <!-- Home Tab -->
             <div
               v-if="
                 $page.props.ziggy.query.tab === 'home' ||
@@ -217,7 +219,7 @@ const handelRemoveSearch = () => {
               />
             </div>
 
-            <!-- All Products Tag -->
+            <!-- All Products Tab -->
             <div v-else-if="$page.props.ziggy.query.tab === 'all-products'">
               <AllProducts
                 :sellerProducts="sellerProducts"
@@ -227,7 +229,7 @@ const handelRemoveSearch = () => {
               />
             </div>
 
-            <!-- Shop Rating And Review Tag -->
+            <!-- Shop Rating And Review Tab -->
             <div
               v-else-if="
                 $page.props.ziggy.query.tab === 'ratings-and-reviews-for-shop'
@@ -241,7 +243,7 @@ const handelRemoveSearch = () => {
               />
             </div>
 
-            <!-- Product Rating And Review Tag -->
+            <!-- Product Rating And Review Tab -->
             <div
               v-else-if="
                 $page.props.ziggy.query.tab ===

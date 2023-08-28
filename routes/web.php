@@ -164,9 +164,9 @@ Route::middleware(["auth","verified"])->group(function () {
 
     Route::post('/payment', [PaymentController::class,"payment"])->name("payment");
 
-    Route::post('/payment/stripePaymentProcess', [StripeController::class,"stripePaymentProcess"])->name("payment.stripePaymentProcess");
+    Route::post('/payment/stripePaymentProcess', [StripeController::class,"stripePaymentProcess"])->name("payment.stripe");
 
-    Route::post('/payment/cashPaymentProcess', [CashOnDeliveryController::class,"cashPaymentProcess"])->name("payment.cashPaymentProcess");
+    Route::post('/payment/cashPaymentProcess', [CashOnDeliveryController::class,"cashPaymentProcess"])->name("payment.cash");
 
     Route::post("/product/track-interaction", [UserProductInteractionController::class,"store"])->name("product.track-interaction");
 

@@ -1,18 +1,17 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import ProductCard from "@/Components/Cards/Products/ProductCard.vue";
-import { ref } from "vue";
+import ProductCard from "@/Components/Cards/Products/ProductCardGrid.vue";
 import { usePage, router, Head } from "@inertiajs/vue3";
+import { ref } from "vue";
 
 const props = defineProps({
   products: Object,
   collection: Object,
 });
 
+// Define Veriables
 const isLoading = ref(false);
-
 const products = ref(props.products.data);
-
 const url = usePage().url;
 
 // Handle Load More Button

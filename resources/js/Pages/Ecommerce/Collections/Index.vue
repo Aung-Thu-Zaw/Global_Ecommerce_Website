@@ -1,17 +1,16 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import CollectionCard from "@/Components/Cards/CollectionCard.vue";
-import { ref } from "vue";
 import { usePage, router, Head } from "@inertiajs/vue3";
+import { ref } from "vue";
 
 const props = defineProps({
   collections: Object,
 });
 
+// Define Veriables
 const isLoading = ref(false);
-
 const collections = ref(props.collections?.data);
-
 const url = usePage().url;
 
 // Handle Load More Button
@@ -51,6 +50,7 @@ const loadMoreCollection = () => {
         >
           <CollectionCard :collections="collections" />
         </div>
+
         <div v-else>
           <p class="text-center text-xl font-bold text-red-600 animate-bounce">
             {{ __("NO_COLLECTION_FOUND") }}!

@@ -21,7 +21,7 @@ defineProps({
         <h1 class="font-bold text-2xl">{{ __("FREQUENTLY_ASK_QUESTIONS") }}</h1>
 
         <div class="flex items-start justify-between mt-10">
-          <!-- Categories Sidebar -->
+          <!-- Faq Categories Sidebar -->
           <FaqCategorySidebar :faqCategories="faqCategories" />
 
           <div class="w-[1000px] ml-5">
@@ -32,7 +32,7 @@ defineProps({
             <div
               class="border border-slate-400 p-6 bg-white w-full rounded-md shadow-md"
             >
-              <!-- Breadcrumb -->
+              <!-- Faq Breadcrumb Start -->
               <Breadcrumb :faqSubCategory="faq.faq_sub_category">
                 <li aria-current="page">
                   <div class="flex items-center max-w-[500px]">
@@ -53,11 +53,13 @@ defineProps({
                     </svg>
                     <span
                       class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400 line-clamp-1"
-                      >{{ faq.question }}</span
                     >
+                      {{ faq.question }}
+                    </span>
                   </div>
                 </li>
               </Breadcrumb>
+              <!-- Faq Breadcrumb End -->
 
               <!-- Questions And Answers -->
               <div class="w-full mb-14">
@@ -94,7 +96,7 @@ defineProps({
                 </div>
               </div>
 
-              <!-- Related Questions -->
+              <!-- Faq Related Questions -->
               <div class="p-6">
                 <h3 class="font-bold text-gray-700 text-md mb-3">
                   {{ __("RELATED_QUESTIONS") }} :

@@ -73,6 +73,7 @@ const submit = () => {
               :deliveryInformation="deliveryInformation"
             />
 
+            <!-- Packages -->
             <article
               v-for="(shop, index) in shops"
               :key="index"
@@ -103,6 +104,7 @@ const submit = () => {
           </main>
 
           <aside class="md:w-1/3">
+            <!-- Order Summary -->
             <article
               class="border border-gray-200 bg-white shadow-sm rounded mb-5 p-3 lg:p-5"
             >
@@ -146,6 +148,7 @@ const submit = () => {
                 </li>
               </ul>
 
+              <!-- Select Payment Method Form Start -->
               <form @submit.prevent="handlePlaceOrder">
                 <div class="my-10">
                   <h1 class="font-bold text-lg text-slate-700">
@@ -217,9 +220,10 @@ const submit = () => {
                   :disabled="!deliveryInformation"
                 >
                   <i class="fa-solid fa-bag-shopping"></i>
-                {{__("PLACE_ORDER")}}
+                  {{ __("PLACE_ORDER") }}
                 </button>
               </form>
+              <!-- Select Payment Method Form End -->
             </article>
           </aside>
         </div>

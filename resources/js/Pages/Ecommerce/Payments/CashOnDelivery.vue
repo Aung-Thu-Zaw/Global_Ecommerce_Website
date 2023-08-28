@@ -9,7 +9,7 @@ const props = defineProps({
 
 const handleConfirmOrder = () => {
   router.post(
-    route("payment.cashPaymentProcess", {
+    route("payment.cash", {
       total_price: props.totalPrice,
       cart_items: props.cartItems,
     })
@@ -29,6 +29,7 @@ const handleConfirmOrder = () => {
           doorstep.
         </h2>
         <button
+          type="button"
           @click="handleConfirmOrder"
           class="px-5 py-3 text-sm font-bold rounded-md border border-blue-600 text-blue-600 mt-10 mb-5 hover:bg-blue-600 hover:text-white transition-all animate-bounce"
         >

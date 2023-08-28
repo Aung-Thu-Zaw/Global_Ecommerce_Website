@@ -112,7 +112,7 @@ const handleUnfollowShop = async (shop_id) => {
       <RecommendedProductSection :recommendedProducts="recommendedProducts" />
     </div>
 
-    <!-- Recommended Product Section -->
+    <!-- Just For You Product Section -->
     <div v-else-if="justForYouProducts">
       <JustForYouProductSection :justForYouProducts="justForYouProducts" />
     </div>

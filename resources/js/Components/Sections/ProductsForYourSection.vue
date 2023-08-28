@@ -1,5 +1,5 @@
 <script setup>
-import ProductCard from "@/Components/Cards/Products/ProductCard.vue";
+import ProductCard from "@/Components/Cards/Products/ProductCardGrid.vue";
 import { router } from "@inertiajs/core";
 import { usePage } from "@inertiajs/vue3";
 import { ref } from "vue";

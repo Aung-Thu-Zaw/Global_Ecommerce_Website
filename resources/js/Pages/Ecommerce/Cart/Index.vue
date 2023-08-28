@@ -68,7 +68,7 @@ const applyCoupon = () => {
       <div class="container max-w-screen-xl mx-auto px-4">
         <div class="flex flex-col md:flex-row gap-4">
           <main class="md:w-3/4">
-            <!-- Package -->
+            <!-- Packages -->
             <article
               v-for="(shop, index) in shops"
               :key="index"
@@ -100,7 +100,6 @@ const applyCoupon = () => {
 
           <aside class="md:w-1/4">
             <!-- Order Summary Card -->
-
             <OrderSummaryCard :cartItems="cartItems" :coupon="coupon" />
 
             <!-- Apply Coupon Input -->
@@ -136,6 +135,7 @@ const applyCoupon = () => {
       </div>
     </section>
 
+    <!-- No Items Card Section -->
     <section v-else class="min-h-[400px] flex flex-col items-center py-10">
       <h2 class="font-semibold text-lg text-center text-slate-600 mb-20">
         <i class="fa-solid fa-bag-shopping"></i>
@@ -144,6 +144,7 @@ const applyCoupon = () => {
         {{ __("THERE_ARE_NO_ITEMS_IN_THIS_CART") }}
       </h2>
       <Link
+        as="button"
         :href="route('home')"
         class="border border-blue-600 px-5 py-3 shadow animate-bounce font-semibold text-blue-600 rounded text-sm hover:bg-blue-600 hover:text-white transition-all"
       >

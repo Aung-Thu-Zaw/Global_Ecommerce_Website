@@ -2,7 +2,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
 import BlogTagCard from "@/Components/Cards/Blogs/BlogTagCard.vue";
-import BlogCard from "@/Components/Cards/Blogs/BlogCard.vue";
+import BlogCardGrid from "@/Components/Cards/Blogs/BlogCardGrid.vue";
 import BlogCategoryCard from "@/Components/Cards/Blogs/BlogCategoryCard.vue";
 import BlogCardList from "@/Components/Cards/Blogs/BlogCardList.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
@@ -100,7 +100,7 @@ const handleRemoveBlogCategory = () => {
 
     <div class="min-h-screen bg-gray-50 mt-40 w-full py-6">
       <div class="w-[1500px] mx-auto">
-        <!-- Breadcrumb  -->
+        <!-- Home Blog Breadcrumb Start  -->
         <div class="border-b py-3 mb-5">
           <Breadcrumb>
             <li aria-current="page">
@@ -124,11 +124,12 @@ const handleRemoveBlogCategory = () => {
               </div>
             </li>
           </Breadcrumb>
+          <!-- Home Blog Breadcrumb End  -->
         </div>
 
         <div class="flex items-start space-x-3">
           <div class="w-[400px]">
-            <!-- Blog Categories -->
+            <!-- Sidebar Blog Categories -->
             <ul
               v-if="blogCategories.length"
               class="h-auto space-y-3 text-center text-md font-bold text-slate-700 mb-10"
@@ -136,7 +137,7 @@ const handleRemoveBlogCategory = () => {
               <BlogCategoryCard :blogCategories="blogCategories" />
             </ul>
 
-            <!-- Blog Tags -->
+            <!-- Sidebar Blog Tags -->
             <div v-if="blogTags.length">
               <BlogTagCard :blogTags="blogTags" />
             </div>
@@ -146,7 +147,7 @@ const handleRemoveBlogCategory = () => {
             <div
               class="text-sm font-bold text-slate-600 px-5 py-3 border-t border-b flex items-center justify-between mb-5"
             >
-              <!-- Search Blogs Input -->
+              <!-- Search Blogs From Input -->
               <form
                 class="w-[350px] rounded-md flex items-center justify-between border border-gray-400 focus:border-gray-400 p-1"
               >
@@ -170,11 +171,10 @@ const handleRemoveBlogCategory = () => {
               </p>
 
               <div class="flex items-center ml-auto">
-                <!-- Blog Sorting -->
+                <!-- Blog Sorting Dropdown -->
                 <div class="w-[210px] flex items-center justify-between">
                   <span class="flex items-center">{{ __("SORT_BY") }} : </span>
                   <select
-                    id="countries"
                     class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[150px] p-2.5 text-slate-700"
                     v-model="params.direction"
                   >
@@ -192,11 +192,13 @@ const handleRemoveBlogCategory = () => {
                   </select>
                 </div>
 
-                <!-- Blog Card Views -->
+                <!-- Blog Grid And List Views -->
                 <div class="flex items-center ml-3">
                   <span class="mr-2"> {{ __("VIEW") }} : </span>
                   <div class="flex items-center justify-between">
+                    <!-- Grid View -->
                     <Link
+                      as="button"
                       :href="route('blogs.index')"
                       :data="{
                         search_blog: params.search_blog,
@@ -214,7 +216,10 @@ const handleRemoveBlogCategory = () => {
                     >
                       <i class="fa-solid fa-grip"></i>
                     </Link>
+
+                    <!-- List View -->
                     <Link
+                      as="button"
                       :href="route('blogs.index')"
                       :data="{
                         search_blog: params.search_blog,
@@ -257,7 +262,7 @@ const handleRemoveBlogCategory = () => {
               </span>
             </div>
 
-            <!-- Blog Cards -->
+            <!-- Blog Cards List View -->
             <div v-if="params.view === 'list'" class="w-full">
               <div v-if="blogPosts.data.length" class="w-full">
                 <div
@@ -269,14 +274,17 @@ const handleRemoveBlogCategory = () => {
                 </div>
               </div>
             </div>
+
+            <!-- Blog Cards Grid View -->
             <div v-else>
               <div v-if="blogPosts.data.length" class="grid grid-cols-4 gap-5">
                 <div v-for="blogPost in blogPosts.data" :key="blogPost.id">
-                  <BlogCard :post="blogPost" />
+                  <BlogCardGrid :post="blogPost" />
                 </div>
               </div>
             </div>
-            <!-- Pagination -->
+
+            <!-- Blog Pagination -->
             <Pagination class="mt-6" :links="blogPosts.links" />
           </div>
         </div>

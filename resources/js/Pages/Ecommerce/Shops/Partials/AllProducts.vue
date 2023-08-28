@@ -1,13 +1,13 @@
 <script setup>
-import ProductCard from "@/Components/Cards/Products/ProductCard.vue";
+import ProductCardGrid from "@/Components/Cards/Products/ProductCardGrid.vue";
 import ProductCardList from "@/Components/Cards/Products/ProductCardList.vue";
+import FilterSidebar from "@/Components/Sidebars/EcommerceFilterSidebarForShop.vue";
+import Pagination from "@/Components/Paginations/Pagination.vue";
 import { reactive, ref, watch } from "vue";
 import { usePage, router, Link } from "@inertiajs/vue3";
-import EcommerceFilterSidebarForShop from "@/Components/Sidebars/EcommerceFilterSidebarForShop.vue";
-import Pagination from "@/Components/Paginations/Pagination.vue";
 
 const props = defineProps({
-  vendorProducts: Object,
+  sellerProducts: Object,
   categories: Object,
   brands: Object,
   shop: Object,
@@ -126,18 +126,15 @@ watch(
   <section class="container mx-auto py-10">
     <div class="container max-w-screen-xl mx-auto">
       <div class="flex flex-col md:flex-row -mx-4">
-        <!-- Filter Sidebar Card -->
-        <EcommerceFilterSidebarForShop
-          :categories="categories"
-          :brands="brands"
-          :shop="shop"
-        />
+        <!-- Product Filter Sidebar Card -->
+        <FilterSidebar :categories="categories" :brands="brands" :shop="shop" />
+
         <main class="md:w-2/3 lg:w-3/4 px-4">
           <div
             class="text-sm font-bold text-slate-600 px-5 py-3 border-t border-b flex items-center justify-between"
           >
             <p v-if="params.search">
-              {{ vendorProducts.total }} {{ __("ITEMS_FOUND_FOR_THE_RESULT") }}
+              {{ sellerProducts.total }} {{ __("ITEMS_FOUND_FOR_THE_RESULT") }}
               <span class="text-blue-600">"{{ params.search }}"</span>
             </p>
 
@@ -164,12 +161,13 @@ watch(
                 </select>
               </div>
 
-              <!-- Dynamic View -->
+              <!-- Product Grid And List View -->
               <div class="flex items-center ml-3">
                 <span class="mr-2">{{ __("VIEW") }} : </span>
                 <div class="flex items-center justify-between">
                   <!-- Grid View -->
                   <Link
+                    as="button"
                     :href="route('shop.show', shop.uuid)"
                     :data="{
                       search: $page.props.ziggy.query?.search,
@@ -192,8 +190,10 @@ watch(
                   >
                     <i class="fa-solid fa-grip"></i>
                   </Link>
+
                   <!-- List View -->
                   <Link
+                    as="button"
                     :href="route('shop.show', shop.uuid)"
                     :data="{
                       search: $page.props.ziggy.query?.search,
@@ -293,20 +293,22 @@ watch(
             </span>
           </div>
 
-          <!-- Product Card List Display -->
+          <!-- Product Card List View Start -->
           <div v-if="$page.props.ziggy.query.view === 'list'">
             <div
-              v-if="vendorProducts.data.length"
+              v-if="sellerProducts.data.length"
               class="flex flex-col items-center space-y-2"
             >
               <div
-                v-for="product in vendorProducts.data"
+                v-for="product in sellerProducts.data"
                 :key="product.id"
                 class="w-full"
               >
                 <ProductCardList :product="product" />
               </div>
             </div>
+
+            <!-- Product Not Found -->
             <div v-else>
               <h4 class="font-bold text-slate-600 text-center mt-20 text-xl">
                 ☹️ {{ __("ITEMS_NOT_FOUND") }}!
@@ -320,23 +322,26 @@ watch(
               </p>
             </div>
             <!-- Pagination -->
-            <Pagination class="mt-6" :links="vendorProducts.links" />
+            <Pagination class="mt-6" :links="sellerProducts.links" />
           </div>
+          <!-- Product Card List View End -->
 
-          <!-- Product Card Grid Display -->
+          <!-- Product Card Grid View Start -->
           <div v-if="$page.props.ziggy.query.view === 'grid'">
             <div
-              v-if="vendorProducts.data.length"
+              v-if="sellerProducts.data.length"
               class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
             >
               <div
-                v-for="product in vendorProducts.data"
+                v-for="product in sellerProducts.data"
                 :key="product.id"
                 class="my-3"
               >
-                <ProductCard :product="product"></ProductCard>
+                <ProductCardGrid :product="product" />
               </div>
             </div>
+
+            <!-- Product Not Found -->
             <div v-else>
               <h4 class="font-bold text-slate-600 text-center mt-20 text-xl">
                 ☹️ {{ __("ITEMS_NOT_FOUND") }}!
@@ -351,8 +356,9 @@ watch(
             </div>
 
             <!-- Pagination -->
-            <Pagination class="mt-6" :links="vendorProducts.links" />
+            <Pagination class="mt-6" :links="sellerProducts.links" />
           </div>
+          <!-- Product Card Grid View End -->
         </main>
       </div>
     </div>

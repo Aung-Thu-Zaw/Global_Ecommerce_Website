@@ -124,8 +124,8 @@ const saved = computed(() => {
     <Head :title="product.name" />
 
     <section class="py-4 mt-44">
-      <!-- Breadcrumb -->
       <div class="container max-w-screen-xl mx-auto px-4">
+        <!-- Breadcrumb Start -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -168,6 +168,7 @@ const saved = computed(() => {
             </div>
           </li>
         </Breadcrumb>
+        <!-- Breadcrumb End -->
       </div>
     </section>
 

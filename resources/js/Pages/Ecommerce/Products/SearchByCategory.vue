@@ -1,8 +1,8 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import ProductCard from "@/Components/Cards/Products/ProductCard.vue";
+import ProductCard from "@/Components/Cards/Products/ProductCardGrid.vue";
 import ProductCardList from "@/Components/Cards/Products/ProductCardList.vue";
-import EcommerceFilterSidebarForCategoryResult from "@/Components/Sidebars/EcommerceFilterSidebarForCategoryResult.vue";
+import FilterSidebar from "@/Components/Sidebars/EcommerceFilterSidebarForCategoryResult.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/SearchByCategoryBreadcrumb.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
 import { reactive, ref, watch } from "vue";
@@ -104,10 +104,8 @@ const handleRemoveBrand = () => {
       <div class="container max-w-screen-xl mx-auto px-4">
         <div class="flex flex-col md:flex-row -mx-4">
           <!-- Ecommerce Filter Sidebar -->
-          <EcommerceFilterSidebarForCategoryResult
-            :category="category"
-            :brands="brands"
-          />
+          <FilterSidebar :category="category" :brands="brands" />
+
           <main class="md:w-2/3 lg:w-3/4 px-4">
             <div
               class="text-sm font-bold text-slate-600 px-5 py-3 border-t border-b flex items-center justify-between"
@@ -140,12 +138,13 @@ const handleRemoveBrand = () => {
                   </select>
                 </div>
 
-                <!-- Dynamic View -->
+                <!-- Product Grid View And List View -->
                 <div class="flex items-center ml-3">
                   <span class="mr-2">{{ __("VIEW") }} : </span>
                   <div class="flex items-center justify-between">
                     <!-- Grid View -->
                     <Link
+                      as="button"
                       :href="route('category.products', category.slug)"
                       :data="{
                         brand: params.brand,
@@ -166,6 +165,7 @@ const handleRemoveBrand = () => {
                     </Link>
                     <!-- List View -->
                     <Link
+                      as="button"
                       :href="route('category.products', category.slug)"
                       :data="{
                         brand: params.brand,
@@ -297,6 +297,7 @@ const handleRemoveBrand = () => {
                 </p>
               </div>
 
+              <!-- Product Pagination -->
               <Pagination class="mt-6" :links="products.links" />
             </div>
           </main>

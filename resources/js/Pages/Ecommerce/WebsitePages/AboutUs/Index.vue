@@ -1,16 +1,18 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 </script>
 
 <template>
   <AppLayout>
-    <Head title="About Us" />
+    <Head :title="__('ABOUT_US')" />
 
     <div class="min-h-screen bg-gray-50 mt-40 w-full">
       <div class="bg-white">
         <div class="container mx-auto py-8">
           <h1 class="font-bold text-2xl mb-5">About Global E-commerce</h1>
+
+          <!-- About Of E-commerce Website -->
           <p class="text-[.9rem]">
             Lorem ipsum dolor sit amet, consectetur adipisicing elit.
             Perspiciatis impedit explicabo, nostrum voluptatum hic iste ipsam
@@ -51,6 +53,7 @@ import { Head, Link } from "@inertiajs/vue3";
         </div>
       </div>
 
+      <!-- Our Mission -->
       <div class="bg-gray-50">
         <div class="container mx-auto py-8">
           <div class="flex items-center justify-between">
@@ -74,6 +77,7 @@ import { Head, Link } from "@inertiajs/vue3";
         </div>
       </div>
 
+      <!-- Free And Easy Returns -->
       <div class="bg-white">
         <div class="container mx-auto py-8">
           <div class="flex items-center justify-between">
@@ -96,7 +100,8 @@ import { Head, Link } from "@inertiajs/vue3";
         </div>
       </div>
 
-      <div class="bg-gray-50">
+      <!-- 100% Genuine Products -->
+      <section class="bg-gray-50">
         <div class="container mx-auto py-8">
           <div class="flex items-center justify-between">
             <div class="w-[700px]">
@@ -119,9 +124,10 @@ import { Head, Link } from "@inertiajs/vue3";
             />
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="bg-white">
+      <!-- Anytime Anywhere -->
+      <section class="bg-white">
         <div class="container mx-auto py-8">
           <div class="flex items-center justify-between">
             <img
@@ -149,7 +155,7 @@ import { Head, Link } from "@inertiajs/vue3";
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   </AppLayout>
 </template>
