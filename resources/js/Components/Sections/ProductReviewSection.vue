@@ -235,9 +235,10 @@ const fiveStarRating = computed(() => {
       >
         <div
           v-if="
-            paginateProductReview.status === 'approved' ||
+            paginateProductReview.status === 'published' ||
             ($page.props.auth.user &&
-              $page.props.auth.user.id === paginateProductReview.user_id)
+              $page.props.auth.user.id === paginateProductReview.user_id &&
+              paginateProductReview.status !== 'published')
           "
           class="shadow border rounded-md p-5 flex flex-col items-start my-3"
         >

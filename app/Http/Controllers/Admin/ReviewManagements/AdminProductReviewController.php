@@ -12,6 +12,7 @@ use App\Models\ProductReview;
 use App\Actions\Admin\ReviewManagements\ProductReviews\PermanentlyDeleteAllTrashProductReviewAction;
 use App\Actions\Admin\ReviewManagements\ProductReviews\PermanentlyDeleteTrashProductReviewAction;
 use App\Http\Traits\HandlesQueryStringParameters;
+use App\Services\BroadcastNotifications\AdminPublishedProductReviewNotificationNotificationSendToSellerDashboardService;
 
 class AdminProductReviewController extends Controller
 {
@@ -42,6 +43,10 @@ class AdminProductReviewController extends Controller
     public function update(Request $request, ProductReview $productReview): RedirectResponse
     {
         $productReview->update(["status" => $request->status]);
+
+        if($request->status === "published") {
+            (new AdminPublishedProductReviewNotificationNotificationSendToSellerDashboardService())->send($productReview);
+        }
 
         $message = $request->status === "unpublished" ? "PRODUCT_REVIEW_HAS_BEEN_SUCCESSFULLY_UNPUBLISHED" : "PRODUCT_REVIEW_HAS_BEEN_SUCCESSFULLY_PUBLISHED";
 

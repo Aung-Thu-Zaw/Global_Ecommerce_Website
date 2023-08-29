@@ -94,7 +94,7 @@ class ProductController extends Controller
 
         $productReviews = ProductReview::where("product_id", $product->id)->where("status", "published")->get();
 
-        $productReviewsAvg = ProductReview::whereProductId($product->id)->avg("rating");
+        $productReviewsAvg = ProductReview::where("product_id", $product->id)->where("status", "published")->avg("rating");
 
         $conversation = Conversation::with(["messages.user:id,avatar","customer:id,name,avatar,last_activity","seller:id,shop_name,avatar,offical,last_activity"])
                                   ->where("customer_id", auth()->id())
