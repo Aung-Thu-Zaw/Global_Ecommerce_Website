@@ -37,6 +37,14 @@ const handleDeleteReview = () => {
 
 
 <template>
+  <div
+    v-if="paginateProductReview.status !== 'published'"
+    class="text-xs font-medium text-green-600 w-full mb-3 text-center"
+  >
+    <i class="fa-solid fa-spinner animate-spin mr-1"></i>
+    <span> {{ __("YOUR_PRODUCT_REVIEW_IS_AWAITING_MODERATION") }} </span>
+  </div>
+
   <div class="flex items-start w-full">
     <div class="flex flex-col items-center justify-center mr-5">
       <img
@@ -73,7 +81,7 @@ const handleDeleteReview = () => {
         {{ paginateProductReview.review_text }}
       </p>
 
-      <div class="flex items-center flex-wrap space-x-2 w-full">
+      <div class="flex items-center flex-wrap space-x-2 w-full mb-3">
         <div
           v-for="image in paginateProductReview.images"
           :key="image.id"
@@ -90,7 +98,7 @@ const handleDeleteReview = () => {
         v-if="
           !paginateProductReview.reply &&
           $page.props.auth.user &&
-          paginateProductReview.seller_id == $page.props.auth.user.id
+          paginateProductReview.shop_id === $page.props.auth.user.id
         "
         class="flex items-center justify-end w-full"
       >
@@ -99,7 +107,7 @@ const handleDeleteReview = () => {
           class="font-bold border text-[.7rem] text-sky-700 px-3 py-2 rounded-sm border-sky-700 hover:bg-sky-700 hover:text-white transition-all mb-3"
         >
           <i class="fa-solid fa-flag"></i>
-          Reply
+          {{ __("REPLY_THIS_REVIEW") }}
         </button>
       </div>
 

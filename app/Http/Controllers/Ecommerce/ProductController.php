@@ -92,7 +92,7 @@ class ProductController extends Controller
                                              ->orderBy("id", "desc")
                                              ->paginate(5);
 
-        $productReviews = ProductReview::whereProductId($product->id)->get();
+        $productReviews = ProductReview::where("product_id", $product->id)->where("status", "published")->get();
 
         $productReviewsAvg = ProductReview::whereProductId($product->id)->avg("rating");
 

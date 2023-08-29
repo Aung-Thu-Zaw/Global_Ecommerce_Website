@@ -931,5 +931,7 @@
     "DELETE_ANSWER": "Delete Answer",
     "ACCOUNT_IS_CREATED_SUCCESSFULLY": "Account is created successfully.",
     "RECEIVED_A_NEW_PRODUCT_REVIEW_FROM_A_CUSTOMER": "Received a new product review from a customer.",
-    "RECEIVED_A_NEW_SHOP_REVIEW_FROM_A_CUSTOMER": "Received a new shop review from a customer."
+    "RECEIVED_A_NEW_SHOP_REVIEW_FROM_A_CUSTOMER": "Received a new shop review from a customer.",
+    "REPLY_THIS_REVIEW": "Reply This Review",
+    "YOUR_PRODUCT_REVIEW_IS_AWAITING_MODERATION": "Your product review is awaiting moderation."
 }

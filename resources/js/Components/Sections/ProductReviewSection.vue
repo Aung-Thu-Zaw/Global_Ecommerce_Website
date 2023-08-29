@@ -232,11 +232,20 @@ const fiveStarRating = computed(() => {
       <div
         v-for="paginateProductReview in paginateProductReviews.data"
         :key="paginateProductReview.id"
-        class="shadow border rounded-md p-5 flex flex-col items-start my-3"
       >
-        <ProductReviewCard :paginateProductReview="paginateProductReview" />
-        <div v-if="paginateProductReview.reply" class="w-full">
-          <ProductReplyCard :paginateProductReview="paginateProductReview" />
+        <div
+          v-if="
+            paginateProductReview.status === 'approved' ||
+            ($page.props.auth.user &&
+              $page.props.auth.user.id === paginateProductReview.user_id)
+          "
+          class="shadow border rounded-md p-5 flex flex-col items-start my-3"
+        >
+          <ProductReviewCard :paginateProductReview="paginateProductReview" />
+
+          <div v-if="paginateProductReview.reply" class="w-full">
+            <ProductReplyCard :paginateProductReview="paginateProductReview" />
+          </div>
         </div>
       </div>
 
