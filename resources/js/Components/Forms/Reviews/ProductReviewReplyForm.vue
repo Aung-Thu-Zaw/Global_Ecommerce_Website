@@ -11,7 +11,7 @@ const emit = defineEmits(["isVisible"]);
 
 const form = useForm({
   product_review_id: props.paginateProductReview.id,
-  shop_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
+  seller_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
   reply_text: "",
   captcha_token: null,
 });

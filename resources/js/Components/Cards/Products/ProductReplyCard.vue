@@ -27,13 +27,13 @@ const handleDeleteReply = () => {
     <div class="flex items-start justify-between my-3 w-full">
       <div class="flex items-center">
         <img
-          :src="paginateProductReview.reply.user.avatar"
+          :src="paginateProductReview.reply.seller.avatar"
           alt=""
           class="w-10 h-10 object-cover rounded-full mr-5"
         />
         <div class="w-full">
           <h4 class="text-lg font-bold text-slate-700">
-            {{ paginateProductReview.reply.user.shop_name }}
+            {{ paginateProductReview.reply.seller.shop_name }}
             <span
               class="px-3 py-1 bg-green-200 text-green-600 rounded-xl text-[.7rem] ml-2"
             >
@@ -41,7 +41,7 @@ const handleDeleteReply = () => {
               Verified
             </span>
           </h4>
-          <p class="text-[.8rem] text-slate-400">Reply From Shop</p>
+          <p class="text-[.7rem] text-slate-400">Reply From Shop</p>
         </div>
       </div>
       <div class="">

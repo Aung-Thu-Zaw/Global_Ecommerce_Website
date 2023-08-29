@@ -9,8 +9,8 @@ const props = defineProps({
   notification: Object,
 });
 
-const goToBlog = () => {
-  router.get(route("blogs.show", props.notification.data.blog));
+const goToProduct = () => {
+  router.get(route("products.show", props.notification.data.slug));
 };
 
 const handleNotificationReadAt = () => {
@@ -19,7 +19,7 @@ const handleNotificationReadAt = () => {
     {},
     {
       onSuccess: () => {
-        goToBlog();
+        goToProduct();
       },
     }
   );
@@ -31,13 +31,13 @@ const handleNotificationReadAt = () => {
     @click="handleNotificationReadAt"
     v-if="
       notification.type ===
-      'App\\Notifications\\Blogs\\BlogCommentReplyFromAuthorNotification'
+      'App\\Notifications\\Reviews\\ProductReviewReplyFromSellerNotification'
     "
     class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer w-full"
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
-      class="flex-shrink-0 bg-orange-300 text-orange-700 ring-2 ring-orange-500 w-10 h-10 rounded-md flex items-center justify-center p-3 font-bold"
+      class="flex-shrink-0 bg-sky-300 text-sky-700 ring-2 ring-sky-500 w-10 h-10 rounded-md flex items-center justify-center p-3 font-bold"
     >
       <i class="fa-solid fa-flag"></i>
     </div>
@@ -64,7 +64,7 @@ const handleNotificationReadAt = () => {
       <div
         class="text-xs font-bold"
         :class="{
-          'text-orange-500': !notification.read_at,
+          'text-sky-500': !notification.read_at,
           'text-gray-500': notification.read_at,
         }"
       >

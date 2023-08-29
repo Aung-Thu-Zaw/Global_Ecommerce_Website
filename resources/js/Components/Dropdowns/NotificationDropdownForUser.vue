@@ -1,5 +1,6 @@
 <script setup>
 import BlogCommentReplyNotificationCard from "@/Components/Cards/Notifications/BlogCommentReplyNotificationCard.vue";
+import ProductReviewReplyNotificationCard from "@/Components/Cards/Notifications/ProductReviewReplyNotificationCard.vue";
 import ProductQuestionAnswerNotificationCard from "@/Components/Cards/Notifications/ProductQuestionAnswerNotificationCard.vue";
 import { usePage, router } from "@inertiajs/vue3";
 import { computed, onMounted, onUpdated, ref } from "vue";
@@ -39,6 +40,19 @@ onMounted(() => {
             message: notification.message,
             product: notification.product,
             answer: notification.answer,
+          },
+        });
+      } else if (
+        notification.type ===
+        "App\\Notifications\\Reviews\\ProductReviewReplyFromSellerNotification"
+      ) {
+        notifications.value.unshift({
+          id: notification.id,
+          type: notification.type,
+          data: {
+            message: notification.message,
+            reply: notification.reply,
+            slug: notification.slug,
           },
         });
       }
@@ -140,6 +154,7 @@ const handleMarkAllAsRead = () => {
     >
       <BlogCommentReplyNotificationCard :notification="notification" />
       <ProductQuestionAnswerNotificationCard :notification="notification" />
+      <ProductReviewReplyNotificationCard :notification="notification" />
     </div>
 
     <div class="w-full text-center py-3" v-if="!sortedNotifications.length">
@@ -150,6 +165,7 @@ const handleMarkAllAsRead = () => {
     </div>
   </div>
 </template>
+
 
 
 
