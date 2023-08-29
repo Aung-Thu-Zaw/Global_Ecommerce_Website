@@ -20,9 +20,11 @@ class Image extends Model
             set: function ($value) {
                 if ($value && str_starts_with($value, "http")) {
                     return $value;
-                } elseif ($value&& str_starts_with($value, "suggestion")) {
+                } elseif ($value && str_starts_with($value, "suggestion")) {
                     return asset("storage/suggestions/$value");
-                } elseif ($value&& str_starts_with($value, "product")) {
+                } elseif ($value && str_starts_with($value, "product-review")) {
+                    return asset("storage/product-reviews/$value");
+                } elseif ($value && str_starts_with($value, "product")) {
                     return asset("storage/products/$value");
                 } else {
                     return null;
@@ -39,6 +41,14 @@ class Image extends Model
         return $this->belongsTo(Product::class);
     }
 
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<ProductReview,Image>
+    */
+    public function productReview(): BelongsTo
+    {
+        return $this->belongsTo(ProductReview::class);
+    }
+
     public static function deleteImage(Image $image): void
     {
 
@@ -48,12 +58,17 @@ class Image extends Model
                 unlink(storage_path("app/public/products/".pathinfo($image->img_path, PATHINFO_BASENAME)));
             }
 
-        } else {
+        } elseif($image->suggestion_id) {
 
             if (!empty($image->img_path) && file_exists(storage_path("app/public/suggestions/".pathinfo($image->img_path, PATHINFO_BASENAME)))) {
                 unlink(storage_path("app/public/suggestions/".pathinfo($image->img_path, PATHINFO_BASENAME)));
             }
 
+        } elseif($image->product_review_id) {
+
+            if (!empty($image->img_path) && file_exists(storage_path("app/public/product-reviews/".pathinfo($image->img_path, PATHINFO_BASENAME)))) {
+                unlink(storage_path("app/public/product-reviews/".pathinfo($image->img_path, PATHINFO_BASENAME)));
+            }
         }
     }
 }

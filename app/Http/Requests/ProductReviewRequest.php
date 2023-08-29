@@ -25,7 +25,7 @@ class ProductReviewRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             "product_id" => ["required","numeric",Rule::exists("products", "id")],
             "shop_id" => ["required","numeric",Rule::exists("users", "id")],
             "user_id" => ["required","numeric",Rule::exists("users", "id")],
@@ -34,6 +34,12 @@ class ProductReviewRequest extends FormRequest
             "rating" => ["required","numeric"],
             "captcha_token"  => ["required",new RecaptchaRule()],
         ];
+
+        if ($this->hasFile("multi_image")) {
+            $rules["multi_image.*"] = ["required","image","mimes:png,jpg,jpeg,svg,webp,gif","max:5120"];
+        }
+
+        return $rules;
     }
 
     /**
@@ -58,6 +64,10 @@ class ProductReviewRequest extends FormRequest
             "status.in" => "The selected status is invalid.",
             "rating.required" =>  "The rating is required.",
             "rating.numeric" =>  "The rating must be a number.",
+            "multi_image.required" => "The multi_image field is required.",
+            "multi_image.multi_image" => "The multi image must be an multi_image.",
+            "multi_image.mimes" => "The multi image must be a file of type: png,jpg,jpeg,svg,webp or gif.",
+            "multi_image.max" => "The multi image must not be greater than 5120 kilobytes.'",
             "captcha_token.required" => "The captcha token is required",
         ];
     }

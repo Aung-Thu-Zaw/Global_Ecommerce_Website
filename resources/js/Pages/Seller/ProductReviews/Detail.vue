@@ -78,6 +78,19 @@ const props = defineProps({
 
       <div class="p-5 border shadow-md rounded-sm my-5">
         <div v-if="productReview" class="my-3">
+          <div class="flex items-center flex-wrap my-3 space-x-2 w-full">
+            <div
+              v-for="image in productReview.images"
+              :key="image.id"
+              class="mb-3"
+            >
+              <img
+                :src="image.img_path"
+                class="h-36 rounded-sm shadow border-2 border-slate-300"
+              />
+            </div>
+          </div>
+
           <div
             class="w-full text-sm text-left text-gray-500 border overflow-hidden shadow rounded-md my-5"
           >

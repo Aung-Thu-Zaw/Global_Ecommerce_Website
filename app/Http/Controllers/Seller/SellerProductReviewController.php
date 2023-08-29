@@ -32,7 +32,7 @@ class SellerProductReviewController extends Controller
     {
         $queryStringParams = $this->getQueryStringParams($request);
 
-        $productReview->load(["product:id,name","user:id,name,email"]);
+        $productReview->load(["product:id,name","user:id,name,email","images"]);
 
         return inertia("Seller/ProductReviews/Detail", compact("productReview", "queryStringParams"));
     }

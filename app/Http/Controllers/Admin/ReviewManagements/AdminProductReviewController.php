@@ -10,6 +10,7 @@ use Inertia\Response;
 use Inertia\ResponseFactory;
 use App\Models\ProductReview;
 use App\Actions\Admin\ReviewManagements\ProductReviews\PermanentlyDeleteAllTrashProductReviewAction;
+use App\Actions\Admin\ReviewManagements\ProductReviews\PermanentlyDeleteTrashProductReviewAction;
 use App\Http\Traits\HandlesQueryStringParameters;
 
 class AdminProductReviewController extends Controller
@@ -31,7 +32,7 @@ class AdminProductReviewController extends Controller
 
     public function show(Request $request, ProductReview $productReview): Response|ResponseFactory
     {
-        $productReview->load(["product:id,name","user:id,name,email"]);
+        $productReview->load(["product:id,name","user:id,name,email","images"]);
 
         $queryStringParams = $this->getQueryStringParams($request);
 
@@ -82,6 +83,8 @@ class AdminProductReviewController extends Controller
         $trashProductReview = ProductReview::onlyTrashed()->findOrFail($trashProductReview);
 
         $trashProductReview->forceDelete();
+
+        (new PermanentlyDeleteTrashProductReviewAction())->handle($trashProductReview);
 
         return to_route('admin.product-reviews.trash', $this->getQueryStringParams($request))->with("success", "THE_PRODUCT_REVIEW_HAS_BEEN_PERMANENTLY_DELETED");
     }

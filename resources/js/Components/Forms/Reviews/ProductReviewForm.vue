@@ -1,9 +1,31 @@
 <script setup>
 import InputError from "@/Components/Forms/InputError.vue";
 import { useForm, usePage } from "@inertiajs/vue3";
+import { ref } from "vue";
 import { useReCaptcha } from "vue-recaptcha-v3";
 
 const props = defineProps({ product: Object });
+
+const multiPreviewPhotos = ref([]);
+// Handle Multi Preview Image
+const getMultiPreviewPhotoPath = (paths) => {
+  paths.forEach((path) => {
+    multiPreviewPhotos.value.push(URL.createObjectURL(path));
+  });
+};
+
+const handleMultiplePhotoChange = (files) => {
+  const paths = Array.from(files);
+  getMultiPreviewPhotoPath(paths);
+};
+
+// Handle Remove Preview Image
+const removeImage = (index) => {
+  multiPreviewPhotos.value.splice(index, 1);
+
+  form.multi_image = Array.from(form.multi_image);
+  form.multi_image.splice(index, 1);
+};
 
 const form = useForm({
   product_id: props.product.id,
@@ -12,6 +34,7 @@ const form = useForm({
   review_text: "",
   rating: 1,
   status: "pending",
+  multi_image: [],
   captcha_token: null,
 });
 
@@ -23,7 +46,10 @@ const handleCreateReview = async () => {
     replace: true,
     preserveScroll: true,
     preserveState: true,
-    onSuccess: () => (form.review_text = ""),
+    onSuccess: () => {
+      form.review_text = "";
+      multiPreviewPhotos.value = [];
+    },
   });
 };
 </script>
@@ -34,6 +60,26 @@ const handleCreateReview = async () => {
     <h1 class="font-bold text-slate-600 text-xl my-3">
       {{ __("ADD_A_REVIEW") }}
     </h1>
+
+    <div v-if="multiPreviewPhotos.length" class="flex flex-wrap space-x-3">
+      <div
+        class="relative"
+        v-for="(multiPreviewPhoto, index) in multiPreviewPhotos"
+        :key="index"
+      >
+        <img
+          :src="multiPreviewPhoto"
+          class="h-[100px] object-cover rounded-sm shadow-md my-3 border-2 border-gray-300 mr-2"
+        />
+        <span
+          class="absolute top-1 right-0 bg-slate-300 text-slate-600 w-4 h-4 flex items-center justify-center rounded-full hover:bg-slate-500 hover:text-slate-300 transition-all"
+          @click="removeImage(index)"
+        >
+          <i class="fas fa-xmark text-xs"></i>
+        </span>
+      </div>
+    </div>
+
     <form @submit.prevent="handleCreateReview">
       <div
         class="border shadow-md rounded-sm my-5 flex items-center justify-between"
@@ -320,9 +366,25 @@ const handleCreateReview = async () => {
           placeholder="Write Comment"
           v-model="form.review_text"
         ></textarea>
+        <InputError class="mt-2" :message="form.errors.review_text" />
       </div>
 
-      <InputError class="mt-2" :message="form.errors.review_text" />
+      <div>
+        <input
+          class="file-input"
+          type="file"
+          id="multiImage"
+          multiple
+          @input="form.multi_image = $event.target.files"
+          @change="handleMultiplePhotoChange($event.target.files)"
+        />
+
+        <span class="text-xs text-gray-500">
+          SVG, PNG, JPG, JPEG, WEBP or GIF (Max File size : 5 MB)
+        </span>
+
+        <InputError class="mt-2" :message="form.errors.multi_image" />
+      </div>
 
       <button
         class="font-bold text-white w-full py-2 rounded-sm my-5"

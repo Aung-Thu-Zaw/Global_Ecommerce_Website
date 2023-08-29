@@ -87,7 +87,7 @@ class ProductController extends Controller
                                          ->orderBy("id", "desc")
                                          ->paginate(5);
 
-        $paginateProductReviews = ProductReview::with(["user.orders.orderItems","reply.user:id,shop_name,avatar"])
+        $paginateProductReviews = ProductReview::with(["user.orders.orderItems","reply.user:id,shop_name,avatar","images"])
                                              ->whereProductId($product->id)
                                              ->orderBy("id", "desc")
                                              ->paginate(5);

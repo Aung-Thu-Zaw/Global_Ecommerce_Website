@@ -60,7 +60,7 @@ const handleDeleteReview = () => {
               Verified Purchaser
             </span>
           </h3>
-          <p class="text-[.8rem] text-slate-400 mb-2">
+          <p class="text-[.7rem] text-slate-400 mb-2">
             Review From {{ paginateProductReview.user.name }}
           </p>
         </div>
@@ -73,11 +73,24 @@ const handleDeleteReview = () => {
         {{ paginateProductReview.review_text }}
       </p>
 
+      <div class="flex items-center flex-wrap space-x-2 w-full">
+        <div
+          v-for="image in paginateProductReview.images"
+          :key="image.id"
+          class="mb-2"
+        >
+          <img
+            :src="image.img_path"
+            class="h-14 rounded-sm shadow border-2 border-slate-300"
+          />
+        </div>
+      </div>
+
       <div
         v-if="
           !paginateProductReview.reply &&
           $page.props.auth.user &&
-          paginateProductReview.vendor_id == $page.props.auth.user.id
+          paginateProductReview.seller_id == $page.props.auth.user.id
         "
         class="flex items-center justify-end w-full"
       >
@@ -87,31 +100,6 @@ const handleDeleteReview = () => {
         >
           <i class="fa-solid fa-flag"></i>
           Reply
-        </button>
-      </div>
-
-      <div
-        v-if="
-          $page.props.auth.user &&
-          $page.props.auth.user.id === paginateProductReview.user_id
-        "
-        class="mb-3 flex items-center justify-end w-full"
-      >
-        <button
-          @click="
-            isEditProductReviewFormVisible = !isEditProductReviewFormVisible
-          "
-          class="font-bold border text-[.7rem] text-sky-700 px-3 py-2 rounded-sm border-sky-700 hover:bg-sky-700 hover:text-white transition-all"
-        >
-          <i class="fa-solid fa-flag"></i>
-          Edit Review
-        </button>
-        <button
-          @click="handleDeleteReview"
-          class="font-bold border text-[.7rem] text-danger-700 px-3 py-2 rounded-sm border-danger-700 hover:bg-danger-700 hover:text-white transition-all ml-3"
-        >
-          <i class="fa-solid fa-flag"></i>
-          Delete Review
         </button>
       </div>
 

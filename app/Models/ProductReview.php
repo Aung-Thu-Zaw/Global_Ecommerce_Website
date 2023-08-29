@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
@@ -17,7 +18,7 @@ class ProductReview extends Model
     use SoftDeletes;
     use Searchable;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     /**
     *     @return array<string>
@@ -67,6 +68,13 @@ class ProductReview extends Model
         return Attribute::make(
             get: fn ($value) => date("j/F/Y ( h:i A )", strtotime($value)),
         );
+    }
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\HasMany<Image>
+    */
+    public function images(): HasMany
+    {
+        return $this->hasMany(Image::class);
     }
 
     /**

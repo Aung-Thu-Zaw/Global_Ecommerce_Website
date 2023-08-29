@@ -3,6 +3,7 @@
 namespace App\Actions\Ecommerce\Reviews;
 
 use App\Models\ProductReview;
+use App\Services\ProductReviewMultiImageUploadService;
 
 class CreateProductReviewAction
 {
@@ -19,6 +20,12 @@ class CreateProductReviewAction
             "status" => $data["status"],
             "rating" => $data["rating"],
         ]);
+
+        if(isset($data["multi_image"])) {
+
+            (new ProductReviewMultiImageUploadService())->createMultiImage($data["multi_image"], $productReview);
+
+        }
 
         return $productReview;
     }
