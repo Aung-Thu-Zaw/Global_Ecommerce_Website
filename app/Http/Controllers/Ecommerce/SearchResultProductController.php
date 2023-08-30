@@ -15,11 +15,11 @@ class SearchResultProductController extends Controller
     public function index(): Response|ResponseFactory
     {
         SearchHistory::firstOrCreate(
-            ["user_id"=>auth()->id() ?? null,"keyword"=>request("search")],
-            ["user_id"=>auth()->id() ?? null,"keyword"=>request("search")]
+            ["user_id" => auth()->id() ?? null,"keyword" => request("search")],
+            ["user_id" => auth()->id() ?? null,"keyword" => request("search")]
         );
 
-        $products=Product::select("id", "user_id", "image", "name", "description", "slug", "price", "discount", "special_offer")
+        $products = Product::select("id", "seller_id", "image", "name", "description", "slug", "price", "discount", "special_offer")
                          ->with(["productReviews:id,product_id,rating","shop:id,offical","images"])
                          ->filterBy(request(["search","category","brand","rating","price"]))
                          ->whereStatus("approved")
@@ -27,22 +27,22 @@ class SearchResultProductController extends Controller
                          ->paginate(20)
                          ->withQueryString();
 
-        $categories=Category::all();
+        $categories = Category::all();
 
-        $brands=null;
+        $brands = null;
 
         if(request("category")) {
-            $category=Category::whereSlug(request("category"))->first();
+            $category = Category::whereSlug(request("category"))->first();
 
             if($category) {
 
-                $brands=Brand::where("category_id", $category->id)->get();
+                $brands = Brand::where("category_id", $category->id)->get();
 
             }
 
         } else {
 
-            $brands=Brand::all();
+            $brands = Brand::all();
         }
 
         return inertia("Ecommerce/Products/SearchResult", compact("categories", "brands", "products"));

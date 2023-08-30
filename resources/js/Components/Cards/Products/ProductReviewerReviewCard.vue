@@ -60,9 +60,21 @@ const filterVerifiedPurchaser = computed(() => {
             {{ productReview.updated_at }}
           </span>
         </div>
-        <p class="w-full text-sm font-normal text-slate-900">
+        <p class="w-full text-sm font-normal text-slate-900 mb-3">
           {{ productReview.review_text }}
         </p>
+        <div class="flex items-center flex-wrap space-x-2 w-full">
+          <div
+            v-for="image in productReview.images"
+            :key="image.id"
+            class="mb-2"
+          >
+            <img
+              :src="image.img_path"
+              class="h-14 rounded-sm shadow border-2 border-slate-300"
+            />
+          </div>
+        </div>
       </div>
     </div>
 
@@ -74,13 +86,13 @@ const filterVerifiedPurchaser = computed(() => {
       <div class="flex items-start justify-between my-3">
         <div class="flex items-center">
           <img
-            :src="productReview.reply.user.avatar"
+            :src="productReview.reply.seller.avatar"
             alt=""
             class="w-10 h-10 object-cover rounded-full mr-5"
           />
           <div>
             <h4 class="text-lg font-bold text-slate-700">
-              {{ productReview.reply.user.shop_name }}
+              {{ productReview.reply.seller.shop_name }}
 
               <span
                 class="px-3 py-1 bg-green-200 text-green-600 rounded-xl text-[.7rem] ml-2"
@@ -98,7 +110,7 @@ const filterVerifiedPurchaser = computed(() => {
           </span>
         </div>
       </div>
-      <p class="w-[92%] text-sm font-normal text-slate-900 ml-auto">
+      <p class="w-[94.3%] text-sm font-normal text-slate-900 ml-auto">
         {{ productReview.reply.reply_text }}
       </p>
     </div>

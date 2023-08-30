@@ -66,7 +66,7 @@ class ShopController extends Controller
                                  ->paginate(20)
                                  ->withQueryString();
 
-        $paginateProductReviews = ProductReview::with(["product.sizes","product.colors","product.types","product.brand","user.orders.orderItems","reply.user:id,shop_name,avatar"])
+        $paginateProductReviews = ProductReview::with(["product.sizes","product.colors","product.types","product.brand","user.orders.orderItems","reply.seller:id,shop_name,avatar","images"])
                                                ->where("shop_id", $shop ? $shop->id : null)
                                                ->where("status", "published")
                                                ->orderBy("id", "desc")
@@ -80,7 +80,7 @@ class ShopController extends Controller
                                           ->where("status", "published")
                                           ->avg("rating");
 
-        $paginateShopReviews = ShopReview::with(["user:id,name,avatar","reply.user:id,shop_name,avatar"])
+        $paginateShopReviews = ShopReview::with(["user:id,name,avatar","reply.seller:id,shop_name,avatar"])
                                          ->where("shop_id", $shop ? $shop->id : null)
                                          ->where("status", "published")
                                          ->orderBy("id", "desc")
