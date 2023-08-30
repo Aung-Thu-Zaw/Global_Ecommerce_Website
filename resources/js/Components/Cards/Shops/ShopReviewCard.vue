@@ -25,6 +25,14 @@ const handleDeleteReview = () => {
 
 
 <template>
+  <div
+    v-if="paginateShopReview.status !== 'published'"
+    class="text-xs font-medium text-green-600 w-full mb-3 text-center"
+  >
+    <i class="fa-solid fa-spinner animate-spin mr-1"></i>
+    <span> {{ __("YOUR_SHOP_REVIEW_IS_AWAITING_MODERATION") }} </span>
+  </div>
+
   <div class="flex items-start w-full">
     <div class="flex flex-col items-center justify-center mr-5">
       <img
@@ -68,29 +76,6 @@ const handleDeleteReview = () => {
         >
           <i class="fa-solid fa-flag"></i>
           Reply
-        </button>
-      </div>
-
-      <div
-        v-if="
-          $page.props.auth.user &&
-          $page.props.auth.user.id === paginateShopReview.user_id
-        "
-        class="mb-3 flex items-center justify-end w-full"
-      >
-        <button
-          @click="isEditShopReviewFormVisible = !isEditShopReviewFormVisible"
-          class="font-bold border text-[.7rem] text-sky-700 px-3 py-2 rounded-sm border-sky-700 hover:bg-sky-700 hover:text-white transition-all"
-        >
-          <i class="fa-solid fa-flag"></i>
-          Edit Review
-        </button>
-        <button
-          @click="handleDeleteReview"
-          class="font-bold border text-[.7rem] text-danger-700 px-3 py-2 rounded-sm border-danger-700 hover:bg-danger-700 hover:text-white transition-all ml-3"
-        >
-          <i class="fa-solid fa-flag"></i>
-          Delete Review
         </button>
       </div>
 

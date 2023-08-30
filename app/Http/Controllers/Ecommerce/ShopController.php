@@ -82,7 +82,6 @@ class ShopController extends Controller
 
         $paginateShopReviews = ShopReview::with(["user:id,name,avatar","reply.seller:id,shop_name,avatar"])
                                          ->where("shop_id", $shop ? $shop->id : null)
-                                         ->where("status", "published")
                                          ->orderBy("id", "desc")
                                          ->paginate(5);
 

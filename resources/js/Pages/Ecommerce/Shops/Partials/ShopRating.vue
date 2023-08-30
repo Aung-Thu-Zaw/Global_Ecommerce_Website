@@ -78,10 +78,7 @@ const fiveStarsRating = computed(() => {
 
       <div class="w-full border rounded-sm shadow-md">
         <div class="p-5">
-          <h1
-            v-if="shopReviews.length"
-            class="font-bold text-slate-600 text-xl my-3"
-          >
+          <h1 class="font-bold text-slate-600 text-xl my-3">
             {{ __("CUSTOMER_REVIEWS") }} ({{ shopReviews.length }})
           </h1>
 
@@ -89,11 +86,20 @@ const fiveStarsRating = computed(() => {
             <div
               v-for="paginateShopReview in paginateShopReviews.data"
               :key="paginateShopReview.id"
-              class="shadow border rounded-md p-5 flex flex-col items-start my-3"
             >
-              <ShopReviewCard :paginateShopReview="paginateShopReview" />
-              <div v-if="paginateShopReview.reply" class="w-full">
-                <ShopReplyCard :paginateShopReview="paginateShopReview" />
+              <div
+                v-if="
+                  paginateShopReview.status === 'published' ||
+                  ($page.props.auth.user &&
+                    $page.props.auth.user.id === paginateShopReview.user_id &&
+                    paginateShopReview.status !== 'published')
+                "
+                class="shadow border rounded-md p-5 flex flex-col items-start my-3"
+              >
+                <ShopReviewCard :paginateShopReview="paginateShopReview" />
+                <div v-if="paginateShopReview.reply" class="w-full">
+                  <ShopReplyCard :paginateShopReview="paginateShopReview" />
+                </div>
               </div>
             </div>
 
