@@ -10,7 +10,7 @@ const emit = defineEmits(["isVisible"]);
 
 const form = useForm({
   shop_review_id: props.paginateShopReview.id,
-  user_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
+  seller_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
   reply_text: "",
   captcha_token: null,
 });
@@ -23,7 +23,7 @@ const handleReply = async () => {
 };
 
 const submit = () => {
-  form.post(route("shop.review.reply.store"), {
+  form.post(route("shop.reviews.reply.store"), {
     replace: true,
     preserveScroll: true,
 

@@ -66,7 +66,7 @@ const handleDeleteReview = () => {
         v-if="
           !paginateShopReview.reply &&
           $page.props.auth.user &&
-          paginateShopReview.vendor_id == $page.props.auth.user.id
+          paginateShopReview.shop_id == $page.props.auth.user.id
         "
         class="flex items-center justify-end w-full"
       >
@@ -75,7 +75,7 @@ const handleDeleteReview = () => {
           class="font-bold border text-[.7rem] text-sky-700 px-3 py-2 rounded-sm border-sky-700 hover:bg-sky-700 hover:text-white transition-all mb-3"
         >
           <i class="fa-solid fa-flag"></i>
-          Reply
+          {{ __("REPLY_THIS_REVIEW") }}
         </button>
       </div>
 
