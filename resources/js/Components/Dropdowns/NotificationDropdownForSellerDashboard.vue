@@ -6,6 +6,7 @@ import DisapprovedCreatedNewProductNotificationCard from "@/Components/Cards/Not
 import SellerNewProductReviewNotificationCard from "@/Components/Cards/Notifications/SellerNewProductReviewNotificationCard.vue";
 import SellerNewShopReviewNotificationCard from "@/Components/Cards/Notifications/SellerNewShopReviewNotificationCard.vue";
 import PublishedProductReviewNotificationCard from "@/Components/Cards/Notifications/PublishedProductReviewNotificationCard.vue";
+import PublishedShopReviewNotificationCard from "@/Components/Cards/Notifications/PublishedShopReviewNotificationCard.vue";
 import { usePage, router } from "@inertiajs/vue3";
 import { computed, onMounted, ref } from "vue";
 
@@ -84,6 +85,19 @@ onMounted(() => {
             message: notification.message,
             review: notification.review,
             slug: notification.slug,
+          },
+        });
+      } else if (
+        notification.type ===
+        "App\\Notifications\\Reviews\\AdminPublishedShopReviewNotification"
+      ) {
+        notifications.value.unshift({
+          id: notification.id,
+          type: notification.type,
+          data: {
+            message: notification.message,
+            review: notification.review,
+            shop: notification.shop,
           },
         });
       }
@@ -190,6 +204,7 @@ const handleMarkAllAsRead = () => {
       <SellerNewProductReviewNotificationCard :notification="notification" />
       <SellerNewShopReviewNotificationCard :notification="notification" />
       <PublishedProductReviewNotificationCard :notification="notification" />
+      <PublishedShopReviewNotificationCard :notification="notification" />
     </div>
 
     <div class="w-full text-center py-3" v-if="!notifications.length">

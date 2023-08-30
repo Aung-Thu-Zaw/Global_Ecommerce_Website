@@ -11,6 +11,7 @@ use Inertia\ResponseFactory;
 use App\Models\ShopReview;
 use App\Actions\Admin\ReviewManagements\ShopReviews\PermanentlyDeleteAllTrashShopReviewAction;
 use App\Http\Traits\HandlesQueryStringParameters;
+use App\Services\BroadcastNotifications\AdminPublishedShopReviewNotificationNotificationSendToSellerDashboardService;
 
 class AdminShopReviewController extends Controller
 {
@@ -41,6 +42,10 @@ class AdminShopReviewController extends Controller
     public function update(Request $request, ShopReview $shopReview): RedirectResponse
     {
         $shopReview->update(["status" => $request->status]);
+
+        if($request->status === "published") {
+            (new AdminPublishedShopReviewNotificationNotificationSendToSellerDashboardService())->send($shopReview);
+        }
 
         $message = $request->status === "unpublished" ? "SHOP_REVIEW_HAS_BEEN_SUCCESSFULLY_UNPUBLISHED" : "SHOP_REVIEW_HAS_BEEN_SUCCESSFULLY_PUBLISHED";
 

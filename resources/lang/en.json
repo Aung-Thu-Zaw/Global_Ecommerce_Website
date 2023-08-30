@@ -936,5 +936,6 @@
     "YOUR_PRODUCT_REVIEW_IS_AWAITING_MODERATION": "Your product review is awaiting moderation.",
     "YOUR_SHOP_REVIEW_IS_AWAITING_MODERATION": "Your shop review is awaiting moderation.",
     "ADMIN_PUBLISHED_PRODUCT_REVIEW_IN_YOUR_PRODUCT": "Admin published product review in your product.",
-    "YOUR_PRODUCT_REVIEW_HAS_BEEN_REPLIED_TO_BY_THE_SELLER": "Your product review has been replied to by the seller."
+    "YOUR_PRODUCT_REVIEW_HAS_BEEN_REPLIED_TO_BY_THE_SELLER": "Your product review has been replied to by the seller.",
+    "ADMIN_PUBLISHED_SHOP_REVIEW_IN_YOUR_SHOP":"Admin published shop review in your shop."
 }

@@ -110,7 +110,12 @@ const fiveStarsRating = computed(() => {
           </div>
 
           <!-- Reviews do not exist -->
-          <div v-else>
+          <div
+            v-if="
+              paginateShopReviews.status !== 'published' ||
+              !paginateShopReviews.data.length
+            "
+          >
             <div class="font-bold text-center text-sm text-slate-600 my-10">
               <i class="fa-solid fa-star text-3xl mb-5 animate-bounce"></i>
               <p>{{ __("THIS_SHOP_HAS_NO_REVIEWS") }}</p>
