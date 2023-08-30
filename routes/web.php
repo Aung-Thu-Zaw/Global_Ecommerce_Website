@@ -277,6 +277,7 @@ Route::middleware(["auth","verified"])->group(function () {
     Route::post("/conversation/messages", [MessageController::class,"store"])->name("message.store");
 
 
-    Route::get('/support-service/live-chats/{live_chat}', [SupportLiveChatServiceController::class,"index"])->name("service.live-chat");
+    Route::get('/support-service/live-chats', [SupportLiveChatServiceController::class,"index"])->name("service.live-chat");
+    // Route::get('/support-service/live-chats/{live_chat}', [SupportLiveChatServiceController::class,"index"])->name("service.live-chat");
 
 });
