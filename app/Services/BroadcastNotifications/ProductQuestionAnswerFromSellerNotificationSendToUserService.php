@@ -2,14 +2,10 @@
 
 namespace App\Services\BroadcastNotifications;
 
-use App\Models\BlogComment;
-use App\Models\BlogCommentReply;
-use App\Models\BlogPost;
 use App\Models\Product;
 use App\Models\ProductAnswer;
 use App\Models\ProductQuestion;
 use App\Models\User;
-use App\Notifications\Blogs\BlogCommentReplyFromAuthorNotification;
 use App\Notifications\ProductQuestions\ProductQuestionAnswerFromSellerNotification;
 
 class ProductQuestionAnswerFromSellerNotificationSendToUserService

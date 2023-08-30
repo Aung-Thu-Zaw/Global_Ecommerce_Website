@@ -4,7 +4,6 @@ namespace App\Services\BroadcastNotifications;
 
 use App\Models\BlogComment;
 use App\Models\BlogPost;
-use App\Models\Product;
 use App\Models\User;
 use App\Notifications\Blogs\NewBlogCommentFromUserNotification;
 use Illuminate\Support\Facades\Notification;

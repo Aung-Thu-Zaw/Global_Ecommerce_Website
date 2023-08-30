@@ -12,7 +12,8 @@ use App\Http\Controllers\Ecommerce\ProductController;
 use App\Http\Controllers\Ecommerce\CheckoutController;
 use App\Http\Controllers\Ecommerce\ConversationController;
 use App\Http\Controllers\Ecommerce\DeliveryInformationController;
-use App\Http\Controllers\Ecommerce\FaqHelpCenter\HelpCenterController;
+use App\Http\Controllers\Ecommerce\HelpCenter\HelpCenterController;
+use App\Http\Controllers\Ecommerce\HelpCenter\SupportLiveChatServiceController;
 use App\Http\Controllers\Ecommerce\LanguageController;
 use App\Http\Controllers\User\FollowedShopController;
 use App\Http\Controllers\Ecommerce\MessageController;
@@ -274,5 +275,8 @@ Route::middleware(["auth","verified"])->group(function () {
          });
 
     Route::post("/conversation/messages", [MessageController::class,"store"])->name("message.store");
+
+
+    Route::get('/support-service/live-chats/{live_chat}', [SupportLiveChatServiceController::class,"index"])->name("service.live-chat");
 
 });

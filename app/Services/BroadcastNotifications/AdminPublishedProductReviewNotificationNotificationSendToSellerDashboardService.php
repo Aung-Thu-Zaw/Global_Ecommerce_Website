@@ -3,13 +3,9 @@
 namespace App\Services\BroadcastNotifications;
 
 use App\Models\ProductReview;
-use App\Models\BlogPost;
 use App\Models\Product;
 use App\Models\User;
-use App\Notifications\Blogs\NewBlogCommentFromUserNotification;
-use App\Notifications\ProductQuestions\NewProductQuestionFromUserNotification;
 use App\Notifications\Reviews\AdminPublishedProductReviewNotification;
-use Illuminate\Support\Facades\Notification;
 
 class AdminPublishedProductReviewNotificationNotificationSendToSellerDashboardService
 {

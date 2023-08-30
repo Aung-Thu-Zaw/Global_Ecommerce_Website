@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Ecommerce\FaqHelpCenter;
+namespace App\Http\Controllers\Ecommerce\HelpCenter;
 
 use App\Http\Controllers\Controller;
 use App\Models\Faq;
