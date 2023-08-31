@@ -49,6 +49,7 @@ use App\Http\Controllers\Admin\FromTheSubmitters\AdminSuggestionController;
 use App\Http\Controllers\Admin\UserManagements\AdminManageController;
 use App\Http\Controllers\Admin\ReviewManagements\AdminProductReviewController;
 use App\Http\Controllers\Admin\ReviewManagements\AdminShopReviewController;
+use App\Http\Controllers\Admin\ContactServices\AdminChatController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/admin/login", [AdminAuthController::class,"login"])->middleware("guest")->name("admin.login");
@@ -667,6 +668,11 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::delete("/trash/{trash_faq_id}/force-delete", "forceDelete")->middleware('permission:faq.trash.delete')->name("trash.force.delete");
                     Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:faq.trash.delete')->name("trash.permanently.delete");
                 });
+
+           // ******************** Admin Dashboard SupportContactService ********************
+
+           // Admin Chats Section
+           Route::get("/chats", [AdminChatController::class,"index"])->name("chats.index");
 
            // ******************** Admin Dashboard From The Submitters ********************
 

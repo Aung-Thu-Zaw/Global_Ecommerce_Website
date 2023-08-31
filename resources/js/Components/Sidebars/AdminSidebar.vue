@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6"
+    class="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6 scrollbar"
   >
     <div
       class="md:flex-col md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center justify-between w-full mx-auto"
@@ -1406,6 +1406,69 @@
           </li>
         </ul>
 
+        <hr v-if="chatMenu" class="my-4 md:min-w-full" />
+
+        <!-- Support Contact Service Section Title -->
+        <h6
+          v-if="chatMenu"
+          class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
+        >
+          {{ __("CONTACT_SERVICES") }}
+        </h6>
+
+        <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+          <!-- Chats Section -->
+          <li v-if="chatMenu" class="items-center">
+            <Link
+              :href="route('admin.chats.index')"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url.startsWith('/admin/chats'),
+                'text-slate-700 hover:text-slate-500':
+                  !$page.url.startsWith('/admin/chats'),
+              }"
+            >
+              <i class="fa-solid fa-comment mr-2 text-sm"></i>
+              {{ __("CHATS") }}
+            </Link>
+          </li>
+
+          <!-- Email Section -->
+          <li class="items-center">
+            <Link
+              href="#"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url.startsWith('/admin/emails'),
+                'text-slate-700 hover:text-slate-500':
+                  !$page.url.startsWith('/admin/emails'),
+              }"
+            >
+              <i class="fa-solid fa-envelope mr-2 text-sm"></i>
+              {{ __("EMAILS") }}
+            </Link>
+          </li>
+
+          <!-- Phone Call Section -->
+          <li class="items-center">
+            <Link
+              href="#"
+              class="text-xs uppercase py-3 font-bold block"
+              :class="{
+                'text-blue-500 hover:text-blue-600':
+                  $page.url.startsWith('/admin/phone-calls'),
+                'text-slate-700 hover:text-slate-500':
+                  !$page.url.startsWith('/admin/phone-calls'),
+              }"
+            >
+              <i class="fa-solid fa-phone mr-2 text-sm"></i>
+              {{ __("PHONE_CALLS") }}
+            </Link>
+          </li>
+        </ul>
+
         <hr
           v-if="subscriberMenu || suggestionMenu || websiteFeedbackMenu"
           class="my-4 md:min-w-full"
@@ -1842,6 +1905,12 @@ export default {
     faqMenu() {
       return this.permissions.length
         ? this.permissions.some((permission) => permission.name === "faq.menu")
+        : false;
+    },
+
+    chatMenu() {
+      return this.permissions.length
+        ? this.permissions.some((permission) => permission.name === "chat.menu")
         : false;
     },
 

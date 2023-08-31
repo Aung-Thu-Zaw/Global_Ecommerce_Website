@@ -405,6 +405,33 @@ import { Head } from "@inertiajs/vue3";
             </div>
           </form>
         </div>
+        <!-- Footer Input Form -->
+        <div class="w-full bg-white border-t shadow px-5 py-3">
+          <form
+            class="bg-slate-100 rounded-full w-full flex items-center justify-between py-0.5 px-5 pr-10 space-x-3"
+          >
+            <div class="flex items-center space-x-3">
+              <span class="text-gray-600 hover:text-gray-700">
+                <i class="fa-solid fa-face-smile"></i>
+              </span>
+              <span class="text-gray-600 hover:text-gray-700">
+                <i class="fa-solid fa-image"></i>
+              </span>
+            </div>
+            <div class="w-full">
+              <input
+                type="text"
+                class="bg-transparent w-full border-none focus:ring-0 text-sm text-slate-700 py-2.5"
+                placeholder="Type a message"
+              />
+            </div>
+            <div>
+              <button class="text-gray-400 hover:text-gray-700">
+                <i class="fa-solid fa-paper-plane"></i>
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>

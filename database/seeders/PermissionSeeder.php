@@ -186,6 +186,8 @@ class PermissionSeeder extends Seeder
         Permission::create(["name" => "faq.trash.restore","group" => "faq"]);
         Permission::create(["name" => "faq.trash.delete","group" => "faq"]);
 
+        Permission::create(["name" => "chat.menu","group" => "chat"]);
+
         Permission::create(["name" => "suggestion.menu","group" => "suggestion"]);
         Permission::create(["name" => "suggestion.detail","group" => "suggestion"]);
         Permission::create(["name" => "suggestion.delete","group" => "suggestion"]);
