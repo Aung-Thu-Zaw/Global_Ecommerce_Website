@@ -1,7 +1,7 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ChatBreadcrumb.vue";
-// import { VideoPlayer } from "@videojs-player/vue";
+import { VideoPlayer } from "@videojs-player/vue";
 import "video.js/dist/video-js.css";
 import { Head, useForm } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
@@ -76,7 +76,7 @@ const form = useForm({
               <input
                 type="text"
                 class="w-full border-none focus:ring-0 text-sm"
-                placeholder="Search chat"
+                :placeholder="__('SEARCH_CHAT')"
               />
               <i
                 class="fa-solid fa-xmark ml-1 text-sm cursor-pointer text-gray-600 hover:text-red-600"
@@ -94,21 +94,21 @@ const form = useForm({
                   href="#"
                   class="inline-block px-3 py-2.5 text-blue-600 bg-blue-200 rounded-sm border-2 border-blue-400 active text-xs"
                   aria-current="page"
-                  >All Chats</a
+                  >{{ __("ALL_CHATS") }}</a
                 >
               </li>
               <li class="mr-2">
                 <a
                   href="#"
                   class="inline-block px-3 py-2.5 text-slate-600 bg-slate-200 rounded-sm border-2 border-slate-400 active text-xs"
-                  >Ongoing Chats</a
+                  >{{ __("ONGOING_CHATS") }}</a
                 >
               </li>
               <li class="mr-2">
                 <a
                   href="#"
                   class="inline-block px-3 py-2.5 text-slate-600 bg-slate-200 rounded-sm border-2 border-slate-400 active text-xs"
-                  >Ended Chats</a
+                  >{{ __("ENDED_CHATS") }}</a
                 >
               </li>
             </ul>
@@ -185,29 +185,29 @@ const form = useForm({
                     class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 border border-slate-300"
                   >
                     <ul
-                      class="py-2 text-sm text-gray-700 font-medium"
+                      class="py-2 text-sm text-gray-600 font-medium"
                       aria-labelledby="dropdownMenuIconButton"
                     >
                       <li>
                         <a href="#" class="block px-4 py-2 hover:bg-gray-100">
                           <i class="fa-solid fa-file-export mr-1"></i>
-                          Export Chat</a
+                          {{ __("EXPORT_CHAT") }}</a
                         >
                       </li>
                       <li>
                         <a href="#" class="block px-4 py-2 hover:bg-gray-100">
                           <i class="fa-solid fa-broom mr-1"></i>
-                          Clear History</a
+                          {{ __("CLEAR_HISTORY") }}</a
                         >
                       </li>
                     </ul>
                     <div class="py-2">
                       <a
                         href="#"
-                        class="block px-4 py-2 hover:bg-gray-100 text-red-600 text-sm"
+                        class="block px-4 py-2 hover:bg-gray-100 text-red-600 text-sm font-medium"
                       >
                         <i class="fa-solid fa-trash-can mr-2"></i>
-                        Delete Chat</a
+                        {{ __("DELETE_CHAT") }}</a
                       >
                     </div>
                   </div>
@@ -229,7 +229,7 @@ const form = useForm({
                 <input
                   type="text"
                   class="w-full border-none focus:ring-0 text-xs bg-transparent"
-                  placeholder="Search message"
+                  :placeholder="__('SEARCH_MESSAGE')"
                 />
                 <i
                   class="fa-solid fa-xmark ml-1 text-sm text-slate-500 hover:text-red-600"
@@ -293,25 +293,133 @@ const form = useForm({
                   <div class="flex items-end justify-end">
                     <div class="flex items-center justify-end">
                       <div class="pl-28">
-                        <p
-                          class="p-3 border-2 bg-slate-50 border-slate-300 rounded-xl rounded-br-none shadow w-auto max-w-[500px] text-sm"
-                        >
-                          Lorem ipsum dolor sit amet, consectetur adipisicing
-                          elit. Voluptates hic soluta repudiandae sit cumque
-                          velit ratione nam fugiat magnam blanditiis. Debitis,
-                          culpa ex dolores repellendus corporis nemo at
-                          quibusdam. Sequi!
-                        </p>
+                        <div class="flex items-center justify-center">
+                          <!-- Dropdown  -->
+                          <div
+                            class="font-bold text-slate-500 hover:text-slate-800"
+                          >
+                            <button
+                              id="messageDropdown"
+                              data-dropdown-toggle="messageDropdownDots"
+                              data-dropdown-placement="left-start"
+                              type="button"
+                              class="p-2"
+                            >
+                              <svg
+                                class="w-4 h-4"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 4 15"
+                              >
+                                <path
+                                  d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+                                />
+                              </svg>
+                            </button>
+
+                            <!-- Dropdown menu -->
+                            <div
+                              id="messageDropdownDots"
+                              class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 border border-slate-300"
+                            >
+                              <ul
+                                class="py-2 text-sm text-gray-600 font-normal"
+                                aria-labelledby="messageDropdown"
+                              >
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i
+                                      class="fa-solid fa-circle-check mr-1"
+                                    ></i>
+                                    {{ __("SELECT") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-reply mr-1"></i>
+                                    {{ __("REPLY") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-thumbtack mr-1"></i>
+                                    {{ __("PIN") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-copy mr-1"></i>
+                                    {{ __("COPY_TEXT") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-download mr-1"></i>
+                                    {{ __("DOWNLOAD") }}</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-edit mr-1"></i>
+                                    {{ __("EDIT") }}</a
+                                  >
+                                </li>
+
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-trash mr-1"></i>
+                                    {{ __("DELETE") }}</a
+                                  >
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <p
+                            class="p-3 border-2 bg-slate-50 border-slate-300 rounded-xl rounded-br-none shadow w-auto max-w-[500px] text-sm"
+                          >
+                            Lorem ipsum dolor sit amet, consectetur adipisicing
+                            elit. Voluptates hic soluta repudiandae sit cumque
+                            velit ratione nam fugiat magnam blanditiis. Debitis,
+                            culpa ex dolores repellendus corporis nemo at
+                            quibusdam. Sequi!
+                          </p>
+                        </div>
+
                         <div
-                          class="flex items-center justify-end space-x-2 mr-2 mt-1"
+                          class="mt-1 text-[.6rem] text-slate-600 flex items-center justify-end space-x-4"
                         >
-                          <span class="text-[.6rem] text-slate-600">
-                            3:30 PM
-                          </span>
-                          <span class="text-[.6rem] text-slate-600">
-                            <i class="fa-solid fa-check text-green-500"></i>
-                            <i class="fa-solid fa-check text-green-500"></i>
-                          </span>
+                          <span class="font-bold">{{ __("EDITED") }}</span>
+                          <div
+                            class="flex items-center justify-end space-x-2 mr-2"
+                          >
+                            <span class=""> 3:30 PM </span>
+                            <span class="text-[.6rem] text-slate-600">
+                              <i class="fa-solid fa-check text-green-500"></i>
+                              <i class="fa-solid fa-check text-green-500"></i>
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -336,25 +444,133 @@ const form = useForm({
 
                       <div class="flex items-end justify-start w-full">
                         <div class="pr-28">
-                          <p
-                            class="p-3 bg-slate-200 border-2 border-slate-300 rounded-xl rounded-bl-none shadow w-auto max-w-[500px] text-sm"
-                          >
-                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                            elit. Voluptates hic soluta repudiandae sit cumque
-                            velit ratione nam fugiat magnam blanditiis. Debitis,
-                            culpa ex dolores repellendus corporis nemo at
-                            quibusdam. Sequi!ff
-                          </p>
+                          <div class="flex items-center justify-start">
+                            <p
+                              class="p-3 bg-slate-200 border-2 border-slate-300 rounded-xl rounded-bl-none shadow w-auto max-w-[500px] text-sm"
+                            >
+                              Lorem ipsum dolor sit amet, consectetur
+                              adipisicing elit. Voluptates hic soluta
+                              repudiandae sit cumque velit ratione nam fugiat
+                              magnam blanditiis. Debitis, culpa ex dolores
+                              repellendus corporis nemo at quibusdam. Sequi!ff
+                            </p>
+                            <!-- Dropdown  -->
+                            <div
+                              class="font-bold text-slate-500 hover:text-slate-800"
+                            >
+                              <button
+                                id="messageDropdown"
+                                data-dropdown-toggle="messageDropdownDots"
+                                data-dropdown-placement="right-start"
+                                type="button"
+                                class="p-2"
+                              >
+                                <svg
+                                  class="w-4 h-4"
+                                  aria-hidden="true"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="currentColor"
+                                  viewBox="0 0 4 15"
+                                >
+                                  <path
+                                    d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+                                  />
+                                </svg>
+                              </button>
+
+                              <!-- Dropdown menu -->
+                              <div
+                                id="messageDropdownDots"
+                                class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 border border-slate-300"
+                              >
+                                <ul
+                                  class="py-2 text-sm text-gray-600 font-normal"
+                                  aria-labelledby="messageDropdown"
+                                >
+                                  <li>
+                                    <a
+                                      href="#"
+                                      class="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                      <i
+                                        class="fa-solid fa-circle-check mr-1"
+                                      ></i>
+                                      Select
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a
+                                      href="#"
+                                      class="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                      <i class="fa-solid fa-reply mr-1"></i>
+                                      Reply
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a
+                                      href="#"
+                                      class="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                      <i class="fa-solid fa-thumbtack mr-1"></i>
+                                      Pin
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a
+                                      href="#"
+                                      class="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                      <i class="fa-solid fa-copy mr-1"></i>
+                                      Copy Text</a
+                                    >
+                                  </li>
+                                  <li>
+                                    <a
+                                      href="#"
+                                      class="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                      <i class="fa-solid fa-download mr-1"></i>
+                                      Download</a
+                                    >
+                                  </li>
+                                  <li>
+                                    <a
+                                      href="#"
+                                      class="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                      <i class="fa-solid fa-edit mr-1"></i>
+                                      Edit</a
+                                    >
+                                  </li>
+
+                                  <li>
+                                    <a
+                                      href="#"
+                                      class="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                      <i class="fa-solid fa-trash mr-1"></i>
+                                      Delete</a
+                                    >
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
                           <div
-                            class="flex items-center justify-start space-x-2 mr-2 mt-1"
+                            class="mt-1 text-[.6rem] text-slate-600 flex items-center justify-start space-x-4"
                           >
-                            <span class="text-[.6rem] text-slate-600">
-                              3:50 PM
-                            </span>
-                            <span class="text-[.6rem] text-slate-600">
-                              <i class="fa-solid fa-check text-green-500"></i>
-                              <i class="fa-solid fa-check"></i>
-                            </span>
+                            <div
+                              class="flex items-center justify-end space-x-2"
+                            >
+                              <span class=""> 3:30 PM </span>
+                              <span class="text-[.6rem] text-slate-600">
+                                <i class="fa-solid fa-check text-green-500"></i>
+                                <i class="fa-solid fa-check text-green-500"></i>
+                              </span>
+                            </div>
+
+                            <span class="font-bold">{{ __("EDITED") }}</span>
                           </div>
                         </div>
                       </div>
@@ -370,11 +586,115 @@ const form = useForm({
                   <div class="flex items-end justify-end">
                     <div class="flex items-center justify-end">
                       <div class="pl-28">
-                        <div class="grid grid-cols-1">
-                          <img
-                            src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                            class="h-48 object-cover border border-slate-300 rounded-sm"
-                          />
+                        <div class="flex items-center justify-center">
+                          <!-- Dropdown  -->
+                          <div
+                            class="font-bold text-slate-500 hover:text-slate-800"
+                          >
+                            <button
+                              id="messageDropdown"
+                              data-dropdown-toggle="messageDropdownDots"
+                              data-dropdown-placement="left-start"
+                              type="button"
+                              class="p-2"
+                            >
+                              <svg
+                                class="w-4 h-4"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 4 15"
+                              >
+                                <path
+                                  d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+                                />
+                              </svg>
+                            </button>
+
+                            <!-- Dropdown menu -->
+                            <div
+                              id="messageDropdownDots"
+                              class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 border border-slate-300"
+                            >
+                              <ul
+                                class="py-2 text-sm text-gray-600 font-normal"
+                                aria-labelledby="messageDropdown"
+                              >
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i
+                                      class="fa-solid fa-circle-check mr-1"
+                                    ></i>
+                                    {{ __("SELECT") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-reply mr-1"></i>
+                                    {{ __("REPLY") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-thumbtack mr-1"></i>
+                                    {{ __("PIN") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-copy mr-1"></i>
+                                    {{ __("COPY_TEXT") }}</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-download mr-1"></i>
+                                    {{ __("DOWNLOAD") }}</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-edit mr-1"></i>
+                                    {{ __("EDIT") }}</a
+                                  >
+                                </li>
+
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-trash mr-1"></i>
+                                    {{ __("DELETE") }}</a
+                                  >
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <div class="grid grid-cols-1">
+                            <img
+                              src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
+                              class="h-48 object-cover border border-slate-300 rounded-sm"
+                            />
+                          </div>
                         </div>
                         <div
                           class="flex items-center justify-end space-x-2 mr-2 mt-1"
@@ -404,50 +724,109 @@ const form = useForm({
                   <div class="flex items-end justify-end">
                     <div class="flex items-center justify-end">
                       <div class="pl-28">
-                        <div class="grid grid-cols-2 gap-0.5">
-                          <img
-                            src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                            class="h-28 object-cover border border-slate-300 rounded-sm"
-                          />
-                          <img
-                            src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                            class="h-28 object-cover border border-slate-300 rounded-sm"
-                          />
-                        </div>
-                        <div
-                          class="flex items-center justify-end space-x-2 mr-2 mt-1"
-                        >
-                          <span class="text-[.6rem] text-slate-600">
-                            3:30 PM
-                          </span>
-                          <span class="text-[.6rem] text-slate-600">
-                            <i class="fa-solid fa-check text-green-500"></i>
-                            <i class="fa-solid fa-check text-green-500"></i>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <img
-                      src="https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg?w=740&t=st=1693393599~exp=1693394199~hmac=b8d8549ac43842545b9059353c6fb745d4d86f21531f6bdba7b292e0bcdd40cc"
-                      class="w-8 h-8 object-cover rounded-full ring-2 ring-slate-300 ml-3"
-                    />
-                  </div>
-                </div>
+                        <div class="flex items-center justify-center">
+                          <!-- Dropdown  -->
+                          <div
+                            class="font-bold text-slate-500 hover:text-slate-800"
+                          >
+                            <button
+                              id="messageDropdown"
+                              data-dropdown-toggle="messageDropdownDots"
+                              data-dropdown-placement="left-start"
+                              type="button"
+                              class="p-2"
+                            >
+                              <svg
+                                class="w-4 h-4"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 4 15"
+                              >
+                                <path
+                                  d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+                                />
+                              </svg>
+                            </button>
 
-                <!-- left Side -->
-                <div class="mb-2">
-                  <div>
-                    <!-- <p class="text-center text-sm text-slate-500 font-bold mb-5">
-                    22-April-2023 ( Sunday )
-                  </p> -->
-                    <div class="flex items-end">
-                      <img
-                        src="https://media.istockphoto.com/id/171383132/photo/customer-service-representative.jpg?s=612x612&w=0&k=20&c=dpu11BZe50RU09eyoLrn55aCkcLKJOj99iGyktLPblI="
-                        class="w-8 h-8 object-cover rounded-full ring-2 ring-slate-300 mr-3"
-                      />
+                            <!-- Dropdown menu -->
+                            <div
+                              id="messageDropdownDots"
+                              class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 border border-slate-300"
+                            >
+                              <ul
+                                class="py-2 text-sm text-gray-600 font-normal"
+                                aria-labelledby="messageDropdown"
+                              >
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i
+                                      class="fa-solid fa-circle-check mr-1"
+                                    ></i>
+                                    {{ __("SELECT") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-reply mr-1"></i>
+                                    {{ __("REPLY") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-thumbtack mr-1"></i>
+                                    {{ __("PIN") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-copy mr-1"></i>
+                                    {{ __("COPY_TEXT") }}</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-download mr-1"></i>
+                                    {{ __("DOWNLOAD") }}</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-edit mr-1"></i>
+                                    {{ __("EDIT") }}</a
+                                  >
+                                </li>
 
-                      <div class="flex items-end justify-start w-full">
-                        <div class="pr-28">
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-trash mr-1"></i>
+                                    {{ __("DELETE") }}</a
+                                  >
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
                           <div class="grid grid-cols-2 gap-0.5">
                             <img
                               src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
@@ -458,6 +837,156 @@ const form = useForm({
                               class="h-28 object-cover border border-slate-300 rounded-sm"
                             />
                           </div>
+                        </div>
+                        <div
+                          class="flex items-center justify-end space-x-2 mr-2 mt-1"
+                        >
+                          <span class="text-[.6rem] text-slate-600">
+                            3:30 PM
+                          </span>
+                          <span class="text-[.6rem] text-slate-600">
+                            <i class="fa-solid fa-check text-green-500"></i>
+                            <i class="fa-solid fa-check text-green-500"></i>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <img
+                      src="https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg?w=740&t=st=1693393599~exp=1693394199~hmac=b8d8549ac43842545b9059353c6fb745d4d86f21531f6bdba7b292e0bcdd40cc"
+                      class="w-8 h-8 object-cover rounded-full ring-2 ring-slate-300 ml-3"
+                    />
+                  </div>
+                </div>
+
+                <!-- left Side -->
+                <div class="mb-2">
+                  <div>
+                    <!-- <p class="text-center text-sm text-slate-500 font-bold mb-5">
+                    22-April-2023 ( Sunday )
+                  </p> -->
+                    <div class="flex items-end">
+                      <img
+                        src="https://media.istockphoto.com/id/171383132/photo/customer-service-representative.jpg?s=612x612&w=0&k=20&c=dpu11BZe50RU09eyoLrn55aCkcLKJOj99iGyktLPblI="
+                        class="w-8 h-8 object-cover rounded-full ring-2 ring-slate-300 mr-3"
+                      />
+
+                      <div class="flex items-end justify-start w-full">
+                        <div class="pr-28">
+                          <div class="flex items-center justify-start">
+                            <div class="grid grid-cols-2 gap-0.5">
+                              <img
+                                src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
+                                class="h-28 object-cover border border-slate-300 rounded-sm"
+                              />
+                              <img
+                                src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
+                                class="h-28 object-cover border border-slate-300 rounded-sm"
+                              />
+                            </div>
+                            <!-- Dropdown  -->
+                            <div
+                              class="font-bold text-slate-500 hover:text-slate-800"
+                            >
+                              <button
+                                id="messageDropdown"
+                                data-dropdown-toggle="messageDropdownDots"
+                                data-dropdown-placement="right-start"
+                                type="button"
+                                class="p-2"
+                              >
+                                <svg
+                                  class="w-4 h-4"
+                                  aria-hidden="true"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="currentColor"
+                                  viewBox="0 0 4 15"
+                                >
+                                  <path
+                                    d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+                                  />
+                                </svg>
+                              </button>
+
+                              <!-- Dropdown menu -->
+                              <div
+                                id="messageDropdownDots"
+                                class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 border border-slate-300"
+                              >
+                                <ul
+                                  class="py-2 text-sm text-gray-600 font-normal"
+                                  aria-labelledby="messageDropdown"
+                                >
+                                  <li>
+                                    <a
+                                      href="#"
+                                      class="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                      <i
+                                        class="fa-solid fa-circle-check mr-1"
+                                      ></i>
+                                      Select
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a
+                                      href="#"
+                                      class="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                      <i class="fa-solid fa-reply mr-1"></i>
+                                      Reply
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a
+                                      href="#"
+                                      class="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                      <i class="fa-solid fa-thumbtack mr-1"></i>
+                                      Pin
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a
+                                      href="#"
+                                      class="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                      <i class="fa-solid fa-copy mr-1"></i>
+                                      Copy Text</a
+                                    >
+                                  </li>
+                                  <li>
+                                    <a
+                                      href="#"
+                                      class="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                      <i class="fa-solid fa-download mr-1"></i>
+                                      Download</a
+                                    >
+                                  </li>
+                                  <li>
+                                    <a
+                                      href="#"
+                                      class="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                      <i class="fa-solid fa-edit mr-1"></i>
+                                      Edit</a
+                                    >
+                                  </li>
+
+                                  <li>
+                                    <a
+                                      href="#"
+                                      class="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                      <i class="fa-solid fa-trash mr-1"></i>
+                                      Delete</a
+                                    >
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+
                           <div
                             class="flex items-center justify-start space-x-2 mr-2 mt-1"
                           >
@@ -483,41 +1012,145 @@ const form = useForm({
                   <div class="flex items-end justify-end">
                     <div class="flex items-center justify-end">
                       <div class="pl-28 w-[500px]">
-                        <div
-                          class="flex flex-row-reverse items-center flex-wrap"
-                        >
-                          <img
-                            src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                            class="h-20 object-cover border border-slate-300 rounded-sm ml-0.5 mb-0.5"
-                          />
-                          <img
-                            src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
-                            class="h-20 object-cover border border-slate-300 rounded-sm ml-0.5 mb-0.5"
-                          />
-                          <img
-                            src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
-                            class="h-20 object-cover border border-slate-300 rounded-sm ml-0.5 mb-0.5"
-                          />
-                          <img
-                            src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
-                            class="h-20 object-cover border border-slate-300 rounded-sm ml-0.5 mb-0.5"
-                          />
-                          <img
-                            src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
-                            class="h-20 object-cover border border-slate-300 rounded-sm ml-0.5 mb-0.5"
-                          />
-                          <img
-                            src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
-                            class="h-20 object-cover border border-slate-300 rounded-sm ml-0.5 mb-0.5"
-                          />
-                          <img
-                            src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
-                            class="h-20 object-cover border border-slate-300 rounded-sm ml-0.5 mb-0.5"
-                          />
-                          <img
-                            src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
-                            class="h-20 object-cover border border-slate-300 rounded-sm ml-0.5 mb-0.5"
-                          />
+                        <div class="flex items-center justify-center">
+                          <!-- Dropdown  -->
+                          <div
+                            class="font-bold text-slate-500 hover:text-slate-800"
+                          >
+                            <button
+                              id="messageDropdown"
+                              data-dropdown-toggle="messageDropdownDots"
+                              data-dropdown-placement="left-start"
+                              type="button"
+                              class="p-2"
+                            >
+                              <svg
+                                class="w-4 h-4"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 4 15"
+                              >
+                                <path
+                                  d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+                                />
+                              </svg>
+                            </button>
+
+                            <!-- Dropdown menu -->
+                            <div
+                              id="messageDropdownDots"
+                              class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 border border-slate-300"
+                            >
+                              <ul
+                                class="py-2 text-sm text-gray-600 font-normal"
+                                aria-labelledby="messageDropdown"
+                              >
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i
+                                      class="fa-solid fa-circle-check mr-1"
+                                    ></i>
+                                    {{ __("SELECT") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-reply mr-1"></i>
+                                    {{ __("REPLY") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-thumbtack mr-1"></i>
+                                    {{ __("PIN") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-copy mr-1"></i>
+                                    {{ __("COPY_TEXT") }}</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-download mr-1"></i>
+                                    {{ __("DOWNLOAD") }}</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-edit mr-1"></i>
+                                    {{ __("EDIT") }}</a
+                                  >
+                                </li>
+
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-trash mr-1"></i>
+                                    {{ __("DELETE") }}</a
+                                  >
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <div
+                            class="flex flex-row-reverse items-center flex-wrap"
+                          >
+                            <img
+                              src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
+                              class="h-20 object-cover border border-slate-300 rounded-sm ml-0.5 mb-0.5"
+                            />
+                            <img
+                              src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
+                              class="h-20 object-cover border border-slate-300 rounded-sm ml-0.5 mb-0.5"
+                            />
+                            <img
+                              src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
+                              class="h-20 object-cover border border-slate-300 rounded-sm ml-0.5 mb-0.5"
+                            />
+                            <img
+                              src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
+                              class="h-20 object-cover border border-slate-300 rounded-sm ml-0.5 mb-0.5"
+                            />
+                            <img
+                              src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
+                              class="h-20 object-cover border border-slate-300 rounded-sm ml-0.5 mb-0.5"
+                            />
+                            <img
+                              src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
+                              class="h-20 object-cover border border-slate-300 rounded-sm ml-0.5 mb-0.5"
+                            />
+                            <img
+                              src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
+                              class="h-20 object-cover border border-slate-300 rounded-sm ml-0.5 mb-0.5"
+                            />
+                            <img
+                              src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
+                              class="h-20 object-cover border border-slate-300 rounded-sm ml-0.5 mb-0.5"
+                            />
+                          </div>
                         </div>
                         <div
                           class="flex items-center justify-end space-x-2 mr-2 mt-1"
@@ -547,21 +1180,128 @@ const form = useForm({
                   <div class="flex items-end justify-end">
                     <div class="flex items-center justify-end">
                       <div class="pl-28">
-                        <p
-                          class="p-3 bg-slate-50 border-2 border-slate-300 rounded-xl rounded-br-none shadow-md w-auto max-w-[500px] text-sm"
-                        >
-                          Lorem ipsum dolor sit amet.
-                        </p>
+                        <div class="flex items-center justify-center">
+                          <!-- Dropdown  -->
+                          <div
+                            class="font-bold text-slate-500 hover:text-slate-800"
+                          >
+                            <button
+                              id="messageDropdown"
+                              data-dropdown-toggle="messageDropdownDots"
+                              data-dropdown-placement="left-start"
+                              type="button"
+                              class="p-2"
+                            >
+                              <svg
+                                class="w-4 h-4"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 4 15"
+                              >
+                                <path
+                                  d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+                                />
+                              </svg>
+                            </button>
+
+                            <!-- Dropdown menu -->
+                            <div
+                              id="messageDropdownDots"
+                              class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 border border-slate-300"
+                            >
+                              <ul
+                                class="py-2 text-sm text-gray-600 font-normal"
+                                aria-labelledby="messageDropdown"
+                              >
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i
+                                      class="fa-solid fa-circle-check mr-1"
+                                    ></i>
+                                    {{ __("SELECT") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-reply mr-1"></i>
+                                    {{ __("REPLY") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-thumbtack mr-1"></i>
+                                    {{ __("PIN") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-copy mr-1"></i>
+                                    {{ __("COPY_TEXT") }}</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-download mr-1"></i>
+                                    {{ __("DOWNLOAD") }}</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-edit mr-1"></i>
+                                    {{ __("EDIT") }}</a
+                                  >
+                                </li>
+
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-trash mr-1"></i>
+                                    {{ __("DELETE") }}</a
+                                  >
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <p
+                            class="p-3 bg-slate-50 border-2 border-slate-300 rounded-xl rounded-br-none shadow-md w-auto max-w-[500px] text-sm"
+                          >
+                            Lorem ipsum dolor sit amet.
+                          </p>
+                        </div>
                         <div
-                          class="flex items-center justify-end space-x-2 mr-2 mt-1"
+                          class="mt-1 text-[.6rem] text-slate-600 flex items-center justify-end space-x-4"
                         >
-                          <span class="text-[.6rem] text-slate-600">
-                            3:30 PM
-                          </span>
-                          <span class="text-[.6rem] text-slate-600">
-                            <i class="fa-solid fa-check text-green-500"></i>
-                            <i class="fa-solid fa-check text-green-500"></i>
-                          </span>
+                          <span class="font-bold">{{ __("EDITED") }}</span>
+                          <div
+                            class="flex items-center justify-end space-x-2 mr-2"
+                          >
+                            <span class=""> 3:30 PM </span>
+                            <span class="text-[.6rem] text-slate-600">
+                              <i class="fa-solid fa-check text-green-500"></i>
+                              <i class="fa-solid fa-check text-green-500"></i>
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -571,6 +1311,7 @@ const form = useForm({
                     />
                   </div>
                 </div>
+
                 <!-- Right Side  -->
                 <div class="mb-2">
                   <p class="text-center text-sm text-slate-500 font-bold mb-5">
@@ -579,23 +1320,130 @@ const form = useForm({
                   <div class="flex items-end justify-end">
                     <div class="flex items-center justify-end">
                       <div class="pl-28">
-                        <p
-                          class="p-3 bg-slate-50 border-2 border-slate-300 rounded-xl rounded-br-none shadow-md w-auto max-w-[500px] text-sm"
-                        >
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Quae aspernatur voluptatum beatae libero ex vero
-                          quisquam sequi nam, cupiditate eaque.
-                        </p>
+                        <div class="flex items-center justify-center">
+                          <!-- Dropdown  -->
+                          <div
+                            class="font-bold text-slate-500 hover:text-slate-800"
+                          >
+                            <button
+                              id="messageDropdown"
+                              data-dropdown-toggle="messageDropdownDots"
+                              data-dropdown-placement="left-start"
+                              type="button"
+                              class="p-2"
+                            >
+                              <svg
+                                class="w-4 h-4"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 4 15"
+                              >
+                                <path
+                                  d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+                                />
+                              </svg>
+                            </button>
+
+                            <!-- Dropdown menu -->
+                            <div
+                              id="messageDropdownDots"
+                              class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 border border-slate-300"
+                            >
+                              <ul
+                                class="py-2 text-sm text-gray-600 font-normal"
+                                aria-labelledby="messageDropdown"
+                              >
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i
+                                      class="fa-solid fa-circle-check mr-1"
+                                    ></i>
+                                    {{ __("SELECT") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-reply mr-1"></i>
+                                    {{ __("REPLY") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-thumbtack mr-1"></i>
+                                    {{ __("PIN") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-copy mr-1"></i>
+                                    {{ __("COPY_TEXT") }}</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-download mr-1"></i>
+                                    {{ __("DOWNLOAD") }}</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-edit mr-1"></i>
+                                    {{ __("EDIT") }}</a
+                                  >
+                                </li>
+
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-trash mr-1"></i>
+                                    {{ __("DELETE") }}</a
+                                  >
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <p
+                            class="p-3 bg-slate-50 border-2 border-slate-300 rounded-xl rounded-br-none shadow-md w-auto max-w-[500px] text-sm"
+                          >
+                            Lorem ipsum dolor sit amet consectetur adipisicing
+                            elit. Quae aspernatur voluptatum beatae libero ex
+                            vero quisquam sequi nam, cupiditate eaque.
+                          </p>
+                        </div>
                         <div
-                          class="flex items-center justify-end space-x-2 mr-2 mt-1"
+                          class="mt-1 text-[.6rem] text-slate-600 flex items-center justify-end space-x-4"
                         >
-                          <span class="text-[.6rem] text-slate-600">
-                            3:30 PM
-                          </span>
-                          <span class="text-[.6rem] text-slate-600">
-                            <i class="fa-solid fa-check text-green-500"></i>
-                            <i class="fa-solid fa-check text-green-500"></i>
-                          </span>
+                          <span class="font-bold">{{ __("EDITED") }}</span>
+                          <div
+                            class="flex items-center justify-end space-x-2 mr-2"
+                          >
+                            <span class=""> 3:30 PM </span>
+                            <span class="text-[.6rem] text-slate-600">
+                              <i class="fa-solid fa-check text-green-500"></i>
+                              <i class="fa-solid fa-check text-green-500"></i>
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -622,13 +1470,118 @@ const form = useForm({
 
                       <div class="flex items-end justify-start w-full">
                         <div class="pr-28">
-                          <video-player
-                            src="https://player.vimeo.com/external/482032091.sd.mp4?s=3894ac8c829e2a945d5b2525ba2325e6890af37b&profile_id=164&oauth2_token_id=57447761"
-                            controls
-                            :loop="true"
-                            :volume="0.6"
-                            class="w-[500px] h-[283px] border border-slate-300 shadow-md"
-                          />
+                          <div class="flex items-center justify-start">
+                            <video-player
+                              src="https://player.vimeo.com/external/482032091.sd.mp4?s=3894ac8c829e2a945d5b2525ba2325e6890af37b&profile_id=164&oauth2_token_id=57447761"
+                              controls
+                              :loop="true"
+                              :volume="0.6"
+                              class="w-[500px] h-[283px] border border-slate-300 shadow-md"
+                            />
+                            <!-- Dropdown  -->
+                            <div
+                              class="font-bold text-slate-500 hover:text-slate-800"
+                            >
+                              <button
+                                id="messageDropdown"
+                                data-dropdown-toggle="messageDropdownDots"
+                                data-dropdown-placement="right-start"
+                                type="button"
+                                class="p-2"
+                              >
+                                <svg
+                                  class="w-4 h-4"
+                                  aria-hidden="true"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="currentColor"
+                                  viewBox="0 0 4 15"
+                                >
+                                  <path
+                                    d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+                                  />
+                                </svg>
+                              </button>
+
+                              <!-- Dropdown menu -->
+                              <div
+                                id="messageDropdownDots"
+                                class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 border border-slate-300"
+                              >
+                                <ul
+                                  class="py-2 text-sm text-gray-600 font-normal"
+                                  aria-labelledby="messageDropdown"
+                                >
+                                  <li>
+                                    <a
+                                      href="#"
+                                      class="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                      <i
+                                        class="fa-solid fa-circle-check mr-1"
+                                      ></i>
+                                      Select
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a
+                                      href="#"
+                                      class="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                      <i class="fa-solid fa-reply mr-1"></i>
+                                      Reply
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a
+                                      href="#"
+                                      class="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                      <i class="fa-solid fa-thumbtack mr-1"></i>
+                                      Pin
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a
+                                      href="#"
+                                      class="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                      <i class="fa-solid fa-copy mr-1"></i>
+                                      Copy Text</a
+                                    >
+                                  </li>
+                                  <li>
+                                    <a
+                                      href="#"
+                                      class="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                      <i class="fa-solid fa-download mr-1"></i>
+                                      Download</a
+                                    >
+                                  </li>
+                                  <li>
+                                    <a
+                                      href="#"
+                                      class="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                      <i class="fa-solid fa-edit mr-1"></i>
+                                      Edit</a
+                                    >
+                                  </li>
+
+                                  <li>
+                                    <a
+                                      href="#"
+                                      class="block px-4 py-2 hover:bg-gray-100"
+                                    >
+                                      <i class="fa-solid fa-trash mr-1"></i>
+                                      Delete</a
+                                    >
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+
                           <div
                             class="flex items-center justify-start space-x-2 mr-2 mt-1"
                           >
@@ -654,13 +1607,117 @@ const form = useForm({
                   <div class="flex items-end justify-end">
                     <div class="flex items-center justify-end">
                       <div class="pl-28">
-                        <video-player
-                          src="https://player.vimeo.com/progressive_redirect/playback/788713051/rendition/360p/file.mp4?loc=external&oauth2_token_id=57447761&signature=919ef4f383848136dec2a4c7b11a673bfa9c5837f31d5c4843e153ff238b2bb6"
-                          controls
-                          :loop="true"
-                          :volume="0.6"
-                          class="w-[500px] h-[283px] border border-slate-300 shadow-md"
-                        />
+                        <div class="flex items-center justify-center">
+                          <!-- Dropdown  -->
+                          <div
+                            class="font-bold text-slate-500 hover:text-slate-800"
+                          >
+                            <button
+                              id="messageDropdown"
+                              data-dropdown-toggle="messageDropdownDots"
+                              data-dropdown-placement="left-start"
+                              type="button"
+                              class="p-2"
+                            >
+                              <svg
+                                class="w-4 h-4"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 4 15"
+                              >
+                                <path
+                                  d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+                                />
+                              </svg>
+                            </button>
+
+                            <!-- Dropdown menu -->
+                            <div
+                              id="messageDropdownDots"
+                              class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 border border-slate-300"
+                            >
+                              <ul
+                                class="py-2 text-sm text-gray-600 font-normal"
+                                aria-labelledby="messageDropdown"
+                              >
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i
+                                      class="fa-solid fa-circle-check mr-1"
+                                    ></i>
+                                    {{ __("SELECT") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-reply mr-1"></i>
+                                    {{ __("REPLY") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-thumbtack mr-1"></i>
+                                    {{ __("PIN") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-copy mr-1"></i>
+                                    {{ __("COPY_TEXT") }}</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-download mr-1"></i>
+                                    {{ __("DOWNLOAD") }}</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-edit mr-1"></i>
+                                    {{ __("EDIT") }}</a
+                                  >
+                                </li>
+
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-trash mr-1"></i>
+                                    {{ __("DELETE") }}</a
+                                  >
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <video-player
+                            src="https://player.vimeo.com/progressive_redirect/playback/788713051/rendition/360p/file.mp4?loc=external&oauth2_token_id=57447761&signature=919ef4f383848136dec2a4c7b11a673bfa9c5837f31d5c4843e153ff238b2bb6"
+                            controls
+                            :loop="true"
+                            :volume="0.6"
+                            class="w-[500px] h-[283px] border border-slate-300 shadow-md"
+                          />
+                        </div>
                         <div
                           class="flex items-center justify-end space-x-2 mr-2 mt-1"
                         >
@@ -689,13 +1746,117 @@ const form = useForm({
                   <div class="flex items-end justify-end">
                     <div class="flex items-center justify-end">
                       <div class="pl-28">
-                        <video-player
-                          src="https://player.vimeo.com/external/484400309.sd.mp4?s=ce7283c34054fc63121bc763965fd4b8cb91e534&profile_id=164&oauth2_token_id=57447761"
-                          controls
-                          :loop="true"
-                          :volume="0.6"
-                          class="w-[500px] h-[283px] border border-slate-300 shadow-md"
-                        />
+                        <div class="flex items-center justify-center">
+                          <!-- Dropdown  -->
+                          <div
+                            class="font-bold text-slate-500 hover:text-slate-800"
+                          >
+                            <button
+                              id="messageDropdown"
+                              data-dropdown-toggle="messageDropdownDots"
+                              data-dropdown-placement="left-start"
+                              type="button"
+                              class="p-2"
+                            >
+                              <svg
+                                class="w-4 h-4"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 4 15"
+                              >
+                                <path
+                                  d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+                                />
+                              </svg>
+                            </button>
+
+                            <!-- Dropdown menu -->
+                            <div
+                              id="messageDropdownDots"
+                              class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 border border-slate-300"
+                            >
+                              <ul
+                                class="py-2 text-sm text-gray-600 font-normal"
+                                aria-labelledby="messageDropdown"
+                              >
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i
+                                      class="fa-solid fa-circle-check mr-1"
+                                    ></i>
+                                    {{ __("SELECT") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-reply mr-1"></i>
+                                    {{ __("REPLY") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-thumbtack mr-1"></i>
+                                    {{ __("PIN") }}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-copy mr-1"></i>
+                                    {{ __("COPY_TEXT") }}</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-download mr-1"></i>
+                                    {{ __("DOWNLOAD") }}</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-edit mr-1"></i>
+                                    {{ __("EDIT") }}</a
+                                  >
+                                </li>
+
+                                <li>
+                                  <a
+                                    href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100"
+                                  >
+                                    <i class="fa-solid fa-trash mr-1"></i>
+                                    {{ __("DELETE") }}</a
+                                  >
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <video-player
+                            src="https://player.vimeo.com/external/484400309.sd.mp4?s=ce7283c34054fc63121bc763965fd4b8cb91e534&profile_id=164&oauth2_token_id=57447761"
+                            controls
+                            :loop="true"
+                            :volume="0.6"
+                            class="w-[500px] h-[283px] border border-slate-300 shadow-md"
+                          />
+                        </div>
                         <div
                           class="flex items-center justify-end space-x-2 mr-2 mt-1"
                         >
@@ -777,20 +1938,43 @@ const form = useForm({
               </div>
 
               <h5 class="text-sm font-bold text-slate-600 my-5">
-                5 Files Selected
+                {{ multiPreviewFiles.length }} {{ __("FILE_SELECTED") }}
               </h5>
 
+              <div class="flex items-center space-x-3">
+                <div class="text-gray-600 hover:text-gray-700 cursor-pointer">
+                  <i class="fa-solid fa-face-smile"></i>
+                </div>
+                <form action="" class="w-full">
+                  <input
+                    type="text"
+                    class="bg-transparent border-0 w-full ring-0 focus:ring-0 text-sm text-slate-700 py-2.5 border-b-2 focus:border-b-2 border-b-slate-300 hover:border-b-slate-300 focus:border-0"
+                    :placeholder="__('TYPE_A_MESSAGE')"
+                  />
+                </form>
+              </div>
+
               <div class="flex items-center space-x-2 mt-5 mb-3">
-                <button
-                  class="bg-yellow-500 text-sm rounded-sm p-3 font-semibold text-white w-[80px] hover:bg-yellow-600"
-                >
-                  <i class="fa-solid fa-image"></i>
-                </button>
+                <label for="input-file">
+                  <div
+                    class="bg-yellow-500 text-sm rounded-sm px-3 py-[15px] font-semibold text-white w-[50px] hover:bg-yellow-600 cursor-pointer flex items-center justify-center"
+                  >
+                    <i class="fa-solid fa-paperclip"></i>
+                  </div>
+                  <input
+                    id="input-file"
+                    type="file"
+                    class="hidden"
+                    multiple
+                    @input="form.files = $event.target.files"
+                    @change="handleMultiplePhotoChange($event.target.files)"
+                  />
+                </label>
                 <button
                   class="bg-blue-600 text-sm rounded-sm p-3 font-semibold text-white w-full hover:bg-blue-700"
                 >
                   <i class="fa-solid fa-paper-plane"></i>
-                  Send
+                  {{ __("SEND") }}
                 </button>
               </div>
             </div>
@@ -802,16 +1986,29 @@ const form = useForm({
               class="w-full flex items-center justify-between py-0.5 px-5 pr-10 space-x-3"
             >
               <div class="flex items-center space-x-4">
-                <div class="text-gray-600 hover:text-gray-700 cursor-pointer">
+                <div
+                  data-tooltip-target="emoji-tooltip"
+                  class="text-gray-600 cursor-pointer"
+                >
                   <i class="fa-solid fa-face-smile"></i>
+                </div>
+
+                <div
+                  id="emoji-tooltip"
+                  role="tooltip"
+                  class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-800 bg-slate-300 border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
+                >
+                  {{ __("EMOJI") }}
+                  <div class="tooltip-arrow" data-popper-arrow></div>
                 </div>
 
                 <div class="flex items-center justify-center w-full">
                   <label for="input-file">
                     <div
+                      data-tooltip-target="file-tooltip"
                       class="text-gray-600 hover:text-gray-700 cursor-pointer"
                     >
-                      <i class="fa-solid fa-image"></i>
+                      <i class="fa-solid fa-paperclip"></i>
                     </div>
                     <input
                       id="input-file"
@@ -822,13 +2019,22 @@ const form = useForm({
                       @change="handleMultiplePhotoChange($event.target.files)"
                     />
                   </label>
+
+                  <div
+                    id="file-tooltip"
+                    role="tooltip"
+                    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-800 bg-slate-300 border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
+                  >
+                    {{ __("IMAGE") }} / {{ __("VIDEO") }} / {{ __("FILE") }}
+                    <div class="tooltip-arrow" data-popper-arrow></div>
+                  </div>
                 </div>
               </div>
               <div class="w-full">
                 <input
                   type="text"
                   class="bg-transparent border-0 w-full ring-0 focus:ring-0 text-sm text-slate-700 py-2.5 border-b-2 focus:border-b-2 border-b-slate-300 hover:border-b-slate-300 focus:border-0"
-                  placeholder="Type a message"
+                  :placeholder="__('TYPE_A_MESSAGE')"
                 />
               </div>
               <div>
