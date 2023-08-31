@@ -17,6 +17,7 @@ return new class () extends Migration {
             $table->foreignId("live_chat_id")->constrained()->cascadeOnDelete();
             $table->foreignId("user_id")->constrained()->cascadeOnDelete();
             $table->foreignId("agent_id")->references("id")->on("users")->cascadeOnDelete();
+            $table->enum('type', ['text', 'image', 'video'])->default("text");
             $table->text("message");
             $table->timestamps();
         });

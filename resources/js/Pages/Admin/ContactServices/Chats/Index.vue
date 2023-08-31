@@ -1,10 +1,10 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ChatBreadcrumb.vue";
-import { VideoPlayer } from "@videojs-player/vue";
+// import { VideoPlayer } from "@videojs-player/vue";
 import "video.js/dist/video-js.css";
-import { Head } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { Head, useForm } from "@inertiajs/vue3";
+import { ref, computed } from "vue";
 
 const isMessageSearchFormOpened = ref(false);
 
@@ -16,6 +16,50 @@ const images = ref([
   "https://images.pexels.com/photos/17901694/pexels-photo-17901694/free-photo-of-young-woman-in-brocade-dress-sitting-by-a-table-with-burning-candles.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
   "https://images.pexels.com/photos/17191051/pexels-photo-17191051/free-photo-of-street-illuminated-at-night.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
 ]);
+
+const multiPreviewFiles = ref([]);
+const getMultiPreviewPhotoPath = (paths) => {
+  paths.forEach((path) => {
+    multiPreviewFiles.value.push(URL.createObjectURL(path));
+  });
+};
+
+const handleMultiplePhotoChange = (files) => {
+  const paths = Array.from(files);
+  getMultiPreviewPhotoPath(paths);
+};
+
+const removeImage = (index) => {
+  multiPreviewFiles.value.splice(index, 1);
+
+  form.files = Array.from(form.files);
+  form.files.splice(index, 1);
+};
+
+const isImage = (file) => {
+  return file.type.includes("image");
+};
+
+const isVideo = (file) => {
+  return file.type.includes("video");
+};
+
+const handleClose = () => {
+  multiPreviewFiles.value = [];
+};
+
+const imgIndex = ref(null);
+
+const getIndex = (index) => {
+  imgIndex.value = index;
+};
+
+const isDisabled = computed(() => (form.files.length ? true : false));
+
+const form = useForm({
+  files: [],
+  captcha_token: null,
+});
 </script>
 
 <template>
@@ -175,7 +219,7 @@ const images = ref([
           <!-- Search Form And Result  -->
           <div
             v-if="isMessageSearchFormOpened"
-            class="fixed w-[1380px] h-auto border-b bg-white py-2 px-5"
+            class="fixed w-[1380px] top-[144px] h-auto border-t border-b bg-white py-2 px-5"
           >
             <!-- Search Message Form -->
             <div class="flex items-center justify-between space-x-10">
@@ -671,35 +715,114 @@ const images = ref([
                     />
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
 
-                <img
-                  class="image"
-                  v-for="(image, i) in images"
-                  :src="image"
-                  :key="i"
-                  @click="index = i"
-                />
-                <vue-gallery-slideshow
-                  :images="images"
-                  :index="index"
-                  @close="index = null"
-                ></vue-gallery-slideshow>
+          <!-- Preview Image Box  -->
+
+          <div
+            v-if="multiPreviewFiles.length"
+            class="fixed z-50 top-0 bottom-0 right-0 left-0 bg-dark bg-opacity-60 flex items-center justify-center"
+          >
+            <div
+              class="border border-gray-500 w-[500px] bg-white shadow-xl rounded-md p-5 pt-0"
+            >
+              <span
+                @click="handleClose"
+                class="bg-slate-300 w-5 h-5 rounded-md flex items-center justify-center hover:bg-slate-400 transition-all mt-5 ml-auto cursor-pointer"
+              >
+                <i class="fa-solid fa-xmark text-[.7rem]"></i>
+              </span>
+
+              <div
+                class="h-auto max-h-[420px] overflow-auto preview-container scrollbar mt-5 grid grid-cols-3 gap-1"
+              >
+                <div
+                  v-for="(multiPreviewFile, index) in multiPreviewFiles"
+                  :key="index"
+                >
+                  <div v-if="multiPreviewFile">
+                    <div v-if="isImage(form.files[index])">
+                      <div class="relative">
+                        <img
+                          :src="multiPreviewFile"
+                          class="w-48 h-48 border object-cover rounded-md shadow"
+                        />
+                        <span
+                          @click="removeImage(index)"
+                          class="absolute top-3 right-3 text-xs bg-dark bg-opacity-50 w-6 h-6 rounded-sm p-2 flex items-center justify-center text-white cursor-pointer hover:bg-opacity-80"
+                        >
+                          <i class="fa-solid fa-trash"></i>
+                        </span>
+                      </div>
+                    </div>
+                    <div v-else-if="isVideo(form.files[index])">
+                      <div class="relative">
+                        <video
+                          :src="multiPreviewFile"
+                          controls
+                          class="w-48 h-48 border object-cover rounded-md shadow"
+                        ></video>
+                        <span
+                          @click="removeImage(index)"
+                          class="absolute top-3 right-3 text-xs bg-dark bg-opacity-50 w-6 h-6 rounded-sm p-2 flex items-center justify-center text-white cursor-pointer hover:bg-opacity-80"
+                        >
+                          <i class="fa-solid fa-trash"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <h5 class="text-sm font-bold text-slate-600 my-5">
+                5 Files Selected
+              </h5>
+
+              <div class="flex items-center space-x-2 mt-5 mb-3">
+                <button
+                  class="bg-yellow-500 text-sm rounded-sm p-3 font-semibold text-white w-[80px] hover:bg-yellow-600"
+                >
+                  <i class="fa-solid fa-image"></i>
+                </button>
+                <button
+                  class="bg-blue-600 text-sm rounded-sm p-3 font-semibold text-white w-full hover:bg-blue-700"
+                >
+                  <i class="fa-solid fa-paper-plane"></i>
+                  Send
+                </button>
               </div>
             </div>
           </div>
 
           <!-- Footer Input Form -->
-          <div class="relative z-50 w-full bg-white border-t shadow px-5 py-6">
+          <div class="relative z-40 w-full bg-white border-t shadow px-5 py-6">
             <form
               class="w-full flex items-center justify-between py-0.5 px-5 pr-10 space-x-3"
             >
               <div class="flex items-center space-x-4">
-                <span class="text-gray-600 hover:text-gray-700">
+                <div class="text-gray-600 hover:text-gray-700 cursor-pointer">
                   <i class="fa-solid fa-face-smile"></i>
-                </span>
-                <span class="text-gray-600 hover:text-gray-700">
-                  <i class="fa-solid fa-image"></i>
-                </span>
+                </div>
+
+                <div class="flex items-center justify-center w-full">
+                  <label for="input-file">
+                    <div
+                      class="text-gray-600 hover:text-gray-700 cursor-pointer"
+                    >
+                      <i class="fa-solid fa-image"></i>
+                    </div>
+                    <input
+                      id="input-file"
+                      type="file"
+                      class="hidden"
+                      multiple
+                      @input="form.files = $event.target.files"
+                      @change="handleMultiplePhotoChange($event.target.files)"
+                    />
+                  </label>
+                </div>
               </div>
               <div class="w-full">
                 <input
