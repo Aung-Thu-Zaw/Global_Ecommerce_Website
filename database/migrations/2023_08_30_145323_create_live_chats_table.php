@@ -15,9 +15,10 @@ return new class () extends Migration {
         Schema::create('live_chats', function (Blueprint $table) {
             $table->id();
             $table->foreignId("user_id")->constrained()->cascadeOnDelete();
-            $table->foreignId("agent_id")->references("id")->on("users")->cascadeOnDelete();
+            $table->foreignId("agent_id")->nullable()->references("id")->on("users")->cascadeOnDelete();
             $table->boolean("pinned")->default(false);
             $table->boolean("archived")->default(false);
+            $table->boolean("is_active")->default(false);
             $table->timestamp("ended_at")->nullable();
             $table->softDeletes();
             $table->timestamps();

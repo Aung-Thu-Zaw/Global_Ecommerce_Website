@@ -1,16 +1,23 @@
 <script setup>
 import { Head } from "@inertiajs/vue3";
+
+defineProps({
+  liveChat: Object,
+});
 </script>
 
 
 <template>
   <Head title="Support Service Live Chat" />
 
+
   <div class="w-full min-h-screen background flex items-center justify-center">
     <div
       class="w-[1000px] h-auto border border-slate-300 shadow-lg rounded-md overflow-hidden"
     >
       <div class="min-w-full">
+
+        {{ liveChat }}
         <!-- Header -->
         <div
           class="w-full border-b shadow bg-white px-5 py-3 flex items-center"
@@ -58,7 +65,7 @@ import { Head } from "@inertiajs/vue3";
           <div class="h-[600px] overflow-auto scrollbar">
             <div class="p-5 h-[800px]">
               <!-- Right Side  -->
-              <div class="mb-2">
+              <!-- <div class="mb-2">
                 <p class="text-center text-sm text-slate-500 font-bold mb-5">
                   22-April-2023 ( Monday )
                 </p>
@@ -91,14 +98,14 @@ import { Head } from "@inertiajs/vue3";
                     class="w-8 h-8 object-cover rounded-full ring-2 ring-slate-300 ml-3"
                   />
                 </div>
-              </div>
+              </div> -->
 
               <!-- left Side -->
-              <div class="mb-2">
+              <!-- <div class="mb-2">
                 <div>
-                  <!-- <p class="text-center text-sm text-slate-500 font-bold mb-5">
+                  <p class="text-center text-sm text-slate-500 font-bold mb-5">
                     22-April-2023 ( Sunday )
-                  </p> -->
+                  </p>
                   <div class="flex items-end">
                     <img
                       src="https://media.istockphoto.com/id/171383132/photo/customer-service-representative.jpg?s=612x612&w=0&k=20&c=dpu11BZe50RU09eyoLrn55aCkcLKJOj99iGyktLPblI="
@@ -131,10 +138,10 @@ import { Head } from "@inertiajs/vue3";
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
 
               <!-- Right Side  -->
-              <div class="mb-2">
+              <!-- <div class="mb-2">
                 <p class="text-center text-sm text-slate-500 font-bold mb-5">
                   22-April-2023 ( Monday )
                 </p>
@@ -165,10 +172,10 @@ import { Head } from "@inertiajs/vue3";
                     class="w-8 h-8 object-cover rounded-full ring-2 ring-slate-300 ml-3"
                   />
                 </div>
-              </div>
+              </div> -->
 
               <!-- Right Side  -->
-              <div class="mb-2">
+              <!-- <div class="mb-2">
                 <p class="text-center text-sm text-slate-500 font-bold mb-5">
                   22-April-2023 ( Monday )
                 </p>
@@ -203,14 +210,14 @@ import { Head } from "@inertiajs/vue3";
                     class="w-8 h-8 object-cover rounded-full ring-2 ring-slate-300 ml-3"
                   />
                 </div>
-              </div>
+              </div> -->
 
               <!-- left Side -->
-              <div class="mb-2">
+              <!-- <div class="mb-2">
                 <div>
-                  <!-- <p class="text-center text-sm text-slate-500 font-bold mb-5">
+                  <p class="text-center text-sm text-slate-500 font-bold mb-5">
                     22-April-2023 ( Sunday )
-                  </p> -->
+                  </p>
                   <div class="flex items-end">
                     <img
                       src="https://media.istockphoto.com/id/171383132/photo/customer-service-representative.jpg?s=612x612&w=0&k=20&c=dpu11BZe50RU09eyoLrn55aCkcLKJOj99iGyktLPblI="
@@ -244,10 +251,10 @@ import { Head } from "@inertiajs/vue3";
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
 
               <!-- Right Side  -->
-              <div class="mb-2">
+              <!-- <div class="mb-2">
                 <p class="text-center text-sm text-slate-500 font-bold mb-5">
                   22-April-2023 ( Monday )
                 </p>
@@ -306,10 +313,10 @@ import { Head } from "@inertiajs/vue3";
                     class="w-8 h-8 object-cover rounded-full ring-2 ring-slate-300 ml-3"
                   />
                 </div>
-              </div>
+              </div> -->
 
               <!-- Right Side  -->
-              <div class="mb-2">
+              <!-- <div class="mb-2">
                 <p class="text-center text-sm text-slate-500 font-bold mb-5">
                   22-April-2023 ( Monday )
                 </p>
@@ -339,9 +346,9 @@ import { Head } from "@inertiajs/vue3";
                     class="w-8 h-8 object-cover rounded-full ring-2 ring-slate-300 ml-3"
                   />
                 </div>
-              </div>
+              </div> -->
               <!-- Right Side  -->
-              <div class="mb-2">
+              <!-- <div class="mb-2">
                 <p class="text-center text-sm text-slate-500 font-bold mb-5">
                   22-April-2023 ( Monday )
                 </p>
@@ -373,13 +380,13 @@ import { Head } from "@inertiajs/vue3";
                     class="w-8 h-8 object-cover rounded-full ring-2 ring-slate-300 ml-3"
                   />
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
 
         <!-- Footer Input Form -->
-        <div class="w-full bg-white border-t shadow px-5 py-3">
+        <!-- <div class="w-full bg-white border-t shadow px-5 py-3">
           <form
             class="bg-slate-100 rounded-full w-full flex items-center justify-between py-0.5 px-5 pr-10 space-x-3"
           >
@@ -404,34 +411,7 @@ import { Head } from "@inertiajs/vue3";
               </button>
             </div>
           </form>
-        </div>
-        <!-- Footer Input Form -->
-        <div class="w-full bg-white border-t shadow px-5 py-3">
-          <form
-            class="bg-slate-100 rounded-full w-full flex items-center justify-between py-0.5 px-5 pr-10 space-x-3"
-          >
-            <div class="flex items-center space-x-3">
-              <span class="text-gray-600 hover:text-gray-700">
-                <i class="fa-solid fa-face-smile"></i>
-              </span>
-              <span class="text-gray-600 hover:text-gray-700">
-                <i class="fa-solid fa-image"></i>
-              </span>
-            </div>
-            <div class="w-full">
-              <input
-                type="text"
-                class="bg-transparent w-full border-none focus:ring-0 text-sm text-slate-700 py-2.5"
-                placeholder="Type a message"
-              />
-            </div>
-            <div>
-              <button class="text-gray-400 hover:text-gray-700">
-                <i class="fa-solid fa-paper-plane"></i>
-              </button>
-            </div>
-          </form>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

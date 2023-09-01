@@ -114,9 +114,14 @@ defineProps({
 
           <div class="flex items-center justify-center space-x-10 mt-10">
             <!-- Chat Now Card -->
-            <a
-              :href="route('service.live-chat')"
-              target="_blank"
+            <Link
+              as="button"
+              :href="route('service.live-chat.store')"
+              :data="{
+                user_id: $page.props.auth.user?.id,
+                agent_id: null,
+              }"
+              method="post"
               class="rounded-md w-[250px] text-white flex items-center bg-orange-600 px-5 py-3"
             >
               <span class="mr-5">
@@ -126,7 +131,7 @@ defineProps({
                 <span class="text-lg font-bold">{{ __("CHAT_NOW") }}</span>
                 <span class="text-[.7rem]">8:00 AM - 09:30 PM</span>
               </div>
-            </a>
+            </Link>
 
             <!-- Email Card -->
             <Link
