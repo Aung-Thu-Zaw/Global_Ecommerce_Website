@@ -16,10 +16,9 @@ return new class () extends Migration {
             $table->id();
             $table->foreignId("user_id")->constrained()->cascadeOnDelete();
             $table->foreignId("agent_id")->references("id")->on("users")->cascadeOnDelete();
-            // $table->boolean("is_active")->default(false);
             $table->boolean("pinned")->default(false);
             $table->boolean("archived")->default(false);
-            $table->timestamp("ended_at");
+            $table->timestamp("ended_at")->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
