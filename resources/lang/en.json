@@ -962,5 +962,7 @@
     "FILE": "File",
     "SEND": "Send",
     "SEARCH_MESSAGE": "Search message",
-    "FILE_SELECTED": "File(s) Selected"
+    "FILE_SELECTED": "File(s) Selected",
+    "BOOKMARK": "Bookmark",
+    "FOLDERS": "Folders"
 }

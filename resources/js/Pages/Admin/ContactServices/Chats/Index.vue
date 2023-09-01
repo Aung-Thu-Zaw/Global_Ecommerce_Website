@@ -65,11 +65,11 @@ const form = useForm({
 <template>
   <AdminDashboardLayout>
     <Head :title="__('CHATS')" />
-    <div class="w-full h-screen pt-[79px]">
+    <div class="w-full h-[960px] pt-[79px] overflow-hidden">
       <div class="w-full h-full flex items-center">
-        <div class="w-[460px] h-full border-r-2 border-r-slate-300">
+        <div class="w-[600px] h-full border-r-2 border-r-slate-300">
           <!-- Form -->
-          <div class="mb-2 bg-white border-b px-2 py-[11px]">
+          <div class="bg-white border-b px-2 py-[11px]">
             <form
               class="w-full border-b flex items-center justify-between border-2 border-gray-400 py-0.5 px-2 rounded-sm"
             >
@@ -85,29 +85,90 @@ const form = useForm({
           </div>
 
           <!-- Header -->
-          <div class="w-full bg-white flex items-center mb-5 px-4">
-            <ul
-              class="flex items-center justify-between text-sm font-medium text-center text-gray-500 w-full"
+          <div class="w-full bg-white flex items-start justify-between h-full">
+            <!-- Sidebar  -->
+            <div
+              class="border-r border-gray-300 shadow bg-gray-50 w-[70px] h-[815px] flex flex-col p-2 text-xs items-center space-y-5 overflow-auto scrollbar"
             >
-              <li class="mr-2">
+              <div
+                data-tooltip-target="trash-tooltip"
+                data-tooltip-placement="right"
+                class="flex items-center justify-center borer ring-2 ring-red-300 min-w-[40px] min-h-[40px] rounded-sm bg-red-600 text-white hover:bg-red-700"
+              >
+                <i class="fa-solid fa-trash-can"></i>
+
+                <div
+                  id="trash-tooltip"
+                  role="tooltip"
+                  class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-800 bg-white rounded-lg shadow-lg opacity-0 tooltip border"
+                >
+                  {{ __("TRASH") }}
+                  <div class="tooltip-arrow" data-popper-arrow></div>
+                </div>
+              </div>
+              <div
+                data-tooltip-target="bookmark-tooltip"
+                data-tooltip-placement="right"
+                class="flex items-center justify-center borer ring-2 ring-primary-300 min-w-[40px] min-h-[40px] rounded-sm bg-primary-600 text-white hover:bg-primary-700"
+              >
+                <i class="fa-solid fa-bookmark"></i>
+                <div
+                  id="bookmark-tooltip"
+                  role="tooltip"
+                  class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-800 bg-white rounded-lg shadow-lg opacity-0 tooltip border"
+                >
+                  {{ __("BOOKMARK") }}
+                  <div class="tooltip-arrow" data-popper-arrow></div>
+                </div>
+              </div>
+
+              <span
+                class="font-bold text-slate-600 pt-3 border-t border-slate-300 flex flex-col items-center justify-center"
+              >
+                <span> Chat </span>
+                <span>
+                  {{ __("FOLDERS") }}
+                </span>
+              </span>
+
+              <div
+                data-tooltip-target="folder-tooltip"
+                data-tooltip-placement="right"
+                class="flex items-center justify-center borer bg-gray-500 ring-2 ring-gray-300 text-white min-w-[40px] min-h-[40px] rounded-sm hover:bg-gray-600"
+              >
+                <i class="fa-solid fa-folder"></i>
+                <div
+                  id="folder-tooltip"
+                  role="tooltip"
+                  class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-800 bg-white rounded-lg shadow-lg opacity-0 tooltip border"
+                >
+                  Customers
+                  <div class="tooltip-arrow" data-popper-arrow></div>
+                </div>
+              </div>
+            </div>
+            <ul
+              class="flex items-center justify-between text-sm font-medium text-center text-gray-500 w-full p-2"
+            >
+              <li class="">
                 <a
                   href="#"
-                  class="inline-block px-3 py-2.5 text-blue-600 bg-blue-200 rounded-sm border-2 border-blue-400 active text-xs"
+                  class="inline-block px-3 py-2.5 text-blue-600 bg-blue-200 rounded-md border-2 border-blue-400 active text-xs transition-all shadow"
                   aria-current="page"
                   >{{ __("ALL_CHATS") }}</a
                 >
               </li>
-              <li class="mr-2">
+              <li class="">
                 <a
                   href="#"
-                  class="inline-block px-3 py-2.5 text-slate-600 bg-slate-200 rounded-sm border-2 border-slate-400 active text-xs"
+                  class="inline-block px-3 py-2.5 text-slate-600 bg-slate-200 hover:bg-slate-300 rounded-md border-2 border-slate-400 active text-xs transition-all shadow"
                   >{{ __("ONGOING_CHATS") }}</a
                 >
               </li>
-              <li class="mr-2">
+              <li class="">
                 <a
                   href="#"
-                  class="inline-block px-3 py-2.5 text-slate-600 bg-slate-200 rounded-sm border-2 border-slate-400 active text-xs"
+                  class="inline-block px-3 py-2.5 text-slate-600 bg-slate-200 hover:bg-slate-300 rounded-md border-2 border-slate-400 active text-xs transition-all shadow"
                   >{{ __("ENDED_CHATS") }}</a
                 >
               </li>
@@ -1996,7 +2057,7 @@ const form = useForm({
                 <div
                   id="emoji-tooltip"
                   role="tooltip"
-                  class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-800 bg-slate-300 border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
+                  class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-800 bg-white rounded-lg shadow-lg opacity-0 tooltip border"
                 >
                   {{ __("EMOJI") }}
                   <div class="tooltip-arrow" data-popper-arrow></div>
@@ -2023,7 +2084,7 @@ const form = useForm({
                   <div
                     id="file-tooltip"
                     role="tooltip"
-                    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-800 bg-slate-300 border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
+                    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-800 bg-white rounded-lg shadow-lg opacity-0 tooltip border"
                   >
                     {{ __("IMAGE") }} / {{ __("VIDEO") }} / {{ __("FILE") }}
                     <div class="tooltip-arrow" data-popper-arrow></div>
@@ -2051,3 +2112,8 @@ const form = useForm({
 </template>
 
 
+<style>
+.scrollbar::-webkit-scrollbar {
+  display: none;
+}
+</style>
