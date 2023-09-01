@@ -964,5 +964,10 @@
     "SEARCH_MESSAGE": "Search message",
     "FILE_SELECTED": "File(s) Selected",
     "BOOKMARK": "Bookmark",
-    "FOLDERS": "Folders"
+    "FOLDERS": "Folders",
+    "MARK_AS_READ": "Mark As Read",
+    "VIEW_CHAT": "View Chat",
+    "ADD_TO_FOLDER": "Add To Folder",
+    "ARCHIVE":"Archive",
+    "CREATE_NEW_FOLDER":"Create New Folder"
 }

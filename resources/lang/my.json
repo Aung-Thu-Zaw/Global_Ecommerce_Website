@@ -964,5 +964,10 @@
     "SEARCH_MESSAGE": "မက်ဆေ့ခ်ျကို ရှာပါ။",
     "FILE_SELECTED": "ဖိုင်(များ) ရွေးထားသည်။",
     "BOOKMARK": "မှတ်သားထားသည်။",
-    "FOLDERS": "ဖိုဒါများ"
+    "FOLDERS": "ဖိုဒါများ",
+    "MARK_AS_READ": "ဖတ်သည်အဖြစ် အမှတ်အသားပြုပါ။",
+    "VIEW_CHAT": "Chat ကို ကြည့်ပါ။",
+    "ADD_TO_FOLDER": "ဖိုဒါတွဲသို့ထည့်ပါ။",
+    "ARCHIVE": "Archive",
+    "CREATE_NEW_FOLDER":"ဖိုင်တွဲအသစ်ဖန်တီးပါ။"
 }
