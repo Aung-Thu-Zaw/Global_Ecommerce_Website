@@ -15,11 +15,9 @@ return new class () extends Migration {
         Schema::create('live_chat_messages', function (Blueprint $table) {
             $table->id();
             $table->foreignId("live_chat_id")->constrained()->cascadeOnDelete();
-            $table->foreignId("user_id")->constrained()->cascadeOnDelete();
-            $table->foreignId("agent_id")->references("id")->on("users")->cascadeOnDelete();
-            $table->enum('type', ['text', 'image', 'video','file'])->default("text");
+            $table->foreignId("user_id")->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId("agent_id")->nullable()->references("id")->on("users")->cascadeOnDelete();
             $table->text("message")->nullable();
-            $table->string("attachment_path")->nullable();
             $table->boolean("is_read_by_user")->default(false);
             $table->boolean("is_read_by_agent")->default(false);
             $table->boolean("is_deleted_by_user")->default(false);

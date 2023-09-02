@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Ecommerce\HelpCenter;
+namespace App\Http\Controllers\Ecommerce\HelpCenter\LiveChats;
 
 use App\Http\Controllers\Controller;
 use App\Models\AgentStatus;
@@ -14,7 +14,10 @@ class SupportLiveChatServiceController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $liveChat = LiveChat::with("agent:id,name,avatar")->select("id", "user_id", "agent_id")->where("user_id", auth()->id())->first();
+        $liveChat = LiveChat::with(["user:id,name,avatar","agent:id,name,avatar","liveChatMessages.chatFileAttachments"])
+        ->select("id", "user_id", "agent_id")
+        ->where("user_id", auth()->id())
+        ->first();
 
         return inertia("Ecommerce/HelpCenter/LiveChat/Index", compact("liveChat"));
     }
@@ -35,4 +38,6 @@ class SupportLiveChatServiceController extends Controller
 
         return to_route("service.live-chat.index");
     }
+
+
 }

@@ -1,4 +1,5 @@
 <script setup>
+import UserLiveChatMessageForm from "@/Components/Forms/Chats/UserLiveChatMessageForm.vue";
 import { Head } from "@inertiajs/vue3";
 
 defineProps({
@@ -10,13 +11,11 @@ defineProps({
 <template>
   <Head title="Support Service Live Chat" />
 
-
   <div class="w-full min-h-screen background flex items-center justify-center">
     <div
       class="w-[1000px] h-auto border border-slate-300 shadow-lg rounded-md overflow-hidden"
     >
       <div class="min-w-full">
-
         {{ liveChat }}
         <!-- Header -->
         <div
@@ -24,13 +23,15 @@ defineProps({
         >
           <div class="mr-3">
             <img
-              src="https://media.istockphoto.com/id/171383132/photo/customer-service-representative.jpg?s=612x612&w=0&k=20&c=dpu11BZe50RU09eyoLrn55aCkcLKJOj99iGyktLPblI="
+              :src="liveChat.agent?.avatar"
               class="w-10 h-10 rounded-full object-cover ring-2 ring-slate-300"
             />
           </div>
           <div>
             <div class="flex items-center space-x-3">
-              <h3 class="text-slate-700 font-bold text-md">Aung Thu Zaw</h3>
+              <h3 class="text-slate-700 font-bold text-md">
+                {{ liveChat.agent?.name }}
+              </h3>
               <span
                 class="text-xs font-medium bg-blue-200 text-blue-700 px-2 py-0.5 rounded-full"
               >
@@ -386,32 +387,7 @@ defineProps({
         </div>
 
         <!-- Footer Input Form -->
-        <!-- <div class="w-full bg-white border-t shadow px-5 py-3">
-          <form
-            class="bg-slate-100 rounded-full w-full flex items-center justify-between py-0.5 px-5 pr-10 space-x-3"
-          >
-            <div class="flex items-center space-x-3">
-              <span class="text-gray-600 hover:text-gray-700">
-                <i class="fa-solid fa-face-smile"></i>
-              </span>
-              <span class="text-gray-600 hover:text-gray-700">
-                <i class="fa-solid fa-image"></i>
-              </span>
-            </div>
-            <div class="w-full">
-              <input
-                type="text"
-                class="bg-transparent w-full border-none focus:ring-0 text-sm text-slate-700 py-2.5"
-                placeholder="Type a message"
-              />
-            </div>
-            <div>
-              <button class="text-gray-400 hover:text-gray-700">
-                <i class="fa-solid fa-paper-plane"></i>
-              </button>
-            </div>
-          </form>
-        </div> -->
+        <UserLiveChatMessageForm :liveChat="liveChat" />
       </div>
     </div>
   </div>
