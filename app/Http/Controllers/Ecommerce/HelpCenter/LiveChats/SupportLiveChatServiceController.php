@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ecommerce\HelpCenter\LiveChats;
 use App\Http\Controllers\Controller;
 use App\Models\AgentStatus;
 use App\Models\LiveChat;
+use App\Models\LiveChatMessage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
@@ -14,10 +15,15 @@ class SupportLiveChatServiceController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $liveChat = LiveChat::with(["user:id,name,avatar","agent:id,name,avatar","liveChatMessages.chatFileAttachments"])
+        $liveChat = LiveChat::with(["user:id,name,avatar","agent:id,name,avatar"])
         ->select("id", "user_id", "agent_id")
         ->where("user_id", auth()->id())
         ->first();
+
+        if($liveChat) {
+            $liveChatMessages = LiveChatMessage::with("chatFileAttachments")->where("live_chat_id", $liveChat->id)->orderBy("id", "desc")->get();
+            return inertia("Ecommerce/HelpCenter/LiveChat/Index", compact("liveChat", "liveChatMessages"));
+        }
 
         return inertia("Ecommerce/HelpCenter/LiveChat/Index", compact("liveChat"));
     }

@@ -216,6 +216,15 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 
+    // /**
+    // * @return \Illuminate\Database\Eloquent\Relations\HasMany<Message>
+    // */
+    // public function liveChatMessages(): HasMany
+    // {
+    //     return $this->hasMany(Message::class);
+    // }
+
+
     public function getRedirectRouteName(): string
     {
         return match ((string)$this->role) {

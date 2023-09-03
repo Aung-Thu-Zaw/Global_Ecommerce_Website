@@ -1,5 +1,5 @@
 <script setup>
-import { useForm } from "@inertiajs/vue3";
+import { useForm, usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
 import { useReCaptcha } from "vue-recaptcha-v3";
 
@@ -40,8 +40,8 @@ const handleClose = () => {
 
 const form = useForm({
   live_chat_id: props.liveChat?.id,
-  user_id: props.liveChat.user?.id,
-  agent_id: props.liveChat.agent?.id,
+  user_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
+  agent_id: null,
   message: "",
   files: [],
   captcha_token: null,

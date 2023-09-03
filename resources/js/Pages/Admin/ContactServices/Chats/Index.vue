@@ -4,8 +4,6 @@ import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import ChatConversationCard from "@/Components/Cards/Chats/ChatConversationCard.vue";
 import DropdownToolsForChatMessage from "@/Components/Dropdowns/Chats/DropdownToolsForChatMessage.vue";
 import AgentLiveChatMessageForm from "@/Components/Forms/Chats/AgentLiveChatMessageForm.vue";
-import { VideoPlayer } from "@videojs-player/vue";
-import "video.js/dist/video-js.css";
 import { Head, useForm } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
 

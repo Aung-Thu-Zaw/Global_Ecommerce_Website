@@ -27,8 +27,8 @@ class LiveChatMessageRequest extends FormRequest
     {
         $rules = [
             "live_chat_id" => ["required","numeric",Rule::exists("live_chats", "id")],
-            "user_id" => ["required","numeric",Rule::exists("users", "id")],
-            "agent_id" => ["required","numeric",Rule::exists("users", "id")],
+            "user_id" => ["nullable","numeric",Rule::exists("users", "id")],
+            "agent_id" => ["nullable","numeric",Rule::exists("users", "id")],
             "message" => ["nullable","string"],
             "captcha_token" => ["required",new RecaptchaRule()],
         ];
@@ -47,10 +47,8 @@ class LiveChatMessageRequest extends FormRequest
     public function messages(): array
     {
         return [
-            "agent_id.required" =>  "The agent id is required.",
             "agent_id.numeric" =>  "The agent id must be a number.",
             "agent_id.exists" =>  "The selected agent id is invalid.",
-            "user_id.required" =>  "The user id is required.",
             "user_id.numeric" =>  "The user id must be a number.",
             "user_id.exists" =>  "The selected user id is invalid.",
             "live_chat_id.required" =>  "The live chat id is required.",
