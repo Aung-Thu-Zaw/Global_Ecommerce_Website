@@ -8,11 +8,31 @@ import OnlineStatus from "@/Components/Status/OnlineStatus.vue";
 import OfflineStatus from "@/Components/Status/OfflineStatus.vue";
 import BusyStatus from "@/Components/Status/BusyStatus.vue";
 import { Head } from "@inertiajs/vue3";
+import { onMounted } from "vue";
+import { initFlowbite } from "flowbite";
+
+
 
 defineProps({
   liveChat: Object,
   liveChatMessages: Object,
 });
+
+// initialize components based on data attribute selectors
+onMounted(() => {
+  initFlowbite();
+});
+
+// const lastDisplayedDate = ref("");
+
+// const shouldDisplayDate = computed(() => {
+//   const currentDate = props.message.created_at;
+//   if (currentDate === lastDisplayedDate.value) {
+//     return false;
+//   }
+//   lastDisplayedDate.value = currentDate;
+//   return true;
+// });
 </script>
 
 
@@ -59,15 +79,39 @@ defineProps({
 
         <!-- Message -->
         <div class="bg-white">
-          <div class="h-[700px] overflow-auto scrollbar border border-red-700">
-            <div class="p-5 flex flex-col justify-end border h-full">
-              <!-- Left Side For Recevier -->
-              <RecevierTextMessageCard />
-              <!-- <RecevierPhotoVideoMessageCard /> -->
+          <div class="h-[700px] overflow-auto scrollbar">
+            <div class="p-5 flex flex-col justify-end h-full">
+              <div v-for="message in liveChatMessages" :key="message.id">
+                <!-- <p
+                  v-if="shouldDisplayDate"
+                  class="text-center text-sm text-slate-500 font-bold px-5 mb-5"
+                >
+                  {{ message.created_at }}
+                </p> -->
+                <!-- Left Side For Recevier -->
+                <div
+                  v-if="message.agent_id && !message.user_id && message.message"
+                >
+                  <RecevierTextMessageCard :message="message" />
+                </div>
+                <!-- <RecevierPhotoVideoMessageCard /> -->
 
-              <!-- Right Side For Sender  -->
-              <SenderTextMessageCard />
-              <SenderPhotoVideoMessageCard />
+                <!-- Right Side For Sender  -->
+                <div
+                  v-if="message.user_id && !message.agent_id && message.message"
+                >
+                  <SenderTextMessageCard :message="message" />
+                </div>
+                <div
+                  v-if="
+                    message.user_id &&
+                    !message.agent_id &&
+                    message.chat_file_attachments.length
+                  "
+                >
+                  <SenderPhotoVideoMessageCard :message="message" />
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -1,92 +1,21 @@
 <script setup>
+import DropdownToolForChatMessage from "@/Components/Dropdowns/Chats/DropdownToolsForChatMessage.vue";
+// import { VideoPlayer } from "@videojs-player/vue";
+// import "video.js/dist/video-js.css";
+
+defineProps({
+  message: Object,
+});
 </script>
 <template>
   <!-- Right Side  -->
-  <div class="mb-2">
-    <p class="text-center text-sm text-slate-500 font-bold mb-5">
-      22-April-2023 ( Monday )
-    </p>
+  <div class="mb-5">
     <div class="flex items-end justify-end">
       <div class="flex items-center justify-end">
         <div class="pl-28">
           <div class="flex items-center justify-center">
             <!-- Dropdown  -->
-            <div class="font-bold text-slate-500 hover:text-slate-800">
-              <button
-                id="messageDropdown"
-                data-dropdown-toggle="messageDropdownDots"
-                data-dropdown-placement="left-start"
-                type="button"
-                class="p-2"
-              >
-                <svg
-                  class="w-4 h-4"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 4 15"
-                >
-                  <path
-                    d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
-                  />
-                </svg>
-              </button>
-
-              <!-- Dropdown menu -->
-              <div
-                id="messageDropdownDots"
-                class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 border border-slate-300"
-              >
-                <ul
-                  class="py-2 text-sm text-gray-600 font-normal"
-                  aria-labelledby="messageDropdown"
-                >
-                  <li>
-                    <a href="#" class="block px-4 py-2 hover:bg-gray-100">
-                      <i class="fa-solid fa-circle-check mr-1"></i>
-                      {{ __("SELECT") }}
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="block px-4 py-2 hover:bg-gray-100">
-                      <i class="fa-solid fa-reply mr-1"></i>
-                      {{ __("REPLY") }}
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="block px-4 py-2 hover:bg-gray-100">
-                      <i class="fa-solid fa-thumbtack mr-1"></i>
-                      {{ __("PIN") }}
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="block px-4 py-2 hover:bg-gray-100">
-                      <i class="fa-solid fa-copy mr-1"></i>
-                      {{ __("COPY_TEXT") }}</a
-                    >
-                  </li>
-                  <li>
-                    <a href="#" class="block px-4 py-2 hover:bg-gray-100">
-                      <i class="fa-solid fa-download mr-1"></i>
-                      {{ __("DOWNLOAD") }}</a
-                    >
-                  </li>
-                  <li>
-                    <a href="#" class="block px-4 py-2 hover:bg-gray-100">
-                      <i class="fa-solid fa-edit mr-1"></i>
-                      {{ __("EDIT") }}</a
-                    >
-                  </li>
-
-                  <li>
-                    <a href="#" class="block px-4 py-2 hover:bg-gray-100">
-                      <i class="fa-solid fa-trash mr-1"></i>
-                      {{ __("DELETE") }}</a
-                    >
-                  </li>
-                </ul>
-              </div>
-            </div>
+            <DropdownToolForChatMessage :message="message" />
 
             <!-- For One Image Or Video -->
             <!-- <div class="">
@@ -198,12 +127,20 @@
             </div> -->
 
             <!-- For Six Images Or Video  -->
-            <div class="flex flex-col items-center w-auto h-auto border">
+            <!-- <div class="flex flex-col items-center w-auto h-auto">
               <div class="flex items-center">
-                <img
-                  src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                  class="w-[215px] h-[162px] object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                />
+                <div class="relative ml-0.5">
+                  <video
+                    src="https://player.vimeo.com/external/587457745.sd.mp4?s=1bde705b069024acb8a38a28cc6529d76ca74416&profile_id=165&oauth2_token_id=57447761"
+                    class="w-[215px] h-[162px] object-cover rounded-[4px]"
+                  ></video>
+                  <div
+                    class="absolute top-14 left-24 bg-black bg-opacity-50 text-md text-white w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
+                  >
+                    <i class="fa-solid fa-play"></i>
+                  </div>
+                </div>
+
                 <div class="flex flex-col items-center">
                   <img
                     src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
@@ -220,16 +157,23 @@
                   src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
                   class="w-full h-20 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
                 />
-                <img
-                  src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                  class="w-full h-20 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                />
+                <div class="relative w-full h-20 ml-0.5">
+                  <video
+                    src="https://player.vimeo.com/external/587457745.sd.mp4?s=1bde705b069024acb8a38a28cc6529d76ca74416&profile_id=165&oauth2_token_id=57447761"
+                    class="w-full h-full object-cover rounded-[4px]"
+                  ></video>
+                  <div
+                    class="absolute top-14 left-24 bg-black bg-opacity-50 text-md text-white w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
+                  >
+                    <i class="fa-solid fa-play"></i>
+                  </div>
+                </div>
                 <img
                   src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
                   class="w-full h-20 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
                 />
               </div>
-            </div>
+            </div> -->
 
             <!-- For Seven Image Or Video -->
             <!-- <div class="flex flex-col items-center w-auto h-auto border">

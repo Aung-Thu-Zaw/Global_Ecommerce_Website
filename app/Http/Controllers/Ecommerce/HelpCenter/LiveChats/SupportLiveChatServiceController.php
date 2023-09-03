@@ -21,7 +21,7 @@ class SupportLiveChatServiceController extends Controller
         ->first();
 
         if($liveChat) {
-            $liveChatMessages = LiveChatMessage::with("chatFileAttachments")->where("live_chat_id", $liveChat->id)->orderBy("id", "desc")->get();
+            $liveChatMessages = LiveChatMessage::with(["chatFileAttachments","user:id,avatar","agent:id,avatar"])->where("live_chat_id", $liveChat->id)->orderBy("id", "asc")->get();
             return inertia("Ecommerce/HelpCenter/LiveChat/Index", compact("liveChat", "liveChatMessages"));
         }
 

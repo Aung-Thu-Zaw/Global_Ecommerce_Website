@@ -19,42 +19,46 @@ class ChatMultiFileUploadService
 
             if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'])) {
 
-                $file->move(storage_path('app/public/live-chats/images/'), $originalName);
+                $finalName = "image"."-".time()."-".$originalName;
+                $file->move(storage_path('app/public/live-chats/images/'), $finalName);
 
                 ChatFileAttachment::create([
                     "live_chat_message_id" => $liveChatMessage->id,
                     "type" => "image",
-                    "attachment_path" => $originalName,
+                    "attachment_path" => $finalName,
                 ]);
 
             } elseif (in_array($extension, ['avi','mpeg','webm','mp4'])) {
 
-                $file->move(storage_path('app/public/live-chats/videos/'), $originalName);
+                $finalName = "video"."-".time()."-".$originalName;
+                $file->move(storage_path('app/public/live-chats/videos/'), $finalName);
 
                 ChatFileAttachment::create([
                     "live_chat_message_id" => $liveChatMessage->id,
                     "type" => "video",
-                    "attachment_path" => $originalName,
+                    "attachment_path" => $finalName,
                 ]);
 
             } elseif (in_array($extension, ['pdf','msword','vnd.ms-excel','vnd','ms-powerpoint','plain','csv','zip','x-rar-compressed','x-7z-compressed'])) {
 
-                $file->move(storage_path('app/public/live-chats/files/'), $originalName);
+                $finalName = "file"."-".time()."-".$originalName;
+                $file->move(storage_path('app/public/live-chats/files/'), $finalName);
 
                 ChatFileAttachment::create([
                     "live_chat_message_id" => $liveChatMessage->id,
                     "type" => "file",
-                    "attachment_path" => $originalName,
+                    "attachment_path" => $finalName,
                 ]);
 
             } elseif (in_array($extension, ['mpeg','wav','ogg'])) {
 
-                $file->move(storage_path('app/public/live-chats/audios/'), $originalName);
+                $finalName = "audio"."-".time()."-".$originalName;
+                $file->move(storage_path('app/public/live-chats/audios/'), $finalName);
 
                 ChatFileAttachment::create([
                     "live_chat_message_id" => $liveChatMessage->id,
                     "type" => "audio",
-                    "attachment_path" => $originalName,
+                    "attachment_path" => $finalName,
                 ]);
             }
         }

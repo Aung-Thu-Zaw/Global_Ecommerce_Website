@@ -21,6 +21,8 @@ class CreateLiveChatMessageAction
                             'user_id' => $data["user_id"],
                             'agent_id' => $data["agent_id"],
                             'message' => $data["message"],
+                            'is_read_by_user' => $data["user_id"] ? true : false,
+                            'is_read_by_agent' => $data["agent_id"] ? true : false,
                         ]);
 
 
