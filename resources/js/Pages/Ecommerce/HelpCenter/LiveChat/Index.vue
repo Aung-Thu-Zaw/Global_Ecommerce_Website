@@ -9,7 +9,7 @@ import OnlineStatus from "@/Components/Status/OnlineStatus.vue";
 import OfflineStatus from "@/Components/Status/OfflineStatus.vue";
 import BusyStatus from "@/Components/Status/BusyStatus.vue";
 import { Head } from "@inertiajs/vue3";
-import { onMounted } from "vue";
+import { onMounted, onUpdated, ref } from "vue";
 import { initFlowbite } from "flowbite";
 
 defineProps({
@@ -17,9 +17,19 @@ defineProps({
   liveChatMessages: Object,
 });
 
+const msgScroll = ref(null);
+
+const scrollToBottom = () => {
+  msgScroll.value.scrollTop = msgScroll.value.scrollHeight;
+};
+
 // initialize components based on data attribute selectors
 onMounted(() => {
   initFlowbite();
+});
+
+onUpdated(() => {
+  scrollToBottom();
 });
 
 // const lastDisplayedDate = ref("");
@@ -81,7 +91,10 @@ onMounted(() => {
           class="h-[700px] bg-white p-5 flex flex-col justify-end border border-red-700 overflow-auto scrollbar"
         > -->
 
-        <div class="h-[700px] bg-white p-5 overflow-auto scrollbar">
+        <div
+          class="h-[700px] bg-white p-5 overflow-auto scrollbar"
+          ref="msgScroll"
+        >
           <p
             class="w-full text-center text-sm font-medium text-blue-500 hover:text-blue-600 cursor-pointer mb-6"
           >
