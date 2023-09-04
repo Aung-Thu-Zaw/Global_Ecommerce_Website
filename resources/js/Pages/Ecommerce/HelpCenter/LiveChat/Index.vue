@@ -3,6 +3,7 @@ import UserLiveChatMessageForm from "@/Components/Forms/Chats/UserLiveChatMessag
 import SenderTextMessageCard from "@/Components/Cards/Chats/SenderTextMessageCard.vue";
 import SenderPhotoVideoMessageCard from "@/Components/Cards/Chats/SenderPhotoVideoMessageCard.vue";
 import RecevierTextMessageCard from "@/Components/Cards/Chats/RecevierTextMessageCard.vue";
+import LastChatDiscussionInformationCard from "@/Components/Cards/Chats/LastChatDiscussionInformationCard.vue";
 // import RecevierPhotoVideoMessageCard from "@/Components/Cards/Chats/RecevierPhotoVideoMessageCard.vue";
 import OnlineStatus from "@/Components/Status/OnlineStatus.vue";
 import OfflineStatus from "@/Components/Status/OfflineStatus.vue";
@@ -10,8 +11,6 @@ import BusyStatus from "@/Components/Status/BusyStatus.vue";
 import { Head } from "@inertiajs/vue3";
 import { onMounted } from "vue";
 import { initFlowbite } from "flowbite";
-
-
 
 defineProps({
   liveChat: Object,
@@ -78,40 +77,45 @@ onMounted(() => {
         </div>
 
         <!-- Message -->
-        <div class="bg-white">
-          <div class="h-[700px] overflow-auto scrollbar">
-            <div class="p-5 flex flex-col justify-end h-full">
-              <div v-for="message in liveChatMessages" :key="message.id">
-                <!-- <p
+        <!-- <div
+          class="h-[700px] bg-white p-5 flex flex-col justify-end border border-red-700 overflow-auto scrollbar"
+        > -->
+
+        <div class="h-[700px] bg-white p-5 overflow-auto scrollbar">
+          <p
+            class="w-full text-center text-sm font-medium text-blue-500 hover:text-blue-600 cursor-pointer mb-6"
+          >
+            <i class="fa-solid fa-message mr-1"></i>
+            View Past Chat History Messages
+          </p>
+
+          <LastChatDiscussionInformationCard :liveChat="liveChat" />
+
+          <div v-for="message in liveChatMessages" :key="message.id">
+            <!-- <p
                   v-if="shouldDisplayDate"
                   class="text-center text-sm text-slate-500 font-bold px-5 mb-5"
                 >
                   {{ message.created_at }}
                 </p> -->
-                <!-- Left Side For Recevier -->
-                <div
-                  v-if="message.agent_id && !message.user_id && message.message"
-                >
-                  <RecevierTextMessageCard :message="message" />
-                </div>
-                <!-- <RecevierPhotoVideoMessageCard /> -->
+            <!-- Left Side For Recevier -->
+            <div v-if="message.agent_id && !message.user_id && message.message">
+              <RecevierTextMessageCard :message="message" />
+            </div>
+            <!-- <RecevierPhotoVideoMessageCard /> -->
 
-                <!-- Right Side For Sender  -->
-                <div
-                  v-if="message.user_id && !message.agent_id && message.message"
-                >
-                  <SenderTextMessageCard :message="message" />
-                </div>
-                <div
-                  v-if="
-                    message.user_id &&
-                    !message.agent_id &&
-                    message.chat_file_attachments.length
-                  "
-                >
-                  <SenderPhotoVideoMessageCard :message="message" />
-                </div>
-              </div>
+            <!-- Right Side For Sender  -->
+            <div v-if="message.user_id && !message.agent_id && message.message">
+              <SenderTextMessageCard :message="message" />
+            </div>
+            <div
+              v-if="
+                message.user_id &&
+                !message.agent_id &&
+                message.chat_file_attachments.length
+              "
+            >
+              <SenderPhotoVideoMessageCard :message="message" />
             </div>
           </div>
         </div>
@@ -124,7 +128,7 @@ onMounted(() => {
 </template>
 
 
-<style>
+<style scoped>
 .background {
   background-image: url("https://cdn.dribbble.com/users/1003944/screenshots/15741863/06_comp_1_4x.gif?resize=400x300&vertical=center");
   background-repeat: no-repeat;

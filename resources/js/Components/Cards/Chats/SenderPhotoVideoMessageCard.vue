@@ -16,255 +16,464 @@ defineProps({
           <div class="flex items-center justify-center">
             <!-- Dropdown  -->
             <DropdownToolForChatMessage :message="message" />
-
             <!-- For One Image Or Video -->
-            <!-- <div class="">
+            <div
+              v-if="message.chat_file_attachments.length === 1"
+              class="w-auto max-w-[400px]"
+            >
+              <!-- Image -->
               <img
-                src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                class="h-48 object-cover border border-slate-300 rounded-[4px]"
+                v-if="message.chat_file_attachments[0].type === 'image'"
+                :src="message.chat_file_attachments[0]?.attachment_path"
+                class="h-48 object-cover border border-gray-200 rounded-[4px]"
               />
-            </div> -->
+
+              <!-- Video -->
+              <div
+                v-if="message.chat_file_attachments[0].type === 'video'"
+                class="relative ml-0.5 mb-0.5"
+              >
+                <video
+                  :src="message.chat_file_attachments[0]?.attachment_path"
+                  class="h-44 object-cover rounded-[4px]"
+                ></video>
+                <div
+                  class="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-md text-white w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
+                >
+                  <i class="fa-solid fa-play"></i>
+                </div>
+              </div>
+            </div>
 
             <!-- For Two Image Or Video  -->
-            <!-- <div class="flex flex-row-reverse items-center w-auto">
+            <div
+              v-else-if="message.chat_file_attachments.length === 2"
+              class="flex items-center w-auto max-w-[400px]"
+            >
+              <!-- Images -->
               <img
-                src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                class="w-full h-32 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
+                v-if="message.chat_file_attachments[0].type === 'image'"
+                :src="message.chat_file_attachments[0]?.attachment_path"
+                class="w-full h-32 object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
               />
               <img
-                src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                class="w-full h-32 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
+                v-if="message.chat_file_attachments[1].type === 'image'"
+                :src="message.chat_file_attachments[1]?.attachment_path"
+                class="w-full h-32 object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
               />
-            </div> -->
+
+              <!-- Videos -->
+              <div
+                v-if="message.chat_file_attachments[0].type === 'video'"
+                class="relative ml-0.5 mb-0.5"
+              >
+                <video
+                  :src="message.chat_file_attachments[0]?.attachment_path"
+                  class="h-32 object-cover rounded-[4px]"
+                ></video>
+                <div
+                  class="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-md text-white w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
+                >
+                  <i class="fa-solid fa-play"></i>
+                </div>
+              </div>
+
+              <div
+                v-if="message.chat_file_attachments[1].type === 'video'"
+                class="relative ml-0.5 mb-0.5"
+              >
+                <video
+                  :src="message.chat_file_attachments[1]?.attachment_path"
+                  class="h-32 object-cover rounded-[4px]"
+                ></video>
+                <div
+                  class="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-md text-white w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
+                >
+                  <i class="fa-solid fa-play"></i>
+                </div>
+              </div>
+            </div>
 
             <!-- For Three Image Or Video  -->
-            <!-- <div class="flex flex-col items-center w-auto h-auto">
-              <img
-                src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                class="w-full h-40 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-              />
-              <div class="flex items-center">
-                <img
-                  src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                  class="w-full h-24 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                />
-                <img
-                  src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                  class="w-full h-24 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                />
-              </div>
-            </div> -->
-
-            <!-- For Four Image Or Video  -->
-            <!-- <div class="grid grid-cols-2 gap-x-0.5 w-auto h-auto">
-              <img
-                src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                class="w-full h-24 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-              />
-              <img
-                src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                class="w-full h-24 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-              />
-              <img
-                src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                class="w-full h-24 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-              />
-              <img
-                src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                class="w-full h-24 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-              />
-            </div> -->
-
-            <!-- For four Images Or Video  -->
-            <!-- <div class="flex items-center w-auto h-auto border">
-              <img
-                src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                class="w-56 h-[245px] object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-              />
-              <div class="flex flex-col items-center">
-                <img
-                  src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                  class="w-full h-20 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                />
-                <img
-                  src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                  class="w-full h-20 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                />
-                <img
-                  src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                  class="w-full h-20 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                />
-              </div>
-            </div> -->
-
-            <!-- For Five Images Or Video  -->
-            <!-- <div class="flex items-center w-auto h-auto border">
-              <div class="flex flex-col items-center">
-                <img
-                  src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                  class="w-48 h-[136px] object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                />
-
-                <img
-                  src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                  class="w-48 h-[136px] object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                />
-              </div>
-              <div class="flex flex-col items-center">
-                <img
-                  src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                  class="w-full h-[90px] object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                />
-                <img
-                  src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                  class="w-full h-[90px] object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                />
-                <img
-                  src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                  class="w-full h-[90px] object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                />
-              </div>
-            </div> -->
-
-            <!-- For Six Images Or Video  -->
-            <!-- <div class="flex flex-col items-center w-auto h-auto">
-              <div class="flex items-center">
-                <div class="relative ml-0.5">
-                  <video
-                    src="https://player.vimeo.com/external/587457745.sd.mp4?s=1bde705b069024acb8a38a28cc6529d76ca74416&profile_id=165&oauth2_token_id=57447761"
-                    class="w-[215px] h-[162px] object-cover rounded-[4px]"
-                  ></video>
-                  <div
-                    class="absolute top-14 left-24 bg-black bg-opacity-50 text-md text-white w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
-                  >
-                    <i class="fa-solid fa-play"></i>
-                  </div>
-                </div>
-
-                <div class="flex flex-col items-center">
-                  <img
-                    src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                    class="w-full h-20 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                  />
-                  <img
-                    src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                    class="w-full h-20 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                  />
-                </div>
-              </div>
-              <div class="flex items-center">
-                <img
-                  src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                  class="w-full h-20 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                />
-                <div class="relative w-full h-20 ml-0.5">
-                  <video
-                    src="https://player.vimeo.com/external/587457745.sd.mp4?s=1bde705b069024acb8a38a28cc6529d76ca74416&profile_id=165&oauth2_token_id=57447761"
-                    class="w-full h-full object-cover rounded-[4px]"
-                  ></video>
-                  <div
-                    class="absolute top-14 left-24 bg-black bg-opacity-50 text-md text-white w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
-                  >
-                    <i class="fa-solid fa-play"></i>
-                  </div>
-                </div>
-                <img
-                  src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                  class="w-full h-20 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                />
-              </div>
-            </div> -->
-
-            <!-- For Seven Image Or Video -->
-            <!-- <div class="flex flex-col items-center w-auto h-auto border">
-              <div class="flex items-center">
-                <img
-                  src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                  class="w-[215px] h-[244px] object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                />
-                <div class="flex flex-col items-center">
-                  <img
-                    src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                    class="w-full h-20 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                  />
-                  <img
-                    src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                    class="w-full h-20 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                  />
-                  <img
-                    src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                    class="w-full h-20 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                  />
-                </div>
-              </div>
-              <div class="flex items-center">
-                <img
-                  src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                  class="w-full h-20 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                />
-                <img
-                  src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                  class="w-full h-20 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                />
-                <img
-                  src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                  class="w-full h-20 object-cover border border-slate-400 rounded-[4px] ml-0.5 mb-0.5"
-                />
-              </div>
-            </div> -->
-
-            <!-- For More than 7 Image or video  -->
-            <!-- <div
-              class="flex flex-row-reverse items-center flex-wrap max-w-[326px] w-auto"
+            <div
+              v-else-if="message.chat_file_attachments.length === 3"
+              class="flex flex-col items-center w-auto max-w-[400px] h-auto"
             >
               <img
-                src="https://cdn.dribbble.com/userupload/4443667/file/original-5d56901f011915cb845770ad7c5c3666.png?resize=1024x768&vertical=center"
-                class="w-30 h-20 object-cover border border-slate-300 rounded-[4px] ml-0.5 mb-0.5"
+                v-if="message.chat_file_attachments[0].type === 'image'"
+                :src="message.chat_file_attachments[0]?.attachment_path"
+                class="w-full h-40 object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
+              />
+
+              <div
+                v-if="message.chat_file_attachments[0].type === 'video'"
+                class="relative ml-0.5 mb-0.5"
+              >
+                <video
+                  :src="message.chat_file_attachments[0]?.attachment_path"
+                  class="w-full h-40 object-cover rounded-[4px]"
+                ></video>
+                <div
+                  class="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-md text-white w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
+                >
+                  <i class="fa-solid fa-play"></i>
+                </div>
+              </div>
+
+              <div class="flex items-center w-full">
+                <img
+                  v-if="message.chat_file_attachments[1].type === 'image'"
+                  :src="message.chat_file_attachments[1]?.attachment_path"
+                  class="w-1/2 h-24 object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
+                />
+                <img
+                  v-if="message.chat_file_attachments[2].type === 'image'"
+                  :src="message.chat_file_attachments[2]?.attachment_path"
+                  class="w-1/2 h-24 object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
+                />
+
+                <div
+                  v-if="message.chat_file_attachments[1].type === 'video'"
+                  class="relative ml-0.5 mb-0.5"
+                >
+                  <video
+                    :src="message.chat_file_attachments[1]?.attachment_path"
+                    class="w-full h-24 object-cover rounded-[4px]"
+                  ></video>
+                  <div
+                    class="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-md text-white w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
+                  >
+                    <i class="fa-solid fa-play"></i>
+                  </div>
+                </div>
+
+                <div
+                  v-if="message.chat_file_attachments[2].type === 'video'"
+                  class="relative ml-0.5 mb-0.5"
+                >
+                  <video
+                    :src="message.chat_file_attachments[2]?.attachment_path"
+                    class="w-full h-24 object-cover rounded-[4px]"
+                  ></video>
+                  <div
+                    class="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-md text-white w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
+                  >
+                    <i class="fa-solid fa-play"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- For Four Image Or Video  -->
+            <div
+              v-else-if="message.chat_file_attachments.length === 4"
+              class="grid grid-cols-2 gap-x-0.5 w-auto max-w-[400px] h-auto"
+            >
+              <img
+                v-if="message.chat_file_attachments[0].type === 'image'"
+                :src="message.chat_file_attachments[0]?.attachment_path"
+                class="w-full h-24 object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
               />
               <img
-                src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
-                class="w-30 h-20 object-cover border border-slate-300 rounded-[4px] ml-0.5 mb-0.5"
+                v-if="message.chat_file_attachments[1].type === 'image'"
+                :src="message.chat_file_attachments[1]?.attachment_path"
+                class="w-full h-24 object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
               />
               <img
-                src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
-                class="w-30 h-20 object-cover border border-slate-300 rounded-[4px] ml-0.5 mb-0.5"
+                v-if="message.chat_file_attachments[2].type === 'image'"
+                :src="message.chat_file_attachments[2]?.attachment_path"
+                class="w-full h-24 object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
               />
               <img
-                src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
-                class="w-30 h-20 object-cover border border-slate-300 rounded-[4px] ml-0.5 mb-0.5"
+                v-if="message.chat_file_attachments[3].type === 'image'"
+                :src="message.chat_file_attachments[3]?.attachment_path"
+                class="w-full h-24 object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
               />
-              <img
-                src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
-                class="w-30 h-20 object-cover border border-slate-300 rounded-[4px] ml-0.5 mb-0.5"
-              />
-              <img
-                src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
-                class="w-30 h-20 object-cover border border-slate-300 rounded-[4px] ml-0.5 mb-0.5"
-              />
-              <img
-                src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
-                class="w-30 h-20 object-cover border border-slate-300 rounded-[4px] ml-0.5 mb-0.5"
-              />
-              <img
-                src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
-                class="w-30 h-20 object-cover border border-slate-300 rounded-[4px] ml-0.5 mb-0.5"
-              />
-              <img
-                src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
-                class="w-30 h-20 object-cover border border-slate-300 rounded-[4px] ml-0.5 mb-0.5"
-              />
-              <img
-                src="https://cdn.dribbble.com/userupload/7618814/file/original-a6d14b926794be13a47a0251ec5cf7f1.png?resize=1024x768"
-                class="w-30 h-20 object-cover border border-slate-300 rounded-[4px] ml-0.5 mb-0.5"
-              />
-            </div> -->
+
+              <div
+                v-if="message.chat_file_attachments[0].type === 'video'"
+                class="relative ml-0.5 mb-0.5"
+              >
+                <video
+                  :src="message.chat_file_attachments[0]?.attachment_path"
+                  class="w-full h-24 object-cover rounded-[4px]"
+                ></video>
+                <div
+                  class="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-md text-white w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
+                >
+                  <i class="fa-solid fa-play"></i>
+                </div>
+              </div>
+              <div
+                v-if="message.chat_file_attachments[1].type === 'video'"
+                class="relative ml-0.5 mb-0.5"
+              >
+                <video
+                  :src="message.chat_file_attachments[1]?.attachment_path"
+                  class="w-full h-24 object-cover rounded-[4px]"
+                ></video>
+                <div
+                  class="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-md text-white w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
+                >
+                  <i class="fa-solid fa-play"></i>
+                </div>
+              </div>
+              <div
+                v-if="message.chat_file_attachments[2].type === 'video'"
+                class="relative ml-0.5 mb-0.5"
+              >
+                <video
+                  :src="message.chat_file_attachments[2]?.attachment_path"
+                  class="w-full h-24 object-cover rounded-[4px]"
+                ></video>
+                <div
+                  class="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-md text-white w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
+                >
+                  <i class="fa-solid fa-play"></i>
+                </div>
+              </div>
+              <div
+                v-if="message.chat_file_attachments[3].type === 'video'"
+                class="relative ml-0.5 mb-0.5"
+              >
+                <video
+                  :src="message.chat_file_attachments[3]?.attachment_path"
+                  class="w-full h-24 object-cover rounded-[4px]"
+                ></video>
+                <div
+                  class="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-md text-white w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
+                >
+                  <i class="fa-solid fa-play"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- For Five Images Or Video  -->
+            <div
+              v-else-if="message.chat_file_attachments.length === 5"
+              class="flex items-center w-auto max-w-[400px] h-auto"
+            >
+              <div class="flex flex-col items-center">
+                <img
+                  v-if="message.chat_file_attachments[0].type === 'image'"
+                  :src="message.chat_file_attachments[0]?.attachment_path"
+                  class="w-48 h-[136px] object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
+                />
+
+                <img
+                  v-if="message.chat_file_attachments[1].type === 'image'"
+                  :src="message.chat_file_attachments[1]?.attachment_path"
+                  class="w-48 h-[136px] object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
+                />
+
+                <div
+                  v-if="message.chat_file_attachments[0].type === 'video'"
+                  class="relative ml-0.5 mb-0.5"
+                >
+                  <video
+                    :src="message.chat_file_attachments[0]?.attachment_path"
+                    class="w-full h-[136px] object-cover rounded-[4px]"
+                  ></video>
+                  <div
+                    class="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-md text-white w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
+                  >
+                    <i class="fa-solid fa-play"></i>
+                  </div>
+                </div>
+
+                <div
+                  v-if="message.chat_file_attachments[1].type === 'video'"
+                  class="relative ml-0.5 mb-0.5"
+                >
+                  <video
+                    :src="message.chat_file_attachments[1]?.attachment_path"
+                    class="w-full h-[136px] object-cover rounded-[4px]"
+                  ></video>
+                  <div
+                    class="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-md text-white w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
+                  >
+                    <i class="fa-solid fa-play"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="flex flex-col items-center">
+                <img
+                  v-if="message.chat_file_attachments[2].type === 'image'"
+                  :src="message.chat_file_attachments[2]?.attachment_path"
+                  class="w-full h-[90px] object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
+                />
+                <img
+                  v-if="message.chat_file_attachments[3].type === 'image'"
+                  :src="message.chat_file_attachments[3]?.attachment_path"
+                  class="w-full h-[90px] object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
+                />
+                <img
+                  v-if="message.chat_file_attachments[4].type === 'image'"
+                  :src="message.chat_file_attachments[4]?.attachment_path"
+                  class="w-full h-[90px] object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
+                />
+
+                <div
+                  v-if="message.chat_file_attachments[2].type === 'video'"
+                  class="relative ml-0.5 mb-0.5"
+                >
+                  <video
+                    :src="message.chat_file_attachments[2]?.attachment_path"
+                    class="w-full h-[90px] object-cover rounded-[4px]"
+                  ></video>
+                  <div
+                    class="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-md text-white w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
+                  >
+                    <i class="fa-solid fa-play"></i>
+                  </div>
+                </div>
+
+                <div
+                  v-if="message.chat_file_attachments[3].type === 'video'"
+                  class="relative ml-0.5 mb-0.5"
+                >
+                  <video
+                    :src="message.chat_file_attachments[3]?.attachment_path"
+                    class="w-full h-[90px] object-cover rounded-[4px]"
+                  ></video>
+                  <div
+                    class="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-md text-white w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
+                  >
+                    <i class="fa-solid fa-play"></i>
+                  </div>
+                </div>
+
+                <div
+                  v-if="message.chat_file_attachments[4].type === 'video'"
+                  class="relative ml-0.5 mb-0.5"
+                >
+                  <video
+                    :src="message.chat_file_attachments[4]?.attachment_path"
+                    class="w-full h-[90px] object-cover rounded-[4px]"
+                  ></video>
+                  <div
+                    class="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-md text-white w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
+                  >
+                    <i class="fa-solid fa-play"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- For Six Images Or Video  -->
+            <div
+              v-else-if="message.chat_file_attachments.length === 6"
+              class="flex flex-col items-centerw-auto max-w-[400px] h-auto"
+            >
+              <div class="flex items-center">
+                <img
+                  :src="message.chat_file_attachments[0]?.attachment_path"
+                  class="w-[215px] h-[162px] object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
+                />
+
+                <div class="flex flex-col items-center">
+                  <img
+                    :src="message.chat_file_attachments[1]?.attachment_path"
+                    class="w-full h-20 object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
+                  />
+                  <img
+                    :src="message.chat_file_attachments[2]?.attachment_path"
+                    class="w-full h-20 object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
+                  />
+                </div>
+              </div>
+              <div class="flex items-center">
+                <img
+                  :src="message.chat_file_attachments[3]?.attachment_path"
+                  class="w-full h-20 object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
+                />
+                <img
+                  :src="message.chat_file_attachments[4]?.attachment_path"
+                  class="w-full h-20 object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
+                />
+
+                <img
+                  :src="message.chat_file_attachments[5]?.attachment_path"
+                  class="w-full h-20 object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
+                />
+              </div>
+            </div>
+
+            <!-- For Seven Image Or Video -->
+            <div
+              v-else-if="message.chat_file_attachments.length === 7"
+              class="flex flex-col items-center w-auto max-w-[400px] h-auto"
+            >
+              <div class="flex items-center justify-end w-full">
+                <img
+                  :src="message.chat_file_attachments[0]?.attachment_path"
+                  class="w-full h-[244px] object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
+                />
+                <div class="flex flex-col items-center w-[183px]">
+                  <img
+                    :src="message.chat_file_attachments[1]?.attachment_path"
+                    class="w-full h-20 object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
+                  />
+                  <img
+                    :src="message.chat_file_attachments[2]?.attachment_path"
+                    class="w-full h-20 object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
+                  />
+                  <img
+                    :src="message.chat_file_attachments[3]?.attachment_path"
+                    class="w-full h-20 object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
+                  />
+                </div>
+              </div>
+              <div class="flex items-center">
+                <img
+                  :src="message.chat_file_attachments[4]?.attachment_path"
+                  class="w-full h-20 object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
+                />
+                <img
+                  :src="message.chat_file_attachments[5]?.attachment_path"
+                  class="w-full h-20 object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
+                />
+                <img
+                  :src="message.chat_file_attachments[6]?.attachment_path"
+                  class="w-full h-20 object-cover border border-gray-200 rounded-[4px] ml-0.5 mb-0.5"
+                />
+              </div>
+            </div>
+
+            <!-- For More than 7 Image or video  -->
+            <div
+              v-if="message.chat_file_attachments.length > 7"
+              class="flex flex-row-reverse items-center flex-wrap w-auto max-w-[400px]"
+            >
+              <div v-for="file in message.chat_file_attachments" :key="file.id">
+                <img
+                  :src="file?.attachment_path"
+                  class="h-20 object-cover border border-slate-300 rounded-[4px] ml-0.5 mb-0.5"
+                />
+              </div>
+            </div>
           </div>
-          <div class="flex items-center justify-end space-x-2 mr-2 mt-1">
-            <span class="text-[.6rem] text-slate-600"> 3:30 PM </span>
-            <span class="text-[.6rem] text-slate-600">
-              <i class="fa-solid fa-check text-green-500"></i>
-              <i class="fa-solid fa-check text-green-500"></i>
-            </span>
+
+          <div
+            class="mt-1 text-[.6rem] text-slate-600 flex items-center justify-end space-x-4"
+          >
+            <span class="font-bold">{{ __("EDITED") }}</span>
+            <div class="flex items-center justify-end space-x-2 mr-2">
+              <span class=""> {{ message.updated_at }} </span>
+              <span
+                v-if="message.is_read_by_user || message.is_read_by_agent"
+                class="text-[.6rem] text-slate-600"
+              >
+                <i
+                  v-if="message.is_read_by_user"
+                  class="fa-solid fa-check text-green-500"
+                ></i>
+                <i
+                  v-if="message.is_read_by_agent"
+                  class="fa-solid fa-check text-green-500"
+                ></i>
+              </span>
+            </div>
           </div>
         </div>
       </div>
