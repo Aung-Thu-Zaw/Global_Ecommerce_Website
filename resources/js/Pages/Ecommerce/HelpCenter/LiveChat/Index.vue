@@ -1,7 +1,7 @@
 <script setup>
 import UserLiveChatMessageForm from "@/Components/Forms/Chats/UserLiveChatMessageForm.vue";
 import SenderTextMessageCard from "@/Components/Cards/Chats/SenderTextMessageCard.vue";
-import SenderPhotoVideoMessageCard from "@/Components/Cards/Chats/SenderPhotoVideoMessageCard.vue";
+import SenderFileMessageCard from "@/Components/Cards/Chats/SenderFileMessageCard.vue";
 import RecevierTextMessageCard from "@/Components/Cards/Chats/RecevierTextMessageCard.vue";
 import LastChatDiscussionInformationCard from "@/Components/Cards/Chats/LastChatDiscussionInformationCard.vue";
 // import RecevierPhotoVideoMessageCard from "@/Components/Cards/Chats/RecevierPhotoVideoMessageCard.vue";
@@ -12,7 +12,7 @@ import { Head } from "@inertiajs/vue3";
 import { onMounted, onUpdated, ref } from "vue";
 import { initFlowbite } from "flowbite";
 
-defineProps({
+const props = defineProps({
   liveChat: Object,
   liveChatMessages: Object,
 });
@@ -128,7 +128,7 @@ onUpdated(() => {
                 message.chat_file_attachments.length
               "
             >
-              <SenderPhotoVideoMessageCard :message="message" />
+              <SenderFileMessageCard :message="message" />
             </div>
           </div>
         </div>
@@ -141,7 +141,7 @@ onUpdated(() => {
 </template>
 
 
-<style scoped>
+<style>
 .background {
   background-image: url("https://cdn.dribbble.com/users/1003944/screenshots/15741863/06_comp_1_4x.gif?resize=400x300&vertical=center");
   background-repeat: no-repeat;

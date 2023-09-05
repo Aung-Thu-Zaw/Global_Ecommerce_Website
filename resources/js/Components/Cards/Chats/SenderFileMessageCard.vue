@@ -6,6 +6,20 @@ import DropdownToolForChatMessage from "@/Components/Dropdowns/Chats/DropdownToo
 defineProps({
   message: Object,
 });
+
+const filteredFilename = (attachmentPath) => {
+  if (typeof attachmentPath === "string") {
+    const parts = attachmentPath.split("/");
+
+    const filename = parts[parts.length - 1];
+
+    const sanitizedFilename = filename.replace(/^file-\d+-/, "");
+
+    return sanitizedFilename;
+  } else {
+    return "";
+  }
+};
 </script>
 <template>
   <!-- Right Side  -->
@@ -452,6 +466,25 @@ defineProps({
                 />
               </div>
             </div>
+
+            <div class="flex flex-col space-y-1 items-end">
+              <div v-for="file in message.chat_file_attachments" :key="file.id">
+                <div
+                  v-if="file.type === 'file'"
+                  class="border p-2 rounded-md flex items-center"
+                >
+                  <div
+                    class="text-gray-700 bg-gray-200 text-sm w-8 h-8 flex items-center justify-center rounded-full border mr-2 border-slate-300"
+                  >
+                    <i class="fa-solid fa-file-zipper"></i>
+                  </div>
+
+                  <h4 class="font-semibold text-sm text-slate-600">
+                    {{ filteredFilename(file.attachment_path) }}
+                  </h4>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div
@@ -484,3 +517,8 @@ defineProps({
     </div>
   </div>
 </template>
+
+
+
+
+

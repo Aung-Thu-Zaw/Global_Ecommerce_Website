@@ -40,7 +40,7 @@ class SupportLiveChatServiceController extends Controller
         ->first();
 
         if ($availableAgent) {
-            $liveChat->update(["agent_id" => $availableAgent->id,"is_active" => true]);
+            $liveChat->update(["agent_id" => $availableAgent->agent_id,"is_active" => true]);
         }
 
         return to_route("service.live-chat.index");

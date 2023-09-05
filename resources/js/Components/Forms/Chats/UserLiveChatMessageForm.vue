@@ -3,7 +3,7 @@ import EmojiPicker from "vue3-emoji-picker";
 import "vue3-emoji-picker/css";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import { useForm, usePage } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 const props = defineProps({
   liveChat: Object,
@@ -17,22 +17,29 @@ const onSelectEmoji = (emoji) => {
   form.message += emoji.i;
 };
 
-const getMultiPreviewPhotoPath = (paths) => {
-  paths.forEach((path) => {
-    multiPreviewFiles.value.push(URL.createObjectURL(path));
+const getMultiPreviewFilePathAndName = (files) => {
+  files.forEach((file) => {
+    multiPreviewFiles.value.push({
+      name: file.name,
+      type: file.type,
+      path: URL.createObjectURL(file),
+    });
   });
 };
 
-const handleMultiplePhotoChange = (files) => {
-  const paths = Array.from(files);
-  getMultiPreviewPhotoPath(paths);
+const handleMultipleFileChange = (previewFiles) => {
+  const files = Array.from(previewFiles);
+
+  getMultiPreviewFilePathAndName(files);
 };
 
-const removeImage = (index) => {
-  multiPreviewFiles.value.splice(index, 1);
+const removeFile = (fileToRemove) => {
+  multiPreviewFiles.value = multiPreviewFiles.value.filter(
+    (file) => file !== fileToRemove
+  );
 
   form.files = Array.from(form.files);
-  form.files.splice(index, 1);
+  form.files = form.files.filter((file) => file.name !== fileToRemove.name);
 };
 
 const isImage = (file) => {
@@ -43,9 +50,25 @@ const isVideo = (file) => {
   return file.type.includes("video");
 };
 
+const isApplication = (file) => {
+  return file.type.includes("application");
+};
+
 const handleClose = () => {
   multiPreviewFiles.value = [];
 };
+
+const filteredImageAndVideoMultiPreviewFiles = computed(() => {
+  return multiPreviewFiles.value.filter((file) => {
+    return isImage(file) || isVideo(file);
+  });
+});
+
+const filteredApplicationMultiPreviewFiles = computed(() => {
+  return multiPreviewFiles.value.filter((file) => {
+    return isApplication(file);
+  });
+});
 
 const form = useForm({
   live_chat_id: props.liveChat?.id,
@@ -95,41 +118,79 @@ const handleCreateLiveChatMessage = async () => {
       </button>
 
       <!-- Preview Files Start -->
-      <div
-        class="h-auto max-h-[420px] overflow-auto preview-container scrollbar mt-5 grid grid-cols-3 gap-1"
-      >
-        <div
-          v-for="(multiPreviewFile, index) in multiPreviewFiles"
-          :key="index"
-        >
-          <div v-if="multiPreviewFile">
-            <!-- Image File -->
-            <div v-if="isImage(form.files[index])">
-              <div class="relative">
-                <img
-                  :src="multiPreviewFile"
-                  class="w-48 h-48 border object-cover rounded-md shadow"
-                />
-                <span
-                  @click="removeImage(index)"
-                  class="absolute top-3 right-3 text-xs bg-dark bg-opacity-50 w-6 h-6 rounded-sm p-2 flex items-center justify-center text-white cursor-pointer hover:bg-opacity-80"
-                >
-                  <i class="fa-solid fa-trash"></i>
-                </span>
+      <div class="max-h-[420px] overflow-auto scrollbar mt-5">
+        <div class="h-auto grid grid-cols-3 gap-1 mb-5">
+          <div
+            v-for="(
+              multiPreviewFile, index
+            ) in filteredImageAndVideoMultiPreviewFiles"
+            :key="index"
+          >
+            <div v-if="multiPreviewFile">
+              <!-- Image File -->
+              <div v-if="isImage(multiPreviewFile)">
+                <div class="relative">
+                  <img
+                    :src="multiPreviewFile.path"
+                    class="w-48 h-48 border object-cover rounded-md shadow"
+                  />
+                  <span
+                    @click="removeFile(multiPreviewFile)"
+                    class="absolute top-3 right-3 text-xs bg-dark bg-opacity-50 w-6 h-6 rounded-sm p-2 flex items-center justify-center text-white cursor-pointer hover:bg-opacity-80"
+                  >
+                    <i class="fa-solid fa-trash"></i>
+                  </span>
+                </div>
+              </div>
+
+              <!-- Video File -->
+              <div v-else-if="isVideo(multiPreviewFile)">
+                <div class="relative">
+                  <video
+                    :src="multiPreviewFile.path"
+                    controls
+                    class="w-48 h-48 border object-cover rounded-md shadow"
+                  ></video>
+                  <span
+                    @click="removeFile(multiPreviewFile)"
+                    class="absolute top-3 right-3 text-xs bg-dark bg-opacity-50 w-6 h-6 rounded-sm p-2 flex items-center justify-center text-white cursor-pointer hover:bg-opacity-80"
+                  >
+                    <i class="fa-solid fa-trash"></i>
+                  </span>
+                </div>
               </div>
             </div>
+          </div>
+        </div>
 
-            <!-- Video File -->
-            <div v-else-if="isVideo(form.files[index])">
-              <div class="relative">
-                <video
-                  :src="multiPreviewFile"
-                  controls
-                  class="w-48 h-48 border object-cover rounded-md shadow"
-                ></video>
+        <!-- File -->
+        <div class="h-auto grid grid-cols-1 gap-1">
+          <div
+            v-for="(
+              multiPreviewFile, index
+            ) in filteredApplicationMultiPreviewFiles"
+            :key="index"
+          >
+            <div
+              v-if="isApplication(multiPreviewFile)"
+              class="flex items-center justify-between"
+            >
+              <div class="border p-2 rounded-md flex items-center w-full">
+                <div
+                  class="text-gray-700 bg-gray-200 text-sm w-8 h-8 flex items-center justify-center rounded-full border mr-2 border-slate-300"
+                >
+                  <i class="fa-solid fa-file-zipper"></i>
+                </div>
+
+                <h4 class="font-semibold text-sm text-slate-600">
+                  {{ multiPreviewFile.name }}
+                </h4>
+              </div>
+
+              <div class="mx-3">
                 <span
-                  @click="removeImage(index)"
-                  class="absolute top-3 right-3 text-xs bg-dark bg-opacity-50 w-6 h-6 rounded-sm p-2 flex items-center justify-center text-white cursor-pointer hover:bg-opacity-80"
+                  @click="removeFile(multiPreviewFile)"
+                  class="text-xs bg-dark bg-opacity-50 w-6 h-6 rounded-sm p-2 flex items-center justify-center text-white cursor-pointer hover:bg-opacity-80"
                 >
                   <i class="fa-solid fa-trash"></i>
                 </span>
@@ -138,6 +199,7 @@ const handleCreateLiveChatMessage = async () => {
           </div>
         </div>
       </div>
+
       <!-- Preview Files End -->
 
       <h5 class="text-sm font-bold text-slate-600 my-5">
@@ -190,7 +252,7 @@ const handleCreateLiveChatMessage = async () => {
                 class="hidden"
                 multiple
                 @input="form.files = $event.target.files"
-                @change="handleMultiplePhotoChange($event.target.files)"
+                @change="handleMultipleFileChange($event.target.files)"
               />
             </label>
 
@@ -251,7 +313,7 @@ const handleCreateLiveChatMessage = async () => {
               class="hidden"
               multiple
               @input="form.files = $event.target.files"
-              @change="handleMultiplePhotoChange($event.target.files)"
+              @change="handleMultipleFileChange($event.target.files)"
             />
           </label>
 
