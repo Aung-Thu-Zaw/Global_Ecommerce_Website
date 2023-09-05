@@ -15,24 +15,44 @@ class SupportLiveChatServiceController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $liveChat = LiveChat::with(["user:id,name,avatar","agent:id,name,avatar"])
-        ->where("user_id", auth()->id())
-        ->first();
+        $previousLiveChats = LiveChat::with(["user:id,name,avatar","agent:id,name,avatar"])
+                                     ->where("user_id", auth()->id())
+                                     ->where("is_active", false)
+                                     ->get();
 
-        if($liveChat) {
-            $liveChatMessages = LiveChatMessage::with(["chatFileAttachments","user:id,avatar","agent:id,avatar"])->where("live_chat_id", $liveChat->id)
-            ->orderBy("id", "asc")->get();
+        $currentLiveChat = LiveChat::with(["user:id,name,avatar","agent:id,name,avatar"])
+                                   ->where("user_id", auth()->id())
+                                   ->where("is_active", true)
+                                   ->first();
 
-            return inertia("Ecommerce/HelpCenter/LiveChat/Index", compact("liveChat", "liveChatMessages"));
+        if($currentLiveChat) {
+
+            $liveChatMessages = LiveChatMessage::with(["chatFileAttachments","user:id,avatar","agent:id,avatar"])
+                                               ->where("live_chat_id", $currentLiveChat->id)
+                                               ->orderBy("id", "asc")
+                                               ->get();
+
+            return inertia("Ecommerce/HelpCenter/LiveChat/Index", compact("currentLiveChat", "previousLiveChats", "liveChatMessages"));
         }
 
-        return inertia("Ecommerce/HelpCenter/LiveChat/Index", compact("liveChat"));
+        return inertia("Ecommerce/HelpCenter/LiveChat/Index", compact("currentLiveChat", "previousLiveChats"));
     }
 
     public function store(Request $request): RedirectResponse
     {
 
-        $liveChat = LiveChat::firstOrCreate(["user_id" => $request->user_id,"agent_id" => $request->agent_id], ["user_id" => $request->user_id,"agent_id" => $request->agent_id]);
+        $liveChat = LiveChat::firstOrCreate(
+            [
+                "user_id" => $request->user_id,
+                "agent_id" => $request->agent_id,
+                "is_active" => true
+            ],
+            [
+                "user_id" => $request->user_id,
+                "agent_id" => $request->agent_id,
+                "is_active" => true
+            ]
+        );
 
         $availableAgent = AgentStatus::where("online_status", "online")
         ->where("chat_status", "avaliable")
@@ -46,5 +66,14 @@ class SupportLiveChatServiceController extends Controller
         return to_route("service.live-chat.index");
     }
 
+    public function update(LiveChat $liveChat): RedirectResponse
+    {
+        $liveChat->update([
+            "is_active" => false,
+            "ended_at" => now()
+        ]);
+
+        return to_route("home");
+    }
 
 }

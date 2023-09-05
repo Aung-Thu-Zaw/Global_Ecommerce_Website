@@ -8,12 +8,14 @@ import LastChatDiscussionInformationCard from "@/Components/Cards/Chats/LastChat
 import OnlineStatus from "@/Components/Status/OnlineStatus.vue";
 import OfflineStatus from "@/Components/Status/OfflineStatus.vue";
 import BusyStatus from "@/Components/Status/BusyStatus.vue";
-import { Head } from "@inertiajs/vue3";
-import { onMounted, onUpdated, ref } from "vue";
+import { Head, Link } from "@inertiajs/vue3";
+import { computed, onMounted, onUpdated, ref } from "vue";
 import { initFlowbite } from "flowbite";
 
 const props = defineProps({
-  liveChat: Object,
+  //   liveChat: Object,
+  previousLiveChats: Object,
+  currentLiveChat: Object,
   liveChatMessages: Object,
 });
 
@@ -42,6 +44,12 @@ onUpdated(() => {
 //   lastDisplayedDate.value = currentDate;
 //   return true;
 // });
+
+const currentLiveChatMessages = computed(() => {
+  return props.liveChatMessages.filter((message) => {
+    return message.live_chat_id === props.currentLiveChat.id;
+  });
+});
 </script>
 
 
@@ -52,89 +60,105 @@ onUpdated(() => {
     <div
       class="w-[1200px] h-auto border border-slate-300 shadow-lg rounded-md overflow-hidden"
     >
-      <div class="min-w-full">
+      <div v-if="currentLiveChat" class="min-w-full">
         <!-- Header -->
         <div
-          class="w-full border-b shadow bg-white px-5 py-3 flex items-center"
+          class="w-full border-b shadow bg-white px-5 py-3 flex items-center justify-between"
         >
-          <div class="mr-3">
-            <img
-              :src="liveChat.agent?.avatar"
-              class="w-10 h-10 rounded-full object-cover ring-2 ring-slate-300"
-            />
-          </div>
-          <div>
-            <div class="flex items-center space-x-3">
-              <h3 class="text-slate-700 font-bold text-md">
-                {{ liveChat.agent?.name }}
-              </h3>
-              <span
-                class="text-xs font-medium bg-blue-200 text-blue-700 px-2 py-0.5 rounded-full"
-              >
-                Service Agent
-              </span>
+          <div class="flex items-center">
+            <div class="mr-3">
+              <img
+                :src="currentLiveChat.agent?.avatar"
+                class="w-10 h-10 rounded-full object-cover ring-2 ring-slate-300"
+              />
             </div>
+            <div>
+              <div class="flex items-center space-x-3">
+                <h3 class="text-slate-700 font-bold text-md">
+                  {{ currentLiveChat.agent?.name }}
+                </h3>
+                <span
+                  class="text-xs font-medium bg-blue-200 text-blue-700 px-2 py-0.5 rounded-full"
+                >
+                  Service Agent
+                </span>
+              </div>
 
-            <!-- Online Status -->
-            <OnlineStatus />
+              <!-- Online Status -->
+              <OnlineStatus />
 
-            <!-- Offline Status -->
-            <!-- <OfflineStatus /> -->
+              <!-- Offline Status -->
+              <!-- <OfflineStatus /> -->
 
-            <!-- Busy Status -->
-            <!-- <BusyStatus /> -->
+              <!-- Busy Status -->
+              <!-- <BusyStatus /> -->
+            </div>
+          </div>
+          <div class="">
+            <Link
+              v-if="
+                currentLiveChat.is_active === 1 &&
+                currentLiveChat.ended_at === null
+              "
+              as="button"
+              method="patch"
+              :href="route('service.live-chat.update', currentLiveChat.id)"
+              class="text-xs font-semibold px-3 py-2 rounded-[4px] bg-red-600 text-white"
+            >
+              End Chat
+            </Link>
           </div>
         </div>
 
-        <!-- Message -->
-        <!-- <div
-          class="h-[700px] bg-white p-5 flex flex-col justify-end border border-red-700 overflow-auto scrollbar"
-        > -->
-
-        <div
-          class="h-[700px] bg-white p-5 overflow-auto scrollbar"
-          ref="msgScroll"
-        >
-          <p
-            class="w-full text-center text-sm font-medium text-blue-500 hover:text-blue-600 cursor-pointer mb-6"
-          >
-            <i class="fa-solid fa-message mr-1"></i>
-            View Past Chat History Messages
-          </p>
-
-          <LastChatDiscussionInformationCard :liveChat="liveChat" />
-
-          <div v-for="message in liveChatMessages" :key="message.id">
-            <!-- <p
-                  v-if="shouldDisplayDate"
-                  class="text-center text-sm text-slate-500 font-bold px-5 mb-5"
-                >
-                  {{ message.created_at }}
-                </p> -->
-            <!-- Left Side For Recevier -->
-            <div v-if="message.agent_id && !message.user_id && message.message">
-              <RecevierTextMessageCard :message="message" />
-            </div>
-            <!-- <RecevierPhotoVideoMessageCard /> -->
-
-            <!-- Right Side For Sender  -->
-            <div v-if="message.user_id && !message.agent_id && message.message">
-              <SenderTextMessageCard :message="message" />
-            </div>
-            <div
-              v-if="
-                message.user_id &&
-                !message.agent_id &&
-                message.chat_file_attachments.length
-              "
+        <div class="h-[700px] bg-white flex flex-col justify-end">
+          <!-- <div v-if="previousLiveChats.length" class="mb-5">
+            <p
+              class="w-full text-center text-sm font-medium text-blue-500 hover:text-blue-600 cursor-pointer mb-6"
             >
-              <SenderFileMessageCard :message="message" />
+              <i class="fa-solid fa-message mr-1"></i>
+              View Previous Chat History
+            </p>
+
+            <LastChatDiscussionInformationCard :liveChat="currentLiveChat" />
+          </div> -->
+          <div class="overflow-auto scrollbar p-5 h-auto" ref="msgScroll">
+            <div v-for="message in currentLiveChatMessages" :key="message.id">
+              <!-- Left Side For Recevier -->
+              <div
+                v-if="message.agent_id && !message.user_id && message.message"
+              >
+                <RecevierTextMessageCard :message="message" />
+              </div>
+              <!-- <RecevierPhotoVideoMessageCard /> -->
+
+              <!-- Right Side For Sender  -->
+              <div
+                v-if="message.user_id && !message.agent_id && message.message"
+              >
+                <SenderTextMessageCard :message="message" />
+              </div>
+              <div
+                v-if="
+                  message.user_id &&
+                  !message.agent_id &&
+                  message.chat_file_attachments.length
+                "
+              >
+                <SenderFileMessageCard :message="message" />
+              </div>
             </div>
           </div>
+
+          <!-- <p
+            v-if="!currentLiveChat.is_active && currentLiveChat.ended_at"
+            class="text-sm font-bold text-gray-500 w-full text-center mt-5"
+          >
+            {{ __("THE_CHAT_HAS_ENDED") }}
+          </p> -->
         </div>
 
         <!-- Footer Input Form -->
-        <UserLiveChatMessageForm :liveChat="liveChat" />
+        <UserLiveChatMessageForm :liveChat="currentLiveChat" />
       </div>
     </div>
   </div>

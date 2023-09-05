@@ -12,7 +12,7 @@ defineProps({
     </div>
     <div class="w-[40%] border"></div>
   </div>
-  <div class="flex flex-col items-center mb-5">
+  <div class="flex flex-col items-center">
     <div class="border-2 border-slate-300 p-4 rounded-md shadow">
       <div class="flex items-center justify-center mb-3">
         <img

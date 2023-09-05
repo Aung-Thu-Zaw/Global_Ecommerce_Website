@@ -968,6 +968,7 @@
     "MARK_AS_READ": "Mark As Read",
     "VIEW_CHAT": "View Chat",
     "ADD_TO_FOLDER": "Add To Folder",
-    "ARCHIVE":"Archive",
-    "CREATE_NEW_FOLDER":"Create New Folder"
+    "ARCHIVE": "Archive",
+    "CREATE_NEW_FOLDER": "Create New Folder",
+    "THE_CHAT_HAS_ENDED": "The chat has ended."
 }
