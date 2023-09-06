@@ -41,6 +41,10 @@ const handleDeleteMessageForMyself = () => {
     is_deleted_by_agent: props.message.agent_id ? 1 : 0,
   });
 };
+
+const handleDeleteMessageForBoth = () => {
+  router.delete(route("live-chat.message.destroy", props.message.id));
+};
 </script>
 
 <template>
@@ -124,6 +128,7 @@ const handleDeleteMessageForMyself = () => {
         </li>
         <li>
           <div
+            @click="handleDeleteMessageForBoth"
             class="px-4 py-2 text-red-600 hover:bg-gray-100 cursor-pointer flex items-center"
           >
             <i class="fa-solid fa-trash mr-1"></i>

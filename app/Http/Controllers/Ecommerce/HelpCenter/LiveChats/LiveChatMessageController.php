@@ -38,4 +38,11 @@ class LiveChatMessageController extends Controller
             "is_deleted_by_agent" => $request->is_deleted_by_agent
         ]);
     }
+
+    public function destroy(int $liveChatMessageId): void
+    {
+        $liveChatMessage = LiveChatMessage::findOrFail($liveChatMessageId);
+
+        $liveChatMessage->delete();
+    }
 }
