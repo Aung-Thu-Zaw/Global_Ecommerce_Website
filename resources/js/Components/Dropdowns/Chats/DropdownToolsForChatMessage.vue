@@ -3,6 +3,7 @@ import { toast } from "vue3-toastify";
 import { __ } from "@/Translations/translations-inside-setup.js";
 import "vue3-toastify/dist/index.css";
 import { ref } from "vue";
+import { router } from "@inertiajs/vue3";
 
 const props = defineProps({
   message: Object,
@@ -32,6 +33,13 @@ const copyMessage = () => {
   } else {
     console.error("Clipboard API is not supported in this browser.");
   }
+};
+
+const handleDeleteMessageForMyself = () => {
+  router.patch(route("live-chat.message.delete-for-myself", props.message.id), {
+    is_deleted_by_user: props.message.user_id ? 1 : 0,
+    is_deleted_by_agent: props.message.agent_id ? 1 : 0,
+  });
 };
 </script>
 
@@ -105,6 +113,7 @@ const copyMessage = () => {
         <hr />
         <li>
           <div
+            @click="handleDeleteMessageForMyself"
             class="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
           >
             <i class="fa-solid fa-trash mr-1"></i>

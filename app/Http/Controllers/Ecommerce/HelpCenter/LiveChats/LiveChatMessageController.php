@@ -28,4 +28,14 @@ class LiveChatMessageController extends Controller
             "is_edited" => true
         ]);
     }
+
+    public function deleteMessageForMyself(Request $request, int $liveChatMessageId): void
+    {
+        $liveChatMessage = LiveChatMessage::findOrFail($liveChatMessageId);
+
+        $liveChatMessage->update([
+            "is_deleted_by_user" => $request->is_deleted_by_user,
+            "is_deleted_by_agent" => $request->is_deleted_by_agent
+        ]);
+    }
 }

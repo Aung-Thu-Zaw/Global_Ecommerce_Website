@@ -23,7 +23,7 @@ const editMessage = (message) => {
 
 
 <template>
-  <div class="mb-5">
+  <div v-if="!message.is_deleted_by_user" class="mb-5">
     <div class="flex items-end justify-end">
       <div class="flex items-center justify-end">
         <div class="pl-28">
