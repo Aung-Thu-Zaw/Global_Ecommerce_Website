@@ -19,6 +19,7 @@ const props = defineProps({
 
 const msgScroll = ref(null);
 const messageToEdit = ref(null);
+const messageToReply = ref(null);
 
 const scrollToBottom = () => {
   msgScroll.value.scrollTop = msgScroll.value.scrollHeight;
@@ -54,15 +55,22 @@ const setMessageToEdit = (message) => {
   messageToEdit.value = message;
 };
 
+const setMessageToReply = (message) => {
+  messageToReply.value = message;
+};
+
 const cancelEditMessage = () => {
   messageToEdit.value = null;
+};
+
+const cancelReplyMessage = () => {
+  messageToReply.value = null;
 };
 </script>
 
 
 <template>
   <Head title="Support Service Live Chat" />
-
   <div class="w-full min-h-screen background flex items-center justify-center">
     <div
       class="w-[1200px] h-auto border border-slate-300 shadow-lg rounded-md overflow-hidden"
@@ -134,7 +142,11 @@ const cancelEditMessage = () => {
               <div
                 v-if="message.agent_id && !message.user_id && message.message"
               >
-                <RecevierTextMessageCard :message="message" />
+                <RecevierTextMessageCard
+                  :message="message"
+                  @editMessage="setMessageToEdit"
+                  @replyMessage="setMessageToReply"
+                />
               </div>
               <!-- <RecevierPhotoVideoMessageCard /> -->
 
@@ -145,6 +157,7 @@ const cancelEditMessage = () => {
                 <SenderTextMessageCard
                   :message="message"
                   @editMessage="setMessageToEdit"
+                  @replyMessage="setMessageToReply"
                 />
               </div>
               <div
@@ -172,6 +185,8 @@ const cancelEditMessage = () => {
           :liveChat="currentLiveChat"
           :messageToEdit="messageToEdit"
           @cancelEditMessage="cancelEditMessage"
+          :messageToReply="messageToReply"
+          @cancelReplyMessage="cancelReplyMessage"
         />
       </div>
     </div>

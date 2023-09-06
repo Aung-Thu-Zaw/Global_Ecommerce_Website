@@ -22,7 +22,7 @@ class SupportLiveChatServiceController extends Controller
 
         if($currentLiveChat) {
 
-            $liveChatMessages = LiveChatMessage::with(["chatFileAttachments","user:id,avatar","agent:id,avatar"])
+            $liveChatMessages = LiveChatMessage::with(["chatFileAttachments","user:id,name,avatar","agent:id,name,avatar","replyToMessage"])
                                                ->where("live_chat_id", $currentLiveChat->id)
                                                ->orderBy("id", "asc")
                                                ->get();

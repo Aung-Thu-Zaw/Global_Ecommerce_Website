@@ -30,6 +30,7 @@ class LiveChatMessageRequest extends FormRequest
             "user_id" => ["nullable","numeric",Rule::exists("users", "id")],
             "agent_id" => ["nullable","numeric",Rule::exists("users", "id")],
             "message" => ["nullable","string"],
+            "reply_to_message_id" => ["nullable","numeric"],
             "captcha_token" => ["required",new RecaptchaRule()],
         ];
 
@@ -54,6 +55,7 @@ class LiveChatMessageRequest extends FormRequest
             "live_chat_id.required" =>  "The live chat id is required.",
             "live_chat_id.numeric" =>  "The live chat id must be a number.",
             "live_chat_id.exists" =>  "The selected live chat id is invalid.",
+            "reply_to_message_id.numeric" =>  "The reply message id must be a number.",
             "message.string" =>  "The shop id must be a string.",
             "captcha_token.required" => "The captcha token is required",
         ];

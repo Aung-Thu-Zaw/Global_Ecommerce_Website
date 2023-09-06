@@ -285,5 +285,6 @@ Route::middleware(["auth","verified"])->group(function () {
     Route::post("/support-service/live-chats/messages", [LiveChatMessageController::class,"store"])->name("live-chat.message.store");
     Route::patch("/support-service/live-chats/messages/{live_chat_mesage}", [LiveChatMessageController::class,"update"])->name("live-chat.message.update");
     Route::patch("/support-service/live-chats/messages/{live_chat_mesage}/delete-for-myself", [LiveChatMessageController::class,"deleteMessageForMyself"])->name("live-chat.message.delete-for-myself");
+    Route::patch("/support-service/live-chats/messages/{live_chat_mesage}/reply", [LiveChatMessageController::class,"replyMessage"])->name("live-chat.message.reply");
     Route::delete("/support-service/live-chats/messages/{live_chat_mesage}", [LiveChatMessageController::class,"destroy"])->name("live-chat.message.destroy");
 });

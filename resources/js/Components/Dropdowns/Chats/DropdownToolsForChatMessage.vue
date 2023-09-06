@@ -9,10 +9,14 @@ const props = defineProps({
   message: Object,
 });
 
-const emits = defineEmits(["editMessage"]);
+const emits = defineEmits(["editMessage", "replyMessage"]);
 
 const startEditing = () => {
   emits("editMessage", props.message);
+};
+
+const startReply = () => {
+  emits("replyMessage", props.message);
 };
 
 const copyMessage = () => {
@@ -52,7 +56,7 @@ const handleDeleteMessageForBoth = () => {
     <button
       id="messageDropdown"
       :data-dropdown-toggle="'messageDropdownDots' + message.id"
-      data-dropdown-placement="left-start"
+      :data-dropdown-placement="message.user_id ? 'left-start' : 'right-start'"
       type="button"
       class="p-2"
     >
@@ -78,14 +82,23 @@ const handleDeleteMessageForBoth = () => {
         class="py-2 text-sm text-gray-600 font-normal"
         aria-labelledby="messageDropdown"
       >
-        <li>
+        <li
+          v-if="
+            $page.props.auth.user &&
+            (message.user_id === $page.props.auth.user.id ||
+              message.agent_id === $page.props.auth.user.id)
+          "
+        >
           <div class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
             <i class="fa-solid fa-circle-check mr-1"></i>
             {{ __("SELECT") }}
           </div>
         </li>
         <li>
-          <div class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
+          <div
+            @click="startReply"
+            class="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+          >
             <i class="fa-solid fa-reply mr-1"></i>
             {{ __("REPLY") }}
           </div>
@@ -105,7 +118,14 @@ const handleDeleteMessageForBoth = () => {
             {{ __("DOWNLOAD") }}
           </div>
         </li>
-        <li v-if="message.message">
+        <li
+          v-if="
+            message.message &&
+            $page.props.auth.user &&
+            (message.user_id === $page.props.auth.user.id ||
+              message.agent_id === $page.props.auth.user.id)
+          "
+        >
           <div
             @click="startEditing"
             class="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -114,8 +134,20 @@ const handleDeleteMessageForBoth = () => {
             {{ __("EDIT") }}
           </div>
         </li>
-        <hr />
-        <li>
+        <hr
+          v-if="
+            $page.props.auth.user &&
+            (message.user_id === $page.props.auth.user.id ||
+              message.agent_id === $page.props.auth.user.id)
+          "
+        />
+        <li
+          v-if="
+            $page.props.auth.user &&
+            (message.user_id === $page.props.auth.user.id ||
+              message.agent_id === $page.props.auth.user.id)
+          "
+        >
           <div
             @click="handleDeleteMessageForMyself"
             class="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
@@ -126,7 +158,13 @@ const handleDeleteMessageForBoth = () => {
             </span>
           </div>
         </li>
-        <li>
+        <li
+          v-if="
+            $page.props.auth.user &&
+            (message.user_id === $page.props.auth.user.id ||
+              message.agent_id === $page.props.auth.user.id)
+          "
+        >
           <div
             @click="handleDeleteMessageForBoth"
             class="px-4 py-2 text-red-600 hover:bg-gray-100 cursor-pointer flex items-center"

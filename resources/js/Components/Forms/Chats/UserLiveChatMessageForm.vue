@@ -8,9 +8,10 @@ import { computed, ref, watch } from "vue";
 const props = defineProps({
   liveChat: Object,
   messageToEdit: Object,
+  messageToReply: Object,
 });
 
-const emits = defineEmits(["cancelEditMessage"]);
+const emits = defineEmits(["cancelEditMessage", "cancelReplyMessage"]);
 
 const multiPreviewFiles = ref([]);
 const emojiPickerVisibleForMainInput = ref(false);
@@ -20,10 +21,21 @@ const cancelEditingMessage = () => {
   emits("cancelEditMessage");
 };
 
+const cancelReplyMessage = () => {
+  emits("cancelReplyMessage");
+};
+
 watch(
   () => props.messageToEdit,
   (newMessageToEdit) => {
-    form.message = newMessageToEdit?.message || "";
+    form.message = newMessageToEdit?.message || null;
+  }
+);
+
+watch(
+  () => props.messageToReply,
+  (newMessageToReply) => {
+    form.reply_to_message_id = newMessageToReply?.id || null;
   }
 );
 
@@ -90,6 +102,7 @@ const form = useForm({
   agent_id: null,
   message: props.messageToEdit?.message,
   files: [],
+  reply_to_message_id: props.messageToReply ? props.messageToReply.id : null,
   captcha_token: null,
 });
 
@@ -106,6 +119,9 @@ const storeMessage = () => {
     onFinish: () => {
       form.message = "";
       multiPreviewFiles.value = [];
+    },
+    onSuccess: () => {
+      cancelReplyMessage();
     },
   });
 };
@@ -299,18 +315,48 @@ const updateMessage = () => {
 
   <!-- Main Messge Send Form -->
   <div class="relative z-40 w-full bg-white border-t shadow px-5 py-3">
+    <!-- Edit Mesage -->
     <div v-if="messageToEdit" class="mb-5 text-xs flex flex-col items-start">
       <div class="flex items-center font-bold text-blue-600 mb-2">
         <i class="fa-solid fa-edit mr-2"></i>
         <span>{{ __("EDIT_MESSAGE") }}</span>
       </div>
       <div class="w-full flex items-center justify-between">
-        <p class="w-full line-clamp-1">
+        <p class="w-full pl-5 line-clamp-1">
           {{ messageToEdit?.message }}
         </p>
 
         <span
           @click="cancelEditingMessage"
+          class="text-lg font-bold w-6 h-6 flex items-center justify-center text-slate-500 ml-3 cursor-pointer hover:text-slate-600"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </span>
+      </div>
+    </div>
+
+    <!-- Reply Mesage -->
+    <div v-if="messageToReply" class="mb-5 text-xs flex flex-col items-start">
+      <div class="flex items-center font-bold text-blue-600 mb-2">
+        <i class="fa-solid fa-reply mr-2"></i>
+        <span>{{ __("REPLY") }}</span>
+      </div>
+      <div class="w-full flex items-center justify-between">
+        <div class="flex flex-col items-start pl-5 w-full">
+          <h6 class="font-semibold text-sm text-slate-700">
+            {{
+              messageToReply.user
+                ? messageToReply?.user?.name
+                : messageToReply?.agent?.name
+            }}
+          </h6>
+          <p class="w-full line-clamp-1">
+            {{ messageToReply?.message }}
+          </p>
+        </div>
+
+        <span
+          @click="cancelReplyMessage"
           class="text-lg font-bold w-6 h-6 flex items-center justify-center text-slate-500 ml-3 cursor-pointer hover:text-slate-600"
         >
           <i class="fa-solid fa-xmark"></i>

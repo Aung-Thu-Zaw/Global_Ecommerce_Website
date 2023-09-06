@@ -59,4 +59,24 @@ class LiveChatMessage extends Model
     {
         return $this->hasMany(ChatFileAttachment::class);
     }
+
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<LiveChatMessage,LiveChatMessage>
+    */
+    public function replyToMessage(): BelongsTo
+    {
+        return $this->belongsTo(LiveChatMessage::class, 'reply_to_message_id');
+    }
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\HasMany<LiveChatMessage>
+    */
+    public function replies(): HasMany
+    {
+        return $this->hasMany(LiveChatMessage::class, 'reply_to_message_id');
+    }
+
+
+
 }
