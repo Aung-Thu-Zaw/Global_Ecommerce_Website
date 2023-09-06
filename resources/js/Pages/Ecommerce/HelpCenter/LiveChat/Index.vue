@@ -3,8 +3,6 @@ import UserLiveChatMessageForm from "@/Components/Forms/Chats/UserLiveChatMessag
 import SenderTextMessageCard from "@/Components/Cards/Chats/SenderTextMessageCard.vue";
 import SenderFileMessageCard from "@/Components/Cards/Chats/SenderFileMessageCard.vue";
 import RecevierTextMessageCard from "@/Components/Cards/Chats/RecevierTextMessageCard.vue";
-import LastChatDiscussionInformationCard from "@/Components/Cards/Chats/LastChatDiscussionInformationCard.vue";
-// import RecevierPhotoVideoMessageCard from "@/Components/Cards/Chats/RecevierPhotoVideoMessageCard.vue";
 import OnlineStatus from "@/Components/Status/OnlineStatus.vue";
 import OfflineStatus from "@/Components/Status/OfflineStatus.vue";
 import BusyStatus from "@/Components/Status/BusyStatus.vue";
@@ -17,33 +15,15 @@ const props = defineProps({
   liveChatMessages: Object,
 });
 
+// Define Variables
 const msgScroll = ref(null);
 const messageToEdit = ref(null);
 const messageToReply = ref(null);
 
+// Auto Scroll To Bottom
 const scrollToBottom = () => {
   msgScroll.value.scrollTop = msgScroll.value.scrollHeight;
 };
-
-// initialize components based on data attribute selectors
-onMounted(() => {
-  initFlowbite();
-});
-
-onUpdated(() => {
-  scrollToBottom();
-});
-
-// const lastDisplayedDate = ref("");
-
-// const shouldDisplayDate = computed(() => {
-//   const currentDate = props.message.created_at;
-//   if (currentDate === lastDisplayedDate.value) {
-//     return false;
-//   }
-//   lastDisplayedDate.value = currentDate;
-//   return true;
-// });
 
 const currentLiveChatMessages = computed(() => {
   return props.liveChatMessages.filter((message) => {
@@ -66,6 +46,18 @@ const cancelEditMessage = () => {
 const cancelReplyMessage = () => {
   messageToReply.value = null;
 };
+
+onMounted(() => {
+  initFlowbite();
+
+  Echo.private(`live-chat.message`).listen("LiveChatMessageSent", (message) => {
+    props.liveChatMessages.push(message);
+  });
+});
+
+onUpdated(() => {
+  scrollToBottom();
+});
 </script>
 
 
@@ -76,7 +68,7 @@ const cancelReplyMessage = () => {
       class="w-[1200px] h-auto border border-slate-300 shadow-lg rounded-md overflow-hidden"
     >
       <div v-if="currentLiveChat" class="min-w-full">
-        <!-- Header -->
+        <!-- Live Chat Box Header -->
         <div
           class="w-full border-b shadow bg-white px-5 py-3 flex items-center justify-between"
         >
@@ -99,16 +91,15 @@ const cancelReplyMessage = () => {
                 </span>
               </div>
 
-              <!-- Online Status -->
-              <OnlineStatus />
+              <!-- <OnlineStatus />
 
-              <!-- Offline Status -->
-              <!-- <OfflineStatus /> -->
+              <OfflineStatus />
 
-              <!-- Busy Status -->
-              <!-- <BusyStatus /> -->
+              <BusyStatus /> -->
             </div>
           </div>
+
+          <!-- End Chat Button -->
           <div class="">
             <Link
               v-if="
@@ -125,17 +116,8 @@ const cancelReplyMessage = () => {
           </div>
         </div>
 
+        <!-- Chat Message Box -->
         <div class="h-[700px] bg-white flex flex-col justify-end">
-          <!-- <div v-if="previousLiveChats.length" class="mb-5">
-            <p
-              class="w-full text-center text-sm font-medium text-blue-500 hover:text-blue-600 cursor-pointer mb-6"
-            >
-              <i class="fa-solid fa-message mr-1"></i>
-              View Previous Chat History
-            </p>
-
-            <LastChatDiscussionInformationCard :liveChat="currentLiveChat" />
-          </div> -->
           <div class="overflow-auto scrollbar p-5 h-auto" ref="msgScroll">
             <div v-for="message in currentLiveChatMessages" :key="message.id">
               <!-- Left Side For Recevier -->
@@ -148,7 +130,6 @@ const cancelReplyMessage = () => {
                   @replyMessage="setMessageToReply"
                 />
               </div>
-              <!-- <RecevierPhotoVideoMessageCard /> -->
 
               <!-- Right Side For Sender  -->
               <div
@@ -171,16 +152,9 @@ const cancelReplyMessage = () => {
               </div>
             </div>
           </div>
-
-          <!-- <p
-            v-if="!currentLiveChat.is_active && currentLiveChat.ended_at"
-            class="text-sm font-bold text-gray-500 w-full text-center mt-5"
-          >
-            {{ __("THE_CHAT_HAS_ENDED") }}
-          </p> -->
         </div>
 
-        <!-- Footer Input Form -->
+        <!-- Live Chat Message Form -->
         <UserLiveChatMessageForm
           :liveChat="currentLiveChat"
           :messageToEdit="messageToEdit"
@@ -191,6 +165,24 @@ const cancelReplyMessage = () => {
       </div>
     </div>
   </div>
+
+  <!-- <div v-if="previousLiveChats.length" class="mb-5">
+            <p
+              class="w-full text-center text-sm font-medium text-blue-500 hover:text-blue-600 cursor-pointer mb-6"
+            >
+              <i class="fa-solid fa-message mr-1"></i>
+              View Previous Chat History
+            </p>
+
+            <LastChatDiscussionInformationCard :liveChat="currentLiveChat" />
+          </div> -->
+
+  <!-- <p
+            v-if="!currentLiveChat.is_active && currentLiveChat.ended_at"
+            class="text-sm font-bold text-gray-500 w-full text-center mt-5"
+          >
+            {{ __("THE_CHAT_HAS_ENDED") }}
+          </p> -->
 </template>
 
 

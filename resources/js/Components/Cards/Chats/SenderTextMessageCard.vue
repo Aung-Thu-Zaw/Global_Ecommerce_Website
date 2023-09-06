@@ -33,7 +33,6 @@ const replyMessage = (message) => {
           />
 
           <div
-            @click="scrollToParentMessage"
             class="p-3 bg-slate-50 border-2 border-slate-300 rounded-xl rounded-br-none shadow-md w-auto max-w-[500px] text-sm flex flex-col"
           >
             <div v-if="message.reply_to_message_id">

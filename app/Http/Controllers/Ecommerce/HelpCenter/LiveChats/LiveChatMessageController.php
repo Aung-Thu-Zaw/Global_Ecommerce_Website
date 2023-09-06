@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ecommerce\HelpCenter\LiveChats;
 
 use App\Actions\Ecommerce\LiveChats\CreateLiveChatMessageAction;
+use App\Events\LiveChatMessageSent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LiveChatMessageRequest;
 use App\Models\LiveChatMessage;
@@ -14,9 +15,9 @@ class LiveChatMessageController extends Controller
     {
         $message = (new CreateLiveChatMessageAction())->handle($request->validated());
 
-        // if($message) {
-        //     event(new ChatMessage($message->load("user:id,avatar")));
-        // }
+        if($message) {
+            event(new LiveChatMessageSent($message));
+        }
     }
 
     public function update(LiveChatMessageRequest $request, int $liveChatMessageId): void
