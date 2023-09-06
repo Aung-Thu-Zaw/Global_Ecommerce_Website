@@ -15,11 +15,6 @@ class SupportLiveChatServiceController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $previousLiveChats = LiveChat::with(["user:id,name,avatar","agent:id,name,avatar"])
-                                     ->where("user_id", auth()->id())
-                                     ->where("is_active", false)
-                                     ->get();
-
         $currentLiveChat = LiveChat::with(["user:id,name,avatar","agent:id,name,avatar"])
                                    ->where("user_id", auth()->id())
                                    ->where("is_active", true)
@@ -32,10 +27,10 @@ class SupportLiveChatServiceController extends Controller
                                                ->orderBy("id", "asc")
                                                ->get();
 
-            return inertia("Ecommerce/HelpCenter/LiveChat/Index", compact("currentLiveChat", "previousLiveChats", "liveChatMessages"));
+            return inertia("Ecommerce/HelpCenter/LiveChat/Index", compact("currentLiveChat", "liveChatMessages"));
         }
 
-        return inertia("Ecommerce/HelpCenter/LiveChat/Index", compact("currentLiveChat", "previousLiveChats"));
+        return inertia("Ecommerce/HelpCenter/LiveChat/Index", compact("currentLiveChat"));
     }
 
     public function store(Request $request): RedirectResponse

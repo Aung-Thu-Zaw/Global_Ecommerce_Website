@@ -13,8 +13,6 @@ import { computed, onMounted, onUpdated, ref } from "vue";
 import { initFlowbite } from "flowbite";
 
 const props = defineProps({
-  //   liveChat: Object,
-  previousLiveChats: Object,
   currentLiveChat: Object,
   liveChatMessages: Object,
 });

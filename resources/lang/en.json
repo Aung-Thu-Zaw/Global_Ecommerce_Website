@@ -970,5 +970,8 @@
     "ADD_TO_FOLDER": "Add To Folder",
     "ARCHIVE": "Archive",
     "CREATE_NEW_FOLDER": "Create New Folder",
-    "THE_CHAT_HAS_ENDED": "The chat has ended."
+    "THE_CHAT_HAS_ENDED": "The chat has ended.",
+    "DELETE_FOR_MYSELF": "Delete for myself",
+    "DELETE_FOR_BOTH": "Delete for both",
+    "COPIED_TO_CLIPBOARD": "Copied to clipboard"
 }

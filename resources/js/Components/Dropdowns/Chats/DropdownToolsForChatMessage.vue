@@ -1,7 +1,32 @@
 <script setup>
-defineProps({
+import { toast } from "vue3-toastify";
+import { __ } from "@/Translations/translations-inside-setup.js";
+import "vue3-toastify/dist/index.css";
+import { ref } from "vue";
+
+const props = defineProps({
   message: Object,
 });
+
+const copyMessage = () => {
+  if (navigator.clipboard) {
+    const messageText = props.message.message;
+
+    navigator.clipboard
+      .writeText(messageText)
+      .then(() => {
+        toast.success(__("COPIED_TO_CLIPBOARD"), {
+          autoClose: 2000,
+        });
+        console.log("Message copied to clipboard:", messageText);
+      })
+      .catch((error) => {
+        console.error("Error copying message:", error);
+      });
+  } else {
+    console.error("Clipboard API is not supported in this browser.");
+  }
+};
 </script>
 
 <template>
@@ -29,54 +54,65 @@ defineProps({
     <!-- Dropdown menu -->
     <div
       :id="'messageDropdownDots' + message.id"
-      class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 border border-slate-300"
+      class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 border border-slate-300"
     >
       <ul
         class="py-2 text-sm text-gray-600 font-normal"
         aria-labelledby="messageDropdown"
       >
         <li>
-          <a href="#" class="block px-4 py-2 hover:bg-gray-100">
+          <div class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
             <i class="fa-solid fa-circle-check mr-1"></i>
             {{ __("SELECT") }}
-          </a>
+          </div>
         </li>
         <li>
-          <a href="#" class="block px-4 py-2 hover:bg-gray-100">
+          <div class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
             <i class="fa-solid fa-reply mr-1"></i>
             {{ __("REPLY") }}
-          </a>
+          </div>
         </li>
-        <li>
-          <a href="#" class="block px-4 py-2 hover:bg-gray-100">
-            <i class="fa-solid fa-thumbtack mr-1"></i>
-            {{ __("PIN") }}
-          </a>
-        </li>
-        <li>
-          <a href="#" class="block px-4 py-2 hover:bg-gray-100">
+        <li v-if="message.message">
+          <div
+            @click="copyMessage"
+            class="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+          >
             <i class="fa-solid fa-copy mr-1"></i>
-            {{ __("COPY_TEXT") }}</a
-          >
+            {{ __("COPY_TEXT") }}
+          </div>
         </li>
-        <li>
-          <a href="#" class="block px-4 py-2 hover:bg-gray-100">
+        <li v-if="message.chat_file_attachments.length">
+          <div class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
             <i class="fa-solid fa-download mr-1"></i>
-            {{ __("DOWNLOAD") }}</a
-          >
+            {{ __("DOWNLOAD") }}
+          </div>
         </li>
         <li>
-          <a href="#" class="block px-4 py-2 hover:bg-gray-100">
+          <div class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
             <i class="fa-solid fa-edit mr-1"></i>
-            {{ __("EDIT") }}</a
-          >
+            {{ __("EDIT") }}
+          </div>
         </li>
-
+        <hr />
         <li>
-          <a href="#" class="block px-4 py-2 hover:bg-gray-100">
-            <i class="fa-solid fa-trash mr-1"></i>
-            {{ __("DELETE") }}</a
+          <div
+            class="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
           >
+            <i class="fa-solid fa-trash mr-1"></i>
+            <span class="line-clamp-1 w-full">
+              {{ __("DELETE_FOR_MYSELF") }}
+            </span>
+          </div>
+        </li>
+        <li>
+          <div
+            class="px-4 py-2 text-red-600 hover:bg-gray-100 cursor-pointer flex items-center"
+          >
+            <i class="fa-solid fa-trash mr-1"></i>
+            <span class="line-clamp-1 w-full">
+              {{ __("DELETE_FOR_BOTH") }}
+            </span>
+          </div>
         </li>
       </ul>
     </div>

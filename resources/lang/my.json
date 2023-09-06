@@ -970,5 +970,8 @@
     "ADD_TO_FOLDER": "ဖိုဒါတွဲသို့ထည့်ပါ။",
     "ARCHIVE": "Archive",
     "CREATE_NEW_FOLDER": "ဖိုင်တွဲအသစ်ဖန်တီးပါ။",
-    "THE_CHAT_HAS_ENDED": "စကားပြောခန်း ပြီးသွားပါပြီ။"
+    "THE_CHAT_HAS_ENDED": "စကားပြောခန်း ပြီးသွားပါပြီ။",
+    "DELETE_FOR_MYSELF": "ကိုယ့်အတွက် ဖျက်လိုက်ပါ",
+    "DELETE_FOR_BOTH": "နှစ်ဦးစလုံးအတွက် ဖျက်ပါ",
+    "COPIED_TO_CLIPBOARD": "ကလစ်ဘုတ်သို့ ကူးယူထားသည်။"
 }
