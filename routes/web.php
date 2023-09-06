@@ -283,5 +283,6 @@ Route::middleware(["auth","verified"])->group(function () {
     Route::patch('/support-service/live-chats/{live_chat}', [SupportLiveChatServiceController::class,"update"])->name("service.live-chat.update");
 
     Route::post("/support-service/live-chats/messages", [LiveChatMessageController::class,"store"])->name("live-chat.message.store");
+    Route::patch("/support-service/live-chats/messages/{live_chat_mesage}", [LiveChatMessageController::class,"update"])->name("live-chat.message.update");
 
 });

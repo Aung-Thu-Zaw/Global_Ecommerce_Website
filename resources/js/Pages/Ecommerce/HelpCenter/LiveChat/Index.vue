@@ -18,6 +18,7 @@ const props = defineProps({
 });
 
 const msgScroll = ref(null);
+const messageToEdit = ref(null);
 
 const scrollToBottom = () => {
   msgScroll.value.scrollTop = msgScroll.value.scrollHeight;
@@ -48,6 +49,14 @@ const currentLiveChatMessages = computed(() => {
     return message.live_chat_id === props.currentLiveChat.id;
   });
 });
+
+const setMessageToEdit = (message) => {
+  messageToEdit.value = message;
+};
+
+const cancelEditMessage = () => {
+  messageToEdit.value = null;
+};
 </script>
 
 
@@ -133,7 +142,10 @@ const currentLiveChatMessages = computed(() => {
               <div
                 v-if="message.user_id && !message.agent_id && message.message"
               >
-                <SenderTextMessageCard :message="message" />
+                <SenderTextMessageCard
+                  :message="message"
+                  @editMessage="setMessageToEdit"
+                />
               </div>
               <div
                 v-if="
@@ -156,7 +168,11 @@ const currentLiveChatMessages = computed(() => {
         </div>
 
         <!-- Footer Input Form -->
-        <UserLiveChatMessageForm :liveChat="currentLiveChat" />
+        <UserLiveChatMessageForm
+          :liveChat="currentLiveChat"
+          :messageToEdit="messageToEdit"
+          @cancelEditMessage="cancelEditMessage"
+        />
       </div>
     </div>
   </div>

@@ -3,15 +3,29 @@ import EmojiPicker from "vue3-emoji-picker";
 import "vue3-emoji-picker/css";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import { useForm, usePage } from "@inertiajs/vue3";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
 const props = defineProps({
   liveChat: Object,
+  messageToEdit: Object,
 });
+
+const emits = defineEmits(["cancelEditMessage"]);
 
 const multiPreviewFiles = ref([]);
 const emojiPickerVisibleForMainInput = ref(false);
 const emojiPickerVisibleForPreviewFileBox = ref(false);
+
+const cancelEditingMessage = () => {
+  emits("cancelEditMessage");
+};
+
+watch(
+  () => props.messageToEdit,
+  (newMessageToEdit) => {
+    form.message = newMessageToEdit?.message || "";
+  }
+);
 
 const onSelectEmoji = (emoji) => {
   form.message += emoji.i;
@@ -74,7 +88,7 @@ const form = useForm({
   live_chat_id: props.liveChat?.id,
   user_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
   agent_id: null,
-  message: "",
+  message: props.messageToEdit?.message,
   files: [],
   captcha_token: null,
 });
@@ -82,11 +96,24 @@ const form = useForm({
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 const handleCreateLiveChatMessage = async () => {
   await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("create_live_chat_message");
+  form.captcha_token = await executeRecaptcha("live_chat_message");
+
+  props.messageToEdit ? updateMessage() : storeMessage();
+};
+
+const storeMessage = () => {
   form.post(route("live-chat.message.store"), {
     onFinish: () => {
       form.message = "";
       multiPreviewFiles.value = [];
+    },
+  });
+};
+
+const updateMessage = () => {
+  form.patch(route("live-chat.message.update", props.messageToEdit.id), {
+    onSuccess: () => {
+      cancelEditingMessage();
     },
   });
 };
@@ -272,6 +299,24 @@ const handleCreateLiveChatMessage = async () => {
 
   <!-- Main Messge Send Form -->
   <div class="relative z-40 w-full bg-white border-t shadow px-5 py-3">
+    <div v-if="messageToEdit" class="mb-5 text-xs flex flex-col items-start">
+      <div class="flex items-center font-bold text-blue-600 mb-2">
+        <i class="fa-solid fa-edit mr-2"></i>
+        <span>{{ __("EDIT_MESSAGE") }}</span>
+      </div>
+      <div class="w-full flex items-center justify-between">
+        <p class="w-full line-clamp-1">
+          {{ messageToEdit?.message }}
+        </p>
+
+        <span
+          @click="cancelEditingMessage"
+          class="text-lg font-bold w-6 h-6 flex items-center justify-center text-slate-500 ml-3 cursor-pointer hover:text-slate-600"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </span>
+      </div>
+    </div>
     <form
       @submit.prevent="handleCreateLiveChatMessage"
       class="w-full flex items-center justify-between py-0.5 px-5 pr-10 space-x-3 bg-slate-100 rounded-full"
@@ -345,10 +390,10 @@ const handleCreateLiveChatMessage = async () => {
         <button
           class="text-gray-400"
           :class="{
-            'text-gray-700': form.message.length > 0,
-            'text-gray-400': !form.message.length,
+            'text-gray-700': form.message,
+            'text-gray-400': !form.message,
           }"
-          :disabled="!form.message.length"
+          :disabled="!form.message"
         >
           <i class="fa-solid fa-paper-plane"></i>
         </button>

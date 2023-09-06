@@ -2,9 +2,23 @@
 import DropdownToolForChatMessage from "@/Components/Dropdowns/Chats/DropdownToolsForChatMessage.vue";
 import { computed, ref } from "vue";
 
-defineProps({
+const props = defineProps({
   message: Object,
 });
+
+const messageToEdit = ref(null);
+
+const emits = defineEmits(["editMessage"]);
+
+// const startEditing = () => {
+//   emits("editMessage", props.message);
+// };
+
+const editMessage = (message) => {
+  //   messageToEdit.value = message;
+
+  emits("editMessage", message);
+};
 </script>
 
 
@@ -14,7 +28,10 @@ defineProps({
       <div class="flex items-center justify-end">
         <div class="pl-28">
           <div class="flex items-center justify-end">
-            <DropdownToolForChatMessage :message="message" />
+            <DropdownToolForChatMessage
+              :message="message"
+              @editMessage="editMessage"
+            />
 
             <p
               class="p-3 bg-slate-50 border-2 border-slate-300 rounded-xl rounded-br-none shadow-md w-auto max-w-[500px] text-sm"
@@ -25,7 +42,9 @@ defineProps({
           <div
             class="mt-1 text-[.6rem] text-slate-600 flex items-center justify-end space-x-4"
           >
-            <span class="font-bold">{{ __("EDITED") }}</span>
+            <span v-if="message.is_edited" class="font-bold">
+              {{ __("EDITED") }}
+            </span>
             <div class="flex items-center justify-end space-x-2 mr-2">
               <span class=""> {{ message.updated_at }} </span>
               <span

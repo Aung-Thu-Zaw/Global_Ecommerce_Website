@@ -973,5 +973,6 @@
     "THE_CHAT_HAS_ENDED": "စကားပြောခန်း ပြီးသွားပါပြီ။",
     "DELETE_FOR_MYSELF": "ကိုယ့်အတွက် ဖျက်လိုက်ပါ",
     "DELETE_FOR_BOTH": "နှစ်ဦးစလုံးအတွက် ဖျက်ပါ",
-    "COPIED_TO_CLIPBOARD": "ကလစ်ဘုတ်သို့ ကူးယူထားသည်။"
+    "COPIED_TO_CLIPBOARD": "ကလစ်ဘုတ်သို့ ကူးယူထားသည်။",
+    "EDIT_MESSAGE": "Message ကို တည်းဖြတ်ပါ။"
 }

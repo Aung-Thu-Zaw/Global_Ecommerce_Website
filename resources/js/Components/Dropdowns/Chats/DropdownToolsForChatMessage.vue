@@ -8,6 +8,12 @@ const props = defineProps({
   message: Object,
 });
 
+const emits = defineEmits(["editMessage"]);
+
+const startEditing = () => {
+  emits("editMessage", props.message);
+};
+
 const copyMessage = () => {
   if (navigator.clipboard) {
     const messageText = props.message.message;
@@ -87,8 +93,11 @@ const copyMessage = () => {
             {{ __("DOWNLOAD") }}
           </div>
         </li>
-        <li>
-          <div class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
+        <li v-if="message.message">
+          <div
+            @click="startEditing"
+            class="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+          >
             <i class="fa-solid fa-edit mr-1"></i>
             {{ __("EDIT") }}
           </div>

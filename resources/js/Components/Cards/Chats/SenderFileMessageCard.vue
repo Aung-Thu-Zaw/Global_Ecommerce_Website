@@ -490,7 +490,9 @@ const filteredFilename = (attachmentPath) => {
           <div
             class="mt-1 text-[.6rem] text-slate-600 flex items-center justify-end space-x-4"
           >
-            <span class="font-bold">{{ __("EDITED") }}</span>
+            <span v-if="message.is_edited" class="font-bold">
+              {{ __("EDITED") }}
+            </span>
             <div class="flex items-center justify-end space-x-2 mr-2">
               <span class=""> {{ message.updated_at }} </span>
               <span
