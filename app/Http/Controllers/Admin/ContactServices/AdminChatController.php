@@ -12,6 +12,11 @@ class AdminChatController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        return inertia("Admin/ContactServices/Chats/Index");
+
+        $liveChats = LiveChat::with(["user:id,name,avatar","agent:id,name,avatar"])
+        ->where("agent_id", auth()->id())->get();
+
+
+        return inertia("Admin/ContactServices/Chats/Index", compact("liveChats"));
     }
 }

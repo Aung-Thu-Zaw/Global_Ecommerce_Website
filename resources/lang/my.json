@@ -974,5 +974,6 @@
     "DELETE_FOR_MYSELF": "ကိုယ့်အတွက် ဖျက်လိုက်ပါ",
     "DELETE_FOR_BOTH": "နှစ်ဦးစလုံးအတွက် ဖျက်ပါ",
     "COPIED_TO_CLIPBOARD": "ကလစ်ဘုတ်သို့ ကူးယူထားသည်။",
-    "EDIT_MESSAGE": "Message ကို တည်းဖြတ်ပါ။"
+    "EDIT_MESSAGE": "Message ကို တည်းဖြတ်ပါ။",
+    "SELECT_A_CHAT_TO_START_MESSAGING": "စာတိုပေးပို့ခြင်းစတင်ရန် ချတ်ကိုရွေးချယ်ပါ။"
 }
