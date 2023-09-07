@@ -12,8 +12,9 @@ import { initFlowbite } from "flowbite";
 
 const props = defineProps({
   currentLiveChat: Object,
-  liveChatMessages: Object,
 });
+
+const messages = ref(props.currentLiveChat.live_chat_messages);
 
 // Define Variables
 const msgScroll = ref(null);
@@ -25,11 +26,11 @@ const scrollToBottom = () => {
   msgScroll.value.scrollTop = msgScroll.value.scrollHeight;
 };
 
-const currentLiveChatMessages = computed(() => {
-  return props.liveChatMessages.filter((message) => {
-    return message.live_chat_id === props.currentLiveChat.id;
-  });
-});
+// const currentLiveChatMessages = computed(() => {
+//   return props.liveChatMessages.filter((message) => {
+//     return message.live_chat_id === props.currentLiveChat.id;
+//   });
+// });
 
 const setMessageToEdit = (message) => {
   messageToEdit.value = message;
@@ -51,7 +52,7 @@ onMounted(() => {
   initFlowbite();
 
   Echo.private(`live-chat.message`).listen("LiveChatMessageSent", (data) => {
-    props.liveChatMessages.push(data.liveChatMessage);
+    messages.value.push(data.liveChatMessage);
   });
 });
 
@@ -119,7 +120,7 @@ onUpdated(() => {
         <!-- Chat Message Box -->
         <div class="h-[700px] bg-white flex flex-col justify-end">
           <div class="overflow-auto scrollbar p-5 h-auto" ref="msgScroll">
-            <div v-for="message in currentLiveChatMessages" :key="message.id">
+            <div v-for="message in messages" :key="message.id">
               <!-- Left Side For Recevier -->
               <div
                 v-if="message.agent_id && !message.user_id && message.message"

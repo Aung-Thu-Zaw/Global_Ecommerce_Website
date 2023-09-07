@@ -18,10 +18,7 @@ class AdminChatController extends Controller
                              ->where("agent_id", auth()->id())
                              ->get();
 
-        $liveChatMessages = LiveChatMessage::with(["chatFileAttachments","user:id,name,avatar","agent:id,name,avatar","replyToMessage"])
-        ->orderBy("id", "asc")
-        ->get();
 
-        return inertia("Admin/ContactServices/Chats/Index", compact("liveChats", "liveChatMessages"));
+        return inertia("Admin/ContactServices/Chats/Index", compact("liveChats"));
     }
 }

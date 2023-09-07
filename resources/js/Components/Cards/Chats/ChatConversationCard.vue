@@ -1,10 +1,15 @@
 <script setup>
 import DropdownToolsForChatConversationCard from "@/Components/Dropdowns/Chats/DropdownToolsForChatConversationCard.vue";
+import { computed } from "vue";
 
-defineProps({
+const props = defineProps({
   liveChat: Object,
   lastMessage: Object,
 });
+
+// const lastMessage = computed(() => {
+//   return
+// });
 </script>
 
 <template>

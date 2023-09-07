@@ -17,20 +17,22 @@ class SupportLiveChatServiceController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $currentLiveChat = LiveChat::with(["user:id,name,avatar","agent:id,name,avatar"])
+        $currentLiveChat = LiveChat::with(["user:id,name,avatar","agent:id,name,avatar","liveChatMessages.chatFileAttachments","liveChatMessages.user:id,name,avatar","liveChatMessages.agent:id,name,avatar","liveChatMessages.replyToMessage"])
                                    ->where("user_id", auth()->id())
                                    ->where("is_active", true)
                                    ->first();
 
-        if($currentLiveChat) {
 
-            $liveChatMessages = LiveChatMessage::with(["chatFileAttachments","user:id,name,avatar","agent:id,name,avatar","replyToMessage"])
-                                               ->where("live_chat_id", $currentLiveChat->id)
-                                               ->orderBy("id", "asc")
-                                               ->get();
 
-            return inertia("Ecommerce/HelpCenter/LiveChat/Index", compact("currentLiveChat", "liveChatMessages"));
-        }
+
+
+
+
+
+
+
+
+
 
         return inertia("Ecommerce/HelpCenter/LiveChat/Index", compact("currentLiveChat"));
     }

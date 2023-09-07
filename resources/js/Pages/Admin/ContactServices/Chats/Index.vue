@@ -23,9 +23,7 @@ const handleSelectedChat = (chat) => {
   selectedLiveChat.value = chat;
 };
 
-const readMessage=()=>{
-    
-}
+const readMessage = () => {};
 
 const msgScroll = ref(null);
 // Auto Scroll To Bottom
@@ -47,7 +45,9 @@ onMounted(() => {
   );
 
   Echo.private(`live-chat.message`).listen("LiveChatMessageSent", (data) => {
-    selectedLiveChat.value.live_chat_messages.push(data.liveChatMessage);
+    selectedLiveChat.value
+      ? selectedLiveChat.value.live_chat_messages.push(data.liveChatMessage)
+      : console.log(data.liveChatMessage);
   });
 });
 </script>
@@ -115,12 +115,14 @@ onMounted(() => {
                 <div v-for="liveChat in liveChats" :key="liveChat.id">
                   <ChatConversationCard
                     :liveChat="liveChat"
-                    :lastMessage="
-                      liveChat.live_chat_messages[
-                        liveChat.live_chat_messages.length - 1
-                      ]
-                    "
                     @click="handleSelectedChat(liveChat)"
+                    :lastMessage="
+                      liveChat.live_chat_messages
+                        ? liveChat.live_chat_messages[
+                            liveChat.live_chat_messages.length - 1
+                          ]
+                        : null
+                    "
                     :class="{
                       'border-slate-400 shadow-md bg-gray-200':
                         selectedLiveChat?.id === liveChat?.id,
@@ -212,7 +214,7 @@ onMounted(() => {
           <div class="h-[720px] bg-white flex flex-col justify-end">
             <div class="overflow-auto scrollbar p-5 h-auto" ref="msgScroll">
               <div
-                v-for="message in selectedLiveChat.live_chat_messages"
+                v-for="message in selectedLiveChat?.live_chat_messages"
                 :key="message.id"
               >
                 <!-- Left Side For Recevier -->
