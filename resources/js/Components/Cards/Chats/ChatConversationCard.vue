@@ -17,6 +17,14 @@ const props = defineProps({
   <div
     v-if="liveChat"
     class="border rounded-md p-3 cursor-pointer transition-all"
+    :class="{
+      'border-l-4 border-r-4 border-l-red-600 border-r-red-600':
+        liveChat.ended_at,
+      'border-l-4 border-r-4 border-l-sky-600 border-r-sky-600':
+        !liveChat.ended_at && !liveChat.live_chat_messages.length,
+      'border-l-4 border-r-4 border-l-green-500 border-r-green-500':
+        !liveChat.ended_at && liveChat.live_chat_messages.length,
+    }"
   >
     <div class="flex items-center">
       <div class="flex items-center w-full">
@@ -29,6 +37,7 @@ const props = defineProps({
             <h4 class="text-sm font-semibold text-slate-700">
               {{ liveChat?.user?.name }}
             </h4>
+
             <div class="flex items-center justify-center space-x-2">
               <!-- Dropdown  -->
               <DropdownToolsForChatConversationCard :liveChat="liveChat" />

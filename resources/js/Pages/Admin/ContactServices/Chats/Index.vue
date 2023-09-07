@@ -1,5 +1,6 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import LastChatDiscussionInformationCard from "@/Components/Cards/Chats/LastChatDiscussionInformationCard.vue";
 import ChatConversationCard from "@/Components/Cards/Chats/ChatConversationCard.vue";
 import AdminDashboardChatSidebarButtons from "@/Components/Sidebars/AdminDashboardChatSidebarButtons.vue";
 import AdminDashboardLiveChatBoxHeader from "@/Components/Headers/AdminDashboardLiveChatBoxHeader.vue";
@@ -211,7 +212,19 @@ onMounted(() => {
           </div>
 
           <!-- Message -->
-          <div class="h-[720px] bg-white flex flex-col justify-end">
+          <div
+            class="h-[720px] bg-white flex flex-col"
+            :class="{
+              'justify-between':
+                !selectedLiveChat.is_active && selectedLiveChat.ended_at,
+              'justify-end':
+                selectedLiveChat.is_active && !selectedLiveChat.ended_at,
+            }"
+          >
+            <LastChatDiscussionInformationCard
+              v-if="!selectedLiveChat.is_active && selectedLiveChat.ended_at"
+              :liveChat="selectedLiveChat"
+            />
             <div class="overflow-auto scrollbar p-5 h-auto" ref="msgScroll">
               <div
                 v-for="message in selectedLiveChat?.live_chat_messages"
@@ -257,6 +270,13 @@ onMounted(() => {
                   <SenderFileMessageCard :message="message" />
                 </div>
               </div>
+
+              <p
+                v-if="!selectedLiveChat.is_active && selectedLiveChat.ended_at"
+                class="text-sm font-bold text-gray-500 w-full text-center mt-5"
+              >
+                {{ __("THE_CHAT_HAS_ENDED") }}
+              </p>
             </div>
           </div>
 

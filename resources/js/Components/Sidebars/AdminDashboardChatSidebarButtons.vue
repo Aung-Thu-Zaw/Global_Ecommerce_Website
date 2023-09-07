@@ -22,6 +22,22 @@
       </div>
     </div>
     <div
+      data-tooltip-target="setting-tooltip"
+      data-tooltip-placement="right"
+      class="flex items-center justify-center borer ring-2 ring-neutral-300 min-w-[40px] min-h-[40px] rounded-sm bg-neutral-600 text-white hover:bg-neutral-700"
+    >
+      <i class="fa-solid fa-gear"></i>
+
+      <div
+        id="setting-tooltip"
+        role="tooltip"
+        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-800 bg-white rounded-lg shadow-lg opacity-0 tooltip border"
+      >
+        {{ __("SETTING") }}
+        <div class="tooltip-arrow" data-popper-arrow></div>
+      </div>
+    </div>
+    <div
       data-tooltip-target="bookmark-tooltip"
       data-tooltip-placement="right"
       class="flex items-center justify-center borer ring-2 ring-primary-300 min-w-[40px] min-h-[40px] rounded-sm bg-primary-600 text-white hover:bg-primary-700"

@@ -17,16 +17,6 @@ class LiveChat extends Model
     protected $guarded = [];
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<LiveChat, never>
-    */
-    protected function createdAt(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => date("j-F-Y ( l )", strtotime($value)),
-        );
-    }
-
-    /**
     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,LiveChat>
     */
     public function user(): BelongsTo
