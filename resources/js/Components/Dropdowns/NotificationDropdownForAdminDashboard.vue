@@ -11,6 +11,7 @@ import SellerCreateNewProductNotificationCard from "@/Components/Cards/Notificat
 import NewBlogCommentNotificationCard from "@/Components/Cards/Notifications/NewBlogCommentNotificationCard.vue";
 import AdminNewProductReviewNotificationCard from "@/Components/Cards/Notifications/AdminNewProductReviewNotificationCard.vue";
 import AdminNewShopReviewNotificationCard from "@/Components/Cards/Notifications/AdminNewShopReviewNotificationCard.vue";
+import NewLiveChatAssignmentNotificationCard from "@/Components/Cards/Notifications/NewLiveChatAssignmentNotificationCard.vue";
 import { usePage, router } from "@inertiajs/vue3";
 import { computed, onMounted, onUpdated, ref } from "vue";
 
@@ -134,6 +135,18 @@ onMounted(() => {
             review: notification.review,
           },
         });
+      } else if (
+        notification.type ===
+        "App\\Notifications\\Chats\\NewLiveChatAssignementFromUserNotification"
+      ) {
+        notifications.value.unshift({
+          id: notification.id,
+          type: notification.type,
+          data: {
+            message: notification.message,
+            name: notification.name,
+          },
+        });
       }
     }
   );
@@ -240,7 +253,7 @@ const handleMarkAllAsRead = () => {
       <SellerCreateNewProductNotificationCard :notification="notification" />
       <AdminNewProductReviewNotificationCard :notification="notification" />
       <AdminNewShopReviewNotificationCard :notification="notification" />
-
+      <NewLiveChatAssignmentNotificationCard :notification="notification" />
       <!-- <OrderPlacedNotificationCard :notification="notification" /> -->
     </div>
 

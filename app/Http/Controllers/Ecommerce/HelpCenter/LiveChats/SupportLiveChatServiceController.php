@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AgentStatus;
 use App\Models\LiveChat;
 use App\Models\LiveChatMessage;
+use App\Services\BroadcastNotifications\NewLiveChatAssignmentNotificationSendToAdminDashboardService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
@@ -69,6 +70,8 @@ class SupportLiveChatServiceController extends Controller
             }
 
             $liveChat->load(["user:id,name,avatar","agent:id,name,avatar"]);
+
+            (new NewLiveChatAssignmentNotificationSendToAdminDashboardService())->send($liveChat);
 
             event(new NewLiveChatAssignment($liveChat));
         }

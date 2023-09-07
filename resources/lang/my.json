@@ -976,5 +976,6 @@
     "COPIED_TO_CLIPBOARD": "ကလစ်ဘုတ်သို့ ကူးယူထားသည်။",
     "EDIT_MESSAGE": "Message ကို တည်းဖြတ်ပါ။",
     "SELECT_A_CHAT_TO_START_MESSAGING": "စာတိုပေးပို့ခြင်းစတင်ရန် ချတ်ကိုရွေးချယ်ပါ။",
-    "YOU_DONT_HAVE_ANY_CHAT_CONVERSATIONS": "သင့်တွင် မည်သည့် ချတ်စကားပြောဆိုမှုမျှ မရှိပါ။"
+    "YOU_DONT_HAVE_ANY_CHAT_CONVERSATIONS": "သင့်တွင် မည်သည့် ချတ်စကားပြောဆိုမှုမျှ မရှိပါ။",
+    "YOU_GET_A_NEW_LIVE_CHAT_ASSIGNMENT_FROM_THE_USER": "အသုံးပြုသူထံမှ တိုက်ရိုက်ချတ်လုပ်ခြင်း တာဝန်အသစ်တစ်ခုကို သင်ရရှိသည်။"
 }
