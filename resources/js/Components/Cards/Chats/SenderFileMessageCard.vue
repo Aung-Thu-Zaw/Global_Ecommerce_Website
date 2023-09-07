@@ -23,8 +23,11 @@ const filteredFilename = (attachmentPath) => {
 </script>
 <template>
   <!-- Right Side  -->
-  <div v-if="!message.is_deleted_by_user" class="mb-5">
-    <div class="flex items-end justify-end">
+  <div>
+    <div
+      v-if="!message.is_deleted_by_user"
+      class="flex items-end justify-end mb-2"
+    >
       <div class="flex items-center justify-end">
         <div class="pl-28">
           <div class="flex items-center justify-center">

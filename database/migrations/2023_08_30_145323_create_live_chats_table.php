@@ -14,6 +14,7 @@ return new class () extends Migration {
     {
         Schema::create('live_chats', function (Blueprint $table) {
             $table->id();
+            $table->string("uuid")->nullable();
             $table->foreignId("user_id")->constrained()->cascadeOnDelete();
             $table->foreignId("agent_id")->nullable()->references("id")->on("users")->cascadeOnDelete();
             $table->boolean("pinned")->default(false);

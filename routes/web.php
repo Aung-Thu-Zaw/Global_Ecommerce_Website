@@ -278,7 +278,7 @@ Route::middleware(["auth","verified"])->group(function () {
     Route::post("/conversation/messages", [MessageController::class,"store"])->name("message.store");
 
 
-    Route::get('/support-service/live-chats', [SupportLiveChatServiceController::class,"index"])->name("service.live-chat.index");
+    Route::get('/support-service/live-chats/{live_chat_id:uuid}', [SupportLiveChatServiceController::class,"show"])->name("service.live-chat.show");
     Route::post('/support-service/live-chats', [SupportLiveChatServiceController::class,"store"])->name("service.live-chat.store");
     Route::patch('/support-service/live-chats/{live_chat}', [SupportLiveChatServiceController::class,"update"])->name("service.live-chat.update");
 

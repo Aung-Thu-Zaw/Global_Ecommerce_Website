@@ -12,13 +12,15 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
+use Illuminate\Support\Str;
 
 class SupportLiveChatServiceController extends Controller
 {
-    public function index(): Response|ResponseFactory
+    public function show(string $uuid): Response|ResponseFactory
     {
-        $currentLiveChat = LiveChat::with(["user:id,name,avatar","agent:id,name,avatar","liveChatMessages.chatFileAttachments","liveChatMessages.user:id,name,avatar","liveChatMessages.agent:id,name,avatar","liveChatMessages.replyToMessage"])
+        $liveChat = LiveChat::with(["user:id,name,avatar","agent:id,name,avatar","liveChatMessages.chatFileAttachments","liveChatMessages.user:id,name,avatar","liveChatMessages.agent:id,name,avatar","liveChatMessages.replyToMessage"])
                                    ->where("user_id", auth()->id())
+                                   ->where("uuid", $uuid)
                                    ->where("is_active", true)
                                    ->first();
 
@@ -34,7 +36,7 @@ class SupportLiveChatServiceController extends Controller
 
 
 
-        return inertia("Ecommerce/HelpCenter/LiveChat/Index", compact("currentLiveChat"));
+        return inertia("Ecommerce/HelpCenter/LiveChat/Show", compact("liveChat"));
     }
 
     public function store(Request $request): RedirectResponse
@@ -59,7 +61,7 @@ class SupportLiveChatServiceController extends Controller
         ->first();
 
         if ($availableAgent) {
-            $liveChat->update(["agent_id" => $availableAgent->agent_id,"is_active" => true]);
+            $liveChat->update(["uuid" => Str::uuid(),"agent_id" => $availableAgent->agent_id,"is_active" => true]);
 
             $agentStatus = AgentStatus::where("agent_id", $availableAgent->agent_id)->first();
 
@@ -76,9 +78,11 @@ class SupportLiveChatServiceController extends Controller
             (new NewLiveChatAssignmentNotificationSendToAdminDashboardService())->send($liveChat);
 
             event(new NewLiveChatAssignment($liveChat));
+
+            return to_route("service.live-chat.show", $liveChat->uuid);
         }
 
-        return to_route("service.live-chat.index");
+        return to_route("home");
     }
 
     public function update(LiveChat $liveChat): RedirectResponse

@@ -57,7 +57,7 @@ const replyMessage = (message) => {
         </div>
 
         <div
-          class="mt-1 text-[.6rem] text-slate-600 flex items-center justify-end space-x-4"
+          class="mt-1 text-[.6rem] text-slate-600 flex items-center justify-start space-x-4"
         >
           <span v-if="message.is_edited" class="font-bold">
             {{ __("EDITED") }}

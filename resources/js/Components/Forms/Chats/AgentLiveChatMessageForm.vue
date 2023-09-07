@@ -119,6 +119,7 @@ const storeMessage = () => {
     onFinish: () => {
       form.message = "";
       multiPreviewFiles.value = [];
+      form.files = [];
     },
     onSuccess: () => {
       cancelReplyMessage();

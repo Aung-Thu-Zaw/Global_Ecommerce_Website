@@ -16,6 +16,7 @@ class AdminChatController extends Controller
 
         $liveChats = LiveChat::with(["user:id,name,avatar","agent:id,name,avatar","liveChatMessages.chatFileAttachments","liveChatMessages.user:id,name,avatar","liveChatMessages.agent:id,name,avatar","liveChatMessages.replyToMessage"])
                              ->where("agent_id", auth()->id())
+                             ->orderBy("pinned", "asc")
                              ->get();
 
 

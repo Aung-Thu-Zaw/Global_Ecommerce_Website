@@ -119,6 +119,7 @@ const storeMessage = () => {
     onFinish: () => {
       form.message = "";
       multiPreviewFiles.value = [];
+      form.files = [];
     },
     onSuccess: () => {
       cancelReplyMessage();
@@ -364,7 +365,6 @@ const updateMessage = () => {
       </div>
     </div>
 
-    
     <form
       @submit.prevent="handleCreateLiveChatMessage"
       class="w-full flex items-center justify-between py-0.5 px-5 pr-10 space-x-3 bg-slate-100 rounded-full"

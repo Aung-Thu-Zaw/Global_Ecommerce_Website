@@ -3,6 +3,7 @@ import UserLiveChatMessageForm from "@/Components/Forms/Chats/UserLiveChatMessag
 import SenderTextMessageCard from "@/Components/Cards/Chats/SenderTextMessageCard.vue";
 import SenderFileMessageCard from "@/Components/Cards/Chats/SenderFileMessageCard.vue";
 import RecevierTextMessageCard from "@/Components/Cards/Chats/RecevierTextMessageCard.vue";
+import ReceiverFileMessageCard from "@/Components/Cards/Chats/ReceiverFileMessageCard.vue";
 import OnlineStatus from "@/Components/Status/OnlineStatus.vue";
 import OfflineStatus from "@/Components/Status/OfflineStatus.vue";
 import BusyStatus from "@/Components/Status/BusyStatus.vue";
@@ -11,10 +12,10 @@ import { computed, onMounted, onUpdated, ref } from "vue";
 import { initFlowbite } from "flowbite";
 
 const props = defineProps({
-  currentLiveChat: Object,
+  liveChat: Object,
 });
 
-const messages = ref(props.currentLiveChat.live_chat_messages);
+const messages = ref(props.liveChat.live_chat_messages);
 
 // Define Variables
 const msgScroll = ref(null);
@@ -26,9 +27,9 @@ const scrollToBottom = () => {
   msgScroll.value.scrollTop = msgScroll.value.scrollHeight;
 };
 
-// const currentLiveChatMessages = computed(() => {
+// const liveChatMessages = computed(() => {
 //   return props.liveChatMessages.filter((message) => {
-//     return message.live_chat_id === props.currentLiveChat.id;
+//     return message.live_chat_id === props.liveChat.id;
 //   });
 // });
 
@@ -68,7 +69,7 @@ onUpdated(() => {
     <div
       class="w-[1200px] h-auto border border-slate-300 shadow-lg rounded-md overflow-hidden"
     >
-      <div v-if="currentLiveChat" class="min-w-full">
+      <div v-if="liveChat" class="min-w-full">
         <!-- Live Chat Box Header -->
         <div
           class="w-full border-b shadow bg-white px-5 py-3 flex items-center justify-between"
@@ -76,14 +77,14 @@ onUpdated(() => {
           <div class="flex items-center">
             <div class="mr-3">
               <img
-                :src="currentLiveChat.agent?.avatar"
+                :src="liveChat.agent?.avatar"
                 class="w-10 h-10 rounded-full object-cover ring-2 ring-slate-300"
               />
             </div>
             <div>
               <div class="flex items-center space-x-3">
                 <h3 class="text-slate-700 font-bold text-md">
-                  {{ currentLiveChat.agent?.name }}
+                  {{ liveChat.agent?.name }}
                 </h3>
                 <span
                   class="text-xs font-medium bg-blue-200 text-blue-700 px-2 py-0.5 rounded-full"
@@ -103,13 +104,10 @@ onUpdated(() => {
           <!-- End Chat Button -->
           <div class="">
             <Link
-              v-if="
-                currentLiveChat.is_active === 1 &&
-                currentLiveChat.ended_at === null
-              "
+              v-if="liveChat.is_active === 1 && liveChat.ended_at === null"
               as="button"
               method="patch"
-              :href="route('service.live-chat.update', currentLiveChat.id)"
+              :href="route('service.live-chat.update', liveChat.id)"
               class="text-xs font-semibold px-3 py-2 rounded-[4px] bg-red-600 text-white"
             >
               End Chat
@@ -133,8 +131,8 @@ onUpdated(() => {
               </div>
               <div
                 v-if="
-                  message.user_id &&
-                  !message.agent_id &&
+                  !message.user_id &&
+                  message.agent_id &&
                   message.chat_file_attachments.length
                 "
               >
@@ -166,7 +164,7 @@ onUpdated(() => {
 
         <!-- Live Chat Message Form -->
         <UserLiveChatMessageForm
-          :liveChat="currentLiveChat"
+          :liveChat="liveChat"
           :messageToEdit="messageToEdit"
           @cancelEditMessage="cancelEditMessage"
           :messageToReply="messageToReply"
@@ -184,11 +182,11 @@ onUpdated(() => {
               View Previous Chat History
             </p>
 
-            <LastChatDiscussionInformationCard :liveChat="currentLiveChat" />
+            <LastChatDiscussionInformationCard :liveChat="liveChat" />
           </div> -->
 
   <!-- <p
-            v-if="!currentLiveChat.is_active && currentLiveChat.ended_at"
+            v-if="!liveChat.is_active && liveChat.ended_at"
             class="text-sm font-bold text-gray-500 w-full text-center mt-5"
           >
             {{ __("THE_CHAT_HAS_ENDED") }}
