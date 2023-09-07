@@ -33,7 +33,7 @@ const replyMessage = (message) => {
           />
 
           <div
-            class="p-3 bg-slate-50 border-2 border-slate-300 rounded-xl rounded-br-none shadow-md w-auto max-w-[500px] text-sm flex flex-col"
+            class="p-3 bg-gray-50 border-2 border-slate-300 rounded-xl rounded-br-none shadow-md w-auto max-w-[500px] text-sm flex flex-col"
           >
             <div v-if="message.reply_to_message_id">
               <div class="flex items-center text-xs text-slate-500">
@@ -75,7 +75,11 @@ const replyMessage = (message) => {
       </div>
     </div>
     <img
-      :src="message?.user?.avatar"
+      :src="
+        $page.url.startsWith('/admin/chats')
+          ? message?.agent?.avatar
+          : message?.user?.avatar
+      "
       class="w-8 h-8 object-cover rounded-full ring-2 ring-slate-300 ml-3"
     />
   </div>

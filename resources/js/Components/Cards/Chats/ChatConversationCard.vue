@@ -3,12 +3,12 @@ import DropdownToolsForChatConversationCard from "@/Components/Dropdowns/Chats/D
 
 defineProps({
   liveChat: Object,
+  lastMessage: Object,
 });
 </script>
 
 <template>
   <!-- Chat Card  -->
-
   <div
     v-if="liveChat"
     class="border rounded-md p-3 cursor-pointer transition-all"
@@ -34,16 +34,15 @@ defineProps({
             </div>
           </div>
           <!-- Send Text -->
-          <div class="w-full flex items-center">
-            <span class="text-[.6rem] w-auto mr-1 font-medium text-amber-700"
-              >Kyaw Kyaw :
+          <div v-if="lastMessage" class="w-full flex items-center">
+            <span class="text-[.6rem] w-auto mr-1 font-medium text-amber-700">
+              {{ lastMessage?.user_id ? lastMessage?.user?.name : "You" }} :
             </span>
 
-            <span class="text-[.7rem] text-slate-600 line-clamp-1 w-[200px]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corporis
-              eius cum eaque reprehenderit labore rerum possimus maiores
-              perferendis iusto! Autem voluptates cumque itaque quasi totam aut
-              quod veniam voluptas culpa.
+            <span
+              class="text-[.7rem] text-slate-600 line-clamp-1 w-auto min-w-[100px]"
+            >
+              {{ lastMessage.message }}
             </span>
           </div>
 

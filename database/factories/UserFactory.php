@@ -29,7 +29,7 @@ class UserFactory extends Factory
             'role'=>fake()->randomElement(["user","seller"]),
             'shop_name'=>fake()->jobTitle(),
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+            'password' => bcrypt("Password!"),
             'remember_token' => Str::random(10),
             "created_at"=>fake()->dateTimeBetween("-9 months", now()),
             "shop_name"=>fake()->sentence(),

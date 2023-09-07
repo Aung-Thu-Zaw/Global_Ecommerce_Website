@@ -50,8 +50,8 @@ const cancelReplyMessage = () => {
 onMounted(() => {
   initFlowbite();
 
-  Echo.private(`live-chat.message`).listen("LiveChatMessageSent", (message) => {
-    props.liveChatMessages.push(message);
+  Echo.private(`live-chat.message`).listen("LiveChatMessageSent", (data) => {
+    props.liveChatMessages.push(data.liveChatMessage);
   });
 });
 
@@ -129,6 +129,15 @@ onUpdated(() => {
                   @editMessage="setMessageToEdit"
                   @replyMessage="setMessageToReply"
                 />
+              </div>
+              <div
+                v-if="
+                  message.user_id &&
+                  !message.agent_id &&
+                  message.chat_file_attachments.length
+                "
+              >
+                <ReceiverFileMessageCard :message="message" />
               </div>
 
               <!-- Right Side For Sender  -->

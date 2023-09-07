@@ -7,6 +7,7 @@ import AgentLiveChatMessageForm from "@/Components/Forms/Chats/AgentLiveChatMess
 import { Head, useForm, Link, usePage } from "@inertiajs/vue3";
 import SenderTextMessageCard from "@/Components/Cards/Chats/SenderTextMessageCard.vue";
 import SenderFileMessageCard from "@/Components/Cards/Chats/SenderFileMessageCard.vue";
+import ReceiverFileMessageCard from "@/Components/Cards/Chats/ReceiverFileMessageCard.vue";
 import RecevierTextMessageCard from "@/Components/Cards/Chats/RecevierTextMessageCard.vue";
 import { computed, onMounted, onUpdated, ref } from "vue";
 
@@ -22,6 +23,19 @@ const handleSelectedChat = (chat) => {
   selectedLiveChat.value = chat;
 };
 
+const readMessage=()=>{
+    
+}
+
+const msgScroll = ref(null);
+// Auto Scroll To Bottom
+const scrollToBottom = () => {
+  msgScroll.value.scrollTop = msgScroll.value.scrollHeight;
+};
+onUpdated(() => {
+  scrollToBottom();
+});
+
 onMounted(() => {
   Echo.private(`new-live-chat.assignment`).listen(
     "NewLiveChatAssignment",
@@ -31,6 +45,10 @@ onMounted(() => {
         : console.log(data.liveChat);
     }
   );
+
+  Echo.private(`live-chat.message`).listen("LiveChatMessageSent", (data) => {
+    selectedLiveChat.value.live_chat_messages.push(data.liveChatMessage);
+  });
 });
 </script>
 
@@ -97,6 +115,11 @@ onMounted(() => {
                 <div v-for="liveChat in liveChats" :key="liveChat.id">
                   <ChatConversationCard
                     :liveChat="liveChat"
+                    :lastMessage="
+                      liveChat.live_chat_messages[
+                        liveChat.live_chat_messages.length - 1
+                      ]
+                    "
                     @click="handleSelectedChat(liveChat)"
                     :class="{
                       'border-slate-400 shadow-md bg-gray-200':
@@ -188,23 +211,15 @@ onMounted(() => {
           <!-- Message -->
           <div class="h-[720px] bg-white flex flex-col justify-end">
             <div class="overflow-auto scrollbar p-5 h-auto" ref="msgScroll">
-              <!-- <div v-for="message in currentLiveChatMessages" :key="message.id"> -->
-              <!-- Left Side For Recevier -->
-              <!-- <div
-                  v-if="message.agent_id && !message.user_id && message.message"
-                >
-                  <RecevierTextMessageCard
-                    :message="message"
-                    @editMessage="setMessageToEdit"
-                    @replyMessage="setMessageToReply"
-                  />
-                </div> -->
-
-              <!-- Right Side For Sender  -->
-              <!-- <div
+              <div
+                v-for="message in selectedLiveChat.live_chat_messages"
+                :key="message.id"
+              >
+                <!-- Left Side For Recevier -->
+                <div
                   v-if="message.user_id && !message.agent_id && message.message"
                 >
-                  <SenderTextMessageCard
+                  <RecevierTextMessageCard
                     :message="message"
                     @editMessage="setMessageToEdit"
                     @replyMessage="setMessageToReply"
@@ -217,13 +232,39 @@ onMounted(() => {
                     message.chat_file_attachments.length
                   "
                 >
+                  <ReceiverFileMessageCard :message="message" />
+                </div>
+
+                <!-- Right Side For Sender  -->
+                <div
+                  v-if="message.agent_id && !message.user_id && message.message"
+                >
+                  <SenderTextMessageCard
+                    :message="message"
+                    @editMessage="setMessageToEdit"
+                    @replyMessage="setMessageToReply"
+                  />
+                </div>
+                <div
+                  v-if="
+                    !message.user_id &&
+                    message.agent_id &&
+                    message.chat_file_attachments.length
+                  "
+                >
                   <SenderFileMessageCard :message="message" />
-                </div> -->
-              <!-- </div> -->
+                </div>
+              </div>
             </div>
           </div>
 
-          <AgentLiveChatMessageForm />
+          <AgentLiveChatMessageForm
+            :liveChat="selectedLiveChat"
+            :messageToEdit="messageToEdit"
+            @cancelEditMessage="cancelEditMessage"
+            :messageToReply="messageToReply"
+            @cancelReplyMessage="cancelReplyMessage"
+          />
         </div>
         <div
           v-else

@@ -13,9 +13,13 @@ class LiveChatMessageController extends Controller
 {
     public function store(LiveChatMessageRequest $request): void
     {
+
         $message = (new CreateLiveChatMessageAction())->handle($request->validated());
 
         if($message) {
+
+            $message->load(["chatFileAttachments","user:id,name,avatar","agent:id,name,avatar","replyToMessage"]);
+
             event(new LiveChatMessageSent($message));
         }
     }

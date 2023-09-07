@@ -21,7 +21,11 @@ const replyMessage = (message) => {
 <template>
   <div class="flex items-end mb-2">
     <img
-      :src="message?.agent?.avatar"
+      :src="
+        $page.url.startsWith('/admin/chats')
+          ? message?.user?.avatar
+          : message?.agent?.avatar
+      "
       class="w-8 h-8 object-cover rounded-full ring-2 ring-slate-300 mr-3"
     />
 
@@ -29,7 +33,7 @@ const replyMessage = (message) => {
       <div class="pr-28">
         <div class="flex items-center justify-start">
           <div
-            class="p-3 bg-slate-200 border-2 border-slate-300 rounded-xl rounded-bl-none shadow-md w-auto max-w-[500px] text-sm"
+            class="p-3 bg-gray-100 border-2 border-slate-300 rounded-xl rounded-bl-none shadow-md w-auto max-w-[500px] text-sm"
           >
             <div v-if="message.reply_to_message_id">
               <div class="flex items-center text-xs text-slate-500">
