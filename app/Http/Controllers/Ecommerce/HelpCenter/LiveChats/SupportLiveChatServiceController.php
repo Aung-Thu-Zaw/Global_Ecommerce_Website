@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Ecommerce\HelpCenter\LiveChats;
 
+use App\Events\NewLiveChatAssignment;
 use App\Http\Controllers\Controller;
 use App\Models\AgentStatus;
 use App\Models\LiveChat;
@@ -56,6 +57,20 @@ class SupportLiveChatServiceController extends Controller
 
         if ($availableAgent) {
             $liveChat->update(["agent_id" => $availableAgent->agent_id,"is_active" => true]);
+
+            $agentStatus = AgentStatus::where("agent_id", $availableAgent->agent_id)->first();
+
+            if($agentStatus) {
+
+                $agentStatus->update([
+                    "current_chat_count" => $agentStatus->current_chat_count + 1,
+                    "chat_status" => $agentStatus->max_chat_capacity > $agentStatus->current_chat_count + 1 ? "avaliable" : "busy"
+            ]);
+            }
+
+            $liveChat->load(["user:id,name,avatar","agent:id,name,avatar"]);
+
+            event(new NewLiveChatAssignment($liveChat));
         }
 
         return to_route("service.live-chat.index");
@@ -67,6 +82,17 @@ class SupportLiveChatServiceController extends Controller
             "is_active" => false,
             "ended_at" => now()
         ]);
+
+        $agentStatus = AgentStatus::where("agent_id", $liveChat->agent_id)->first();
+
+        if($agentStatus) {
+
+
+            $agentStatus->update([
+                "current_chat_count" => $agentStatus->current_chat_count - 1,
+                "chat_status" => $agentStatus->max_chat_capacity > $agentStatus->current_chat_count - 1 ? "avaliable" : "busy"
+        ]);
+        }
 
         return to_route("home");
     }

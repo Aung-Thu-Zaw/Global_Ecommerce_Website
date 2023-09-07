@@ -14,8 +14,8 @@ class AdminChatController extends Controller
     {
 
         $liveChats = LiveChat::with(["user:id,name,avatar","agent:id,name,avatar"])
-        ->where("agent_id", auth()->id())->get();
-
+                             ->where("agent_id", auth()->id())
+                             ->get();
 
         return inertia("Admin/ContactServices/Chats/Index", compact("liveChats"));
     }

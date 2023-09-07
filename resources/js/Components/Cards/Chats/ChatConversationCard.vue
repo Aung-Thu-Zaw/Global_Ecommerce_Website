@@ -8,9 +8,10 @@ defineProps({
 
 <template>
   <!-- Chat Card  -->
+
   <div
     v-if="liveChat"
-    class="border border-slate-200 rounded-md p-3 bg-white cursor-pointer hover:bg-gray-50 transition-all"
+    class="border rounded-md p-3 cursor-pointer transition-all"
   >
     <div class="flex items-center">
       <div class="flex items-center w-full">

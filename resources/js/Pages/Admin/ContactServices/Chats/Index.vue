@@ -4,13 +4,13 @@ import ChatConversationCard from "@/Components/Cards/Chats/ChatConversationCard.
 import AdminDashboardChatSidebarButtons from "@/Components/Sidebars/AdminDashboardChatSidebarButtons.vue";
 import AdminDashboardLiveChatBoxHeader from "@/Components/Headers/AdminDashboardLiveChatBoxHeader.vue";
 import AgentLiveChatMessageForm from "@/Components/Forms/Chats/AgentLiveChatMessageForm.vue";
-import { Head, useForm, Link } from "@inertiajs/vue3";
+import { Head, useForm, Link, usePage } from "@inertiajs/vue3";
 import SenderTextMessageCard from "@/Components/Cards/Chats/SenderTextMessageCard.vue";
 import SenderFileMessageCard from "@/Components/Cards/Chats/SenderFileMessageCard.vue";
 import RecevierTextMessageCard from "@/Components/Cards/Chats/RecevierTextMessageCard.vue";
 import { computed, onMounted, onUpdated, ref } from "vue";
 
-defineProps({
+const props = defineProps({
   liveChats: Object,
 });
 
@@ -21,6 +21,17 @@ const selectedLiveChat = ref(null);
 const handleSelectedChat = (chat) => {
   selectedLiveChat.value = chat;
 };
+
+onMounted(() => {
+  Echo.private(`new-live-chat.assignment`).listen(
+    "NewLiveChatAssignment",
+    (data) => {
+      data.liveChat.agent_id === usePage().props.auth.user?.id
+        ? props.liveChats.push(data.liveChat)
+        : console.log(data.liveChat);
+    }
+  );
+});
 </script>
 
 <template>
@@ -50,7 +61,7 @@ const handleSelectedChat = (chat) => {
             <!-- Sidebar  -->
             <AdminDashboardChatSidebarButtons />
 
-            <div class="w-full">
+            <div v-if="liveChats.length" class="w-full">
               <ul
                 class="flex items-center justify-between text-sm font-medium text-center text-gray-500 w-full p-2"
               >
@@ -87,9 +98,20 @@ const handleSelectedChat = (chat) => {
                   <ChatConversationCard
                     :liveChat="liveChat"
                     @click="handleSelectedChat(liveChat)"
+                    :class="{
+                      'border-slate-400 shadow-md bg-gray-200':
+                        selectedLiveChat?.id === liveChat?.id,
+                      'border-slate-200 bg-white hover:bg-gray-100':
+                        selectedLiveChat?.id !== liveChat?.id,
+                    }"
                   />
                 </div>
               </div>
+            </div>
+            <div v-else class="w-full flex items-center justify-center h-full">
+              <p class="font-semibold text-slate-500 text-sm">
+                {{ __("YOU_DONT_HAVE_ANY_CHAT_CONVERSATIONS") }}
+              </p>
             </div>
           </div>
         </div>

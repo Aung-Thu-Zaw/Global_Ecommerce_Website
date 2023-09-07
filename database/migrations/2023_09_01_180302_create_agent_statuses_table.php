@@ -16,7 +16,7 @@ return new class () extends Migration {
             $table->id();
             $table->foreignId('agent_id')->constrained('users');
             $table->enum('online_status', ['online','offline']);
-            $table->enum('chat_status', ['avaliable','busy','unavailable','away']);
+            $table->enum('chat_status', ['avaliable','busy','unavailable']);
             $table->integer('current_chat_count');
             $table->integer('max_chat_capacity');
             $table->timestamps();

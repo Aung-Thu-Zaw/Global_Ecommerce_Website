@@ -26,3 +26,7 @@ Broadcast::channel('chat.message', function ($user) {
 Broadcast::channel('live-chat.message', function ($user) {
     return Auth::check();
 });
+
+Broadcast::channel('new-live-chat.assignment', function ($user) {
+    return Auth::check();
+});
