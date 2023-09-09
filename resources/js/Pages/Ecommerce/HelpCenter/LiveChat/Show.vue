@@ -8,7 +8,7 @@ import OnlineStatus from "@/Components/Status/OnlineStatus.vue";
 import OfflineStatus from "@/Components/Status/OfflineStatus.vue";
 import BusyStatus from "@/Components/Status/BusyStatus.vue";
 import { Head, Link, usePage } from "@inertiajs/vue3";
-import { computed, onMounted, onUpdated, ref } from "vue";
+import { computed, onMounted, onUpdated, ref, watch } from "vue";
 import { initFlowbite } from "flowbite";
 
 const props = defineProps({
@@ -17,13 +17,18 @@ const props = defineProps({
 
 const messages = ref(props.liveChat.live_chat_messages);
 
+const isNewMessageSent = ref(false);
+
 // Define Variables
 const msgScroll = ref(null);
 const messageToReply = ref(null);
 
 // Auto Scroll To Bottom
 const scrollToBottom = () => {
-  msgScroll.value.scrollTop = msgScroll.value.scrollHeight;
+  if (isNewMessageSent.value) {
+    msgScroll.value.scrollTop = msgScroll.value.scrollHeight;
+    isNewMessageSent.value = false;
+  }
 };
 
 const setMessageToReply = (message) => {
@@ -40,6 +45,7 @@ onMounted(() => {
   Echo.private(`live-chat.message`).listen("LiveChatMessageSent", (data) => {
     if (data.liveChatMessage.live_chat_id === props.liveChat.id)
       messages.value.push(data.liveChatMessage);
+    isNewMessageSent.value = true;
   });
 
   Echo.private(`live-chat.message`).listen("LiveChatMessageDeleted", (data) => {
@@ -121,14 +127,20 @@ onUpdated(() => {
 
         <!-- Chat Message Box -->
         <div class="h-[700px] bg-white flex flex-col justify-end">
-          <div class="overflow-auto scrollbar p-5 h-auto" ref="msgScroll">
-            <div v-for="message in messages" :key="message.id">
+          <div class="overflow-auto scrollbar h-auto" ref="msgScroll">
+            <div
+              v-for="message in messages"
+              :key="message.id"
+              :id="'message-' + message.id"
+              class="px-5 py-2"
+            >
               <!-- Left Side For Recevier -->
               <div
                 v-if="message.agent_id && !message.user_id && message.message"
               >
                 <RecevierTextMessageCard
                   :message="message"
+                  :msgScroll="msgScroll"
                   @replyMessage="setMessageToReply"
                 />
               </div>
@@ -148,6 +160,7 @@ onUpdated(() => {
               >
                 <SenderTextMessageCard
                   :message="message"
+                  :msgScroll="msgScroll"
                   @replyMessage="setMessageToReply"
                 />
               </div>

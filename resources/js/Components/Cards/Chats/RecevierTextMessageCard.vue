@@ -4,6 +4,7 @@ import { computed, ref } from "vue";
 
 const props = defineProps({
   message: Object,
+  msgScroll: Object,
 });
 
 const emits = defineEmits(["replyMessage"]);
@@ -11,8 +12,23 @@ const emits = defineEmits(["replyMessage"]);
 const replyMessage = (message) => {
   emits("replyMessage", message);
 };
-</script>
 
+const scrollToOriginalMessage = (messageId) => {
+  const originalMessageElement = props.msgScroll.querySelector(
+    `#message-${messageId}`
+  );
+
+  if (originalMessageElement) {
+    originalMessageElement.style.backgroundColor = "#f3f4f6ff";
+
+    originalMessageElement.scrollIntoView({ behavior: "smooth" });
+
+    setTimeout(() => {
+      originalMessageElement.style.backgroundColor = "transparent";
+    }, 3000);
+  }
+};
+</script>
 
 <template>
   <div
@@ -21,7 +37,7 @@ const replyMessage = (message) => {
         ? !message.is_deleted_by_agent
         : !message.is_deleted_by_user
     "
-    class="flex items-end mb-2"
+    class="flex items-end"
   >
     <img
       :src="
@@ -36,9 +52,11 @@ const replyMessage = (message) => {
       <div class="pr-28">
         <div class="flex items-center justify-start">
           <div
-            class="p-3 bg-gray-100 border-2 border-slate-300 rounded-xl rounded-bl-none shadow-md w-auto max-w-[500px] text-sm"
+            v-if="message.reply_to_message_id"
+            @click="scrollToOriginalMessage(message.reply_to_message_id)"
+            class="p-3 border-2 bg-gray-100 border-slate-300 rounded-xl rounded-bl-none shadow-md w-auto max-w-[500px] text-sm cursor-pointer"
           >
-            <div v-if="message.reply_to_message_id">
+            <div>
               <div class="flex items-center text-xs text-slate-500">
                 <i class="fa-solid fa-reply mr-2"></i>
 
@@ -47,6 +65,15 @@ const replyMessage = (message) => {
                 </p>
               </div>
             </div>
+            <p>
+              {{ message.message }}
+            </p>
+          </div>
+
+          <div
+            v-else
+            class="p-3 border-2 bg-gray-100 border-slate-300 rounded-xl rounded-bl-none shadow-md w-auto max-w-[500px] text-sm"
+          >
             <p>
               {{ message.message }}
             </p>

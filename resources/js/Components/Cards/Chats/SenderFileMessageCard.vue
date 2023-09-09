@@ -30,7 +30,7 @@ const filteredFilename = (attachmentPath) => {
           ? !message.is_deleted_by_agent
           : !message.is_deleted_by_user
       "
-      class="flex items-end justify-end mb-2"
+      class="flex items-end justify-end"
     >
       <div class="flex items-center justify-end">
         <div class="pl-28">

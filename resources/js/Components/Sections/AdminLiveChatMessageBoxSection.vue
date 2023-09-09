@@ -6,20 +6,22 @@ import SenderTextMessageCard from "@/Components/Cards/Chats/SenderTextMessageCar
 import SenderFileMessageCard from "@/Components/Cards/Chats/SenderFileMessageCard.vue";
 import ReceiverFileMessageCard from "@/Components/Cards/Chats/ReceiverFileMessageCard.vue";
 import RecevierTextMessageCard from "@/Components/Cards/Chats/RecevierTextMessageCard.vue";
-import { onMounted, onUpdated, ref } from "vue";
+import { onMounted, onUpdated, ref, watch } from "vue";
 import { usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
   selectedLiveChat: Object,
 });
 
-const readMessage = () => {};
-
 const msgScroll = ref(null);
 const messageToReply = ref(null);
+const isNewMessageSent = ref(false);
 // Auto Scroll To Bottom
 const scrollToBottom = () => {
-  msgScroll.value.scrollTop = msgScroll.value.scrollHeight;
+  if (isNewMessageSent.value) {
+    msgScroll.value.scrollTop = msgScroll.value.scrollHeight;
+    isNewMessageSent.value = false;
+  }
 };
 onUpdated(() => {
   scrollToBottom();
@@ -37,6 +39,7 @@ onMounted(() => {
   Echo.private(`live-chat.message`).listen("LiveChatMessageSent", (data) => {
     if (props.selectedLiveChat.id === data.liveChatMessage.live_chat_id) {
       props.selectedLiveChat.live_chat_messages.push(data.liveChatMessage);
+      isNewMessageSent.value = true;
     }
   });
 
@@ -132,7 +135,7 @@ onMounted(() => {
 
     <!-- Message -->
     <div class="h-[810px] bg-white flex flex-col justify-end">
-      <div class="overflow-auto scrollbar p-5 h-auto" ref="msgScroll">
+      <div class="overflow-auto scrollbar h-auto" ref="msgScroll">
         <LastChatDiscussionInformationCard
           v-if="!selectedLiveChat.is_active && selectedLiveChat.ended_at"
           :liveChat="selectedLiveChat"
@@ -140,11 +143,14 @@ onMounted(() => {
         <div
           v-for="message in selectedLiveChat?.live_chat_messages"
           :key="message.id"
+          :id="'message-' + message.id"
+          class="px-5 py-2"
         >
           <!-- Left Side For Recevier -->
           <div v-if="message.user_id && !message.agent_id && message.message">
             <RecevierTextMessageCard
               :message="message"
+              :msgScroll="msgScroll"
               @editMessage="setMessageToEdit"
               @replyMessage="setMessageToReply"
             />
@@ -163,6 +169,7 @@ onMounted(() => {
           <div v-if="message.agent_id && !message.user_id && message.message">
             <SenderTextMessageCard
               :message="message"
+              :msgScroll="msgScroll"
               @editMessage="setMessageToEdit"
               @replyMessage="setMessageToReply"
             />
