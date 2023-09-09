@@ -15,6 +15,7 @@ const props = defineProps({
 const readMessage = () => {};
 
 const msgScroll = ref(null);
+const messageToReply = ref(null);
 // Auto Scroll To Bottom
 const scrollToBottom = () => {
   msgScroll.value.scrollTop = msgScroll.value.scrollHeight;
@@ -22,6 +23,14 @@ const scrollToBottom = () => {
 onUpdated(() => {
   scrollToBottom();
 });
+
+const setMessageToReply = (message) => {
+  messageToReply.value = message;
+};
+
+const cancelReplyMessage = () => {
+  messageToReply.value = null;
+};
 
 onMounted(() => {
   Echo.private(`live-chat.message`).listen("LiveChatMessageSent", (data) => {
@@ -33,7 +42,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="selectedLiveChat" class="w-full h-full">
+  <div v-if="selectedLiveChat" class="w-full h-full overflow-hidden">
     <!-- Header -->
     <AdminDashboardLiveChatBoxHeader :liveChat="selectedLiveChat" />
 
@@ -103,7 +112,7 @@ onMounted(() => {
     </div>
 
     <!-- Message -->
-    <div class="h-[720px] bg-white flex flex-col justify-end">
+    <div class="h-[810px] bg-white flex flex-col justify-end">
       <div class="overflow-auto scrollbar p-5 h-auto" ref="msgScroll">
         <LastChatDiscussionInformationCard
           v-if="!selectedLiveChat.is_active && selectedLiveChat.ended_at"
@@ -157,14 +166,14 @@ onMounted(() => {
           {{ __("THE_CHAT_HAS_ENDED") }}
         </p>
       </div>
-    </div>
 
-    <AgentLiveChatMessageForm
-      :liveChat="selectedLiveChat"
-      :messageToEdit="messageToEdit"
-      @cancelEditMessage="cancelEditMessage"
-      :messageToReply="messageToReply"
-      @cancelReplyMessage="cancelReplyMessage"
-    />
+      <AgentLiveChatMessageForm
+        :liveChat="selectedLiveChat"
+        :messageToEdit="messageToEdit"
+        @cancelEditMessage="cancelEditMessage"
+        :messageToReply="messageToReply"
+        @cancelReplyMessage="cancelReplyMessage"
+      />
+    </div>
   </div>
 </template>

@@ -21,13 +21,6 @@ const cancelReplyMessage = () => {
 };
 
 watch(
-  () => props.messageToEdit,
-  (newMessageToEdit) => {
-    form.message = newMessageToEdit?.message || null;
-  }
-);
-
-watch(
   () => props.messageToReply,
   (newMessageToReply) => {
     form.reply_to_message_id = newMessageToReply?.id || null;

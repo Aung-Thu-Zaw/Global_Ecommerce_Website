@@ -56,7 +56,13 @@ const handleDeleteMessageForBoth = () => {
     <button
       id="messageDropdown"
       :data-dropdown-toggle="'messageDropdownDots' + message.id"
-      :data-dropdown-placement="message.user_id ? 'left-start' : 'right-start'"
+      :data-dropdown-placement="
+        ($page.url.startsWith('/support-service/live-chats') &&
+          message.user_id) ||
+        ($page.url.startsWith('/admin/live-chats') && message.agent_id)
+          ? 'left-start'
+          : 'right-start'
+      "
       type="button"
       class="p-2"
     >

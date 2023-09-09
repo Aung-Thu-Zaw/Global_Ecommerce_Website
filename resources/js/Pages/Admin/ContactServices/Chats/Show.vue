@@ -32,9 +32,11 @@ onMounted(() => {
 <template>
   <AdminDashboardLayout>
     <Head :title="__('CHATS')" />
-    <div class="w-full h-[960px] pt-[79px] overflow-hidden">
+    <div class="w-full h-screen pt-[79px]">
       <div class="w-full h-full flex items-center">
-        <div class="w-[600px] h-full border-r-2 border-r-slate-300">
+        <div
+          class="w-[600px] h-full border-r-2 border-r-slate-300 overflow-hidden"
+        >
           <!-- Form -->
           <ChatConversationCardSearchForm
             :selectedLiveChat="selectedLiveChat"
