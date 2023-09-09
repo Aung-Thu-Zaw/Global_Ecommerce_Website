@@ -7,7 +7,7 @@ import ReceiverFileMessageCard from "@/Components/Cards/Chats/ReceiverFileMessag
 import OnlineStatus from "@/Components/Status/OnlineStatus.vue";
 import OfflineStatus from "@/Components/Status/OfflineStatus.vue";
 import BusyStatus from "@/Components/Status/BusyStatus.vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, usePage } from "@inertiajs/vue3";
 import { computed, onMounted, onUpdated, ref } from "vue";
 import { initFlowbite } from "flowbite";
 
@@ -40,6 +40,24 @@ onMounted(() => {
   Echo.private(`live-chat.message`).listen("LiveChatMessageSent", (data) => {
     if (data.liveChatMessage.live_chat_id === props.liveChat.id)
       messages.value.push(data.liveChatMessage);
+  });
+
+  Echo.private(`live-chat.message`).listen("LiveChatMessageDeleted", (data) => {
+    if (data.liveChatMessage.live_chat_id === props.liveChat.id) {
+      console.log(data.liveChatMessage);
+      const index = messages.value.findIndex(
+        (message) => message.id === data.liveChatMessage.id
+      );
+
+      if (
+        (index !== -1 && data.liveChatMessage.is_deleted_by_user) ||
+        (index !== -1 &&
+          data.liveChatMessage.is_deleted_by_user === 0 &&
+          data.liveChatMessage.is_deleted_by_agent === 0)
+      ) {
+        messages.value.splice(index, 1);
+      }
+    }
   });
 });
 

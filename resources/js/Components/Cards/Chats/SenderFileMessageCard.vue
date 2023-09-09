@@ -25,7 +25,11 @@ const filteredFilename = (attachmentPath) => {
   <!-- Right Side  -->
   <div>
     <div
-      v-if="!message.is_deleted_by_user"
+      v-if="
+        $page.url.startsWith('/admin/live-chats')
+          ? !message.is_deleted_by_agent
+          : !message.is_deleted_by_user
+      "
       class="flex items-end justify-end mb-2"
     >
       <div class="flex items-center justify-end">

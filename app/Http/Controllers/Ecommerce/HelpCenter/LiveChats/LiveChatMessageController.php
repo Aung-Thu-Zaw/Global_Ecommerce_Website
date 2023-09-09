@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ecommerce\HelpCenter\LiveChats;
 
 use App\Actions\Ecommerce\LiveChats\CreateLiveChatMessageAction;
+use App\Events\LiveChatMessageDeleted;
 use App\Events\LiveChatMessageSent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LiveChatMessageRequest;
@@ -32,11 +33,15 @@ class LiveChatMessageController extends Controller
             "is_deleted_by_user" => $request->is_deleted_by_user,
             "is_deleted_by_agent" => $request->is_deleted_by_agent
         ]);
+
+        event(new LiveChatMessageDeleted($liveChatMessage));
     }
 
     public function destroy(int $liveChatMessageId): void
     {
         $liveChatMessage = LiveChatMessage::findOrFail($liveChatMessageId);
+
+        event(new LiveChatMessageDeleted($liveChatMessage));
 
         $liveChatMessage->delete();
     }

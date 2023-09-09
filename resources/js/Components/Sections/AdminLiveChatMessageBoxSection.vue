@@ -7,6 +7,7 @@ import SenderFileMessageCard from "@/Components/Cards/Chats/SenderFileMessageCar
 import ReceiverFileMessageCard from "@/Components/Cards/Chats/ReceiverFileMessageCard.vue";
 import RecevierTextMessageCard from "@/Components/Cards/Chats/RecevierTextMessageCard.vue";
 import { onMounted, onUpdated, ref } from "vue";
+import { usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
   selectedLiveChat: Object,
@@ -36,6 +37,24 @@ onMounted(() => {
   Echo.private(`live-chat.message`).listen("LiveChatMessageSent", (data) => {
     if (props.selectedLiveChat.id === data.liveChatMessage.live_chat_id) {
       props.selectedLiveChat.live_chat_messages.push(data.liveChatMessage);
+    }
+  });
+
+  Echo.private(`live-chat.message`).listen("LiveChatMessageDeleted", (data) => {
+    if (props.selectedLiveChat.id === data.liveChatMessage.live_chat_id) {
+      console.log(data.liveChatMessage);
+      const index = props.selectedLiveChat.live_chat_messages.findIndex(
+        (message) => message.id === data.liveChatMessage.id
+      );
+
+      if (
+        (index !== -1 && data.liveChatMessage.is_deleted_by_agent) ||
+        (index !== -1 &&
+          data.liveChatMessage.is_deleted_by_user === 0 &&
+          data.liveChatMessage.is_deleted_by_agent === 0)
+      ) {
+        props.selectedLiveChat.live_chat_messages.splice(index, 1);
+      }
     }
   });
 });

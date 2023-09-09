@@ -15,7 +15,14 @@ const replyMessage = (message) => {
 
 
 <template>
-  <div class="flex items-end mb-2">
+  <div
+    v-if="
+      $page.url.startsWith('/admin/live-chats')
+        ? !message.is_deleted_by_agent
+        : !message.is_deleted_by_user
+    "
+    class="flex items-end mb-2"
+  >
     <img
       :src="
         $page.url.startsWith('/admin/live-chats')

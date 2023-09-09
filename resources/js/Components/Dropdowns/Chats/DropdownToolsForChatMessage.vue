@@ -9,11 +9,7 @@ const props = defineProps({
   message: Object,
 });
 
-const emits = defineEmits(["editMessage", "replyMessage"]);
-
-const startEditing = () => {
-  emits("editMessage", props.message);
-};
+const emits = defineEmits(["replyMessage"]);
 
 const startReply = () => {
   emits("replyMessage", props.message);
@@ -39,15 +35,26 @@ const copyMessage = () => {
   }
 };
 
-const handleDeleteMessageForMyself = () => {
-  router.patch(route("live-chat.message.delete-for-myself", props.message.id), {
-    is_deleted_by_user: props.message.user_id ? 1 : 0,
-    is_deleted_by_agent: props.message.agent_id ? 1 : 0,
-  });
+const handleDeleteMessageForMyself = (
+  deletedByAgent = 0,
+  deletedByUser = 0
+) => {
+  router.patch(
+    route("live-chat.message.delete-for-myself", props.message.id),
+    {
+      is_deleted_by_user: deletedByUser,
+      is_deleted_by_agent: deletedByAgent,
+    },
+    {
+      preserveScroll: true,
+    }
+  );
 };
 
 const handleDeleteMessageForBoth = () => {
-  router.delete(route("live-chat.message.destroy", props.message.id));
+  router.delete(route("live-chat.message.destroy", props.message.id), {
+    preserveScroll: true,
+  });
 };
 </script>
 
@@ -130,6 +137,17 @@ const handleDeleteMessageForBoth = () => {
               message.agent_id !== $page.props.auth.user.id)
           " -->
         <li
+          @click="
+            handleDeleteMessageForMyself(
+              $page.url.startsWith('/admin/live-chats') && !message.agent_id
+                ? 1
+                : 0,
+              $page.url.startsWith('/support-service/live-chats') &&
+                !message.user_id
+                ? 1
+                : 0
+            )
+          "
           v-if="
             ($page.props.auth.user &&
               $page.url.startsWith('/admin/live-chats') &&
@@ -158,7 +176,17 @@ const handleDeleteMessageForBoth = () => {
           "
         >
           <div
-            @click="handleDeleteMessageForMyself"
+            @click="
+              handleDeleteMessageForMyself(
+                $page.url.startsWith('/admin/live-chats') && message.agent_id
+                  ? 1
+                  : 0,
+                $page.url.startsWith('/support-service/live-chats') &&
+                  message.user_id
+                  ? 1
+                  : 0
+              )
+            "
             class="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
           >
             <i class="fa-solid fa-trash mr-1"></i>
