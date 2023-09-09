@@ -25,9 +25,9 @@ onUpdated(() => {
 
 onMounted(() => {
   Echo.private(`live-chat.message`).listen("LiveChatMessageSent", (data) => {
-    props.selectedLiveChat
-      ? props.selectedLiveChat.live_chat_messages.push(data.liveChatMessage)
-      : console.log(data.liveChatMessage);
+    if (props.selectedLiveChat.id === data.liveChatMessage.live_chat_id) {
+      props.selectedLiveChat.live_chat_messages.push(data.liveChatMessage);
+    }
   });
 });
 </script>

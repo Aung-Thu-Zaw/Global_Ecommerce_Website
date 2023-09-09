@@ -63,7 +63,11 @@ onMounted(() => {
                     >
                       <ChatConversationCard
                         :liveChat="liveChat"
-                        class="border-slate-200 bg-white hover:bg-gray-100"
+                        class="border-slate-200 hover:bg-gray-50"
+                        :class="{
+                          'border-slate-400 bg-gray-100 shadow-md':
+                            selectedLiveChat.id === liveChat.id,
+                        }"
                       />
                     </div>
                   </div>
