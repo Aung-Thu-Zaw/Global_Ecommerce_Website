@@ -22,7 +22,7 @@ const replyMessage = (message) => {
   <div class="flex items-end mb-2">
     <img
       :src="
-        $page.url.startsWith('/admin/chats')
+        $page.url.startsWith('/admin/live-chats')
           ? message?.user?.avatar
           : message?.agent?.avatar
       "

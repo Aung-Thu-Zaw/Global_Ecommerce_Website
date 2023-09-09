@@ -517,7 +517,7 @@ const filteredFilename = (attachmentPath) => {
       </div>
       <img
         :src="
-          $page.url.startsWith('/admin/chats')
+          $page.url.startsWith('/admin/live-chats')
             ? message?.agent?.avatar
             : message?.user?.avatar
         "

@@ -1420,13 +1420,16 @@
           <!-- Chats Section -->
           <li v-if="chatMenu" class="items-center">
             <Link
-              :href="route('admin.chats.index')"
+              :href="route('admin.live-chats.index')"
               class="text-xs uppercase py-3 font-bold block"
+              :data="{
+                tab: 'all-chats',
+              }"
               :class="{
                 'text-blue-500 hover:text-blue-600':
-                  $page.url.startsWith('/admin/chats'),
+                  $page.url.startsWith('/admin/live-chats'),
                 'text-slate-700 hover:text-slate-500':
-                  !$page.url.startsWith('/admin/chats'),
+                  !$page.url.startsWith('/admin/live-chats'),
               }"
             >
               <i class="fa-solid fa-comment mr-2 text-sm"></i>

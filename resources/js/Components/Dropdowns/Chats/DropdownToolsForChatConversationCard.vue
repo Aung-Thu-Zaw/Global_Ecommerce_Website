@@ -47,13 +47,6 @@ defineProps({
             {{ __("PIN") }}
           </div>
         </li>
-
-        <li>
-          <div class="block px-4 py-2 hover:bg-gray-100">
-            <i class="fa-solid fa-envelope-circle-check mr-1"></i>
-            {{ __("MARK_AS_READ") }}
-          </div>
-        </li>
         <li>
           <div class="block px-4 py-2 hover:bg-gray-100">
             <i class="fa-solid fa-eye mr-1"></i>

@@ -14,7 +14,6 @@ return new class () extends Migration {
     {
         Schema::create('chat_folders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("live_chat_id")->nullable();
             $table->string("name");
             $table->timestamps();
         });

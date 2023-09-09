@@ -315,7 +315,10 @@ const updateMessage = () => {
   <!-- File Preview Message Form Box End  -->
 
   <!-- Main Message Form -->
-  <div class="relative z-40 w-full bg-white border-t shadow px-5 py-6">
+  <div
+    v-if="liveChat.is_active === 1 && !liveChat.ended_at"
+    class="relative z-40 w-full bg-white border-t shadow px-5 py-6"
+  >
     <!-- Edit Mesage -->
     <div v-if="messageToEdit" class="mb-5 text-xs flex flex-col items-start">
       <div class="flex items-center font-bold text-blue-600 mb-2">

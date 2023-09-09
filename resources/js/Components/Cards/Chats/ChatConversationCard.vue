@@ -1,15 +1,37 @@
 <script setup>
 import DropdownToolsForChatConversationCard from "@/Components/Dropdowns/Chats/DropdownToolsForChatConversationCard.vue";
-import { computed } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 
 const props = defineProps({
   liveChat: Object,
-  lastMessage: Object,
 });
 
-// const lastMessage = computed(() => {
-//   return
+// const filteredMessages = computed(() => {
+//   if (props.liveChat.live_chat_messages) {
+//     return props.liveChat.live_chat_messages.filter((message) => {
+//       return props.liveChat.id === message.live_chat_id;
+//     });
+//   }
 // });
+
+// const lastMessage = computed(
+//   () => filteredMessages.value[filteredMessages.value.length - 1]
+// );
+
+// const lastMessage = computed(
+//   () =>
+//     props.liveChat.live_chat_messages[
+//       props.liveChat.live_chat_messages.length - 1
+//     ]
+// );
+
+const lastMessage = ref(null);
+
+onMounted(() => {
+  Echo.private(`live-chat.message`).listen("LiveChatMessageSent", (data) => {
+    lastMessage.value = data.liveChatMessage;
+  });
+});
 </script>
 
 <template>
@@ -21,9 +43,9 @@ const props = defineProps({
       'border-l-4 border-r-4 border-l-red-600 border-r-red-600':
         liveChat.ended_at,
       'border-l-4 border-r-4 border-l-sky-600 border-r-sky-600':
-        !liveChat.ended_at && !liveChat.live_chat_messages.length,
+        !liveChat.ended_at && !liveChat.live_chat_messages?.length,
       'border-l-4 border-r-4 border-l-green-500 border-r-green-500':
-        !liveChat.ended_at && liveChat.live_chat_messages.length,
+        !liveChat.ended_at && liveChat.live_chat_messages?.length,
     }"
   >
     <div class="flex items-center">
@@ -48,7 +70,10 @@ const props = defineProps({
             </div>
           </div>
           <!-- Send Text -->
-          <div v-if="lastMessage" class="w-full flex items-center">
+          <div
+            v-if="lastMessage.live_chat_id === liveChat.id"
+            class="w-full flex items-center"
+          >
             <span class="text-[.6rem] w-auto mr-1 font-medium text-amber-700">
               {{ lastMessage?.user_id ? lastMessage?.user?.name : "You" }} :
             </span>
@@ -60,7 +85,7 @@ const props = defineProps({
                 lastMessage.message
                   ? lastMessage.message
                   : "Send " +
-                    lastMessage.chat_file_attachments.length +
+                    lastMessage.chat_file_attachments?.length +
                     " File(s)"
               }}
             </span>

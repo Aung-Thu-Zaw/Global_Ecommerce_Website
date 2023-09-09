@@ -672,7 +672,15 @@ Route::middleware(["admin","verified","user.role:admin"])
            // ******************** Admin Dashboard SupportContactService ********************
 
            // Admin Chats Section
-           Route::get("/chats", [AdminChatController::class,"index"])->name("chats.index");
+
+           Route::controller(AdminChatController::class)
+           ->prefix("/live-chats")
+           ->name("live-chats.")
+           ->group(function () {
+               Route::get("/", "index")->name("index");
+               Route::patch("/", "update")->name("update");
+
+           });
 
            // ******************** Admin Dashboard From The Submitters ********************
 
