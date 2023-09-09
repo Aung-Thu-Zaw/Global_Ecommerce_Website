@@ -118,20 +118,23 @@ const handleDeleteMessageForBoth = () => {
             {{ __("DOWNLOAD") }}
           </div>
         </li>
+        <!-- v-if="
+            $page.props.auth.user &&
+            (message.user_id !== $page.props.auth.user.id ||
+              message.agent_id !== $page.props.auth.user.id)
+          " -->
         <li
           v-if="
-            message.message &&
-            $page.props.auth.user &&
-            (message.user_id === $page.props.auth.user.id ||
-              message.agent_id === $page.props.auth.user.id)
+            ($page.props.auth.user &&
+              $page.url.startsWith('/admin/live-chats') &&
+              $page.props.auth.user.id !== message.agent_id) ||
+            ($page.url.startsWith('/support-service/live-chats') &&
+              $page.props.auth.user.id !== message.user_id)
           "
         >
-          <div
-            @click="startEditing"
-            class="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
-          >
-            <i class="fa-solid fa-edit mr-1"></i>
-            {{ __("EDIT") }}
+          <div class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
+            <i class="fa-solid fa-trash-can mr-1"></i>
+            {{ __("DELETE") }}
           </div>
         </li>
         <hr

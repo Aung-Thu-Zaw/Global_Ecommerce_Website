@@ -24,16 +24,6 @@ class LiveChatMessageController extends Controller
         }
     }
 
-    public function update(LiveChatMessageRequest $request, int $liveChatMessageId): void
-    {
-        $liveChatMessage = LiveChatMessage::findOrFail($liveChatMessageId);
-
-        $liveChatMessage->update([
-            "message" => $request->message,
-            "is_edited" => true
-        ]);
-    }
-
     public function deleteMessageForMyself(Request $request, int $liveChatMessageId): void
     {
         $liveChatMessage = LiveChatMessage::findOrFail($liveChatMessageId);

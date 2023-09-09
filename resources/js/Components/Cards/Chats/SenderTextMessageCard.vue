@@ -6,11 +6,7 @@ const props = defineProps({
   message: Object,
 });
 
-const emits = defineEmits(["editMessage", "replyMessage"]);
-
-const editMessage = (message) => {
-  emits("editMessage", message);
-};
+const emits = defineEmits(["replyMessage"]);
 
 const replyMessage = (message) => {
   emits("replyMessage", message);
@@ -28,7 +24,6 @@ const replyMessage = (message) => {
         <div class="flex items-center justify-end">
           <DropdownToolForChatMessage
             :message="message"
-            @editMessage="editMessage"
             @replyMessage="replyMessage"
           />
 
@@ -52,9 +47,6 @@ const replyMessage = (message) => {
         <div
           class="mt-1 text-[.6rem] text-slate-600 flex items-center justify-end space-x-4"
         >
-          <span v-if="message.is_edited" class="font-bold">
-            {{ __("EDITED") }}
-          </span>
           <div class="flex items-center justify-end space-x-2 mr-2">
             <span class=""> {{ message.updated_at }} </span>
             <span

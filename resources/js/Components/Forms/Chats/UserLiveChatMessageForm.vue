@@ -7,19 +7,14 @@ import { computed, ref, watch } from "vue";
 
 const props = defineProps({
   liveChat: Object,
-  messageToEdit: Object,
   messageToReply: Object,
 });
 
-const emits = defineEmits(["cancelEditMessage", "cancelReplyMessage"]);
+const emits = defineEmits(["cancelReplyMessage"]);
 
 const multiPreviewFiles = ref([]);
 const emojiPickerVisibleForMainInput = ref(false);
 const emojiPickerVisibleForPreviewFileBox = ref(false);
-
-const cancelEditingMessage = () => {
-  emits("cancelEditMessage");
-};
 
 const cancelReplyMessage = () => {
   emits("cancelReplyMessage");
@@ -100,7 +95,7 @@ const form = useForm({
   live_chat_id: props.liveChat?.id,
   user_id: usePage().props.auth.user ? usePage().props.auth.user.id : null,
   agent_id: null,
-  message: props.messageToEdit?.message,
+  message: null,
   files: [],
   reply_to_message_id: props.messageToReply ? props.messageToReply.id : null,
   captcha_token: null,
@@ -111,10 +106,6 @@ const handleCreateLiveChatMessage = async () => {
   await recaptchaLoaded();
   form.captcha_token = await executeRecaptcha("live_chat_message");
 
-  props.messageToEdit ? updateMessage() : storeMessage();
-};
-
-const storeMessage = () => {
   form.post(route("live-chat.message.store"), {
     onFinish: () => {
       form.message = "";
@@ -123,14 +114,6 @@ const storeMessage = () => {
     },
     onSuccess: () => {
       cancelReplyMessage();
-    },
-  });
-};
-
-const updateMessage = () => {
-  form.patch(route("live-chat.message.update", props.messageToEdit.id), {
-    onSuccess: () => {
-      cancelEditingMessage();
     },
   });
 };
@@ -316,26 +299,6 @@ const updateMessage = () => {
 
   <!-- Main Messge Send Form -->
   <div class="relative z-40 w-full bg-white border-t shadow px-5 py-3">
-    <!-- Edit Mesage -->
-    <div v-if="messageToEdit" class="mb-5 text-xs flex flex-col items-start">
-      <div class="flex items-center font-bold text-blue-600 mb-2">
-        <i class="fa-solid fa-edit mr-2"></i>
-        <span>{{ __("EDIT_MESSAGE") }}</span>
-      </div>
-      <div class="w-full flex items-center justify-between">
-        <p class="w-full pl-5 line-clamp-1">
-          {{ messageToEdit?.message }}
-        </p>
-
-        <span
-          @click="cancelEditingMessage"
-          class="text-lg font-bold w-6 h-6 flex items-center justify-center text-slate-500 ml-3 cursor-pointer hover:text-slate-600"
-        >
-          <i class="fa-solid fa-xmark"></i>
-        </span>
-      </div>
-    </div>
-
     <!-- Reply Mesage -->
     <div v-if="messageToReply" class="mb-5 text-xs flex flex-col items-start">
       <div class="flex items-center font-bold text-blue-600 mb-2">

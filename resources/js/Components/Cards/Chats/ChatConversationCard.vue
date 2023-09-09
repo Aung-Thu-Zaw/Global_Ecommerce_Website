@@ -8,7 +8,9 @@ const props = defineProps({
 });
 
 const unreadMessages = ref(
-  props.liveChat ? props.liveChat.live_chat_messages : []
+  props.liveChat && props.liveChat.live_chat_messages
+    ? props.liveChat.live_chat_messages
+    : []
 );
 
 const lastMessage = ref(
@@ -20,11 +22,12 @@ const lastMessage = ref(
 );
 
 const agentUnreadMessagesCount = computed(() => {
-  const messages = unreadMessages.value.length
-    ? unreadMessages.value.filter((message) => {
-        return message.is_read_by_agent === 0;
-      })
-    : [];
+  const messages =
+    unreadMessages.value && unreadMessages.value.length
+      ? unreadMessages.value.filter((message) => {
+          return message.is_read_by_agent === 0;
+        })
+      : [];
 
   return messages ? messages.length : null;
 });
@@ -33,6 +36,7 @@ onMounted(() => {
   Echo.private(`live-chat.message`).listen("LiveChatMessageSent", (data) => {
     if (data.liveChatMessage.live_chat_id === props.liveChat.id) {
       //   props.liveChat.live_chat_messages.push(data.liveChatMessage);
+
       unreadMessages.value.push(data.liveChatMessage);
       lastMessage.value = data.liveChatMessage;
     }

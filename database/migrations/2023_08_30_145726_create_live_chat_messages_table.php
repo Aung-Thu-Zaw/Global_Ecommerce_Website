@@ -23,7 +23,6 @@ return new class () extends Migration {
             $table->boolean("is_deleted_by_user")->default(false);
             $table->boolean("is_deleted_by_agent")->default(false);
             $table->boolean("pinned")->default(false);
-            $table->boolean("is_edited")->default(false);
             $table->foreignId("reply_to_message_id")->nullable()->references("id")->on("live_chat_messages")->cascadeOnDelete();
             $table->softDeletes();
             $table->timestamps();

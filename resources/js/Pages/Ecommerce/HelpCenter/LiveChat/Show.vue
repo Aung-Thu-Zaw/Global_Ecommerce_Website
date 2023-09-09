@@ -19,7 +19,6 @@ const messages = ref(props.liveChat.live_chat_messages);
 
 // Define Variables
 const msgScroll = ref(null);
-const messageToEdit = ref(null);
 const messageToReply = ref(null);
 
 // Auto Scroll To Bottom
@@ -27,22 +26,8 @@ const scrollToBottom = () => {
   msgScroll.value.scrollTop = msgScroll.value.scrollHeight;
 };
 
-// const liveChatMessages = computed(() => {
-//   return props.liveChatMessages.filter((message) => {
-//     return message.live_chat_id === props.liveChat.id;
-//   });
-// });
-
-const setMessageToEdit = (message) => {
-  messageToEdit.value = message;
-};
-
 const setMessageToReply = (message) => {
   messageToReply.value = message;
-};
-
-const cancelEditMessage = () => {
-  messageToEdit.value = null;
 };
 
 const cancelReplyMessage = () => {
@@ -126,7 +111,6 @@ onUpdated(() => {
               >
                 <RecevierTextMessageCard
                   :message="message"
-                  @editMessage="setMessageToEdit"
                   @replyMessage="setMessageToReply"
                 />
               </div>
@@ -146,7 +130,6 @@ onUpdated(() => {
               >
                 <SenderTextMessageCard
                   :message="message"
-                  @editMessage="setMessageToEdit"
                   @replyMessage="setMessageToReply"
                 />
               </div>
@@ -166,32 +149,12 @@ onUpdated(() => {
         <!-- Live Chat Message Form -->
         <UserLiveChatMessageForm
           :liveChat="liveChat"
-          :messageToEdit="messageToEdit"
-          @cancelEditMessage="cancelEditMessage"
           :messageToReply="messageToReply"
           @cancelReplyMessage="cancelReplyMessage"
         />
       </div>
     </div>
   </div>
-
-  <!-- <div v-if="previousLiveChats.length" class="mb-5">
-            <p
-              class="w-full text-center text-sm font-medium text-blue-500 hover:text-blue-600 cursor-pointer mb-6"
-            >
-              <i class="fa-solid fa-message mr-1"></i>
-              View Previous Chat History
-            </p>
-
-            <LastChatDiscussionInformationCard :liveChat="liveChat" />
-          </div> -->
-
-  <!-- <p
-            v-if="!liveChat.is_active && liveChat.ended_at"
-            class="text-sm font-bold text-gray-500 w-full text-center mt-5"
-          >
-            {{ __("THE_CHAT_HAS_ENDED") }}
-          </p> -->
 </template>
 
 
