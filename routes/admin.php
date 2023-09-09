@@ -678,8 +678,7 @@ Route::middleware(["admin","verified","user.role:admin"])
            ->name("live-chats.")
            ->group(function () {
                Route::get("/", "index")->name("index");
-               Route::patch("/", "update")->name("update");
-
+               Route::get("/chat/{live_chat:uuid}", "show")->name("show");
            });
 
            // ******************** Admin Dashboard From The Submitters ********************

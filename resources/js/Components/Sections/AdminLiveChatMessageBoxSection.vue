@@ -167,15 +167,4 @@ onMounted(() => {
       @cancelReplyMessage="cancelReplyMessage"
     />
   </div>
-  <div v-else class="w-full h-full flex flex-col items-center justify-center">
-    <img
-      src="../../assets/images/live-chat.jpg"
-      class="h-96 object-cover mb-5"
-    />
-    <p
-      class="font-bold text-slate-600 text-sm border shadow bg-gray-100 px-3 py-1 rounded-full"
-    >
-      {{ __("SELECT_A_CHAT_TO_START_MESSAGING") }}
-    </p>
-  </div>
 </template>

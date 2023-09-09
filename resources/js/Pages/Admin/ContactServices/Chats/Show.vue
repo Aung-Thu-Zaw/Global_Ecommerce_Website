@@ -3,13 +3,19 @@ import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import ChatConversationCard from "@/Components/Cards/Chats/ChatConversationCard.vue";
 import FilterChatCardTabs from "@/Components/Tabs/FilterChatCardTabs.vue";
 import ChatConversationCardSearchForm from "@/Components/Forms/Chats/ChatConversationCardSearchForm.vue";
+import AdminLiveChatMessageBoxSection from "@/Components/Sections/AdminLiveChatMessageBoxSection.vue";
 import AdminDashboardChatSidebarButtons from "@/Components/Sidebars/AdminDashboardChatSidebarButtons.vue";
-import { Head, usePage } from "@inertiajs/vue3";
-import { onMounted } from "vue";
+import { Head, useForm, Link, usePage } from "@inertiajs/vue3";
+import { computed, onMounted, onUpdated, ref } from "vue";
 
 const props = defineProps({
   liveChats: Object,
+  liveChat: Object,
 });
+
+const selectedLiveChat = ref(props.liveChat);
+
+const isMessageSearchFormOpened = ref(false);
 
 onMounted(() => {
   Echo.private(`new-live-chat.assignment`).listen(
@@ -45,14 +51,15 @@ onMounted(() => {
               <div
                 class="w-full h-[760px] space-y-2 p-3 overflow-auto scrollbar"
               >
-                <div
-                  v-for="liveChat in liveChats"
-                  :key="liveChat.id"
-                  class="w-full"
-                >
+                <div v-for="liveChat in liveChats" :key="liveChat.id">
                   <ChatConversationCard
                     :liveChat="liveChat"
-                    class="border-slate-200 bg-white hover:bg-gray-100"
+                    :class="{
+                      'border-slate-400 shadow-md bg-gray-100':
+                        selectedLiveChat?.id === liveChat?.id,
+                      'border-slate-200 bg-white hover:bg-gray-100':
+                        selectedLiveChat?.id !== liveChat?.id,
+                    }"
                   />
                 </div>
               </div>
@@ -65,17 +72,7 @@ onMounted(() => {
           </div>
         </div>
 
-        <div class="w-full h-full flex flex-col items-center justify-center">
-          <img
-            src="../../../../assets/images/live-chat.jpg"
-            class="h-96 object-cover mb-5"
-          />
-          <p
-            class="font-bold text-slate-600 text-sm border shadow bg-gray-100 px-3 py-1 rounded-full"
-          >
-            {{ __("SELECT_A_CHAT_TO_START_MESSAGING") }}
-          </p>
-        </div>
+        <AdminLiveChatMessageBoxSection :selectedLiveChat="selectedLiveChat" />
       </div>
     </div>
   </AdminDashboardLayout>

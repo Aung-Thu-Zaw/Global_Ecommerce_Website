@@ -28,5 +28,33 @@ class AdminChatController extends Controller
         return inertia("Admin/ContactServices/Chats/Index", compact("liveChats"));
     }
 
+    public function show(LiveChat $liveChat): Response|ResponseFactory
+    {
+        $liveChats = LiveChat::with([
+                                 "user:id,name,avatar",
+                                 "agent:id,name,avatar",
+                                 "liveChatMessages.chatFileAttachments",
+                                 "liveChatMessages.user:id,name,avatar",
+                                 "liveChatMessages.agent:id,name,avatar",
+                                 "liveChatMessages.replyToMessage"
+                                ])
+                             ->filterBy(request(["search","tab"]))
+                             ->where("agent_id", auth()->id())
+                             ->orderBy("pinned", "asc")
+                             ->get();
+
+        $liveChat->load([
+            "user:id,name,avatar",
+            "agent:id,name,avatar",
+            "liveChatMessages.chatFileAttachments",
+            "liveChatMessages.user:id,name,avatar",
+            "liveChatMessages.agent:id,name,avatar",
+            "liveChatMessages.replyToMessage"
+           ]);
+
+
+        return inertia("Admin/ContactServices/Chats/Show", compact("liveChats", "liveChat"));
+    }
+
 
 }

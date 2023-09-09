@@ -53,7 +53,8 @@ onMounted(() => {
   initFlowbite();
 
   Echo.private(`live-chat.message`).listen("LiveChatMessageSent", (data) => {
-    messages.value.push(data.liveChatMessage);
+    if (data.liveChatMessage.live_chat_id === props.liveChat.id)
+      messages.value.push(data.liveChatMessage);
   });
 });
 
