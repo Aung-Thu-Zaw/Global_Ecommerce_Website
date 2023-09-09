@@ -2,12 +2,18 @@
 import { router, usePage } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 
+const props = defineProps({
+  selectedLiveChat: Object,
+});
+
 const search = ref(usePage().props.ziggy.query.search);
 
 // Handle Search
 const handleSearch = () => {
   router.get(
-    route("admin.live-chats.index"),
+    props.selectedLiveChat
+      ? route("admin.live-chats.show", { uuid: props.selectedLiveChat.uuid })
+      : route("admin.live-chats.index"),
     {
       search: search.value,
       tab: usePage().props.ziggy.query?.tab,
@@ -23,7 +29,9 @@ const handleSearch = () => {
 const removeSearch = () => {
   search.value = "";
   router.get(
-    route("admin.live-chats.index"),
+    props.selectedLiveChat
+      ? route("admin.live-chats.show", { uuid: props.selectedLiveChat.uuid })
+      : route("admin.live-chats.index"),
     {
       tab: usePage().props.ziggy.query?.tab,
     },

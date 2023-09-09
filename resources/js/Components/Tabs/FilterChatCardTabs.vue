@@ -1,5 +1,9 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
+
+defineProps({
+  selectedLiveChat: Object,
+});
 </script>
 
 <template>
@@ -9,7 +13,11 @@ import { Link } from "@inertiajs/vue3";
     <li class="">
       <Link
         as="button"
-        :href="route('admin.live-chats.index')"
+        :href="
+          selectedLiveChat
+            ? route('admin.live-chats.show', { uuid: selectedLiveChat.uuid })
+            : route('admin.live-chats.index')
+        "
         :data="{
           tab: 'all-chats',
         }"
@@ -27,7 +35,11 @@ import { Link } from "@inertiajs/vue3";
     <li class="">
       <Link
         as="button"
-        :href="route('admin.live-chats.index')"
+        :href="
+          selectedLiveChat
+            ? route('admin.live-chats.show', { uuid: selectedLiveChat.uuid })
+            : route('admin.live-chats.index')
+        "
         :data="{
           tab: 'ongoing-chats',
         }"
@@ -44,7 +56,11 @@ import { Link } from "@inertiajs/vue3";
     <li class="">
       <Link
         as="button"
-        :href="route('admin.live-chats.index')"
+        :href="
+          selectedLiveChat
+            ? route('admin.live-chats.show', { uuid: selectedLiveChat.uuid })
+            : route('admin.live-chats.index')
+        "
         :data="{
           tab: 'ended-chats',
         }"

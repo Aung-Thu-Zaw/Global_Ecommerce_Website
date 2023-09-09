@@ -37,30 +37,38 @@ onMounted(() => {
             <!-- Sidebar  -->
             <AdminDashboardChatSidebarButtons />
 
-            <div v-if="liveChats.length" class="w-full">
-              <FilterChatCardTabs />
+            <div class="flex flex-col w-full h-full">
+              <div class="w-full">
+                <FilterChatCardTabs />
+              </div>
+              <div class="w-full h-full">
+                <div v-if="liveChats.length" class="w-full">
+                  <!-- Chat Conversation -->
 
-              <!-- Chat Conversation -->
-
-              <div
-                class="w-full h-[760px] space-y-2 p-3 overflow-auto scrollbar"
-              >
+                  <div
+                    class="w-full h-[760px] space-y-2 p-3 overflow-auto scrollbar"
+                  >
+                    <div
+                      v-for="liveChat in liveChats"
+                      :key="liveChat.id"
+                      class="w-full"
+                    >
+                      <ChatConversationCard
+                        :liveChat="liveChat"
+                        class="border-slate-200 bg-white hover:bg-gray-100"
+                      />
+                    </div>
+                  </div>
+                </div>
                 <div
-                  v-for="liveChat in liveChats"
-                  :key="liveChat.id"
-                  class="w-full"
+                  v-else
+                  class="w-full flex items-center justify-center h-full"
                 >
-                  <ChatConversationCard
-                    :liveChat="liveChat"
-                    class="border-slate-200 bg-white hover:bg-gray-100"
-                  />
+                  <p class="font-semibold text-slate-500 text-sm">
+                    {{ __("YOU_DONT_HAVE_ANY_CHAT_CONVERSATIONS") }}
+                  </p>
                 </div>
               </div>
-            </div>
-            <div v-else class="w-full flex items-center justify-center h-full">
-              <p class="font-semibold text-slate-500 text-sm">
-                {{ __("YOU_DONT_HAVE_ANY_CHAT_CONVERSATIONS") }}
-              </p>
             </div>
           </div>
         </div>
