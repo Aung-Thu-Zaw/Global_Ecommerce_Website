@@ -20,6 +20,8 @@ return new class () extends Migration {
             $table->boolean("pinned")->default(false);
             $table->boolean("archived")->default(false);
             $table->boolean("is_active")->default(false);
+            $table->boolean("is_deleted_by_user")->default(false);
+            $table->boolean("is_deleted_by_agent")->default(false);
             $table->timestamp("ended_at")->nullable();
             $table->softDeletes();
             $table->timestamps();

@@ -9,12 +9,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 
 class LiveChat extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use CascadeSoftDeletes;
 
+    /**
+    * @var string[]
+    */
+    // protected array $cascadeDeletes = ['liveChatMessages'];
     protected $guarded = [];
 
     /**

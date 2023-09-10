@@ -680,6 +680,8 @@ Route::middleware(["admin","verified","user.role:admin"])
                Route::get("/", "index")->name("index");
                Route::get("/chat/{live_chat:uuid}", "show")->name("show");
                Route::patch("/{live_chat}/pinned", "pinnedChat")->name("pinned");
+               Route::patch("/{live_chat}/delete-for-myself", "deleteForMyself")->name("delete-for-myself");
+               Route::delete("/{live_chat}", "destroy")->name("destroy");
            });
 
            // ******************** Admin Dashboard From The Submitters ********************

@@ -1,5 +1,5 @@
 <script setup>
-import { Link, router } from "@inertiajs/vue3";
+import { Link, router, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
   liveChat: Object,
@@ -9,6 +9,22 @@ const handlePinnedChatConversation = () => {
   router.patch(route("admin.live-chats.pinned", props.liveChat.id), {
     pinned: props.liveChat.pinned === 1 ? 0 : 1,
   });
+};
+
+const handleDeleteChatForMyself = () => {
+  router.patch(route("admin.live-chats.delete-for-myself", props.liveChat.id), {
+    is_deleted_by_agent: 1,
+    tab: usePage().props.ziggy.query?.tab,
+  });
+};
+
+const handleDeleteChatForBoth = () => {
+  router.delete(
+    route("admin.live-chats.destroy", {
+      live_chat: props.liveChat.id,
+      tab: usePage().props.ziggy.query?.tab,
+    })
+  );
 };
 </script>
 
@@ -80,10 +96,29 @@ const handlePinnedChatConversation = () => {
           </div>
         </li>
 
+        <hr />
+
         <li>
-          <div class="block px-4 py-2 hover:bg-gray-100">
+          <div
+            @click="handleDeleteChatForMyself"
+            class="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
+          >
             <i class="fa-solid fa-trash-can mr-1"></i>
-            {{ __("DELETE_CHAT") }}
+            <span class="line-clamp-1 w-full">
+              {{ __("DELETE_CHAT_FOR_MYSELF") }}
+            </span>
+          </div>
+        </li>
+
+        <li>
+          <div
+            @click="handleDeleteChatForBoth"
+            class="px-4 py-2 text-red-600 hover:bg-gray-100 cursor-pointer flex items-center"
+          >
+            <i class="fa-solid fa-trash-can mr-1"></i>
+            <span class="line-clamp-1 w-full">
+              {{ __("DELETE_CHAT_FOR_BOTH") }}
+            </span>
           </div>
         </li>
       </ul>

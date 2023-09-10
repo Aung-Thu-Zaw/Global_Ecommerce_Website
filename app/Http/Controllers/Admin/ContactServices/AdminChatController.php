@@ -23,6 +23,7 @@ class AdminChatController extends Controller
                                 ])
                              ->filterBy(request(["search","tab"]))
                              ->where("agent_id", auth()->id())
+                             ->where("is_deleted_by_agent", false)
                              ->orderBy("pinned", "desc")
                              ->get();
 
@@ -42,6 +43,7 @@ class AdminChatController extends Controller
                                 ])
                              ->filterBy(request(["search","tab"]))
                              ->where("agent_id", auth()->id())
+                             ->where("is_deleted_by_agent", false)
                              ->orderBy("pinned", "desc")
                              ->get();
 
@@ -65,6 +67,22 @@ class AdminChatController extends Controller
         ]);
 
         return back();
+    }
+
+    public function deleteForMyself(Request $request, LiveChat $liveChat): RedirectResponse
+    {
+        $liveChat->update([
+            "is_deleted_by_agent" => $request->is_deleted_by_agent
+        ]);
+
+        return to_route("admin.live-chats.index", ["tab" => $request->tab]);
+    }
+
+    public function destroy(Request $request, LiveChat $liveChat): RedirectResponse
+    {
+        $liveChat->delete();
+
+        return to_route("admin.live-chats.index", ["tab" => $request->tab]);
     }
 
 }

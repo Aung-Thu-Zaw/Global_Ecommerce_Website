@@ -47,11 +47,11 @@ onMounted(() => {
             <!-- Sidebar  -->
             <AdminDashboardChatSidebarButtons />
 
-            <div class="flex flex-col w-full">
+            <div class="flex flex-col w-full h-full">
               <div class="w-full">
                 <FilterChatCardTabs :selectedLiveChat="selectedLiveChat" />
               </div>
-              <div class="w-full">
+              <div class="w-full h-full">
                 <div v-if="liveChats.length" class="w-full">
                   <!-- Chat Conversation -->
 

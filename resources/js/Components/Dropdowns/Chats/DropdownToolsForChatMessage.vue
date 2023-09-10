@@ -189,7 +189,7 @@ const handleDeleteMessageForBoth = () => {
             "
             class="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
           >
-            <i class="fa-solid fa-trash mr-1"></i>
+            <i class="fa-solid fa-trash-can mr-1"></i>
             <span class="line-clamp-1 w-full">
               {{ __("DELETE_FOR_MYSELF") }}
             </span>
@@ -206,7 +206,7 @@ const handleDeleteMessageForBoth = () => {
             @click="handleDeleteMessageForBoth"
             class="px-4 py-2 text-red-600 hover:bg-gray-100 cursor-pointer flex items-center"
           >
-            <i class="fa-solid fa-trash mr-1"></i>
+            <i class="fa-solid fa-trash-can mr-1"></i>
             <span class="line-clamp-1 w-full">
               {{ __("DELETE_FOR_BOTH") }}
             </span>
