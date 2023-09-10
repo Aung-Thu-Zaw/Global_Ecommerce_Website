@@ -49,7 +49,8 @@ use App\Http\Controllers\Admin\FromTheSubmitters\AdminSuggestionController;
 use App\Http\Controllers\Admin\UserManagements\AdminManageController;
 use App\Http\Controllers\Admin\ReviewManagements\AdminProductReviewController;
 use App\Http\Controllers\Admin\ReviewManagements\AdminShopReviewController;
-use App\Http\Controllers\Admin\ContactServices\AdminChatController;
+use App\Http\Controllers\Admin\ContactServices\Chats\AdminChatController;
+use App\Http\Controllers\Admin\ContactServices\Chats\AdminChatFolderController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/admin/login", [AdminAuthController::class,"login"])->middleware("guest")->name("admin.login");
@@ -682,6 +683,13 @@ Route::middleware(["admin","verified","user.role:admin"])
                Route::patch("/{live_chat}/pinned", "pinnedChat")->name("pinned");
                Route::patch("/{live_chat}/delete-for-myself", "deleteForMyself")->name("delete-for-myself");
                Route::delete("/{live_chat}", "destroy")->name("destroy");
+           });
+
+           Route::controller(AdminChatFolderController::class)
+           ->prefix("/live-chats/folders")
+           ->name("live-chats.folders.")
+           ->group(function () {
+               Route::post("/", "store")->name("store");
            });
 
            // ******************** Admin Dashboard From The Submitters ********************

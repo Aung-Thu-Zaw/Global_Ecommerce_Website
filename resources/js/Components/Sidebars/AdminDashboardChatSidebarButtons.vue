@@ -1,4 +1,12 @@
 <script setup>
+import FolderCreateForm from "@/Components/Forms/Chats/FolderCreateForm.vue";
+import { ref } from "vue";
+
+defineProps({
+  folders: Object,
+});
+
+const isCreateFolderFormVisibled = ref(false);
 </script>
 
 <template>
@@ -69,6 +77,7 @@
     </div>
 
     <div
+      @click="isCreateFolderFormVisibled = true"
       data-tooltip-target="create-folder-tooltip"
       data-tooltip-placement="right"
       class="flex items-center justify-center borer bg-blue-600 ring-2 ring-blue-300 text-white min-w-[40px] min-h-[40px] rounded-sm hover:bg-blue-700"
@@ -85,6 +94,7 @@
     </div>
 
     <span
+      v-if="folders.length"
       class="font-bold text-slate-600 pt-3 border-t border-slate-300 flex flex-col items-center justify-center"
     >
       <span> Chat </span>
@@ -94,19 +104,26 @@
     </span>
 
     <div
-      data-tooltip-target="folder-tooltip"
+      v-for="folder in folders"
+      :key="folder.id"
+      :data-tooltip-target="'folder-tooltip' + folder.id"
       data-tooltip-placement="right"
       class="flex items-center justify-center borer bg-gray-500 ring-2 ring-gray-300 text-white min-w-[40px] min-h-[40px] rounded-sm hover:bg-gray-600"
     >
       <i class="fa-solid fa-folder"></i>
       <div
-        id="folder-tooltip"
+        :id="'folder-tooltip' + folder.id"
         role="tooltip"
-        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-800 bg-white rounded-lg shadow-lg opacity-0 tooltip border"
+        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-800 bg-white rounded-lg shadow-lg opacity-0 tooltip border capitalize"
       >
-        Customers
+        {{ folder.name }}
         <div class="tooltip-arrow" data-popper-arrow></div>
       </div>
     </div>
   </div>
+
+  <FolderCreateForm
+    :isCreateFolderFormVisibled="isCreateFolderFormVisibled"
+    @closeForm="isCreateFolderFormVisibled = false"
+  />
 </template>

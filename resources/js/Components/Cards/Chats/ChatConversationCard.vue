@@ -5,6 +5,7 @@ import { computed, onMounted, ref, watch } from "vue";
 
 const props = defineProps({
   liveChat: Object,
+  folders: Object,
 });
 
 const unreadMessages = ref(
@@ -108,7 +109,10 @@ onMounted(() => {
     <div class="py-3 pr-3 flex flex-col items-end">
       <div class="flex items-center justify-center space-x-1">
         <!-- Dropdown -->
-        <DropdownToolsForChatConversationCard :liveChat="liveChat" />
+        <DropdownToolsForChatConversationCard
+          :liveChat="liveChat"
+          :folders="folders"
+        />
 
         <div v-if="liveChat.pinned" class="text-xs text-slate-500">
           <i class="fa-solid fa-thumbtack"></i>

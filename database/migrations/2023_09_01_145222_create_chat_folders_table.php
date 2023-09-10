@@ -15,6 +15,7 @@ return new class () extends Migration {
         Schema::create('chat_folders', function (Blueprint $table) {
             $table->id();
             $table->string("name");
+            $table->foreignId("agent_id")->nullable()->references("id")->on("users")->cascadeOnDelete();
             $table->timestamps();
         });
     }

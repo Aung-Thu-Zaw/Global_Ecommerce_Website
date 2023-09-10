@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Admin\ContactServices;
+namespace App\Http\Controllers\Admin\ContactServices\Chats;
 
 use App\Http\Controllers\Controller;
+use App\Models\ChatFolder;
 use App\Models\LiveChat;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -27,8 +28,10 @@ class AdminChatController extends Controller
                              ->orderBy("pinned", "desc")
                              ->get();
 
+        $folders = ChatFolder::where("agent_id", auth()->id())->get();
 
-        return inertia("Admin/ContactServices/Chats/Index", compact("liveChats"));
+
+        return inertia("Admin/ContactServices/Chats/Index", compact("liveChats", "folders"));
     }
 
     public function show(LiveChat $liveChat): Response|ResponseFactory
@@ -56,8 +59,10 @@ class AdminChatController extends Controller
             "liveChatMessages.replyToMessage"
            ]);
 
+        $folders = ChatFolder::where("agent_id", auth()->id())->get();
 
-        return inertia("Admin/ContactServices/Chats/Show", compact("liveChats", "liveChat"));
+
+        return inertia("Admin/ContactServices/Chats/Show", compact("liveChats", "liveChat", "folders"));
     }
 
     public function pinnedChat(Request $request, LiveChat $liveChat): RedirectResponse

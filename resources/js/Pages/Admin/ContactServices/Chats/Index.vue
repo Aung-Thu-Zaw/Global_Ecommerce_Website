@@ -9,6 +9,7 @@ import { onMounted } from "vue";
 
 const props = defineProps({
   liveChats: Object,
+  folders: Object,
 });
 
 onMounted(() => {
@@ -35,7 +36,7 @@ onMounted(() => {
           <!-- Header -->
           <div class="w-full bg-white flex items-start justify-between h-full">
             <!-- Sidebar  -->
-            <AdminDashboardChatSidebarButtons />
+            <AdminDashboardChatSidebarButtons :folders="folders" />
 
             <div class="flex flex-col w-full h-full">
               <div class="w-full">
@@ -55,6 +56,7 @@ onMounted(() => {
                     >
                       <ChatConversationCard
                         :liveChat="liveChat"
+                        :folders="folders"
                         class="border-slate-200 bg-white hover:bg-gray-100"
                       />
                     </div>
