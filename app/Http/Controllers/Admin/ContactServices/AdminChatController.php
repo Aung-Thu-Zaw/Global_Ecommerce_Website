@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\ContactServices;
 
 use App\Http\Controllers\Controller;
 use App\Models\LiveChat;
+use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -55,6 +56,5 @@ class AdminChatController extends Controller
 
         return inertia("Admin/ContactServices/Chats/Show", compact("liveChats", "liveChat"));
     }
-
 
 }

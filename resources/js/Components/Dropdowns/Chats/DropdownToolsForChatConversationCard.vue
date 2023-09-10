@@ -1,4 +1,6 @@
 <script setup>
+import { Link } from "@inertiajs/vue3";
+
 defineProps({
   liveChat: Object,
 });
@@ -48,10 +50,17 @@ defineProps({
           </div>
         </li>
         <li>
-          <div class="block px-4 py-2 hover:bg-gray-100">
+          <Link
+            :href="route('admin.live-chats.show', { live_chat: liveChat.uuid })"
+            :data="{
+              search: $page.props.ziggy.query?.search,
+              tab: $page.props.ziggy.query?.tab,
+            }"
+            class="block px-4 py-2 hover:bg-gray-100"
+          >
             <i class="fa-solid fa-eye mr-1"></i>
             {{ __("VIEW_CHAT") }}
-          </div>
+          </Link>
         </li>
         <li>
           <div class="block px-4 py-2 hover:bg-gray-100">
