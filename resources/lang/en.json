@@ -954,6 +954,8 @@
     "SELECT": "Select",
     "REPLY": "Reply",
     "PIN": "Pin",
+    "PIN_TO_TOP": "Pin to top",
+    "UNPIN_FROM_TOP": "Unpin from top",
     "COPY_TEXT": "Copy Text",
     "DOWNLOAD": "Download",
     "TYPE_A_MESSAGE": "Type a message",

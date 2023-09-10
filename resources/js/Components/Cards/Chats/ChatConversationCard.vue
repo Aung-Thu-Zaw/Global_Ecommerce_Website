@@ -105,8 +105,8 @@ onMounted(() => {
       </div>
     </Link>
 
-    <div class="py-3 pr-3 flex flex-col items-center">
-      <div class="flex items-center justify-center space-x-2">
+    <div class="py-3 pr-3 flex flex-col items-end">
+      <div class="flex items-center justify-center space-x-1">
         <!-- Dropdown -->
         <DropdownToolsForChatConversationCard :liveChat="liveChat" />
 
@@ -117,7 +117,7 @@ onMounted(() => {
 
       <div
         v-if="agentUnreadMessagesCount !== 0"
-        class="border w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center p-2"
+        class="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center p-2"
       >
         <span class="text-[.6rem]">{{ agentUnreadMessagesCount }}</span>
       </div>

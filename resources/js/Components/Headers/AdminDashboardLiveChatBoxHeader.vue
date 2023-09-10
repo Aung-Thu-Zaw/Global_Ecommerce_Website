@@ -74,12 +74,6 @@ defineProps({
                   {{ __("EXPORT_CHAT") }}</a
                 >
               </li>
-              <li>
-                <a href="#" class="block px-4 py-2 hover:bg-gray-100">
-                  <i class="fa-solid fa-broom mr-1"></i>
-                  {{ __("CLEAR_HISTORY") }}</a
-                >
-              </li>
             </ul>
             <div class="py-2">
               <a

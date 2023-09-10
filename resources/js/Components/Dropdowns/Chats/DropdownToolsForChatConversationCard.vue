@@ -1,9 +1,15 @@
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
 
-defineProps({
+const props = defineProps({
   liveChat: Object,
 });
+
+const handlePinnedChatConversation = () => {
+  router.patch(route("admin.live-chats.pinned", props.liveChat.id), {
+    pinned: props.liveChat.pinned === 1 ? 0 : 1,
+  });
+};
 </script>
 
 <template>
@@ -44,9 +50,14 @@ defineProps({
           </div>
         </li>
         <li>
-          <div class="block px-4 py-2 hover:bg-gray-100">
+          <div
+            @click="handlePinnedChatConversation"
+            class="block px-4 py-2 hover:bg-gray-100"
+          >
             <i class="fa-solid fa-thumbtack mr-1"></i>
-            {{ __("PIN") }}
+            {{
+              liveChat.pinned === 1 ? __("UNPIN_FROM_TOP") : __("PIN_TO_TOP")
+            }}
           </div>
         </li>
         <li>
@@ -66,13 +77,6 @@ defineProps({
           <div class="block px-4 py-2 hover:bg-gray-100">
             <i class="fa-solid fa-folder-plus mr-1"></i>
             {{ __("ADD_TO_FOLDER") }}
-          </div>
-        </li>
-
-        <li>
-          <div class="block px-4 py-2 hover:bg-gray-100">
-            <i class="fa-solid fa-broom mr-1"></i>
-            {{ __("CLEAR_HISTORY") }}
           </div>
         </li>
 
