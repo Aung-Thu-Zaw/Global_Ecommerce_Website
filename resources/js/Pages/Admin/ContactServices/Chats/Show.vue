@@ -15,6 +15,20 @@ const props = defineProps({
   liveChat: Object,
 });
 
+const folder = ref(null);
+
+const selectedFolder = (selectedFolder) => {
+  folder.value = selectedFolder;
+};
+
+const filteredLiveChats = computed(() => {
+  return folder.value
+    ? props.liveChats.filter((liveChat) => {
+        return liveChat.folder_id === folder.value.id;
+      })
+    : props.liveChats;
+});
+
 const selectedLiveChat = ref(props.liveChat);
 
 const isMessageSearchFormOpened = ref(false);
@@ -24,7 +38,7 @@ onMounted(() => {
     "NewLiveChatAssignment",
     (data) => {
       data.liveChat.agent_id === usePage().props.auth.user?.id
-        ? props.liveChats.push(data.liveChat)
+        ? props.liveChats.unshift(data.liveChat)
         : console.log(data.liveChat);
     }
   );
@@ -47,11 +61,36 @@ onMounted(() => {
           <!-- Header -->
           <div class="w-full bg-white flex items-start justify-between h-full">
             <!-- Sidebar  -->
-            <AdminDashboardChatSidebarButtons :folders="folders" />
+            <AdminDashboardChatSidebarButtons
+              :folders="folders"
+              @selectedFolder="selectedFolder"
+            />
 
             <div class="flex flex-col w-full h-full">
               <div class="px-2 border-b py-2 mb-3">
                 <Breadcrumb>
+                  <li v-if="folder">
+                    <div class="flex items-center">
+                      <svg
+                        aria-hidden="true"
+                        class="w-6 h-6 text-gray-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                          clip-rule="evenodd"
+                        ></path>
+                      </svg>
+                      <span
+                        class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400 dark:hover:text-white"
+                      >
+                        {{ folder.name }}
+                      </span>
+                    </div>
+                  </li>
                   <li>
                     <div class="flex items-center">
                       <svg
@@ -81,14 +120,14 @@ onMounted(() => {
                 <FilterChatCardTabs :selectedLiveChat="selectedLiveChat" />
               </div>
               <div class="w-full h-full">
-                <div v-if="liveChats.length" class="w-full">
+                <div v-if="filteredLiveChats.length" class="w-full">
                   <!-- Chat Conversation -->
 
                   <div
                     class="w-full h-[760px] space-y-2 p-3 overflow-auto scrollbar"
                   >
                     <div
-                      v-for="liveChat in liveChats"
+                      v-for="liveChat in filteredLiveChats"
                       :key="liveChat.id"
                       class="w-full"
                     >

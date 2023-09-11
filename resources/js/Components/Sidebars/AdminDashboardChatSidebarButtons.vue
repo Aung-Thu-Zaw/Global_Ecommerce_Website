@@ -7,7 +7,16 @@ defineProps({
   folders: Object,
 });
 
+const emits = defineEmits(["selectedFolder"]);
+
 const isCreateFolderFormVisibled = ref(false);
+
+const selectedFolder = ref(null);
+
+const handleFolderSelect = (folder) => {
+  selectedFolder.value = folder;
+  emits("selectedFolder", folder);
+};
 </script>
 
 <template>
@@ -130,16 +139,24 @@ const isCreateFolderFormVisibled = ref(false);
       :key="folder.id"
       :data-tooltip-target="'folder-tooltip' + folder.id"
       data-tooltip-placement="right"
-      class="flex items-center justify-center borer bg-gray-500 ring-2 ring-gray-300 text-white min-w-[40px] min-h-[40px] rounded-sm hover:bg-gray-600"
     >
-      <i class="fa-solid fa-folder"></i>
       <div
-        :id="'folder-tooltip' + folder.id"
-        role="tooltip"
-        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-800 bg-white rounded-lg shadow-lg opacity-0 tooltip border capitalize"
+        @click="handleFolderSelect(folder)"
+        class="flex items-center justify-center borer ring-2 ring-gray-300 text-white min-w-[40px] min-h-[40px] rounded-sm hover:bg-gray-600 cursor-pointer"
+        :class="{
+          'bg-gray-700': selectedFolder && selectedFolder.id === folder.id,
+          'bg-gray-500': !selectedFolder || selectedFolder.id !== folder.id,
+        }"
       >
-        {{ folder.name }}
-        <div class="tooltip-arrow" data-popper-arrow></div>
+        <i class="fa-solid fa-folder"></i>
+        <div
+          :id="'folder-tooltip' + folder.id"
+          role="tooltip"
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-800 bg-white rounded-lg shadow-lg opacity-0 tooltip border capitalize"
+        >
+          {{ folder.name }}
+          <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
       </div>
     </div>
   </div>
