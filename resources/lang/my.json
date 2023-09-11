@@ -984,5 +984,7 @@
     "SETTING": "ဆက်တင်",
     "ALL": "အားလုံး",
     "REMOVE_FROM_FOLDER": "ဖိုင်တွဲမှ ဖယ်ရှားပါ။",
-    "DELETE_CHAT": "Chat ကိုဖျက်ပါ"
+    "DELETE_CHAT": "Chat ကိုဖျက်ပါ",
+    "DELETE_FOLDER": "Folder ကိုဖျက်ပါ။",
+    "CHAT_FOLDERS": "Chat ဖိုဒါများ"
 }

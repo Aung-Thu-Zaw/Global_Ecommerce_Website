@@ -691,6 +691,7 @@ Route::middleware(["admin","verified","user.role:admin"])
            ->name("live-chats.folders.")
            ->group(function () {
                Route::post("/", "store")->name("store");
+               Route::delete("/{chat_folder}", "destroy")->name("destroy");
            });
 
            // ******************** Admin Dashboard From The Submitters ********************

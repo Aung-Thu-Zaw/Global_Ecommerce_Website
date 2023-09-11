@@ -62,7 +62,7 @@ const handleDeleteMessageForBoth = () => {
   <div class="font-bold text-slate-500 hover:text-slate-800">
     <button
       id="messageDropdown"
-      :data-dropdown-toggle="'messageDropdownDots' + message.id"
+      :data-dropdown-toggle="'message' + message.id"
       :data-dropdown-placement="
         ($page.url.startsWith('/support-service/live-chats') &&
           message.user_id) ||
@@ -88,7 +88,7 @@ const handleDeleteMessageForBoth = () => {
 
     <!-- Dropdown menu -->
     <div
-      :id="'messageDropdownDots' + message.id"
+      :id="'message' + message.id"
       class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 border border-slate-300"
     >
       <ul

@@ -24,4 +24,13 @@ class AdminChatFolderController extends Controller
 
         return back();
     }
+
+    public function destroy(int $chatFolderId): RedirectResponse
+    {
+        $folder = ChatFolder::findOrFail($chatFolderId);
+
+        $folder->delete();
+
+        return back();
+    }
 }

@@ -1,5 +1,6 @@
 <script setup>
 import FolderCreateForm from "@/Components/Forms/Chats/FolderCreateForm.vue";
+import FolderDeleteForm from "@/Components/Forms/Chats/FolderDeleteForm.vue";
 import { Link } from "@inertiajs/vue3";
 import { ref } from "vue";
 
@@ -10,6 +11,7 @@ defineProps({
 const emits = defineEmits(["selectedFolder"]);
 
 const isCreateFolderFormVisibled = ref(false);
+const isDeleteFolderFormVisibled = ref(false);
 
 const selectedFolder = ref(null);
 
@@ -124,6 +126,23 @@ const handleFolderSelect = (folder) => {
       </div>
     </div>
 
+    <div
+      @click="isDeleteFolderFormVisibled = true"
+      data-tooltip-target="delete-folder-tooltip"
+      data-tooltip-placement="right"
+      class="flex items-center justify-center borer bg-red-600 ring-2 ring-red-300 text-white min-w-[40px] min-h-[40px] rounded-sm hover:bg-red-700"
+    >
+      <i class="fa-solid fa-folder-minus"></i>
+      <div
+        id="delete-folder-tooltip"
+        role="tooltip"
+        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-800 bg-white rounded-lg shadow-lg opacity-0 tooltip border"
+      >
+        {{ __("DELETE_FOLDER") }}
+        <div class="tooltip-arrow" data-popper-arrow></div>
+      </div>
+    </div>
+
     <span
       v-if="folders.length"
       class="font-bold text-slate-600 pt-3 border-t border-slate-300 flex flex-col items-center justify-center"
@@ -164,5 +183,11 @@ const handleFolderSelect = (folder) => {
   <FolderCreateForm
     :isCreateFolderFormVisibled="isCreateFolderFormVisibled"
     @closeForm="isCreateFolderFormVisibled = false"
+  />
+
+  <FolderDeleteForm
+    :folders="folders"
+    :isDeleteFolderFormVisibled="isDeleteFolderFormVisibled"
+    @closeForm="isDeleteFolderFormVisibled = false"
   />
 </template>

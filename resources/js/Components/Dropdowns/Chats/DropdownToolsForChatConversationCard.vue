@@ -32,7 +32,7 @@ const handleChatWithFolder = (folderId = null) => {
   router.patch(
     route("admin.live-chats.handle-chat-with-folder", props.liveChat.id),
     {
-      folder_id: folderId,
+      chat_folder_id: folderId,
     }
   );
 };
@@ -99,7 +99,7 @@ const handleChatWithFolder = (folderId = null) => {
             {{ __("VIEW_CHAT") }}
           </Link>
         </li>
-        <li v-if="folders.length && !liveChat.folder_id">
+        <li v-if="folders.length && !liveChat.chat_folder_id">
           <button
             id="doubleDropdownButton"
             :data-dropdown-toggle="'doubleDropdown' + liveChat.id"

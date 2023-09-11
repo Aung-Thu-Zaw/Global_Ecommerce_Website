@@ -93,8 +93,9 @@ class AdminChatController extends Controller
 
     public function handleChatWithFolder(Request $request, LiveChat $liveChat): RedirectResponse
     {
+
         $liveChat->update([
-            "folder_id" => $request->folder_id,
+            "chat_folder_id" => $request->chat_folder_id,
         ]);
 
         return back();

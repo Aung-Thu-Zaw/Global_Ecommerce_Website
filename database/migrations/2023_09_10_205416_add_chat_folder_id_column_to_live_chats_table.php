@@ -13,7 +13,7 @@ return new class () extends Migration {
     public function up()
     {
         Schema::table('live_chats', function (Blueprint $table) {
-            $table->foreignId("folder_id")->after("id")->nullable();
+            $table->foreignId("chat_folder_id")->after("id")->nullable()->constrained()->onDelete("set null");
         });
     }
 
@@ -25,7 +25,7 @@ return new class () extends Migration {
     public function down()
     {
         Schema::table('live_chats', function (Blueprint $table) {
-            $table->dropColumn("folder_id");
+            $table->dropColumn("chat_folder_id");
         });
     }
 };

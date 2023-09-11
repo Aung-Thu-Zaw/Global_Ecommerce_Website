@@ -293,7 +293,7 @@ const handleCreateLiveChatMessage = async () => {
   <!-- Main Message Form -->
   <div
     v-if="liveChat.is_active === 1 && !liveChat.ended_at"
-    class="relative z-50 w-full bg-white border-t shadow px-5 py-6"
+    class="relative z-30 w-full bg-white border-t shadow px-5 py-6"
   >
     <!-- Reply Mesage -->
     <div v-if="messageToReply" class="mb-5 text-xs flex flex-col items-start">

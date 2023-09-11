@@ -44,7 +44,7 @@ const handleCreateFolder = async () => {
   <div
     v-if="isCreateFolderFormVisibled"
     @click.self="closeCreateForm"
-    class="bg-dark bg-opacity-50 fixed top-0 bottom-0 left-0 right-0 z-20 flex items-center justify-center"
+    class="bg-dark bg-opacity-50 fixed top-0 bottom-0 left-0 right-0 z-50 flex items-center justify-center"
   >
     <div
       class="border w-[500px] bg-white border-slate-300 shadow p-5 rounded-md"

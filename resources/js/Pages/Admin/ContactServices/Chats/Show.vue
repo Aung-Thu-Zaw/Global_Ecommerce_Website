@@ -24,7 +24,7 @@ const selectedFolder = (selectedFolder) => {
 const filteredLiveChats = computed(() => {
   return folder.value
     ? props.liveChats.filter((liveChat) => {
-        return liveChat.folder_id === folder.value.id;
+        return liveChat.chat_folder_id === folder.value.id;
       })
     : props.liveChats;
 });

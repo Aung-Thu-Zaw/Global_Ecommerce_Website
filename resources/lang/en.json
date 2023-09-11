@@ -969,8 +969,8 @@
     "BOOKMARK": "Bookmark",
     "FOLDERS": "Folders",
     "MARK_AS_READ": "Mark As Read",
-    "VIEW_CHAT": "View Chat",
-    "ADD_TO_FOLDER": "Add To Folder",
+    "VIEW_CHAT": "View chat",
+    "ADD_TO_FOLDER": "Add to folder",
     "ARCHIVE": "Archive",
     "CREATE_NEW_FOLDER": "Create New Folder",
     "THE_CHAT_HAS_ENDED": "The chat has ended.",
@@ -983,6 +983,8 @@
     "YOU_GET_A_NEW_LIVE_CHAT_ASSIGNMENT_FROM_THE_USER": "You get a new live chat assignment from the user.",
     "SETTING": "Setting",
     "ALL": "All",
-    "REMOVE_FROM_FOLDER": "Remove From Folder",
-    "DELETE_CHAT": "Delete Chat"
+    "REMOVE_FROM_FOLDER": "Remove from folder",
+    "DELETE_CHAT": "Delete Chat",
+    "DELETE_FOLDER": "Delete Folder",
+    "CHAT_FOLDERS": "Chat Folders"
 }
