@@ -8,7 +8,7 @@ defineProps({
   folders: Object,
 });
 
-const emits = defineEmits(["selectedFolder"]);
+const emits = defineEmits(["selectedFolder", "archivedChat"]);
 
 const isCreateFolderFormVisibled = ref(false);
 const isDeleteFolderFormVisibled = ref(false);
@@ -18,6 +18,10 @@ const selectedFolder = ref(null);
 const handleFolderSelect = (folder) => {
   selectedFolder.value = folder;
   emits("selectedFolder", folder);
+};
+
+const goToArchived = () => {
+  emits("archivedChat");
 };
 </script>
 
@@ -94,17 +98,18 @@ const handleFolderSelect = (folder) => {
       </div>
     </div>
     <div
-      data-tooltip-target="bookmark-tooltip"
+      @click="goToArchived"
+      data-tooltip-target="archived-chats-tooltip"
       data-tooltip-placement="right"
       class="flex items-center justify-center borer ring-2 ring-warning-300 min-w-[40px] min-h-[40px] rounded-sm bg-warning-600 text-white hover:bg-warning-700"
     >
       <i class="fa-solid fa-archive"></i>
       <div
-        id="bookmark-tooltip"
+        id="archived-chats-tooltip"
         role="tooltip"
         class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-800 bg-white rounded-lg shadow-lg opacity-0 tooltip border"
       >
-        {{ __("ARCHIVE") }}
+        {{ __("ARCHIVED_CHATS") }}
         <div class="tooltip-arrow" data-popper-arrow></div>
       </div>
     </div>

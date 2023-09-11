@@ -12,6 +12,12 @@ const handlePinnedChatConversation = () => {
   });
 };
 
+const handleArchivedChatConversation = () => {
+  router.patch(route("admin.live-chats.archived", props.liveChat.id), {
+    archived: props.liveChat.archived === 1 ? 0 : 1,
+  });
+};
+
 const handleDeleteChatForMyself = () => {
   router.patch(route("admin.live-chats.delete-for-myself", props.liveChat.id), {
     is_deleted_by_agent: 1,
@@ -70,9 +76,12 @@ const handleChatWithFolder = (folderId = null) => {
         aria-labelledby="messageDropdown"
       >
         <li>
-          <div class="block px-4 py-2 hover:bg-gray-100">
+          <div
+            @click="handleArchivedChatConversation"
+            class="block px-4 py-2 hover:bg-gray-100"
+          >
             <i class="fa-solid fa-box-archive mr-1"></i>
-            {{ __("ARCHIVE") }}
+            {{ liveChat.archived === 1 ? __("UNARCHIVE") : __("ARCHIVE") }}
           </div>
         </li>
         <li>

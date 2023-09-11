@@ -101,4 +101,14 @@ class AdminChatController extends Controller
         return back();
     }
 
+
+    public function archivedChat(Request $request, LiveChat $liveChat): RedirectResponse
+    {
+        $liveChat->update([
+            "archived" => $request->archived,
+        ]);
+
+        return back();
+    }
+
 }
