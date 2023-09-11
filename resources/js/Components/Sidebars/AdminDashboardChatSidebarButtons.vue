@@ -1,5 +1,6 @@
 <script setup>
 import FolderCreateForm from "@/Components/Forms/Chats/FolderCreateForm.vue";
+import { Link } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 defineProps({
@@ -13,6 +14,27 @@ const isCreateFolderFormVisibled = ref(false);
   <div
     class="border-r border-gray-300 shadow bg-gray-50 w-[70px] h-[815px] flex flex-col p-2 text-xs items-center space-y-5 overflow-auto scrollbar"
   >
+    <Link
+      :href="route('admin.live-chats.index')"
+      :data="{
+        tab: 'all-chats',
+      }"
+      data-tooltip-target="chat-tooltip"
+      data-tooltip-placement="right"
+      class="flex items-center justify-center borer ring-2 ring-green-300 min-w-[40px] min-h-[40px] rounded-sm bg-green-600 text-white hover:bg-green-700"
+    >
+      <i class="fa-solid fa-home"></i>
+
+      <div
+        id="chat-tooltip"
+        role="tooltip"
+        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-800 bg-white rounded-lg shadow-lg opacity-0 tooltip border"
+      >
+        {{ __("ALL_CHATS") }}
+
+        <div class="tooltip-arrow" data-popper-arrow></div>
+      </div>
+    </Link>
     <div
       data-tooltip-target="trash-tooltip"
       data-tooltip-placement="right"

@@ -280,7 +280,8 @@ Route::middleware(["auth","verified"])->group(function () {
 
     Route::get('/support-service/live-chats/{live_chat_id:uuid}', [SupportLiveChatServiceController::class,"show"])->name("service.live-chat.show");
     Route::post('/support-service/live-chats', [SupportLiveChatServiceController::class,"store"])->name("service.live-chat.store");
-    Route::patch('/support-service/live-chats/{live_chat}', [SupportLiveChatServiceController::class,"update"])->name("service.live-chat.update");
+    Route::patch('/support-service/live-chats/{live_chat}/end-chat', [SupportLiveChatServiceController::class,"endChat"])->name("service.live-chat.end-chat");
+
 
     Route::post("/support-service/live-chats/messages", [LiveChatMessageController::class,"store"])->name("live-chat.message.store");
     Route::patch("/support-service/live-chats/messages/{live_chat_mesage}/delete-for-myself", [LiveChatMessageController::class,"deleteMessageForMyself"])->name("live-chat.message.delete-for-myself");

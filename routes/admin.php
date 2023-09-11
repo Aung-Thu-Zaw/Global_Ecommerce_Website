@@ -683,6 +683,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                Route::patch("/{live_chat}/pinned", "pinnedChat")->name("pinned");
                Route::patch("/{live_chat}/delete-for-myself", "deleteForMyself")->name("delete-for-myself");
                Route::delete("/{live_chat}", "destroy")->name("destroy");
+               Route::patch('/{live_chat}/handle-chat-with-folder', "handleChatWithFolder")->name("handle-chat-with-folder");
            });
 
            Route::controller(AdminChatFolderController::class)

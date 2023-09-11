@@ -27,6 +27,15 @@ const handleDeleteChatForBoth = () => {
     })
   );
 };
+
+const handleChatWithFolder = (folderId = null) => {
+  router.patch(
+    route("admin.live-chats.handle-chat-with-folder", props.liveChat.id),
+    {
+      folder_id: folderId,
+    }
+  );
+};
 </script>
 
 <template>
@@ -90,10 +99,10 @@ const handleDeleteChatForBoth = () => {
             {{ __("VIEW_CHAT") }}
           </Link>
         </li>
-        <li v-if="folders.length">
+        <li v-if="folders.length && !liveChat.folder_id">
           <button
             id="doubleDropdownButton"
-            data-dropdown-toggle="doubleDropdown"
+            :data-dropdown-toggle="'doubleDropdown' + liveChat.id"
             data-dropdown-placement="right-start"
             type="button"
             class="flex items-center justify-between w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -117,7 +126,7 @@ const handleDeleteChatForBoth = () => {
             </svg>
           </button>
           <div
-            id="doubleDropdown"
+            :id="'doubleDropdown' + liveChat.id"
             class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
           >
             <ul
@@ -126,22 +135,25 @@ const handleDeleteChatForBoth = () => {
             >
               <li v-for="folder in folders" :key="folder.id">
                 <div
+                  @click="handleChatWithFolder(folder.id)"
                   class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                 >
                   <i class="fa-solid fa-folder mr-1"></i>
                   {{ folder.name }}
                 </div>
               </li>
-              <!-- <hr />
-              <li>
-                <div
-                  class="block text-blue-600 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  <i class="fa-solid fa-plus"></i>
-                  {{ __("CREATE_NEW_FOLDER") }}
-                </div>
-              </li> -->
             </ul>
+          </div>
+        </li>
+        <li v-else>
+          <div
+            @click="handleChatWithFolder()"
+            class="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
+          >
+            <i class="fa-solid fa-folder-minus mr-1"></i>
+            <span class="line-clamp-1 w-full">
+              {{ __("REMOVE_FROM_FOLDER") }}
+            </span>
           </div>
         </li>
 

@@ -90,4 +90,14 @@ class AdminChatController extends Controller
         return to_route("admin.live-chats.index", ["tab" => $request->tab]);
     }
 
+
+    public function handleChatWithFolder(Request $request, LiveChat $liveChat): RedirectResponse
+    {
+        $liveChat->update([
+            "folder_id" => $request->folder_id,
+        ]);
+
+        return back();
+    }
+
 }

@@ -117,7 +117,7 @@ onUpdated(() => {
               v-if="liveChat.is_active === 1 && liveChat.ended_at === null"
               as="button"
               method="patch"
-              :href="route('service.live-chat.update', liveChat.id)"
+              :href="route('service.live-chat.end-chat', liveChat.id)"
               class="text-xs font-semibold px-3 py-2 rounded-[4px] bg-red-600 text-white"
             >
               End Chat

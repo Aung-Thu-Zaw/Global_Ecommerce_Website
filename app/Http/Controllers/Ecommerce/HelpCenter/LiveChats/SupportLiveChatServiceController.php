@@ -85,7 +85,7 @@ class SupportLiveChatServiceController extends Controller
         return to_route("home");
     }
 
-    public function update(LiveChat $liveChat): RedirectResponse
+    public function endChat(LiveChat $liveChat): RedirectResponse
     {
         $liveChat->update([
             "is_active" => false,
@@ -96,7 +96,6 @@ class SupportLiveChatServiceController extends Controller
 
         if($agentStatus) {
 
-
             $agentStatus->update([
                 "current_chat_count" => $agentStatus->current_chat_count - 1,
                 "chat_status" => $agentStatus->max_chat_capacity > $agentStatus->current_chat_count - 1 ? "avaliable" : "busy"
@@ -105,5 +104,6 @@ class SupportLiveChatServiceController extends Controller
 
         return to_route("home");
     }
+
 
 }
