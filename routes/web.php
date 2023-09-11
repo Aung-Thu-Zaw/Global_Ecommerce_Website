@@ -279,6 +279,7 @@ Route::middleware(["auth","verified"])->group(function () {
 
 
     Route::get('/support-service/live-chats/{live_chat_id:uuid}', [SupportLiveChatServiceController::class,"show"])->name("service.live-chat.show");
+    Route::get('/support-service/other-options', [SupportLiveChatServiceController::class,"otherOption"])->name("service.live-chat.other-options");
     Route::post('/support-service/live-chats', [SupportLiveChatServiceController::class,"store"])->name("service.live-chat.store");
     Route::patch('/support-service/live-chats/{live_chat}/end-chat', [SupportLiveChatServiceController::class,"endChat"])->name("service.live-chat.end-chat");
 

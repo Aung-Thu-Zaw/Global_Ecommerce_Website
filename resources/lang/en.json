@@ -988,5 +988,14 @@
     "REMOVE_FROM_FOLDER": "Remove from folder",
     "DELETE_CHAT": "Delete Chat",
     "DELETE_FOLDER": "Delete Folder",
-    "CHAT_FOLDERS": "Chat Folders"
+    "CHAT_FOLDERS": "Chat Folders",
+    "SORRY_NO_AGENT_ARE_AVALIABLE_RIGHT_NOW": "Sorry, no agents are available right now.",
+    "WE_APOLOGIZE_FOR_ANY_INCONVENIENCE": "We apologize for any inconvenience. Our support team is currently busy assisting other customers.Please consider one of the following options",
+    "SEND_AN_EMAIL": "Send an Email",
+    "FILL_OUT_A_CONTACT_FORM": "Fill out a Contact Form",
+    "VISIT_OUR_HELP_CENTER": "Visit our Help Center",
+    "CHECK_OUR_FAQS": "Check Our FAQs",
+    "CALL_US": "Call Us",
+    "THANK_YOU_FOR_YOUR_UNDERSTANDING": "Thank you for your understanding, and we'll be happy to assist you as soon as possible.",
+    "PLEASE_CONSIDER_ONE_OF_THE_FOLLOWING_OPTIONS":"Please consider one of the following options"
 }

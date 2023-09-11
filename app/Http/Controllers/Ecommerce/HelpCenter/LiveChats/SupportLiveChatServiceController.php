@@ -82,7 +82,7 @@ class SupportLiveChatServiceController extends Controller
             return to_route("service.live-chat.show", $liveChat->uuid);
         }
 
-        return to_route("home");
+        return to_route("service.live-chat.other-options");
     }
 
     public function endChat(LiveChat $liveChat): RedirectResponse
@@ -105,5 +105,10 @@ class SupportLiveChatServiceController extends Controller
         return to_route("home");
     }
 
+
+    public function otherOption(): Response|ResponseFactory
+    {
+        return inertia("Ecommerce/HelpCenter/LiveChat/OtherOption");
+    }
 
 }
