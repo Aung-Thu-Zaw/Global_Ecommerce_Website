@@ -129,6 +129,20 @@ const removeWatchlistItem = async (item) => {
               {{ color.name }},
             </span>
           </span>
+          <span
+            v-if="watchlist.product.types.length"
+            class="text-[.8rem] text-gray-500"
+          >
+            <span class="text-gray-600">|</span>
+            Type:
+            <span
+              v-for="itemType in watchlist.product.types"
+              :key="itemType.id"
+              class="text-slate-700 font-semibold"
+            >
+              {{ itemType.name }},
+            </span>
+          </span>
           <p class="text-[.8rem] text-red-500 font-bold">
             Only {{ watchlist.product.qty }} item(s) left
           </p>
@@ -167,14 +181,14 @@ const removeWatchlistItem = async (item) => {
     <div class="flex-auto">
       <div class="float-right">
         <button
-          class="px-4 py-2 inline-block text-blue-600 bg-white shadow-sm border border-gray-200 rounded-md ml-3 hover:bg-blue-600 hover:text-white transition-all"
+          class="px-4 py-2 text-sm inline-block text-blue-600 bg-white shadow-sm border border-gray-200 rounded-md ml-3 hover:bg-blue-600 hover:text-white transition-all"
           @click="addToCart"
         >
           <i class="fa-solid fa-cart-shopping"></i>
           Add to cart
         </button>
         <button
-          class="px-4 py-2 inline-block text-red-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-red-600 hover:text-white transition-all ml-3"
+          class="px-4 py-2 text-sm inline-block text-red-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-red-600 hover:text-white transition-all ml-3"
           @click="removeWatchlistItem(watchlist.id)"
         >
           <i class="fa fa-trash"></i>

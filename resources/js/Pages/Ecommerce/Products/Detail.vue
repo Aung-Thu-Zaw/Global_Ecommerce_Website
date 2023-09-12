@@ -84,7 +84,7 @@ const addToCart = () => {
 // Handle Product Save To Watchlist
 const saveToWatchlist = () => {
   router.post(
-    route("watchlist.store", {
+    route("watchlists.store", {
       user_id: usePage().props.auth.user.id,
       product_id: props.product.id,
       shop_id: props.product.shop.id,

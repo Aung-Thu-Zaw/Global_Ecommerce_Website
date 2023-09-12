@@ -14,12 +14,12 @@ const props = defineProps({
 
 <template>
   <AppLayout>
-    <Head title="My Watchlist" />
+    <Head :title="__('MY_WATCHLIST')" />
     <section class="py-5 sm:py-7 mt-44">
       <!-- Title -->
       <div class="container max-w-screen-xl mx-auto px-4">
         <h1 class="font-bold text-2xl text-slate-600 uppercase mb-5 self-start">
-          My Watchlist
+          {{ __("MY_WATCHLIST") }}
         </h1>
       </div>
     </section>

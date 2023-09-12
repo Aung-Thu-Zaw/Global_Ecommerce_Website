@@ -1,6 +1,6 @@
 <script setup>
 import OrderTrackingForm from "@/Components/Forms/OrderTrackingForm.vue";
-import EcommerceSearchInputForm from "@/Components/Forms/EcommerceSearchInputForm.vue";
+import SearchForm from "@/Components/Forms/EcommerceSearchInputForm.vue";
 import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
 import LanguageDropdown from "@/Components/Dropdowns/LanguageDropdown.vue";
 import { Link, usePage } from "@inertiajs/vue3";
@@ -95,7 +95,7 @@ const totalItems = computed(() => {
         </div>
 
         <!-- Global Search With History And Suggestion -->
-        <EcommerceSearchInputForm />
+        <SearchForm />
 
         <!-- Auuthorized User Actions -->
         <nav

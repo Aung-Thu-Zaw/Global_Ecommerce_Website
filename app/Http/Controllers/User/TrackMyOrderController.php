@@ -14,7 +14,7 @@ class TrackMyOrderController extends Controller
         $order=Order::where("order_no", $request->order_no)->first();
 
         if(!$order) {
-            return back()->with("error", "Order Code is invalid.");
+            return back()->with("error", "ORDER_CODE_IS_INVALID");
         }
 
         return to_route("my-orders.show", $order->id);

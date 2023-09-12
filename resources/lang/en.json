@@ -997,5 +997,8 @@
     "CHECK_OUR_FAQS": "Check Our FAQs",
     "CALL_US": "Call Us",
     "THANK_YOU_FOR_YOUR_UNDERSTANDING": "Thank you for your understanding, and we'll be happy to assist you as soon as possible.",
-    "PLEASE_CONSIDER_ONE_OF_THE_FOLLOWING_OPTIONS":"Please consider one of the following options"
+    "PLEASE_CONSIDER_ONE_OF_THE_FOLLOWING_OPTIONS":"Please consider one of the following options",
+
+    
+    "ORDER_CODE_IS_INVALID":"Order Code is invalid."
 }

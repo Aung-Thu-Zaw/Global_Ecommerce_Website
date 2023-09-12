@@ -16,22 +16,22 @@ class MyWatchlistController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $watchlists=Watchlist::findOrFail(auth()->id());
+        $watchlists = Watchlist::where("user_id", auth()->id())->get();
 
-        $shopIds=$watchlists->pluck("shop_id")->unique()->values();
+        $shopIds = $watchlists->pluck("shop_id")->unique()->values();
 
         $shops = User::select("id", "shop_name")->whereIn('id', $shopIds)->get();
 
-        $watchlists->load(["product.shop:id,shop_name","product.brand:id,name","product.sizes","product.colors"]);
+        $watchlists->load(["product.shop:id,shop_name","product.brand:id,name","product.sizes","product.colors","product.types"]);
 
-        $mostViewedProducts=UserProductInteraction::where('user_id', auth()->id())
-                                                  ->groupBy('product_id')
-                                                  ->pluck('product_id')
-                                                  ->toArray();
+        $mostViewedProducts = UserProductInteraction::where('user_id', auth()->id())
+                                                    ->groupBy('product_id')
+                                                    ->pluck('product_id')
+                                                    ->toArray();
 
-        $recommendedProducts = Product::select("id", "user_id", "image", "name", "slug", "price", "discount", "special_offer")
+        $recommendedProducts = Product::select("id", "seller_id", "image", "name", "slug", "price", "discount", "special_offer")
                                       ->with(["productReviews:id,product_id,rating","shop:id,offical"])
-                                      ->whereStatus("active")
+                                      ->where("status", "approved")
                                       ->whereIn('id', $mostViewedProducts)
                                       ->inRandomOrder()
                                       ->limit(10)
@@ -42,10 +42,10 @@ class MyWatchlistController extends Controller
 
     public function store(WatchlistRequest $request): RedirectResponse
     {
-        $watchlist=Watchlist::whereUserId($request->user_id)
-                            ->whereProductId($request->product_id)
-                            ->whereShopId($request->shop_id)
-                            ->first();
+        $watchlist = Watchlist::where("user_id", $request->user_id)
+                              ->where("product_id", $request->product_id)
+                              ->where("shop_id", $request->shop_id)
+                              ->first();
 
         if(!$watchlist) {
             Watchlist::create($request->validated());
@@ -54,13 +54,13 @@ class MyWatchlistController extends Controller
 
         $watchlist->delete();
 
-        return back()->with("info", "Item has been removed from your watchlist");
+        return back()->with("info", "Item(s) has been removed from your watchlist");
     }
 
     public function destroy(Watchlist $watchlist): RedirectResponse
     {
         $watchlist->delete();
 
-        return back()->with("success", "Item has been removed from your watchlist");
+        return back()->with("success", "Item(s) has been removed from your watchlist");
     }
 }
