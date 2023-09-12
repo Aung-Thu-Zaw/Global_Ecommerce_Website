@@ -140,10 +140,10 @@ defineProps({
               class="rounded-md w-[250px] text-white flex items-center bg-blue-700 px-5 py-3"
             >
               <span class="mr-5">
-                <i class="fa-solid fa-phone text-lg"></i>
+                <i class="fa-solid fa-envelope text-lg"></i>
               </span>
               <div class="flex flex-col items-start justify-center">
-                <span class="text-lg font-bold">{{ __("PHONE_CALL") }}</span>
+                <span class="text-lg font-bold">{{ __("CONTACT_US") }}</span>
                 <span class="text-[.7rem]">8:00 AM - 09:30 PM</span>
               </div>
             </Link>
