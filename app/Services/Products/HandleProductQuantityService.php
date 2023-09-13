@@ -6,7 +6,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 
-class UpdateProductQuantityService
+class HandleProductQuantityService
 {
     public function updateQuantity(Order $order): void
     {

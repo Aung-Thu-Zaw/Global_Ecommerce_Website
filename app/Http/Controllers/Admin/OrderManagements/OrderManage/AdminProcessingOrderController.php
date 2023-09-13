@@ -12,7 +12,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Jobs\Orders\SendShippedOrderEmailToCustomer;
 use App\Http\Traits\HandlesQueryStringParameters;
-use App\Services\Products\UpdateProductQuantityService;
+use App\Services\Products\HandleProductQuantityService;
 
 class AdminProcessingOrderController extends Controller
 {
@@ -40,9 +40,9 @@ class AdminProcessingOrderController extends Controller
         return inertia("Admin/OrderManagements/OrderManage/ProcessingOrders/Detail", compact("queryStringParams", "order", "deliveryInformation", "orderItems"));
     }
 
-    public function update(Request $request, Order $order, UpdateProductQuantityService $updateProductQuantityService): RedirectResponse
+    public function update(Request $request, Order $order): RedirectResponse
     {
-        $updateProductQuantityService->updateQuantity($order);
+        (new HandleProductQuantityService())->updateQuantity($order);
 
         $order->load(["orderItems.product.shop"]);
 
