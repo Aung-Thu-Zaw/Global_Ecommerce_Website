@@ -3,7 +3,7 @@
 namespace App\Actions\Admin\Categories;
 
 use App\Models\Category;
-use App\Services\CategoryImageUploadService;
+use App\Services\UploadFiles\CategoryImageUploadService;
 
 class UpdateCategoryAction
 {

@@ -3,7 +3,7 @@
 namespace App\Actions\Admin\UserManagements\AdminManage;
 
 use App\Models\User;
-use App\Services\AdminUserAvatarUploadService;
+use App\Services\UploadFiles\AdminUserAvatarUploadService;
 
 class UpdateAdminAction
 {

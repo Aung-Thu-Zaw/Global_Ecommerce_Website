@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Chats;
+namespace App\Services\UploadFiles;
 
 use App\Models\ChatFileAttachment;
 use App\Models\LiveChatMessage;

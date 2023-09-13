@@ -3,7 +3,7 @@
 namespace App\Actions\Ecommerce;
 
 use App\Models\Suggestion;
-use App\Services\SuggestionMultiImageUploadService;
+use App\Services\UploadFiles\SuggestionMultiImageUploadService;
 
 class CreateSuggestionAction
 {

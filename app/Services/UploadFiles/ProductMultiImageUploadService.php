@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\UploadFiles;
 
 use App\Models\Image;
 use App\Models\Product;

@@ -3,7 +3,7 @@
 namespace App\Actions\Admin\Banners\SliderBanners;
 
 use App\Models\SliderBanner;
-use App\Services\SliderBannerImageUploadService;
+use App\Services\UploadFiles\SliderBannerImageUploadService;
 
 class CreateSliderBannerAction
 {

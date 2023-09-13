@@ -3,7 +3,7 @@
 namespace App\Actions\Admin\Categories;
 
 use App\Models\Category;
-use App\Services\CategoryImageUploadService;
+use App\Services\UploadFiles\CategoryImageUploadService;
 
 class CreateCategoryAction
 {
@@ -15,10 +15,10 @@ class CreateCategoryAction
         $image = isset($data["image"]) ? (new CategoryImageUploadService())->createImage($data["image"]) : null;
 
         Category::create([
-            "parent_id"=>$data["parent_id"],
-            "name"=>$data["name"],
-            "status"=>$data["status"],
-            "image"=>$image
+            "parent_id" => $data["parent_id"],
+            "name" => $data["name"],
+            "status" => $data["status"],
+            "image" => $image
         ]);
     }
 }

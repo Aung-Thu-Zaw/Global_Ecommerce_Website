@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\UploadFiles;
 
 use App\Models\WebsiteSetting;
 use Illuminate\Http\UploadedFile;
@@ -14,9 +14,9 @@ class WebsiteSettingImageUploadService
             WebsiteSetting::deleteLogo($logoImage);
         }
 
-        $originalName=$image->getClientOriginalName();
+        $originalName = $image->getClientOriginalName();
 
-        $finalName=time()."-".$originalName;
+        $finalName = time()."-".$originalName;
 
         $image->move(storage_path("app/public/website-settings/"), $finalName);
 
@@ -30,9 +30,9 @@ class WebsiteSettingImageUploadService
             WebsiteSetting::deleteFavicon($faviconImage);
         }
 
-        $originalName=$image->getClientOriginalName();
+        $originalName = $image->getClientOriginalName();
 
-        $finalName=time()."-".$originalName;
+        $finalName = time()."-".$originalName;
 
         $image->move(storage_path("app/public/website-settings/"), $finalName);
 

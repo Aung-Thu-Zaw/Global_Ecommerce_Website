@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\UploadFiles;
 
 use App\Models\BlogPost;
 use Illuminate\Http\UploadedFile;

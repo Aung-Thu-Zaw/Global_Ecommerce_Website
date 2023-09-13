@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\UploadFiles;
 
 use App\Models\SliderBanner;
 use Illuminate\Http\UploadedFile;

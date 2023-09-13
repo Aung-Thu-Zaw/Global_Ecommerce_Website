@@ -3,7 +3,7 @@
 namespace App\Actions\Ecommerce\Reviews;
 
 use App\Models\ProductReview;
-use App\Services\ProductReviewMultiImageUploadService;
+use App\Services\UploadFiles\ProductReviewMultiImageUploadService;
 
 class CreateProductReviewAction
 {

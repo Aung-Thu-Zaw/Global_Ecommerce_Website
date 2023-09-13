@@ -3,7 +3,7 @@
 namespace App\Actions\Admin\Brands;
 
 use App\Models\Brand;
-use App\Services\BrandImageUploadService;
+use App\Services\UploadFiles\BrandImageUploadService;
 
 class CreateBrandAction
 {
@@ -15,10 +15,10 @@ class CreateBrandAction
         $image = isset($data["image"]) ? (new BrandImageUploadService())->createImage($data["image"]) : null;
 
         Brand::create([
-            "category_id"=>$data["category_id"],
-            "name"=>$data["name"],
-            "description"=>$data["description"],
-            "image"=>$image
+            "category_id" => $data["category_id"],
+            "name" => $data["name"],
+            "description" => $data["description"],
+            "image" => $image
         ]);
     }
 }

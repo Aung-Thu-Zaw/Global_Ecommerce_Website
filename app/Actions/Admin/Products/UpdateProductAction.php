@@ -3,8 +3,8 @@
 namespace App\Actions\Admin\Products;
 
 use App\Models\Product;
-use App\Services\ProductImageUploadService;
-use App\Services\ProductMultiImageUploadService;
+use App\Services\UploadFiles\ProductImageUploadService;
+use App\Services\UploadFiles\ProductMultiImageUploadService;
 use App\Services\Products\HandleProductColorService;
 use App\Services\Products\HandleProductSizeService;
 use App\Services\Products\HandleProductTypeService;

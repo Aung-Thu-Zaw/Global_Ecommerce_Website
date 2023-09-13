@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\UploadFiles;
 
-use App\Models\User;
+use App\Models\Brand;
 use Illuminate\Http\UploadedFile;
 
-class AdminUserAvatarUploadService
+class BrandImageUploadService
 {
     public function createImage(UploadedFile $image): string
     {
@@ -13,24 +13,23 @@ class AdminUserAvatarUploadService
 
         $finalName=time()."-".$originalName;
 
-        $image->move(storage_path("app/public/avatars/"), $finalName);
+        $image->move(storage_path("app/public/brands/"), $finalName);
 
         return $finalName;
     }
 
-    public function updateImage(UploadedFile $image, string $avatar): string
+    public function updateImage(UploadedFile $image, string $brandImage): string
     {
-        if(is_string($avatar)) {
+        if(is_string($brandImage)) {
 
-            User::deleteUserAvatar($avatar);
-
+            Brand::deleteImage($brandImage);
         }
 
         $originalName=$image->getClientOriginalName();
 
         $finalName=time()."-".$originalName;
 
-        $image->move(storage_path("app/public/avatars/"), $finalName);
+        $image->move(storage_path("app/public/brands/"), $finalName);
 
         return $finalName;
     }

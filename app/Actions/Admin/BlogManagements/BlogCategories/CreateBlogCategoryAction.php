@@ -3,7 +3,7 @@
 namespace App\Actions\Admin\BlogManagements\BlogCategories;
 
 use App\Models\BlogCategory;
-use App\Services\BlogCategoryImageUploadService;
+use App\Services\UploadFiles\BlogCategoryImageUploadService;
 
 class CreateBlogCategoryAction
 {

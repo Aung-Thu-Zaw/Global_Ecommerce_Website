@@ -3,7 +3,7 @@
 namespace App\Actions\Admin\Banners\SliderBanners;
 
 use App\Models\SliderBanner;
-use App\Services\SliderBannerImageUploadService;
+use App\Services\UploadFiles\SliderBannerImageUploadService;
 
 class UpdateSliderBannerAction
 {
@@ -15,9 +15,9 @@ class UpdateSliderBannerAction
         $image = isset($data["image"]) ? (new SliderBannerImageUploadService())->updateImage($data["image"], $sliderBanner->image) : $sliderBanner->image;
 
         $sliderBanner->update([
-            "url"=>$data["url"],
-            "status"=>$data["status"],
-            "image"=>$image
+            "url" => $data["url"],
+            "status" => $data["status"],
+            "image" => $image
         ]);
     }
 }

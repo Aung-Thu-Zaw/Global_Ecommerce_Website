@@ -3,7 +3,7 @@
 namespace App\Actions\Admin\Banners\ProductBanners;
 
 use App\Models\ProductBanner;
-use App\Services\ProductBannerImageUploadService;
+use App\Services\UploadFiles\ProductBannerImageUploadService;
 
 class UpdateProductBannerAction
 {
@@ -15,9 +15,9 @@ class UpdateProductBannerAction
         $image = isset($data["image"]) ? (new ProductBannerImageUploadService())->updateImage($data["image"], $productBanner->image) : $productBanner->image;
 
         $productBanner->update([
-            "url"=>$data["url"],
-            "status"=>$data["status"],
-            "image"=>$image
+            "url" => $data["url"],
+            "status" => $data["status"],
+            "image" => $image
         ]);
     }
 }

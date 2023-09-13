@@ -3,7 +3,7 @@
 namespace App\Actions\Admin\BlogManagements\BlogPosts;
 
 use App\Models\BlogPost;
-use App\Services\BlogPostImageUploadService;
+use App\Services\UploadFiles\BlogPostImageUploadService;
 use App\Services\HandleBlogTagService;
 
 class CreateBlogPostAction
@@ -15,12 +15,12 @@ class CreateBlogPostAction
     {
         $image = isset($data["image"]) ? (new BlogPostImageUploadService())->createImage($data["image"]) : null;
 
-        $blogPost=BlogPost::create([
-            "blog_category_id"=>$data["blog_category_id"],
-            "author_id"=>$data["author_id"],
-            "title"=>$data["title"],
-            "description"=>$data["description"],
-            "image"=>$image
+        $blogPost = BlogPost::create([
+            "blog_category_id" => $data["blog_category_id"],
+            "author_id" => $data["author_id"],
+            "title" => $data["title"],
+            "description" => $data["description"],
+            "image" => $image
         ]);
 
         if(isset($data["tags"])) {

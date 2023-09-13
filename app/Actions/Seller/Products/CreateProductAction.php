@@ -3,8 +3,8 @@
 namespace App\Actions\Seller\Products;
 
 use App\Models\Product;
-use App\Services\ProductImageUploadService;
-use App\Services\ProductMultiImageUploadService;
+use App\Services\UploadFiles\ProductImageUploadService;
+use App\Services\UploadFiles\ProductMultiImageUploadService;
 use App\Services\Products\HandleProductColorService;
 use App\Services\Products\HandleProductSizeService;
 use App\Services\Products\HandleProductTypeService;
@@ -18,21 +18,21 @@ class CreateProductAction
     {
         $image = isset($data["image"]) ? (new ProductImageUploadService())->createImage($data["image"]) : null;
 
-        $product=Product::create([
-            "brand_id"=>$data["brand_id"],
-            "category_id"=>$data["category_id"],
-            "seller_id"=>$data["seller_id"],
-            "name"=>$data["name"],
-            "code"=>$data["code"],
-            "qty"=>$data["qty"],
-            "price"=>$data["price"],
-            "discount"=>$data["discount"],
-            "description"=>$data["description"],
-            "featured"=>$data["featured"],
-            "special_offer"=>$data["special_offer"],
-            "status"=>$data["status"],
-            "return_policy"=>$data["return_policy"],
-            "image"=>$image,
+        $product = Product::create([
+            "brand_id" => $data["brand_id"],
+            "category_id" => $data["category_id"],
+            "seller_id" => $data["seller_id"],
+            "name" => $data["name"],
+            "code" => $data["code"],
+            "qty" => $data["qty"],
+            "price" => $data["price"],
+            "discount" => $data["discount"],
+            "description" => $data["description"],
+            "featured" => $data["featured"],
+            "special_offer" => $data["special_offer"],
+            "status" => $data["status"],
+            "return_policy" => $data["return_policy"],
+            "image" => $image,
         ]);
 
         if(isset($data["sizes"])) {

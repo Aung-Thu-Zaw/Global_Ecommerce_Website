@@ -3,7 +3,7 @@
 namespace App\Actions\Seller\ProductBanners;
 
 use App\Models\SellerProductBanner;
-use App\Services\ProductBannerImageUploadService;
+use App\Services\UploadFiles\ProductBannerImageUploadService;
 
 class CreateSellerProductBannerAction
 {

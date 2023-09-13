@@ -3,7 +3,7 @@
 namespace App\Actions\Admin\Banners\CampaignBanners;
 
 use App\Models\CampaignBanner;
-use App\Services\CampaignBannerImageUploadService;
+use App\Services\UploadFiles\CampaignBannerImageUploadService;
 
 class CreateCampaignBannerAction
 {
