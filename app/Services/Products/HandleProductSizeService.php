@@ -15,23 +15,22 @@ class HandleProductSizeService
     {
         $product->sizes()->detach();
 
-        foreach ($sizes as $size) {
-            $countExisitngSizes=Size::where("name", $size)->count();
+        $filteredSizes = array_unique(array_map('strtolower', $sizes));
 
-            $exisitngSizes=Size::where("name", $size)->get();
+        $attachedSizeIds = $product->sizes()->pluck('id')->toArray();
 
-            if (!$countExisitngSizes) {
-                $sizeModel=new Size();
-                $sizeModel->name=$size;
+        foreach ($filteredSizes as $size) {
+            $existedSize = Size::where("name", $size)->first();
+
+            if (!$existedSize) {
+                $sizeModel = new Size();
+                $sizeModel->name = $size;
                 $sizeModel->save();
                 $product->sizes()->attach($sizeModel);
-            }
-
-            if ($countExisitngSizes) {
-                foreach ($exisitngSizes as $exisitngSize) {
-                    $product->sizes()->attach($exisitngSize);
-                }
+            } elseif (!in_array($existedSize->id, $attachedSizeIds)) {
+                $product->sizes()->attach($existedSize);
             }
         }
+
     }
 }
