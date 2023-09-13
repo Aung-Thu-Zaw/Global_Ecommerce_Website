@@ -11,6 +11,8 @@ class Size extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Size, never>
     */

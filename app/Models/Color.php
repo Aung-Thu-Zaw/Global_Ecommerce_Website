@@ -11,6 +11,8 @@ class Color extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     /**
     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Color, never>
     */

@@ -23,9 +23,8 @@ class HandleProductSizeService
             $existedSize = Size::where("name", $size)->first();
 
             if (!$existedSize) {
-                $sizeModel = new Size();
-                $sizeModel->name = $size;
-                $sizeModel->save();
+                $sizeModel = Size::create(["name" => $size]);
+
                 $product->sizes()->attach($sizeModel);
             } elseif (!in_array($existedSize->id, $attachedSizeIds)) {
                 $product->sizes()->attach($existedSize);

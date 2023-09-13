@@ -15,22 +15,19 @@ class HandleProductTypeService
     {
         $product->types()->detach();
 
-        foreach ($types as $type) {
-            $countExisitngTypes=Type::where("name", $type)->count();
+        $filteredTypes = array_unique(array_map('strtolower', $types));
 
-            $exisitngTypes=Type::where("name", $type)->get();
+        $attachedTypeIds = $product->types()->pluck('id')->toArray();
 
-            if (!$countExisitngTypes) {
-                $typeModel=new Type();
-                $typeModel->name=$type;
-                $typeModel->save();
+        foreach ($filteredTypes as $type) {
+            $existedType = Type::where("name", $type)->first();
+
+            if (!$existedType) {
+                $typeModel = Type::create(["name" => $type]);
+
                 $product->types()->attach($typeModel);
-            }
-
-            if ($countExisitngTypes) {
-                foreach ($exisitngTypes as $exisitngType) {
-                    $product->types()->attach($exisitngType);
-                }
+            } elseif (!in_array($existedType->id, $attachedTypeIds)) {
+                $product->types()->attach($existedType);
             }
         }
     }

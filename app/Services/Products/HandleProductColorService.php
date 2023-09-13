@@ -23,9 +23,8 @@ class HandleProductColorService
             $existedColor = Color::where("name", $color)->first();
 
             if (!$existedColor) {
-                $colorModel = new Color();
-                $colorModel->name = $color;
-                $colorModel->save();
+                $colorModel = Color::create(["name" => $color]);
+
                 $product->colors()->attach($colorModel);
             } elseif (!in_array($existedColor->id, $attachedColorIds)) {
                 $product->colors()->attach($existedColor);
