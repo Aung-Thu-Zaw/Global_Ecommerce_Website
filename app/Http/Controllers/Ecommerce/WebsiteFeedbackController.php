@@ -6,9 +6,7 @@ use App\Actions\Ecommerce\CreateWebsiteFeedbackAction;
 use App\Events\FeedbackForWebsite;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WebsiteFeedbackRequest;
-use App\Mail\ForTheSubmitters\ThankForWebsiteFeedbackMail;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Mail;
 
 class WebsiteFeedbackController extends Controller
 {

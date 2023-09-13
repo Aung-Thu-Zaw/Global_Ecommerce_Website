@@ -2,18 +2,15 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Brand;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Conversation;
 use App\Models\Language;
-use App\Models\Message;
 use App\Models\SearchHistory;
 use App\Models\User;
 use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
-use Jorenvh\Share\ShareFacade;
 use Tightenco\Ziggy\Ziggy;
 use Jorenvh\Share\Share;
 

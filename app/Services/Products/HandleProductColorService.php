@@ -15,22 +15,20 @@ class HandleProductColorService
     {
         $product->colors()->detach();
 
-        foreach ($colors as $color) {
-            $countExisitngColors=Color::where("name", $color)->count();
+        $filteredColors = array_unique(array_map('strtolower', $colors));
 
-            $exisitngColors=Color::where("name", $color)->get();
+        $attachedColorIds = $product->colors()->pluck('id')->toArray();
 
-            if (!$countExisitngColors) {
-                $colorModel=new Color();
-                $colorModel->name=$color;
+        foreach ($filteredColors as $color) {
+            $existedColor = Color::where("name", $color)->first();
+
+            if (!$existedColor) {
+                $colorModel = new Color();
+                $colorModel->name = $color;
                 $colorModel->save();
                 $product->colors()->attach($colorModel);
-            }
-
-            if ($countExisitngColors) {
-                foreach ($exisitngColors as $existingColor) {
-                    $product->colors()->attach($existingColor);
-                }
+            } elseif (!in_array($existedColor->id, $attachedColorIds)) {
+                $product->colors()->attach($existedColor);
             }
         }
     }

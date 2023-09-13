@@ -425,7 +425,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:product-review.trash.delete')->name("trash.permanently.delete");
                 });
 
-           //    Admin Shop Reviews Section
+           // Admin Shop Reviews Section
            Route::controller(AdminShopReviewController::class)
                 ->prefix("/shop-reviews")
                 ->name("shop-reviews.")
@@ -653,6 +653,7 @@ Route::middleware(["admin","verified","user.role:admin"])
                     Route::delete("/trash/{trash_faq_sub_category_id}/force-delete", "forceDelete")->middleware('permission:faq-category.trash.delete')->name("trash.force.delete");
                     Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:faq-category.trash.delete')->name("trash.permanently.delete");
                 });
+
            // Admin Faqs Section
            Route::controller(AdminFaqController::class)
                 ->prefix("/faqs")
@@ -673,27 +674,26 @@ Route::middleware(["admin","verified","user.role:admin"])
            // ******************** Admin Dashboard SupportContactService ********************
 
            // Admin Chats Section
-
            Route::controller(AdminChatController::class)
-           ->prefix("/live-chats")
-           ->name("live-chats.")
-           ->group(function () {
-               Route::get("/", "index")->name("index");
-               Route::get("/chat/{live_chat:uuid}", "show")->name("show");
-               Route::patch("/{live_chat}/pinned", "pinnedChat")->name("pinned");
-               Route::patch("/{live_chat}/delete-for-myself", "deleteForMyself")->name("delete-for-myself");
-               Route::delete("/{live_chat}", "destroy")->name("destroy");
-               Route::patch('/{live_chat}/handle-chat-with-folder', "handleChatWithFolder")->name("handle-chat-with-folder");
-               Route::patch("/{live_chat}/archived", "archivedChat")->name("archived");
-           });
+                ->prefix("/live-chats")
+                ->name("live-chats.")
+                ->group(function () {
+                    Route::get("/", "index")->name("index");
+                    Route::get("/chat/{live_chat:uuid}", "show")->name("show");
+                    Route::patch("/{live_chat}/pinned", "pinnedChat")->name("pinned");
+                    Route::patch("/{live_chat}/delete-for-myself", "deleteForMyself")->name("delete-for-myself");
+                    Route::delete("/{live_chat}", "destroy")->name("destroy");
+                    Route::patch('/{live_chat}/handle-chat-with-folder', "handleChatWithFolder")->name("handle-chat-with-folder");
+                    Route::patch("/{live_chat}/archived", "archivedChat")->name("archived");
+                });
 
            Route::controller(AdminChatFolderController::class)
-           ->prefix("/live-chats/folders")
-           ->name("live-chats.folders.")
-           ->group(function () {
-               Route::post("/", "store")->name("store");
-               Route::delete("/{chat_folder}", "destroy")->name("destroy");
-           });
+                ->prefix("/live-chats/folders")
+                ->name("live-chats.folders.")
+                ->group(function () {
+                    Route::post("/", "store")->name("store");
+                    Route::delete("/{chat_folder}", "destroy")->name("destroy");
+                });
 
            // ******************** Admin Dashboard From The Submitters ********************
 

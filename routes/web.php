@@ -277,14 +277,27 @@ Route::middleware(["auth","verified"])->group(function () {
     Route::post("/conversation/messages", [MessageController::class,"store"])->name("message.store");
 
 
-    Route::get('/support-service/live-chats/{live_chat_id:uuid}', [SupportLiveChatServiceController::class,"show"])->name("service.live-chat.show");
-    Route::get('/support-service/other-options', [SupportLiveChatServiceController::class,"otherOption"])->name("service.live-chat.other-options");
-    Route::post('/support-service/live-chats', [SupportLiveChatServiceController::class,"store"])->name("service.live-chat.store");
-    Route::patch('/support-service/live-chats/{live_chat}/end-chat', [SupportLiveChatServiceController::class,"endChat"])->name("service.live-chat.end-chat");
+    Route::controller(SupportLiveChatServiceController::class)
+         ->prefix("/support-service")
+         ->name("service.live-chat.")
+         ->group(function () {
+             Route::get('/live-chats/{live_chat_id:uuid}', "show")->name("show");
+             Route::get('/other-options', "otherOption")->name("other-options");
+             Route::post('/live-chats', "store")->name("store");
+             Route::patch('/live-chats/{live_chat}/end-chat', "endChat")->name("end-chat");
+         });
 
 
-    Route::post("/support-service/live-chats/messages", [LiveChatMessageController::class,"store"])->name("live-chat.message.store");
-    Route::patch("/support-service/live-chats/messages/{live_chat_mesage}/delete-for-myself", [LiveChatMessageController::class,"deleteMessageForMyself"])->name("live-chat.message.delete-for-myself");
-    Route::patch("/support-service/live-chats/messages/{live_chat_mesage}/reply", [LiveChatMessageController::class,"replyMessage"])->name("live-chat.message.reply");
-    Route::delete("/support-service/live-chats/messages/{live_chat_mesage}", [LiveChatMessageController::class,"destroy"])->name("live-chat.message.destroy");
+    Route::controller(LiveChatMessageController::class)
+         ->prefix("/support-service/live-chats/messages")
+         ->name("live-chat.message.")
+         ->group(function () {
+             Route::post("", "store")->name("store");
+             Route::patch("/{live_chat_mesage}/delete-for-myself", "deleteMessageForMyself")->name("delete-for-myself");
+             Route::patch("/{live_chat_mesage}/reply", "replyMessage")->name("reply");
+             Route::delete("/{live_chat_mesage}", "destroy")->name("destroy");
+         });
+
+
+
 });

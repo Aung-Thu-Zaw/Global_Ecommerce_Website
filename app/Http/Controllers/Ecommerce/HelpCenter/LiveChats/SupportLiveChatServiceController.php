@@ -6,7 +6,6 @@ use App\Events\NewLiveChatAssignment;
 use App\Http\Controllers\Controller;
 use App\Models\AgentStatus;
 use App\Models\LiveChat;
-use App\Models\LiveChatMessage;
 use App\Services\BroadcastNotifications\NewLiveChatAssignmentNotificationSendToAdminDashboardService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,30 +17,24 @@ class SupportLiveChatServiceController extends Controller
 {
     public function show(string $uuid): Response|ResponseFactory
     {
-        $liveChat = LiveChat::with(["user:id,name,avatar","agent:id,name,avatar","liveChatMessages.chatFileAttachments","liveChatMessages.user:id,name,avatar","liveChatMessages.agent:id,name,avatar","liveChatMessages.replyToMessage"])
-                                   ->where("user_id", auth()->id())
-                                   ->where("uuid", $uuid)
-                                   ->where("is_active", true)
-                                   ->first();
-
-
-
-
-
-
-
-
-
-
-
-
+        $liveChat = LiveChat::with([
+                        "user:id,name,avatar",
+                        "agent:id,name,avatar",
+                        "liveChatMessages.chatFileAttachments",
+                        "liveChatMessages.user:id,name,avatar",
+                        "liveChatMessages.agent:id,name,avatar",
+                        "liveChatMessages.replyToMessage"
+                         ])
+                            ->where("user_id", auth()->id())
+                            ->where("uuid", $uuid)
+                            ->where("is_active", true)
+                            ->first();
 
         return inertia("Ecommerce/HelpCenter/LiveChat/Show", compact("liveChat"));
     }
 
     public function store(Request $request): RedirectResponse
     {
-
         $liveChat = LiveChat::firstOrCreate(
             [
                 "user_id" => $request->user_id,

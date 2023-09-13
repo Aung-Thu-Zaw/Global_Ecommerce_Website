@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
                 BrandSeeder::class,
                 CollectionSeeder::class,
                 ProductSeeder::class,
+                ColorSeeder::class,
                 ImageSeeder::class,
                 CouponSeeder::class,
                 CountrySeeder::class,
