@@ -9,11 +9,11 @@ class BlogCategoryImageUploadService
 {
     public function createImage(UploadedFile $image): string
     {
-        $originalName=$image->getClientOriginalName();
+        $originalName = $image->getClientOriginalName();
 
-        $finalName=time()."-".$originalName;
+        $finalName = time()."-".$originalName;
 
-        $image->move(storage_path("app/public/blog-categories/"), $finalName);
+        $image->storeAs("blog-categories", $finalName);
 
         return $finalName;
     }
@@ -25,11 +25,11 @@ class BlogCategoryImageUploadService
             BlogCategory::deleteImage($blogCategoryImage);
         }
 
-        $originalName=$image->getClientOriginalName();
+        $originalName = $image->getClientOriginalName();
 
-        $finalName=time()."-".$originalName;
+        $finalName = time()."-".$originalName;
 
-        $image->move(storage_path("app/public/blog-categories/"), $finalName);
+        $image->storeAs("blog-categories", $finalName);
 
         return $finalName;
     }
