@@ -9,11 +9,11 @@ class CampaignBannerImageUploadService
 {
     public function createImage(UploadedFile $image): string
     {
-        $originalName=$image->getClientOriginalName();
+        $originalName = $image->getClientOriginalName();
 
-        $finalName=time()."-".$originalName;
+        $finalName = time()."-".$originalName;
 
-        $image->move(storage_path("app/public/campaign-banners/"), $finalName);
+        $image->storeAs("campaign-banners", $finalName);
 
         return $finalName;
     }
@@ -25,11 +25,11 @@ class CampaignBannerImageUploadService
             CampaignBanner::deleteImage($campaignBannerImage);
         }
 
-        $originalName=$image->getClientOriginalName();
+        $originalName = $image->getClientOriginalName();
 
-        $finalName=time()."-".$originalName;
+        $finalName = time()."-".$originalName;
 
-        $image->move(storage_path("app/public/campaign-banners/"), $finalName);
+        $image->storeAs("campaign-banners", $finalName);
 
         return $finalName;
     }
