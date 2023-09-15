@@ -9,11 +9,11 @@ class ProductImageUploadService
 {
     public function createImage(UploadedFile $image): string
     {
-        $originalName=$image->getClientOriginalName();
+        $originalName = $image->getClientOriginalName();
 
-        $finalName=time()."-".$originalName;
+        $finalName = time()."-".$originalName;
 
-        $image->move(storage_path("app/public/products/"), $finalName);
+        $image->storeAs("products", $finalName);
 
         return $finalName;
     }
@@ -25,11 +25,11 @@ class ProductImageUploadService
             Product::deleteImage($productImage);
         }
 
-        $originalName=$image->getClientOriginalName();
+        $originalName = $image->getClientOriginalName();
 
-        $finalName="product"."-".time()."-".$originalName;
+        $finalName = "product"."-".time()."-".$originalName;
 
-        $image->move(storage_path("app/public/products/"), $finalName);
+        $image->storeAs("products", $finalName);
 
         return $finalName;
     }
