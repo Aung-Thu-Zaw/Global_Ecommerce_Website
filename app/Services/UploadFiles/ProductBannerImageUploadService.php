@@ -17,7 +17,7 @@ class ProductBannerImageUploadService
 
         $finalName = time()."-".$originalName;
 
-        $image->move(storage_path("app/public/product-banners/"), $finalName);
+        $image->storeAs("product-banners", $finalName);
 
         return $finalName;
     }
@@ -33,7 +33,7 @@ class ProductBannerImageUploadService
 
         $finalName = time()."-".$originalName;
 
-        $image->move(storage_path("app/public/product-banners/"), $finalName);
+        $image->storeAs("product-banners", $finalName);
 
         return $finalName;
     }
