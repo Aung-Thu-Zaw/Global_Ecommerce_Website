@@ -19,12 +19,9 @@ class ProductReviewMultiImageUploadService
 
             $finalName = "product-review"."-".time()."-".$originalName;
 
-            $image->move(storage_path("app/public/product-reviews/"), $finalName);
+            $image->storeAs("product-reviews", $finalName);
 
-            $image = new Image();
-            $image->product_review_id = $productReview->id;
-            $image->img_path = $finalName;
-            $image->save();
+            Image::create(["product_review_id" => $productReview->id,"img_path" => $finalName]);
         }
     }
 }

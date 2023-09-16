@@ -13,18 +13,18 @@ class ProductMultiImageUploadService
      */
     public function createMultiImage(array $images, Product $product): void
     {
+
         foreach ($images as $image) {
 
-            $originalName=$image->getClientOriginalName();
+            $originalName = $image->getClientOriginalName();
 
-            $finalName="product"."-".time()."-".$originalName;
+            $finalName = "product"."-".time()."-".$originalName;
 
-            $image->move(storage_path("app/public/products/"), $finalName);
+            $image->storeAs("products", $finalName);
 
-            $image=new Image();
-            $image->product_id=$product->id;
-            $image->img_path=$finalName;
-            $image->save();
+            Image::create(["product_id" => $product->id,"img_path" => $finalName]);
+
         }
+
     }
 }

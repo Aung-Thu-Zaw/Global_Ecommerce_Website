@@ -19,12 +19,9 @@ class SuggestionMultiImageUploadService
 
             $finalName = "suggestion"."-".time()."-".$originalName;
 
-            $image->move(storage_path("app/public/suggestions/"), $finalName);
+            $image->storeAs("suggestions", $finalName);
 
-            $image = new Image();
-            $image->suggestion_id = $suggestion->id;
-            $image->img_path = $finalName;
-            $image->save();
+            Image::create(["suggestion_id" => $suggestion->id,"img_path" => $finalName]);
         }
     }
 }
