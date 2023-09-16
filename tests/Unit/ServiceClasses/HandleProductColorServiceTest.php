@@ -34,10 +34,14 @@ class HandleProductColorServiceTest extends TestCase
 
     public function test_it_can_handle_colors(): void
     {
+        // Arrange
         $colors = ['red', 'green', 'blue', 'yellow'];
 
-        (new HandleProductColorService())->handle($colors, $this->product);
+        // Act
+        $service = new HandleProductColorService();
+        $service->handle($colors, $this->product);
 
+        // Assert
         $this->assertCount(count($colors), $this->product->colors);
         foreach ($colors as $color) {
             $this->assertContains($color, $this->product->colors->pluck('name')->all());
@@ -46,10 +50,14 @@ class HandleProductColorServiceTest extends TestCase
 
     public function test_it_does_not_duplicate_existing_colors(): void
     {
+        // Arrange
         $colors = ['red','Red','green','gREEn','blue','blue'];
 
-        (new HandleProductColorService())->handle($colors, $this->product);
+        // Act
+        $service = new HandleProductColorService();
+        $service->handle($colors, $this->product);
 
+        // Assert
         $this->assertCount(3, $this->product->colors);
     }
 

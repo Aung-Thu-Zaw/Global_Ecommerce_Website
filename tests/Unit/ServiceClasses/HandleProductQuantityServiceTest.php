@@ -41,25 +41,32 @@ class HandleProductQuantityServiceTest extends TestCase
 
     public function test_update_quantity_subtracts_correctly(): void
     {
+        // Arrange
         $product = $this->createProduct(productQty:20);
         $this->createOrderItem(productId: $product->id, qty: 3);
 
-        (new HandleProductQuantityService())->updateQuantity($this->order);
+        // Act
+        $service = new HandleProductQuantityService();
+        $service->updateQuantity($this->order);
 
+        // Assert
         $updatedProduct = Product::find($product->id);
         $this->assertEquals(17, $updatedProduct->qty);
     }
 
     public function test_update_quantity_handles_multiple_order_items(): void
     {
-
+        // Arrange
         $product1 = $this->createProduct(productQty:20);
         $product2 = $this->createProduct(productQty:10);
         $this->createOrderItem(productId: $product1->id, qty: 2);
         $this->createOrderItem(productId: $product2->id, qty: 5);
 
-        (new HandleProductQuantityService())->updateQuantity($this->order);
+        // Act
+        $service = new HandleProductQuantityService();
+        $service->updateQuantity($this->order);
 
+        // Assert
         $updatedProduct1 = Product::find($product1->id);
         $updatedProduct2 = Product::find($product2->id);
         $this->assertEquals(18, $updatedProduct1->qty);

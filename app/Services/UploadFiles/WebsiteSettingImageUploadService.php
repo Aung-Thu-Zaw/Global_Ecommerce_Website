@@ -18,7 +18,7 @@ class WebsiteSettingImageUploadService
 
         $finalName = time()."-".$originalName;
 
-        $image->move(storage_path("app/public/website-settings/"), $finalName);
+        $image->storeAs("website-settings", $finalName);
 
         return $finalName;
     }
@@ -34,7 +34,7 @@ class WebsiteSettingImageUploadService
 
         $finalName = time()."-".$originalName;
 
-        $image->move(storage_path("app/public/website-settings/"), $finalName);
+        $image->storeAs("website-settings", $finalName);
 
         return $finalName;
     }

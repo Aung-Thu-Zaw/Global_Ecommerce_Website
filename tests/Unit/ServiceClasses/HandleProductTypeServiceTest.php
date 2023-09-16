@@ -34,10 +34,14 @@ class HandleProductTypeServiceTest extends TestCase
 
     public function test_it_can_handle_types(): void
     {
+        // Arrange
         $types = ['jean','letter','iron','metal','steel'];
 
-        (new HandleProductTypeService())->handle($types, $this->product);
+        // Act
+        $service = new HandleProductTypeService();
+        $service->handle($types, $this->product);
 
+        // Assert
         $this->assertCount(count($types), $this->product->types);
         foreach ($types as $type) {
             $this->assertContains($type, $this->product->types->pluck('name')->all());
@@ -46,10 +50,14 @@ class HandleProductTypeServiceTest extends TestCase
 
     public function test_it_does_not_duplicate_existing_types(): void
     {
+        // Arrange
         $types = ['jean','JEan','letter','Letter','iron','metal','METAL','steel'];
 
-        (new HandleProductTypeService())->handle($types, $this->product);
+        // Act
+        $service = new HandleProductTypeService();
+        $service->handle($types, $this->product);
 
+        // Assert
         $this->assertCount(5, $this->product->types);
     }
 

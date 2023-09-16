@@ -34,10 +34,14 @@ class HandleProductSizeServiceTest extends TestCase
 
     public function test_it_can_handle_sizes(): void
     {
+        // Arrange
         $sizes = ['sm','md','lg','xl','2xl'];
 
-        (new HandleProductSizeService())->handle($sizes, $this->product);
+        // Act
+        $service = new HandleProductSizeService();
+        $service->handle($sizes, $this->product);
 
+        // Assert
         $this->assertCount(count($sizes), $this->product->sizes);
         foreach ($sizes as $size) {
             $this->assertContains($size, $this->product->sizes->pluck('name')->all());
@@ -46,10 +50,14 @@ class HandleProductSizeServiceTest extends TestCase
 
     public function test_it_does_not_duplicate_existing_sizes(): void
     {
+        // Arrange
         $sizes = ['sm','SM','sM','Sm'];
 
-        (new HandleProductSizeService())->handle($sizes, $this->product);
+        // Act
+        $service = new HandleProductSizeService();
+        $service->handle($sizes, $this->product);
 
+        // Assert
         $this->assertCount(1, $this->product->sizes);
     }
 
