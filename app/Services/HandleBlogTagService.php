@@ -15,22 +15,19 @@ class HandleBlogTagService
     {
         $blogPost->blogTags()->detach();
 
-        foreach ($tags as $tag) {
-            $countExisitngTags=BlogTag::where("name", $tag)->count();
+        $filteredTags = array_unique(array_map('strtolower', $tags));
 
-            $exisitngTags=BlogTag::where("name", $tag)->get();
+        $attachedTagIds = $blogPost->blogTags()->pluck('id')->toArray();
 
-            if (!$countExisitngTags) {
-                $BlogTagModel=new BlogTag();
-                $BlogTagModel->name=$tag;
-                $BlogTagModel->save();
-                $blogPost->blogTags()->attach($BlogTagModel);
-            }
+        foreach ($filteredTags as $tag) {
+            $existedTag = BlogTag::where("name", $tag)->first();
 
-            if ($countExisitngTags) {
-                foreach ($exisitngTags as $exisitngTag) {
-                    $blogPost->blogTags()->attach($exisitngTag);
-                }
+            if (!$existedTag) {
+                $tagModel = BlogTag::create(["name" => $tag]);
+
+                $blogPost->blogTags()->attach($tagModel);
+            } elseif (!in_array($existedTag->id, $attachedTagIds)) {
+                $blogPost->blogTags()->attach($existedTag);
             }
         }
     }
