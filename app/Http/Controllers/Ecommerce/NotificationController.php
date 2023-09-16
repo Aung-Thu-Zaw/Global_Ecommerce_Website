@@ -9,9 +9,9 @@ use Illuminate\Http\RedirectResponse;
 
 class NotificationController extends Controller
 {
-    public function reatNotification(string $notificationId): RedirectResponse
+    public function reatNotification(Request $request, string $notificationId): RedirectResponse
     {
-        (new ReadNotificationService())->read($notificationId);
+        (new ReadNotificationService())->read($request->notifiable_id, $notificationId);
 
         return back();
     }

@@ -6,9 +6,9 @@ use App\Models\User;
 
 class ReadNotificationService
 {
-    public function read(string $notificationId): void
+    public function read(int $notifiableId, string $notificationId): void
     {
-        $user = User::findOrFail(auth()->id());
+        $user = User::findOrFail($notifiableId);
 
         $notification = $user->notifications()->findOrFail($notificationId);
 
@@ -20,9 +20,9 @@ class ReadNotificationService
      */
     public function readAll(array $notifications): void
     {
-        $user = User::findOrFail(auth()->id());
-
         foreach($notifications as $notification) {
+
+            $user = User::findOrFail($notification["notifiable_id"]);
 
             $notification = $user->notifications()->findOrFail($notification["id"]);
 

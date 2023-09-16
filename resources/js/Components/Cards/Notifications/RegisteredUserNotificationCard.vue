@@ -18,7 +18,9 @@ const goToDetailPage = () => {
 const handleNotificationReadAt = () => {
   router.patch(
     route("admin.notifications.read", props.notification.id),
-    {},
+    {
+      notifiable_id: props.notification.notifiable_id,
+    },
     {
       onSuccess: () => {
         goToDetailPage();

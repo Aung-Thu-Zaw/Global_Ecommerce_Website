@@ -16,7 +16,9 @@ const goToBlog = () => {
 const handleNotificationReadAt = () => {
   router.patch(
     route("notifications.read", props.notification.id),
-    {},
+    {
+        notifiable_id: props.notification.notifiable_id,
+    },
     {
       onSuccess: () => {
         goToBlog();
