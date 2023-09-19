@@ -377,8 +377,8 @@ const handleCancel = () => {
           </span>
         </div>
 
-        <div v-for="item in orderItems" :key="item.id" class="w-full my-3">
-          <div v-if="item.vendor_id === shop.id">
+        <div v-for="item in orderItems" :key="item.id" class="w-full">
+          <div v-if="item.shop_id === shop.id">
             <OrderCartItem :item="item" :order="order" />
           </div>
         </div>

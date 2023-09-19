@@ -1,4 +1,5 @@
 <script setup>
+import { Link } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 const props = defineProps({ item: Object, order: Object });
@@ -9,7 +10,7 @@ const isCancelFormOpen = ref(false);
 
 <template>
   <div
-    class="flex flex-wrap lg:flex-row justify-between gap-5 px-3 py-2 lg:py-4 lg:px-5"
+    class="flex flex-wrap lg:flex-row justify-between px-3 py-2 lg:py-4 lg:px-5 border-b"
   >
     <div class="w-full lg:w-2/5 xl:w-2/4">
       <figure class="flex leading-5">
@@ -136,7 +137,6 @@ const isCancelFormOpen = ref(false);
       </div>
     </form>
   </div>
-  <hr />
 </template>
 
 

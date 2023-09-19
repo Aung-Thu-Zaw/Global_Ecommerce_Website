@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::controller(SellerAuthController::class)
      ->prefix("/seller")
      ->name("seller.")
+     ->middleware("guest")
      ->group(function () {
          Route::get("/register", "register")->name("register");
          Route::get("/login", "login")->name("login");

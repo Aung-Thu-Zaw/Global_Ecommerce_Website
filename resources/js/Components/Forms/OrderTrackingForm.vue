@@ -4,7 +4,7 @@ import { ref } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
-const order_no = ref("");
+const order_no = ref(null);
 
 const handleTrackOrder = () => {
   router.post(

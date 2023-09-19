@@ -18,7 +18,7 @@ class MyOrderController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $orders=Order::where("user_id", auth()->id())
+        $orders = Order::where("user_id", auth()->id())
                      ->whereNull("return_reason")
                      ->whereNull("return_date")
                      ->whereNull("return_status")
@@ -28,7 +28,7 @@ class MyOrderController extends Controller
                      ->orderBy("id", "desc")
                      ->get();
 
-        $toPayOrders=Order::where("user_id", auth()->id())
+        $toPayOrders = Order::where("user_id", auth()->id())
                           ->where("payment_type", "cash on delivery")
                           ->whereNull("return_reason")
                           ->whereNull("return_date")
@@ -39,7 +39,7 @@ class MyOrderController extends Controller
                           ->orderBy("id", "desc")
                           ->get();
 
-        $toReceiveOrders=Order::where("user_id", auth()->id())
+        $toReceiveOrders = Order::where("user_id", auth()->id())
                                 ->where(function ($query) {
                                     $query->where("order_status", "confirmed")
                                           ->orWhere("order_status", "shipped");
@@ -53,7 +53,7 @@ class MyOrderController extends Controller
                                 ->orderBy("id", "desc")
                                 ->get();
 
-        $receivedOrders=Order::where("user_id", auth()->id())
+        $receivedOrders = Order::where("user_id", auth()->id())
                              ->where("order_status", "delivered")
                              ->whereNull("return_reason")
                              ->whereNull("return_date")
@@ -74,15 +74,15 @@ class MyOrderController extends Controller
 
     public function show(int $id): Response|ResponseFactory
     {
-        $order=Order::findOrFail($id);
+        $order = Order::findOrFail($id);
 
-        $deliveryInformation=DeliveryInformation::where("user_id", $order->user_id)->first();
+        $deliveryInformation = DeliveryInformation::where("user_id", $order->user_id)->first();
 
-        $orderItems=OrderItem::with(["product.shop","product.brand"])
+        $orderItems = OrderItem::with(["product.shop","product.brand"])
                              ->where("order_id", $order->id)
                              ->get();
 
-        $shopIds=$orderItems->pluck("vendor_id")
+        $shopIds = $orderItems->pluck("shop_id")
                             ->unique()
                             ->values();
 
@@ -100,19 +100,19 @@ class MyOrderController extends Controller
 
     public function return(ReturnOrCancelOrderRequest $request, int $order_id): RedirectResponse
     {
-        $order=Order::findOrFail($order_id);
+        $order = Order::findOrFail($order_id);
 
         $order->update([
-            "return_date"=>now()->format("Y-m-d"),
-            "return_reason"=>$request->return_reason,
-            "return_status"=>"requested",
+            "return_date" => now()->format("Y-m-d"),
+            "return_reason" => $request->return_reason,
+            "return_status" => "requested",
         ]);
 
         $order->orderItems()->each(function ($orderItem) use ($request) {
             $orderItem->update([
-                    "return_date"=>now()->format("Y-m-d"),
-                    "return_reason"=>$request->return_reason,
-                    "return_status"=>"requested",
+                    "return_date" => now()->format("Y-m-d"),
+                    "return_reason" => $request->return_reason,
+                    "return_status" => "requested",
                 ]);
         });
 
@@ -121,19 +121,19 @@ class MyOrderController extends Controller
 
     public function cancel(ReturnOrCancelOrderRequest $request, int $order_id): RedirectResponse
     {
-        $order=Order::findOrFail($order_id);
+        $order = Order::findOrFail($order_id);
 
         $order->update([
-            "cancel_date"=>now()->format("Y-m-d"),
-            "cancel_reason"=>$request->cancel_reason,
-            "cancel_status"=>"requested",
+            "cancel_date" => now()->format("Y-m-d"),
+            "cancel_reason" => $request->cancel_reason,
+            "cancel_status" => "requested",
         ]);
 
         $order->orderItems()->each(function ($orderItem) use ($request) {
             $orderItem->update([
-                    "cancel_date"=>now()->format("Y-m-d"),
-                    "cancel_reason"=>$request->cancel_reason,
-                    "cancel_status"=>"requested",
+                    "cancel_date" => now()->format("Y-m-d"),
+                    "cancel_reason" => $request->cancel_reason,
+                    "cancel_status" => "requested",
                 ]);
         });
 
@@ -142,7 +142,7 @@ class MyOrderController extends Controller
 
     public function downloadInvoice(int $order_id): HttpResponse
     {
-        $order=Order::find($order_id);
+        $order = Order::find($order_id);
 
         $pdf = PDF::loadView('files.invoice', compact("order"))->setPaper('a4');
 
