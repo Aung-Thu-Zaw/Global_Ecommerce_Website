@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Ecommerce\HelpCenter\LiveChats;
+namespace App\Http\Controllers\Ecommerce\SupportServices\LiveChats;
 
 use App\Actions\Ecommerce\LiveChats\CreateLiveChatMessageAction;
 use App\Events\LiveChatMessageDeleted;

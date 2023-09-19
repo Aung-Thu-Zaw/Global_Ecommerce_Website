@@ -114,23 +114,6 @@ import { Link } from "@inertiajs/vue3";
               </li>
             </ul>
           </aside>
-          <aside class="w-1/2 sm:w-auto lg:w-40 mb-5">
-            <h3 class="font-semibold">Apps</h3>
-            <a href="#" class="mt-3 inline-block">
-              <img
-                class="h-10"
-                src="../../assets/images/btn-appstore.png"
-                height="38"
-              />
-            </a>
-            <a href="#" class="inline-block">
-              <img
-                class="h-10"
-                src="../../assets/images/btn-market.png"
-                height="38"
-              />
-            </a>
-          </aside>
         </div>
       </div>
     </section>

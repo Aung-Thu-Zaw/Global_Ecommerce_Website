@@ -1,11 +1,12 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/OrderManageBreadcrumb.vue";
-import Tr from "@/Components/Table/Tr.vue";
-import Td from "@/Components/Table/Td.vue";
 import OrderDetailCard from "@/Components/Cards/OrderDetailCard.vue";
 import DeliveryInformationCard from "@/Components/Cards/DeliveryInformationCard.vue";
-import { Link, usePage, Head, router } from "@inertiajs/vue3";
+import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
+import { usePage, Head, router } from "@inertiajs/vue3";
+import Tr from "@/Components/Table/Tr.vue";
+import Td from "@/Components/Table/Td.vue";
 import { inject, ref, computed } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -76,7 +77,7 @@ const orderManageControl = computed(() => {
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Details Pending Order" />
+    <Head :title="order.invoice_no" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -99,8 +100,9 @@ const orderManageControl = computed(() => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Pending Orders</span
               >
+                {{ __("PENDING_ORDERS") }}
+              </span>
             </div>
           </li>
 
@@ -121,36 +123,48 @@ const orderManageControl = computed(() => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Details</span
+              >
+                {{ order.invoice_no }}
+              </span>
+            </div>
+          </li>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span
+                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                >{{ __("DETAILS") }}</span
               >
             </div>
           </li>
         </Breadcrumb>
 
         <!-- Go Back button -->
+
         <div>
-          <Link
-            as="button"
-            :href="route('admin.orders.pending.index')"
-            :data="{
-              page: props.queryStringParams.page,
-              per_page: props.queryStringParams.per_page,
-              sort: props.queryStringParams.sort,
-              direction: props.queryStringParams.direction,
-            }"
-            class="goback-btn"
-          >
-            <span>
-              <i class="fa-solid fa-circle-left"></i>
-              Go Back
-            </span>
-          </Link>
+          <GoBackButton
+            href="admin.orders.pending.index"
+            :queryStringParams="queryStringParams"
+          />
         </div>
       </div>
 
       <div class="grid grid-cols-2 gap-3 my-5">
         <!-- Delivery Information Detail  -->
         <DeliveryInformationCard :deliveryInformation="deliveryInformation" />
+
         <div class="p-5 border shadow-md rounded-sm">
           <!-- Order Detail  -->
           <OrderDetailCard
@@ -162,7 +176,7 @@ const orderManageControl = computed(() => {
           <button
             @click="handleConfirmOrder(order.id)"
             v-if="order.order_status === 'pending' && orderManageControl"
-            class="bg-green-600 py-3 w-full rounded-sm font-bold text-white hover:bg-green-700 transition-all shadow"
+            class="bg-green-600 py-3 w-full rounded-sm font-bold text-white hover:bg-green-700 transition-all shadow mt-3"
           >
             <svg
               v-if="processing"

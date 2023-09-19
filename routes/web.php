@@ -13,8 +13,8 @@ use App\Http\Controllers\Ecommerce\CheckoutController;
 use App\Http\Controllers\Ecommerce\ConversationController;
 use App\Http\Controllers\Ecommerce\DeliveryInformationController;
 use App\Http\Controllers\Ecommerce\HelpCenter\HelpCenterController;
-use App\Http\Controllers\Ecommerce\HelpCenter\LiveChats\LiveChatMessageController;
-use App\Http\Controllers\Ecommerce\HelpCenter\LiveChats\SupportLiveChatServiceController;
+use App\Http\Controllers\Ecommerce\SupportServices\LiveChats\LiveChatMessageController;
+use App\Http\Controllers\Ecommerce\SupportServices\LiveChats\SupportLiveChatServiceController;
 use App\Http\Controllers\Ecommerce\LanguageController;
 use App\Http\Controllers\User\FollowedShopController;
 use App\Http\Controllers\Ecommerce\MessageController;
@@ -94,6 +94,9 @@ Route::controller(FaqController::class)
          Route::get("/{faq}", "show")->name("show");
      });
 
+
+
+//  ******************* Customer Help Center *******************
 Route::controller(HelpCenterController::class)
      ->prefix("/help-center")
      ->name("help-center.")
@@ -101,6 +104,10 @@ Route::controller(HelpCenterController::class)
          Route::get("/", "index")->name("index");
          Route::get("/questions/search-result", "searchResult")->name("questions.search");
      });
+
+
+
+
 
 Route::post('/subscribe', [SubscriberController::class, 'store'])->name("subscribe.store");
 
@@ -277,6 +284,27 @@ Route::middleware(["auth","verified"])->group(function () {
     Route::post("/conversation/messages", [MessageController::class,"store"])->name("message.store");
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // ******************* Support Services For Authenticated User *******************
+
     Route::controller(SupportLiveChatServiceController::class)
          ->prefix("/support-service")
          ->name("service.live-chat.")
@@ -287,7 +315,6 @@ Route::middleware(["auth","verified"])->group(function () {
              Route::patch('/live-chats/{live_chat}/end-chat', "endChat")->name("end-chat");
          });
 
-
     Route::controller(LiveChatMessageController::class)
          ->prefix("/support-service/live-chats/messages")
          ->name("live-chat.message.")
@@ -297,7 +324,4 @@ Route::middleware(["auth","verified"])->group(function () {
              Route::patch("/{live_chat_mesage}/reply", "replyMessage")->name("reply");
              Route::delete("/{live_chat_mesage}", "destroy")->name("destroy");
          });
-
-
-
 });

@@ -1,11 +1,14 @@
 <script setup>
+import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/OrderManageBreadcrumb.vue";
 import OrderDetailCard from "@/Components/Cards/OrderDetailCard.vue";
 import DeliveryInformationCard from "@/Components/Cards/DeliveryInformationCard.vue";
+import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
+import { Head } from "@inertiajs/vue3";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
-import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Head } from "@inertiajs/vue3";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 // Define the props
 const props = defineProps({
@@ -42,8 +45,32 @@ const props = defineProps({
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Delivered Orders</span
               >
+                {{ __("DELIVERED_ORDERS") }}
+              </span>
+            </div>
+          </li>
+
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span
+                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+              >
+                {{ order.invoice_no }}
+              </span>
             </div>
           </li>
           <li aria-current="page">
@@ -63,30 +90,19 @@ const props = defineProps({
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Details</span
+                >{{ __("DETAILS") }}</span
               >
             </div>
           </li>
         </Breadcrumb>
 
         <!-- Go Back button -->
+
         <div>
-          <Link
-            as="button"
-            :href="route('admin.orders.delivered.index')"
-            :data="{
-              page: props.queryStringParams.page,
-              per_page: props.queryStringParams.per_page,
-              sort: props.queryStringParams.sort,
-              direction: props.queryStringParams.direction,
-            }"
-            class="goback-btn"
-          >
-            <span>
-              <i class="fa-solid fa-circle-left"></i>
-              Go Back
-            </span>
-          </Link>
+          <GoBackButton
+            href="admin.orders.delivered.index"
+            :queryStringParams="queryStringParams"
+          />
         </div>
       </div>
 
