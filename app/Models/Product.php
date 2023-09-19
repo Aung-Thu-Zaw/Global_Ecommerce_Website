@@ -12,6 +12,7 @@ use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\DB;
 use Laravel\Scout\Searchable;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -276,11 +277,13 @@ class Product extends Model
             });
         });
 
-        // $query->when($filterBy["rating"]?? null, function ($query, $rating) {
-        //     $query->whereHas("productReviews", function ($query) use ($rating) {
-        //         $query->groupBy("product_id")
-        //               ->havingRaw("AVG(rating) >= ?", [$rating]);
-        //     });
-        // });
+        $query->when($filterBy["rating"] ?? null, function ($query, $rating) {
+            $query->whereHas("productReviews", function ($query) use ($rating) {
+                $query->select('product_id', DB::raw('AVG(rating) as average_rating'))
+                      ->groupBy('product_id')
+                      ->havingRaw('AVG(rating) >= ?', [$rating]);
+            });
+        });
+
     }
 }
