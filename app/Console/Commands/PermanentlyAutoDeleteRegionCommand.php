@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Admin\ShippingAreas\PermanentlyDeleteAllTrashRegionAction;
 use App\Models\Region;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -27,14 +28,8 @@ class PermanentlyAutoDeleteRegionCommand extends Command
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $regions=Region::onlyTrashed()
-                       ->where('deleted_at', '<=', $cutoffDate)
-                       ->get();
+        $brands = Region::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
-        $regions->each(function ($region) {
-
-            $region->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashRegionAction())->handle($brands);
     }
 }

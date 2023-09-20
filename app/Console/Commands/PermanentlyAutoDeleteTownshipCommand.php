@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Admin\ShippingAreas\PermanentlyDeleteAllTrashTownshipAction;
 use App\Models\Township;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -27,14 +28,8 @@ class PermanentlyAutoDeleteTownshipCommand extends Command
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $townships=Township::onlyTrashed()
-                           ->where('deleted_at', '<=', $cutoffDate)
-                           ->get();
+        $brands = Township::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
-        $townships->each(function ($township) {
-
-            $township->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashTownshipAction())->handle($brands);
     }
 }

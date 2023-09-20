@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Admin\ShippingAreas\PermanentlyDeleteAllTrashCityAction;
 use App\Models\City;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -27,14 +28,8 @@ class PermanentlyAutoDeleteCityCommand extends Command
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $cities=City::onlyTrashed()
-                    ->where('deleted_at', '<=', $cutoffDate)
-                    ->get();
+        $brands = City::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
-        $cities->each(function ($city) {
-
-            $city->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashCityAction())->handle($brands);
     }
 }

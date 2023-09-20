@@ -387,7 +387,7 @@
                         direction: 'desc',
                       }"
                     >
-                      Region
+                      Region / State
                     </Link>
                   </li>
 

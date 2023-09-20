@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin\ShippingArea;
+namespace App\Http\Controllers\Admin\ShippingAreas;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CityRequest;
 use App\Http\Requests\RegionRequest;
+use App\Http\Traits\HandlesQueryStringParameters;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Region;
@@ -16,9 +17,11 @@ use Illuminate\Database\Eloquent\Builder;
 
 class AdminCityController extends Controller
 {
+    use HandlesQueryStringParameters;
+
     public function index(): Response|ResponseFactory
     {
-        $cities=City::search(request("search"))
+        $cities = City::search(request("search"))
                             ->query(function (Builder $builder) {
                                 $builder->with(["region.country", "townships"]);
                             })
@@ -32,11 +35,11 @@ class AdminCityController extends Controller
 
     public function create(): Response|ResponseFactory
     {
-        $per_page=request("per_page");
+        $per_page = request("per_page");
 
-        $countries=Country::all();
+        $countries = Country::all();
 
-        $regions=Region::all();
+        $regions = Region::all();
 
         return inertia("Admin/ShippingAreas/Cities/Create", compact("per_page", "countries", "regions"));
     }
@@ -50,11 +53,11 @@ class AdminCityController extends Controller
 
     public function edit(City $city): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $paginate = [ "page" => request("page"),"per_page" => request("per_page")];
 
-        $countries=Country::all();
+        $countries = Country::all();
 
-        $regions=Region::all();
+        $regions = Region::all();
 
         return inertia("Admin/ShippingAreas/Cities/Edit", compact("city", "paginate", "countries", "regions"));
     }
@@ -76,7 +79,7 @@ class AdminCityController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashCities=City::search(request("search"))
+        $trashCities = City::search(request("search"))
                                 ->onlyTrashed()
                                 ->orderBy(request("sort", "id"), request("direction", "desc"))
                                 ->paginate(request("per_page", 10))

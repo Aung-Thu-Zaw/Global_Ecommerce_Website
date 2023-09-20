@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin\ShippingArea;
+namespace App\Http\Controllers\Admin\ShippingAreas;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegionRequest;
+use App\Http\Traits\HandlesQueryStringParameters;
 use App\Models\Country;
 use App\Models\Region;
 use Illuminate\Http\Request;
@@ -14,9 +15,11 @@ use Illuminate\Database\Eloquent\Builder;
 
 class AdminRegionController extends Controller
 {
+    use HandlesQueryStringParameters;
+
     public function index(): Response|ResponseFactory
     {
-        $regions=Region::search(request("search"))
+        $regions = Region::search(request("search"))
                             ->query(function (Builder $builder) {
                                 $builder->with(["cities", "country"]);
                             })
@@ -30,9 +33,9 @@ class AdminRegionController extends Controller
 
     public function create(): Response|ResponseFactory
     {
-        $per_page=request("per_page");
+        $per_page = request("per_page");
 
-        $countries=Country::all();
+        $countries = Country::all();
 
         return inertia("Admin/ShippingAreas/Regions/Create", compact("per_page", "countries"));
     }
@@ -46,9 +49,9 @@ class AdminRegionController extends Controller
 
     public function edit(Region $region): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $paginate = [ "page" => request("page"),"per_page" => request("per_page")];
 
-        $countries=Country::all();
+        $countries = Country::all();
 
         return inertia("Admin/ShippingAreas/Regions/Edit", compact("re$region", "paginate", "countries"));
     }
@@ -70,7 +73,7 @@ class AdminRegionController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashRegions=Region::search(request("search"))
+        $trashRegions = Region::search(request("search"))
                                 ->onlyTrashed()
                                 ->orderBy(request("sort", "id"), request("direction", "desc"))
                                 ->paginate(request("per_page", 10))

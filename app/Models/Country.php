@@ -24,7 +24,7 @@ class Country extends Model
     * @var string[]
     */
     protected array $cascadeDeletes = ['regions'];
-    protected $guarded=[];
+    protected $guarded = [];
 
 
     public function getSlugOptions(): SlugOptions
@@ -46,7 +46,6 @@ class Country extends Model
     {
         return [
             'name' => $this->name,
-
         ];
     }
 

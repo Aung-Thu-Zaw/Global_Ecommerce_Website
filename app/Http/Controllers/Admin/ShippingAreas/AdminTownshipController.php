@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin\ShippingArea;
+namespace App\Http\Controllers\Admin\ShippingAreas;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TownshipRequest;
+use App\Http\Traits\HandlesQueryStringParameters;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Region;
@@ -16,9 +17,11 @@ use Illuminate\Database\Eloquent\Builder;
 
 class AdminTownshipController extends Controller
 {
+    use HandlesQueryStringParameters;
+
     public function index(): Response|ResponseFactory
     {
-        $townships=Township::search(request("search"))
+        $townships = Township::search(request("search"))
                             ->query(function (Builder $builder) {
                                 $builder->with("city.region.country");
                             })
@@ -32,13 +35,13 @@ class AdminTownshipController extends Controller
 
     public function create(): Response|ResponseFactory
     {
-        $per_page=request("per_page");
+        $per_page = request("per_page");
 
-        $countries=Country::all();
+        $countries = Country::all();
 
-        $regions=Region::all();
+        $regions = Region::all();
 
-        $cities=City::all();
+        $cities = City::all();
 
         return inertia("Admin/ShippingAreas/Townships/Create", compact("per_page", "countries", "regions", "cities"));
     }
@@ -52,13 +55,13 @@ class AdminTownshipController extends Controller
 
     public function edit(City $city): Response|ResponseFactory
     {
-        $paginate=[ "page"=>request("page"),"per_page"=>request("per_page")];
+        $paginate = [ "page" => request("page"),"per_page" => request("per_page")];
 
-        $countries=Country::all();
+        $countries = Country::all();
 
-        $regions=Region::all();
+        $regions = Region::all();
 
-        $cities=City::all();
+        $cities = City::all();
 
         return inertia("Admin/ShippingAreas/Townships/Edit", compact("city", "paginate", "countries", "regions", "cities"));
     }
@@ -80,7 +83,7 @@ class AdminTownshipController extends Controller
 
     public function trash(): Response|ResponseFactory
     {
-        $trashTownships=Township::search(request("search"))
+        $trashTownships = Township::search(request("search"))
                                 ->onlyTrashed()
                                 ->orderBy(request("sort", "id"), request("direction", "desc"))
                                 ->paginate(request("per_page", 10))

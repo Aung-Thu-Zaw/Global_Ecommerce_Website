@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Admin\ShippingAreas\PermanentlyDeleteAllTrashCountryAction;
 use App\Models\Country;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -27,14 +28,8 @@ class PermanentlyAutoDeleteCountryCommand extends Command
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $countries=Country::onlyTrashed()
-                          ->where('deleted_at', '<=', $cutoffDate)
-                          ->get();
+        $brands = Country::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
-        $countries->each(function ($country) {
-
-            $country->forceDelete();
-
-        });
+        (new PermanentlyDeleteAllTrashCountryAction())->handle($brands);
     }
 }

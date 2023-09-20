@@ -1,155 +1,167 @@
 <script setup>
-import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import ActiveStatus from "@/Components/Table/ActiveStatus.vue";
-import InactiveStatus from "@/Components/Table/InactiveStatus.vue";
-import Tr from "@/Components/Table/Tr.vue";
-import Td from "@/Components/Table/Td.vue";
+import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/CountryBreadcrumb.vue";
+import CreateButton from "@/Components/Buttons/CreateButton.vue";
+import TrashButton from "@/Components/Buttons/TrashButton.vue";
+import EditButton from "@/Components/Buttons/EditButton.vue";
+import DeleteButton from "@/Components/Buttons/DeleteButton.vue";
+import DashboardSearchInputForm from "@/Components/Forms/DashboardSearchInputForm.vue";
+import DashboardPerPageSelectBox from "@/Components/Forms/DashboardPerPageSelectBox.vue";
+import DashboardFilterByCreatedDate from "@/Components/Forms/DashboardFilterByCreatedDate.vue";
+import SortingArrows from "@/Components/Table/SortingArrows.vue";
+import TableContainer from "@/Components/Table/TableContainer.vue";
+import TableHeader from "@/Components/Table/TableHeader.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
-import TableHeader from "@/Components/Table/TableHeader.vue";
-import TableContainer from "@/Components/Table/TableContainer.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/ShippingAreaBreadcrumb.vue";
+import Tr from "@/Components/Table/Tr.vue";
+import Td from "@/Components/Table/Td.vue";
+import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, Head } from "@inertiajs/vue3";
-import { reactive, watch, inject } from "vue";
-import { router } from "@inertiajs/vue3";
-import { usePage } from "@inertiajs/vue3";
+import { __ } from "@/Translations/translations-inside-setup.js";
+import { inject, computed, ref, reactive } from "vue";
+import { router, Head, usePage } from "@inertiajs/vue3";
 
-// Data come from controller
+// Define the props
 const props = defineProps({
   countries: Object,
 });
 
+// Define Variables
 const swal = inject("$swal");
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
 
-const handleSearchBox = () => {
-  params.search = "";
-};
-
-// Handle Url Query Params
-const params = reactive({
-  search: null,
-  page: props.countries.current_page ? props.countries.current_page : 1,
-  per_page: props.countries.per_page ? props.countries.per_page : 10,
-  sort: "id",
-  direction: "desc",
+// Create New Shipping Area Permission
+const shippingAreaAdd = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "shipping-area.add"
+      )
+    : false;
 });
 
-// Watch Search Input Form
-watch(
-  () => params.search,
-  (current, previous) => {
-    router.get(
-      "/admin/countries",
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Shipping Area Edit Permission
+const shippingAreaEdit = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "shipping-area.edit"
+      )
+    : false;
+});
 
-// Watch Perpage Dropdown
-watch(
-  () => params.per_page,
-  (current, previous) => {
-    router.get(
-      "/admin/countries",
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Shipping Area Delete Permission
+const shippingAreaDelete = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "shipping-area.delete"
+      )
+    : false;
+});
 
-// Handle Sorting With Column Arrow
+// Shipping Area Trash List Permission
+const shippingAreaTrashList = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "shipping-area.trash.list"
+      )
+    : false;
+});
+
+// Query String Parameteres
+const params = reactive({
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
+});
+
+// Update Sorting Table Column
 const updateSorting = (sort = "id") => {
   params.sort = sort;
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/countries",
+    route("admin.countries.index"),
     {
-      search: params.search,
-      page: params.page,
-      per_page: params.per_page,
+      search: usePage().props.ziggy.query?.search,
+      page: usePage().props.ziggy.query?.page,
+      per_page: usePage().props.ziggy.query?.per_page,
       sort: params.sort,
       direction: params.direction,
+      created_from: usePage().props.ziggy.query?.created_from,
+      created_until: usePage().props.ziggy.query?.created_until,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
-const handleDelete = async (country) => {
+// Handle Country Delete
+const handleDelete = (country) => {
+  router.delete(
+    route("admin.countries.destroy", {
+      country: country,
+      search: usePage().props.ziggy.query?.search,
+      page: usePage().props.ziggy.query?.page,
+      per_page: usePage().props.ziggy.query?.per_page,
+      sort: params.sort,
+      direction: params.direction,
+      created_from: usePage().props.ziggy.query?.created_from,
+      created_until: usePage().props.ziggy.query?.created_until,
+    }),
+    {
+      preserveScroll: true,
+      onSuccess: () => {
+        if (usePage().props.flash.successMessage) {
+          swal({
+            icon: "success",
+            title: __(usePage().props.flash.successMessage),
+          });
+        }
+      },
+    }
+  );
+};
+
+// Handle Delete Country
+const handleDeleteCountry = async (country) => {
   if (country.regions.length > 0) {
     const result = await swal({
       icon: "error",
-      title: "You can't delete this country because this country have regions?",
-      text: "If you click 'Delete, whatever!' button regions will be automatically deleted.You will be able to restore this country in the trash!",
+      title: __(
+        "YOU_CANT_DELETE_THIS_COUNTRY_BECAUSE_THIS_COUNTRY_HAVE_PRODUCTS"
+      ),
+      text: __(
+        "IF_YOU_CLICK_THE_DELETE_WHATEVER_BUTTON_REGIONS_ASSOCIATED_WITH_THAT_COUNTRY_WILL_BE_AUTOMATICALLY_DELETED"
+      ),
       showCancelButton: true,
-      confirmButtonText: "Delete, whatever!",
-      confirmButtonColor: "#ef4444",
+      confirmButtonText: __("DELETE_WHATEVER"),
+      cancelButtonText: __("CANCEL"),
+      confirmButtonColor: "#d52222",
+      cancelButtonColor: "#626262",
       timer: 20000,
       timerProgressBar: true,
       reverseButtons: true,
     });
     if (result.isConfirmed) {
-      router.delete(
-        route("admin.countries.destroy", {
-          country: country.slug,
-          page: props.countries.current_page,
-          per_page: params.per_page,
-        })
-      );
-      setTimeout(() => {
-        swal({
-          icon: "success",
-          title: usePage().props.flash.successMessage,
-        });
-      }, 500);
+      handleDelete(country.slug);
     }
   } else {
     const result = await swal({
-      icon: "warning",
-      title: "Are you sure you want to delete this country?",
-      text: "You will be able to restore this country in the trash!",
+      icon: "question",
+      title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_COUNTRY"),
+      text: __("YOU_WILL_BE_ABLE_TO_RESTORE_THIS_COUNTRY_IN_THE_TRASH"),
       showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      confirmButtonColor: "#ef4444",
+      confirmButtonText: __("YES_DELETE_IT"),
+      cancelButtonText: __("CANCEL"),
+      confirmButtonColor: "#d52222",
+      cancelButtonColor: "#626262",
       timer: 20000,
       timerProgressBar: true,
       reverseButtons: true,
     });
 
     if (result.isConfirmed) {
-      router.delete(
-        route("admin.countries.destroy", {
-          country: country.slug,
-          page: props.countries.current_page,
-          per_page: params.per_page,
-        })
-      );
-      setTimeout(() => {
-        swal({
-          icon: "success",
-          title: usePage().props.flash.successMessage,
-        });
-      }, 500);
+      handleDelete(country.slug);
     }
   }
 };
@@ -157,223 +169,116 @@ const handleDelete = async (country) => {
 if (usePage().props.flash.successMessage) {
   swal({
     icon: "success",
-    title: usePage().props.flash.successMessage,
+    title: __(usePage().props.flash.successMessage),
   });
 }
 </script>
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Country" />
+    <Head :title="__('COUNTRIES')" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
-        <Breadcrumb>
-          <li>
-            <div class="flex items-center">
-              <svg
-                aria-hidden="true"
-                class="w-6 h-6 text-gray-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <span
-                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400 dark:hover:text-white"
-              >
-                Country
-              </span>
-            </div>
-          </li>
-        </Breadcrumb>
+        <!-- Breadcrumb -->
+        <Breadcrumb />
 
-        <div>
-          <Link
-            as="button"
-            :href="route('admin.countries.trash')"
-            :data="{
-              page: 1,
-              per_page: 10,
-              sort: 'id',
-              direction: 'desc',
-            }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"
-          >
-            <i class="fa-solid fa-trash"></i>
-
-            Trash
-          </Link>
+        <!-- Trash Button -->
+        <div v-if="shippingAreaTrashList">
+          <TrashButton href="admin.countries.trash" />
         </div>
       </div>
 
       <div class="mb-5 flex items-center justify-between">
-        <Link
-          :href="route('admin.countries.create')"
-          :data="{
-            per_page: params.per_page,
-          }"
-          class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700"
-        >
-          <i class="fa-sharp fa-solid fa-plus cursor-pointer"></i>
-          Add Country</Link
-        >
-        <!-- Search Input Form -->
-        <div class="flex items-center">
-          <form class="w-[350px] relative">
-            <input
-              type="text"
-              class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-              placeholder="Search"
-              v-model="params.search"
-            />
+        <!-- Create country Button -->
+        <div v-if="shippingAreaAdd">
+          <CreateButton href="admin.countries.create" name="ADD_COUNTRY" />
+        </div>
 
-            <i
-              v-if="params.search"
-              class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-              @click="handleSearchBox"
-            ></i>
-          </form>
+        <div class="flex items-center ml-auto">
+          <!-- Search Box -->
+          <DashboardSearchInputForm
+            href="admin.countries.index"
+            placeholder="SEARCH_BY_NAME"
+          />
+
+          <!-- Perpage Select Box -->
           <div class="ml-5">
-            <select
-              class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-              v-model="params.per_page"
-            >
-              <option value="" disabled>Select</option>
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="75">75</option>
-              <option value="100">100</option>
-            </select>
+            <DashboardPerPageSelectBox href="admin.countries.index" />
           </div>
+
+          <!-- Filter By Date -->
+          <DashboardFilterByCreatedDate href="admin.countries.index" />
         </div>
       </div>
 
+      <!-- Country Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="id" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('name')">
-            Name ( Country )
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'name',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'name',
-              }"
-            ></i>
+            {{ __("NAME") }}
+            <SortingArrows :params="params" sort="name" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('created_at')">
-            Created At
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'created_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'created_at',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'created_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'created_at',
-              }"
-            ></i>
+            {{ __("CREATED_DATE") }}
+            <SortingArrows :params="params" sort="created_at" />
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
+
+          <HeaderTh v-if="shippingAreaEdit || shippingAreaDelete">
+            {{ __("ACTION") }}
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="countries.data.length">
           <Tr v-for="country in countries.data" :key="country.id">
-            <BodyTh>{{ country.id }}</BodyTh>
+            <BodyTh>
+              {{ country.id }}
+            </BodyTh>
 
-            <Td>{{ country.name }}</Td>
-
-            <Td>{{ country.created_at }}</Td>
             <Td>
-              <Link
-                as="button"
-                :href="route('admin.countries.edit', country.slug)"
-                :data="{
-                  page: props.countries.current_page,
-                  per_page: params.per_page,
-                }"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
-              >
-                <i class="fa-solid fa-edit"></i>
-                Edit
-              </Link>
-              <button
-                @click="handleDelete(country)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
-              >
-                <i class="fa-solid fa-xmark"></i>
-                Delete
-              </button>
+              {{ country.name }}
+            </Td>
+
+            <Td>
+              {{ country.created_at }}
+            </Td>
+
+            <Td
+              v-if="shippingAreaEdit || shippingAreaDelete"
+              class="flex items-center"
+            >
+              <!-- Edit Button -->
+              <div v-if="shippingAreaEdit">
+                <EditButton href="admin.countries.edit" :slug="country.slug" />
+              </div>
+
+              <!-- Delete Button -->
+              <div v-if="shippingAreaDelete">
+                <DeleteButton @click="handleDeleteCountry(country)" />
+              </div>
             </Td>
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Country Table End -->
 
-      <!-- Not Avaliable Data -->
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!countries.data.length" />
 
       <!-- Pagination -->
-      <pagination class="mt-6" :links="countries.links" />
+      <div v-if="countries.data.length" class="mt-6">
+        <p class="text-center text-sm text-gray-500 mb-3 font-bold">
+          Showing {{ countries.from }} - {{ countries.to }} of
+          {{ countries.total }}
+        </p>
+        <Pagination :links="countries.links" />
+      </div>
     </div>
   </AdminDashboardLayout>
 </template>
