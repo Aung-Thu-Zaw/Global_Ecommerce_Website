@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin\ShippingAreas;
 
+use App\Actions\Admin\ShippingAreas\PermanentlyDeleteAllTrashCityAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CityRequest;
-use App\Http\Requests\RegionRequest;
 use App\Http\Traits\HandlesQueryStringParameters;
 use App\Models\City;
 use App\Models\Country;
@@ -46,35 +46,37 @@ class AdminCityController extends Controller
 
     public function store(CityRequest $request): RedirectResponse
     {
-        City::create($request->validated());
+        City::create(["name" => $request->name,"region_id" => $request->region_id]);
 
-        return to_route("admin.cities.index", "per_page=$request->per_page")->with("success", "City has been successfully created.");
+        return to_route("admin.cities.index", $this->getQueryStringParams($request))->with("success", "CITY_HAS_BEEN_SUCCESSFULLY_CREATED");
     }
 
-    public function edit(City $city): Response|ResponseFactory
+    public function edit(Request $request, City $city): Response|ResponseFactory
     {
-        $paginate = [ "page" => request("page"),"per_page" => request("per_page")];
-
         $countries = Country::all();
 
         $regions = Region::all();
 
-        return inertia("Admin/ShippingAreas/Cities/Edit", compact("city", "paginate", "countries", "regions"));
+        $city->load(["region.country"]);
+
+        $queryStringParams = $this->getQueryStringParams($request);
+
+        return inertia("Admin/ShippingAreas/Cities/Edit", compact("city", "queryStringParams", "countries", "regions"));
     }
 
     public function update(CityRequest $request, City $city): RedirectResponse
     {
 
-        $city->update($request->validated());
+        $city->update(["name" => $request->name,"region_id" => $request->region_id]);
 
-        return to_route("admin.cities.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "City has been successfully updated.");
+        return to_route("admin.cities.index", $this->getQueryStringParams($request))->with("success", "CITY_HAS_BEEN_SUCCESSFULLY_UPDATED");
     }
 
     public function destroy(Request $request, City $city): RedirectResponse
     {
         $city->delete();
 
-        return to_route("admin.cities.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "City has been successfully deleted.");
+        return to_route("admin.cities.index", $this->getQueryStringParams($request))->with("success", "CITY_HAS_BEEN_SUCCESSFULLY_DELETED");
     }
 
     public function trash(): Response|ResponseFactory
@@ -88,32 +90,30 @@ class AdminCityController extends Controller
         return inertia("Admin/ShippingAreas/Cities/Trash", compact("trashCities"));
     }
 
-    public function restore(Request $request, int $id): RedirectResponse
+    public function restore(Request $request, int $trashCityId): RedirectResponse
     {
-        $city = City::onlyTrashed()->findOrFail($id);
+        $trashCity = City::onlyTrashed()->findOrFail($trashCityId);
 
-        $city->restore();
+        $trashCity->restore();
 
-        return to_route('admin.cities.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "City has been successfully restored.");
+        return to_route('admin.cities.trash', $this->getQueryStringParams($request))->with("success", "CITY_HAS_BEEN_SUCCESSFULLY_RESTORED");
     }
 
-    public function forceDelete(Request $request, int $id): RedirectResponse
+    public function forceDelete(Request $request, int $trashCityId): RedirectResponse
     {
-        $city = City::onlyTrashed()->findOrFail($id);
+        $trashCity = City::onlyTrashed()->findOrFail($trashCityId);
 
-        $city->forceDelete();
+        $trashCity->forceDelete();
 
-        return to_route('admin.cities.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The City has been permanently deleted.");
+        return to_route('admin.cities.trash', $this->getQueryStringParams($request))->with("success", "THE_CITY_HAS_BEEN_PERMANENTLY_DELETED");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $cities = City::onlyTrashed()->get();
+        $trashCities = City::onlyTrashed()->get();
 
-        $cities->each(function ($city) {
-            $city->forceDelete();
-        });
+        (new PermanentlyDeleteAllTrashCityAction())->handle($trashCities);
 
-        return to_route('admin.cities.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Cities have been successfully deleted.");
+        return to_route('admin.cities.trash', $this->getQueryStringParams($request))->with("success", "CITIES_HAVE_BEEN_PERMANENTLY_DELETED");
     }
 }

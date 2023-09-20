@@ -131,7 +131,7 @@ const handleEditRegion = async () => {
 
           <!-- Country Select Box -->
           <div class="mb-6">
-            <InputLabel for="country" :value="__('COUNTRY')" />
+            <InputLabel for="country" :value="__('COUNTRY') + '*'" />
 
             <select
               class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"

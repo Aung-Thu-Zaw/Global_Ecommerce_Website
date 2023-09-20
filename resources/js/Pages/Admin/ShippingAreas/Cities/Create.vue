@@ -1,6 +1,6 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/RegionBreadcrumb.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/CityBreadcrumb.vue";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
@@ -8,32 +8,40 @@ import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
 import SaveButton from "@/Components/Buttons/SaveButton.vue";
 import { useForm, Head } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 // Define the props
 const props = defineProps({
   countries: Object,
+  regions: Object,
   per_page: String,
 });
 
+const country = ref("");
 const processing = ref(false);
+
+const filteredRegions = computed(() => {
+  return props.regions.filter((region) => {
+    return region.country_id === country.value;
+  });
+});
 
 const form = useForm({
   name: "",
-  country_id: "",
+  region_id: "",
   captcha_token: null,
 });
 
 const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 
-const handleCreateRegion = async () => {
+const handleCreateCity = async () => {
   await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("create_region");
+  form.captcha_token = await executeRecaptcha("create_city");
 
   processing.value = true;
 
   form.post(
-    route("admin.regions.store", {
+    route("admin.cities.store", {
       page: 1,
       per_page: props.per_page,
       sort: "id",
@@ -52,7 +60,7 @@ const handleCreateRegion = async () => {
 
 <template>
   <AdminDashboardLayout>
-    <Head :title="__('CREATE_REGION')" />
+    <Head :title="__('CREATE_CITY')" />
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <!-- Breadcrumb  -->
       <div class="flex items-center justify-between mb-10">
@@ -84,7 +92,7 @@ const handleCreateRegion = async () => {
         <!-- Go Back button -->
         <div>
           <GoBackButton
-            href="admin.regions.index"
+            href="admin.cities.index"
             :queryStringParams="{
               page: 1,
               per_page: props.per_page,
@@ -96,9 +104,9 @@ const handleCreateRegion = async () => {
       </div>
 
       <div class="border shadow-md p-10">
-        <form @submit.prevent="handleCreateRegion">
+        <form @submit.prevent="handleCreateCity">
           <div class="mb-6">
-            <InputLabel for="name" :value="__('REGION_OR_STATE_NAME') + ' *'" />
+            <InputLabel for="name" :value="__('CITY_NAME') + ' *'" />
 
             <TextInput
               id="name"
@@ -106,7 +114,7 @@ const handleCreateRegion = async () => {
               class="mt-1 block w-full"
               v-model="form.name"
               required
-              :placeholder="__('ENTER_REGION_OR_STATE_NAME')"
+              :placeholder="__('ENTER_CITY_NAME')"
             />
 
             <InputError class="mt-2" :message="form.errors.name" />
@@ -118,7 +126,7 @@ const handleCreateRegion = async () => {
 
             <select
               class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-              v-model="form.country_id"
+              v-model="country"
             >
               <option value="" selected disabled>
                 {{ __("SELECT_COUNTRY") }}
@@ -131,8 +139,30 @@ const handleCreateRegion = async () => {
                 {{ country.name }}
               </option>
             </select>
+          </div>
 
-            <InputError class="mt-2" :message="form.errors.country_id" />
+          <!-- Region Select Box -->
+          <div class="mb-6">
+            <InputLabel for="region" :value="__('REGION') + '*'" />
+
+            <select
+              class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+              v-model="form.region_id"
+              :disabled="!country"
+            >
+              <option value="" selected disabled>
+                {{ __("SELECT_REGION") }}
+              </option>
+              <option
+                v-for="region in filteredRegions"
+                :key="region"
+                :value="region.id"
+              >
+                {{ region.name }}
+              </option>
+            </select>
+
+            <InputError class="mt-2" :message="form.errors.region_id" />
           </div>
 
           <!-- Save Button -->
