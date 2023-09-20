@@ -1083,5 +1083,8 @@
     "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_COUNTRY": "ဤနိုင်ငံကို ပြန်လည်ရယူလိုသည်မှာ သေချာပါသလား။",
     "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_REGION": "ဤတိုင်းဒေသကြီး/ပြည်နယ်ကို ပြန်လည်ရယူလိုသည်မှာ သေချာပါသလား။",
     "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_CITY": "ဤမြို့ကို ပြန်လည်ရယူလိုသည်မှာ သေချာပါသလား။",
-    "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_TOWNSHIP": "ဤမြို့နယ်/ခရိုင်ကို ပြန်လည်ရယူလိုသည်မှာ သေချာပါသလား။"
+    "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_TOWNSHIP": "ဤမြို့နယ်/ခရိုင်ကို ပြန်လည်ရယူလိုသည်မှာ သေချာပါသလား။",
+    "SELECT_COUNTRY": "နိုင်ငံကိုရွေးချယ်ပါ",
+    "SELECT_REGION": "တိုင်းဒေသကြီး/ပြည်နယ်ကို ရွေးပါ။",
+    "SELECT_CITY": "မြို့ကို ရွေးပါ။"
 }

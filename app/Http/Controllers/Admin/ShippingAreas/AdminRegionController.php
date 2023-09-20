@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\ShippingAreas;
 
+use App\Actions\Admin\ShippingAreas\PermanentlyDeleteAllTrashRegionAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegionRequest;
 use App\Http\Traits\HandlesQueryStringParameters;
@@ -27,7 +28,6 @@ class AdminRegionController extends Controller
                             ->paginate(request("per_page", 10))
                             ->appends(request()->all());
 
-
         return inertia("Admin/ShippingAreas/Regions/Index", compact("regions"));
     }
 
@@ -42,33 +42,33 @@ class AdminRegionController extends Controller
 
     public function store(RegionRequest $request): RedirectResponse
     {
-        Region::create($request->validated());
+        Region::create(["name" => $request->name,"country_id" => $request->country_id]);
 
-        return to_route("admin.regions.index", "per_page=$request->per_page")->with("success", "Region has been successfully created.");
+        return to_route("admin.regions.index", $this->getQueryStringParams($request))->with("success", "REGION_HAS_BEEN_SUCCESSFULLY_CREATED");
     }
 
-    public function edit(Region $region): Response|ResponseFactory
+    public function edit(Request $request, Region $region): Response|ResponseFactory
     {
-        $paginate = [ "page" => request("page"),"per_page" => request("per_page")];
-
         $countries = Country::all();
 
-        return inertia("Admin/ShippingAreas/Regions/Edit", compact("re$region", "paginate", "countries"));
+        $queryStringParams = $this->getQueryStringParams($request);
+
+        return inertia("Admin/ShippingAreas/Regions/Edit", compact("region", "countries", "queryStringParams"));
     }
 
     public function update(RegionRequest $request, Region $region): RedirectResponse
     {
 
-        $region->update($request->validated());
+        $region->update(["name" => $request->name,"country_id" => $request->country_id]);
 
-        return to_route("admin.regions.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Region has been successfully updated.");
+        return to_route("admin.regions.index", $this->getQueryStringParams($request))->with("success", "REGION_HAS_BEEN_SUCCESSFULLY_UPDATED");
     }
 
     public function destroy(Request $request, Region $region): RedirectResponse
     {
         $region->delete();
 
-        return to_route("admin.regions.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Region has been successfully deleted.");
+        return to_route("admin.regions.index", $this->getQueryStringParams($request))->with("success", "REGION_HAS_BEEN_SUCCESSFULLY_DELETED");
     }
 
     public function trash(): Response|ResponseFactory
@@ -82,32 +82,30 @@ class AdminRegionController extends Controller
         return inertia("Admin/ShippingAreas/Regions/Trash", compact("trashRegions"));
     }
 
-    public function restore(Request $request, int $id): RedirectResponse
+    public function restore(Request $request, int $trashRegionId): RedirectResponse
     {
-        $region = Region::onlyTrashed()->findOrFail($id);
+        $trashRegion = Region::onlyTrashed()->findOrFail($trashRegionId);
 
-        $region->restore();
+        $trashRegion->restore();
 
-        return to_route('admin.regions.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Region has been successfully restored.");
+        return to_route('admin.regions.trash', $this->getQueryStringParams($request))->with("success", "REGION_HAS_BEEN_SUCCESSFULLY_RESTORED");
     }
 
-    public function forceDelete(Request $request, int $id): RedirectResponse
+    public function forceDelete(Request $request, int $trashRegionId): RedirectResponse
     {
-        $region = Region::onlyTrashed()->findOrFail($id);
+        $trashRegion = Region::onlyTrashed()->findOrFail($trashRegionId);
 
-        $region->forceDelete();
+        $trashRegion->forceDelete();
 
-        return to_route('admin.regions.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The Region has been permanently deleted.");
+        return to_route('admin.regions.trash', $this->getQueryStringParams($request))->with("success", "THE_REGION_HAS_BEEN_PERMANENTLY_DELETED");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $regions = Region::onlyTrashed()->get();
+        $trashRegions = Region::onlyTrashed()->get();
 
-        $regions->each(function ($region) {
-            $region->forceDelete();
-        });
+        (new PermanentlyDeleteAllTrashRegionAction())->handle($trashRegions);
 
-        return to_route('admin.regions.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Regions have been successfully deleted.");
+        return to_route('admin.regions.trash', $this->getQueryStringParams($request))->with("success", "REGIONS_HAVE_BEEN_PERMANENTLY_DELETED");
     }
 }

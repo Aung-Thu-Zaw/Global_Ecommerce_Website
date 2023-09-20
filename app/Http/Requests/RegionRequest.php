@@ -27,6 +27,7 @@ class RegionRequest extends FormRequest
     {
         $rules = [
             "name" => ["required","string","max:255",Rule::unique("regions", "name")],
+            "country_id" => ["required","numeric",Rule::exists("countries", "id")],
             "captcha_token"  => ["required",new RecaptchaRule()],
 
         ];
@@ -50,6 +51,9 @@ class RegionRequest extends FormRequest
             "name.string" =>  "The name must be a string.",
             "name.unique" => "The name has already been taken.",
             "name.max" => "The name must not be greater than 255 characters.",
+            "country_id.required" => "Country id is required.",
+            "country_id.exists" => "Country id does not exist.",
+            "country_id.numeric" => "Country id must be numeric.",
             "captcha_token.required" => "The captcha token is required",
         ];
     }

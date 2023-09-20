@@ -22,7 +22,7 @@ return new class () extends Migration {
             $table->string("country");
             $table->string("region");
             $table->string("city");
-            $table->string("township");
+            $table->string("township")->nullable();
             $table->string("postal_code")->nullable();
             $table->text("additional_information")->nullable();
             $table->timestamps();
