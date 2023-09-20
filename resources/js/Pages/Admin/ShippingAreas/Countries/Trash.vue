@@ -1,107 +1,92 @@
 <script setup>
-import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import ActiveStatus from "@/Components/Table/ActiveStatus.vue";
-import InactiveStatus from "@/Components/Table/InactiveStatus.vue";
-import Tr from "@/Components/Table/Tr.vue";
-import Td from "@/Components/Table/Td.vue";
+import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/BrandBreadcrumb.vue";
+import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
+import RestoreButton from "@/Components/Buttons/RestoreButton.vue";
+import DeleteForeverButton from "@/Components/Buttons/DeleteForeverButton.vue";
+import EmptyTrashButton from "@/Components/Buttons/EmptyTrashButton.vue";
+import DashboardSearchInputForm from "@/Components/Forms/DashboardSearchInputForm.vue";
+import DashboardPerPageSelectBox from "@/Components/Forms/DashboardPerPageSelectBox.vue";
+import DashboardFilterByDeletedDate from "@/Components/Forms/DashboardFilterByDeletedDate.vue";
+import SortingArrows from "@/Components/Table/SortingArrows.vue";
+import TableContainer from "@/Components/Table/TableContainer.vue";
+import TableHeader from "@/Components/Table/TableHeader.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
-import TableHeader from "@/Components/Table/TableHeader.vue";
-import TableContainer from "@/Components/Table/TableContainer.vue";
-import SearchForm from "@/Components/Form/SearchForm.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/CategoryBreadcrumb.vue";
+import Tr from "@/Components/Table/Tr.vue";
+import Td from "@/Components/Table/Td.vue";
+import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, Head } from "@inertiajs/vue3";
-import { inject, reactive, watch } from "vue";
-import { router } from "@inertiajs/vue3";
-import { usePage } from "@inertiajs/vue3";
+import { __ } from "@/Translations/translations-inside-setup.js";
+import { reactive, inject, computed, ref } from "vue";
+import { router, Head, usePage } from "@inertiajs/vue3";
 
+// Define the Props
 const props = defineProps({
-  trashCategories: Object,
+  trashCountries: Object,
 });
 
+// Define Variables
 const swal = inject("$swal");
+const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
 
-const params = reactive({
-  search: null,
-  page: props.trashCategories.current_page
-    ? props.trashCategories.current_page
-    : 1,
-  per_page: props.trashCategories.per_page
-    ? props.trashCategories.per_page
-    : 10,
-  sort: "id",
-  direction: "desc",
+// Shipping Area Trash Restore Permission
+const shippingAreaTrashRestore = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "shipping-area.trash.restore"
+      )
+    : false;
 });
 
-const handleSearchBox = () => {
-  params.search = "";
-};
+// Shipping Area Trash Delete Permission
+const shippingAreaTrashDelete = computed(() => {
+  return permissions.value.length
+    ? permissions.value.some(
+        (permission) => permission.name === "shipping-area.trash.delete"
+      )
+    : false;
+});
 
-watch(
-  () => params.search,
-  (current, previous) => {
-    router.get(
-      "/admin/categories/trash",
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Query String Parameteres
+const params = reactive({
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
+});
 
-watch(
-  () => params.per_page,
-  (current, previous) => {
-    router.get(
-      "/admin/categories/trash",
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
+// Update Sorting Table Column
 const updateSorting = (sort = "id") => {
   params.sort = sort;
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
   router.get(
-    "/admin/categories/trash",
+    route("admin.countries.trash"),
     {
-      search: params.search,
-      page: params.page,
-      per_page: params.per_page,
+      search: usePage().props.ziggy.query?.search,
+      page: usePage().props.ziggy.query?.page,
+      per_page: usePage().props.ziggy.query?.per_page,
       sort: params.sort,
       direction: params.direction,
+      deleted_from: usePage().props.ziggy.query?.deleted_from,
+      deleted_until: usePage().props.ziggy.query?.deleted_until,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
 };
 
-const handleRestore = async (trashCategoryId) => {
+// Handle Trash Country Restore
+const handleRestoreTrashCountry = async (trashCountryId) => {
   const result = await swal({
-    icon: "info",
-    title: "Are you sure you want to restore this category?",
+    icon: "question",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_COUNTRY"),
     showCancelButton: true,
-    confirmButtonText: "Yes, restore",
-    confirmButtonColor: "#4d9be9",
+    confirmButtonText: __("YES_RESTORE_IT"),
+    cancelButtonText: __("CANCEL"),
+    confirmButtonColor: "#2562c4",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -109,31 +94,45 @@ const handleRestore = async (trashCategoryId) => {
 
   if (result.isConfirmed) {
     router.post(
-      route("admin.categories.restore", {
-        id: trashCategoryId,
-        page: params.current_page,
-        per_page: params.per_page,
+      route("admin.countries.trash.restore", {
+        trash_country_id: trashCountryId,
+        search: usePage().props.ziggy.query?.search,
+        page: usePage().props.ziggy.query?.page,
+        per_page: usePage().props.ziggy.query?.per_page,
         sort: params.sort,
         direction: params.direction,
-      })
+        deleted_from: usePage().props.ziggy.query?.deleted_from,
+        deleted_until: usePage().props.ziggy.query?.deleted_until,
+      }),
+      {},
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: __(usePage().props.flash.successMessage),
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
-const handleDelete = async (trashCategoryId) => {
+// Handle Trash Country Delete
+const handleDeleteTrashCountry = async (trashCountryId) => {
   const result = await swal({
-    icon: "warning",
-    title: "Are you sure you want to delete it from the trash?",
-    text: "Category in the trash will be permanetly deleted! You can't get it back.",
+    icon: "question",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_IT_FROM_THE_TRASH"),
+    text: __(
+      "COUNTRY_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK"
+    ),
     showCancelButton: true,
-    confirmButtonText: "Yes, delete it !",
-    confirmButtonColor: "#ef4444",
+    confirmButtonText: __("YES_DELETE_IT"),
+    cancelButtonText: __("CANCEL"),
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -141,63 +140,82 @@ const handleDelete = async (trashCategoryId) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("admin.categories.forceDelete", {
-        id: trashCategoryId,
-        page: params.current_page,
-        per_page: params.per_page,
+      route("admin.countries.trash.force.delete", {
+        trash_country_id: trashCountryId,
+        search: usePage().props.ziggy.query?.search,
+        page: usePage().props.ziggy.query?.page,
+        per_page: usePage().props.ziggy.query?.per_page,
         sort: params.sort,
         direction: params.direction,
-      })
+        deleted_from: usePage().props.ziggy.query?.deleted_from,
+        deleted_until: usePage().props.ziggy.query?.deleted_until,
+      }),
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: __(usePage().props.flash.successMessage),
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 
-const handlePermanentlyDelete = async () => {
+// Handle Trash Country Delete Permanently
+const handlePermanentlyDeleteTrashCountries = async () => {
   const result = await swal({
-    icon: "warning",
-    title: "Are you sure you want to delete it from the trash?",
-    text: "All categories in the trash will be permanetly deleted! You can't get it back.",
+    icon: "question",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_IT_FROM_THE_TRASH"),
+    text: __(
+      "ALL_COUNTRIES_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK"
+    ),
     showCancelButton: true,
-    confirmButtonText: "Yes, delete it !",
-    confirmButtonColor: "#ef4444",
+    confirmButtonText: __("YES_DELETE_IT"),
+    cancelButtonText: __("CANCEL"),
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
   });
 
   if (result.isConfirmed) {
-    router.get(
-      route("admin.categories.permanentlyDelete", {
-        page: params.current_page,
-        per_page: params.per_page,
+    router.delete(
+      route("admin.countries.trash.permanently.delete", {
+        page: usePage().props.ziggy.query?.page,
+        per_page: usePage().props.ziggy.query?.per_page,
         sort: params.sort,
         direction: params.direction,
-      })
+        deleted_from: usePage().props.ziggy.query?.deleted_from,
+        deleted_until: usePage().props.ziggy.query?.deleted_until,
+      }),
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          if (usePage().props.flash.successMessage) {
+            swal({
+              icon: "success",
+              title: __(usePage().props.flash.successMessage),
+            });
+          }
+        },
+      }
     );
-    setTimeout(() => {
-      swal({
-        icon: "success",
-        title: usePage().props.flash.successMessage,
-      });
-    }, 500);
   }
 };
 </script>
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Trash Categories" />
+    <Head :title="__('TRASH_COUNTRIES')" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <!-- Breadcrumb  -->
-
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -216,227 +234,130 @@ const handlePermanentlyDelete = async () => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Trash</span
               >
+                {{ __("TRASH") }}
+              </span>
             </div>
           </li>
         </Breadcrumb>
 
+        <!-- Go Back Button -->
         <div>
-          <Link
-            as="button"
-            :href="route('admin.categories.index')"
-            :data="{
+          <GoBackButton
+            href="admin.countries.index"
+            :queryStringParams="{
               page: 1,
               per_page: 10,
               sort: 'id',
               direction: 'desc',
             }"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-500"
-          >
-            <i class="fa-solid fa-arrow-left"></i>
-            Go Back
-          </Link>
-        </div>
-      </div>
-
-      <!-- Search Input Form -->
-      <div class="flex items-center justify-end mb-5">
-        <form class="w-[350px] relative">
-          <input
-            type="text"
-            class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-            placeholder="Search"
-            v-model="params.search"
           />
-
-          <i
-            v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-            @click="handleSearchBox"
-          ></i>
-        </form>
-        <div class="ml-5">
-          <select
-            class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-            v-model="params.per_page"
-          >
-            <option value="" selected disabled>Select</option>
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="75">75</option>
-            <option value="100">100</option>
-          </select>
         </div>
       </div>
 
-      <!-- Auto delete description and button  -->
-      <p class="text-left text-sm font-bold mb-2 text-warning-600">
-        Categories in the Trash will be automatically deleted after 60 days.
-        <button
-          @click="handlePermanentlyDelete"
-          class="text-primary-500 rounded-md px-2 py-1 hover:bg-primary-200 hover:text-primary-600 transition-all hover:animate-bounce"
-        >
-          Empty the trash now
-        </button>
+      <div class="flex items-center justify-end mb-5">
+        <!-- Search Box -->
+        <DashboardSearchInputForm
+          href="admin.countries.trash"
+          placeholder="SEARCH_BY_NAME"
+        />
+        <!-- Perpage Select Box -->
+        <div class="ml-5">
+          <DashboardPerPageSelectBox href="admin.countries.trash" />
+        </div>
+
+        <!-- Filter By Date -->
+        <DashboardFilterByDeletedDate href="admin.countries.trash" />
+      </div>
+
+      <!-- Brand Permanently Delete Button -->
+      <p
+        v-if="shippingAreaTrashDelete && trashCountries.data.length !== 0"
+        class="text-left text-sm font-bold mb-2 text-warning-600"
+      >
+        {{
+          __(
+            "COUNTRIES_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS"
+          )
+        }}
+
+        <EmptyTrashButton @click="handlePermanentlyDeleteTrashCountries" />
       </p>
 
+      <!-- Trash Brand Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="id" />
           </HeaderTh>
-          <HeaderTh> Image </HeaderTh>
+
           <HeaderTh @click="updateSorting('name')">
-            Name
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'name',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'name',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'name',
-              }"
-            ></i>
+            {{ __("NAME") }}
+            <SortingArrows :params="params" sort="name" />
           </HeaderTh>
-          <HeaderTh @click="updateSorting('status')">
-            Status
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'status',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'status',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'status',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'status',
-              }"
-            ></i>
+
+          <HeaderTh @click="updateSorting('deleted_at')">
+            {{ __("DELETED_DATE") }}
+            <SortingArrows :params="params" sort="deleted_at" />
           </HeaderTh>
-          <HeaderTh @click="updateSorting('created_at')">
-            Created At
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'created_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'created_at',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'created_at',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'created_at',
-              }"
-            ></i>
+
+          <HeaderTh v-if="shippingAreaTrashRestore || shippingAreaTrashDelete">
+            {{ __("ACTION") }}
           </HeaderTh>
-          <HeaderTh> Action </HeaderTh>
         </TableHeader>
 
-        <tbody v-if="trashCategories.data.length">
+        <tbody v-if="trashCountries.data.length">
           <Tr
-            v-for="trashCategory in trashCategories.data"
-            :key="trashCategory.id"
+            v-for="trashCountry in trashCountries.data"
+            :key="trashCountry.id"
           >
-            <BodyTh>{{ trashCategory.id }}</BodyTh>
+            <BodyTh>
+              {{ trashCountry.id }}
+            </BodyTh>
+
             <Td>
-              <img
-                :src="trashCategory.image"
-                class="w-[50px] h-[50px] rounded-full object-cover shadow-lg ring-2 ring-slate-300"
-                alt=""
-              />
+              {{ trashCountry.name }}
             </Td>
-            <Td>{{ trashCategory.name }}</Td>
+
             <Td>
-              <ActiveStatus v-if="trashCategory.status == 'show'">
-                {{ trashCategory.status }}
-              </ActiveStatus>
-              <InactiveStatus v-if="trashCategory.status == 'hide'">
-                {{ trashCategory.status }}
-              </InactiveStatus>
+              {{ trashCountry.deleted_at }}
             </Td>
-            <Td>{{ trashCategory.created_at }}</Td>
-            <Td>
-              <button
-                @click="handleRestore(trashCategory.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 mr-3 my-1"
-              >
-                <i class="fa-solid fa-recycle"></i>
-                Restore
-              </button>
-              <button
-                @click="handleDelete(trashCategory.id)"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 mr-3 my-1"
-              >
-                <i class="fa-solid fa-trash"></i>
-                Delete Forever
-              </button>
+
+            <Td
+              v-if="shippingAreaTrashRestore || shippingAreaTrashDelete"
+              class="flex items-center"
+            >
+              <!-- Restore Button -->
+              <div v-if="shippingAreaTrashRestore">
+                <RestoreButton
+                  @click="handleRestoreTrashCountry(trashCountry.id)"
+                />
+              </div>
+
+              <!-- Delete Button -->
+              <div v-if="shippingAreaTrashDelete">
+                <DeleteForeverButton
+                  @click="handleDeleteTrashCountry(trashCountry.id)"
+                />
+              </div>
             </Td>
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Trash Brand Table End -->
 
-      <!-- Not Avaliable Data -->
-      <NotAvaliableData v-if="!trashCategories.data.length" />
+      <!-- No Data Row -->
+      <NotAvaliableData v-if="!trashCountries.data.length" />
 
       <!-- Pagination -->
-      <pagination class="mt-6" :links="trashCategories.links" />
+      <div v-if="trashCountries.data.length" class="mt-6">
+        <p class="text-center text-sm text-gray-600 mb-3 font-bold">
+          Showing {{ trashCountries.from }} - {{ trashCountries.to }} of
+          {{ trashCountries.total }}
+        </p>
+        <Pagination :links="trashCountries.links" />
+      </div>
     </div>
   </AdminDashboardLayout>
 </template>

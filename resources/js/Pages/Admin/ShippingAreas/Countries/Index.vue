@@ -128,7 +128,7 @@ const handleDeleteCountry = async (country) => {
     const result = await swal({
       icon: "error",
       title: __(
-        "YOU_CANT_DELETE_THIS_COUNTRY_BECAUSE_THIS_COUNTRY_HAVE_PRODUCTS"
+        "YOU_CANT_DELETE_THIS_COUNTRY_BECAUSE_THIS_COUNTRY_HAVE_REGIONS"
       ),
       text: __(
         "IF_YOU_CLICK_THE_DELETE_WHATEVER_BUTTON_REGIONS_ASSOCIATED_WITH_THAT_COUNTRY_WILL_BE_AUTOMATICALLY_DELETED"

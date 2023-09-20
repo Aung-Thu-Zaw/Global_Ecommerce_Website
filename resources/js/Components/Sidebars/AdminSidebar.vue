@@ -347,7 +347,7 @@
 
                 <ul
                   v-if="!shippingAreaIsHidden || shippingArea"
-                  class="text-sm ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
+                  class="text-[.84rem] ml-10 font-bold text-slate-500 h-auto flex flex-col items-center"
                 >
                   <!-- Country Section -->
                   <li
@@ -366,7 +366,7 @@
                         direction: 'desc',
                       }"
                     >
-                      Country
+                      {{ __("COUNTRIES") }}
                     </Link>
                   </li>
 
@@ -387,7 +387,7 @@
                         direction: 'desc',
                       }"
                     >
-                      Region / State
+                      {{ __("REGIONS") }}
                     </Link>
                   </li>
 
@@ -408,7 +408,7 @@
                         direction: 'desc',
                       }"
                     >
-                      City
+                      {{ __("CITIES") }}
                     </Link>
                   </li>
 
@@ -429,7 +429,7 @@
                         direction: 'desc',
                       }"
                     >
-                      Township
+                      {{ __("TOWNSHIPS") }}
                     </Link>
                   </li>
                 </ul>
