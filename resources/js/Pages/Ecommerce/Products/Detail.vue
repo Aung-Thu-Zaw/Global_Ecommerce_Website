@@ -393,12 +393,16 @@ const saved = computed(() => {
 
             <!-- Action Buttons -->
             <div class="flex flex-wrap gap-2 mb-5">
-              <a
+              <Link
+                as="button"
                 class="px-4 py-2 inline-block text-white bg-yellow-500 border border-transparent rounded-md hover:bg-yellow-600"
-                href="#"
+                :href="route('product.buy-now', product.slug)"
+                :data="{
+                  quantity: quantity,
+                }"
               >
                 Buy now
-              </a>
+              </Link>
               <button
                 class="px-4 py-2 inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
                 @click="addToCart"

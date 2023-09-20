@@ -24,7 +24,7 @@ class CheckoutController extends Controller
         $shopIds = $cartItems->pluck("shop_id")->unique()->values();
         $shops = User::select("id", "shop_name")->whereIn('id', $shopIds)->get();
 
-        $cartItems->load(["product.shop","product.brand","product.sizes","product.colors"]);
+        $cartItems->load(["product.shop","product.brand","product.sizes","product.colors","product.types"]);
 
 
         $countries = Country::all();

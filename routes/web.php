@@ -3,6 +3,7 @@
 use App\Http\Controllers\Ecommerce\Blogs\BlogCommentController;
 use App\Http\Controllers\Ecommerce\Blogs\BlogCommentReplyController;
 use App\Http\Controllers\Ecommerce\Blogs\BlogController;
+use App\Http\Controllers\Ecommerce\BuyNowController;
 use App\Http\Controllers\Ecommerce\CancelOrderAndItemController;
 use App\Http\Controllers\Ecommerce\CartController;
 use App\Http\Controllers\Ecommerce\CartItemController;
@@ -167,6 +168,8 @@ Route::middleware(["auth","verified"])->group(function () {
          });
 
     Route::get('/checkout', [CheckoutController::class,"index"])->name("checkout.index");
+
+    Route::get("/buy-now/{product}", [BuyNowController::class,"buyNow"])->name("product.buy-now");
 
     Route::post('/delivery-information', [DeliveryInformationController::class,"store"])->name("information.store");
 

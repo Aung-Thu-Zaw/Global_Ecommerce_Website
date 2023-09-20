@@ -2,29 +2,12 @@
 import { computed, ref, watch } from "vue";
 import { Link, router } from "@inertiajs/vue3";
 
-const props = defineProps({ item: Object });
-
-const quantity = ref(props.item.qty);
-
-watch(
-  () => quantity.value,
-  () => {
-    router.post(
-      route("cart-items.update", props.item.id),
-      {
-        qty: quantity.value,
-      },
-      {
-        preserveScroll: true,
-      }
-    );
-  }
-);
+const props = defineProps({ product: Object, quantity: Number });
 
 const totalDiscountPrice = computed(
-  () => quantity.value * props.item.product.discount
+  () => props.quantity * props.product.discount
 );
-const totalPrice = computed(() => quantity.value * props.item.product.price);
+const totalPrice = computed(() => props.quantity * props.product.price);
 </script>
 
 <template>
@@ -36,8 +19,8 @@ const totalPrice = computed(() => quantity.value * props.item.product.price);
             class="block w-16 h-16 rounded border border-gray-200 overflow-hidden"
           >
             <img
-              :src="item.product.image"
-              :alt="item.product.name"
+              :src="product.image"
+              :alt="product.name"
               class="h-full object-cover"
             />
           </div>
@@ -45,17 +28,17 @@ const totalPrice = computed(() => quantity.value * props.item.product.price);
         <figcaption class="ml-3">
           <p>
             <Link
-              :href="route('products.show', item.product.slug)"
+              :href="route('products.show', product.slug)"
               class="hover:text-blue-600 font-semibold text-slate-600"
             >
-              {{ item.product.name }}
+              {{ product.name }}
             </Link>
           </p>
           <span class="text-[.8rem] text-gray-500">
-            <span v-if="item.product.brand">
+            <span v-if="product.brand">
               Brand:
               <span class="text-slate-700 font-semibold">
-                {{ item.product.brand.name }}
+                {{ product.brand.name }}
               </span>
             </span>
             <span v-else>
@@ -63,42 +46,33 @@ const totalPrice = computed(() => quantity.value * props.item.product.price);
               <span class="text-slate-700 font-semibold"> No Brand </span>
             </span>
           </span>
-          <span
-            v-if="item.product.sizes.length"
-            class="text-[.8rem] text-gray-500"
-          >
+          <span v-if="product.sizes.length" class="text-[.8rem] text-gray-500">
             <span class="text-gray-600">|</span>
             Size:
             <span
-              v-for="size in item.product.sizes"
+              v-for="size in product.sizes"
               :key="size.id"
               class="text-slate-700 font-semibold"
             >
               {{ size.name }},
             </span>
           </span>
-          <span
-            v-if="item.product.colors.length"
-            class="text-[.8rem] text-gray-500"
-          >
+          <span v-if="product.colors.length" class="text-[.8rem] text-gray-500">
             <span class="text-gray-600">|</span>
             Color:
             <span
-              v-for="color in item.product.colors"
+              v-for="color in product.colors"
               :key="color.id"
               class="text-slate-700 font-semibold"
             >
               {{ color.name }},
             </span>
           </span>
-          <span
-            v-if="item.product.types.length"
-            class="text-[.8rem] text-gray-500"
-          >
+          <span v-if="product.types.length" class="text-[.8rem] text-gray-500">
             <span class="text-gray-600">|</span>
             Type:
             <span
-              v-for="productType in item.product.types"
+              v-for="productType in product.types"
               :key="productType.id"
               class="text-slate-700 font-semibold"
             >
@@ -106,28 +80,27 @@ const totalPrice = computed(() => quantity.value * props.item.product.price);
             </span>
           </span>
           <p class="text-[.8rem] text-red-500 font-bold">
-            Only {{ item.product.qty }} item(s) left
+            Only {{ product.qty }} item(s) left
           </p>
         </figcaption>
       </figure>
     </div>
 
     <div class="">
-      <div v-if="item.product.discount" class="leading-5">
+      <div v-if="product.discount" class="leading-5">
         <p class="font-semibold not-italic">${{ totalDiscountPrice }}</p>
         <small class="text-gray-600 block">
-          ${{ item.product.discount }} / per item
+          ${{ product.discount }} / per item
         </small>
         <small class="text-gray-400 block line-through">
-          ${{ item.product.price }} / per item
+          ${{ product.price }} / per item
         </small>
         <small
           class="bg-green-300 text-green-600 px-2 py-1 rounded-full text-[.6rem]"
         >
           {{
             (
-              ((item.product.price - item.product.discount) /
-                item.product.price) *
+              ((product.price - product.discount) / product.price) *
               100
             ).toFixed(1)
           }}% OFF
@@ -137,14 +110,14 @@ const totalPrice = computed(() => quantity.value * props.item.product.price);
       <div v-else class="leading-5">
         <p class="font-semibold not-italic">${{ totalPrice }}</p>
         <small class="text-gray-600 block">
-          ${{ item.product.price }} / per item
+          ${{ product.price }} / per item
         </small>
       </div>
     </div>
 
     <div class="flex-auto">
       <div class="float-right">
-        <p class="text-slate-700 font-semibold">Qty : {{ item.qty }}</p>
+        <p class="text-slate-700 font-semibold">Qty : {{ quantity }}</p>
       </div>
     </div>
   </div>

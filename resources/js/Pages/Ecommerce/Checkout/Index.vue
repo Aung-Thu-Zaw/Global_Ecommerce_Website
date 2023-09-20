@@ -1,9 +1,11 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import DeliveryInformationForm from "@/Components/Forms/DeliveryInformationForm.vue";
+import PlaceOrderForm from "@/Components/Forms/PlaceOrderForm.vue";
 import CheckoutShoppingCartItem from "@/Components/Items/CheckoutShoppingCartItem.vue";
+import BuyNowItem from "@/Components/Items/BuyNowItem.vue";
 import { computed, ref } from "vue";
-import { useForm, Head } from "@inertiajs/vue3";
+import { useForm, Head, Link } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
 
 const props = defineProps({
@@ -15,14 +17,16 @@ const props = defineProps({
   townships: Object,
   deliveryInformation: Object,
   coupon: Object,
+  product: Object,
+  quantity: Number,
 });
 
 const totalItems = computed(() => {
-  return props.cartItems.reduce((total, item) => total + item.qty, 0);
+  return props.cartItems?.reduce((total, item) => total + item.qty, 0);
 });
 
 const totalPrice = computed(() =>
-  props.cartItems.reduce((total, item) => {
+  props.cartItems?.reduce((total, item) => {
     return item.product.discount
       ? total + item.qty * parseFloat(item.product.discount)
       : total + item.qty * parseFloat(item.product.price);
@@ -32,30 +36,12 @@ const totalPrice = computed(() =>
 const totalPriceWithCoupon = computed(
   () => totalPrice.value - props.coupon.discount_amount
 );
-
-const form = useForm({
-  total_price: ref(
-    props.coupon ? totalPriceWithCoupon.value : totalPrice.value
-  ),
-  cart_items: ref(props.cartItems),
-  payment_method: ref("creditOrDebitCard"),
-});
-
-const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
-const handlePlaceOrder = async () => {
-  await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("place_order");
-  submit();
-};
-
-const submit = () => {
-  form.post(route("payment"));
-};
 </script>
 
 <template>
   <AppLayout>
     <Head title="Global E-commerce : Global Online Shopping" />
+
     <section class="py-10 mt-44">
       <div class="container max-w-screen-xl mx-auto px-4">
         <h1 class="font-semibold text-xl text-slate-700 mb-5">
@@ -74,157 +60,67 @@ const submit = () => {
             />
 
             <!-- Packages -->
-            <article
-              v-for="(shop, index) in shops"
-              :key="index"
-              class="border border-gray-200 bg-white shadow-sm rounded mb-5"
-            >
+            <div v-if="!product">
               <div
-                class="border-b flex items-center justify-between px-3 py-2 lg:px-5 font-bold text-slate-600 text-md"
+                v-for="(shop, index) in shops"
+                :key="index"
+                class="border border-gray-200 bg-white shadow-sm rounded mb-5"
               >
-                <span>
-                  <i class="fas fa-box"></i>
-                  {{ __("PACKAGE") }} {{ index + 1 }}
-                </span>
-                <span class="text-sm text-slate-500">
-                  {{ __("SHIPPED_BY") }}
-                  <span class="text-slate-700">{{ shop.shop_name }}</span>
-                </span>
-              </div>
-
-              <!-- item-cart -->
-              <div v-for="item in cartItems" :key="item.id">
-                <div v-if="item.shop_id == shop.id">
-                  <CheckoutShoppingCartItem :item="item" />
+                <div
+                  class="border-b flex items-center justify-between px-3 py-2 lg:px-5 font-bold text-slate-600 text-md"
+                >
+                  <span>
+                    <i class="fas fa-box"></i>
+                    {{ __("PACKAGE") }} {{ index + 1 }}
+                  </span>
+                  <span class="text-sm text-slate-500">
+                    {{ __("SHIPPED_BY") }}
+                    <span class="text-slate-700">{{ shop.shop_name }}</span>
+                  </span>
                 </div>
-              </div>
 
-              <hr />
-            </article>
+                <!-- item-cart -->
+                <div v-for="item in cartItems" :key="item.id">
+                  <div v-if="item.shop_id == shop.id">
+                    <CheckoutShoppingCartItem :item="item" />
+                  </div>
+                </div>
+
+                <hr />
+              </div>
+            </div>
+            <div v-else>
+              <div
+                class="border border-gray-200 bg-white shadow-sm rounded mb-5"
+              >
+                <div
+                  class="border-b flex items-center justify-between px-3 py-2 lg:px-5 font-bold text-slate-600 text-md"
+                >
+                  <span>
+                    <i class="fas fa-box"></i>
+                    {{ __("PACKAGE") }} 1
+                  </span>
+                  <span class="text-sm text-slate-500">
+                    {{ __("SHIPPED_BY") }}
+                    <span class="text-slate-700">
+                      {{ product.shop.shop_name }}
+                    </span>
+                  </span>
+                </div>
+
+                <BuyNowItem :product="product" :quantity="quantity" />
+              </div>
+            </div>
           </main>
 
           <aside class="md:w-1/3">
-            <!-- Order Summary -->
-            <article
-              class="border border-gray-200 bg-white shadow-sm rounded mb-5 p-3 lg:p-5"
-            >
-              <h2 class="text-center mb-5 font-bold text-2xl text-slate-800">
-                {{ __("ORDER_SUMMARY") }}
-              </h2>
-              <ul class="mb-5">
-                <li class="flex justify-between text-gray-600 mb-1">
-                  <span> {{ __("TOTAL_ITEMS") }} :</span>
-                  <span>{{ totalItems }} {{ __("ITEMS") }} </span>
-                </li>
-
-                <li class="flex justify-between text-gray-600 mb-1">
-                  <span> {{ __("TOTAL_PRICE") }} :</span>
-                  <span>${{ totalPrice }}</span>
-                </li>
-
-                <div v-if="coupon">
-                  <li class="flex justify-between text-gray-600 mb-1">
-                    <span> {{ __("COUPON_CODE") }} :</span>
-                    <span class="text-yellow-600 text-sm font-bold">
-                      {{ coupon.code }}
-                    </span>
-                  </li>
-                  <li class="flex justify-between text-gray-600 mb-1">
-                    <span> {{ __("COUPON_DISCOUNT") }} :</span>
-                    <span class="text-gray-600 text-sm font-bold">
-                      - ${{ coupon.discount_amount }}
-                    </span>
-                  </li>
-                </div>
-
-                <li
-                  class="text-lg font-bold border-t flex justify-between mt-3 pt-3"
-                >
-                  <span> {{ __("TOTAL_PRICE") }} :</span>
-                  <span v-if="totalPriceWithCoupon">
-                    ${{ totalPriceWithCoupon }}
-                  </span>
-                  <span v-else>${{ totalPrice }}</span>
-                </li>
-              </ul>
-
-              <!-- Select Payment Method Form Start -->
-              <form @submit.prevent="handlePlaceOrder">
-                <div class="my-10">
-                  <h1 class="font-bold text-lg text-slate-700">
-                    {{ __("SELECT_PAYMENT_METHODS") }}
-                  </h1>
-
-                  <input type="hidden" v-model="form.total_price" />
-                  <input type="hidden" v-model="form.cart_items" />
-                  <div class="my-5">
-                    <div class="flex items-center mr-4 mb-3">
-                      <input
-                        id="blue-radio-1"
-                        type="radio"
-                        name="colored-radio"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                        value="creditOrDebitCard"
-                        v-model="form.payment_method"
-                      />
-                      <label
-                        for="blue-radio-1"
-                        class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300"
-                      >
-                        <i class="fa-solid fa-credit-card"></i>
-                        Credit/Debit Card
-                      </label>
-                    </div>
-
-                    <div class="flex items-center mr-4 mb-3">
-                      <input
-                        id="blue-radio-2"
-                        type="radio"
-                        name="colored-radio"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                        value="paypal"
-                        v-model="form.payment_method"
-                      />
-                      <label
-                        for="blue-radio-2"
-                        class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300"
-                      >
-                        <i class="fa-brands fa-paypal"></i>
-                        Paypal
-                      </label>
-                    </div>
-
-                    <div class="flex items-center mr-4 mb-3">
-                      <input
-                        id="blue-radio-3"
-                        type="radio"
-                        name="colored-radio"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                        value="cashOnDelivery"
-                        v-model="form.payment_method"
-                      />
-                      <label
-                        for="blue-radio-3"
-                        class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300"
-                      >
-                        <i class="fa-solid fa-money-bill"></i>
-
-                        Cash on Delivery
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <button
-                  type="submit"
-                  class="px-4 py-3 mb-2 inline-block text-md w-full text-center font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 uppercase"
-                  :disabled="!deliveryInformation"
-                >
-                  <i class="fa-solid fa-bag-shopping"></i>
-                  {{ __("PLACE_ORDER") }}
-                </button>
-              </form>
-              <!-- Select Payment Method Form End -->
-            </article>
+            <PlaceOrderForm
+              :cartItems="cartItems"
+              :deliveryInformation="deliveryInformation"
+              :coupon="coupon"
+              :product="product"
+              :quantity="quantity"
+            />
           </aside>
         </div>
       </div>
