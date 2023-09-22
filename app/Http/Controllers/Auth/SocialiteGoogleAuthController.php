@@ -4,9 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Events\RegisteredWithSocialite;
 use App\Http\Controllers\Controller;
-use App\Jobs\AccountRegistered\SendNewUserRegisteredWithSocialiteEmailNotificationForAdmin;
-use App\Jobs\AccountRegistered\SendNewUserRegisteredWithSocialiteNotificationForAdminDashboard;
-use App\Jobs\AccountRegistered\SendWelcomeEmailToRegisteredWithSocialiteAccount;
 use App\Models\User;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\InvalidStateException;

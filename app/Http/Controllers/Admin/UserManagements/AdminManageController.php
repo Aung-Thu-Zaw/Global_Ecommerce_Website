@@ -28,7 +28,7 @@ class AdminManageController extends Controller
                       ->where("status", "active")
                       ->orderBy(request("sort", "id"), request("direction", "desc"))
                       ->paginate(request("per_page", 10))
-                      ->appends(request()->all());
+                      ->withQueryString();
 
         return inertia("Admin/UserManagements/AdminManage/Index", compact("admins"));
     }
@@ -94,7 +94,7 @@ class AdminManageController extends Controller
                            ->onlyTrashed()
                            ->orderBy(request("sort", "id"), request("direction", "desc"))
                            ->paginate(request("per_page", 10))
-                           ->appends(request()->all());
+                           ->withQueryString();
 
         return inertia("Admin/UserManagements/AdminManage/Trash", compact("trashAdmins"));
     }

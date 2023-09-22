@@ -68,10 +68,10 @@ class AdminCountryController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashCountries = Country::search(request("search"))
-                                ->onlyTrashed()
-                                ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                ->paginate(request("per_page", 10))
-                                ->appends(request()->all());
+                                 ->onlyTrashed()
+                                 ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                 ->paginate(request("per_page", 10))
+                                 ->appends(request()->all());
 
         return inertia("Admin/ShippingAreas/Countries/Trash", compact("trashCountries"));
     }

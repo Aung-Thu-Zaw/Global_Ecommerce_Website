@@ -22,12 +22,12 @@ class AdminFaqCategoryController extends Controller
     public function index(): Response|ResponseFactory
     {
         $faqCategories = FaqCategory::search(request("search"))
-                                  ->query(function (Builder $builder) {
-                                      $builder->with("faqSubCategories");
-                                  })
-                                  ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                  ->paginate(request("per_page", 10))
-                                  ->appends(request()->all());
+                                    ->query(function (Builder $builder) {
+                                        $builder->with("faqSubCategories");
+                                    })
+                                    ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                    ->paginate(request("per_page", 10))
+                                    ->appends(request()->all());
 
         return inertia("Admin/AdminWebControlArea/FaqCategories/Categories/Index", compact("faqCategories"));
     }
@@ -70,10 +70,10 @@ class AdminFaqCategoryController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashFaqCategories = FaqCategory::search(request("search"))
-                                       ->onlyTrashed()
-                                       ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                       ->paginate(request("per_page", 10))
-                                       ->appends(request()->all());
+                                         ->onlyTrashed()
+                                         ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                         ->paginate(request("per_page", 10))
+                                         ->appends(request()->all());
 
         return inertia("Admin/AdminWebControlArea/FaqCategories/Categories/Trash", compact("trashFaqCategories"));
     }

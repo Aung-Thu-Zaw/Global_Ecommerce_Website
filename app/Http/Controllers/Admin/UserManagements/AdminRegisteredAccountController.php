@@ -20,7 +20,7 @@ class AdminRegisteredAccountController extends Controller
         $users = User::filterBy(request(["search","created_from","created_until"]))
                      ->orderBy(request("sort", "id"), request("direction", "desc"))
                      ->paginate(request("per_page", 10))
-                     ->appends(request()->all());
+                     ->withQueryString();
 
         return inertia("Admin/UserManagements/RegisteredAccounts/Index", compact("users"));
     }
@@ -45,7 +45,7 @@ class AdminRegisteredAccountController extends Controller
                           ->onlyTrashed()
                           ->orderBy(request("sort", "id"), request("direction", "desc"))
                           ->paginate(request("per_page", 10))
-                          ->appends(request()->all());
+                          ->withQueryString();
 
         return inertia("Admin/UserManagements/RegisteredAccounts/Trash", compact("trashUsers"));
     }

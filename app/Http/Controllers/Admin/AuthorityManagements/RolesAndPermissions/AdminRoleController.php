@@ -21,7 +21,7 @@ class AdminRoleController extends Controller
         $roles = Role::filterBy(request(["search","created_from","created_until"]))
                      ->orderBy(request("sort", "id"), request("direction", "desc"))
                      ->paginate(request("per_page", 10))
-                     ->appends(request()->all());
+                     ->withQueryString();
 
         return inertia("Admin/AuthorityManagements/RolesAndPermissions/Roles/Index", compact("roles"));
     }
@@ -67,7 +67,7 @@ class AdminRoleController extends Controller
                           ->onlyTrashed()
                           ->orderBy(request("sort", "id"), request("direction", "desc"))
                           ->paginate(request("per_page", 10))
-                          ->appends(request()->all());
+                          ->withQueryString();
 
         return inertia("Admin/AuthorityManagements/RolesAndPermissions/Roles/Trash", compact("trashRoles"));
     }

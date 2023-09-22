@@ -14,7 +14,7 @@ class AdminPermissionController extends Controller
         $permissions = Permission::filterBy(request(["search","created_from","created_until"]))
                                  ->orderBy(request("sort", "id"), request("direction", "desc"))
                                  ->paginate(request("per_page", 10))
-                                 ->appends(request()->all());
+                                 ->withQueryString();
 
         return inertia("Admin/AuthorityManagements/RolesAndPermissions/Permissions/Index", compact("permissions"));
     }

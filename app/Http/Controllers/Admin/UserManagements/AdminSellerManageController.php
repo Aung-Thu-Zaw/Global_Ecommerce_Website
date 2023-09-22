@@ -21,7 +21,7 @@ class AdminSellerManageController extends Controller
                        ->where("role", "seller")
                        ->orderBy(request("sort", "id"), request("direction", "desc"))
                        ->paginate(request("per_page", 10))
-                       ->appends(request()->all());
+                       ->withQueryString();
 
         return inertia("Admin/UserManagements/SellerManage/Index", compact("sellers"));
     }
@@ -56,7 +56,7 @@ class AdminSellerManageController extends Controller
                             ->where("role", "seller")
                             ->orderBy(request("sort", "id"), request("direction", "desc"))
                             ->paginate(request("per_page", 10))
-                            ->appends(request()->all());
+                            ->withQueryString();
 
         return inertia("Admin/UserManagements/SellerManage/Trash", compact("trashSellers"));
     }

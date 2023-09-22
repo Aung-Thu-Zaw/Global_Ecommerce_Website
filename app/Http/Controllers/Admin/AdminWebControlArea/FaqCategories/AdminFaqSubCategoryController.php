@@ -75,10 +75,10 @@ class AdminFaqSubCategoryController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashFaqSubCategories = FaqSubCategory::search(request("search"))
-                                             ->onlyTrashed()
-                                             ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                             ->paginate(request("per_page", 10))
-                                             ->appends(request()->all());
+                                               ->onlyTrashed()
+                                               ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                               ->paginate(request("per_page", 10))
+                                               ->appends(request()->all());
 
         return inertia("Admin/AdminWebControlArea/FaqCategories/SubCategories/Trash", compact("trashFaqSubCategories"));
     }

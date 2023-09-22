@@ -30,7 +30,6 @@ class AdminChatController extends Controller
 
         $folders = ChatFolder::where("agent_id", auth()->id())->get();
 
-
         return inertia("Admin/ContactServices/Chats/Index", compact("liveChats", "folders"));
     }
 
@@ -60,7 +59,6 @@ class AdminChatController extends Controller
            ]);
 
         $folders = ChatFolder::where("agent_id", auth()->id())->get();
-
 
         return inertia("Admin/ContactServices/Chats/Show", compact("liveChats", "liveChat", "folders"));
     }
@@ -93,14 +91,12 @@ class AdminChatController extends Controller
 
     public function handleChatWithFolder(Request $request, LiveChat $liveChat): RedirectResponse
     {
-
         $liveChat->update([
             "chat_folder_id" => $request->chat_folder_id,
         ]);
 
         return back();
     }
-
 
     public function archivedChat(Request $request, LiveChat $liveChat): RedirectResponse
     {

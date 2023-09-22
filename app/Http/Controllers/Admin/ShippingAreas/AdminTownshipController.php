@@ -23,12 +23,12 @@ class AdminTownshipController extends Controller
     public function index(): Response|ResponseFactory
     {
         $townships = Township::search(request("search"))
-                            ->query(function (Builder $builder) {
-                                $builder->with("city.region.country");
-                            })
-                            ->orderBy(request("sort", "id"), request("direction", "desc"))
-                            ->paginate(request("per_page", 10))
-                            ->appends(request()->all());
+                             ->query(function (Builder $builder) {
+                                 $builder->with("city.region.country");
+                             })
+                             ->orderBy(request("sort", "id"), request("direction", "desc"))
+                             ->paginate(request("per_page", 10))
+                             ->appends(request()->all());
 
         return inertia("Admin/ShippingAreas/Townships/Index", compact("townships"));
     }
@@ -85,10 +85,10 @@ class AdminTownshipController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashTownships = Township::search(request("search"))
-                                ->onlyTrashed()
-                                ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                ->paginate(request("per_page", 10))
-                                ->appends(request()->all());
+                                  ->onlyTrashed()
+                                  ->orderBy(request("sort", "id"), request("direction", "desc"))
+                                  ->paginate(request("per_page", 10))
+                                  ->appends(request()->all());
 
         return inertia("Admin/ShippingAreas/Townships/Trash", compact("trashTownships"));
     }

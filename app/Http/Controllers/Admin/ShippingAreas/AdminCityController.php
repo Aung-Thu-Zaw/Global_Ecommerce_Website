@@ -22,12 +22,12 @@ class AdminCityController extends Controller
     public function index(): Response|ResponseFactory
     {
         $cities = City::search(request("search"))
-                            ->query(function (Builder $builder) {
-                                $builder->with(["region.country", "townships"]);
-                            })
-                            ->orderBy(request("sort", "id"), request("direction", "desc"))
-                            ->paginate(request("per_page", 10))
-                            ->appends(request()->all());
+                      ->query(function (Builder $builder) {
+                          $builder->with(["region.country", "townships"]);
+                      })
+                      ->orderBy(request("sort", "id"), request("direction", "desc"))
+                      ->paginate(request("per_page", 10))
+                      ->appends(request()->all());
 
 
         return inertia("Admin/ShippingAreas/Cities/Index", compact("cities"));
@@ -66,7 +66,6 @@ class AdminCityController extends Controller
 
     public function update(CityRequest $request, City $city): RedirectResponse
     {
-
         $city->update(["name" => $request->name,"region_id" => $request->region_id]);
 
         return to_route("admin.cities.index", $this->getQueryStringParams($request))->with("success", "CITY_HAS_BEEN_SUCCESSFULLY_UPDATED");
@@ -82,10 +81,10 @@ class AdminCityController extends Controller
     public function trash(): Response|ResponseFactory
     {
         $trashCities = City::search(request("search"))
-                                ->onlyTrashed()
-                                ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                ->paginate(request("per_page", 10))
-                                ->appends(request()->all());
+                           ->onlyTrashed()
+                           ->orderBy(request("sort", "id"), request("direction", "desc"))
+                           ->paginate(request("per_page", 10))
+                           ->appends(request()->all());
 
         return inertia("Admin/ShippingAreas/Cities/Trash", compact("trashCities"));
     }
