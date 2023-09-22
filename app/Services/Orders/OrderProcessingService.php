@@ -7,51 +7,35 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
+use App\Notifications\OrderPlacedNotification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 
 class OrderProcessingService
 {
-    /**
-    * @param array<mixed> $cartItems
-    */
-    public function processCashPayment(int $totalPrice, array $cartItems)
+    public function createOrder(User $user, int $totalPrice, string $paymentId = null, string $paymentType, string $paymentMethod, string $currency = 'usd', string $transactionId = null): Order
     {
-        $order = $this->createOrder($totalPrice);
-
-        $order->load(["deliveryInformation", "orderItems.product.shop"]);
-
-        $this->createOrderItems($order->id, $cartItems);
-
-        $this->sendOrderPlacedMail($order);
-
-        $this->clearCartItems();
-
-    }
-
-    private function createOrder(int $totalPrice): Order
-    {
-        $user = User::findOrFail(auth()->id());
-
         return Order::create([
             "user_id" => $user->id,
             "delivery_information_id" => $user->deliveryInformation ? $user->deliveryInformation->id : null,
-            'payment_type' => "cash on delivery",
-            'payment_method' => "cash on delivery",
+            'payment_id' => $paymentId,
+            'payment_type' => $paymentType,
+            'payment_method' => $paymentMethod,
             'total_amount' => $totalPrice,
+            'transaction_id' => $transactionId,
+            'currency' => $currency,
             'order_no' => "#" . uniqid(),
-            'currency' => "usd",
             'invoice_no' => 'GLOBAL E-COMMERCE' . mt_rand(100000000, 999999999),
             'order_date' => Carbon::now()->format("Y-m-d"),
             'order_status' => "pending",
         ]);
     }
 
-
     /**
     * @param array<mixed> $cartItems
     */
-    private function createOrderItems(int $orderId, array $cartItems): void
+    public function createOrderItems(int $orderId, array $cartItems): void
     {
         foreach ($cartItems as $item) {
             OrderItem::create([
@@ -66,7 +50,13 @@ class OrderProcessingService
         }
     }
 
-    private function sendOrderPlacedMail(Order $order): void
+    public function notifyOrderPlacedToAdmins(Order $order): void
+    {
+        $admins = User::where("role", "admin")->get();
+        Notification::send($admins, new OrderPlacedNotification($order));
+    }
+
+    public function sendOrderPlacedMail(Order $order): void
     {
         if($order->deliveryInformation) {
 
@@ -75,7 +65,14 @@ class OrderProcessingService
         }
     }
 
-    private function clearCartItems(): void
+    public function removeCouponSession(): void
+    {
+        if (session("coupon")) {
+            session()->forget("coupon");
+        }
+    }
+
+    public function clearCartItems(): void
     {
         $cart = Cart::where("user_id", auth()->id())->first();
 
