@@ -1087,5 +1087,7 @@
     "ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_TOWNSHIP": "Are you sure you want to restore this township/district?",
     "SELECT_COUNTRY": "Select Country",
     "SELECT_REGION": "Select Region/State",
-    "SELECT_CITY": "Select City"
+    "SELECT_CITY": "Select City",
+    "TOWNSHIP_NAME": "Township Name",
+    "ENTER_TOWNSHIP_NAME": "Enter Township Name"
 }

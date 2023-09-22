@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\ShippingAreas;
 
+use App\Actions\Admin\ShippingAreas\PermanentlyDeleteAllTrashTownshipAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TownshipRequest;
 use App\Http\Traits\HandlesQueryStringParameters;
@@ -29,7 +30,6 @@ class AdminTownshipController extends Controller
                             ->paginate(request("per_page", 10))
                             ->appends(request()->all());
 
-
         return inertia("Admin/ShippingAreas/Townships/Index", compact("townships"));
     }
 
@@ -48,37 +48,38 @@ class AdminTownshipController extends Controller
 
     public function store(TownshipRequest $request): RedirectResponse
     {
-        Township::create($request->validated());
+        Township::create(["name" => $request->name,"city_id" => $request->city_id]);
 
-        return to_route("admin.townships.index", "per_page=$request->per_page")->with("success", "Township has been successfully created.");
+        return to_route("admin.townships.index", $this->getQueryStringParams($request))->with("success", "TOWNSHIP_HAS_BEEN_SUCCESSFULLY_CREATED");
     }
 
-    public function edit(City $city): Response|ResponseFactory
+    public function edit(Request $request, Township $township): Response|ResponseFactory
     {
-        $paginate = [ "page" => request("page"),"per_page" => request("per_page")];
-
         $countries = Country::all();
 
         $regions = Region::all();
 
         $cities = City::all();
 
-        return inertia("Admin/ShippingAreas/Townships/Edit", compact("city", "paginate", "countries", "regions", "cities"));
+        $township->load(["city.region.country"]);
+
+        $queryStringParams = $this->getQueryStringParams($request);
+
+        return inertia("Admin/ShippingAreas/Townships/Edit", compact("township", "queryStringParams", "countries", "regions", "cities"));
     }
 
     public function update(TownshipRequest $request, Township $township): RedirectResponse
     {
+        $township->update(["name" => $request->name,"city_id" => $request->city_id]);
 
-        $township->update($request->validated());
-
-        return to_route("admin.townships.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Township has been successfully updated.");
+        return to_route("admin.townships.index", $this->getQueryStringParams($request))->with("success", "TOWNSHIP_HAS_BEEN_SUCCESSFULLY_UPDATED");
     }
 
     public function destroy(Request $request, Township $township): RedirectResponse
     {
         $township->delete();
 
-        return to_route("admin.townships.index", "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Township has been successfully deleted.");
+        return to_route("admin.townships.index", $this->getQueryStringParams($request))->with("success", "TOWNSHIP_HAS_BEEN_SUCCESSFULLY_DELETED");
     }
 
     public function trash(): Response|ResponseFactory
@@ -92,32 +93,30 @@ class AdminTownshipController extends Controller
         return inertia("Admin/ShippingAreas/Townships/Trash", compact("trashTownships"));
     }
 
-    public function restore(Request $request, int $id): RedirectResponse
+    public function restore(Request $request, int $trashTownshipId): RedirectResponse
     {
-        $township = Township::onlyTrashed()->findOrFail($id);
+        $trashTownship = Township::onlyTrashed()->findOrFail($trashTownshipId);
 
-        $township->restore();
+        $trashTownship->restore();
 
-        return to_route('admin.townships.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Township has been successfully restored.");
+        return to_route('admin.townships.trash', $this->getQueryStringParams($request))->with("success", "TOWNSHIP_HAS_BEEN_SUCCESSFULLY_RESTORED");
     }
 
-    public function forceDelete(Request $request, int $id): RedirectResponse
+    public function forceDelete(Request $request, int $trashTownshipId): RedirectResponse
     {
-        $township = Township::onlyTrashed()->findOrFail($id);
+        $trashTownship = Township::onlyTrashed()->findOrFail($trashTownshipId);
 
-        $township->forceDelete();
+        $trashTownship->forceDelete();
 
-        return to_route('admin.townships.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "The Township has been permanently deleted.");
+        return to_route('admin.townships.trash', $this->getQueryStringParams($request))->with("success", "THE_TOWNSHIP_HAS_BEEN_PERMANENTLY_DELETED");
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
     {
-        $township = Township::onlyTrashed()->get();
+        $trashTownships = Township::onlyTrashed()->get();
 
-        $township->each(function ($township) {
-            $township->forceDelete();
-        });
+        (new PermanentlyDeleteAllTrashTownshipAction())->handle($trashTownships);
 
-        return to_route('admin.townships.trash', "page=$request->page&per_page=$request->per_page&sort=$request->sort&direction=$request->direction")->with("success", "Townships have been successfully deleted.");
+        return to_route('admin.townships.trash', $this->getQueryStringParams($request))->with("success", "TOWNSHIPS_HAVE_BEEN_PERMANENTLY_DELETED");
     }
 }
