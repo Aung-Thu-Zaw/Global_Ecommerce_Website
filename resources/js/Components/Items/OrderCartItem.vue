@@ -3,9 +3,6 @@ import { Link } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 const props = defineProps({ item: Object, order: Object });
-
-const isReturnFormOpen = ref(false);
-const isCancelFormOpen = ref(false);
 </script>
 
 <template>
@@ -72,70 +69,7 @@ const isCancelFormOpen = ref(false);
       <span class="font-semibold not-italic text-slate-700">
         Total : ${{ item.price }}
       </span>
-
-      <button
-        v-if="
-          order.order_status !== 'shipped' &&
-          order.order_status !== 'delivered' &&
-          !item.return_reason &&
-          order.payment_type === 'card'
-        "
-        @click="isReturnFormOpen = !isReturnFormOpen"
-        class="text-sm font-bold text-red-700 underline"
-      >
-        Return Item
-      </button>
-
-      <button
-        v-if="
-          order.order_status !== 'shipped' &&
-          order.order_status !== 'delivered' &&
-          !item.cancel_reason &&
-          order.payment_type === 'cash on delivery'
-        "
-        @click="isCancelFormOpen = !isCancelFormOpen"
-        class="text-sm font-bold text-red-700 underline"
-      >
-        Cancel Item
-      </button>
     </div>
-
-    <form v-if="isReturnFormOpen" class="w-full">
-      <div class="w-full flex flex-col items-end">
-        <textarea
-          name=""
-          id=""
-          cols="30"
-          rows="10"
-          class="w-full h-[150px] focus:ring-0 border-2 border-slate-400 focus:border-slate-400 rounded-md"
-          placeholder="Please, write reason why do you want to return this item."
-        ></textarea>
-        <button
-          class="px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-md my-3"
-        >
-          <i class="fa-solid fa-paper-plane mr-2"></i>
-          Submit
-        </button>
-      </div>
-    </form>
-    <form v-if="isCancelFormOpen" class="w-full">
-      <div class="w-full flex flex-col items-end">
-        <textarea
-          name=""
-          id=""
-          cols="30"
-          rows="10"
-          class="w-full h-[150px] focus:ring-0 border-2 border-slate-400 focus:border-slate-400 rounded-md"
-          placeholder="Please, write reason why do you want to cancel this item."
-        ></textarea>
-        <button
-          class="px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-md my-3"
-        >
-          <i class="fa-solid fa-paper-plane mr-2"></i>
-          Submit
-        </button>
-      </div>
-    </form>
   </div>
 </template>
 

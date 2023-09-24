@@ -114,7 +114,7 @@ defineProps({
               {{ deliveryInformation.postal_code }}
             </span>
           </div>
-          <div class="border-b py-3 bg-gray-50 flex items-center">
+          <div class="py-3 bg-gray-50 flex items-center">
             <span
               class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
             >

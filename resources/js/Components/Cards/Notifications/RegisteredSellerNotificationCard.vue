@@ -8,6 +8,7 @@ dayjs.extend(relativeTime);
 const props = defineProps({
   notification: Object,
 });
+
 const goToDetailPage = () => {
   router.get(
     route("admin.registered-accounts.show", props.notification.data.user.id)

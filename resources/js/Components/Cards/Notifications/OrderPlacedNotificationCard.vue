@@ -1,8 +1,7 @@
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import { router } from "@inertiajs/vue3";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { computed } from "vue";
 
 dayjs.extend(relativeTime);
 
@@ -10,15 +9,29 @@ const props = defineProps({
   notification: Object,
 });
 
-const formattedTime = computed(() =>
-  props.notification.created_at
-    ? dayjs(props.notification.created_at).fromNow()
-    : ""
-);
+const goToDetailPage = () => {
+  router.get(
+    route("admin.orders.pending.show", props.notification.data.order_id)
+  );
+};
+
+const handleNotificationReadAt = () => {
+  router.patch(
+    route("admin.notifications.read", props.notification.id),
+    {
+      notifiable_id: props.notification.notifiable_id,
+    },
+    {
+      onSuccess: () => {
+        goToDetailPage();
+      },
+    }
+  );
+};
 </script>
 
 <template>
-  <Link
+  <div
     v-if="notification.type === 'App\\Notifications\\OrderPlacedNotification'"
     :href="
       route('admin.orders.pending.show', {
@@ -26,7 +39,8 @@ const formattedTime = computed(() =>
         noti_id: notification.id,
       })
     "
-    class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
+    @click="handleNotificationReadAt"
+    class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
     :class="{ 'bg-gray-50': notification.read_at }"
   >
     <div
@@ -42,16 +56,17 @@ const formattedTime = computed(() =>
           'text-gray-500': notification.read_at,
         }"
       >
-        {{ notification.data.message }}
+        {{ __(notification.data.message) }}
 
         <span
-          class="font-bold text-sm"
+          class="font-bold text-sm block"
           :class="{
             'text-slate-600': !notification.read_at,
             'text-gray-500': notification.read_at,
           }"
-          >Order No : {{ notification.data.order_no }}</span
         >
+          {{ __("ORDER_NO") }} : {{ notification.data.order_no }}
+        </span>
       </div>
       <div
         class="text-xs font-bold dark:text-sky-500"
@@ -67,5 +82,5 @@ const formattedTime = computed(() =>
         {{ dayjs(notification.created_at).fromNow() }}
       </div>
     </div>
-  </Link>
+  </div>
 </template>

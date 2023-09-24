@@ -62,7 +62,10 @@ import { Link } from "@inertiajs/vue3";
       <!-- Go To Seller Own Shop -->
       <li>
         <Link
-          v-if="$page.props.auth.user?.role === 'seller'"
+          v-if="
+            $page.props.auth.user?.role === 'seller' &&
+            $page.props.auth.user?.status === 'active'
+          "
           :href="route('shop.show', $page.props.auth.user.uuid)"
           :data="{ tab: 'home' }"
           class="text-left text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-200"

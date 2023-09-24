@@ -59,9 +59,9 @@ class OrderPlacedNotification extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-            "message" => "New Order Placed From Customer.",
-            "order_id"=>$this->order->id,
-            "order_no"=>$this->order->order_no
+            "message" => "RECEIVED_NEW_ORDER_FROM_CUSTOMER",
+            "order_id" => $this->order->id,
+            "order_no" => $this->order->order_no
         ];
     }
 
@@ -75,11 +75,9 @@ class OrderPlacedNotification extends Notification implements ShouldBroadcast
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" => "New Order Placed From Customer.",
-            "order_id"=>$this->order->id,
-            "order_no"=>$this->order->order_no
+            "message" => "RECEIVED_NEW_ORDER_FROM_CUSTOMER",
+            "order_id" => $this->order->id,
+            "order_no" => $this->order->order_no
         ]);
     }
-
-
 }

@@ -12,7 +12,7 @@ class OrderItem extends Model
     use HasFactory;
     use Searchable;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     /**
     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Product,OrderItem>

@@ -5,6 +5,7 @@ import OrderDetailCard from "@/Components/Cards/OrderDetailCard.vue";
 import DeliveryInformationCard from "@/Components/Cards/DeliveryInformationCard.vue";
 import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
 import { usePage, Head, router } from "@inertiajs/vue3";
+import { __ } from "@/Translations/translations-inside-setup.js";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import { inject, ref, computed } from "vue";
@@ -26,9 +27,10 @@ const swal = inject("$swal");
 const handleDeliveredOrder = async (id) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to delivered this order?",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELIVERED_THIS_ORDER"),
     showCancelButton: true,
-    confirmButtonText: "Yes, Delivered!",
+    confirmButtonText: __("YES_DELIVERED"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#2562c4",
     cancelButtonColor: "#626262",
     timer: 20000,

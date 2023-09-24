@@ -22,7 +22,7 @@ const formattedAmount = (amount) => {
 </script>
 
 <template>
-  <div class="p-5 border shadow-md rounded-sm">
+  <div>
     <h1 class="font-bold text-slate-700 text-2xl border-b-4 px-10 py-3">
       Order Details
     </h1>
@@ -138,7 +138,7 @@ const formattedAmount = (amount) => {
 
           <slot />
 
-          <div class="border-b py-3 bg-gray-50 flex items-center">
+          <div class="py-3 bg-gray-50 flex items-center">
             <span
               class="px-10 w-[350px] font-medium text-gray-900 whitespace-nowrap"
             >

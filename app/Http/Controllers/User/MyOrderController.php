@@ -30,6 +30,7 @@ class MyOrderController extends Controller
 
         $toPayOrders = Order::where("user_id", auth()->id())
                           ->where("payment_type", "cash on delivery")
+                          ->where("order_status", "!=", "delivered")
                           ->whereNull("return_reason")
                           ->whereNull("return_date")
                           ->whereNull("return_status")

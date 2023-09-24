@@ -254,7 +254,7 @@ const handleMarkAllAsRead = () => {
       <AdminNewProductReviewNotificationCard :notification="notification" />
       <AdminNewShopReviewNotificationCard :notification="notification" />
       <NewLiveChatAssignmentNotificationCard :notification="notification" />
-      <!-- <OrderPlacedNotificationCard :notification="notification" /> -->
+      <OrderPlacedNotificationCard :notification="notification" />
     </div>
 
     <div class="w-full text-center py-3" v-if="!sortedNotifications.length">

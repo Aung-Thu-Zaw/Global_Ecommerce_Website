@@ -24,7 +24,7 @@ const totalPrice = computed(() => quantity.value * props.item.product.price);
 watch(
   () => quantity.value,
   () => {
-    router.post(
+    router.patch(
       route("cart-items.update", props.item.id),
       {
         qty: quantity.value,
@@ -107,7 +107,7 @@ const removeItem = async (item) => {
 </script>
 
 <template>
-  <div class="flex flex-wrap lg:flex-row gap-5 mb-4 px-3 py-2 lg:py-4 lg:px-5">
+  <div class="flex flex-wrap lg:flex-row gap-5 px-3 py-2 lg:py-4 lg:px-5">
     <div class="w-full lg:w-2/5 xl:w-2/4">
       <figure class="flex leading-5">
         <div>

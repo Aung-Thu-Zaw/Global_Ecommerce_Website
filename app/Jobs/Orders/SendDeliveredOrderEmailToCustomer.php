@@ -15,7 +15,10 @@ use Illuminate\Support\Facades\Mail;
 
 class SendDeliveredOrderEmailToCustomer implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -34,9 +37,9 @@ class SendDeliveredOrderEmailToCustomer implements ShouldQueue
      */
     public function handle()
     {
-        $deliveryInformation=$this->order->deliveryInformation;
+        $deliveryInformation = $this->order->deliveryInformation;
 
-        $deliveryInformation=DeliveryInformation::findOrFail($this->order->delivery_information_id);
+        $deliveryInformation = DeliveryInformation::findOrFail($this->order->delivery_information_id);
 
         Mail::to($deliveryInformation->email)->send(new OrderDeliveredMail($this->order));
 

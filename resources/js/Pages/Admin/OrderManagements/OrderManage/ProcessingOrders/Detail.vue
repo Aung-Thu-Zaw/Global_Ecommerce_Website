@@ -8,6 +8,7 @@ import { usePage, Head, router } from "@inertiajs/vue3";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import { inject, ref, computed } from "vue";
+import { __ } from "@/Translations/translations-inside-setup.js";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
@@ -26,9 +27,10 @@ const swal = inject("$swal");
 const handleShippedOrder = async (id) => {
   const result = await swal({
     icon: "question",
-    title: "Are you sure you want to shipped this order?",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_SHIPPED_THIS_ORDER"),
     showCancelButton: true,
-    confirmButtonText: "Yes, Shipped!",
+    confirmButtonText: __("YES_SHIPPED"),
+    cancelButtonText: __("CANCEL"),
     confirmButtonColor: "#2562c4",
     cancelButtonColor: "#626262",
     timer: 20000,

@@ -420,7 +420,8 @@ class ProductSeeder extends Seeder
         // Product::factory()->create(["seller_id" => 3,"image" => "product-399.jpg"]);
         // Product::factory()->create(["seller_id" => 3,"image" => "product-400.jpg"]);
 
-        Product::factory(1000)->create(["status" => "approved"]);
+        Product::factory(800)->create(["status" => "approved"]);
+        Product::factory(200)->create(["status" => "approved","seller_id" => 3]);
         Product::factory(50)->create(["featured" => true,"status" => "approved"]);
     }
 }

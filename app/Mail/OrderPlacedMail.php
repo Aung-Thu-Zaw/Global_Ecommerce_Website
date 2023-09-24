@@ -49,18 +49,8 @@ class OrderPlacedMail extends Mailable
         return new Content(
             view: 'mails.for-users.order-placed-mail',
             with: [
-                "order"=>$this->order,
+                "order" => $this->order,
             ],
         );
     }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array
-     */
-    // public function attachments()
-    // {
-    //     return [];
-    // }
 }

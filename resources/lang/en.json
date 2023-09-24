@@ -1099,5 +1099,15 @@
     "ITEM_HAS_BEEN_REMOVED_FROM_YOUR_WATCHLIST": "Item(s) has been removed from your watchlist",
     "YOU_DID_NOT_FOLLOW_ANY_SHOP": "You didn't follow any shop",
     "ARE_YOU_SURE_YOU_WANT_TO_UNFOLLOW_THIS_SHOP": "Are you sure you want unfollow this shop?",
-    "IF_YOU_UNFOLLOW_SLELECTED_STORES_YOU_WONT_BE_ABLE_TO_VIEW_THE_LATEST_ARRIVALS_AND_SALES_FROM_THEM_ANYMORE": "If you unfollow selected stores, you won't be able to view the latest arrival and sales from them anymore."
+    "IF_YOU_UNFOLLOW_SLELECTED_STORES_YOU_WONT_BE_ABLE_TO_VIEW_THE_LATEST_ARRIVALS_AND_SALES_FROM_THEM_ANYMORE": "If you unfollow selected stores, you won't be able to view the latest arrival and sales from them anymore.",
+    "RECEIVED_NEW_ORDER_FROM_CUSTOMER": "Received New Order From Customer.",
+    "ORDER_NO": "Order No",
+    "ARE_YOU_SURE_YOU_WANT_TO_CONFIRM_THIS_ORDER": "Are you sure you want to confirm this order?",
+    "ARE_YOU_SURE_YOU_WANT_TO_PROCESS_THIS_ORDER": "Are you sure you want to process this order?",
+    "ARE_YOU_SURE_YOU_WANT_TO_SHIPPED_THIS_ORDER": "Are you sure you want to shipped this order?",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELIVERED_THIS_ORDER": "Are you sure you want to delivered this order?",
+    "YES_CONFIRM": "Yes, Confirm!",
+    "YES_PROCESS": "Yes, Process!",
+    "YES_SHIPPED": "Yes, Shipped!",
+    "YES_DELIVERED": "Yes, Delivered!"
 }

@@ -37,9 +37,9 @@ class SendConfirmedOrderEmailToCustomer implements ShouldQueue
      */
     public function handle()
     {
-        $deliveryInformation=$this->order->deliveryInformation;
+        $deliveryInformation = $this->order->deliveryInformation;
 
-        $deliveryInformation=DeliveryInformation::findOrFail($this->order->delivery_information_id);
+        $deliveryInformation = DeliveryInformation::findOrFail($this->order->delivery_information_id);
 
         Mail::to($deliveryInformation->email)->send(new OrderConfirmMail($this->order));
     }

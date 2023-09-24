@@ -189,7 +189,7 @@ defineProps({
             order.order_status === 'delivered',
         }"
       >
-        Confirmeded
+        Confirmed
       </span>
       <span
         :class="{

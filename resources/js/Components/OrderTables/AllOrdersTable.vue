@@ -58,7 +58,6 @@ const handleDownload = async (orderId) => {
       <HeaderTh> Payment </HeaderTh>
       <HeaderTh> Amount </HeaderTh>
       <HeaderTh> Order Status </HeaderTh>
-      <HeaderTh> Return Or Cancel </HeaderTh>
       <HeaderTh> Order Date </HeaderTh>
       <HeaderTh> Actions </HeaderTh>
     </TableHeader>
@@ -86,39 +85,24 @@ const handleDownload = async (orderId) => {
             {{ order.order_status }}
           </DeliveredStatus>
         </Td>
-        <Td v-if="order.payment_type === 'card'">
-          <span
-            class="text-slate-600 text-sm bg-slate-200 px-3 py-1 rounded-full"
-          >
-            <i class="fa-solid fa-circle text-[.6rem] animate-pulse"></i>
-            No Return Requested
-          </span>
-        </Td>
-        <Td v-if="order.payment_type === 'cash on delivery'">
-          <span
-            class="text-slate-600 text-sm bg-slate-200 px-3 py-1 rounded-full"
-          >
-            <i class="fa-solid fa-circle text-[.6rem] animate-pulse"></i>
-            No Cancel Requested
-          </span>
-        </Td>
+
         <Td>{{ order.order_date }}</Td>
 
         <Td>
           <button
             @click="handleDownload(order.id)"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-orange-600 text-white hover:bg-orange-700 mr-3 my-1"
+            class="text-sm px-5 py-2.5 uppercase font-semibold rounded-md bg-amber-600 text-white hover:bg-amber-700 mr-3 my-1"
           >
             <i class="fa-solid fa-download"></i>
-            Invoice
+            {{ __("INVOICE") }}
           </button>
           <Link
             :href="route('my-orders.show', order.id)"
             as="button"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
+            class="text-sm px-5 py-2.5 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 my-1"
           >
             <i class="fa-solid fa-eye"></i>
-            Details
+            {{ __("DETAILS") }}
           </Link>
         </Td>
       </Tr>

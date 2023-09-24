@@ -58,7 +58,6 @@ const handleDownload = async (orderId) => {
       <HeaderTh> Payment </HeaderTh>
       <HeaderTh> Amount </HeaderTh>
       <HeaderTh> Order Status </HeaderTh>
-      <HeaderTh> Return Status </HeaderTh>
       <HeaderTh> Order Date </HeaderTh>
       <HeaderTh> Actions </HeaderTh>
     </TableHeader>
@@ -86,54 +85,24 @@ const handleDownload = async (orderId) => {
             {{ order.order_status }}
           </DeliveredStatus>
         </Td>
-        <Td>
-          <span
-            v-if="
-              order.return_reason &&
-              order.return_date &&
-              order.return_status === 'pending'
-            "
-            class="text-red-600 text-sm bg-red-200 px-3 py-1 rounded-full"
-          >
-            <i class="fa-solid fa-rotate-right animate-spin"></i>
-            return
-          </span>
-          <span
-            v-else-if="
-              order.return_reason &&
-              order.return_approved_date &&
-              order.return_status === 'approved'
-            "
-            class="text-green-600 text-sm bg-green-200 px-3 py-1 rounded-full"
-          >
-            <i class="fa-solid fa-circle-check animate-pulse"></i>
-            approved
-          </span>
-          <span
-            v-else
-            class="text-slate-600 text-sm bg-slate-200 px-3 py-1 rounded-full"
-          >
-            <i class="fa-solid fa-circle text-[.6rem] animate-pulse"></i>
-            No Requested
-          </span>
-        </Td>
+
         <Td>{{ order.order_date }}</Td>
 
         <Td>
           <button
             @click="handleDownload(order.id)"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-orange-600 text-white hover:bg-orange-700 mr-3 my-1"
+            class="text-sm px-5 py-2.5 uppercase font-semibold rounded-md bg-orange-600 text-white hover:bg-orange-700 mr-3 my-1"
           >
             <i class="fa-solid fa-download"></i>
-            Invoice
+            {{ __("INVOICE") }}
           </button>
           <Link
             :href="route('my-orders.show', order.id)"
             as="button"
-            class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
+            class="text-sm px-5 py-2.5 uppercase font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 my-1"
           >
             <i class="fa-solid fa-eye"></i>
-            Details
+            {{ __("DETAILS") }}
           </Link>
         </Td>
       </Tr>

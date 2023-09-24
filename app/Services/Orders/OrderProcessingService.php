@@ -16,7 +16,7 @@ class OrderProcessingService
 {
     public function createOrder(User $user, int $totalPrice, string $paymentId = null, string $paymentType, string $paymentMethod, string $currency = 'usd', string $transactionId = null): Order
     {
-        return Order::create([
+        $order = Order::create([
             "user_id" => $user->id,
             "delivery_information_id" => $user->deliveryInformation ? $user->deliveryInformation->id : null,
             'payment_id' => $paymentId,
@@ -30,6 +30,10 @@ class OrderProcessingService
             'order_date' => Carbon::now()->format("Y-m-d"),
             'order_status' => "pending",
         ]);
+
+        $order->load(["orderItems.product.shop"]);
+
+        return $order;
     }
 
     /**

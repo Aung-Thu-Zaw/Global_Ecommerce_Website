@@ -37,7 +37,7 @@ const handleRefundOrder = async (id) => {
     reverseButtons: true,
   });
   if (result.isConfirmed) {
-    router.post(
+    router.patch(
       route("admin.return-orders.approved.update", {
         order: props.order.id,
         page: props.queryStringParams.page,

@@ -21,6 +21,9 @@ class AdminShippedOrderController extends Controller
     {
         $shippedOrders = Order::search(request("search"))
                               ->where("order_status", "shipped")
+                              ->where("cancel_status", null)
+                              ->where("return_status", null)
+                              ->where("return_status", null)
                               ->orderBy(request("sort", "id"), request("direction", "desc"))
                               ->paginate(request("per_page", 10))
                               ->appends(request()->all());
