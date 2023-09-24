@@ -4,6 +4,7 @@ import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
 import Information from "@/Components/Information.vue";
 import ShopInformationCard from "@/Components/Cards/Shops/ShopInformationCard.vue";
 import RelatedProductSection from "@/Components/Sections/RelatedProductSection.vue";
+import { __ } from "@/Translations/translations-inside-setup.js";
 import { computed, reactive, ref } from "vue";
 import { router, usePage, Head, Link } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";
@@ -94,12 +95,12 @@ const saveToWatchlist = () => {
       preserveScroll: true,
       onSuccess: () => {
         if (usePage().props.flash.successMessage) {
-          toast.success(usePage().props.flash.successMessage, {
+          toast.success(__(usePage().props.flash.successMessage), {
             autoClose: 2000,
           });
         }
         if (usePage().props.flash.infoMessage) {
-          toast.info(usePage().props.flash.infoMessage, {
+          toast.info(__(usePage().props.flash.infoMessage), {
             autoClose: 2000,
           });
         }

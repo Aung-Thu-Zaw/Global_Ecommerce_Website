@@ -43,9 +43,12 @@ const props = defineProps({
               </div>
 
               <!--  watchlist item-cart -->
-              <div v-for="watchlist in watchlists" :key="watchlist.id">
+              <div v-for="(watchlist, index) in watchlists" :key="watchlist.id">
                 <div v-if="watchlist.shop_id == shop.id">
-                  <WatchListItem :watchlist="watchlist" />
+                  <WatchListItem
+                    :watchlist="watchlist"
+                    :class="{ 'border-b': index < watchlists.length - 1 }"
+                  />
                 </div>
               </div>
               <hr />
@@ -58,16 +61,16 @@ const props = defineProps({
       <h2 class="font-semibold text-lg text-center text-slate-600 mb-20">
         <i class="fas fa-heart"></i>
         <br />
-        There are no favorites yet.
+        {{ __("THERE_ARE_NO_FAVOURITES_YET") }}
         <br />
-        Add your favorites to wishlist and they will show here.
+        {{ __("ADD_YOUR_FAVOURITES_TO_WATCHLIST_AND_THEY_WILL_SHOW_HERE") }}
       </h2>
       <Link
         :href="route('home')"
         class="border border-blue-600 px-5 py-3 shadow animate-bounce font-semibold text-blue-600 rounded text-sm hover:bg-blue-600 hover:text-white transition-all"
       >
         <i class="fa-solid fa-cart-shopping"></i>
-        Continue Shopping
+        {{ __("CONTINUE_SHOPPING") }}
       </Link>
     </section>
 

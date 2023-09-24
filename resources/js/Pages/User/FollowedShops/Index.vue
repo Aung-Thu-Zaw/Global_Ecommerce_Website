@@ -2,6 +2,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import RecommendedProductSection from "@/Components/Sections/RecommendedProductSection.vue";
 import JustForYouProductSection from "@/Components/Sections/JustForYouProductSection.vue";
+import { __ } from "@/Translations/translations-inside-setup.js";
 import { Link, Head, router } from "@inertiajs/vue3";
 import { inject } from "vue";
 
@@ -15,12 +16,16 @@ const swal = inject("$swal");
 
 const handleUnfollowShop = async (shop_id) => {
   const result = await swal({
-    icon: "warning",
-    title: "Are you sure you want unfollow this shop?",
-    text: "If you unfollow selected stores, you won't be able to view the latest arrival and sales from them anymore.",
+    icon: "question",
+    title: __("ARE_YOU_SURE_YOU_WANT_TO_UNFOLLOW_THIS_SHOP"),
+    text: __(
+      "IF_YOU_UNFOLLOW_SLELECTED_STORES_YOU_WONT_BE_ABLE_TO_VIEW_THE_LATEST_ARRIVALS_AND_SALES_FROM_THEM_ANYMORE"
+    ),
     showCancelButton: true,
     confirmButtonText: "Yes, unfollow!",
-    confirmButtonColor: "#ef4444",
+    cancelButtonText: __("CANCEL"),
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -35,12 +40,12 @@ const handleUnfollowShop = async (shop_id) => {
 
 <template>
   <AppLayout>
-    <Head title="Followed Shops" />
+    <Head :title="__('FOLLOWED_SHOPS')" />
     <section class="py-5 sm:py-7 mt-44">
       <!-- Title -->
       <div class="container max-w-screen-xl mx-auto px-4">
         <h1 class="font-bold text-2xl text-slate-600 uppercase mb-5 self-start">
-          Followed Shops
+          {{ __("FOLLOWED_SHOPS") }}
         </h1>
       </div>
     </section>
@@ -86,7 +91,7 @@ const handleUnfollowShop = async (shop_id) => {
                 class="bg-blue-500 text-sm font-bold px-5 rounded-sm shadow-sm text-white mx-2 py-3 hover:bg-blue-600"
               >
                 <i class="fa-solid fa-shop"></i>
-                Visit Shop
+                {{ __("VISIT_SHOP") }}
               </Link>
             </div>
           </div>
@@ -96,14 +101,16 @@ const handleUnfollowShop = async (shop_id) => {
     <section v-else class="min-h-[400px] flex flex-col items-center py-10">
       <h2 class="font-semibold text-lg text-center text-slate-600 mb-20">
         <i class="fas fa-shop"></i>
-        You didn't follow any shop
+
+        {{ __("YOU_DID_NOT_FOLLOW_ANY_SHOP") }}
       </h2>
       <Link
         :href="route('home')"
         class="border border-blue-600 px-5 py-3 shadow animate-bounce font-semibold text-blue-600 rounded text-sm hover:bg-blue-600 hover:text-white transition-all"
       >
         <i class="fa-solid fa-home"></i>
-        Go To Home Page
+
+        {{ __("GO_TO_HOME_PAGE") }}
       </Link>
     </section>
 

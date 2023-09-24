@@ -1,4 +1,5 @@
 <script setup>
+import { __ } from "@/Translations/translations-inside-setup.js";
 import { inject } from "vue";
 import { Link, router, usePage } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";
@@ -37,12 +38,14 @@ const addToCart = () => {
 // Handle Remove Watchlist Product
 const removeWatchlistItem = async (item) => {
   const result = await swal({
-    icon: "warning",
-    title: `Remove From Watchlist`,
-    text: `Are you sure you want to remove this item(s)?`,
+    icon: "question",
+    title: __("REMOVE_FROM_WATCHLIST"),
+    text: __("ARE_YOU_SURE_YOU_WANT_TO_REMOVE_THIS_ITEMS"),
     showCancelButton: true,
-    confirmButtonText: "Yes, remove it!",
-    confirmButtonColor: "#ef4444",
+    confirmButtonText: __("YES_REMOVE_IT"),
+    cancelButtonText: __("CANCEL"),
+    confirmButtonColor: "#d52222",
+    cancelButtonColor: "#626262",
     timer: 20000,
     timerProgressBar: true,
     reverseButtons: true,
@@ -50,7 +53,7 @@ const removeWatchlistItem = async (item) => {
 
   if (result.isConfirmed) {
     router.delete(
-      route("watchlist.destroy", item),
+      route("watchlists.destroy", item),
       {},
       {
         preserveScroll: true,
@@ -66,7 +69,7 @@ const removeWatchlistItem = async (item) => {
 </script>
 
 <template>
-  <div class="flex flex-wrap lg:flex-row gap-5 mb-4 px-3 py-2 lg:py-4 lg:px-5">
+  <div class="flex flex-wrap lg:flex-row gap-5 px-3 py-2 lg:py-4 lg:px-5">
     <div class="w-full lg:w-2/5 xl:w-2/4">
       <figure class="flex leading-5">
         <div>
@@ -160,7 +163,7 @@ const removeWatchlistItem = async (item) => {
           ${{ watchlist.product.price }} / per item
         </small>
         <small
-          class="bg-green-300 text-green-600 px-2 py-1 rounded-full text-[.6rem]"
+          class="bg-green-200 font-medium text-green-600 px-2 py-1 rounded-full text-[.6rem]"
         >
           {{
             (
@@ -197,7 +200,6 @@ const removeWatchlistItem = async (item) => {
       </div>
     </div>
   </div>
-  <hr />
 </template>
 
 

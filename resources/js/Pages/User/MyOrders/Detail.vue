@@ -409,7 +409,7 @@ const handleCancel = () => {
 
         <div v-if="isReturnFormOpened" class="w-full my-5">
           <form
-            @submit.prevent="handleReturnOrder"
+            @submit.prevent="handleOrder"
             class="flex flex-col items-center"
           >
             <textarea
@@ -453,7 +453,7 @@ const handleCancel = () => {
 
         <div v-if="isCancelFormOpened" class="w-full my-5">
           <form
-            @submit.prevent="handleCancelOrder"
+            @submit.prevent="handleOrder"
             class="flex flex-col items-center"
           >
             <textarea

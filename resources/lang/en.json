@@ -1089,5 +1089,15 @@
     "SELECT_REGION": "Select Region/State",
     "SELECT_CITY": "Select City",
     "TOWNSHIP_NAME": "Township Name",
-    "ENTER_TOWNSHIP_NAME": "Enter Township Name"
+    "ENTER_TOWNSHIP_NAME": "Enter Township Name",
+    "THERE_ARE_NO_FAVOURITES_YET": "There are no favorites yet.",
+    "ADD_YOUR_FAVOURITES_TO_WATCHLIST_AND_THEY_WILL_SHOW_HERE": "Add your favorites to watchlist and they will show here.",
+    "REMOVE_FROM_WATCHLIST": "Remove From Watchlist",
+    "ARE_YOU_SURE_YOU_WANT_TO_REMOVE_THIS_ITEMS": "Are you sure you want to remove this item(s)?",
+    "RECOMMENDED_PRODUCTS": "Recommended Products",
+    "ITEM_IS_MOVED_TO_WATCHLIST": "Item is moved to watchlist, you can re-add it to cart from watchlist.",
+    "ITEM_HAS_BEEN_REMOVED_FROM_YOUR_WATCHLIST": "Item(s) has been removed from your watchlist",
+    "YOU_DID_NOT_FOLLOW_ANY_SHOP": "You didn't follow any shop",
+    "ARE_YOU_SURE_YOU_WANT_TO_UNFOLLOW_THIS_SHOP": "Are you sure you want unfollow this shop?",
+    "IF_YOU_UNFOLLOW_SLELECTED_STORES_YOU_WONT_BE_ABLE_TO_VIEW_THE_LATEST_ARRIVALS_AND_SALES_FROM_THEM_ANYMORE": "If you unfollow selected stores, you won't be able to view the latest arrival and sales from them anymore."
 }

@@ -49,18 +49,18 @@ class MyWatchlistController extends Controller
 
         if(!$watchlist) {
             Watchlist::create($request->validated());
-            return back()->with("success", "Item is moved to watchlist, you can re-add it to cart from watchlist.");
+            return back()->with("success", "ITEM_IS_MOVED_TO_WATCHLIST");
         }
 
         $watchlist->delete();
 
-        return back()->with("info", "Item(s) has been removed from your watchlist");
+        return back()->with("info", "ITEM_HAS_BEEN_REMOVED_FROM_YOUR_WATCHLIST");
     }
 
     public function destroy(Watchlist $watchlist): RedirectResponse
     {
         $watchlist->delete();
 
-        return back()->with("success", "Item(s) has been removed from your watchlist");
+        return back()->with("success", "ITEM_HAS_BEEN_REMOVED_FROM_YOUR_WATCHLIST");
     }
 }
