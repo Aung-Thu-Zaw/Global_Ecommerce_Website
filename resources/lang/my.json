@@ -1108,5 +1108,10 @@
     "YES_CONFIRM": "ဟုတ်ကဲ့ အတည်ပြုပါ",
     "YES_PROCESS": "ဟုတ်ကဲ့၊ ဆောင်ရွက်ပါ",
     "YES_SHIPPED": "ဟုတ်ကဲ့ ပို့ပြီးပါပြီ",
-    "YES_DELIVERED": "ဟုတ်ကဲ့၊ ပေးပို့ပြီးပါပြီ"
+    "YES_DELIVERED": "ဟုတ်ကဲ့၊ ပေးပို့ပြီးပါပြီ",
+    "RETURN_STATUS": "Return Status",
+    "RETURN_DATE": "Return Date",
+    "REQUESTED_RETURN_ORDERS": "တောင်းဆိုထားသော အော်ဒါများ",
+    "APPROVED_RETURN_ORDERS": "အတည်ပြုထားသော အော်ဒါများ",
+    "REFUNDED_RETURN_ORDERS": "ပြန်အမ်းထားသော အော်ဒါများ"
 }

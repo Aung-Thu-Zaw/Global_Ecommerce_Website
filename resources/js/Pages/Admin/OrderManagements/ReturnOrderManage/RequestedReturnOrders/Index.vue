@@ -1,111 +1,65 @@
 <script setup>
+import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/ReturnOrderManageBreadcrumb.vue";
-import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import SortingArrows from "@/Components/Table/SortingArrows.vue";
+import DetailButton from "@/Components/Buttons/DetailButton.vue";
 import RequestedStatus from "@/Components/Status/RequestedStatus.vue";
-import Tr from "@/Components/Table/Tr.vue";
-import Td from "@/Components/Table/Td.vue";
+import DashboardSearchInputForm from "@/Components/Forms/DashboardSearchInputForm.vue";
+import DashboardPerPageSelectBox from "@/Components/Forms/DashboardPerPageSelectBox.vue";
+import DashboardFilterByCreatedDate from "@/Components/Forms/DashboardFilterByCreatedDate.vue";
+import SortingArrows from "@/Components/Table/SortingArrows.vue";
+import TableContainer from "@/Components/Table/TableContainer.vue";
+import TableHeader from "@/Components/Table/TableHeader.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
-import TableHeader from "@/Components/Table/TableHeader.vue";
-import TableContainer from "@/Components/Table/TableContainer.vue";
+import Tr from "@/Components/Table/Tr.vue";
+import Td from "@/Components/Table/Td.vue";
+import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
 import Pagination from "@/Components/Paginations/Pagination.vue";
-import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, Head, router, usePage } from "@inertiajs/vue3";
-import { reactive, watch, computed } from "vue";
+import { __ } from "@/Translations/translations-inside-setup.js";
+import { computed, reactive } from "vue";
+import { router, Head, usePage } from "@inertiajs/vue3";
 
 // Define the props
 const props = defineProps({
   requestedReturnOrders: Object,
 });
 
+// Return Order Detail Permission
+const returnOrderManageDetail = computed(() => {
+  return usePage().props.auth.user.permissions.length
+    ? usePage().props.auth.user.permissions.some(
+        (permission) => permission.name === "return-order-manage.detail"
+      )
+    : false;
+});
+
 // Query String Parameteres
 const params = reactive({
-  search: usePage().props.ziggy.query?.search,
-  page: usePage().props.ziggy.query?.page,
-  per_page: usePage().props.ziggy.query?.per_page,
   sort: usePage().props.ziggy.query?.sort,
   direction: usePage().props.ziggy.query?.direction,
 });
-
-// Handle Search
-const handleSearch = () => {
-  router.get(
-    route("admin.return-orders.requested.index"),
-    {
-      search: params.search,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
-
-// Remove Search Param
-const removeSearch = () => {
-  params.search = "";
-  router.get(
-    route("admin.return-orders.requested.index"),
-    {
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
-
-// Handle Query String Parameter
-const handleQueryStringParameter = () => {
-  router.get(
-    route("admin.return-orders.requested.index"),
-    {
-      search: params.search,
-      page: params.page,
-      per_page: params.per_page,
-      sort: params.sort,
-      direction: params.direction,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
-
-// Watching Search Box
-watch(
-  () => params.search,
-  () => {
-    if (params.search === "") {
-      removeSearch();
-    } else {
-      handleSearch();
-    }
-  }
-);
-
-// Watching Perpage Select Box
-watch(
-  () => params.per_page,
-  () => {
-    handleQueryStringParameter();
-  }
-);
 
 // Update Sorting Table Column
 const updateSorting = (sort = "id") => {
   params.sort = sort;
   params.direction = params.direction === "asc" ? "desc" : "asc";
 
-  handleQueryStringParameter();
+  router.get(
+    route("admin.return-orders.requested.index"),
+    {
+      search: usePage().props.ziggy.query?.search,
+      page: usePage().props.ziggy.query?.page,
+      per_page: usePage().props.ziggy.query?.per_page,
+      sort: params.sort,
+      direction: params.direction,
+      created_from: usePage().props.ziggy.query?.created_from,
+      created_until: usePage().props.ziggy.query?.created_until,
+    },
+    {
+      replace: true,
+      preserveState: true,
+    }
+  );
 };
 
 // Formatted Amount
@@ -117,21 +71,12 @@ const formattedAmount = (amount) => {
     return totalAmount.toFixed(2);
   }
 };
-
-// Return Order Detail Permission
-const returnOrderManageDetail = computed(() => {
-  return usePage().props.auth.user.permissions.length
-    ? usePage().props.auth.user.permissions.some(
-        (permission) => permission.name === "return-order-manage.detail"
-      )
-    : false;
-});
 </script>
 
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Requested Return Orders" />
+    <Head :title="__('REQUESTED_RETURN_ORDERS')" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
@@ -154,7 +99,7 @@ const returnOrderManageDetail = computed(() => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Requested Returns</span
+                >{{ __("REQUESTED_RETURNS") }}</span
               >
             </div>
           </li>
@@ -163,32 +108,22 @@ const returnOrderManageDetail = computed(() => {
 
       <div class="flex items-center justify-end mb-5">
         <!-- Search Box -->
-        <form class="w-[350px] relative">
-          <input
-            type="text"
-            class="search-input"
-            placeholder="Search by invoice"
-            v-model="params.search"
-          />
-          <i
-            v-if="params.search"
-            class="fa-solid fa-xmark remove-search"
-            @click="removeSearch"
-          ></i>
-        </form>
+        <DashboardSearchInputForm
+          href="admin.return-orders.requested.index"
+          placeholder="SEARCH_BY_INVOICE"
+        />
 
         <!-- Perpage Select Box -->
         <div class="ml-5">
-          <select class="perpage-selectbox" v-model="params.per_page">
-            <option value="" disabled>Select</option>
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="75">75</option>
-            <option value="100">100</option>
-          </select>
+          <DashboardPerPageSelectBox
+            href="admin.return-orders.requested.index"
+          />
         </div>
+
+        <!-- Filter By Date -->
+        <DashboardFilterByCreatedDate
+          href="admin.return-orders.requested.index"
+        />
       </div>
 
       <!-- Requested Order Table Start -->
@@ -200,28 +135,30 @@ const returnOrderManageDetail = computed(() => {
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('invoice_no')">
-            Invoice
+            {{ __("INVOICE") }}
             <SortingArrows :params="params" sort="invoice_no" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('payment_type')">
-            Payment
+            {{ __("PAYMENT") }}
             <SortingArrows :params="params" sort="payment_type" />
           </HeaderTh>
 
           <HeaderTh @click="updateSorting('total_amount')">
-            Amount
+            {{ __("AMOUNT") }}
             <SortingArrows :params="params" sort="total_amount" />
           </HeaderTh>
 
-          <HeaderTh> Return Status </HeaderTh>
+          <HeaderTh> {{ __("RETURN_STATUS") }} </HeaderTh>
 
           <HeaderTh @click="updateSorting('return_date')">
-            Return Date
+            {{ __("RETURN_DATE") }}
             <SortingArrows :params="params" sort="return_date" />
           </HeaderTh>
 
-          <HeaderTh v-if="returnOrderManageDetail"> Action </HeaderTh>
+          <HeaderTh v-if="returnOrderManageDetail">
+            {{ __("ACTION") }}
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="requestedReturnOrders.data.length">
@@ -258,28 +195,12 @@ const returnOrderManageDetail = computed(() => {
 
             <Td v-if="returnOrderManageDetail">
               <!-- Detail Button -->
-              <Link
-                v-if="returnOrderManageDetail"
-                as="button"
-                :href="
-                  route(
-                    'admin.return-orders.requested.show',
-                    requestedReturnOrder.id
-                  )
-                "
-                :data="{
-                  page: params.page,
-                  per_page: params.per_page,
-                  sort: params.sort,
-                  direction: params.direction,
-                }"
-                class="detail-btn group"
-              >
-                <span class="group-hover:animate-pulse">
-                  <i class="fa-solid fa-eye"></i>
-                  Details
-                </span>
-              </Link>
+              <div>
+                <DetailButton
+                  href="admin.return-orders.requested.show"
+                  :id="requestedReturnOrder.id"
+                />
+              </div>
             </Td>
           </Tr>
         </tbody>

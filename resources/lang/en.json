@@ -1109,5 +1109,10 @@
     "YES_CONFIRM": "Yes, Confirm!",
     "YES_PROCESS": "Yes, Process!",
     "YES_SHIPPED": "Yes, Shipped!",
-    "YES_DELIVERED": "Yes, Delivered!"
+    "YES_DELIVERED": "Yes, Delivered!",
+    "RETURN_STATUS": "Return Status",
+    "RETURN_DATE": "Return Date",
+    "REQUESTED_RETURN_ORDERS": "Requested Return Orders",
+    "APPROVED_RETURN_ORDERS": "Approved Return Orders",
+    "REFUNDED_RETURN_ORDERS": "Refunded Return Orders"
 }

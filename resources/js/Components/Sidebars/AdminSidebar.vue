@@ -1436,40 +1436,6 @@
               {{ __("CHATS") }}
             </Link>
           </li>
-
-          <!-- Email Section -->
-          <li class="items-center">
-            <Link
-              href="#"
-              class="text-xs uppercase py-3 font-bold block"
-              :class="{
-                'text-blue-500 hover:text-blue-600':
-                  $page.url.startsWith('/admin/emails'),
-                'text-slate-700 hover:text-slate-500':
-                  !$page.url.startsWith('/admin/emails'),
-              }"
-            >
-              <i class="fa-solid fa-envelope mr-2 text-sm"></i>
-              {{ __("EMAILS") }}
-            </Link>
-          </li>
-
-          <!-- Phone Call Section -->
-          <li class="items-center">
-            <Link
-              href="#"
-              class="text-xs uppercase py-3 font-bold block"
-              :class="{
-                'text-blue-500 hover:text-blue-600':
-                  $page.url.startsWith('/admin/phone-calls'),
-                'text-slate-700 hover:text-slate-500':
-                  !$page.url.startsWith('/admin/phone-calls'),
-              }"
-            >
-              <i class="fa-solid fa-phone mr-2 text-sm"></i>
-              {{ __("PHONE_CALLS") }}
-            </Link>
-          </li>
         </ul>
 
         <hr

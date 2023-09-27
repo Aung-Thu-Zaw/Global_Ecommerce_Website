@@ -55,8 +55,6 @@ class AdminRequestedCancelOrderController extends Controller
                 ]);
         });
 
-        // Mail::to($order->deliveryInformation->email)->send(new OrderDeliveredMail($order));
-
         return to_route("admin.cancel-orders.approved.index")->with("success", "Order cancel is approved.");
     }
 }
