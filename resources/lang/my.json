@@ -1113,5 +1113,9 @@
     "RETURN_DATE": "Return Date",
     "REQUESTED_RETURN_ORDERS": "တောင်းဆိုထားသော အော်ဒါများ",
     "APPROVED_RETURN_ORDERS": "အတည်ပြုထားသော အော်ဒါများ",
-    "REFUNDED_RETURN_ORDERS": "ပြန်အမ်းထားသော အော်ဒါများ"
+    "REFUNDED_RETURN_ORDERS": "ပြန်အမ်းထားသော အော်ဒါများ",
+    "CANCEL_STATUS": "Cancel Status",
+    "CANCEL_DATE": "Cancel Date",
+    "REQUESTED_CANCEL_ORDERS": "တောင်းဆိုထားသော အော်ဒါများ",
+    "APPROVED_CANCEL_ORDERS": "အတည်ပြုထားသော အော်ဒါများ"
 }

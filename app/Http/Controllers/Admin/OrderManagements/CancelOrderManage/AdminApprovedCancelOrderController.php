@@ -24,7 +24,7 @@ class AdminApprovedCancelOrderController extends Controller
                                      ->paginate(request("per_page", 10))
                                      ->appends(request()->all());
 
-        return inertia("Admin/OrderManagements/ReturnOrderManage/ApprovedCancelOrders/Index", compact("approvedCancelOrders"));
+        return inertia("Admin/OrderManagements/CancelOrderManage/ApprovedCancelOrders/Index", compact("approvedCancelOrders"));
     }
 
     public function show(Request $request, Order $order): Response|ResponseFactory
@@ -35,6 +35,6 @@ class AdminApprovedCancelOrderController extends Controller
 
         $orderItems = OrderItem::with("product.shop")->where("order_id", $order->id)->get();
 
-        return inertia("Admin/OrderManagements/ReturnOrderManage/ApprovedCancelOrders/Detail", compact("queryStringParams", "order", "deliveryInformation", "orderItems"));
+        return inertia("Admin/OrderManagements/CancelOrderManage/ApprovedCancelOrders/Detail", compact("queryStringParams", "order", "deliveryInformation", "orderItems"));
     }
 }

@@ -1,38 +1,30 @@
 <script setup>
-import Breadcrumb from "@/Components/Breadcrumbs/CancelOrderManage/Breadcrumb.vue";
-import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import ApprovedStatus from "@/Components/Table/ApprovedStatus.vue";
-import Tr from "@/Components/Table/Tr.vue";
-import Td from "@/Components/Table/Td.vue";
+import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/CancelOrderManageBreadcrumb.vue";
+import DetailButton from "@/Components/Buttons/DetailButton.vue";
+import ApprovedStatus from "@/Components/Status/ApprovedStatus.vue";
+import DashboardSearchInputForm from "@/Components/Forms/DashboardSearchInputForm.vue";
+import DashboardPerPageSelectBox from "@/Components/Forms/DashboardPerPageSelectBox.vue";
+import DashboardFilterByCreatedDate from "@/Components/Forms/DashboardFilterByCreatedDate.vue";
+import SortingArrows from "@/Components/Table/SortingArrows.vue";
+import TableContainer from "@/Components/Table/TableContainer.vue";
+import TableHeader from "@/Components/Table/TableHeader.vue";
 import HeaderTh from "@/Components/Table/HeaderTh.vue";
 import BodyTh from "@/Components/Table/BodyTh.vue";
-import TableHeader from "@/Components/Table/TableHeader.vue";
-import TableContainer from "@/Components/Table/TableContainer.vue";
-import Pagination from "@/Components/Pagination.vue";
-import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import { Link, Head, router } from "@inertiajs/vue3";
-import { reactive, watch, computed } from "vue";
+import Tr from "@/Components/Table/Tr.vue";
+import Td from "@/Components/Table/Td.vue";
+import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
+import Pagination from "@/Components/Paginations/Pagination.vue";
+import { __ } from "@/Translations/translations-inside-setup.js";
+import { computed, reactive } from "vue";
+import { router, Head, usePage } from "@inertiajs/vue3";
 
+// Define the props
 const props = defineProps({
   approvedCancelOrders: Object,
 });
 
-const params = reactive({
-  search: null,
-  page: props.approvedCancelOrders.current_page
-    ? props.approvedCancelOrders.current_page
-    : 1,
-  per_page: props.approvedCancelOrders.per_page
-    ? props.approvedCancelOrders.per_page
-    : 10,
-  sort: "id",
-  direction: "desc",
-});
-
-const handleSearchBox = () => {
-  params.search = "";
-};
-
+// Cancel Order Detail Permission
 const cancelOrderManageDetail = computed(() => {
   return usePage().props.auth.user.permissions.length
     ? usePage().props.auth.user.permissions.some(
@@ -41,45 +33,13 @@ const cancelOrderManageDetail = computed(() => {
     : false;
 });
 
-watch(
-  () => params.search,
-  () => {
-    router.get(
-      route("admin.cancel-orders.approved.index"),
-      {
-        search: params.search,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
+// Query String Parameteres
+const params = reactive({
+  sort: usePage().props.ziggy.query?.sort,
+  direction: usePage().props.ziggy.query?.direction,
+});
 
-watch(
-  () => params.per_page,
-  () => {
-    router.get(
-      route("admin.cancel-orders.approved.index"),
-      {
-        search: params.search,
-        page: params.page,
-        per_page: params.per_page,
-        sort: params.sort,
-        direction: params.direction,
-      },
-      {
-        replace: true,
-        preserveState: true,
-      }
-    );
-  }
-);
-
+// Update Sorting Table Column
 const updateSorting = (sort = "id") => {
   params.sort = sort;
   params.direction = params.direction === "asc" ? "desc" : "asc";
@@ -87,24 +47,40 @@ const updateSorting = (sort = "id") => {
   router.get(
     route("admin.cancel-orders.approved.index"),
     {
-      search: params.search,
-      page: params.page,
-      per_page: params.per_page,
+      search: usePage().props.ziggy.query?.search,
+      page: usePage().props.ziggy.query?.page,
+      per_page: usePage().props.ziggy.query?.per_page,
       sort: params.sort,
       direction: params.direction,
+      created_from: usePage().props.ziggy.query?.created_from,
+      created_until: usePage().props.ziggy.query?.created_until,
     },
-    { replace: true, preserveState: true }
+    {
+      replace: true,
+      preserveState: true,
+    }
   );
+};
+
+// Formatted Amount
+const formattedAmount = (amount) => {
+  const totalAmount = parseFloat(amount);
+  if (Number.isInteger(totalAmount)) {
+    return totalAmount.toFixed(0);
+  } else {
+    return totalAmount.toFixed(2);
+  }
 };
 </script>
 
 
 <template>
   <AdminDashboardLayout>
-    <Head title="Approved Cancel Orders" />
+    <Head :title="__('APPROVED_CANCEL_ORDERS')" />
 
     <div class="px-4 md:px-10 mx-auto w-full py-32">
       <div class="flex items-center justify-between mb-10">
+        <!-- Breadcrumb -->
         <Breadcrumb>
           <li aria-current="page">
             <div class="flex items-center">
@@ -123,7 +99,7 @@ const updateSorting = (sort = "id") => {
               </svg>
               <span
                 class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >Approved Cancel</span
+                >{{ __("APPROVED_CANCELS") }}</span
               >
             </div>
           </li>
@@ -131,166 +107,58 @@ const updateSorting = (sort = "id") => {
       </div>
 
       <div class="flex items-center justify-end mb-5">
-        <form class="w-[350px] relative">
-          <input
-            type="text"
-            class="rounded-md border-2 border-slate-300 text-sm p-3 w-full"
-            placeholder="Search"
-            v-model="params.search"
-          />
+        <!-- Search Box -->
+        <DashboardSearchInputForm
+          href="admin.cancel-orders.approved.index"
+          placeholder="SEARCH_BY_INVOICE"
+        />
 
-          <i
-            v-if="params.search"
-            class="fa-solid fa-xmark absolute top-4 right-5 text-slate-600 cursor-pointer"
-            @click="handleSearchBox"
-          ></i>
-        </form>
-
+        <!-- Perpage Select Box -->
         <div class="ml-5">
-          <select
-            class="py-3 w-[80px] border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-            v-model="params.per_page"
-          >
-            <option value="" selected disabled>Select</option>
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="75">75</option>
-            <option value="100">100</option>
-          </select>
+          <DashboardPerPageSelectBox
+            href="admin.cancel-orders.approved.index"
+          />
         </div>
+
+        <!-- Filter By Date -->
+        <DashboardFilterByCreatedDate
+          href="admin.cancel-orders.approved.index"
+        />
       </div>
 
+      <!-- Requested Order Table Start -->
       <TableContainer>
         <TableHeader>
           <HeaderTh @click="updateSorting('id')">
             No
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'id',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'id',
-              }"
-            ></i>
+            <SortingArrows :params="params" sort="id" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('invoice_no')">
-            Invoice
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'invoice_no',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'invoice_no',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'invoice_no',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'invoice_no',
-              }"
-            ></i>
+            {{ __("INVOICE") }}
+            <SortingArrows :params="params" sort="invoice_no" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('payment_type')">
-            Payment
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'payment_type',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'payment_type',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'payment_type',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'payment_type',
-              }"
-            ></i>
+            {{ __("PAYMENT") }}
+            <SortingArrows :params="params" sort="payment_type" />
           </HeaderTh>
+
           <HeaderTh @click="updateSorting('total_amount')">
-            Amount
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'total_amount',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'total_amount',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'total_amount',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'total_amount',
-              }"
-            ></i>
+            {{ __("AMOUNT") }}
+            <SortingArrows :params="params" sort="total_amount" />
           </HeaderTh>
-          <HeaderTh> Cancel Status </HeaderTh>
-          <HeaderTh @click="updateSorting('order_date')">
-            Cancel Date
-            <i
-              class="fa-sharp fa-solid fa-arrow-up arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'asc' && params.sort === 'cancel_date',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'asc' &&
-                  params.sort === 'cancel_date',
-              }"
-            ></i>
-            <i
-              class="fa-sharp fa-solid fa-arrow-down arrow-icon cursor-pointer"
-              :class="{
-                'text-blue-600':
-                  params.direction === 'desc' && params.sort === 'cancel_date',
-                'visually-hidden':
-                  params.direction !== '' &&
-                  params.direction !== 'desc' &&
-                  params.sort === 'cancel_date',
-              }"
-            ></i>
+
+          <HeaderTh> {{ __("CANCEL_STATUS") }} </HeaderTh>
+
+          <HeaderTh @click="updateSorting('cancel_date')">
+            {{ __("CANCEL_DATE") }}
+            <SortingArrows :params="params" sort="cancel_date" />
           </HeaderTh>
-          <HeaderTh v-if="cancelOrderManageDetail"> Action </HeaderTh>
+
+          <HeaderTh v-if="cancelOrderManageDetail">
+            {{ __("ACTION") }}
+          </HeaderTh>
         </TableHeader>
 
         <tbody v-if="approvedCancelOrders.data.length">
@@ -298,44 +166,59 @@ const updateSorting = (sort = "id") => {
             v-for="approvedCancelOrder in approvedCancelOrders.data"
             :key="approvedCancelOrder.id"
           >
-            <BodyTh>{{ approvedCancelOrder.id }}</BodyTh>
-            <Td>{{ approvedCancelOrder.invoice_no }}</Td>
-            <Td class="capitalize">{{ approvedCancelOrder.payment_type }}</Td>
-            <Td>$ {{ approvedCancelOrder.total_amount }}</Td>
+            <BodyTh>
+              {{ approvedCancelOrder.id }}
+            </BodyTh>
+
+            <Td>
+              {{ approvedCancelOrder.invoice_no }}
+            </Td>
+
+            <Td class="capitalize">
+              {{ approvedCancelOrder.payment_type }}
+            </Td>
+
+            <Td
+              >$
+              {{ formattedAmount(approvedCancelOrder.total_amount) }}
+            </Td>
+
             <Td>
               <ApprovedStatus>
                 {{ approvedCancelOrder.cancel_status }}
               </ApprovedStatus>
             </Td>
-            <Td>{{ approvedCancelOrder.return_date }}</Td>
+
+            <Td>
+              {{ approvedCancelOrder.cancel_date }}
+            </Td>
 
             <Td v-if="cancelOrderManageDetail">
-              <Link
-                v-if="cancelOrderManageDetail"
-                as="button"
-                :href="
-                  route(
-                    'admin.return-orders.approved.show',
-                    approvedCancelOrder.id
-                  )
-                "
-                :data="{
-                  page: props.approvedCancelOrders.current_page,
-                  per_page: params.per_page,
-                }"
-                class="text-sm px-3 py-2 uppercase font-semibold rounded-md bg-sky-600 text-white hover:bg-sky-700 my-1"
-              >
-                <i class="fa-solid fa-eye"></i>
-                Details
-              </Link>
+              <!-- Detail Button -->
+              <div>
+                <DetailButton
+                  href="admin.cancel-orders.approved.show"
+                  :id="approvedCancelOrder.id"
+                />
+              </div>
             </Td>
           </Tr>
         </tbody>
       </TableContainer>
+      <!-- Requested Order Table End -->
 
+      <!-- No Data Row -->
       <NotAvaliableData v-if="!approvedCancelOrders.data.length" />
 
-      <Pagination class="mt-6" :links="approvedCancelOrders.links" />
+      <!-- Pagination -->
+      <div v-if="approvedCancelOrders.data.length" class="mt-6">
+        <p class="text-center text-sm text-gray-600 mb-3 font-bold">
+          Showing {{ approvedCancelOrders.from }} -
+          {{ approvedCancelOrders.to }} of
+          {{ approvedCancelOrders.total }}
+        </p>
+        <Pagination :links="approvedCancelOrders.links" />
+      </div>
     </div>
   </AdminDashboardLayout>
 </template>
