@@ -6,6 +6,7 @@ export default defineConfig({
     resolve: {
         alias: {
             "@stripe/stripe-js": "@stripe/stripe-js/dist/stripe.esm.js",
+            "@assets": "/resources/js/assets",
         },
     },
     plugins: [

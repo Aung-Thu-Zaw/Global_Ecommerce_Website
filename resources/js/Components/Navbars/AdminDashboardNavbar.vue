@@ -1,27 +1,25 @@
 <script setup>
 import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
-import LanguageDropdownForDashboard from "@/Components/Dropdowns/LanguageDropdownForDashboard.vue";
-import NotificationDropdownForAdminDashboard from "@/Components/Dropdowns/NotificationDropdownForAdminDashboard.vue";
 </script>
 
 <template>
+  <!-- Navbar -->
   <nav
-    class="absolute top-0 left-0 w-full z-3 md:flex-row md:flex-nowrap md:justify-start flex items-center p-4 bg-blue-500"
+    class="sticky top-0 w-full z-2 md:flex-row md:flex-nowrap md:justify-start flex items-center p-4 bg-blue-600"
   >
     <div
-      class="w-full mx-auto items-center flex justify-end md:flex-nowrap flex-wrap md:px-10 px-4"
+      class="w-full mx-auto items-center flex justify-between md:flex-nowrap flex-wrap md:px-10 px-4"
     >
-      <!-- Dashboard Title -->
-      <Link
-        :href="route('admin.dashboard')"
-        class="text-white text-sm uppercase hidden lg:inline-block font-semibold text-right ml-60"
+      <!-- Brand -->
+      <a
+        class="text-white text-sm hidden lg:inline-block font-bold"
+        href="javascript:void(0)"
       >
         Admin Dashboard
-      </Link>
-
-      <!-- Dashboard Search Form -->
+      </a>
+      <!-- Form -->
       <form
-        class="md:flex hidden flex-row flex-wrap items-center lg:ml-auto mr-3"
+        class="md:flex hidden flex-row flex-wrap items-center lg:ml-auto mr-3 w-[250px]"
       >
         <div class="relative flex w-full flex-wrap items-stretch">
           <span
@@ -31,25 +29,18 @@ import NotificationDropdownForAdminDashboard from "@/Components/Dropdowns/Notifi
           </span>
           <input
             type="text"
-            :placeholder="__('SEARCH_HERE') + '...'"
-            class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
+            placeholder="Search here..."
+            class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring-2 focus:ring-orange-300 font-medium w-full pl-10"
           />
         </div>
       </form>
+      <!-- User -->
       <ul
-        class="flex-col md:flex-row list-none items-center justify-center hidden md:flex"
+        class="z-50 flex-col md:flex-row list-none items-center hidden md:flex"
       >
-        <!-- Admin Dashboard Notification Dropdown -->
-        <NotificationDropdownForAdminDashboard />
-
-        <!-- Admin Dashboard Language Dropdown -->
-        <LanguageDropdownForDashboard />
-
-        <!-- User Dropdown -->
         <UserDropdown />
       </ul>
     </div>
   </nav>
+  <!-- End Navbar -->
 </template>
-
-
