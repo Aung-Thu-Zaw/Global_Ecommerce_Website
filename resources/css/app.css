@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer components {
-    .social-btn {
+    /* .social-btn {
         @apply flex items-center justify-center border border-gray-300 p-3 w-full my-2 rounded-md md:w-[200px] hover:-translate-y-2 hover:shadow-md duration-150;
     }
 
@@ -29,7 +29,7 @@
 
     .image {
         @apply h-[50px] rounded-sm object-cover shadow-lg border-2 border-gray-300;
-    }
+    } */
 }
 
 .arrow-icon {
