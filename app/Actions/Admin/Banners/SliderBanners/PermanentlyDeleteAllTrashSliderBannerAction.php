@@ -8,13 +8,11 @@ use Illuminate\Support\Collection;
 class PermanentlyDeleteAllTrashSliderBannerAction
 {
     /**
-    * @param Collection<int,SliderBanner> $sliderBanners
-    */
-
+     * @param  Collection<int,SliderBanner>  $sliderBanners
+     */
     public function handle(Collection $sliderBanners): void
     {
         $sliderBanners->each(function ($sliderBanner) {
-
             SliderBanner::deleteImage($sliderBanner->image);
 
             $sliderBanner->forceDelete();

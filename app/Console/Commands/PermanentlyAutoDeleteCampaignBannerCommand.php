@@ -23,12 +23,11 @@ class PermanentlyAutoDeleteCampaignBannerCommand extends Command
      */
     protected $description = 'Campaign Banners in the trash will be automatically deleted after 60 days';
 
-
     public function handle(): void
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $campaignBanners=CampaignBanner::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
+        $campaignBanners = CampaignBanner::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
         (new PermanentlyDeleteAllTrashCampaignBannerAction())->handle($campaignBanners);
     }

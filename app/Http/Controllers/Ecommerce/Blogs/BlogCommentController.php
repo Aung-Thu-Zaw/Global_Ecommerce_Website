@@ -22,7 +22,7 @@ class BlogCommentController extends Controller
 
     public function update(BlogCommentRequest $request, BlogComment $blogComment): RedirectResponse
     {
-        $blogComment->update(["comment" => $request->comment]);
+        $blogComment->update(['comment' => $request->comment]);
 
         return back();
     }

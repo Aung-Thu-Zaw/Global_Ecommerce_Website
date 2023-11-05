@@ -2,7 +2,7 @@
 import ProductCardGrid from "@/Components/Cards/Products/ProductCardGrid.vue";
 import ProductCardList from "@/Components/Cards/Products/ProductCardList.vue";
 import FilterSidebar from "@/Components/Sidebars/EcommerceFilterSidebarForShop.vue";
-import Pagination from "@/Components/Paginations/Pagination.vue";
+import Pagination from "@/Components/Paginations/DashboardPagination.vue";
 import { reactive, ref, watch } from "vue";
 import { usePage, router, Link } from "@inertiajs/vue3";
 

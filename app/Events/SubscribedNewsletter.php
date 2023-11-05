@@ -22,6 +22,6 @@ class SubscribedNewsletter
      */
     public function __construct(Subscriber $subscriber)
     {
-        $this->subscriber=$subscriber;
+        $this->subscriber = $subscriber;
     }
 }

@@ -8,15 +8,12 @@ use Illuminate\Support\Collection;
 class PermanentlyDeleteAllTrashFaqCategoryAction
 {
     /**
-    * @param Collection<int,FaqCategory> $faqCategories
-    */
-
+     * @param  Collection<int,FaqCategory>  $faqCategories
+     */
     public function handle(Collection $faqCategories): void
     {
         $faqCategories->each(function ($faqCategory) {
-
             $faqCategory->forceDelete();
-
         });
     }
 }

@@ -6,7 +6,7 @@ import DeliveryInformationCard from "@/Components/Cards/DeliveryInformationCard.
 import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
 import { usePage, Head, router } from "@inertiajs/vue3";
 import Tr from "@/Components/Table/Tr.vue";
-import { __ } from "@/Translations/translations-inside-setup.js";
+import { __ } from "@/Services/translations-inside-setup.js";
 import Td from "@/Components/Table/Td.vue";
 import { inject, ref, computed } from "vue";
 import { toast } from "vue3-toastify";

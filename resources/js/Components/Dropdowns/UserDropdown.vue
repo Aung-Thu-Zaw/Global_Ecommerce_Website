@@ -33,7 +33,7 @@ import { Link } from "@inertiajs/vue3";
         }"
         >{{ $page.props.auth.user.name }}
       </span>
-      <span v-else class="font-bold ml-2 text-slate-600"
+      <span v-else class="font-bold ml-2 text-slate-600 hidden md:block"
         >{{ $page.props.auth.user.name }}
       </span>
     </div>

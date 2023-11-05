@@ -5,9 +5,7 @@ namespace App\Notifications\SubscribedNewsletter;
 use App\Models\Subscriber;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class NewsletterSubscribedNotification extends Notification implements ShouldBroadcast
@@ -36,19 +34,18 @@ class NewsletterSubscribedNotification extends Notification implements ShouldBro
     }
 
     /**
-    * Get the array representation of the notification.
-    *
-    * @param  mixed  $notifiable
-    * @return array<string|int>
-    */
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array<string|int>
+     */
     public function toArray($notifiable)
     {
         return [
-            "message" => "A_NEW_SUBSCRIBER_HAS_SUBSCRIBED_TO_THE_WEBSITE_NEWSLETTER",
-            "subscriber" => $this->subscriber
+            'message' => 'A_NEW_SUBSCRIBER_HAS_SUBSCRIBED_TO_THE_WEBSITE_NEWSLETTER',
+            'subscriber' => $this->subscriber,
         ];
     }
-
 
     /**
      * Get the array representation of the notification.
@@ -59,8 +56,8 @@ class NewsletterSubscribedNotification extends Notification implements ShouldBro
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" => "A_NEW_SUBSCRIBER_HAS_SUBSCRIBED_TO_THE_WEBSITE_NEWSLETTER",
-            "subscriber" => $this->subscriber
+            'message' => 'A_NEW_SUBSCRIBER_HAS_SUBSCRIBED_TO_THE_WEBSITE_NEWSLETTER',
+            'subscriber' => $this->subscriber,
         ]);
     }
 }

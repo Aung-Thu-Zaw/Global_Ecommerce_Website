@@ -11,25 +11,24 @@ class ProductImageUploadService
     {
         $originalName = $image->getClientOriginalName();
 
-        $finalName = time()."-".$originalName;
+        $finalName = time().'-'.$originalName;
 
-        $image->storeAs("products", $finalName);
+        $image->storeAs('products', $finalName);
 
         return $finalName;
     }
 
     public function updateImage(UploadedFile $image, string $productImage): string
     {
-        if(is_string($productImage)) {
-
+        if (is_string($productImage)) {
             Product::deleteImage($productImage);
         }
 
         $originalName = $image->getClientOriginalName();
 
-        $finalName = "product"."-".time()."-".$originalName;
+        $finalName = 'product'.'-'.time().'-'.$originalName;
 
-        $image->storeAs("products", $finalName);
+        $image->storeAs('products', $finalName);
 
         return $finalName;
     }

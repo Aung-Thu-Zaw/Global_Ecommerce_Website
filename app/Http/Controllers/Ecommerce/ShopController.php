@@ -11,87 +11,87 @@ use App\Models\SellerProductBanner;
 use App\Models\ShopReview;
 use App\Models\User;
 use App\Services\UserShopInteractionService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 use Inertia\ResponseFactory;
-use Illuminate\Database\Eloquent\Builder;
 
 class ShopController extends Controller
 {
-    public function index(): Response | ResponseFactory
+    public function index(): Response|ResponseFactory
     {
-        $sellerShops = User::search(request("search_shop"))
+        $sellerShops = User::search(request('search_shop'))
                            ->query(function (Builder $builder) {
-                               $builder->with(["followers:id","products:id,seller_id","shopReviews:id,shop_id,rating"])
-                                       ->select("id", "uuid", "shop_name", "avatar");
+                               $builder->with(['followers:id', 'products:id,seller_id', 'shopReviews:id,shop_id,rating'])
+                                       ->select('id', 'uuid', 'shop_name', 'avatar');
                            })
-                           ->where("status", "active")
-                           ->where("role", "seller")
+                           ->where('status', 'active')
+                           ->where('role', 'seller')
                            ->paginate(30)
                            ->appends(request()->all());
 
-        return inertia("Ecommerce/Shops/Index", compact("sellerShops"));
+        return inertia('Ecommerce/Shops/Index', compact('sellerShops'));
     }
 
     public function show(string $shopUUID): Response|ResponseFactory
     {
         $user = User::findOrFail(auth()->id());
 
-        $shop = User::whereUuid($shopUUID)->where("status", "active")->first();
+        $shop = User::whereUuid($shopUUID)->where('status', 'active')->first();
 
         $followings = $user->followings;
 
         $followers = $user->followers;
 
-        $sellerProductBanners = SellerProductBanner::select("id", "seller_id", "image", "url")
-                                                   ->where("seller_id", $shop ? $shop->id : null)
-                                                   ->where("status", "show")
-                                                   ->orderBy("id", "desc")
+        $sellerProductBanners = SellerProductBanner::select('id', 'seller_id', 'image', 'url')
+                                                   ->where('seller_id', $shop ? $shop->id : null)
+                                                   ->where('status', 'show')
+                                                   ->orderBy('id', 'desc')
                                                    ->get();
 
-        $sellerRandomProducts = Product::select("id", "seller_id", "image", "name", "slug", "price", "discount", "special_offer")
-                                       ->with(["productReviews:id,product_id,rating","shop:id,offical"])
-                                       ->where("seller_id", $shop ? $shop->id : null)
-                                       ->where("status", "approved")
+        $sellerRandomProducts = Product::select('id', 'seller_id', 'image', 'name', 'slug', 'price', 'discount', 'special_offer')
+                                       ->with(['productReviews:id,product_id,rating', 'shop:id,offical'])
+                                       ->where('seller_id', $shop ? $shop->id : null)
+                                       ->where('status', 'approved')
                                        ->inRandomOrder()
                                        ->limit(20)
                                        ->get();
 
-        $sellerProducts = Product::select("id", "seller_id", "image", "name", "description", "slug", "price", "discount", "special_offer")
-                                 ->with(["productReviews:id,product_id,rating","shop:id,offical","images"])
-                                 ->filterBy(request(["search","category","brand","rating","price"]))
-                                 ->where("seller_id", $shop ? $shop->id : null)
-                                 ->where("status", "approved")
-                                 ->orderBy(request("sort", "id"), request("direction", "desc"))
+        $sellerProducts = Product::select('id', 'seller_id', 'image', 'name', 'description', 'slug', 'price', 'discount', 'special_offer')
+                                 ->with(['productReviews:id,product_id,rating', 'shop:id,offical', 'images'])
+                                 ->filterBy(request(['search', 'category', 'brand', 'rating', 'price']))
+                                 ->where('seller_id', $shop ? $shop->id : null)
+                                 ->where('status', 'approved')
+                                 ->orderBy(request('sort', 'id'), request('direction', 'desc'))
                                  ->paginate(20)
                                  ->withQueryString();
 
-        $paginateProductReviews = ProductReview::with(["product.sizes","product.colors","product.types","product.brand","user.orders.orderItems","reply.seller:id,shop_name,avatar","images"])
-                                               ->where("shop_id", $shop ? $shop->id : null)
-                                               ->where("status", "published")
-                                               ->orderBy("id", "desc")
+        $paginateProductReviews = ProductReview::with(['product.sizes', 'product.colors', 'product.types', 'product.brand', 'user.orders.orderItems', 'reply.seller:id,shop_name,avatar', 'images'])
+                                               ->where('shop_id', $shop ? $shop->id : null)
+                                               ->where('status', 'published')
+                                               ->orderBy('id', 'desc')
                                                ->paginate(5);
 
-        $productReviews = ProductReview::where("shop_id", $shop ? $shop->id : null)
-                                       ->where("status", "published")
+        $productReviews = ProductReview::where('shop_id', $shop ? $shop->id : null)
+                                       ->where('status', 'published')
                                        ->get();
 
-        $productReviewsAvg = ProductReview::where("shop_id", $shop ? $shop->id : null)
-                                          ->where("status", "published")
-                                          ->avg("rating");
+        $productReviewsAvg = ProductReview::where('shop_id', $shop ? $shop->id : null)
+                                          ->where('status', 'published')
+                                          ->avg('rating');
 
-        $paginateShopReviews = ShopReview::with(["user:id,name,avatar","reply.seller:id,shop_name,avatar"])
-                                         ->where("shop_id", $shop ? $shop->id : null)
-                                         ->orderBy("id", "desc")
+        $paginateShopReviews = ShopReview::with(['user:id,name,avatar', 'reply.seller:id,shop_name,avatar'])
+                                         ->where('shop_id', $shop ? $shop->id : null)
+                                         ->orderBy('id', 'desc')
                                          ->paginate(5);
 
-        $shopReviews = ShopReview::where("shop_id", $shop ? $shop->id : null)
-                                 ->where("status", "published")
+        $shopReviews = ShopReview::where('shop_id', $shop ? $shop->id : null)
+                                 ->where('status', 'published')
                                  ->get();
 
-        $shopReviewsAvg = ShopReview::where("shop_id", $shop ? $shop->id : null)
-                                    ->where("status", "published")
-                                    ->avg("rating");
+        $shopReviewsAvg = ShopReview::where('shop_id', $shop ? $shop->id : null)
+                                    ->where('status', 'published')
+                                    ->avg('rating');
 
         $categories = Category::join('products', 'categories.id', '=', 'products.category_id')
                               ->join('users', 'products.seller_id', '=', 'users.id')
@@ -107,21 +107,21 @@ class ShopController extends Controller
                        ->select('brands.*')
                        ->get();
 
-        return inertia("Ecommerce/Shops/Show", compact(
-            "shop",
-            "followings",
-            "followers",
-            "sellerProductBanners",
-            "sellerRandomProducts",
-            "sellerProducts",
-            "categories",
-            "brands",
-            "productReviews",
-            "paginateProductReviews",
-            "productReviewsAvg",
-            "shopReviews",
-            "paginateShopReviews",
-            "shopReviewsAvg"
+        return inertia('Ecommerce/Shops/Show', compact(
+            'shop',
+            'followings',
+            'followers',
+            'sellerProductBanners',
+            'sellerRandomProducts',
+            'sellerProducts',
+            'categories',
+            'brands',
+            'productReviews',
+            'paginateProductReviews',
+            'productReviewsAvg',
+            'shopReviews',
+            'paginateShopReviews',
+            'shopReviewsAvg'
         ));
     }
 

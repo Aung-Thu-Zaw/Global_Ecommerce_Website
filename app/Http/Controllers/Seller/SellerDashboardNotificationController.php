@@ -19,7 +19,7 @@ class SellerDashboardNotificationController extends Controller
     public function markAllAsRead(Request $request): RedirectResponse
     {
         $request->validate([
-            "notifications" => ["required", "array"]
+            'notifications' => ['required', 'array'],
         ]);
 
         (new ReadNotificationService())->readAll($request->notifications);

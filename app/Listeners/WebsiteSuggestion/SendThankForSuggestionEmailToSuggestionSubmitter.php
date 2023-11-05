@@ -3,8 +3,6 @@
 namespace App\Listeners\WebsiteSuggestion;
 
 use App\Mail\ForTheSubmitters\ThankForSuggestionMail;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
 
 class SendThankForSuggestionEmailToSuggestionSubmitter
@@ -27,7 +25,7 @@ class SendThankForSuggestionEmailToSuggestionSubmitter
      */
     public function handle($event)
     {
-        $suggestion=$event->suggestion ?? null;
+        $suggestion = $event->suggestion ?? null;
         Mail::to($suggestion->email)->queue(new ThankForSuggestionMail($suggestion));
     }
 }

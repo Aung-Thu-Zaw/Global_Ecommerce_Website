@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
@@ -15,13 +14,13 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        $superAdmin=Role::create(["name"=>"Super Admin"]);
+        $superAdmin = Role::create(['name' => 'Super Admin']);
         $superAdmin->syncPermissions(\Spatie\Permission\Models\Permission::all());
 
-        Role::create(["name"=>"CEO"]);
-        Role::create(["name"=>"Admin"]);
-        Role::create(["name"=>"Moderator"]);
-        Role::create(["name"=>"Accountant"]);
-        Role::create(["name"=>"Marketing"]);
+        Role::create(['name' => 'CEO']);
+        Role::create(['name' => 'Admin']);
+        Role::create(['name' => 'Moderator']);
+        Role::create(['name' => 'Accountant']);
+        Role::create(['name' => 'Marketing']);
     }
 }

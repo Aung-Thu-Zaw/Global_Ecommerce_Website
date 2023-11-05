@@ -19,7 +19,7 @@ class ReadNotificationServiceTest extends TestCase
         $notification = $user->notifications()->create([
             'id' => Str::uuid(),
             'data' => 'Your notification data',
-            'type' => 'App\Notifications\TestingNotification'
+            'type' => 'App\Notifications\TestingNotification',
         ]);
 
         // Act
@@ -36,21 +36,21 @@ class ReadNotificationServiceTest extends TestCase
         $user = User::factory()->create();
         $notifications = $user->notifications()->createMany([
             [
-            'id' => Str::uuid(),
-            'data' => 'Your notification data 1',
-            'type' => 'App\Notifications\TestingNotification'
-        ],
-        [
-            'id' => Str::uuid(),
-            'data' => 'Your notification data 2',
-            'type' => 'App\Notifications\TestingNotification'
-        ],
-        [
-            'id' => Str::uuid(),
-            'data' => 'Your notification data 3',
-            'type' => 'App\Notifications\TestingNotification'
-        ]
-    ]);
+                'id' => Str::uuid(),
+                'data' => 'Your notification data 1',
+                'type' => 'App\Notifications\TestingNotification',
+            ],
+            [
+                'id' => Str::uuid(),
+                'data' => 'Your notification data 2',
+                'type' => 'App\Notifications\TestingNotification',
+            ],
+            [
+                'id' => Str::uuid(),
+                'data' => 'Your notification data 3',
+                'type' => 'App\Notifications\TestingNotification',
+            ],
+        ]);
 
         // Act
         $service = new ReadNotificationService();

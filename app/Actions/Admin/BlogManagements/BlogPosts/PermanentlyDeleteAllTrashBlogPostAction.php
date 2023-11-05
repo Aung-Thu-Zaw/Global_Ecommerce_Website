@@ -8,17 +8,14 @@ use Illuminate\Support\Collection;
 class PermanentlyDeleteAllTrashBlogPostAction
 {
     /**
-    * @param Collection<int,BlogPost> $blogPosts
-    */
-
+     * @param  Collection<int,BlogPost>  $blogPosts
+     */
     public function handle(Collection $blogPosts): void
     {
         $blogPosts->each(function ($blogPost) {
-
             BlogPost::deleteImage($blogPost->image);
 
             $blogPost->forceDelete();
-
         });
     }
 }

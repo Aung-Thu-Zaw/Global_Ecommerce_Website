@@ -4,12 +4,11 @@ namespace App\Mail;
 
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Mail\Mailables\Address;
 
 class OrderConfirmMail extends Mailable
 {
@@ -49,7 +48,7 @@ class OrderConfirmMail extends Mailable
         return new Content(
             view: 'mails.for-users.order-confirmed-mail',
             with: [
-                "order"=>$this->order,
+                'order' => $this->order,
             ],
         );
     }

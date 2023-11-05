@@ -2,8 +2,8 @@
 
 namespace App\Services\BroadcastNotifications;
 
-use App\Models\ProductQuestion;
 use App\Models\Product;
+use App\Models\ProductQuestion;
 use App\Models\User;
 use App\Notifications\ProductQuestions\NewProductQuestionFromUserNotification;
 

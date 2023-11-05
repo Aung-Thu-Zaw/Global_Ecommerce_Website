@@ -5,7 +5,6 @@ namespace App\Notifications;
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -19,7 +18,6 @@ class OrderPlacedNotification extends Notification implements ShouldBroadcast
      *
      * @return void
      */
-
     public function __construct(protected Order $order)
     {
         //
@@ -59,12 +57,11 @@ class OrderPlacedNotification extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-            "message" => "RECEIVED_NEW_ORDER_FROM_CUSTOMER",
-            "order_id" => $this->order->id,
-            "order_no" => $this->order->order_no
+            'message' => 'RECEIVED_NEW_ORDER_FROM_CUSTOMER',
+            'order_id' => $this->order->id,
+            'order_no' => $this->order->order_no,
         ];
     }
-
 
     /**
      * Get the array representation of the notification.
@@ -75,9 +72,9 @@ class OrderPlacedNotification extends Notification implements ShouldBroadcast
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" => "RECEIVED_NEW_ORDER_FROM_CUSTOMER",
-            "order_id" => $this->order->id,
-            "order_no" => $this->order->order_no
+            'message' => 'RECEIVED_NEW_ORDER_FROM_CUSTOMER',
+            'order_id' => $this->order->id,
+            'order_no' => $this->order->order_no,
         ]);
     }
 }

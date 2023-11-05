@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Attributes\SearchUsingFullText;
+use Laravel\Scout\Searchable;
 
 class BlogComment extends Model
 {
@@ -21,8 +21,8 @@ class BlogComment extends Model
     protected $guarded = [];
 
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     #[SearchUsingFullText(['comment'])]
     public function toSearchableArray(): array
     {
@@ -42,58 +42,56 @@ class BlogComment extends Model
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogPost, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogPost, never>
+     */
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("F j, Y", strtotime($value)),
+            get: fn ($value) => date('F j, Y', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogCommentReply, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogCommentReply, never>
+     */
     protected function updatedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j/F/Y h:i:s A", strtotime($value)),
+            get: fn ($value) => date('j/F/Y h:i:s A', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogPost, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogPost, never>
+     */
     protected function deletedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date('j-F-Y', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,BlogComment>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,BlogComment>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<BlogPost,BlogComment>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<BlogPost,BlogComment>
+     */
     public function blogPost(): BelongsTo
     {
         return $this->belongsTo(BlogPost::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasOne<BlogCommentReply>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne<BlogCommentReply>
+     */
     public function blogCommentReply(): HasOne
     {
         return $this->hasOne(BlogCommentReply::class);
     }
-
-
 }

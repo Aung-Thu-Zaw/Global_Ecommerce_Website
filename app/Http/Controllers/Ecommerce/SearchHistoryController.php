@@ -10,7 +10,7 @@ class SearchHistoryController extends Controller
 {
     public function update(SearchHistory $searchHistory): RedirectResponse
     {
-        $searchHistory->update(["user_id"=>null]);
+        $searchHistory->update(['user_id' => null]);
 
         return back();
     }

@@ -43,7 +43,6 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
@@ -86,23 +85,18 @@ class LoginRequest extends FormRequest
         return Str::transliterate(Str::lower($this->input('email')).'|'.$this->ip());
     }
 
-
-
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     public function messages(): array
     {
-
         return [
-            "email.required" => "The email field is required.",
-            "email.email" => "The email address must be a valid email address.",
-            "email.string" => "The email must be a string.",
-            "password.required" => "The password field is required.",
-            "password.string" => "The password must be a string.",
-            "captcha_token.required" => "The captcha token is required.",
+            'email.required' => 'The email field is required.',
+            'email.email' => 'The email address must be a valid email address.',
+            'email.string' => 'The email must be a string.',
+            'password.required' => 'The password field is required.',
+            'password.string' => 'The password must be a string.',
+            'captcha_token.required' => 'The captcha token is required.',
         ];
     }
-
-
 }

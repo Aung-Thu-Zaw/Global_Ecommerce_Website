@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Admin\OrderManagements\OrderManage;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\HandlesQueryStringParameters;
+use App\Jobs\Orders\SendConfirmedOrderEmailToCustomer;
+use App\Models\DeliveryInformation;
+use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
-use App\Models\DeliveryInformation;
-use App\Models\Order;
-use App\Models\OrderItem;
-use App\Jobs\Orders\SendConfirmedOrderEmailToCustomer;
-use App\Http\Traits\HandlesQueryStringParameters;
 
 class AdminPendingOrderController extends Controller
 {
@@ -19,40 +19,40 @@ class AdminPendingOrderController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $pendingOrders = Order::search(request("search"))
-                              ->where("order_status", "pending")
-                              ->where("cancel_status", null)
-                              ->where("return_status", null)
-                              ->where("return_status", null)
-                              ->orderBy(request("sort", "id"), request("direction", "desc"))
-                              ->paginate(request("per_page", 10))
+        $pendingOrders = Order::search(request('search'))
+                              ->where('order_status', 'pending')
+                              ->where('cancel_status', null)
+                              ->where('return_status', null)
+                              ->where('return_status', null)
+                              ->orderBy(request('sort', 'id'), request('direction', 'desc'))
+                              ->paginate(request('per_page', 10))
                               ->appends(request()->all());
 
-        return inertia("Admin/OrderManagements/OrderManage/PendingOrders/Index", compact("pendingOrders"));
+        return inertia('Admin/OrderManagements/OrderManage/PendingOrders/Index', compact('pendingOrders'));
     }
 
     public function show(Request $request, Order $order): Response|ResponseFactory
     {
-        $deliveryInformation = DeliveryInformation::where("user_id", $order->user_id)->first();
+        $deliveryInformation = DeliveryInformation::where('user_id', $order->user_id)->first();
 
-        $orderItems = OrderItem::with("product.shop")->where("order_id", $order->id)->get();
+        $orderItems = OrderItem::with('product.shop')->where('order_id', $order->id)->get();
 
         $queryStringParams = $this->getQueryStringParams($request);
 
-        return inertia("Admin/OrderManagements/OrderManage/PendingOrders/Detail", compact("queryStringParams", "order", "deliveryInformation", "orderItems"));
+        return inertia('Admin/OrderManagements/OrderManage/PendingOrders/Detail', compact('queryStringParams', 'order', 'deliveryInformation', 'orderItems'));
     }
 
     public function update(Request $request, Order $order): RedirectResponse
     {
-        $order->load(["orderItems.product.shop"]);
+        $order->load(['orderItems.product.shop']);
 
         $order->update([
-            "order_status" => "confirmed",
-            "confirmed_date" => now()->format("Y-m-d")
+            'order_status' => 'confirmed',
+            'confirmed_date' => now()->format('Y-m-d'),
         ]);
 
         SendConfirmedOrderEmailToCustomer::dispatch($order);
 
-        return to_route("admin.orders.pending.index", $this->getQueryStringParams($request))->with("success", "Order is confirmed");
+        return to_route('admin.orders.pending.index', $this->getQueryStringParams($request))->with('success', 'Order is confirmed');
     }
 }

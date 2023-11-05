@@ -2,7 +2,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import RecommendedProductSection from "@/Components/Sections/RecommendedProductSection.vue";
 import JustForYouProductSection from "@/Components/Sections/JustForYouProductSection.vue";
-import { __ } from "@/Translations/translations-inside-setup.js";
+import { __ } from "@/Services/translations-inside-setup.js";
 import { Link, Head, router } from "@inertiajs/vue3";
 import { inject } from "vue";
 

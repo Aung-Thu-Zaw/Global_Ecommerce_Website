@@ -16,6 +16,6 @@ class WebsiteFeedbackController extends Controller
 
         event(new FeedbackForWebsite($websiteFeedback));
 
-        return back()->with("success", "THANK_FOR_YOUR_FEEDBACK");
+        return back()->with('success', 'THANK_FOR_YOUR_FEEDBACK');
     }
 }

@@ -5,7 +5,6 @@ namespace App\Listeners\AccountRegisteredWithSocialite;
 use App\Models\User;
 use App\Notifications\AccountRegistered\RegisteredUserEmailNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Notification;
 
 class SendNewUserRegisteredWithSocialiteEmailNotificationToAdmin implements ShouldQueue
@@ -28,9 +27,9 @@ class SendNewUserRegisteredWithSocialiteEmailNotificationToAdmin implements Shou
      */
     public function handle($event)
     {
-        $user=$event->user ?? null;
+        $user = $event->user ?? null;
 
-        $admins=User::where("role", "admin")->get();
+        $admins = User::where('role', 'admin')->get();
 
         Notification::send($admins, new RegisteredUserEmailNotification($user));
     }

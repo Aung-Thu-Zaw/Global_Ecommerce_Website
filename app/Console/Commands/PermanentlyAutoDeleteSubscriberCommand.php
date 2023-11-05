@@ -23,12 +23,11 @@ class PermanentlyAutoDeleteSubscriberCommand extends Command
      */
     protected $description = 'Subscribers in the trash will be automatically deleted after 60 days';
 
-
     public function handle(): void
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $subscribers=Subscriber::onlyTrashed()
+        $subscribers = Subscriber::onlyTrashed()
                                ->where('deleted_at', '<=', $cutoffDate)
                                ->get();
 

@@ -1,5 +1,5 @@
 <script setup>
-import { __ } from "@/Translations/translations-inside-setup.js";
+import { __ } from "@/Services/translations-inside-setup.js";
 import { inject } from "vue";
 import { Link, router, usePage } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";

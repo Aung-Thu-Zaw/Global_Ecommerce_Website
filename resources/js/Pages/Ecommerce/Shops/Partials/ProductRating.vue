@@ -1,5 +1,5 @@
 <script setup>
-import Pagination from "@/Components/Paginations/Pagination.vue";
+import Pagination from "@/Components/Paginations/DashboardPagination.vue";
 import TotalAverageRatingStarWithProgressBar from "@/Components/RatingStars/TotalAverageRatingStarWithProgressBar.vue";
 import TotalReviewAvgStars from "@/Components/RatingStars/TotalReviewAvgStars.vue";
 import ProductReviewerReviewCard from "@/Components/Cards/Products/ProductReviewerReviewCard.vue";

@@ -11,8 +11,8 @@ class SellerDashboardGuideController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $sellerDashboardGuides=SellerDashboardGuide::all();
+        $sellerDashboardGuides = SellerDashboardGuide::all();
 
-        return inertia("Seller/Guide/Index", compact("sellerDashboardGuides"));
+        return inertia('Seller/Guide/Index', compact('sellerDashboardGuides'));
     }
 }

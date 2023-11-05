@@ -3,18 +3,18 @@
 namespace App\Models;
 
 use App\Models\Scopes\FilteredByDateScope;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Attributes\SearchUsingFullText;
 use Laravel\Scout\Searchable;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Dyrynda\Database\Support\CascadeSoftDeletes;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Laravel\Scout\Attributes\SearchUsingFullText;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class BlogPost extends Model
 {
@@ -25,10 +25,11 @@ class BlogPost extends Model
     use HasSlug;
 
     /**
-    * @var string[]
-    */
+     * @var string[]
+     */
     protected array $cascadeDeletes = ['blogCategory'];
-    protected $guarded=[];
+
+    protected $guarded = [];
 
     public function getSlugOptions(): SlugOptions
     {
@@ -43,8 +44,8 @@ class BlogPost extends Model
     }
 
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     #[SearchUsingFullText(['description'])]
     public function toSearchableArray(): array
     {
@@ -65,88 +66,87 @@ class BlogPost extends Model
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogPost, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogPost, never>
+     */
     protected function image(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/blog-posts/$value"),
+            set: fn ($value) => str_starts_with($value, 'http') ? $value : asset("storage/blog-posts/$value"),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogPost, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogPost, never>
+     */
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("F j, Y", strtotime($value)),
+            get: fn ($value) => date('F j, Y', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogPost, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogPost, never>
+     */
     protected function deletedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date('j-F-Y', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<BlogCategory,BlogPost>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<BlogCategory,BlogPost>
+     */
     public function blogCategory(): BelongsTo
     {
         return $this->belongsTo(BlogCategory::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,BlogPost>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,BlogPost>
+     */
     public function author(): BelongsTo
     {
-        return $this->belongsTo(User::class, "author_id");
+        return $this->belongsTo(User::class, 'author_id');
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<BlogTag>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<BlogTag>
+     */
     public function blogTags(): BelongsToMany
     {
-        return $this->belongsToMany(BlogTag::class, "blog_post_blog_tag");
+        return $this->belongsToMany(BlogTag::class, 'blog_post_blog_tag');
     }
 
     public static function deleteImage(string $blogPostImage): void
     {
-        if (!empty($blogPostImage) && file_exists(storage_path("app/public/blog-posts/".pathinfo($blogPostImage, PATHINFO_BASENAME)))) {
-            unlink(storage_path("app/public/blog-posts/".pathinfo($blogPostImage, PATHINFO_BASENAME)));
+        if (! empty($blogPostImage) && file_exists(storage_path('app/public/blog-posts/'.pathinfo($blogPostImage, PATHINFO_BASENAME)))) {
+            unlink(storage_path('app/public/blog-posts/'.pathinfo($blogPostImage, PATHINFO_BASENAME)));
         }
     }
 
     /**
-    * @param array<string> $filterBy
-    * @param Builder<BlogPost> $query
-    */
-
+     * @param  array<string>  $filterBy
+     * @param  Builder<BlogPost>  $query
+     */
     public function scopeFilterBy(Builder $query, array $filterBy): void
     {
         $query->when(
-            $filterBy["search_blog"]??null,
+            $filterBy['search_blog'] ?? null,
             function ($query, $search_blog) {
                 $query->where(
                     function ($query) use ($search_blog) {
-                        $query->where("title", "LIKE", "%".$search_blog."%")
-                              ->orWhere("description", "LIKE", "%".$search_blog."%");
+                        $query->where('title', 'LIKE', '%'.$search_blog.'%')
+                              ->orWhere('description', 'LIKE', '%'.$search_blog.'%');
                     }
                 );
             }
         );
 
-        $query->when($filterBy["blog_category"]?? null, function ($query, $categorySlug) {
-            $query->whereHas("blogCategory", function ($query) use ($categorySlug) {
-                $query->where("slug", $categorySlug);
+        $query->when($filterBy['blog_category'] ?? null, function ($query, $categorySlug) {
+            $query->whereHas('blogCategory', function ($query) use ($categorySlug) {
+                $query->where('slug', $categorySlug);
             });
         });
     }

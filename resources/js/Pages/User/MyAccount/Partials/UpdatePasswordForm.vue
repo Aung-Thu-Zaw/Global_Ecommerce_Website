@@ -3,7 +3,7 @@ import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import SaveButton from "@/Components/Buttons/SaveButton.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
-import { __ } from "@/Translations/translations-inside-setup.js";
+import { __ } from "@/Services/translations-inside-setup.js";
 import { useForm, usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
 import { toast } from "vue3-toastify";

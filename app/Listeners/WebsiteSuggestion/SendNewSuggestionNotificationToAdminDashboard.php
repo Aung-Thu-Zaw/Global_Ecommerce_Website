@@ -4,8 +4,6 @@ namespace App\Listeners\WebsiteSuggestion;
 
 use App\Models\User;
 use App\Notifications\WebsiteSuggestion\NewSuggestionNotification;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Notification;
 
 class SendNewSuggestionNotificationToAdminDashboard
@@ -28,8 +26,8 @@ class SendNewSuggestionNotificationToAdminDashboard
      */
     public function handle($event)
     {
-        $suggestion=$event->suggestion ?? null;
-        $admins=User::where("role", "admin")->get();
+        $suggestion = $event->suggestion ?? null;
+        $admins = User::where('role', 'admin')->get();
         Notification::send($admins, new NewSuggestionNotification($suggestion));
     }
 }

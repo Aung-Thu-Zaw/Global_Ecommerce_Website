@@ -6,9 +6,7 @@ use App\Models\Product;
 use App\Models\ProductReview;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class AdminPublishedProductReviewNotification extends Notification implements ShouldBroadcast
@@ -37,20 +35,19 @@ class AdminPublishedProductReviewNotification extends Notification implements Sh
     }
 
     /**
-    * Get the array representation of the notification.
-    *
-    * @param  mixed  $notifiable
-    * @return array<string|int>
-    */
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array<string|int>
+     */
     public function toArray($notifiable)
     {
         return [
-            "message" => "ADMIN_PUBLISHED_PRODUCT_REVIEW_IN_YOUR_PRODUCT",
-            "review" => $this->productReview,
-            "slug" => $this->product->slug
+            'message' => 'ADMIN_PUBLISHED_PRODUCT_REVIEW_IN_YOUR_PRODUCT',
+            'review' => $this->productReview,
+            'slug' => $this->product->slug,
         ];
     }
-
 
     /**
      * Get the array representation of the notification.
@@ -61,9 +58,9 @@ class AdminPublishedProductReviewNotification extends Notification implements Sh
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" => "ADMIN_PUBLISHED_PRODUCT_REVIEW_IN_YOUR_PRODUCT",
-            "review" => $this->productReview,
-            "slug" => $this->product->slug
+            'message' => 'ADMIN_PUBLISHED_PRODUCT_REVIEW_IN_YOUR_PRODUCT',
+            'review' => $this->productReview,
+            'slug' => $this->product->slug,
         ]);
     }
 }

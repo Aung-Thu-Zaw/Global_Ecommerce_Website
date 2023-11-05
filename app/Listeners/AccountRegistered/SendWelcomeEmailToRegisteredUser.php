@@ -2,8 +2,8 @@
 
 namespace App\Listeners\AccountRegistered;
 
-use App\Mail\ForTheRegisteredUser\RegisteredUserWelcomeMail;
 use App\Mail\ForTheRegisteredUser\RegisteredSellerWelcomeMail;
+use App\Mail\ForTheRegisteredUser\RegisteredUserWelcomeMail;
 use Illuminate\Support\Facades\Mail;
 
 class SendWelcomeEmailToRegisteredUser
@@ -28,9 +28,8 @@ class SendWelcomeEmailToRegisteredUser
     {
         $user = $event->user ?? null;
 
-        $user->role === "user" ?
+        $user->role === 'user' ?
         Mail::to($user->email)->queue(new RegisteredUserWelcomeMail($user)) :
         Mail::to($user->email)->queue(new RegisteredSellerWelcomeMail($user));
-
     }
 }

@@ -17,10 +17,10 @@ class SellerProductBannerFactory extends Factory
     public function definition()
     {
         return [
-            "seller_id"=>3,
-            "image"=>fake()->imageUrl(),
-            "url"=>fake()->url(),
-            "status"=>"show",
+            'seller_id' => 3,
+            'image' => fake()->imageUrl(),
+            'url' => fake()->url(),
+            'status' => 'show',
         ];
     }
 }

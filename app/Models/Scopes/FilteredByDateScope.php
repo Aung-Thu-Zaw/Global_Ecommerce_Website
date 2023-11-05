@@ -13,23 +13,21 @@ class FilteredByDateScope implements Scope
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $builder
      * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @param Builder<Model> $builder
-     *
+     * @param  Builder<Model>  $builder
      * @return void
      */
     public function apply(Builder $builder, Model $model)
     {
-
-        $builder->when(request("created_from"), function ($query, $createdFrom) {
+        $builder->when(request('created_from'), function ($query, $createdFrom) {
             $query->whereDate('created_at', '>=', $createdFrom);
         })
-        ->when(request("created_until"), function ($query, $createdUntil) {
+        ->when(request('created_until'), function ($query, $createdUntil) {
             $query->whereDate('created_at', '<=', $createdUntil);
         })
-        ->when(request("deleted_from"), function ($query, $deletedFrom) {
+        ->when(request('deleted_from'), function ($query, $deletedFrom) {
             $query->whereDate('deleted_at', '>=', $deletedFrom);
         })
-        ->when(request("deleted_until"), function ($query, $deletedUntil) {
+        ->when(request('deleted_until'), function ($query, $deletedUntil) {
             $query->whereDate('deleted_at', '<=', $deletedUntil);
         });
     }

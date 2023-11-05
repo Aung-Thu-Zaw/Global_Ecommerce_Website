@@ -12,7 +12,7 @@ class AdminAuthController extends Controller
     public function login(): Response|ResponseFactory
     {
         return inertia('Admin/Auth/Login', [
-            'canResetPassword' => Route::has("password.request"),
+            'canResetPassword' => Route::has('password.request'),
             'status' => session('status'),
         ]);
     }

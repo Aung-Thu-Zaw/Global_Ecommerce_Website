@@ -17,17 +17,17 @@ class DeliveryInformationFactory extends Factory
     public function definition()
     {
         return [
-            "user_id" => fake()->numberBetween(1, 10),
-            "name" => fake()->name(),
-            "email" => fake()->email(),
-            "phone" => fake()->phoneNumber(),
-            "address" => fake()->address(),
-            "country" => "Myanmar",
-            "region" => "Tanintharyi",
-            "city" => "Myeik",
-            "township" => "Myeik",
-            "postal_code" => "14051",
-            "additional_information" => fake()->paragraph(),
+            'user_id' => fake()->numberBetween(1, 10),
+            'name' => fake()->name(),
+            'email' => fake()->email(),
+            'phone' => fake()->phoneNumber(),
+            'address' => fake()->address(),
+            'country' => 'Myanmar',
+            'region' => 'Tanintharyi',
+            'city' => 'Myeik',
+            'township' => 'Myeik',
+            'postal_code' => '14051',
+            'additional_information' => fake()->paragraph(),
         ];
     }
 }

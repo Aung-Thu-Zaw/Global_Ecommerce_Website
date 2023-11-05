@@ -8,15 +8,12 @@ use Illuminate\Support\Collection;
 class PermanentlyDeleteAllTrashSubscriberAction
 {
     /**
-    * @param Collection<int,Subscriber> $subscribers
-    */
-
+     * @param  Collection<int,Subscriber>  $subscribers
+     */
     public function handle(Collection $subscribers): void
     {
         $subscribers->each(function ($subscriber) {
-
             $subscriber->forceDelete();
-
         });
     }
 }

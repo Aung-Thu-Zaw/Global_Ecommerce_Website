@@ -8,68 +8,68 @@ use App\Models\DeliveryInformation;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
-use Inertia\Response;
-use Inertia\ResponseFactory;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response as HttpResponse;
+use Inertia\Response;
+use Inertia\ResponseFactory;
 
 class MyOrderController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $orders = Order::where("user_id", auth()->id())
-                     ->whereNull("return_reason")
-                     ->whereNull("return_date")
-                     ->whereNull("return_status")
-                     ->whereNull("cancel_reason")
-                     ->whereNull("cancel_date")
-                     ->whereNull("cancel_status")
-                     ->orderBy("id", "desc")
+        $orders = Order::where('user_id', auth()->id())
+                     ->whereNull('return_reason')
+                     ->whereNull('return_date')
+                     ->whereNull('return_status')
+                     ->whereNull('cancel_reason')
+                     ->whereNull('cancel_date')
+                     ->whereNull('cancel_status')
+                     ->orderBy('id', 'desc')
                      ->get();
 
-        $toPayOrders = Order::where("user_id", auth()->id())
-                          ->where("payment_type", "cash on delivery")
-                          ->where("order_status", "!=", "delivered")
-                          ->whereNull("return_reason")
-                          ->whereNull("return_date")
-                          ->whereNull("return_status")
-                          ->whereNull("cancel_reason")
-                          ->whereNull("cancel_date")
-                          ->whereNull("cancel_status")
-                          ->orderBy("id", "desc")
+        $toPayOrders = Order::where('user_id', auth()->id())
+                          ->where('payment_type', 'cash on delivery')
+                          ->where('order_status', '!=', 'delivered')
+                          ->whereNull('return_reason')
+                          ->whereNull('return_date')
+                          ->whereNull('return_status')
+                          ->whereNull('cancel_reason')
+                          ->whereNull('cancel_date')
+                          ->whereNull('cancel_status')
+                          ->orderBy('id', 'desc')
                           ->get();
 
-        $toReceiveOrders = Order::where("user_id", auth()->id())
+        $toReceiveOrders = Order::where('user_id', auth()->id())
                                 ->where(function ($query) {
-                                    $query->where("order_status", "confirmed")
-                                          ->orWhere("order_status", "shipped");
+                                    $query->where('order_status', 'confirmed')
+                                          ->orWhere('order_status', 'shipped');
                                 })
-                                ->whereNull("return_reason")
-                                ->whereNull("return_date")
-                                ->whereNull("return_status")
-                                ->whereNull("cancel_reason")
-                                ->whereNull("cancel_date")
-                                ->whereNull("cancel_status")
-                                ->orderBy("id", "desc")
+                                ->whereNull('return_reason')
+                                ->whereNull('return_date')
+                                ->whereNull('return_status')
+                                ->whereNull('cancel_reason')
+                                ->whereNull('cancel_date')
+                                ->whereNull('cancel_status')
+                                ->orderBy('id', 'desc')
                                 ->get();
 
-        $receivedOrders = Order::where("user_id", auth()->id())
-                             ->where("order_status", "delivered")
-                             ->whereNull("return_reason")
-                             ->whereNull("return_date")
-                             ->whereNull("return_status")
-                             ->whereNull("cancel_reason")
-                             ->whereNull("cancel_date")
-                             ->whereNull("cancel_status")
-                             ->orderBy("id", "desc")
+        $receivedOrders = Order::where('user_id', auth()->id())
+                             ->where('order_status', 'delivered')
+                             ->whereNull('return_reason')
+                             ->whereNull('return_date')
+                             ->whereNull('return_status')
+                             ->whereNull('cancel_reason')
+                             ->whereNull('cancel_date')
+                             ->whereNull('cancel_status')
+                             ->orderBy('id', 'desc')
                              ->get();
 
-        return inertia("User/MyOrders/Index", compact(
-            "orders",
-            "toPayOrders",
-            "toReceiveOrders",
-            "receivedOrders"
+        return inertia('User/MyOrders/Index', compact(
+            'orders',
+            'toPayOrders',
+            'toReceiveOrders',
+            'receivedOrders'
         ));
     }
 
@@ -77,25 +77,25 @@ class MyOrderController extends Controller
     {
         $order = Order::findOrFail($id);
 
-        $deliveryInformation = DeliveryInformation::where("user_id", $order->user_id)->first();
+        $deliveryInformation = DeliveryInformation::where('user_id', $order->user_id)->first();
 
-        $orderItems = OrderItem::with(["product.shop","product.brand"])
-                             ->where("order_id", $order->id)
+        $orderItems = OrderItem::with(['product.shop', 'product.brand'])
+                             ->where('order_id', $order->id)
                              ->get();
 
-        $shopIds = $orderItems->pluck("shop_id")
+        $shopIds = $orderItems->pluck('shop_id')
                             ->unique()
                             ->values();
 
-        $shops = User::select("id", "shop_name")
+        $shops = User::select('id', 'shop_name')
                      ->whereIn('id', $shopIds)
                      ->get();
 
-        return inertia("User/MyOrders/Detail", compact(
-            "order",
-            "orderItems",
-            "deliveryInformation",
-            "shops"
+        return inertia('User/MyOrders/Detail', compact(
+            'order',
+            'orderItems',
+            'deliveryInformation',
+            'shops'
         ));
     }
 
@@ -104,20 +104,20 @@ class MyOrderController extends Controller
         $order = Order::findOrFail($order_id);
 
         $order->update([
-            "return_date" => now()->format("Y-m-d"),
-            "return_reason" => $request->return_reason,
-            "return_status" => "requested",
+            'return_date' => now()->format('Y-m-d'),
+            'return_reason' => $request->return_reason,
+            'return_status' => 'requested',
         ]);
 
         $order->orderItems()->each(function ($orderItem) use ($request) {
             $orderItem->update([
-                    "return_date" => now()->format("Y-m-d"),
-                    "return_reason" => $request->return_reason,
-                    "return_status" => "requested",
-                ]);
+                'return_date' => now()->format('Y-m-d'),
+                'return_reason' => $request->return_reason,
+                'return_status' => 'requested',
+            ]);
         });
 
-        return to_route("return-orders.index", "tab=all-return-orders")->with("success", "Return request successfully.");
+        return to_route('return-orders.index', 'tab=all-return-orders')->with('success', 'Return request successfully.');
     }
 
     public function cancel(ReturnOrCancelOrderRequest $request, int $order_id): RedirectResponse
@@ -125,27 +125,27 @@ class MyOrderController extends Controller
         $order = Order::findOrFail($order_id);
 
         $order->update([
-            "cancel_date" => now()->format("Y-m-d"),
-            "cancel_reason" => $request->cancel_reason,
-            "cancel_status" => "requested",
+            'cancel_date' => now()->format('Y-m-d'),
+            'cancel_reason' => $request->cancel_reason,
+            'cancel_status' => 'requested',
         ]);
 
         $order->orderItems()->each(function ($orderItem) use ($request) {
             $orderItem->update([
-                    "cancel_date" => now()->format("Y-m-d"),
-                    "cancel_reason" => $request->cancel_reason,
-                    "cancel_status" => "requested",
-                ]);
+                'cancel_date' => now()->format('Y-m-d'),
+                'cancel_reason' => $request->cancel_reason,
+                'cancel_status' => 'requested',
+            ]);
         });
 
-        return to_route("cancel-orders.index", "tab=all-cancel-orders")->with("success", "Cancel request successfully.");
+        return to_route('cancel-orders.index', 'tab=all-cancel-orders')->with('success', 'Cancel request successfully.');
     }
 
     public function downloadInvoice(int $order_id): HttpResponse
     {
         $order = Order::find($order_id);
 
-        $pdf = PDF::loadView('files.invoice', compact("order"))->setPaper('a4');
+        $pdf = PDF::loadView('files.invoice', compact('order'))->setPaper('a4');
 
         return response($pdf->output())
                ->header('Content-Type', 'application/pdf')

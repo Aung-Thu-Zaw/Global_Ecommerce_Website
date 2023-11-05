@@ -7,12 +7,12 @@ use App\Models\FaqCategory;
 class CreateFaqCategoryAction
 {
     /**
-     * @param array<mixed> $data
+     * @param  array<mixed>  $data
      */
     public function handle(array $data): void
     {
         FaqCategory::create([
-            "name"=>$data["name"],
+            'name' => $data['name'],
         ]);
     }
 }

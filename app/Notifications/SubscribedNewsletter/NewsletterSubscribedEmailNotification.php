@@ -3,9 +3,7 @@
 namespace App\Notifications\SubscribedNewsletter;
 
 use App\Models\Subscriber;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -43,10 +41,10 @@ class NewsletterSubscribedEmailNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage())
-        ->subject("New Newsletter Subscription")
-        ->greeting("Dear ".$notifiable->name.",")
-        ->line("A new subscriber has subscribed to the website newsletter. Here are the details:")
-        ->line("Subscriber Email: ".$this->subscriber->email)
-        ->line("Subscribe Date: ".$this->subscriber->created_at);
+        ->subject('New Newsletter Subscription')
+        ->greeting('Dear '.$notifiable->name.',')
+        ->line('A new subscriber has subscribed to the website newsletter. Here are the details:')
+        ->line('Subscriber Email: '.$this->subscriber->email)
+        ->line('Subscribe Date: '.$this->subscriber->created_at);
     }
 }

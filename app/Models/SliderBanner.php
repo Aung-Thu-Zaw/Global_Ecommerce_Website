@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use App\Models\Scopes\FilteredByDateScope;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 
@@ -15,11 +15,11 @@ class SliderBanner extends Model
     use SoftDeletes;
     use Searchable;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     public function toSearchableArray(): array
     {
         return [
@@ -38,39 +38,39 @@ class SliderBanner extends Model
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<SliderBanner, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<SliderBanner, never>
+     */
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date('j-F-Y', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<SliderBanner, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<SliderBanner, never>
+     */
     protected function deletedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date('j-F-Y', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<SliderBanner, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<SliderBanner, never>
+     */
     protected function image(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/slider-banners/$value"),
+            set: fn ($value) => str_starts_with($value, 'http') ? $value : asset("storage/slider-banners/$value"),
         );
     }
 
     public static function deleteImage(string $sliderBannerImage): void
     {
-        if (!empty($sliderBannerImage) && file_exists(storage_path("app/public/slider-banners/".pathinfo($sliderBannerImage, PATHINFO_BASENAME)))) {
-            unlink(storage_path("app/public/slider-banners/".pathinfo($sliderBannerImage, PATHINFO_BASENAME)));
+        if (! empty($sliderBannerImage) && file_exists(storage_path('app/public/slider-banners/'.pathinfo($sliderBannerImage, PATHINFO_BASENAME)))) {
+            unlink(storage_path('app/public/slider-banners/'.pathinfo($sliderBannerImage, PATHINFO_BASENAME)));
         }
     }
 }

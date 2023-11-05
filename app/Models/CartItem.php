@@ -10,19 +10,19 @@ class CartItem extends Model
 {
     use HasFactory;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Cart,CartItem>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Cart,CartItem>
+     */
     public function cart(): BelongsTo
     {
         return $this->belongsTo(Cart::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Product,CartItem>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Product,CartItem>
+     */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);

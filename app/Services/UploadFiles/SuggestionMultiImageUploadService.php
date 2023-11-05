@@ -9,19 +9,18 @@ use Illuminate\Http\UploadedFile;
 class SuggestionMultiImageUploadService
 {
     /**
-     * @param array<UploadedFile> $images
+     * @param  array<UploadedFile>  $images
      */
     public function createMultiImage(array $images, Suggestion $suggestion): void
     {
         foreach ($images as $image) {
-
             $originalName = $image->getClientOriginalName();
 
-            $finalName = "suggestion"."-".time()."-".$originalName;
+            $finalName = 'suggestion'.'-'.time().'-'.$originalName;
 
-            $image->storeAs("suggestions", $finalName);
+            $image->storeAs('suggestions', $finalName);
 
-            Image::create(["suggestion_id" => $suggestion->id,"img_path" => $finalName]);
+            Image::create(['suggestion_id' => $suggestion->id, 'img_path' => $finalName]);
         }
     }
 }

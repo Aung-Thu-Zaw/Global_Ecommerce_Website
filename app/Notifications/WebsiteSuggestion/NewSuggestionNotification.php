@@ -5,9 +5,7 @@ namespace App\Notifications\WebsiteSuggestion;
 use App\Models\Suggestion;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class NewSuggestionNotification extends Notification implements ShouldBroadcast
@@ -36,19 +34,18 @@ class NewSuggestionNotification extends Notification implements ShouldBroadcast
     }
 
     /**
-    * Get the array representation of the notification.
-    *
-    * @param  mixed  $notifiable
-    * @return array<string|int>
-    */
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array<string|int>
+     */
     public function toArray($notifiable)
     {
         return [
-            "message" => $this->suggestion->type === 'report_bug' ? "A_NEW_SUGGESTION_ABOUT_OF_REPORTING_BUGS" : "A_NEW_SUGGESTION_ABOUT_OF_FEATURE_REQUESTED",
-            "suggestion" => $this->suggestion
+            'message' => $this->suggestion->type === 'report_bug' ? 'A_NEW_SUGGESTION_ABOUT_OF_REPORTING_BUGS' : 'A_NEW_SUGGESTION_ABOUT_OF_FEATURE_REQUESTED',
+            'suggestion' => $this->suggestion,
         ];
     }
-
 
     /**
      * Get the array representation of the notification.
@@ -59,8 +56,8 @@ class NewSuggestionNotification extends Notification implements ShouldBroadcast
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" => $this->suggestion->type === 'report_bug' ? "A_NEW_SUGGESTION_ABOUT_OF_REPORTING_BUGS" : "A_NEW_SUGGESTION_ABOUT_OF_FEATURE_REQUESTED",
-            "suggestion" => $this->suggestion
+            'message' => $this->suggestion->type === 'report_bug' ? 'A_NEW_SUGGESTION_ABOUT_OF_REPORTING_BUGS' : 'A_NEW_SUGGESTION_ABOUT_OF_FEATURE_REQUESTED',
+            'suggestion' => $this->suggestion,
         ]);
     }
 }

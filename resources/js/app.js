@@ -7,11 +7,11 @@ import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
 import { VueReCaptcha } from "vue-recaptcha-v3";
-import * as te from "tw-elements";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import CKEditor from "@ckeditor/ckeditor5-vue";
-import { translations } from "./Translations/translations";
+import { translations } from "./Services/translations";
+import { Can } from "@/Services/can.js";
 
 const appName =
     window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
@@ -29,6 +29,7 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .mixin(translations)
+            .use(Can)
             .use(VueReCaptcha, {
                 siteKey: captcheKey,
                 loaderOptions: {
@@ -41,17 +42,9 @@ createInertiaApp({
             .mount(el);
     },
     progress: {
-        // The delay after which the progress bar will appear
-        // during navigation, in milliseconds.
         delay: 250,
-
-        // The color of the progress bar.
         color: "#fc9126",
-
-        // Whether to include the default NProgress styles.
         includeCSS: true,
-
-        // Whether the NProgress spinner will be shown.
         showSpinner: true,
     },
 });

@@ -17,8 +17,8 @@ class SearchHistoryFactory extends Factory
     public function definition()
     {
         return [
-            "user_id"=>fake()->numberBetween(20,120),
-            "keyword"=>fake()->text()
+            'user_id' => fake()->numberBetween(20, 120),
+            'keyword' => fake()->text(),
         ];
     }
 }

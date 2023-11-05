@@ -11,7 +11,7 @@ import { Link } from "@inertiajs/vue3";
       <li class="inline-flex items-center">
         <Link
           :href="route('admin.dashboard')"
-          class="inline-flex items-center text-sm font-semibold text-blueGray-600 hover:text-orange-600"
+          class="inline-flex items-center text-sm font-semibold text-blueGray-600 hover:text-blue-600"
         >
           <svg
             class="w-3 h-3 mr-2.5"

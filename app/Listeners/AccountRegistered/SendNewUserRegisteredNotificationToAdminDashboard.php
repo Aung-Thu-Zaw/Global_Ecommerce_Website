@@ -4,8 +4,6 @@ namespace App\Listeners\AccountRegistered;
 
 use App\Models\User;
 use App\Notifications\AccountRegistered\RegisteredUserNotification;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Notification;
 
 class SendNewUserRegisteredNotificationToAdminDashboard
@@ -28,9 +26,9 @@ class SendNewUserRegisteredNotificationToAdminDashboard
      */
     public function handle($event)
     {
-        $user=$event->user ?? null;
+        $user = $event->user ?? null;
 
-        $admins=User::where("role", "admin")->get();
+        $admins = User::where('role', 'admin')->get();
         Notification::send($admins, new RegisteredUserNotification($user));
     }
 }

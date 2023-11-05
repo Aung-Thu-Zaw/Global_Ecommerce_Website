@@ -4,7 +4,7 @@ import InputLabel from "@/Components/Forms/InputLabel.vue";
 import SaveButton from "@/Components/Buttons/SaveButton.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import datepicker from "vue3-datepicker";
-import { __ } from "@/Translations/translations-inside-setup.js";
+import { __ } from "@/Services/translations-inside-setup.js";
 import { Link, useForm, usePage } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
 import { toast } from "vue3-toastify";

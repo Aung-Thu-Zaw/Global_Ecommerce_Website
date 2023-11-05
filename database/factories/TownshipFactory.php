@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Township;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,10 +17,10 @@ class TownshipFactory extends Factory
     public function definition()
     {
         return [
-            "city_id"=>fake()->numberBetween(1, 80),
-            "name"=>fake()->unique()->sentence(),
-            "slug"=>fake()->unique()->slug(),
-            "created_at"=>fake()->dateTimeBetween("-2 months", now()),
+            'city_id' => fake()->numberBetween(1, 80),
+            'name' => fake()->unique()->sentence(),
+            'slug' => fake()->unique()->slug(),
+            'created_at' => fake()->dateTimeBetween('-2 months', now()),
         ];
     }
 }

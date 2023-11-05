@@ -22,33 +22,30 @@ class FollowedShopController extends Controller
         $followedShopIds = $followedShops->pluck('followable_id')->toArray();
 
         if ($followedShops->isEmpty()) {
-
-            $mostViewedProducts = UserProductInteraction::where("user_id", $user->id)
+            $mostViewedProducts = UserProductInteraction::where('user_id', $user->id)
                                                         ->groupBy('product_id')
                                                         ->pluck('product_id')
                                                         ->toArray();
 
-            $recommendedProducts = Product::select("id", "seller_id", "image", "name", "slug", "price", "discount", "special_offer")
-                                          ->with(["productReviews:id,product_id,rating","shop:id,offical"])
-                                          ->where("status", "approved")
+            $recommendedProducts = Product::select('id', 'seller_id', 'image', 'name', 'slug', 'price', 'discount', 'special_offer')
+                                          ->with(['productReviews:id,product_id,rating', 'shop:id,offical'])
+                                          ->where('status', 'approved')
                                           ->whereIn('id', $mostViewedProducts)
                                           ->inRandomOrder()
                                           ->limit(10)
                                           ->get();
 
-            return inertia("User/FollowedShops/Index", compact("followedShops", "recommendedProducts"));
-
+            return inertia('User/FollowedShops/Index', compact('followedShops', 'recommendedProducts'));
         } else {
-
-            $justForYouProducts = Product::select("id", "seller_id", "image", "name", "slug", "price", "discount", "special_offer")
-                                         ->with(["productReviews:id,product_id,rating","shop:id,offical"])
-                                         ->where("status", "approved")
-                                         ->whereIn("seller_id", $followedShopIds)
+            $justForYouProducts = Product::select('id', 'seller_id', 'image', 'name', 'slug', 'price', 'discount', 'special_offer')
+                                         ->with(['productReviews:id,product_id,rating', 'shop:id,offical'])
+                                         ->where('status', 'approved')
+                                         ->whereIn('seller_id', $followedShopIds)
                                          ->inRandomOrder()
                                          ->limit(15)
                                          ->get();
 
-            return inertia("User/FollowedShops/Index", compact("followedShops", "justForYouProducts"));
+            return inertia('User/FollowedShops/Index', compact('followedShops', 'justForYouProducts'));
         }
     }
 

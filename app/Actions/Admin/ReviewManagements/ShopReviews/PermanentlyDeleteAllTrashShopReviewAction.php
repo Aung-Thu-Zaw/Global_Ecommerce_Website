@@ -8,15 +8,12 @@ use Illuminate\Support\Collection;
 class PermanentlyDeleteAllTrashShopReviewAction
 {
     /**
-    * @param Collection<int,ShopReview> $shopReviews
-    */
-
+     * @param  Collection<int,ShopReview>  $shopReviews
+     */
     public function handle(Collection $shopReviews): void
     {
         $shopReviews->each(function ($shopReview) {
-
             $shopReview->forceDelete();
-
         });
     }
 }

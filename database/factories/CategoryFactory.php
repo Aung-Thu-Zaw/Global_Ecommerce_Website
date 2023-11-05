@@ -17,11 +17,11 @@ class CategoryFactory extends Factory
     public function definition()
     {
         return [
-            "name"=>fake()->unique()->name(),
-            "slug"=>fake()->unique()->slug(),
-            "image"=>fake()->imageUrl(),
-            "status"=>"show",
-            "created_at"=>fake()->dateTimeBetween("-9 months", now()),
+            'name' => fake()->unique()->name(),
+            'slug' => fake()->unique()->slug(),
+            'image' => fake()->imageUrl(),
+            'status' => 'show',
+            'created_at' => fake()->dateTimeBetween('-9 months', now()),
         ];
     }
 }

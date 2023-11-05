@@ -13,6 +13,6 @@ class StripeController extends Controller
     {
         (new ProcessPaymentByPlacingOrderService())->processPayment($request->total_price, $request->cart_items, $request->payment_method_id, 'stripe');
 
-        return redirect()->route("home")->with("success", "Your order has been placed successfully");
+        return redirect()->route('home')->with('success', 'Your order has been placed successfully');
     }
 }

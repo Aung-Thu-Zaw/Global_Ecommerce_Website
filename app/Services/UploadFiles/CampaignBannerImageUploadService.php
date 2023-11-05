@@ -11,25 +11,24 @@ class CampaignBannerImageUploadService
     {
         $originalName = $image->getClientOriginalName();
 
-        $finalName = time()."-".$originalName;
+        $finalName = time().'-'.$originalName;
 
-        $image->storeAs("campaign-banners", $finalName);
+        $image->storeAs('campaign-banners', $finalName);
 
         return $finalName;
     }
 
     public function updateImage(UploadedFile $image, string $campaignBannerImage): string
     {
-        if(is_string($campaignBannerImage)) {
-
+        if (is_string($campaignBannerImage)) {
             CampaignBanner::deleteImage($campaignBannerImage);
         }
 
         $originalName = $image->getClientOriginalName();
 
-        $finalName = time()."-".$originalName;
+        $finalName = time().'-'.$originalName;
 
-        $image->storeAs("campaign-banners", $finalName);
+        $image->storeAs('campaign-banners', $finalName);
 
         return $finalName;
     }

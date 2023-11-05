@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use App\Models\Scopes\FilteredByDateScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Builder;
+use Laravel\Scout\Searchable;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
@@ -20,7 +20,7 @@ class Faq extends Model
     use SoftDeletes;
     use HasSlug;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     public function getSlugOptions(): SlugOptions
     {
@@ -35,8 +35,8 @@ class Faq extends Model
     }
 
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     public function toSearchableArray(): array
     {
         return [
@@ -55,64 +55,62 @@ class Faq extends Model
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Faq, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Faq, never>
+     */
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date('j-F-Y', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Faq, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Faq, never>
+     */
     protected function deletedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date('j-F-Y', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<FaqCategory,Faq>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<FaqCategory,Faq>
+     */
     public function faqCategory(): BelongsTo
     {
         return $this->belongsTo(FaqCategory::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<FaqSubCategory,Faq>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<FaqSubCategory,Faq>
+     */
     public function faqSubCategory(): BelongsTo
     {
         return $this->belongsTo(FaqSubCategory::class);
     }
 
     /**
-    * @param array<string> $filterBy
-    * @param Builder<Faq> $query
-    */
-
+     * @param  array<string>  $filterBy
+     * @param  Builder<Faq>  $query
+     */
     public function scopeFilterBy(Builder $query, array $filterBy): void
     {
         $query->when(
-            $filterBy["search_question"]??null,
+            $filterBy['search_question'] ?? null,
             function ($query, $search_question) {
                 $query->where(
                     function ($query) use ($search_question) {
-                        $query->where("question", "LIKE", "%".$search_question."%");
+                        $query->where('question', 'LIKE', '%'.$search_question.'%');
                     }
                 );
             }
         );
 
-        $query->when($filterBy["category"]?? null, function ($query, $subCategorySlug) {
-            $query->whereHas("faqSubCategory", function ($query) use ($subCategorySlug) {
-                $query->where("slug", $subCategorySlug);
+        $query->when($filterBy['category'] ?? null, function ($query, $subCategorySlug) {
+            $query->whereHas('faqSubCategory', function ($query) use ($subCategorySlug) {
+                $query->where('slug', $subCategorySlug);
             });
         });
     }
-
 }

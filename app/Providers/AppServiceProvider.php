@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Models\SeoSetting;
 use App\Models\WebsiteSetting;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;

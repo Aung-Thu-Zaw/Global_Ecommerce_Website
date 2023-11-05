@@ -16,7 +16,7 @@ class SellerAuth
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return redirect()->route('seller.login');
         }
 

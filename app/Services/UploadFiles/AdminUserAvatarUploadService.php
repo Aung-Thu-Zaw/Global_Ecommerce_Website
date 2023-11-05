@@ -11,26 +11,24 @@ class AdminUserAvatarUploadService
     {
         $originalName = $image->getClientOriginalName();
 
-        $finalName = time()."-".$originalName;
+        $finalName = time().'-'.$originalName;
 
-        $image->move(storage_path("app/public/avatars/"), $finalName);
+        $image->move(storage_path('app/public/avatars/'), $finalName);
 
         return $finalName;
     }
 
     public function updateImage(UploadedFile $image, string $avatar): string
     {
-        if(is_string($avatar)) {
-
+        if (is_string($avatar)) {
             User::deleteUserAvatar($avatar);
-
         }
 
         $originalName = $image->getClientOriginalName();
 
-        $finalName = time()."-".$originalName;
+        $finalName = time().'-'.$originalName;
 
-        $image->move(storage_path("app/public/avatars/"), $finalName);
+        $image->move(storage_path('app/public/avatars/'), $finalName);
 
         return $finalName;
     }

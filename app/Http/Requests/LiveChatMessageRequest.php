@@ -26,16 +26,16 @@ class LiveChatMessageRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            "live_chat_id" => ["required","numeric",Rule::exists("live_chats", "id")],
-            "user_id" => ["nullable","numeric",Rule::exists("users", "id")],
-            "agent_id" => ["nullable","numeric",Rule::exists("users", "id")],
-            "message" => ["nullable","string"],
-            "reply_to_message_id" => ["nullable","numeric"],
-            "captcha_token" => ["required",new RecaptchaRule()],
+            'live_chat_id' => ['required', 'numeric', Rule::exists('live_chats', 'id')],
+            'user_id' => ['nullable', 'numeric', Rule::exists('users', 'id')],
+            'agent_id' => ['nullable', 'numeric', Rule::exists('users', 'id')],
+            'message' => ['nullable', 'string'],
+            'reply_to_message_id' => ['nullable', 'numeric'],
+            'captcha_token' => ['required', new RecaptchaRule()],
         ];
 
-        if ($this->hasFile("files")) {
-            $rules['files.*'] = ['required','file','mimetypes:image/jpeg,image/png,image/gif,image/webp,image/jpg,image/svg,video/avi,video/mpeg,video/mp4,video/webm,application/pdf,
+        if ($this->hasFile('files')) {
+            $rules['files.*'] = ['required', 'file', 'mimetypes:image/jpeg,image/png,image/gif,image/webp,image/jpg,image/svg,video/avi,video/mpeg,video/mp4,video/webm,application/pdf,
                                  application/msword,application/vnd.ms-excel,application/vnd.ms-powerpoint,text/plain,text/csv,audio/mpeg,audio/wav,audio/ogg,application/zip,application/x-rar-compressed,application/x-7z-compressed'];
         }
 
@@ -43,21 +43,21 @@ class LiveChatMessageRequest extends FormRequest
     }
 
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     public function messages(): array
     {
         return [
-            "agent_id.numeric" =>  "The agent id must be a number.",
-            "agent_id.exists" =>  "The selected agent id is invalid.",
-            "user_id.numeric" =>  "The user id must be a number.",
-            "user_id.exists" =>  "The selected user id is invalid.",
-            "live_chat_id.required" =>  "The live chat id is required.",
-            "live_chat_id.numeric" =>  "The live chat id must be a number.",
-            "live_chat_id.exists" =>  "The selected live chat id is invalid.",
-            "reply_to_message_id.numeric" =>  "The reply message id must be a number.",
-            "message.string" =>  "The shop id must be a string.",
-            "captcha_token.required" => "The captcha token is required",
+            'agent_id.numeric' => 'The agent id must be a number.',
+            'agent_id.exists' => 'The selected agent id is invalid.',
+            'user_id.numeric' => 'The user id must be a number.',
+            'user_id.exists' => 'The selected user id is invalid.',
+            'live_chat_id.required' => 'The live chat id is required.',
+            'live_chat_id.numeric' => 'The live chat id must be a number.',
+            'live_chat_id.exists' => 'The selected live chat id is invalid.',
+            'reply_to_message_id.numeric' => 'The reply message id must be a number.',
+            'message.string' => 'The shop id must be a string.',
+            'captcha_token.required' => 'The captcha token is required',
         ];
     }
 }

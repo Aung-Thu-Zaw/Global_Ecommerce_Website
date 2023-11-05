@@ -11,11 +11,10 @@ class MessageController extends Controller
 {
     public function store(MessageRequest $request): void
     {
-        $message= (new CreateMessageAction())->handle($request);
+        $message = (new CreateMessageAction())->handle($request);
 
-        if($message) {
-            event(new ChatMessage($message->load("user:id,avatar")));
+        if ($message) {
+            event(new ChatMessage($message->load('user:id,avatar')));
         }
     }
-
 }

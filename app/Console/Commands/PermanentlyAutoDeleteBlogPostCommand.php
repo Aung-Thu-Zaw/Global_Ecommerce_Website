@@ -10,10 +10,10 @@ use Illuminate\Console\Command;
 class PermanentlyAutoDeleteBlogPostCommand extends Command
 {
     /**
-    * The name and signature of the console command.
-    *
-    * @var string
-    */
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
     protected $signature = 'blog_post:delete';
 
     /**
@@ -23,12 +23,11 @@ class PermanentlyAutoDeleteBlogPostCommand extends Command
      */
     protected $description = 'Blog posts in the trash will be automatically deleted after 60 days';
 
-
     public function handle(): void
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $blogPosts=BlogPost::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
+        $blogPosts = BlogPost::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
         (new PermanentlyDeleteAllTrashBlogPostAction())->handle($blogPosts);
     }

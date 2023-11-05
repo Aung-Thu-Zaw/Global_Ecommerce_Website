@@ -17,10 +17,10 @@ class CollectionFactory extends Factory
     public function definition()
     {
         return [
-            "title"=>fake()->unique()->sentence(4),
-            "slug"=>fake()->unique()->slug(),
-            "description"=>fake()->unique()->sentence(),
-            "created_at"=>fake()->dateTimeBetween("-9 months", now()),
+            'title' => fake()->unique()->sentence(4),
+            'slug' => fake()->unique()->slug(),
+            'description' => fake()->unique()->sentence(),
+            'created_at' => fake()->dateTimeBetween('-9 months', now()),
         ];
     }
 }

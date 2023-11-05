@@ -26,67 +26,66 @@ class AdminManageRequest extends FormRequest
      */
     public function rules()
     {
-
-        $rules= [
-            "name" => ["required","string","max:255"],
-            "email" => ["required","string","email","max:255",Rule::unique("users", "email")],
-            "phone"=>["required","string",Rule::unique("users", "phone")],
-            "about"=>["nullable","string"],
-            "address"=>["nullable","string"],
-            "gender"=>["nullable",Rule::in(["male","female","other"])],
-            "password" => ["required", Password::defaults()],
-            "status"=>["nullable",Rule::in(["active","inactive"])],
-            "birthday"=>["nullable","date"],
-            "uuid"=>["nullable","string"],
-            "role"=>["nullable",Rule::in(["admin","vendor","user"])],
-            "captcha_token"  => ["required",new RecaptchaRule()],
+        $rules = [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')],
+            'phone' => ['required', 'string', Rule::unique('users', 'phone')],
+            'about' => ['nullable', 'string'],
+            'address' => ['nullable', 'string'],
+            'gender' => ['nullable', Rule::in(['male', 'female', 'other'])],
+            'password' => ['required', Password::defaults()],
+            'status' => ['nullable', Rule::in(['active', 'inactive'])],
+            'birthday' => ['nullable', 'date'],
+            'uuid' => ['nullable', 'string'],
+            'role' => ['nullable', Rule::in(['admin', 'vendor', 'user'])],
+            'captcha_token' => ['required', new RecaptchaRule()],
         ];
 
-        if ($this->hasFile("avatar")) {
-            $rules["avatar"]=["required","image","mimes:png,jpg,jpeg,svg,webp,gif","max:5120"];
+        if ($this->hasFile('avatar')) {
+            $rules['avatar'] = ['required', 'image', 'mimes:png,jpg,jpeg,svg,webp,gif', 'max:5120'];
         }
 
         $route = $this->route();
-        if ($route&&in_array($this->method(), ['POST','PUT', 'PATCH'])) {
+        if ($route && in_array($this->method(), ['POST', 'PUT', 'PATCH'])) {
             $user = $route->parameter('user');
-            $rules["email"]=["required","string","email","max:255",Rule::unique("users", "email")->ignore($user)];
-            $rules["phone"]=["required",Rule::unique("users", "phone")->ignore($user)];
-            $rules["password"]=["nullable"];
+            $rules['email'] = ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user)];
+            $rules['phone'] = ['required', Rule::unique('users', 'phone')->ignore($user)];
+            $rules['password'] = ['nullable'];
         }
 
         return $rules;
     }
 
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     public function messages(): array
     {
         return [
-            "name.required" => "The name field is required.",
-            "name.string" => "The name must be a string.",
-            "name.max" => "The name must not be greater than 255 characters.",
-            "email.required" => "The email address field is required.",
-            "email.string" => "The email address must be a string.",
-            "email.email" =>  "The email address must be a valid email address.",
-            "email.max" => "The email address must not be greater than 255 characters.",
-            "email.unique" =>'The email has already been taken.',
-            "phone.required" => "The phone field is required.",
-            "phone.string" => "The phone must be a string.",
-            "uuid.string" => "The uuid must be a string.",
-            "phone.unique" =>'The phone has already been taken.',
-            "about.string" => "The about must be a string.",
-            "address.string" => "The address must be a string.",
-            "gender.in"=>"The selected gender is invalid.",
-            "password.required" =>"The password field is required.",
-            "status.in"=>"The selected status is invalid.",
-            "birthday.date" => "The birthday is not a valid date.",
-            "role.in"=>"The selected role is invalid.",
-            "avatar.required"=>"The avatar field is required.",
-            "avatar.image"=>"The avatar must be an image.",
-            "avatar.mimes"=>"The image must be a file of type: png,jpg,jpeg,svg,webp or gif.",
-            "avatar.max"=>"The image must not be greater than 5120 kilobytes.",
-            "captcha_token.required"=>"The captcha token is required",
+            'name.required' => 'The name field is required.',
+            'name.string' => 'The name must be a string.',
+            'name.max' => 'The name must not be greater than 255 characters.',
+            'email.required' => 'The email address field is required.',
+            'email.string' => 'The email address must be a string.',
+            'email.email' => 'The email address must be a valid email address.',
+            'email.max' => 'The email address must not be greater than 255 characters.',
+            'email.unique' => 'The email has already been taken.',
+            'phone.required' => 'The phone field is required.',
+            'phone.string' => 'The phone must be a string.',
+            'uuid.string' => 'The uuid must be a string.',
+            'phone.unique' => 'The phone has already been taken.',
+            'about.string' => 'The about must be a string.',
+            'address.string' => 'The address must be a string.',
+            'gender.in' => 'The selected gender is invalid.',
+            'password.required' => 'The password field is required.',
+            'status.in' => 'The selected status is invalid.',
+            'birthday.date' => 'The birthday is not a valid date.',
+            'role.in' => 'The selected role is invalid.',
+            'avatar.required' => 'The avatar field is required.',
+            'avatar.image' => 'The avatar must be an image.',
+            'avatar.mimes' => 'The image must be a file of type: png,jpg,jpeg,svg,webp or gif.',
+            'avatar.max' => 'The image must not be greater than 5120 kilobytes.',
+            'captcha_token.required' => 'The captcha token is required',
         ];
     }
 }

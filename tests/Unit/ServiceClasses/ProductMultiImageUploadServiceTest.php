@@ -19,11 +19,11 @@ class ProductMultiImageUploadServiceTest extends TestCase
         // Arrange
         Storage::fake();
 
-        $seller = User::factory()->create(["status" => "active", "role" => "seller"]);
+        $seller = User::factory()->create(['status' => 'active', 'role' => 'seller']);
         $category = Category::factory()->create();
         $brand = Brand::factory()->create();
         $collection = Collection::factory()->create();
-        $product =  Product::factory()->create(["seller_id" => $seller->id,"brand_id" => $brand->id,"collection_id" => $collection->id,"category_id" => $category->id]);
+        $product = Product::factory()->create(['seller_id' => $seller->id, 'brand_id' => $brand->id, 'collection_id' => $collection->id, 'category_id' => $category->id]);
         $images = [
             UploadedFile::fake()->image('test-product-image1.jpg'),
             UploadedFile::fake()->image('test-product-image2.jpg'),

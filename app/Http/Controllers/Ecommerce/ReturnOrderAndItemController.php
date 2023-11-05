@@ -11,41 +11,41 @@ class ReturnOrderAndItemController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $allReturnOrders=Order::where("user_id", auth()->id())
-                              ->whereNotNull("return_reason")
-                              ->whereNotNull("return_date")
-                              ->whereNotNull("return_status")
-                              ->orderBy("id", "desc")
+        $allReturnOrders = Order::where('user_id', auth()->id())
+                              ->whereNotNull('return_reason')
+                              ->whereNotNull('return_date')
+                              ->whereNotNull('return_status')
+                              ->orderBy('id', 'desc')
                               ->get();
 
-        $requestedReturnOrders=Order::where("user_id", auth()->id())
-                                    ->whereNotNull("return_reason")
-                                    ->whereNotNull("return_date")
-                                    ->whereReturnStatus("requested")
-                                    ->orderBy("id", "desc")
+        $requestedReturnOrders = Order::where('user_id', auth()->id())
+                                    ->whereNotNull('return_reason')
+                                    ->whereNotNull('return_date')
+                                    ->whereReturnStatus('requested')
+                                    ->orderBy('id', 'desc')
                                     ->get();
 
-        $approvedReturnOrders=Order::where("user_id", auth()->id())
-                                   ->whereNotNull("return_reason")
-                                   ->whereNotNull("return_date")
-                                   ->whereNotNull("return_approved_date")
-                                   ->whereReturnStatus("approved")
-                                   ->orderBy("id", "desc")
+        $approvedReturnOrders = Order::where('user_id', auth()->id())
+                                   ->whereNotNull('return_reason')
+                                   ->whereNotNull('return_date')
+                                   ->whereNotNull('return_approved_date')
+                                   ->whereReturnStatus('approved')
+                                   ->orderBy('id', 'desc')
                                    ->get();
 
-        $refundedReturnOrders=Order::where("user_id", auth()->id())
-                                   ->whereNotNull("return_reason")
-                                   ->whereNotNull("return_date")
-                                   ->whereNotNull("return_refunded_date")
-                                   ->whereReturnStatus("refunded")
-                                   ->orderBy("id", "desc")
+        $refundedReturnOrders = Order::where('user_id', auth()->id())
+                                   ->whereNotNull('return_reason')
+                                   ->whereNotNull('return_date')
+                                   ->whereNotNull('return_refunded_date')
+                                   ->whereReturnStatus('refunded')
+                                   ->orderBy('id', 'desc')
                                    ->get();
 
-        return inertia("User/ReturnOrdersAndItems/Index", compact(
-            "allReturnOrders",
-            "requestedReturnOrders",
-            "approvedReturnOrders",
-            "refundedReturnOrders"
+        return inertia('User/ReturnOrdersAndItems/Index', compact(
+            'allReturnOrders',
+            'requestedReturnOrders',
+            'approvedReturnOrders',
+            'refundedReturnOrders'
         ));
     }
 }

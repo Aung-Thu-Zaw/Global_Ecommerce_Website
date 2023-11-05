@@ -10,14 +10,12 @@ class HandleProductQuantityService
 {
     public function updateQuantity(Order $order): void
     {
-        $orderItems=OrderItem::where("order_id", $order->id)->get();
+        $orderItems = OrderItem::where('order_id', $order->id)->get();
 
         $orderItems->each(function ($orderItem) {
+            $product = Product::findOrFail($orderItem->product_id);
 
-            $product=Product::findOrFail($orderItem->product_id);
-
-            $product->update(["qty"=>$product->qty - $orderItem->qty]);
-
+            $product->update(['qty' => $product->qty - $orderItem->qty]);
         });
     }
 }

@@ -14,7 +14,7 @@ class WebsiteSettingImageUploadServiceTest extends TestCase
         // Arrange
         Storage::fake();
         $existingImageName = 'existing-logo-image.jpg';
-        Storage::put("website-settings/$existingImageName", "dummy");
+        Storage::put("website-settings/$existingImageName", 'dummy');
         $newImage = UploadedFile::fake()->image('new-logo-image.jpg');
 
         // Act
@@ -32,7 +32,7 @@ class WebsiteSettingImageUploadServiceTest extends TestCase
         // Arrange
         Storage::fake();
         $existingImageName = 'existing-favicon-image.jpg';
-        Storage::put("website-settings/$existingImageName", "dummy");
+        Storage::put("website-settings/$existingImageName", 'dummy');
         $newImage = UploadedFile::fake()->image('new-favicon-image.jpg');
 
         // Act

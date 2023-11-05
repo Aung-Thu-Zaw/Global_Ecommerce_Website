@@ -11,25 +11,24 @@ class SliderBannerImageUploadService
     {
         $originalName = $image->getClientOriginalName();
 
-        $finalName = time()."-".$originalName;
+        $finalName = time().'-'.$originalName;
 
-        $image->storeAs("slider-banners", $finalName);
+        $image->storeAs('slider-banners', $finalName);
 
         return $finalName;
     }
 
     public function updateImage(UploadedFile $image, string $sliderBannerImage): string
     {
-        if(is_string($sliderBannerImage)) {
-
+        if (is_string($sliderBannerImage)) {
             SliderBanner::deleteImage($sliderBannerImage);
         }
 
         $originalName = $image->getClientOriginalName();
 
-        $finalName = time()."-".$originalName;
+        $finalName = time().'-'.$originalName;
 
-        $image->storeAs("slider-banners", $finalName);
+        $image->storeAs('slider-banners', $finalName);
 
         return $finalName;
     }

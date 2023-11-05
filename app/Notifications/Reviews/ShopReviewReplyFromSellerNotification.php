@@ -6,9 +6,7 @@ use App\Models\Reply;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class ShopReviewReplyFromSellerNotification extends Notification implements ShouldBroadcast
@@ -37,20 +35,19 @@ class ShopReviewReplyFromSellerNotification extends Notification implements Shou
     }
 
     /**
-    * Get the array representation of the notification.
-    *
-    * @param  mixed  $notifiable
-    * @return array<string|int>
-    */
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array<string|int>
+     */
     public function toArray($notifiable)
     {
         return [
-            "message" => "YOUR_SHOP_REVIEW_HAS_BEEN_REPLIED_TO_BY_THE_SELLER",
-            "reply" => $this->reply->reply_text,
-            "shop" => $this->user->uuid
+            'message' => 'YOUR_SHOP_REVIEW_HAS_BEEN_REPLIED_TO_BY_THE_SELLER',
+            'reply' => $this->reply->reply_text,
+            'shop' => $this->user->uuid,
         ];
     }
-
 
     /**
      * Get the array representation of the notification.
@@ -61,9 +58,9 @@ class ShopReviewReplyFromSellerNotification extends Notification implements Shou
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" => "YOUR_SHOP_REVIEW_HAS_BEEN_REPLIED_TO_BY_THE_SELLER",
-            "reply" => $this->reply->reply_text,
-            "shop" => $this->user->uuid
+            'message' => 'YOUR_SHOP_REVIEW_HAS_BEEN_REPLIED_TO_BY_THE_SELLER',
+            'reply' => $this->reply->reply_text,
+            'shop' => $this->user->uuid,
         ]);
     }
 }

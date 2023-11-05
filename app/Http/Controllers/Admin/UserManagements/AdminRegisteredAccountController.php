@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Admin\UserManagements;
 
+use App\Actions\Admin\UserManagements\PermanentlyDeleteAllTrashUserAction;
 use App\Http\Controllers\Controller;
+use App\Http\Traits\HandlesQueryStringParameters;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
-use App\Models\User;
-use App\Actions\Admin\UserManagements\PermanentlyDeleteAllTrashUserAction;
-use App\Http\Traits\HandlesQueryStringParameters;
 
 class AdminRegisteredAccountController extends Controller
 {
@@ -17,37 +17,37 @@ class AdminRegisteredAccountController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $users = User::filterBy(request(["search","created_from","created_until"]))
-                     ->orderBy(request("sort", "id"), request("direction", "desc"))
-                     ->paginate(request("per_page", 10))
+        $users = User::filterBy(request(['search', 'created_from', 'created_until']))
+                     ->orderBy(request('sort', 'id'), request('direction', 'desc'))
+                     ->paginate(request('per_page', 10))
                      ->withQueryString();
 
-        return inertia("Admin/UserManagements/RegisteredAccounts/Index", compact("users"));
+        return inertia('Admin/UserManagements/RegisteredAccounts/Index', compact('users'));
     }
 
     public function show(Request $request, User $user): Response|ResponseFactory
     {
         $queryStringParams = $this->getQueryStringParams($request);
 
-        return inertia("Admin/UserManagements/RegisteredAccounts/Detail", compact("user", "queryStringParams"));
+        return inertia('Admin/UserManagements/RegisteredAccounts/Detail', compact('user', 'queryStringParams'));
     }
 
     public function destroy(Request $request, User $user): RedirectResponse
     {
         $user->delete();
 
-        return to_route("admin.registered-accounts.index", $this->getQueryStringParams($request))->with("success", "USER_HAS_BEEN_SUCCESSFULLY_DELETED");
+        return to_route('admin.registered-accounts.index', $this->getQueryStringParams($request))->with('success', 'USER_HAS_BEEN_SUCCESSFULLY_DELETED');
     }
 
     public function trash(): Response|ResponseFactory
     {
-        $trashUsers = User::filterBy(request(["search","deleted_from","deleted_until"]))
+        $trashUsers = User::filterBy(request(['search', 'deleted_from', 'deleted_until']))
                           ->onlyTrashed()
-                          ->orderBy(request("sort", "id"), request("direction", "desc"))
-                          ->paginate(request("per_page", 10))
+                          ->orderBy(request('sort', 'id'), request('direction', 'desc'))
+                          ->paginate(request('per_page', 10))
                           ->withQueryString();
 
-        return inertia("Admin/UserManagements/RegisteredAccounts/Trash", compact("trashUsers"));
+        return inertia('Admin/UserManagements/RegisteredAccounts/Trash', compact('trashUsers'));
     }
 
     public function restore(Request $request, int $trashRegisteredAccountId): RedirectResponse
@@ -56,7 +56,7 @@ class AdminRegisteredAccountController extends Controller
 
         $trashRegisteredAccount->restore();
 
-        return to_route('admin.registered-accounts.trash', $this->getQueryStringParams($request))->with("success", "USER_HAS_BEEN_SUCCESSFULLY_RESTORED");
+        return to_route('admin.registered-accounts.trash', $this->getQueryStringParams($request))->with('success', 'USER_HAS_BEEN_SUCCESSFULLY_RESTORED');
     }
 
     public function forceDelete(Request $request, int $trashRegisteredAccountId): RedirectResponse
@@ -67,7 +67,7 @@ class AdminRegisteredAccountController extends Controller
 
         $trashRegisteredAccount->forceDelete();
 
-        return to_route('admin.registered-accounts.trash', $this->getQueryStringParams($request))->with("success", "THE_USER_HAS_BEEN_PERMANENTLY_DELETED");
+        return to_route('admin.registered-accounts.trash', $this->getQueryStringParams($request))->with('success', 'THE_USER_HAS_BEEN_PERMANENTLY_DELETED');
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -76,6 +76,6 @@ class AdminRegisteredAccountController extends Controller
 
         (new PermanentlyDeleteAllTrashUserAction())->handle($trashRegisteredAccounts);
 
-        return to_route('admin.registered-accounts.trash', $this->getQueryStringParams($request))->with("success", "USERS_HAVE_BEEN_PERMANENTLY_DELETED");
+        return to_route('admin.registered-accounts.trash', $this->getQueryStringParams($request))->with('success', 'USERS_HAVE_BEEN_PERMANENTLY_DELETED');
     }
 }

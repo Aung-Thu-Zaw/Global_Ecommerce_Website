@@ -10,6 +10,6 @@ class SellerDashboardController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        return inertia("Seller/Dashboard");
+        return inertia('Seller/Dashboard');
     }
 }

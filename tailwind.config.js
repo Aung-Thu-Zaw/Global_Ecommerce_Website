@@ -14,10 +14,39 @@ module.exports = {
     ],
 
     theme: {
+        // @keyframes bounce {
+        //     0%, 20%, 50%, 80%, 100% {
+        //       transform: translateY(0);
+        //     }
+        //     40% {
+        //       transform: translateY(-15px);
+        //     }
+        //     60% {
+        //       transform: translateY(-10px);
+        //     }
+        //   }
+
         colors: {
             ...colors,
         },
         extend: {
+            keyframes: {
+                press: {
+                    "0%": {
+                        transform: "scale(1)",
+                    },
+                    "50%": {
+                        transform: "scale(0.9)",
+                    },
+                    "100%": {
+                        transform: "scale(1)",
+                    },
+                },
+            },
+            animation: {
+                press: "press 0.2s ease-in-out",
+            },
+
             colors: {
                 brand: "#0EA5E9",
                 dark: "#0F172A",

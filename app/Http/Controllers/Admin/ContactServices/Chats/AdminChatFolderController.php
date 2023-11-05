@@ -13,13 +13,13 @@ class AdminChatFolderController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            "name" => ["required","string"],
-            "captcha_token" => ["required",new RecaptchaRule()],
+            'name' => ['required', 'string'],
+            'captcha_token' => ['required', new RecaptchaRule()],
         ]);
 
         ChatFolder::create([
-            "name" => $request->name,
-            "agent_id" => auth()->id()
+            'name' => $request->name,
+            'agent_id' => auth()->id(),
         ]);
 
         return back();

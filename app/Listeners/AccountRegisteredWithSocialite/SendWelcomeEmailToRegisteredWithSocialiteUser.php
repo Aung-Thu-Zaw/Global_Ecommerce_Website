@@ -3,8 +3,6 @@
 namespace App\Listeners\AccountRegisteredWithSocialite;
 
 use App\Mail\ForTheRegisteredUser\RegisteredUserWelcomeMail;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
 
 class SendWelcomeEmailToRegisteredWithSocialiteUser
@@ -27,9 +25,8 @@ class SendWelcomeEmailToRegisteredWithSocialiteUser
      */
     public function handle($event)
     {
-        $user=$event->user ?? null;
+        $user = $event->user ?? null;
 
         Mail::to($user->email)->queue(new RegisteredUserWelcomeMail($user));
-
     }
 }

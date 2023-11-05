@@ -18,24 +18,23 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'uuid'=>fake()->uuid(),
+            'uuid' => fake()->uuid(),
             'avatar' => fake()->imageUrl(),
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'phone'=>fake()->unique()->phoneNumber(),
-            'address'=>fake()->address(),
-            'status'=>fake()->randomElement(["active","inactive"]),
-            'gender'=>fake()->randomElement(["male","female"]),
-            'role'=>fake()->randomElement(["user","seller"]),
-            'shop_name'=>fake()->jobTitle(),
+            'phone' => fake()->unique()->phoneNumber(),
+            'address' => fake()->address(),
+            'status' => fake()->randomElement(['active', 'inactive']),
+            'gender' => fake()->randomElement(['male', 'female']),
+            'role' => fake()->randomElement(['user', 'seller']),
+            'shop_name' => fake()->jobTitle(),
             'email_verified_at' => now(),
-            'password' => bcrypt("Password!"),
+            'password' => bcrypt('Password!'),
             'remember_token' => Str::random(10),
-            "created_at"=>fake()->dateTimeBetween("-9 months", now()),
-            "shop_name"=>fake()->sentence(),
-            "company_name"=>fake()->sentence(),
+            'created_at' => fake()->dateTimeBetween('-9 months', now()),
+            'shop_name' => fake()->sentence(),
+            'company_name' => fake()->sentence(),
         ];
-
     }
 
     /**

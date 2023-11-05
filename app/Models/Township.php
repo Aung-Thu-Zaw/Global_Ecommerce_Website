@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use App\Models\Scopes\FilteredByDateScope;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Dyrynda\Database\Support\CascadeSoftDeletes;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use Laravel\Scout\Searchable;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
@@ -22,10 +22,9 @@ class Township extends Model
     use HasSlug;
 
     /**
-    * @var string[]
-    */
+     * @var string[]
+     */
     protected $guarded = [];
-
 
     public function getSlugOptions(): SlugOptions
     {
@@ -40,8 +39,8 @@ class Township extends Model
     }
 
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     public function toSearchableArray(): array
     {
         return [
@@ -61,28 +60,28 @@ class Township extends Model
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Township, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Township, never>
+     */
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date('j-F-Y', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Township, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Township, never>
+     */
     protected function deletedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date('j-F-Y', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<City,Township>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<City,Township>
+     */
     public function city(): BelongsTo
     {
         return $this->belongsTo(City::class);

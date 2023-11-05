@@ -8,16 +8,16 @@ use App\Services\UploadFiles\CampaignBannerImageUploadService;
 class UpdateCampaignBannerAction
 {
     /**
-     * @param array<mixed> $data
+     * @param  array<mixed>  $data
      */
     public function handle(array $data, CampaignBanner $campaignBanner): void
     {
-        $image = isset($data["image"]) ? (new CampaignBannerImageUploadService())->updateImage($data["image"], $campaignBanner->image) : $campaignBanner->image;
+        $image = isset($data['image']) ? (new CampaignBannerImageUploadService())->updateImage($data['image'], $campaignBanner->image) : $campaignBanner->image;
 
         $campaignBanner->update([
-            "url"=>$data["url"],
-            "status"=>$data["status"],
-            "image"=>$image
+            'url' => $data['url'],
+            'status' => $data['status'],
+            'image' => $image,
         ]);
     }
 }

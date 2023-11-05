@@ -20,14 +20,12 @@ class PasswordController extends Controller
             'password' => ['required', Password::defaults(), 'confirmed'],
         ]);
 
-        if($request->user()) {
-
+        if ($request->user()) {
             $request->user()->update([
                 'password' => Hash::make($validated['password']),
             ]);
-
         }
 
-        return to_route('my-account.edit', 'tab=change-password')->with("success", "PASSWORD_UPDATED_SUCCESSFULLY");
+        return to_route('my-account.edit', 'tab=change-password')->with('success', 'PASSWORD_UPDATED_SUCCESSFULLY');
     }
 }

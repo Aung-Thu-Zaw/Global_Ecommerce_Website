@@ -4,7 +4,7 @@ import ProductQuestionAnswerCard from "@/Components/Cards/Products/ProductQuesti
 import ProductQuestionCreateForm from "@/Components/Forms/Products/ProductQuestionCreateForm.vue";
 import { useForm, usePage, Link } from "@inertiajs/vue3";
 import { useReCaptcha } from "vue-recaptcha-v3";
-import Pagination from "@/Components/Paginations/Pagination.vue";
+import Pagination from "@/Components/Paginations/DashboardPagination.vue";
 
 const props = defineProps({
   product: Object,

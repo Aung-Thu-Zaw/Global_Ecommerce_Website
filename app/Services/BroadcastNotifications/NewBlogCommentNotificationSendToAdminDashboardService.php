@@ -14,7 +14,7 @@ class NewBlogCommentNotificationSendToAdminDashboardService
     {
         $blogPost = BlogPost::findOrFail($blogComment->blog_post_id);
 
-        $admins = User::where("role", "admin")->get();
+        $admins = User::where('role', 'admin')->get();
 
         Notification::send($admins, new NewBlogCommentFromUserNotification($blogPost, $blogComment));
     }

@@ -23,7 +23,6 @@ class PermanentlyAutoDeleteWebsiteFeedbackCommand extends Command
      */
     protected $description = 'Website Feedbacks in the trash will be automatically deleted after 60 days';
 
-
     public function handle(): void
     {
         $cutoffDate = Carbon::now()->subDays(60);

@@ -11,7 +11,7 @@ class SellerCreatesANewProductNotificationSendToAdminDashboardService
 {
     public function send(Product $product): void
     {
-        $admins = User::where("role", "admin")->get();
+        $admins = User::where('role', 'admin')->get();
 
         Notification::send($admins, new SellerCreateNewProductNotification($product));
     }

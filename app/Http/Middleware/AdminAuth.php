@@ -16,8 +16,7 @@ class AdminAuth
      */
     public function handle(Request $request, Closure $next)
     {
-
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return redirect()->route('admin.login');
         }
 

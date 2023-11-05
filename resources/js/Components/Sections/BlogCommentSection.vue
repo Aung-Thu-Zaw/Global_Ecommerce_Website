@@ -2,7 +2,7 @@
 import BlogCommentCard from "@/Components/Cards/Blogs/BlogCommentCard.vue";
 import BlogReplyCard from "@/Components/Cards/Blogs/BlogReplyCard.vue";
 import BlogCommentCreateForm from "@/Components/Forms/Blogs/BlogCommentCreateForm.vue";
-import Pagination from "@/Components/Paginations/Pagination.vue";
+import Pagination from "@/Components/Paginations/DashboardPagination.vue";
 import { Link } from "@inertiajs/vue3";
 
 const props = defineProps({

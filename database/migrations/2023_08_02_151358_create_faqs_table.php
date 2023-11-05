@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class () extends Migration {
+return new class() extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -14,10 +15,10 @@ return new class () extends Migration {
     {
         Schema::create('faqs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("faq_sub_category_id")->constrained()->cascadeOnDelete();
-            $table->string("question");
-            $table->string("slug");
-            $table->text("answer");
+            $table->foreignId('faq_sub_category_id')->constrained()->cascadeOnDelete();
+            $table->string('question');
+            $table->string('slug');
+            $table->text('answer');
             $table->integer('helpful')->default(0);
             $table->integer('unhelpful')->default(0);
             $table->timestamps();

@@ -17,11 +17,11 @@ class ShopReview extends Model
     use SoftDeletes;
     use Searchable;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     public function toSearchableArray(): array
     {
         return [
@@ -40,54 +40,54 @@ class ShopReview extends Model
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductReview, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductReview, never>
+     */
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j/F/Y ( h:i A )", strtotime($value)),
+            get: fn ($value) => date('j/F/Y ( h:i A )', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<ShopReview, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<ShopReview, never>
+     */
     protected function updatedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j/F/Y ( h:i A )", strtotime($value)),
+            get: fn ($value) => date('j/F/Y ( h:i A )', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<ShopReview, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<ShopReview, never>
+     */
     protected function deletedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j/F/Y ( h:i A )", strtotime($value)),
+            get: fn ($value) => date('j/F/Y ( h:i A )', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,ShopReview>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,ShopReview>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,ShopReview>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,ShopReview>
+     */
     public function shop(): BelongsTo
     {
-        return $this->belongsTo(User::class, "shop_id");
+        return $this->belongsTo(User::class, 'shop_id');
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasOne<Reply>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne<Reply>
+     */
     public function reply(): HasOne
     {
         return $this->hasOne(Reply::class);

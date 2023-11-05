@@ -25,7 +25,7 @@ class SendConfirmOfAccountDeletionEmailToUser
      */
     public function handle($event)
     {
-        $user=$event->user ?? null;
+        $user = $event->user ?? null;
 
         Mail::to($user->email)->queue(new ConfirmOfAccountDeletionMail($user));
     }

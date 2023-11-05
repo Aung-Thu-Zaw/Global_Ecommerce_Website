@@ -25,24 +25,23 @@ class ConversationRequest extends FormRequest
     public function rules()
     {
         return [
-            "customer_id"=>["required","numeric",Rule::exists("users", "id")],
-            "vendor_id"=>["required","numeric",Rule::exists("users", "id")]
+            'customer_id' => ['required', 'numeric', Rule::exists('users', 'id')],
+            'vendor_id' => ['required', 'numeric', Rule::exists('users', 'id')],
         ];
     }
 
-
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     public function messages(): array
     {
         return [
-            "customer_id.required" =>  "The customer id is required.",
-            "customer_id.numeric" =>  "The customer id must be a number.",
-            "customer_id.exists" =>  "The selected customer id is invalid.",
-            "vendor_id.required" =>  "The vendor id is required.",
-            "vendor_id.numeric" =>  "The vendor id must be a number.",
-            "vendor_id.exists" =>  "The selected vendor id is invalid.",
+            'customer_id.required' => 'The customer id is required.',
+            'customer_id.numeric' => 'The customer id must be a number.',
+            'customer_id.exists' => 'The selected customer id is invalid.',
+            'vendor_id.required' => 'The vendor id is required.',
+            'vendor_id.numeric' => 'The vendor id must be a number.',
+            'vendor_id.exists' => 'The selected vendor id is invalid.',
         ];
     }
 }

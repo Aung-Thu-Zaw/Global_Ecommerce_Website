@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class () extends Migration {
+return new class() extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -14,9 +15,9 @@ return new class () extends Migration {
     {
         Schema::create('social_traffic', function (Blueprint $table) {
             $table->id();
-            $table->string("social_name");
-            $table->integer("actual_visitors")->default(0);
-            $table->integer("target_visitors")->default(0);
+            $table->string('social_name');
+            $table->integer('actual_visitors')->default(0);
+            $table->integer('target_visitors')->default(0);
             $table->timestamps();
         });
     }

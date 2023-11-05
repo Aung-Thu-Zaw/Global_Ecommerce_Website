@@ -1,0 +1,39 @@
+<script setup>
+import { Link } from "@inertiajs/vue3";
+
+defineProps({
+  to: String,
+
+  label: {
+    type: String,
+    required: true,
+  },
+
+  icon: {
+    type: String,
+    default: "fa-home",
+  },
+});
+</script>
+
+<template>
+  <nav
+    class="flex mb-5 md:mb-0 overflow-x-auto max-w-[350px] md:max-w-[600px] px-10 md:px-0"
+    aria-label="Breadcrumb"
+  >
+    <ol class="inline-flex items-center space-x-1 md:space-x-3">
+      <li class="inline-flex items-center">
+        <Link
+          :href="route(to)"
+          class="inline-flex items-center text-sm font-bold text-blueGray-600 hover:text-blue-600"
+        >
+          <span class="mr-2.5">
+            <i class="fa-solid" :class="icon"></i>
+          </span>
+          {{ label }}
+        </Link>
+      </li>
+      <slot />
+    </ol>
+  </nav>
+</template>

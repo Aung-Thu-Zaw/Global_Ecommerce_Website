@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\ReadNotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Services\ReadNotificationService;
 
 class AdminDashboardNotificationController extends Controller
 {
@@ -19,7 +19,7 @@ class AdminDashboardNotificationController extends Controller
     public function markAllAsRead(Request $request): RedirectResponse
     {
         $request->validate([
-            "notifications" => ["required", "array"]
+            'notifications' => ['required', 'array'],
         ]);
 
         (new ReadNotificationService())->readAll($request->notifications);

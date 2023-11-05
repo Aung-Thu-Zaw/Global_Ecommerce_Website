@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Actions\Admin\FromTheSubmitters\Suggestions\PermanentlyDeleteAllTrashSuggestionsAction;
-use App\Models\Image;
 use App\Models\Suggestion;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -23,7 +22,6 @@ class PermanentlyAutoDeleteSuggestionCommand extends Command
      * @var string
      */
     protected $description = 'Suggestions in the trash will be automatically deleted after 60 days';
-
 
     public function handle(): void
     {

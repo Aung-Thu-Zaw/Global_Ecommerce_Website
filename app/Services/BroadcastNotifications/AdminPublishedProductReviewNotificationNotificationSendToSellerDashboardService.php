@@ -2,8 +2,8 @@
 
 namespace App\Services\BroadcastNotifications;
 
-use App\Models\ProductReview;
 use App\Models\Product;
+use App\Models\ProductReview;
 use App\Models\User;
 use App\Notifications\Reviews\AdminPublishedProductReviewNotification;
 

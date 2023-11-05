@@ -21,8 +21,8 @@ class ProductReview extends Model
     protected $guarded = [];
 
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     public function toSearchableArray(): array
     {
         return [
@@ -41,62 +41,62 @@ class ProductReview extends Model
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductReview, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductReview, never>
+     */
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j/F/Y ( h:i A )", strtotime($value)),
+            get: fn ($value) => date('j/F/Y ( h:i A )', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductReview, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductReview, never>
+     */
     protected function updatedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j/F/Y ( h:i A )", strtotime($value)),
+            get: fn ($value) => date('j/F/Y ( h:i A )', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductReview, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductReview, never>
+     */
     protected function deletedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j/F/Y ( h:i A )", strtotime($value)),
+            get: fn ($value) => date('j/F/Y ( h:i A )', strtotime($value)),
         );
     }
+
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasMany<Image>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Image>
+     */
     public function images(): HasMany
     {
         return $this->hasMany(Image::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,ProductReview>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,ProductReview>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasOne<Reply>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne<Reply>
+     */
     public function reply(): HasOne
     {
         return $this->hasOne(Reply::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Product,ProductReview>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Product,ProductReview>
+     */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);

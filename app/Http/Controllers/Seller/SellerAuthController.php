@@ -17,7 +17,7 @@ class SellerAuthController extends Controller
     public function login(): Response|ResponseFactory
     {
         return inertia('Seller/Auth/Login', [
-            'canResetPassword' => Route::has("password.request"),
+            'canResetPassword' => Route::has('password.request'),
             'status' => session('status'),
         ]);
     }

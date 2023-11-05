@@ -14,8 +14,8 @@ class Color extends Model
     protected $guarded = [];
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Color, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Color, never>
+     */
     protected function name(): Attribute
     {
         return Attribute::make(
@@ -24,10 +24,10 @@ class Color extends Model
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Product>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Product>
+     */
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class, "product_color");
+        return $this->belongsToMany(Product::class, 'product_color');
     }
 }

@@ -17,9 +17,9 @@ class BlogCommentReplyFactory extends Factory
     public function definition()
     {
         return [
-            "blog_comment_id" => fake()->numberBetween(1, 100),
-            "author_id" => 1,
-            "reply_text" => fake()->paragraph()
+            'blog_comment_id' => fake()->numberBetween(1, 100),
+            'author_id' => 1,
+            'reply_text' => fake()->paragraph(),
         ];
     }
 }

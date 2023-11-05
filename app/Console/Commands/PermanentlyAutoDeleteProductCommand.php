@@ -23,12 +23,11 @@ class PermanentlyAutoDeleteProductCommand extends Command
      */
     protected $description = 'Products in the trash will be automatically deleted after 60 days';
 
-
     public function handle(): void
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $products=Product::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
+        $products = Product::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
         (new PermanentlyDeleteAllTrashProductAction())->handle($products);
     }

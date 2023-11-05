@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Admin\UserManagements;
 
-use App\Http\Controllers\Controller;
-use Inertia\Response;
-use Inertia\ResponseFactory;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use App\Http\Requests\AdminManageRequest;
-use App\Models\User;
-use Spatie\Permission\Models\Role;
 use App\Actions\Admin\UserManagements\AdminManage\CreateAdminAction;
 use App\Actions\Admin\UserManagements\AdminManage\UpdateAdminAction;
 use App\Actions\Admin\UserManagements\PermanentlyDeleteAllTrashUserAction;
-use App\Services\AdminManage\AdminAssignRoleService;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminManageRequest;
 use App\Http\Traits\HandlesQueryStringParameters;
+use App\Models\User;
+use App\Services\AdminManage\AdminAssignRoleService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Inertia\Response;
+use Inertia\ResponseFactory;
+use Spatie\Permission\Models\Role;
 
 class AdminManageController extends Controller
 {
@@ -22,33 +22,33 @@ class AdminManageController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $admins = User::with("roles")
-                      ->filterBy(request(["search","created_from","created_until"]))
-                      ->where("role", "admin")
-                      ->where("status", "active")
-                      ->orderBy(request("sort", "id"), request("direction", "desc"))
-                      ->paginate(request("per_page", 10))
+        $admins = User::with('roles')
+                      ->filterBy(request(['search', 'created_from', 'created_until']))
+                      ->where('role', 'admin')
+                      ->where('status', 'active')
+                      ->orderBy(request('sort', 'id'), request('direction', 'desc'))
+                      ->paginate(request('per_page', 10))
                       ->withQueryString();
 
-        return inertia("Admin/UserManagements/AdminManage/Index", compact("admins"));
+        return inertia('Admin/UserManagements/AdminManage/Index', compact('admins'));
     }
 
     public function show(Request $request, User $user): Response|ResponseFactory
     {
         $queryStringParams = $this->getQueryStringParams($request);
 
-        $user->load("roles");
+        $user->load('roles');
 
-        return inertia("Admin/UserManagements/AdminManage/Detail", compact("user", "queryStringParams"));
+        return inertia('Admin/UserManagements/AdminManage/Detail', compact('user', 'queryStringParams'));
     }
 
     public function create(): Response|ResponseFactory
     {
-        $per_page = request("per_page");
+        $per_page = request('per_page');
 
         $roles = Role::all();
 
-        return inertia("Admin/UserManagements/AdminManage/Create", compact("per_page", "roles"));
+        return inertia('Admin/UserManagements/AdminManage/Create', compact('per_page', 'roles'));
     }
 
     public function store(AdminManageRequest $request, AdminAssignRoleService $adminAssignRoleService): RedirectResponse
@@ -57,18 +57,18 @@ class AdminManageController extends Controller
 
         $adminAssignRoleService->assign($admin, $request->assign_role);
 
-        return to_route("admin.admin-manage.index", $this->getQueryStringParams($request))->with("success", "ADMIN_HAS_BEEN_SUCCESSFULLY_CREATED");
+        return to_route('admin.admin-manage.index', $this->getQueryStringParams($request))->with('success', 'ADMIN_HAS_BEEN_SUCCESSFULLY_CREATED');
     }
 
     public function edit(Request $request, User $user): Response|ResponseFactory
     {
         $roles = Role::all();
 
-        $user->load("roles");
+        $user->load('roles');
 
         $queryStringParams = $this->getQueryStringParams($request);
 
-        return inertia("Admin/UserManagements/AdminManage/Edit", compact("user", "roles", "queryStringParams"));
+        return inertia('Admin/UserManagements/AdminManage/Edit', compact('user', 'roles', 'queryStringParams'));
     }
 
     public function update(AdminManageRequest $request, User $user, AdminAssignRoleService $adminAssignRoleService): RedirectResponse
@@ -77,26 +77,26 @@ class AdminManageController extends Controller
 
         $adminAssignRoleService->updateAssign($admin, $request->assign_role);
 
-        return to_route("admin.admin-manage.index", $this->getQueryStringParams($request))->with("success", "ADMIN_HAS_BEEN_SUCCESSFULLY_UPDATED");
+        return to_route('admin.admin-manage.index', $this->getQueryStringParams($request))->with('success', 'ADMIN_HAS_BEEN_SUCCESSFULLY_UPDATED');
     }
 
     public function destroy(Request $request, User $user): RedirectResponse
     {
         $user->delete();
 
-        return to_route("admin.admin-manage.index", $this->getQueryStringParams($request))->with("success", "ADMIN_HAS_BEEN_SUCCESSFULLY_DELETED");
+        return to_route('admin.admin-manage.index', $this->getQueryStringParams($request))->with('success', 'ADMIN_HAS_BEEN_SUCCESSFULLY_DELETED');
     }
 
     public function trash(): Response|ResponseFactory
     {
-        $trashAdmins = User::with("roles")
-                           ->filterBy(request(["search","deleted_from","deleted_until"]))
+        $trashAdmins = User::with('roles')
+                           ->filterBy(request(['search', 'deleted_from', 'deleted_until']))
                            ->onlyTrashed()
-                           ->orderBy(request("sort", "id"), request("direction", "desc"))
-                           ->paginate(request("per_page", 10))
+                           ->orderBy(request('sort', 'id'), request('direction', 'desc'))
+                           ->paginate(request('per_page', 10))
                            ->withQueryString();
 
-        return inertia("Admin/UserManagements/AdminManage/Trash", compact("trashAdmins"));
+        return inertia('Admin/UserManagements/AdminManage/Trash', compact('trashAdmins'));
     }
 
     public function restore(Request $request, int $trashAdminId): RedirectResponse
@@ -105,7 +105,7 @@ class AdminManageController extends Controller
 
         $trashAdmin->restore();
 
-        return to_route('admin.admin-manage.trash', $this->getQueryStringParams($request))->with("success", "ADMIN_HAS_BEEN_SUCCESSFULLY_RESTORED");
+        return to_route('admin.admin-manage.trash', $this->getQueryStringParams($request))->with('success', 'ADMIN_HAS_BEEN_SUCCESSFULLY_RESTORED');
     }
 
     public function forceDelete(Request $request, int $trashAdminId): RedirectResponse
@@ -116,7 +116,7 @@ class AdminManageController extends Controller
 
         $trashAdmin->forceDelete();
 
-        return to_route('admin.admin-manage.trash', $this->getQueryStringParams($request))->with("success", "THE_ADMIN_HAS_BEEN_PERMANENTLY_DELETED");
+        return to_route('admin.admin-manage.trash', $this->getQueryStringParams($request))->with('success', 'THE_ADMIN_HAS_BEEN_PERMANENTLY_DELETED');
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -125,6 +125,6 @@ class AdminManageController extends Controller
 
         (new PermanentlyDeleteAllTrashUserAction())->handle($trashAdmins);
 
-        return to_route('admin.admin-manage.trash', $this->getQueryStringParams($request))->with("success", "ADMINS_HAVE_BEEN_PERMANENTLY_DELETED");
+        return to_route('admin.admin-manage.trash', $this->getQueryStringParams($request))->with('success', 'ADMINS_HAVE_BEEN_PERMANENTLY_DELETED');
     }
 }

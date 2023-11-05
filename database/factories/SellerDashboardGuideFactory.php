@@ -17,8 +17,8 @@ class SellerDashboardGuideFactory extends Factory
     public function definition()
     {
         return [
-            "title"=>fake()->title(),
-            "description"=>fake()->paragraph(10)
+            'title' => fake()->title(),
+            'description' => fake()->paragraph(10),
         ];
     }
 }

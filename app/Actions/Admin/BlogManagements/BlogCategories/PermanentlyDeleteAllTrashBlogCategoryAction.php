@@ -8,17 +8,14 @@ use Illuminate\Support\Collection;
 class PermanentlyDeleteAllTrashBlogCategoryAction
 {
     /**
-    * @param Collection<int,BlogCategory> $blogCategories
-    */
-
+     * @param  Collection<int,BlogCategory>  $blogCategories
+     */
     public function handle(Collection $blogCategories): void
     {
         $blogCategories->each(function ($blogCategory) {
-
             BlogCategory::deleteImage($blogCategory->image);
 
             $blogCategory->forceDelete();
-
         });
     }
 }

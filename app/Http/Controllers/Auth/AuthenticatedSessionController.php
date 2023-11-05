@@ -30,12 +30,12 @@ class AuthenticatedSessionController extends Controller
 
         $user = User::findOrFail(auth()->id());
 
-        return redirect()->route($user->getRedirectRouteName())->with("success", "Welcome Back " . $user->name . " 😍");
+        return redirect()->route($user->getRedirectRouteName())->with('success', 'Welcome Back '.$user->name.' 😍');
     }
 
     public function destroy(Request $request): RedirectResponse
     {
-        $user=User::findOrFail(auth()->id());
+        $user = User::findOrFail(auth()->id());
 
         Auth::guard('web')->logout();
 
@@ -43,6 +43,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return to_route($user->logoutRedirect())->with("success", 'See you later '.$user->name .' 🤗');
+        return to_route($user->logoutRedirect())->with('success', 'See you later '.$user->name.' 🤗');
     }
 }

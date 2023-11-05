@@ -21,7 +21,7 @@ class OrderFactory extends Factory
             'total_amount' => fake()->numberBetween(100, 999),
             'invoice_no' => fake()->randomLetter(),
             'order_date' => now(),
-            'order_status' => "processing",
+            'order_status' => 'processing',
         ];
     }
 }

@@ -24,19 +24,19 @@ class ReturnOrCancelOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            "return_reason"=>["nullable","string"],
-            "cancel_reason"=>["nullable","string"],
+            'return_reason' => ['nullable', 'string'],
+            'cancel_reason' => ['nullable', 'string'],
         ];
     }
 
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     public function messages(): array
     {
         return [
-            "return_reason.string" => "The return reason must be a string.",
-            "cancel_reason.string" => "The cancel reason must be a string.",
+            'return_reason.string' => 'The return reason must be a string.',
+            'cancel_reason.string' => 'The cancel reason must be a string.',
         ];
     }
 }

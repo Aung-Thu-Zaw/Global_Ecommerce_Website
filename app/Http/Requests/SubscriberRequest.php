@@ -26,23 +26,22 @@ class SubscriberRequest extends FormRequest
     public function rules()
     {
         return [
-            "email"=>["required","email","string",Rule::unique("subscribers", "email")],
-            "captcha_token"  => ["required",new RecaptchaRule()],
+            'email' => ['required', 'email', 'string', Rule::unique('subscribers', 'email')],
+            'captcha_token' => ['required', new RecaptchaRule()],
         ];
     }
 
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     public function messages(): array
     {
         return [
-            "email.required" => "The email address field is required.",
-            "email.string" => "The email address must be a string.",
-            "email.email" =>  "The email address must be a valid email address.",
-            "email.unique"=>"The email has already been subscribed.",
-            "captcha_token.required"=>"The captcha token is required",
+            'email.required' => 'The email address field is required.',
+            'email.string' => 'The email address must be a string.',
+            'email.email' => 'The email address must be a valid email address.',
+            'email.unique' => 'The email has already been subscribed.',
+            'captcha_token.required' => 'The captcha token is required',
         ];
     }
-
 }

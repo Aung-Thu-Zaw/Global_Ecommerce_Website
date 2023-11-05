@@ -10,6 +10,6 @@ class AboutUsController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        return inertia("Ecommerce/WebsitePages/AboutUs/Index");
+        return inertia('Ecommerce/WebsitePages/AboutUs/Index');
     }
 }

@@ -23,12 +23,11 @@ class PermanentlyAutoDeleteProductBannerCommand extends Command
      */
     protected $description = 'Product Banners in the trash will be automatically deleted after 60 days';
 
-
     public function handle(): void
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $productBanners=ProductBanner::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
+        $productBanners = ProductBanner::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
         (new PermanentlyDeleteAllTrashProductBannerAction())->handle($productBanners);
     }

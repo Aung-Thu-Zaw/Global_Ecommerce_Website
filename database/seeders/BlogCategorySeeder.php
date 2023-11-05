@@ -15,44 +15,44 @@ class BlogCategorySeeder extends Seeder
     public function run()
     {
         BlogCategory::factory()->create([
-            "name"=>"Fashion",
-            "slug"=>"fashion",
-            "image"=>"fashion.webp",
+            'name' => 'Fashion',
+            'slug' => 'fashion',
+            'image' => 'fashion.webp',
         ]);
         BlogCategory::factory()->create([
-            "name"=>"Foods",
-            "slug"=>"foods",
-            "image"=>"food.jpg",
+            'name' => 'Foods',
+            'slug' => 'foods',
+            'image' => 'food.jpg',
         ]);
         BlogCategory::factory()->create([
-            "name"=>"Lifestyle",
-            "slug"=>"lifestyle",
-            "image"=>"lifestyle.jpg",
+            'name' => 'Lifestyle',
+            'slug' => 'lifestyle',
+            'image' => 'lifestyle.jpg',
         ]);
         BlogCategory::factory()->create([
-            "name"=>"Sports",
-            "slug"=>"sports",
-            "image"=>"sports.jpg",
+            'name' => 'Sports',
+            'slug' => 'sports',
+            'image' => 'sports.jpg',
         ]);
         BlogCategory::factory()->create([
-            "name"=>"Technology",
-            "slug"=>"technology",
-            "image"=>"technology.jpg",
+            'name' => 'Technology',
+            'slug' => 'technology',
+            'image' => 'technology.jpg',
         ]);
         BlogCategory::factory()->create([
-            "name"=>"Travel",
-            "slug"=>"travel",
-            "image"=>"travel.jpg",
+            'name' => 'Travel',
+            'slug' => 'travel',
+            'image' => 'travel.jpg',
         ]);
         BlogCategory::factory()->create([
-            "name"=>"Beauty & Health",
-            "slug"=>"beauty-and-health",
-            "image"=>"beauty-and-health.webp",
+            'name' => 'Beauty & Health',
+            'slug' => 'beauty-and-health',
+            'image' => 'beauty-and-health.webp',
         ]);
         BlogCategory::factory()->create([
-            "name"=>"Home Improvement",
-            "slug"=>"home-improvement",
-            "image"=>"home-improvement.jpg",
+            'name' => 'Home Improvement',
+            'slug' => 'home-improvement',
+            'image' => 'home-improvement.jpg',
         ]);
     }
 }

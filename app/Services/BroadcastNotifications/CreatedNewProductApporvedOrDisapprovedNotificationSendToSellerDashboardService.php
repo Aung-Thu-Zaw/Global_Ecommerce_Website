@@ -11,9 +11,9 @@ class CreatedNewProductApporvedOrDisapprovedNotificationSendToSellerDashboardSer
 {
     public function send(Product $product): void
     {
-        $seller=User::findOrFail($product->seller_id);
+        $seller = User::findOrFail($product->seller_id);
 
-        $product->status==="approved" ? $seller->notify(new AdminApprovedCreatedNewProductNotification($product)) :
+        $product->status === 'approved' ? $seller->notify(new AdminApprovedCreatedNewProductNotification($product)) :
                                         $seller->notify(new AdminDisapprovedCreatedNewProductNotification($product));
     }
 }

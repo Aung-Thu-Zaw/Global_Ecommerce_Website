@@ -22,7 +22,7 @@ class ProductAnswerController extends Controller
 
     public function update(ProductAnswerRequest $request, ProductAnswer $productAnswer): RedirectResponse
     {
-        $productAnswer->update(["answer_text" => $request->answer_text]);
+        $productAnswer->update(['answer_text' => $request->answer_text]);
 
         return back();
     }

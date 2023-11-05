@@ -3,10 +3,9 @@
 namespace App\Listeners\AccountDeleted;
 
 use App\Models\User;
-use App\Notifications\AccountDeleted\UserAccountDeletedEmailNotification;
 use App\Notifications\AccountDeleted\SellerAccountDeletedEmailNotification;
+use App\Notifications\AccountDeleted\UserAccountDeletedEmailNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Notification;
 
 class SendUserAccountDeletedEmailNotificationToAdmin implements ShouldQueue
@@ -31,9 +30,9 @@ class SendUserAccountDeletedEmailNotificationToAdmin implements ShouldQueue
     {
         $user = $event->user ?? null;
 
-        $admins = User::where("role", "admin")->get();
+        $admins = User::where('role', 'admin')->get();
 
-        $user->role === "seller" ?
+        $user->role === 'seller' ?
         Notification::send($admins, new SellerAccountDeletedEmailNotification($user)) :
         Notification::send($admins, new UserAccountDeletedEmailNotification($user));
     }

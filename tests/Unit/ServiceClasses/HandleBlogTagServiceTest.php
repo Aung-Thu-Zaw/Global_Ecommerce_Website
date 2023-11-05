@@ -14,22 +14,24 @@ class HandleBlogTagServiceTest extends TestCase
     use RefreshDatabase;
 
     private User $author;
+
     private BlogCategory $blogCategory;
+
     private BlogPost $blogPost;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->author = User::factory()->create(["status" => "active", "role" => "admin"]);
+        $this->author = User::factory()->create(['status' => 'active', 'role' => 'admin']);
         $this->blogCategory = BlogCategory::factory()->create();
-        $this->blogPost = BlogPost::factory()->create(["author_id" => $this->author->id,"blog_category_id" => $this->blogCategory->id]);
+        $this->blogPost = BlogPost::factory()->create(['author_id' => $this->author->id, 'blog_category_id' => $this->blogCategory->id]);
     }
 
     public function test_it_can_handle_tags(): void
     {
         // Arrange
-        $tags = ['life','sports','travel','advanture'];
+        $tags = ['life', 'sports', 'travel', 'advanture'];
 
         // Act
         $service = new HandleBlogTagService();
@@ -45,7 +47,7 @@ class HandleBlogTagServiceTest extends TestCase
     public function test_it_does_not_duplicate_existing_tags(): void
     {
         // Arrange
-        $tags = ['life','sports','SPorts','travel','advanture'];
+        $tags = ['life', 'sports', 'SPorts', 'travel', 'advanture'];
 
         // Act
         $service = new HandleBlogTagService();
@@ -54,5 +56,4 @@ class HandleBlogTagServiceTest extends TestCase
         // Assert
         $this->assertCount(4, $this->blogPost->blogTags);
     }
-
 }

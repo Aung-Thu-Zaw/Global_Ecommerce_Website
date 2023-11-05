@@ -11,25 +11,24 @@ class BrandImageUploadService
     {
         $originalName = $image->getClientOriginalName();
 
-        $finalName = time()."-".$originalName;
+        $finalName = time().'-'.$originalName;
 
-        $image->storeAs("brands", $finalName);
+        $image->storeAs('brands', $finalName);
 
         return $finalName;
     }
 
     public function updateImage(UploadedFile $image, string $brandImage): string
     {
-        if(is_string($brandImage)) {
-
+        if (is_string($brandImage)) {
             Brand::deleteImage($brandImage);
         }
 
         $originalName = $image->getClientOriginalName();
 
-        $finalName = time()."-".$originalName;
+        $finalName = time().'-'.$originalName;
 
-        $image->storeAs("brands", $finalName);
+        $image->storeAs('brands', $finalName);
 
         return $finalName;
     }

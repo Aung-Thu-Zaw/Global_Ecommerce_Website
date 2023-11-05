@@ -11,25 +11,24 @@ class BlogCategoryImageUploadService
     {
         $originalName = $image->getClientOriginalName();
 
-        $finalName = time()."-".$originalName;
+        $finalName = time().'-'.$originalName;
 
-        $image->storeAs("blog-categories", $finalName);
+        $image->storeAs('blog-categories', $finalName);
 
         return $finalName;
     }
 
     public function updateImage(UploadedFile $image, string|null $blogCategoryImage): string
     {
-        if(is_string($blogCategoryImage)) {
-
+        if (is_string($blogCategoryImage)) {
             BlogCategory::deleteImage($blogCategoryImage);
         }
 
         $originalName = $image->getClientOriginalName();
 
-        $finalName = time()."-".$originalName;
+        $finalName = time().'-'.$originalName;
 
-        $image->storeAs("blog-categories", $finalName);
+        $image->storeAs('blog-categories', $finalName);
 
         return $finalName;
     }

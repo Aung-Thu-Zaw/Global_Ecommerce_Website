@@ -5,9 +5,7 @@ namespace App\Notifications\Reviews;
 use App\Models\ProductReview;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class NewProductReviewFromCustomerNotification extends Notification implements ShouldBroadcast
@@ -36,19 +34,18 @@ class NewProductReviewFromCustomerNotification extends Notification implements S
     }
 
     /**
-    * Get the array representation of the notification.
-    *
-    * @param  mixed  $notifiable
-    * @return array<string|int>
-    */
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array<string|int>
+     */
     public function toArray($notifiable)
     {
         return [
-            "message" => "RECEIVED_A_NEW_PRODUCT_REVIEW_FROM_A_CUSTOMER",
-            "review" => $this->productReview,
+            'message' => 'RECEIVED_A_NEW_PRODUCT_REVIEW_FROM_A_CUSTOMER',
+            'review' => $this->productReview,
         ];
     }
-
 
     /**
      * Get the array representation of the notification.
@@ -59,8 +56,8 @@ class NewProductReviewFromCustomerNotification extends Notification implements S
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" => "RECEIVED_A_NEW_PRODUCT_REVIEW_FROM_A_CUSTOMER",
-            "review" => $this->productReview,
+            'message' => 'RECEIVED_A_NEW_PRODUCT_REVIEW_FROM_A_CUSTOMER',
+            'review' => $this->productReview,
         ]);
     }
 }

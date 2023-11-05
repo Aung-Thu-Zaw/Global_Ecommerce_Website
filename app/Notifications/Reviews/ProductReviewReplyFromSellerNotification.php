@@ -5,9 +5,7 @@ namespace App\Notifications\Reviews;
 use App\Models\Product;
 use App\Models\Reply;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class ProductReviewReplyFromSellerNotification extends Notification
@@ -36,20 +34,19 @@ class ProductReviewReplyFromSellerNotification extends Notification
     }
 
     /**
-    * Get the array representation of the notification.
-    *
-    * @param  mixed  $notifiable
-    * @return array<string|int>
-    */
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array<string|int>
+     */
     public function toArray($notifiable)
     {
         return [
-            "message" => "YOUR_PRODUCT_REVIEW_HAS_BEEN_REPLIED_TO_BY_THE_SELLER",
-            "reply" => $this->reply->reply_text,
-            "slug" => $this->product->slug
+            'message' => 'YOUR_PRODUCT_REVIEW_HAS_BEEN_REPLIED_TO_BY_THE_SELLER',
+            'reply' => $this->reply->reply_text,
+            'slug' => $this->product->slug,
         ];
     }
-
 
     /**
      * Get the array representation of the notification.
@@ -60,9 +57,9 @@ class ProductReviewReplyFromSellerNotification extends Notification
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" => "YOUR_PRODUCT_REVIEW_HAS_BEEN_REPLIED_TO_BY_THE_SELLER",
-            "reply" => $this->reply->reply_text,
-            "slug" => $this->product->slug
+            'message' => 'YOUR_PRODUCT_REVIEW_HAS_BEEN_REPLIED_TO_BY_THE_SELLER',
+            'reply' => $this->reply->reply_text,
+            'slug' => $this->product->slug,
         ]);
     }
 }

@@ -8,9 +8,8 @@ use Illuminate\Support\Collection;
 class PermanentlyDeleteAllTrashTownshipAction
 {
     /**
-    * @param Collection<int,Township> $townships
-    */
-
+     * @param  Collection<int,Township>  $townships
+     */
     public function handle(Collection $townships): void
     {
         $townships->each(function ($township) {

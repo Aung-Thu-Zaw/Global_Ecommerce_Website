@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import Pagination from "@/Components/Paginations/Pagination.vue";
+import Pagination from "@/Components/Paginations/DashboardPagination.vue";
 import ShopProfileCard from "@/Components/Cards/Shops/ShopProfileCard.vue";
 import { Head, usePage, router } from "@inertiajs/vue3";
 import { reactive } from "vue";

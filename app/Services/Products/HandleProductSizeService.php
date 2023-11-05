@@ -8,9 +8,8 @@ use App\Models\Size;
 class HandleProductSizeService
 {
     /**
-     * @param array<string> $sizes
+     * @param  array<string>  $sizes
      */
-
     public function handle(array $sizes, Product $product): void
     {
         $product->sizes()->detach();
@@ -20,16 +19,15 @@ class HandleProductSizeService
         $attachedSizeIds = $product->sizes()->pluck('id')->toArray();
 
         foreach ($filteredSizes as $size) {
-            $existedSize = Size::where("name", $size)->first();
+            $existedSize = Size::where('name', $size)->first();
 
-            if (!$existedSize) {
-                $sizeModel = Size::create(["name" => $size]);
+            if (! $existedSize) {
+                $sizeModel = Size::create(['name' => $size]);
 
                 $product->sizes()->attach($sizeModel);
-            } elseif (!in_array($existedSize->id, $attachedSizeIds)) {
+            } elseif (! in_array($existedSize->id, $attachedSizeIds)) {
                 $product->sizes()->attach($existedSize);
             }
         }
-
     }
 }

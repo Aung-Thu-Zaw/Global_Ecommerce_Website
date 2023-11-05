@@ -8,15 +8,12 @@ use Illuminate\Support\Collection;
 class PermanentlyDeleteAllTrashCollectionAction
 {
     /**
-    * @param Collection<int,ProductCollection> $productCollections
-    */
-
+     * @param  Collection<int,ProductCollection>  $productCollections
+     */
     public function handle(Collection $productCollections): void
     {
         $productCollections->each(function ($productCollection) {
-
             $productCollection->forceDelete();
-
         });
     }
 }

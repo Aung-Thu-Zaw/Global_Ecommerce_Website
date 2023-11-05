@@ -11,8 +11,8 @@ class TermsAndConditionsController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $termsAndConditions=Page::findOrFail(2);
+        $termsAndConditions = Page::findOrFail(2);
 
-        return inertia("Ecommerce/WebsitePages/TermsAndConditions/Index", compact("termsAndConditions"));
+        return inertia('Ecommerce/WebsitePages/TermsAndConditions/Index', compact('termsAndConditions'));
     }
 }

@@ -22,7 +22,7 @@ class BlogCommentReplyController extends Controller
 
     public function update(BlogCommentReplyRequest $request, BlogCommentReply $blogCommentReply): RedirectResponse
     {
-        $blogCommentReply->update(["reply_text" => $request->reply_text]);
+        $blogCommentReply->update(['reply_text' => $request->reply_text]);
 
         return back();
     }

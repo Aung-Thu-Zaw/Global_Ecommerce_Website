@@ -23,12 +23,11 @@ class PermanentlyAutoDeleteBrandCommand extends Command
      */
     protected $description = 'Brands in the trash will be automatically deleted after 60 days';
 
-
     public function handle(): void
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $brands=Brand::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
+        $brands = Brand::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
         (new PermanentlyDeleteAllTrashBrandAction())->handle($brands);
     }

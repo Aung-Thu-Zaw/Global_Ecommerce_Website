@@ -17,9 +17,9 @@ class CountryFactory extends Factory
     public function definition()
     {
         return [
-            "name"=>fake()->unique()->country(),
-            "slug"=>fake()->unique()->slug(),
-            "created_at"=>fake()->dateTimeBetween("-2 months", now()),
+            'name' => fake()->unique()->country(),
+            'slug' => fake()->unique()->slug(),
+            'created_at' => fake()->dateTimeBetween('-2 months', now()),
         ];
     }
 }

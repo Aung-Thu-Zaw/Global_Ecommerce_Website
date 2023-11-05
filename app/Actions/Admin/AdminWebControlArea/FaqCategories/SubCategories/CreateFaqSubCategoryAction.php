@@ -7,14 +7,14 @@ use App\Models\FaqSubCategory;
 class CreateFaqSubCategoryAction
 {
     /**
-     * @param array<mixed> $data
+     * @param  array<mixed>  $data
      */
     public function handle(array $data): void
     {
         FaqSubCategory::create([
-            "icon"=>$data["icon"],
-            "faq_category_id"=>$data["faq_category_id"],
-            "name"=>$data["name"],
+            'icon' => $data['icon'],
+            'faq_category_id' => $data['faq_category_id'],
+            'name' => $data['name'],
         ]);
     }
 }

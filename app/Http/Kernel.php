@@ -62,7 +62,7 @@ class Kernel extends HttpKernel
         'auth' => \App\Http\Middleware\Authenticate::class,
         'admin' => \App\Http\Middleware\AdminAuth::class,
         'seller' => \App\Http\Middleware\SellerAuth::class,
-        'user.role'=>\App\Http\Middleware\UserRole::class,
+        'user.role' => \App\Http\Middleware\UserRole::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
@@ -75,6 +75,6 @@ class Kernel extends HttpKernel
         'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
-        'restrict.superadmin.data'=>\App\Http\Middleware\RestrictSuperAdminDataAccess::class,
+        'restrict.superadmin.data' => \App\Http\Middleware\RestrictSuperAdminDataAccess::class,
     ];
 }

@@ -16,15 +16,14 @@ class ReadNotificationService
     }
 
     /**
-     * @param array<mixed> $notifications
+     * @param  array<mixed>  $notifications
      */
     public function readAll(array $notifications): void
     {
-        foreach($notifications as $notification) {
+        foreach ($notifications as $notification) {
+            $user = User::findOrFail($notification['notifiable_id']);
 
-            $user = User::findOrFail($notification["notifiable_id"]);
-
-            $notification = $user->notifications()->findOrFail($notification["id"]);
+            $notification = $user->notifications()->findOrFail($notification['id']);
 
             $notification->update(['read_at' => now()]);
         }

@@ -6,10 +6,10 @@ use App\Actions\CreateUserAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\Cart;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-use Illuminate\Auth\Events\Registered;
 use Inertia\Response;
 
 class RegisteredUserController extends Controller
@@ -29,14 +29,14 @@ class RegisteredUserController extends Controller
      */
     public function store(RegisterRequest $request): RedirectResponse
     {
-        $user = (new CreateUserAction())->execute($request->validated() + ["role" => $request->role ?? "user","status" => $request->status ?? "active"]);
+        $user = (new CreateUserAction())->execute($request->validated() + ['role' => $request->role ?? 'user', 'status' => $request->status ?? 'active']);
 
         event(new Registered($user));
 
-        Cart::create(["user_id" => $user->id]);
+        Cart::create(['user_id' => $user->id]);
 
         Auth::login($user);
 
-        return to_route($user->getRedirectRouteName())->with("success", "ACCOUNT_IS_CREATED_SUCCESSFULLY");
+        return to_route($user->getRedirectRouteName())->with('success', 'ACCOUNT_IS_CREATED_SUCCESSFULLY');
     }
 }

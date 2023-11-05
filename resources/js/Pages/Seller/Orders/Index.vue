@@ -13,8 +13,8 @@ import BodyTh from "@/Components/Table/BodyTh.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Td from "@/Components/Table/Td.vue";
 import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import Pagination from "@/Components/Paginations/Pagination.vue";
-import { __ } from "@/Translations/translations-inside-setup.js";
+import Pagination from "@/Components/Paginations/DashboardPagination.vue";
+import { __ } from "@/Services/translations-inside-setup.js";
 import { reactive } from "vue";
 import { router, Head, usePage } from "@inertiajs/vue3";
 

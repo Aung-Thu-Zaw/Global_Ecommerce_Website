@@ -18,7 +18,7 @@ class UserRole
     {
         $user = auth()->user();
 
-        if (!$user || $user->role !== $role) {
+        if (! $user || $user->role !== $role) {
             abort(403);
         }
 

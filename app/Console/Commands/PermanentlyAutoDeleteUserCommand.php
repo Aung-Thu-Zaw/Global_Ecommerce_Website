@@ -10,10 +10,10 @@ use Illuminate\Console\Command;
 class PermanentlyAutoDeleteUserCommand extends Command
 {
     /**
-    * The name and signature of the console command.
-    *
-    * @var string
-    */
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
     protected $signature = 'user:delete';
 
     /**
@@ -23,12 +23,11 @@ class PermanentlyAutoDeleteUserCommand extends Command
      */
     protected $description = 'Users in the trash will be automatically deleted after 60 days';
 
-
     public function handle(): void
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $users=User::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
+        $users = User::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
         (new PermanentlyDeleteAllTrashUserAction())->handle($users);
     }

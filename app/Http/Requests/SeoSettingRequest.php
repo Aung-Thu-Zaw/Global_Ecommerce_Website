@@ -25,25 +25,25 @@ class SeoSettingRequest extends FormRequest
     public function rules()
     {
         return [
-            "meta_title"=>["nullable","string"],
-            "meta_author"=>["nullable","string"],
-            "meta_keyword"=>["nullable","string"],
-            "meta_description"=>["nullable","string"],
-            "captcha_token"  => ["required",new RecaptchaRule()],
+            'meta_title' => ['nullable', 'string'],
+            'meta_author' => ['nullable', 'string'],
+            'meta_keyword' => ['nullable', 'string'],
+            'meta_description' => ['nullable', 'string'],
+            'captcha_token' => ['required', new RecaptchaRule()],
         ];
     }
 
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     public function messages(): array
     {
         return [
-            "meta_title.string" => "The meta title must be a string.",
-            "meta_author.string" => "The meta author must be a string.",
-            "meta_keyword.string" => "The meta keyword must be a string.",
-            "meta_description.string" => "The meta description must be a string.",
-            "captcha_token.required"=>"The captcha token is required",
+            'meta_title.string' => 'The meta title must be a string.',
+            'meta_author.string' => 'The meta author must be a string.',
+            'meta_keyword.string' => 'The meta keyword must be a string.',
+            'meta_description.string' => 'The meta description must be a string.',
+            'captcha_token.required' => 'The captcha token is required',
         ];
     }
 }

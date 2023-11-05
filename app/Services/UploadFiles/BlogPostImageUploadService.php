@@ -11,25 +11,24 @@ class BlogPostImageUploadService
     {
         $originalName = $image->getClientOriginalName();
 
-        $finalName = time()."-".$originalName;
+        $finalName = time().'-'.$originalName;
 
-        $image->storeAs("blog-posts", $finalName);
+        $image->storeAs('blog-posts', $finalName);
 
         return $finalName;
     }
 
     public function updateImage(UploadedFile $image, string $blogPostImage): string
     {
-        if(is_string($blogPostImage)) {
-
+        if (is_string($blogPostImage)) {
             BlogPost::deleteImage($blogPostImage);
         }
 
         $originalName = $image->getClientOriginalName();
 
-        $finalName = time()."-".$originalName;
+        $finalName = time().'-'.$originalName;
 
-        $image->storeAs("blog-posts", $finalName);
+        $image->storeAs('blog-posts', $finalName);
 
         return $finalName;
     }

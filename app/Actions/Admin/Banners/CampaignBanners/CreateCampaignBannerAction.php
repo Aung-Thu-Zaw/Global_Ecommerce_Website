@@ -8,16 +8,16 @@ use App\Services\UploadFiles\CampaignBannerImageUploadService;
 class CreateCampaignBannerAction
 {
     /**
-     * @param array<mixed> $data
+     * @param  array<mixed>  $data
      */
     public function handle(array $data): void
     {
-        $image = isset($data["image"]) ? (new CampaignBannerImageUploadService())->createImage($data["image"]) : null;
+        $image = isset($data['image']) ? (new CampaignBannerImageUploadService())->createImage($data['image']) : null;
 
         CampaignBanner::create([
-            "url"=>$data["url"],
-            "status"=>"hide",
-            "image"=>$image
+            'url' => $data['url'],
+            'status' => 'hide',
+            'image' => $image,
         ]);
     }
 }

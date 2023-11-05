@@ -13,11 +13,11 @@ class ConversationController extends Controller
     public function store(ConversationRequest $request): RedirectResponse
     {
         Conversation::firstOrCreate([
-            "customer_id"=>$request->customer_id,
-            "vendor_id"=>$request->vendor_id
+            'customer_id' => $request->customer_id,
+            'vendor_id' => $request->vendor_id,
         ], [
-            "customer_id"=>$request->customer_id,
-            "vendor_id"=>$request->vendor_id
+            'customer_id' => $request->customer_id,
+            'vendor_id' => $request->vendor_id,
         ]);
 
         return back();
@@ -25,10 +25,10 @@ class ConversationController extends Controller
 
     public function markMessageAsSeen(Conversation $conversation): RedirectResponse
     {
-        $messages = Message::where('conversation_id', $conversation->id)->where("user_id", "!=", request()->user_id)->get();
+        $messages = Message::where('conversation_id', $conversation->id)->where('user_id', '!=', request()->user_id)->get();
 
         foreach ($messages as $message) {
-            $message->update(["is_seen"=>true]);
+            $message->update(['is_seen' => true]);
         }
 
         return back();

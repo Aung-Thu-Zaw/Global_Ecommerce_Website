@@ -16,6 +16,6 @@ class SuggestionController extends Controller
 
         event(new SuggestionForWebsite($suggestion));
 
-        return back()->with("success", "THANKS_FOR_YOUR_SUGGESTION");
+        return back()->with('success', 'THANKS_FOR_YOUR_SUGGESTION');
     }
 }

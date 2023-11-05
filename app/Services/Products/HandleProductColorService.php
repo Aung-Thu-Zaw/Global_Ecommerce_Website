@@ -8,9 +8,8 @@ use App\Models\Product;
 class HandleProductColorService
 {
     /**
-     * @param array<string> $colors
+     * @param  array<string>  $colors
      */
-
     public function handle(array $colors, Product $product): void
     {
         $product->colors()->detach();
@@ -20,13 +19,13 @@ class HandleProductColorService
         $attachedColorIds = $product->colors()->pluck('id')->toArray();
 
         foreach ($filteredColors as $color) {
-            $existedColor = Color::where("name", $color)->first();
+            $existedColor = Color::where('name', $color)->first();
 
-            if (!$existedColor) {
-                $colorModel = Color::create(["name" => $color]);
+            if (! $existedColor) {
+                $colorModel = Color::create(['name' => $color]);
 
                 $product->colors()->attach($colorModel);
-            } elseif (!in_array($existedColor->id, $attachedColorIds)) {
+            } elseif (! in_array($existedColor->id, $attachedColorIds)) {
                 $product->colors()->attach($existedColor);
             }
         }

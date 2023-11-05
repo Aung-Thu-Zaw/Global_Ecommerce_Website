@@ -17,13 +17,13 @@ class BlogPostFactory extends Factory
     public function definition()
     {
         return [
-            "blog_category_id"=>fake()->numberBetween(1, 8),
-            "author_id"=>1,
-            "title"=>fake()->unique()->sentence(),
-            "slug"=>fake()->unique()->slug(),
-            "description"=>fake()->paragraph(10),
-            "image"=>fake()->imageUrl(),
-            "created_at"=>fake()->dateTimeBetween("-4 months", now()),
+            'blog_category_id' => fake()->numberBetween(1, 8),
+            'author_id' => 1,
+            'title' => fake()->unique()->sentence(),
+            'slug' => fake()->unique()->slug(),
+            'description' => fake()->paragraph(10),
+            'image' => fake()->imageUrl(),
+            'created_at' => fake()->dateTimeBetween('-4 months', now()),
         ];
     }
 }

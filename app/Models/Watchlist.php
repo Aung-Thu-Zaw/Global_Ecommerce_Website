@@ -10,19 +10,19 @@ class Watchlist extends Model
 {
     use HasFactory;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,Watchlist>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,Watchlist>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Product,Watchlist>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Product,Watchlist>
+     */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);

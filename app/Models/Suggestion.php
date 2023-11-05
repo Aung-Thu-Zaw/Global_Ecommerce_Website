@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 
 class Suggestion extends Model
 {
@@ -19,8 +19,8 @@ class Suggestion extends Model
     protected $guarded = [];
 
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     public function toSearchableArray(): array
     {
         return [
@@ -39,28 +39,28 @@ class Suggestion extends Model
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Suggestion, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Suggestion, never>
+     */
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y ( h:i A )", strtotime($value)),
+            get: fn ($value) => date('j-F-Y ( h:i A )', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Subscriber, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Subscriber, never>
+     */
     protected function deletedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y ( h:i A )", strtotime($value)),
+            get: fn ($value) => date('j-F-Y ( h:i A )', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasMany<Image>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Image>
+     */
     public function images(): HasMany
     {
         return $this->hasMany(Image::class);

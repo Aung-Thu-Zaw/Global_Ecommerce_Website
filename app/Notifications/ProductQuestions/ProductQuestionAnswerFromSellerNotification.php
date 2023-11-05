@@ -4,12 +4,9 @@ namespace App\Notifications\ProductQuestions;
 
 use App\Models\Product;
 use App\Models\ProductAnswer;
-use App\Models\ProductQuestion;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class ProductQuestionAnswerFromSellerNotification extends Notification implements ShouldBroadcast
@@ -38,20 +35,19 @@ class ProductQuestionAnswerFromSellerNotification extends Notification implement
     }
 
     /**
-    * Get the array representation of the notification.
-    *
-    * @param  mixed  $notifiable
-    * @return array<string|int>
-    */
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array<string|int>
+     */
     public function toArray($notifiable)
     {
         return [
-            "message" => "YOUR_QUESTION_HAS_BEEN_ANSWERED_TO_BY_THE_SELLER",
-            "product" => $this->product->slug,
-            "answer" => $this->productAnswer->answer_text,
+            'message' => 'YOUR_QUESTION_HAS_BEEN_ANSWERED_TO_BY_THE_SELLER',
+            'product' => $this->product->slug,
+            'answer' => $this->productAnswer->answer_text,
         ];
     }
-
 
     /**
      * Get the array representation of the notification.
@@ -62,9 +58,9 @@ class ProductQuestionAnswerFromSellerNotification extends Notification implement
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" => "YOUR_QUESTION_HAS_BEEN_ANSWERED_TO_BY_THE_SELLER",
-            "product" => $this->product->slug,
-            "answer" => $this->productAnswer->answer_text,
+            'message' => 'YOUR_QUESTION_HAS_BEEN_ANSWERED_TO_BY_THE_SELLER',
+            'product' => $this->product->slug,
+            'answer' => $this->productAnswer->answer_text,
         ]);
     }
 }

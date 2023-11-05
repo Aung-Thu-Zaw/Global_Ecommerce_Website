@@ -17,12 +17,12 @@ class BrandFactory extends Factory
     public function definition()
     {
         return [
-            "category_id"=>fake()->numberBetween(1, 67),
-            "name"=>fake()->unique()->company(),
-            "slug"=>fake()->unique()->slug(),
-            "description"=>fake()->paragraph(20),
-            "image"=>fake()->imageUrl(),
-            "created_at"=>fake()->dateTimeBetween("-5 months", now()),
+            'category_id' => fake()->numberBetween(1, 67),
+            'name' => fake()->unique()->company(),
+            'slug' => fake()->unique()->slug(),
+            'description' => fake()->paragraph(20),
+            'image' => fake()->imageUrl(),
+            'created_at' => fake()->dateTimeBetween('-5 months', now()),
         ];
     }
 }

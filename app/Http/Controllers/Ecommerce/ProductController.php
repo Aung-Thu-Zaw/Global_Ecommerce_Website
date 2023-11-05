@@ -16,100 +16,100 @@ class ProductController extends Controller
 {
     public function newProducts(): Response|ResponseFactory
     {
-        $newProducts = Product::select("id", "seller_id", "image", "name", "slug", "price", "discount", "special_offer")
-                            ->with(["productReviews:id,product_id,rating","shop:id,offical"])
-                            ->whereStatus("approved")
+        $newProducts = Product::select('id', 'seller_id', 'image', 'name', 'slug', 'price', 'discount', 'special_offer')
+                            ->with(['productReviews:id,product_id,rating', 'shop:id,offical'])
+                            ->whereStatus('approved')
                             ->whereBetween('created_at', [now()->subDays(30), now()])
-                            ->orderBy("id", "desc")
+                            ->orderBy('id', 'desc')
                             ->paginate(20);
 
-        return inertia("Ecommerce/Products/NewProducts", compact("newProducts"));
+        return inertia('Ecommerce/Products/NewProducts', compact('newProducts'));
     }
 
     public function featuredProducts(): Response|ResponseFactory
     {
-        $featuredProducts = Product::select("id", "seller_id", "image", "name", "slug", "price", "discount", "special_offer")
-                                 ->with(["productReviews:id,product_id,rating","shop:id,offical"])
-                                 ->whereStatus("approved")
+        $featuredProducts = Product::select('id', 'seller_id', 'image', 'name', 'slug', 'price', 'discount', 'special_offer')
+                                 ->with(['productReviews:id,product_id,rating', 'shop:id,offical'])
+                                 ->whereStatus('approved')
                                  ->whereFeatured(1)
-                                 ->orderBy("id", "desc")
+                                 ->orderBy('id', 'desc')
                                  ->paginate(20);
 
-        return inertia("Ecommerce/Products/FeaturedProducts", compact("featuredProducts"));
+        return inertia('Ecommerce/Products/FeaturedProducts', compact('featuredProducts'));
     }
 
     public function hotDealProducts(): Response|ResponseFactory
     {
-        $hotDealProducts = Product::select("id", "seller_id", "image", "name", "slug", "price", "discount", "special_offer")
-                                ->with(["productReviews:id,product_id,rating","shop:id,offical"])
-                                ->whereStatus("approved")
+        $hotDealProducts = Product::select('id', 'seller_id', 'image', 'name', 'slug', 'price', 'discount', 'special_offer')
+                                ->with(['productReviews:id,product_id,rating', 'shop:id,offical'])
+                                ->whereStatus('approved')
                                 ->whereHotDeal(1)
-                                ->orderBy("id", "desc")
+                                ->orderBy('id', 'desc')
                                 ->paginate(20);
 
-        return inertia("Ecommerce/Products/HotDealProducts", compact("hotDealProducts"));
+        return inertia('Ecommerce/Products/HotDealProducts', compact('hotDealProducts'));
     }
 
     public function flashSaleProducts(): Response|ResponseFactory
     {
         $flashSale = FlashSale::findOrFail(1);
 
-        $flashSaleProducts = FlashSaleItem::with(["product:id,seller_id,image,name,slug,price,discount,special_offer","product.productReviews:id,product_id,rating","product.shop:id,offical"])
-                                          ->orderBy("id", "desc")
+        $flashSaleProducts = FlashSaleItem::with(['product:id,seller_id,image,name,slug,price,discount,special_offer', 'product.productReviews:id,product_id,rating', 'product.shop:id,offical'])
+                                          ->orderBy('id', 'desc')
                                           ->paginate(20);
 
-        return inertia("Ecommerce/Products/FlashSaleProducts", compact("flashSale", "flashSaleProducts"));
+        return inertia('Ecommerce/Products/FlashSaleProducts', compact('flashSale', 'flashSaleProducts'));
     }
 
     public function show(Product $product): Response|ResponseFactory
     {
         $sellerId = $product->shop ? $product->shop->id : null;
 
-        $product->load(["images","brand:id,name","colors","sizes","shop:id,uuid,offical,shop_name,avatar","watchlists","cartItems"]);
+        $product->load(['images', 'brand:id,name', 'colors', 'sizes', 'shop:id,uuid,offical,shop_name,avatar', 'watchlists', 'cartItems']);
 
-        $productsFromShop = Product::select("id", "seller_id", "image", "name", "slug", "price", "discount")
-                                 ->with(["shop:id,uuid"])
+        $productsFromShop = Product::select('id', 'seller_id', 'image', 'name', 'slug', 'price', 'discount')
+                                 ->with(['shop:id,uuid'])
                                  ->whereSellerId($sellerId)
-                                 ->where("id", "!=", $product->id)
+                                 ->where('id', '!=', $product->id)
                                  ->limit(5)
                                  ->get();
 
-        $relatedProducts = Product::select("id", "seller_id", "image", "name", "slug", "price", "discount", "special_offer")
-                                ->with(["productReviews:id,product_id,rating","shop:id,offical"])
-                                ->whereStatus("approved")
+        $relatedProducts = Product::select('id', 'seller_id', 'image', 'name', 'slug', 'price', 'discount', 'special_offer')
+                                ->with(['productReviews:id,product_id,rating', 'shop:id,offical'])
+                                ->whereStatus('approved')
                                 ->whereCategoryId($product->category_id)
                                 ->where('id', '!=', $product->id)
                                 ->limit(10)
                                 ->get();
 
-        $productQuestions = ProductQuestion::with(["user","productAnswer.seller:id,shop_name,avatar","product:id,seller_id"])
+        $productQuestions = ProductQuestion::with(['user', 'productAnswer.seller:id,shop_name,avatar', 'product:id,seller_id'])
                                          ->whereProductId($product->id)
-                                         ->orderBy("id", "desc")
+                                         ->orderBy('id', 'desc')
                                          ->paginate(5);
 
-        $paginateProductReviews = ProductReview::with(["user.orders.orderItems","reply.seller:id,shop_name,avatar","images"])
+        $paginateProductReviews = ProductReview::with(['user.orders.orderItems', 'reply.seller:id,shop_name,avatar', 'images'])
                                              ->whereProductId($product->id)
-                                             ->orderBy("id", "desc")
+                                             ->orderBy('id', 'desc')
                                              ->paginate(5);
 
-        $productReviews = ProductReview::where("product_id", $product->id)->where("status", "published")->get();
+        $productReviews = ProductReview::where('product_id', $product->id)->where('status', 'published')->get();
 
-        $productReviewsAvg = ProductReview::where("product_id", $product->id)->where("status", "published")->avg("rating");
+        $productReviewsAvg = ProductReview::where('product_id', $product->id)->where('status', 'published')->avg('rating');
 
-        $conversation = Conversation::with(["messages.user:id,avatar","customer:id,name,avatar,last_activity","seller:id,shop_name,avatar,offical,last_activity"])
-                                  ->where("customer_id", auth()->id())
-                                  ->where("seller_id", $product->seller_id)
+        $conversation = Conversation::with(['messages.user:id,avatar', 'customer:id,name,avatar,last_activity', 'seller:id,shop_name,avatar,offical,last_activity'])
+                                  ->where('customer_id', auth()->id())
+                                  ->where('seller_id', $product->seller_id)
                                   ->first();
 
-        return inertia("Ecommerce/Products/Detail", compact(
-            "product",
-            "productsFromShop",
-            "relatedProducts",
-            "productQuestions",
-            "paginateProductReviews",
-            "productReviews",
-            "productReviewsAvg",
-            "conversation"
+        return inertia('Ecommerce/Products/Detail', compact(
+            'product',
+            'productsFromShop',
+            'relatedProducts',
+            'productQuestions',
+            'paginateProductReviews',
+            'productReviews',
+            'productReviewsAvg',
+            'conversation'
         ));
     }
 }

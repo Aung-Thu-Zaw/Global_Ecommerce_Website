@@ -27,33 +27,29 @@ class Translations extends Component
      */
     public function render()
     {
-        $locale=session("locale") ? session("locale") : App::getLocale();
+        $locale = session('locale') ? session('locale') : App::getLocale();
 
-        $translations=Cache::rememberForever("translations_$locale", function () use ($locale) {
+        $translations = Cache::rememberForever("translations_$locale", function () use ($locale) {
+            $phpTranslations = [];
 
-            $phpTranslations=[];
+            $jsonTranslations = [];
 
-            $jsonTranslations=[];
-
-            if(File::exists(resource_path("lang/$locale"))) {
-                $phpTranslations=collect(File::allFiles(resource_path("lang/$locale")))
+            if (File::exists(resource_path("lang/$locale"))) {
+                $phpTranslations = collect(File::allFiles(resource_path("lang/$locale")))
                  ->filter(function ($file) {
-                     return $file->getExtension()==="php";
+                     return $file->getExtension() === 'php';
                  })->flatMap(function ($file) {
                      return Arr::dot(File::getRequire($file->getRealPath()));
                  })->toArray();
-
             }
 
-            if(File::exists(resource_path("lang/$locale.json"))) {
-                $jsonTranslations=json_decode(File::get(resource_path("lang/$locale.json")), true);
+            if (File::exists(resource_path("lang/$locale.json"))) {
+                $jsonTranslations = json_decode(File::get(resource_path("lang/$locale.json")), true);
             }
 
             return array_merge($phpTranslations, $jsonTranslations);
         });
 
-
-
-        return view('components.translations', compact("translations"));
+        return view('components.translations', compact('translations'));
     }
 }

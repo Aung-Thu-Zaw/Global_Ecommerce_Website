@@ -10,5 +10,4 @@ class AgentStatus extends Model
     use HasFactory;
 
     protected $guarded = [];
-
 }

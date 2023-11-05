@@ -12,11 +12,11 @@ class UserProductInteractionController extends Controller
     public function store(UserProductInteractionRequest $request): RedirectResponse
     {
         UserProductInteraction::firstOrCreate([
-            "user_id"=>$request->user_id,
-            "product_id"=>$request->product_id
+            'user_id' => $request->user_id,
+            'product_id' => $request->product_id,
         ], [
-            "user_id"=>$request->user_id,
-            "product_id"=>$request->product_id
+            'user_id' => $request->user_id,
+            'product_id' => $request->product_id,
         ]);
 
         return back();

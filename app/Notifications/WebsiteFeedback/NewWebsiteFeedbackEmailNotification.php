@@ -4,7 +4,6 @@ namespace App\Notifications\WebsiteFeedback;
 
 use App\Models\WebsiteFeedback;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -42,11 +41,11 @@ class NewWebsiteFeedbackEmailNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage())
-        ->subject("New Website Feedback Received")
-        ->greeting("Dear ".$notifiable->name.",")
-        ->line("We got a new feedback from the submitter:")
-        ->line("Submitter Email: ".$this->websiteFeedback->email)
-        ->line("Date: ".$this->websiteFeedback->created_at)
+        ->subject('New Website Feedback Received')
+        ->greeting('Dear '.$notifiable->name.',')
+        ->line('We got a new feedback from the submitter:')
+        ->line('Submitter Email: '.$this->websiteFeedback->email)
+        ->line('Date: '.$this->websiteFeedback->created_at)
         ->action('See More Details', route('admin.website-feedbacks.show', $this->websiteFeedback->id));
     }
 }

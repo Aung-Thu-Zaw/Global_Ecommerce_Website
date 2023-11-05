@@ -48,26 +48,26 @@ class EventServiceProvider extends ServiceProvider
             SendNewUserRegisteredWithSocialiteEmailNotificationToAdmin::class,
             SendWelcomeEmailToRegisteredWithSocialiteUser::class,
         ],
-        AccountDeleted::class=>[
+        AccountDeleted::class => [
             SendUserAccountDeletedNotificationToAdminDashboard::class,
             SendUserAccountDeletedEmailNotificationToAdmin::class,
             SendConfirmOfAccountDeletionEmailToUser::class,
         ],
-        SubscribedNewsletter::class=>[
+        SubscribedNewsletter::class => [
             SendNewSubscriberNotificationToAdminDashboard::class,
             SendNewSubscriberEmailNotificationToAdmin::class,
             SendThankForSubscribeWebsiteEmailToSubscriber::class,
         ],
-        SuggestionForWebsite::class=>[
+        SuggestionForWebsite::class => [
             SendNewSuggestionNotificationToAdminDashboard::class,
             SendNewSuggestionEmailNotificationToAdmin::class,
             SendThankForSuggestionEmailToSuggestionSubmitter::class,
         ],
-        FeedbackForWebsite::class=>[
+        FeedbackForWebsite::class => [
             SendNewWebsiteFeedbackNotificationToAdminDashboard::class,
             SendNewWebsiteFeedbackEmailNotificationToAdmin::class,
             SendThankForFeedbackEmailToFeedbackSubmitter::class,
-        ]
+        ],
     ];
 
     /**

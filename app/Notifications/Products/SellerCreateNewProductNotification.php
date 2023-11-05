@@ -3,12 +3,9 @@
 namespace App\Notifications\Products;
 
 use App\Models\Product;
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class SellerCreateNewProductNotification extends Notification implements ShouldBroadcast
@@ -37,20 +34,18 @@ class SellerCreateNewProductNotification extends Notification implements ShouldB
     }
 
     /**
-    * Get the array representation of the notification.
-    *
-    * @param  mixed  $notifiable
-    * @return array<string|int>
-    */
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array<string|int>
+     */
     public function toArray($notifiable)
     {
         return [
-            "message" => "A_SELLER_HAS_CREATED_A_NEW_PRODUCT",
-            "product" => $this->product,
+            'message' => 'A_SELLER_HAS_CREATED_A_NEW_PRODUCT',
+            'product' => $this->product,
         ];
     }
-
-
 
     /**
      * Get the array representation of the notification.
@@ -61,8 +56,8 @@ class SellerCreateNewProductNotification extends Notification implements ShouldB
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" => "A_SELLER_HAS_CREATED_A_NEW_PRODUCT",
-            "product" => $this->product,
+            'message' => 'A_SELLER_HAS_CREATED_A_NEW_PRODUCT',
+            'product' => $this->product,
         ]);
     }
 }

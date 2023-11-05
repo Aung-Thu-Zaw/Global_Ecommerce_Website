@@ -25,23 +25,23 @@ class TermsAndConditionsRequest extends FormRequest
     public function rules()
     {
         return [
-            "title"=>["required","string"],
-            "description"=>["required","string"],
-            "captcha_token"  => ["required",new RecaptchaRule()],
+            'title' => ['required', 'string'],
+            'description' => ['required', 'string'],
+            'captcha_token' => ['required', new RecaptchaRule()],
         ];
     }
 
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     public function messages(): array
     {
         return [
-            "title.required" =>  "The title field is required.",
-            "title.string" =>  "The title must be a string.",
-            "description.required" =>  "The description field is required.",
-            "description.string" =>  "The description must be a string.",
-            "captcha_token.required"=>"The captcha token is required",
+            'title.required' => 'The title field is required.',
+            'title.string' => 'The title must be a string.',
+            'description.required' => 'The description field is required.',
+            'description.string' => 'The description must be a string.',
+            'captcha_token.required' => 'The captcha token is required',
         ];
     }
 }

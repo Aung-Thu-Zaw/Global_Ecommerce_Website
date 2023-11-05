@@ -11,12 +11,12 @@ class TrackMyOrderController extends Controller
 {
     public function trackMyOrder(Request $request): RedirectResponse
     {
-        $order=Order::where("order_no", $request->order_no)->first();
+        $order = Order::where('order_no', $request->order_no)->first();
 
-        if(!$order) {
-            return back()->with("error", "ORDER_CODE_IS_INVALID");
+        if (! $order) {
+            return back()->with('error', 'ORDER_CODE_IS_INVALID');
         }
 
-        return to_route("my-orders.show", $order->id);
+        return to_route('my-orders.show', $order->id);
     }
 }

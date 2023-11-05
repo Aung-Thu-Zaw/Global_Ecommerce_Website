@@ -21,7 +21,6 @@ class SliderBannerImageUploadServiceTest extends TestCase
 
         // Assert
         Storage::assertExists("slider-banners/$finalName");
-
     }
 
     public function test_updateImage_replaces_image(): void
@@ -29,7 +28,7 @@ class SliderBannerImageUploadServiceTest extends TestCase
         // Arrange
         Storage::fake();
         $existingImageName = 'existing-slider-banner-image.jpg';
-        Storage::put("slider-banners/$existingImageName", "dummy");
+        Storage::put("slider-banners/$existingImageName", 'dummy');
         $newImage = UploadedFile::fake()->image('new-slider-banner-image.jpg');
 
         // Act

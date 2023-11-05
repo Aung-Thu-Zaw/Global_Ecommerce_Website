@@ -5,7 +5,6 @@ namespace App\Listeners\SubscribedNewsletter;
 use App\Models\User;
 use App\Notifications\SubscribedNewsletter\NewsletterSubscribedEmailNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Notification;
 
 class SendNewSubscriberEmailNotificationToAdmin implements ShouldQueue
@@ -28,9 +27,9 @@ class SendNewSubscriberEmailNotificationToAdmin implements ShouldQueue
      */
     public function handle($event)
     {
-        $subscriber=$event->subscriber ?? null;
+        $subscriber = $event->subscriber ?? null;
 
-        $admins=User::where("role", "admin")->get();
+        $admins = User::where('role', 'admin')->get();
         Notification::send($admins, new NewsletterSubscribedEmailNotification($subscriber));
     }
 }

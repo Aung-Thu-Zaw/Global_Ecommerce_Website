@@ -15,11 +15,11 @@ class CampaignBanner extends Model
     use SoftDeletes;
     use Searchable;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     /**
-    *     @return array<string|bool>
-    */
+     *     @return array<string|bool>
+     */
     public function toSearchableArray(): array
     {
         return [
@@ -38,39 +38,39 @@ class CampaignBanner extends Model
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<CampaignBanner, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<CampaignBanner, never>
+     */
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date('j-F-Y', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<CampaignBanner, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<CampaignBanner, never>
+     */
     protected function deletedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date('j-F-Y', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<CampaignBanner, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<CampaignBanner, never>
+     */
     protected function image(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/campaign-banners/$value"),
+            set: fn ($value) => str_starts_with($value, 'http') ? $value : asset("storage/campaign-banners/$value"),
         );
     }
 
     public static function deleteImage(string $campaignBannerImage): void
     {
-        if (!empty($campaignBannerImage) && file_exists(storage_path("app/public/campaign-banners/".pathinfo($campaignBannerImage, PATHINFO_BASENAME)))) {
-            unlink(storage_path("app/public/campaign-banners/".pathinfo($campaignBannerImage, PATHINFO_BASENAME)));
+        if (! empty($campaignBannerImage) && file_exists(storage_path('app/public/campaign-banners/'.pathinfo($campaignBannerImage, PATHINFO_BASENAME)))) {
+            unlink(storage_path('app/public/campaign-banners/'.pathinfo($campaignBannerImage, PATHINFO_BASENAME)));
         }
     }
 }

@@ -11,8 +11,8 @@ class PrivacyPolicyController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $privacyPolicy=Page::findOrFail(1);
+        $privacyPolicy = Page::findOrFail(1);
 
-        return inertia("Ecommerce/WebsitePages/PrivacyPolicy/Index", compact("privacyPolicy"));
+        return inertia('Ecommerce/WebsitePages/PrivacyPolicy/Index', compact('privacyPolicy'));
     }
 }

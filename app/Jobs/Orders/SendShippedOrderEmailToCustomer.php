@@ -6,7 +6,6 @@ use App\Mail\OrderShippedMail;
 use App\Models\DeliveryInformation;
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -37,9 +36,9 @@ class SendShippedOrderEmailToCustomer implements ShouldQueue
      */
     public function handle()
     {
-        $deliveryInformation=$this->order->deliveryInformation;
+        $deliveryInformation = $this->order->deliveryInformation;
 
-        $deliveryInformation=DeliveryInformation::findOrFail($this->order->delivery_information_id);
+        $deliveryInformation = DeliveryInformation::findOrFail($this->order->delivery_information_id);
 
         Mail::to($deliveryInformation->email)->send(new OrderShippedMail($this->order));
     }

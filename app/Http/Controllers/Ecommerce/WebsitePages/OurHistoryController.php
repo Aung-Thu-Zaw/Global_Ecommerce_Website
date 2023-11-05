@@ -10,6 +10,6 @@ class OurHistoryController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        return inertia("Ecommerce/WebsitePages/OurHistory/Index");
+        return inertia('Ecommerce/WebsitePages/OurHistory/Index');
     }
 }

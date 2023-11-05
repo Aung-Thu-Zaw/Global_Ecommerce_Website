@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use App\Models\Scopes\FilteredByDateScope;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Dyrynda\Database\Support\CascadeSoftDeletes;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use Laravel\Scout\Searchable;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
@@ -22,11 +22,11 @@ class Country extends Model
     use HasSlug;
 
     /**
-    * @var string[]
-    */
+     * @var string[]
+     */
     protected array $cascadeDeletes = ['regions'];
-    protected $guarded = [];
 
+    protected $guarded = [];
 
     public function getSlugOptions(): SlugOptions
     {
@@ -41,8 +41,8 @@ class Country extends Model
     }
 
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     public function toSearchableArray(): array
     {
         return [
@@ -60,30 +60,29 @@ class Country extends Model
         static::addGlobalScope(new FilteredByDateScope());
     }
 
-
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Country, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Country, never>
+     */
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date('j-F-Y', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Country, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Country, never>
+     */
     protected function deletedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date('j-F-Y', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasMany<Region>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Region>
+     */
     public function regions(): HasMany
     {
         return $this->hasMany(Region::class);

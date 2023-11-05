@@ -8,14 +8,11 @@ use Illuminate\Support\Collection;
 class PermanentlyDeleteAllTrashCountryAction
 {
     /**
-    * @param Collection<int,Country> $countries
-    */
-
+     * @param  Collection<int,Country>  $countries
+     */
     public function handle(Collection $countries): void
     {
         $countries->each(function ($country) {
-
-
             $country->forceDelete();
         });
     }

@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import Pagination from "@/Components/Paginations/Pagination.vue";
+import Pagination from "@/Components/Paginations/DashboardPagination.vue";
 import FaqCategorySidebar from "@/Components/Sidebars/FaqCategorySidebar.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/FaqSectionBreadcrumb.vue";
 import FaqSearchFormInput from "@/Components/Forms/FaqSearchFormInput.vue";

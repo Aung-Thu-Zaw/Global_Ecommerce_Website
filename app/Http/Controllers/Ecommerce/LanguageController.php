@@ -15,7 +15,7 @@ class LanguageController extends Controller
     {
         $locale = $request->input('locale');
 
-        $languages=DB::table("languages")->pluck("short_name")->toArray();
+        $languages = DB::table('languages')->pluck('short_name')->toArray();
 
         if (in_array($locale, $languages)) {
             Cache::flush();

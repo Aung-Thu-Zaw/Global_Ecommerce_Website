@@ -6,9 +6,7 @@ use App\Models\BlogComment;
 use App\Models\BlogPost;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class NewBlogCommentFromUserNotification extends Notification implements ShouldBroadcast
@@ -37,21 +35,20 @@ class NewBlogCommentFromUserNotification extends Notification implements ShouldB
     }
 
     /**
-    * Get the array representation of the notification.
-    *
-    * @param  mixed  $notifiable
-    * @return array<string|int>
-    */
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array<string|int>
+     */
     public function toArray($notifiable)
     {
         return [
-            "message" => "YOUR_BLOG_RECEIVED_A_NEW_COMMENT_FROM_A_USER",
-            "blog" => $this->blogPost->slug,
-            "comment" => $this->blogComment->comment,
+            'message' => 'YOUR_BLOG_RECEIVED_A_NEW_COMMENT_FROM_A_USER',
+            'blog' => $this->blogPost->slug,
+            'comment' => $this->blogComment->comment,
 
         ];
     }
-
 
     /**
      * Get the array representation of the notification.
@@ -62,9 +59,9 @@ class NewBlogCommentFromUserNotification extends Notification implements ShouldB
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" => "YOUR_BLOG_RECEIVED_A_NEW_COMMENT_FROM_A_USER",
-            "blog" => $this->blogPost->slug,
-            "comment" => $this->blogComment->comment,
+            'message' => 'YOUR_BLOG_RECEIVED_A_NEW_COMMENT_FROM_A_USER',
+            'blog' => $this->blogPost->slug,
+            'comment' => $this->blogComment->comment,
         ]);
     }
 }

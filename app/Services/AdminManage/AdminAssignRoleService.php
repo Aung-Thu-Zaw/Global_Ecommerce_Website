@@ -11,10 +11,9 @@ class AdminAssignRoleService
     {
         $user->assignRole($roleId);
 
-        $role = Role::with("permissions")->where("id", $roleId)->first();
+        $role = Role::with('permissions')->where('id', $roleId)->first();
 
         if ($role) {
-
             $user->syncPermissions($role->permissions);
         }
     }
@@ -28,14 +27,11 @@ class AdminAssignRoleService
 
             $user->assignRole($roleId);
 
-            $role = Role::with("permissions")->where("id", $roleId)->first();
+            $role = Role::with('permissions')->where('id', $roleId)->first();
 
             if ($role) {
-
                 $user->syncPermissions($role->permissions);
-
             }
         }
-
     }
 }

@@ -42,14 +42,12 @@ class RegisteredUserEmailNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage())
-        ->subject("New User Registered")
-        ->greeting("Dear ".$notifiable->name.",")
-        ->line("A new user has registered on our platform. Please review the details below:")
-        ->line("Name: ".$this->user->name)
-        ->line("Email: ".$this->user->email)
-        ->line("Registration Date: ".Carbon::parse($this->user->created_at)->format("Y-m-d"))
+        ->subject('New User Registered')
+        ->greeting('Dear '.$notifiable->name.',')
+        ->line('A new user has registered on our platform. Please review the details below:')
+        ->line('Name: '.$this->user->name)
+        ->line('Email: '.$this->user->email)
+        ->line('Registration Date: '.Carbon::parse($this->user->created_at)->format('Y-m-d'))
         ->action('See More Details', route('admin.registered-accounts.show', $this->user->id));
-
     }
-
 }

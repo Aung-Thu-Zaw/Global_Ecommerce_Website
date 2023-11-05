@@ -21,7 +21,6 @@ class BrandImageUploadServiceTest extends TestCase
 
         // Assert
         Storage::assertExists("brands/$finalName");
-
     }
 
     public function test_updateImage_replaces_image(): void
@@ -29,7 +28,7 @@ class BrandImageUploadServiceTest extends TestCase
         // Arrange
         Storage::fake();
         $existingImageName = 'existing-brand-image.jpg';
-        Storage::put("brands/$existingImageName", "dummy");
+        Storage::put("brands/$existingImageName", 'dummy');
         $newImage = UploadedFile::fake()->image('new-brand-image.jpg');
 
         // Act

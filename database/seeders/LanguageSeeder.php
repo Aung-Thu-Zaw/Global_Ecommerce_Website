@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Language;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class LanguageSeeder extends Seeder
@@ -16,50 +15,48 @@ class LanguageSeeder extends Seeder
     public function run()
     {
         Language::create([
-           "name"=>"English",
-           "short_name"=>"en"
+            'name' => 'English',
+            'short_name' => 'en',
         ]);
 
         Language::create([
-             "name"=>"Myanmar",
-             "short_name"=>"my"
+            'name' => 'Myanmar',
+            'short_name' => 'my',
         ]);
 
         Language::create([
-            "name" => "Korean",
-            "short_name" => "ko"
+            'name' => 'Korean',
+            'short_name' => 'ko',
         ]);
 
         Language::create([
-            "name" => "Japanese",
-            "short_name" => "ja"
+            'name' => 'Japanese',
+            'short_name' => 'ja',
         ]);
 
         Language::create([
-            "name" => "French",
-            "short_name" => "fr"
+            'name' => 'French',
+            'short_name' => 'fr',
         ]);
 
         Language::create([
-            "name" => "Chinese",
-            "short_name" => "zh"
+            'name' => 'Chinese',
+            'short_name' => 'zh',
         ]);
 
         Language::create([
-            "name" => "Arabic",
-            "short_name" => "ar"
+            'name' => 'Arabic',
+            'short_name' => 'ar',
         ]);
 
         Language::create([
-            "name" => "Thai",
-            "short_name" => "th"
+            'name' => 'Thai',
+            'short_name' => 'th',
         ]);
 
         Language::create([
-            "name" => "Hindi",
-            "short_name" => "hi"
+            'name' => 'Hindi',
+            'short_name' => 'hi',
         ]);
-
-
     }
 }

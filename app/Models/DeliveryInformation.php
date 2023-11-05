@@ -10,11 +10,11 @@ class DeliveryInformation extends Model
 {
     use HasFactory;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,DeliveryInformation>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,DeliveryInformation>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -16,9 +16,8 @@ class LiveChatMessageController extends Controller
     {
         $message = (new CreateLiveChatMessageAction())->handle($request->validated());
 
-        if($message) {
-
-            $message->load(["chatFileAttachments","user:id,name,avatar","agent:id,name,avatar","replyToMessage"]);
+        if ($message) {
+            $message->load(['chatFileAttachments', 'user:id,name,avatar', 'agent:id,name,avatar', 'replyToMessage']);
 
             event(new LiveChatMessageSent($message));
         }
@@ -29,8 +28,8 @@ class LiveChatMessageController extends Controller
         $liveChatMessage = LiveChatMessage::findOrFail($liveChatMessageId);
 
         $liveChatMessage->update([
-            "is_deleted_by_user" => $request->is_deleted_by_user,
-            "is_deleted_by_agent" => $request->is_deleted_by_agent
+            'is_deleted_by_user' => $request->is_deleted_by_user,
+            'is_deleted_by_agent' => $request->is_deleted_by_agent,
         ]);
 
         event(new LiveChatMessageDeleted($liveChatMessage));

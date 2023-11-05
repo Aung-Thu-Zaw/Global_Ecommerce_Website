@@ -3,14 +3,14 @@
 namespace App\Models;
 
 use App\Models\Scopes\FilteredByDateScope;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Dyrynda\Database\Support\CascadeSoftDeletes;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use Laravel\Scout\Searchable;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
@@ -23,10 +23,11 @@ class City extends Model
     use HasSlug;
 
     /**
-    * @var string[]
-    */
+     * @var string[]
+     */
     protected array $cascadeDeletes = ['townships'];
-    protected $guarded=[];
+
+    protected $guarded = [];
 
     public function getSlugOptions(): SlugOptions
     {
@@ -41,8 +42,8 @@ class City extends Model
     }
 
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     public function toSearchableArray(): array
     {
         return [
@@ -51,7 +52,7 @@ class City extends Model
         ];
     }
 
-        /**
+    /**
      * The "booted" method of the model.
      *
      * @return void
@@ -62,36 +63,36 @@ class City extends Model
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<City, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<City, never>
+     */
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date('j-F-Y', strtotime($value)),
         );
     }
+
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<City, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<City, never>
+     */
     protected function deletedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date('j-F-Y', strtotime($value)),
         );
     }
 
-
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Region,City>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Region,City>
+     */
     public function region(): BelongsTo
     {
         return $this->belongsTo(Region::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasMany<Township>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Township>
+     */
     public function townships(): HasMany
     {
         return $this->hasMany(Township::class);

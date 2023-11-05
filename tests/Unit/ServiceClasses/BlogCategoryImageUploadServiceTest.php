@@ -22,7 +22,6 @@ class BlogCategoryImageUploadServiceTest extends TestCase
         // Assert
         Storage::assertExists("blog-categories/$finalName");
         // $this->assertFileExists(storage_path('app/public/blog-categories/') . $finalName);
-
     }
 
     public function test_updateImage_replaces_image(): void
@@ -30,7 +29,7 @@ class BlogCategoryImageUploadServiceTest extends TestCase
         // Arrange
         Storage::fake();
         $existingImageName = 'existing-blog-category-image.jpg';
-        Storage::put("blog-categories/$existingImageName", "dummy");
+        Storage::put("blog-categories/$existingImageName", 'dummy');
         $newImage = UploadedFile::fake()->image('new-blog-category-image.jpg');
 
         // Act

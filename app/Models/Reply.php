@@ -11,39 +11,39 @@ class Reply extends Model
 {
     use HasFactory;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Reply, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Reply, never>
+     */
     protected function updatedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j/F/Y h:i:s A", strtotime($value)),
+            get: fn ($value) => date('j/F/Y h:i:s A', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<ProductReview,Reply>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<ProductReview,Reply>
+     */
     public function productReview(): BelongsTo
     {
         return $this->belongsTo(ProductReview::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<ShopReview,Reply>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<ShopReview,Reply>
+     */
     public function shopReview(): BelongsTo
     {
         return $this->belongsTo(ShopReview::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,Reply>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,Reply>
+     */
     public function seller(): BelongsTo
     {
-        return $this->belongsTo(User::class,"seller_id");
+        return $this->belongsTo(User::class, 'seller_id');
     }
 }

@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use App\Models\Scopes\FilteredByDateScope;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -23,10 +23,11 @@ class Brand extends Model
     use HasSlug;
 
     /**
-    * @var string[]
-    */
+     * @var string[]
+     */
     protected array $cascadeDeletes = ['products'];
-    protected $guarded=[];
+
+    protected $guarded = [];
 
     public function getSlugOptions(): SlugOptions
     {
@@ -41,8 +42,8 @@ class Brand extends Model
     }
 
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     public function toSearchableArray(): array
     {
         return [
@@ -61,46 +62,26 @@ class Brand extends Model
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Brand, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Brand, never>
+     */
     protected function image(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/brands/$value"),
+            set: fn ($value) => str_starts_with($value, 'http') ? $value : asset("storage/brands/$value"),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Brand, never>
-    */
-    protected function createdAt(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
-        );
-    }
-
-    /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Brand, never>
-    */
-    protected function deletedAt(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
-        );
-    }
-
-    /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Category,Brand>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Category,Brand>
+     */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasMany<Product>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Product>
+     */
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
@@ -108,8 +89,8 @@ class Brand extends Model
 
     public static function deleteImage(string $brandImage): void
     {
-        if (!empty($brandImage) && file_exists(storage_path("app/public/brands/".pathinfo($brandImage, PATHINFO_BASENAME)))) {
-            unlink(storage_path("app/public/brands/".pathinfo($brandImage, PATHINFO_BASENAME)));
+        if (! empty($brandImage) && file_exists(storage_path('app/public/brands/'.pathinfo($brandImage, PATHINFO_BASENAME)))) {
+            unlink(storage_path('app/public/brands/'.pathinfo($brandImage, PATHINFO_BASENAME)));
         }
     }
 }

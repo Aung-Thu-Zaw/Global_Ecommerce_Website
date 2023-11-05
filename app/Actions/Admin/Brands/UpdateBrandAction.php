@@ -8,17 +8,17 @@ use App\Services\UploadFiles\BrandImageUploadService;
 class UpdateBrandAction
 {
     /**
-     * @param array<mixed> $data
+     * @param  array<mixed>  $data
      */
     public function handle(array $data, Brand $brand): void
     {
-        $image = isset($data["image"]) ? (new BrandImageUploadService())->updateImage($data["image"], $brand->image) : $brand->image;
+        $image = isset($data['image']) ? (new BrandImageUploadService())->updateImage($data['image'], $brand->image) : $brand->image;
 
         $brand->update([
-            "category_id" => $data["category_id"],
-            "name" => $data["name"],
-            "description" => $data["description"],
-            "image" => $image
+            'category_id' => $data['category_id'],
+            'name' => $data['name'],
+            'description' => $data['description'],
+            'image' => $image,
         ]);
     }
 }

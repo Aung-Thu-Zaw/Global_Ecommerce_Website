@@ -3,15 +3,15 @@
 namespace App\Models;
 
 use App\Models\Scopes\FilteredByDateScope;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Dyrynda\Database\Support\CascadeSoftDeletes;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Laravel\Scout\Searchable;
 use Spatie\Sluggable\HasSlug;
@@ -26,9 +26,10 @@ class Product extends Model
     use HasSlug;
 
     /**
-    * @var string[]
-    */
+     * @var string[]
+     */
     protected array $cascadeDeletes = ['category'];
+
     protected $guarded = [];
 
     protected $casts = [
@@ -49,8 +50,8 @@ class Product extends Model
     }
 
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     public function toSearchableArray(): array
     {
         return [
@@ -69,39 +70,38 @@ class Product extends Model
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Product, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Product, never>
+     */
     protected function image(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => str_starts_with($value, "http") ? $value : asset("storage/products/$value"),
+            set: fn ($value) => str_starts_with($value, 'http') ? $value : asset("storage/products/$value"),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Product, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Product, never>
+     */
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date('j-F-Y', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Product, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Product, never>
+     */
     protected function deletedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date('j-F-Y', strtotime($value)),
         );
     }
 
-
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Product, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Product, never>
+     */
     protected function specialOffer(): Attribute
     {
         return Attribute::make(
@@ -110,8 +110,8 @@ class Product extends Model
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Product, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Product, never>
+     */
     protected function featured(): Attribute
     {
         return Attribute::make(
@@ -120,104 +120,104 @@ class Product extends Model
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasMany<Image>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Image>
+     */
     public function images(): HasMany
     {
         return $this->hasMany(Image::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Brand,Product>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Brand,Product>
+     */
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,Product>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,Product>
+     */
     public function shop(): BelongsTo
     {
-        return $this->belongsTo(User::class, "seller_id");
+        return $this->belongsTo(User::class, 'seller_id');
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Collection,Product>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Collection,Product>
+     */
     public function collection(): BelongsTo
     {
         return $this->belongsTo(Collection::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Color>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Color>
+     */
     public function colors(): BelongsToMany
     {
         return $this->belongsToMany(Color::class, 'product_color');
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Size>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Size>
+     */
     public function sizes(): BelongsToMany
     {
         return $this->belongsToMany(Size::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Type>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Type>
+     */
     public function types(): BelongsToMany
     {
         return $this->belongsToMany(Type::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Category,Product>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Category,Product>
+     */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasMany<CartItem>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<CartItem>
+     */
     public function cartItems(): HasMany
     {
         return $this->hasMany(CartItem::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasMany<Watchlist>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Watchlist>
+     */
     public function watchlists(): HasMany
     {
         return $this->hasMany(Watchlist::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasMany<OrderItem>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<OrderItem>
+     */
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasMany<ProductQuestion>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<ProductQuestion>
+     */
     public function productQuestions(): HasMany
     {
         return $this->hasMany(ProductQuestion::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasMany<ProductReview>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<ProductReview>
+     */
     public function productReviews(): HasMany
     {
         return $this->hasMany(ProductReview::class);
@@ -225,65 +225,62 @@ class Product extends Model
 
     public static function deleteImage(string $productImage): void
     {
-        if (!empty($productImage) && file_exists(storage_path("app/public/products/".pathinfo($productImage, PATHINFO_BASENAME)))) {
-            unlink(storage_path("app/public/products/".pathinfo($productImage, PATHINFO_BASENAME)));
+        if (! empty($productImage) && file_exists(storage_path('app/public/products/'.pathinfo($productImage, PATHINFO_BASENAME)))) {
+            unlink(storage_path('app/public/products/'.pathinfo($productImage, PATHINFO_BASENAME)));
         }
     }
 
     /**
-    * @param array<string> $filterBy
-    * @param Builder<Product> $query
-    */
-
+     * @param  array<string>  $filterBy
+     * @param  Builder<Product>  $query
+     */
     public function scopeFilterBy(Builder $query, array $filterBy): void
     {
         $query->when(
-            $filterBy["search"] ?? null,
+            $filterBy['search'] ?? null,
             function ($query, $search) {
                 $query->where(
                     function ($query) use ($search) {
-                        $query->where("name", "LIKE", "%".$search."%");
+                        $query->where('name', 'LIKE', '%'.$search.'%');
                     }
                 );
             }
         );
 
-        $query->when($filterBy["price"] ?? null, function ($query, $price) {
+        $query->when($filterBy['price'] ?? null, function ($query, $price) {
             if ($price !== null) {
-                $priceRange = explode("-", $price);
+                $priceRange = explode('-', $price);
 
                 if (count($priceRange) === 2) {
                     $minPrice = $priceRange[0];
                     $maxPrice = $priceRange[1];
 
                     $query->where(function ($query) use ($minPrice, $maxPrice) {
-                        $query->whereBetween("price", [$minPrice, $maxPrice])
-                            ->orWhereBetween("discount", [$minPrice, $maxPrice]);
+                        $query->whereBetween('price', [$minPrice, $maxPrice])
+                            ->orWhereBetween('discount', [$minPrice, $maxPrice]);
                     });
                 }
             }
         });
 
-
-        $query->when($filterBy["category"] ?? null, function ($query, $categorySlug) {
-            $query->whereHas("category", function ($query) use ($categorySlug) {
-                $query->where("slug", $categorySlug);
+        $query->when($filterBy['category'] ?? null, function ($query, $categorySlug) {
+            $query->whereHas('category', function ($query) use ($categorySlug) {
+                $query->where('slug', $categorySlug);
             });
         });
 
-        $query->when($filterBy["brand"] ?? null, function ($query, $brandSlug) {
-            $query->whereHas("brand", function ($query) use ($brandSlug) {
-                $query->where("slug", $brandSlug);
+        $query->when($filterBy['brand'] ?? null, function ($query, $brandSlug) {
+            $query->whereHas('brand', function ($query) use ($brandSlug) {
+                $query->where('slug', $brandSlug);
             });
         });
 
-        $query->when($filterBy["rating"] ?? null, function ($query, $rating) {
-            $query->whereHas("productReviews", function ($query) use ($rating) {
+        $query->when($filterBy['rating'] ?? null, function ($query, $rating) {
+            $query->whereHas('productReviews', function ($query) use ($rating) {
                 $query->select('product_id', DB::raw('AVG(rating) as average_rating'))
                       ->groupBy('product_id')
                       ->havingRaw('AVG(rating) >= ?', [$rating]);
             });
         });
-
     }
 }

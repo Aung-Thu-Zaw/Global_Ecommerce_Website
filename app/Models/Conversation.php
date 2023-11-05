@@ -11,29 +11,29 @@ class Conversation extends Model
 {
     use HasFactory;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasMany<Message>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Message>
+     */
     public function messages(): HasMany
     {
         return $this->hasMany(Message::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,Conversation>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,Conversation>
+     */
     public function customer(): BelongsTo
     {
-        return $this->belongsTo(User::class, "customer_id");
+        return $this->belongsTo(User::class, 'customer_id');
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,Conversation>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,Conversation>
+     */
     public function seller(): BelongsTo
     {
-        return $this->belongsTo(User::class, "seller_id");
+        return $this->belongsTo(User::class, 'seller_id');
     }
 }

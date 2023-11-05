@@ -1,6 +1,6 @@
 <script setup>
 import { toast } from "vue3-toastify";
-import { __ } from "@/Translations/translations-inside-setup.js";
+import { __ } from "@/Services/translations-inside-setup.js";
 import "vue3-toastify/dist/index.css";
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3";

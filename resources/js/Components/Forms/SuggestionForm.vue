@@ -2,7 +2,7 @@
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
-import { __ } from "@/Translations/translations-inside-setup.js";
+import { __ } from "@/Services/translations-inside-setup.js";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import { useForm, usePage } from "@inertiajs/vue3";
 import { ref } from "vue";

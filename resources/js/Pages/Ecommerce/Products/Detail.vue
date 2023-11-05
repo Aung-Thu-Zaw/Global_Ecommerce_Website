@@ -4,7 +4,7 @@ import Breadcrumb from "@/Components/Breadcrumbs/HomeBreadcrumb.vue";
 import Information from "@/Components/Information.vue";
 import ShopInformationCard from "@/Components/Cards/Shops/ShopInformationCard.vue";
 import RelatedProductSection from "@/Components/Sections/RelatedProductSection.vue";
-import { __ } from "@/Translations/translations-inside-setup.js";
+import { __ } from "@/Services/translations-inside-setup.js";
 import { computed, reactive, ref } from "vue";
 import { router, usePage, Head, Link } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";

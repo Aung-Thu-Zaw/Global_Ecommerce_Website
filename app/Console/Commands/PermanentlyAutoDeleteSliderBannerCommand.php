@@ -23,12 +23,11 @@ class PermanentlyAutoDeleteSliderBannerCommand extends Command
      */
     protected $description = 'Slider Banners in the trash will be automatically deleted after 60 days';
 
-
     public function handle(): void
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $sliderBanners=SliderBanner::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
+        $sliderBanners = SliderBanner::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
         (new PermanentlyDeleteAllTrashSliderBannerAction())->handle($sliderBanners);
     }

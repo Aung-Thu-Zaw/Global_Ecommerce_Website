@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\FlashSale;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class FlashSaleSeeder extends Seeder
@@ -16,7 +15,7 @@ class FlashSaleSeeder extends Seeder
     public function run()
     {
         FlashSale::create([
-            "end_date" => null
+            'end_date' => null,
         ]);
     }
 }

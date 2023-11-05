@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Admin\Categories\CreateCategoryAction;
+use App\Actions\Admin\Categories\PermanentlyDeleteAllTrashCategoryAction;
+use App\Actions\Admin\Categories\UpdateCategoryAction;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryRequest;
+use App\Http\Traits\HandlesQueryStringParameters;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Builder;
-use Inertia\Response;
-use Inertia\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Http\Requests\CategoryRequest;
-use App\Models\Category;
-use App\Actions\Admin\Categories\CreateCategoryAction;
-use App\Actions\Admin\Categories\UpdateCategoryAction;
-use App\Actions\Admin\Categories\PermanentlyDeleteAllTrashCategoryAction;
-use App\Http\Traits\HandlesQueryStringParameters;
+use Inertia\Response;
+use Inertia\ResponseFactory;
 
 class AdminCategoryController extends Controller
 {
@@ -21,65 +21,65 @@ class AdminCategoryController extends Controller
 
     public function index(): Response|ResponseFactory
     {
-        $categories = Category::search(request("search"))
+        $categories = Category::search(request('search'))
                               ->query(function (Builder $builder) {
-                                  $builder->with("children");
+                                  $builder->with('children');
                               })
-                              ->orderBy(request("sort", "id"), request("direction", "desc"))
-                              ->paginate(request("per_page", 10))
+                              ->orderBy(request('sort', 'id'), request('direction', 'desc'))
+                              ->paginate(request('per_page', 10))
                               ->appends(request()->all());
 
-        return inertia("Admin/Categories/Index", compact("categories"));
+        return inertia('Admin/Categories/Index', compact('categories'));
     }
 
     public function create(): Response|ResponseFactory
     {
-        $per_page = request("per_page");
+        $per_page = request('per_page');
 
-        $categories = Category::select("id", "parent_id", "name")->get();
+        $categories = Category::select('id', 'parent_id', 'name')->get();
 
-        return inertia("Admin/Categories/Create", compact("per_page", "categories"));
+        return inertia('Admin/Categories/Create', compact('per_page', 'categories'));
     }
 
     public function store(CategoryRequest $request): RedirectResponse
     {
         (new CreateCategoryAction())->handle($request->validated());
 
-        return to_route("admin.categories.index", $this->getQueryStringParams($request))->with("success", "CATEGORY_HAS_BEEN_SUCCESSFULLY_CREATED");
+        return to_route('admin.categories.index', $this->getQueryStringParams($request))->with('success', 'CATEGORY_HAS_BEEN_SUCCESSFULLY_CREATED');
     }
 
     public function edit(Request $request, Category $category): Response|ResponseFactory
     {
-        $categories = Category::select("id", "parent_id", "name")->get();
+        $categories = Category::select('id', 'parent_id', 'name')->get();
 
         $queryStringParams = $this->getQueryStringParams($request);
 
-        return inertia("Admin/Categories/Edit", compact("category", "categories", "queryStringParams"));
+        return inertia('Admin/Categories/Edit', compact('category', 'categories', 'queryStringParams'));
     }
 
     public function update(CategoryRequest $request, Category $category): RedirectResponse
     {
         (new UpdateCategoryAction())->handle($request->validated(), $category);
 
-        return to_route("admin.categories.index", $this->getQueryStringParams($request))->with("success", "CATEGORY_HAS_BEEN_SUCCESSFULLY_UPDATED");
+        return to_route('admin.categories.index', $this->getQueryStringParams($request))->with('success', 'CATEGORY_HAS_BEEN_SUCCESSFULLY_UPDATED');
     }
 
     public function destroy(Request $request, Category $category): RedirectResponse
     {
         $category->delete();
 
-        return to_route("admin.categories.index", $this->getQueryStringParams($request))->with("success", "CATEGORY_HAS_BEEN_SUCCESSFULLY_DELETED");
+        return to_route('admin.categories.index', $this->getQueryStringParams($request))->with('success', 'CATEGORY_HAS_BEEN_SUCCESSFULLY_DELETED');
     }
 
     public function trash(): Response|ResponseFactory
     {
-        $trashCategories = Category::search(request("search"))
+        $trashCategories = Category::search(request('search'))
                                    ->onlyTrashed()
-                                   ->orderBy(request("sort", "id"), request("direction", "desc"))
-                                   ->paginate(request("per_page", 10))
+                                   ->orderBy(request('sort', 'id'), request('direction', 'desc'))
+                                   ->paginate(request('per_page', 10))
                                    ->appends(request()->all());
 
-        return inertia("Admin/Categories/Trash", compact("trashCategories"));
+        return inertia('Admin/Categories/Trash', compact('trashCategories'));
     }
 
     public function restore(Request $request, int $trashCategoryId): RedirectResponse
@@ -88,7 +88,7 @@ class AdminCategoryController extends Controller
 
         $trashCategory->restore();
 
-        return to_route('admin.categories.trash', $this->getQueryStringParams($request))->with("success", "CATEGORY_HAS_BEEN_SUCCESSFULLY_RESTORED");
+        return to_route('admin.categories.trash', $this->getQueryStringParams($request))->with('success', 'CATEGORY_HAS_BEEN_SUCCESSFULLY_RESTORED');
     }
 
     public function forceDelete(Request $request, int $trashCategoryId): RedirectResponse
@@ -99,7 +99,7 @@ class AdminCategoryController extends Controller
 
         $trashCategory->forceDelete();
 
-        return to_route('admin.categories.trash', $this->getQueryStringParams($request))->with("success", "THE_CATEGORY_HAS_BEEN_PERMANENTLY_DELETED");
+        return to_route('admin.categories.trash', $this->getQueryStringParams($request))->with('success', 'THE_CATEGORY_HAS_BEEN_PERMANENTLY_DELETED');
     }
 
     public function permanentlyDelete(Request $request): RedirectResponse
@@ -108,6 +108,6 @@ class AdminCategoryController extends Controller
 
         (new PermanentlyDeleteAllTrashCategoryAction())->handle($trashCategories);
 
-        return to_route('admin.categories.trash', $this->getQueryStringParams($request))->with("success", "CATEGORIES_HAVE_BEEN_PERMANENTLY_DELETED");
+        return to_route('admin.categories.trash', $this->getQueryStringParams($request))->with('success', 'CATEGORIES_HAVE_BEEN_PERMANENTLY_DELETED');
     }
 }

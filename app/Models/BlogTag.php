@@ -14,7 +14,7 @@ class BlogTag extends Model
     use HasFactory;
     use HasSlug;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     public function getSlugOptions(): SlugOptions
     {
@@ -29,8 +29,8 @@ class BlogTag extends Model
     }
 
     /**
-       * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogTag, never>
-       */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<BlogTag, never>
+     */
     protected function name(): Attribute
     {
         return Attribute::make(
@@ -39,10 +39,10 @@ class BlogTag extends Model
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<BlogPost>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<BlogPost>
+     */
     public function blogPosts(): BelongsToMany
     {
-        return $this->belongsToMany(BlogPost::class, "blog_post_blog_tag");
+        return $this->belongsToMany(BlogPost::class, 'blog_post_blog_tag');
     }
 }

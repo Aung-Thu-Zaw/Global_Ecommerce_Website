@@ -14,8 +14,8 @@ class Type extends Model
     protected $guarded = [];
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Type, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Type, never>
+     */
     protected function name(): Attribute
     {
         return Attribute::make(
@@ -24,10 +24,10 @@ class Type extends Model
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Product>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Product>
+     */
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class, "product_type");
+        return $this->belongsToMany(Product::class, 'product_type');
     }
 }

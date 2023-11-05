@@ -29,7 +29,7 @@ const toggleCollapseShow = (classes) => {
       </button>
       <!-- Brand -->
       <Link
-        href="#"
+        :href="route('home')"
         class="md:block text-left text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm font-bold px-0"
       >
         <img :src="logo" alt="logo" class="w-auto h-12 object-contain" />
@@ -55,7 +55,7 @@ const toggleCollapseShow = (classes) => {
           <div class="flex flex-wrap">
             <div class="w-6/12">
               <Link
-                href="#"
+                :href="route('home')"
                 class="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm font-bold p-4 px-0"
               >
                 <img
@@ -117,7 +117,7 @@ const toggleCollapseShow = (classes) => {
           </li>
 
           <!-- Brands -->
-          <li class="items-center">
+          <li v-show="can('brands.view')" class="items-center">
             <Link
               :href="route('admin.brands.index')"
               :data="{

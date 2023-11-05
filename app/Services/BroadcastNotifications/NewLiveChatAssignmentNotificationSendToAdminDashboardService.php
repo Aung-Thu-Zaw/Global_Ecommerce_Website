@@ -11,7 +11,7 @@ class NewLiveChatAssignmentNotificationSendToAdminDashboardService
 {
     public function send(LiveChat $liveChat): void
     {
-        $admins = User::where("role", "admin")->get();
+        $admins = User::where('role', 'admin')->get();
 
         $user = User::findOrFail($liveChat->user_id);
 

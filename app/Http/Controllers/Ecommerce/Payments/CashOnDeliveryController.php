@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Ecommerce\Payments;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Services\Payments\ProcessPaymentByPlacingOrderService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class CashOnDeliveryController extends Controller
 {
@@ -13,6 +13,6 @@ class CashOnDeliveryController extends Controller
     {
         (new ProcessPaymentByPlacingOrderService())->processPayment($request->total_price, $request->cart_items, null, 'cash');
 
-        return redirect()->route("home")->with("success", "Your order has been placed successfully");
+        return redirect()->route('home')->with('success', 'Your order has been placed successfully');
     }
 }

@@ -5,9 +5,7 @@ namespace App\Notifications;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class FollowedShopNotification extends Notification implements ShouldBroadcast
@@ -44,11 +42,10 @@ class FollowedShopNotification extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-            "message" => "IS_FOLLOWED_YOUR_SHOP",
-            "name" => $this->user->name
+            'message' => 'IS_FOLLOWED_YOUR_SHOP',
+            'name' => $this->user->name,
         ];
     }
-
 
     /**
      * Get the array representation of the notification.
@@ -59,8 +56,8 @@ class FollowedShopNotification extends Notification implements ShouldBroadcast
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            "message" => "IS_FOLLOWED_YOUR_SHOP",
-            "name" => $this->user->name
+            'message' => 'IS_FOLLOWED_YOUR_SHOP',
+            'name' => $this->user->name,
         ]);
     }
 }

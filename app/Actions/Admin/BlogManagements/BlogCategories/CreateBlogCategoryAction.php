@@ -8,16 +8,16 @@ use App\Services\UploadFiles\BlogCategoryImageUploadService;
 class CreateBlogCategoryAction
 {
     /**
-     * @param array<mixed> $data
+     * @param  array<mixed>  $data
      */
     public function handle(array $data): void
     {
-        $image = isset($data["image"]) ? (new BlogCategoryImageUploadService())->createImage($data["image"]) : null;
+        $image = isset($data['image']) ? (new BlogCategoryImageUploadService())->createImage($data['image']) : null;
 
         BlogCategory::create([
-            "name"=>$data["name"],
-            "status"=>$data["status"],
-            "image"=>$image
+            'name' => $data['name'],
+            'status' => $data['status'],
+            'image' => $image,
         ]);
     }
 }

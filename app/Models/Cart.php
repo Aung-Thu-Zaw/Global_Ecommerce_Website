@@ -10,11 +10,11 @@ class Cart extends Model
 {
     use HasFactory;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasMany<CartItem>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<CartItem>
+     */
     public function cartItems(): HasMany
     {
         return $this->hasMany(CartItem::class);

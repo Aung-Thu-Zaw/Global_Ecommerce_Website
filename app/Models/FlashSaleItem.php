@@ -14,20 +14,20 @@ class FlashSaleItem extends Model
     protected $guarded = [];
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Product,FlashSaleItem>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Product,FlashSaleItem>
+     */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<FlashSaleItem, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<FlashSaleItem, never>
+     */
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date('j-F-Y', strtotime($value)),
         );
     }
 }

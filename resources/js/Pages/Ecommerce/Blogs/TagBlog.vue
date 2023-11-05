@@ -5,7 +5,7 @@ import BlogTagCard from "@/Components/Cards/Blogs/BlogTagCard.vue";
 import BlogCard from "@/Components/Cards/Blogs/BlogCardGrid.vue";
 import BlogCategoryCard from "@/Components/Cards/Blogs/BlogCategoryCard.vue";
 import BlogCardList from "@/Components/Cards/Blogs/BlogCardList.vue";
-import Pagination from "@/Components/Paginations/Pagination.vue";
+import Pagination from "@/Components/Paginations/DashboardPagination.vue";
 import { usePage, Head, Link, router } from "@inertiajs/vue3";
 import { reactive, watch } from "vue";
 

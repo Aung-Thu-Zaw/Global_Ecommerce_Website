@@ -8,14 +8,11 @@ use Illuminate\Support\Collection;
 class PermanentlyDeleteAllTrashRegionAction
 {
     /**
-    * @param Collection<int,Region> $regions
-    */
-
+     * @param  Collection<int,Region>  $regions
+     */
     public function handle(Collection $regions): void
     {
         $regions->each(function ($region) {
-
-
             $region->forceDelete();
         });
     }

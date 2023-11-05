@@ -12,23 +12,23 @@ class HelpCenterController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $topQuestions = Faq::select("id", "question", "slug")
-                           ->orderBy("helpful", "desc")
+        $topQuestions = Faq::select('id', 'question', 'slug')
+                           ->orderBy('helpful', 'desc')
                            ->take(9)
                            ->get();
 
-        $faqSubCategories = FaqSubCategory::select("id", "icon", "name", "slug")->get();
+        $faqSubCategories = FaqSubCategory::select('id', 'icon', 'name', 'slug')->get();
 
-        return inertia("Ecommerce/HelpCenter/Index", compact("topQuestions", "faqSubCategories"));
+        return inertia('Ecommerce/HelpCenter/Index', compact('topQuestions', 'faqSubCategories'));
     }
 
     public function searchResult(): Response|ResponseFactory
     {
-        $faqs = Faq::filterBy(request(["search_question"]))
-                   ->orderBy("id", "desc")
+        $faqs = Faq::filterBy(request(['search_question']))
+                   ->orderBy('id', 'desc')
                    ->paginate(15)
                    ->withQueryString();
 
-        return inertia("Ecommerce/HelpCenter/QuestionSearchResult", compact("faqs"));
+        return inertia('Ecommerce/HelpCenter/QuestionSearchResult', compact('faqs'));
     }
 }

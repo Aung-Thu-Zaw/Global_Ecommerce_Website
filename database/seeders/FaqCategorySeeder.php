@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\FaqCategory;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class FaqCategorySeeder extends Seeder
@@ -16,50 +15,50 @@ class FaqCategorySeeder extends Seeder
     public function run()
     {
         FaqCategory::create([
-            "name"=>"Account Managements",
-            "slug"=>"account-managements"
+            'name' => 'Account Managements',
+            'slug' => 'account-managements',
         ]);
 
         FaqCategory::create([
 
-            "name"=>"Orders",
-            "slug"=>"orders"
+            'name' => 'Orders',
+            'slug' => 'orders',
         ]);
 
         FaqCategory::create([
 
-            "name"=>"Payments",
-            "slug"=>"payments"
+            'name' => 'Payments',
+            'slug' => 'payments',
         ]);
 
         FaqCategory::create([
 
-            "name"=>"Shipping And Delivery",
-            "slug"=>"shipping-and-delivery"
+            'name' => 'Shipping And Delivery',
+            'slug' => 'shipping-and-delivery',
         ]);
 
         FaqCategory::create([
 
-            "name"=>"Returns And Refunds",
-            "slug"=>"returns-and-refunds"
+            'name' => 'Returns And Refunds',
+            'slug' => 'returns-and-refunds',
         ]);
 
         FaqCategory::create([
 
-            "name"=>"Sell on Global E-commerce",
-            "slug"=>"sell-on-global-ecommerce"
+            'name' => 'Sell on Global E-commerce',
+            'slug' => 'sell-on-global-ecommerce',
         ]);
 
         FaqCategory::create([
 
-            "name"=>"Shop Categories",
-            "slug"=>"shop-categories"
+            'name' => 'Shop Categories',
+            'slug' => 'shop-categories',
         ]);
 
         FaqCategory::create([
 
-            "name"=>"Promotions",
-            "slug"=>"promotions"
+            'name' => 'Promotions',
+            'slug' => 'promotions',
         ]);
     }
 }

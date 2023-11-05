@@ -1,7 +1,7 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import QuestionSearchForm from "@/Components/Forms/QuestionSearchForm.vue";
-import Pagination from "@/Components/Paginations/Pagination.vue";
+import Pagination from "@/Components/Paginations/DashboardPagination.vue";
 import { Head, Link } from "@inertiajs/vue3";
 
 const props = defineProps({

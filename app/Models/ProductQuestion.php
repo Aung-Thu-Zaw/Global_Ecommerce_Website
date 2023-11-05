@@ -15,42 +15,42 @@ class ProductQuestion extends Model
     protected $guarded = [];
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductQuestion, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<ProductQuestion, never>
+     */
     protected function updatedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j/F/Y h:i:s A", strtotime($value)),
+            get: fn ($value) => date('j/F/Y h:i:s A', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,ProductQuestion>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,ProductQuestion>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,ProductQuestion>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,ProductQuestion>
+     */
     public function seller(): BelongsTo
     {
-        return $this->belongsTo(User::class, "seller_id");
+        return $this->belongsTo(User::class, 'seller_id');
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Product,ProductQuestion>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Product,ProductQuestion>
+     */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasOne<ProductAnswer>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne<ProductAnswer>
+     */
     public function productAnswer(): HasOne
     {
         return $this->hasOne(ProductAnswer::class);

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
 use App\Actions\DeleteUserAction;
 use App\Events\AccountDeleted;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\MyAccountUpdateRequest;
 use App\Services\UserAvatarService;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -47,9 +47,8 @@ class MyAccountController extends Controller
             $user->save();
         }
 
-        return to_route('my-account.edit', 'tab=edit-profile')->with("success", "PROFILE_UPDATED_SUCCESSFULLY");
+        return to_route('my-account.edit', 'tab=edit-profile')->with('success', 'PROFILE_UPDATED_SUCCESSFULLY');
     }
-
 
     /**
      * Delete the user's account.
@@ -58,13 +57,12 @@ class MyAccountController extends Controller
     {
         $user = $request->user();
 
-        if($user) {
-
+        if ($user) {
             (new DeleteUserAction())->execute($request);
 
             event(new AccountDeleted($user));
         }
 
-        return Redirect::to('/')->with("success", "YOUR_ACCOUNT_IS_DELETED_SUCCESSFULLY");
+        return Redirect::to('/')->with('success', 'YOUR_ACCOUNT_IS_DELETED_SUCCESSFULLY');
     }
 }

@@ -26,12 +26,12 @@ class AdminSocialTrafficController extends Controller
             }
         }
 
-        return back()->with("success", "Change visitor target successfully.");
+        return back()->with('success', 'Change visitor target successfully.');
     }
 
     public function incrementActualVisitors(SocialTraffic $socialTraffic): RedirectResponse
     {
-        $socialTraffic->update(["actual_visitors"=>$socialTraffic->actual_visitors+1]);
+        $socialTraffic->update(['actual_visitors' => $socialTraffic->actual_visitors + 1]);
 
         return back();
     }

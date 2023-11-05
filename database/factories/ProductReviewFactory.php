@@ -17,13 +17,13 @@ class ProductReviewFactory extends Factory
     public function definition()
     {
         return [
-            "product_id"=>fake()->numberBetween(1, 200),
-            "shop_id"=>fake()->numberBetween(3, 40),
-            "user_id"=>fake()->numberBetween(5, 113),
-            "review_text"=>fake()->paragraph(),
-            "rating"=>fake()->numberBetween(1, 5),
-            "status"=>fake()->randomElement(["pending","published","unpublished"]),
-            "created_at"=>fake()->dateTimeBetween("-5 months", now()),
+            'product_id' => fake()->numberBetween(1, 200),
+            'shop_id' => fake()->numberBetween(3, 40),
+            'user_id' => fake()->numberBetween(5, 113),
+            'review_text' => fake()->paragraph(),
+            'rating' => fake()->numberBetween(1, 5),
+            'status' => fake()->randomElement(['pending', 'published', 'unpublished']),
+            'created_at' => fake()->dateTimeBetween('-5 months', now()),
         ];
     }
 }

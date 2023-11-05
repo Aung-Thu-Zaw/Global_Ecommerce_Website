@@ -2,85 +2,92 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Admin\Brands\CreateBrandAction;
+use App\Actions\Admin\Brands\PermanentlyDeleteAllTrashBrandAction;
+use App\Actions\Admin\Brands\UpdateBrandAction;
 use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\Builder;
-use Inertia\Response;
-use Inertia\ResponseFactory;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use App\Http\Requests\BrandRequest;
+use App\Http\Traits\HandlesQueryStringParameters;
 use App\Models\Brand;
 use App\Models\Category;
-use App\Actions\Admin\Brands\CreateBrandAction;
-use App\Actions\Admin\Brands\UpdateBrandAction;
-use App\Actions\Admin\Brands\PermanentlyDeleteAllTrashBrandAction;
-use App\Http\Traits\HandlesQueryStringParameters;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Inertia\Response;
+use Inertia\ResponseFactory;
 
 class AdminBrandController extends Controller
 {
     use HandlesQueryStringParameters;
 
+    public function __construct()
+    {
+        $this->middleware('permission:brands.view', ['only' => ['index']]);
+        $this->middleware('permission:brands.create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:brands.edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:brands.delete', ['only' => ['destroy']]);
+        $this->middleware('permission:brands.view.trash', ['only' => ['trashed']]);
+        $this->middleware('permission:brands.restore', ['only' => ['restore']]);
+        $this->middleware('permission:brands.force.delete', ['only' => ['forceDelete', 'forceDeleteAll']]);
+    }
+
     public function index(): Response|ResponseFactory
     {
-        $brands = Brand::search(request("search"))
+        $brands = Brand::search(request('search'))
                        ->query(function (Builder $builder) {
-                           $builder->with("products:id,brand_id");
+                           $builder->withCount('products');
                        })
-                       ->orderBy(request("sort", "id"), request("direction", "desc"))
-                       ->paginate(request("per_page", 10))
+                       ->orderBy(request('sort', 'id'), request('direction', 'desc'))
+                       ->paginate(request('per_page', 10))
                        ->appends(request()->all());
 
-        return inertia("Admin/Brands/Index", compact("brands"));
+        return inertia('Admin/Brands/Index', compact('brands'));
     }
 
     public function create(): Response|ResponseFactory
     {
-        $per_page = request("per_page");
-
         $categories = Category::all();
 
-        return inertia("Admin/Brands/Create", compact("per_page", "categories"));
+        return inertia('Admin/Brands/Create', compact('categories'));
     }
 
     public function store(BrandRequest $request): RedirectResponse
     {
         (new CreateBrandAction())->handle($request->validated());
 
-        return to_route("admin.brands.index", $this->getQueryStringParams($request))->with("success", "BRAND_HAS_BEEN_SUCCESSFULLY_CREATED");
+        return to_route('admin.brands.index', $this->getQueryStringParams($request))->with('success', 'BRAND_HAS_BEEN_SUCCESSFULLY_CREATED');
     }
 
     public function edit(Request $request, Brand $brand): Response|ResponseFactory
     {
         $categories = Category::all();
 
-        $queryStringParams = $this->getQueryStringParams($request);
-
-        return inertia("Admin/Brands/Edit", compact("brand", "categories", "queryStringParams"));
+        return inertia('Admin/Brands/Edit', compact('brand', 'categories'));
     }
 
     public function update(BrandRequest $request, Brand $brand): RedirectResponse
     {
         (new UpdateBrandAction())->handle($request->validated(), $brand);
 
-        return to_route("admin.brands.index", $this->getQueryStringParams($request))->with("success", "BRAND_HAS_BEEN_SUCCESSFULLY_UPDATED");
+        return to_route('admin.brands.index', $this->getQueryStringParams($request))->with('success', 'BRAND_HAS_BEEN_SUCCESSFULLY_UPDATED');
     }
 
     public function destroy(Request $request, Brand $brand): RedirectResponse
     {
         $brand->delete();
 
-        return to_route("admin.brands.index", $this->getQueryStringParams($request))->with("success", "BRAND_HAS_BEEN_SUCCESSFULLY_DELETED");
+        return to_route('admin.brands.index', $this->getQueryStringParams($request))->with('success', 'BRAND_HAS_BEEN_SUCCESSFULLY_DELETED');
     }
 
-    public function trash(): Response|ResponseFactory
+    public function trashed(): Response|ResponseFactory
     {
-        $trashBrands = Brand::search(request("search"))
-                            ->onlyTrashed()
-                            ->orderBy(request("sort", "id"), request("direction", "desc"))
-                            ->paginate(request("per_page", 10))
-                            ->appends(request()->all());
+        $trashBrands = Brand::search(request('search'))
+            ->onlyTrashed()
+            ->orderBy(request('sort', 'id'), request('direction', 'desc'))
+            ->paginate(request('per_page', 10))
+            ->appends(request()->all());
 
-        return inertia("Admin/Brands/Trash", compact("trashBrands"));
+        return inertia('Admin/Brands/Trash', compact('trashBrands'));
     }
 
     public function restore(Request $request, int $trashBrandId): RedirectResponse
@@ -89,7 +96,7 @@ class AdminBrandController extends Controller
 
         $trashBrand->restore();
 
-        return to_route('admin.brands.trash', $this->getQueryStringParams($request))->with("success", "BRAND_HAS_BEEN_SUCCESSFULLY_RESTORED");
+        return to_route('admin.brands.trash', $this->getQueryStringParams($request))->with('success', 'BRAND_HAS_BEEN_SUCCESSFULLY_RESTORED');
     }
 
     public function forceDelete(Request $request, int $trashBrandId): RedirectResponse
@@ -100,15 +107,15 @@ class AdminBrandController extends Controller
 
         $trashBrand->forceDelete();
 
-        return to_route('admin.brands.trash', $this->getQueryStringParams($request))->with("success", "THE_BRAND_HAS_BEEN_PERMANENTLY_DELETED");
+        return to_route('admin.brands.trash', $this->getQueryStringParams($request))->with('success', 'THE_BRAND_HAS_BEEN_PERMANENTLY_DELETED');
     }
 
-    public function permanentlyDelete(Request $request): RedirectResponse
+    public function forceDeleteAll(Request $request): RedirectResponse
     {
         $trashBrands = Brand::onlyTrashed()->get();
 
         (new PermanentlyDeleteAllTrashBrandAction())->handle($trashBrands);
 
-        return to_route('admin.brands.trash', $this->getQueryStringParams($request))->with("success", "BRANDS_HAVE_BEEN_PERMANENTLY_DELETED");
+        return to_route('admin.brands.trash', $this->getQueryStringParams($request))->with('success', 'BRANDS_HAVE_BEEN_PERMANENTLY_DELETED');
     }
 }

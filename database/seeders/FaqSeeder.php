@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Faq;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class FaqSeeder extends Seeder
@@ -15,6 +14,6 @@ class FaqSeeder extends Seeder
      */
     public function run()
     {
-      Faq::factory(200)->create();
+        Faq::factory(200)->create();
     }
 }

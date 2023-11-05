@@ -17,8 +17,8 @@ class PageFactory extends Factory
     public function definition()
     {
         return [
-            "title"=>fake()->sentence(),
-            "description"=>fake()->paragraph()
+            'title' => fake()->sentence(),
+            'description' => fake()->paragraph(),
         ];
     }
 }

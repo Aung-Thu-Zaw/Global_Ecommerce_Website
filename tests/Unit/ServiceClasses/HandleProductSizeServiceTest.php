@@ -16,16 +16,20 @@ class HandleProductSizeServiceTest extends TestCase
     use RefreshDatabase;
 
     private User $seller;
+
     private Category $category;
+
     private Brand $brand;
+
     private Collection $collection;
+
     private Product $product;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->seller = User::factory()->create(["status" => "active", "role" => "seller"]);
+        $this->seller = User::factory()->create(['status' => 'active', 'role' => 'seller']);
         $this->category = Category::factory()->create();
         $this->brand = Brand::factory()->create();
         $this->collection = Collection::factory()->create();
@@ -35,7 +39,7 @@ class HandleProductSizeServiceTest extends TestCase
     public function test_it_can_handle_sizes(): void
     {
         // Arrange
-        $sizes = ['sm','md','lg','xl','2xl'];
+        $sizes = ['sm', 'md', 'lg', 'xl', '2xl'];
 
         // Act
         $service = new HandleProductSizeService();
@@ -51,7 +55,7 @@ class HandleProductSizeServiceTest extends TestCase
     public function test_it_does_not_duplicate_existing_sizes(): void
     {
         // Arrange
-        $sizes = ['sm','SM','sM','Sm'];
+        $sizes = ['sm', 'SM', 'sM', 'Sm'];
 
         // Act
         $service = new HandleProductSizeService();
@@ -64,10 +68,10 @@ class HandleProductSizeServiceTest extends TestCase
     private function createProduct(): Product
     {
         return Product::factory()->create([
-            "seller_id" => $this->seller->id,
-            "brand_id" => $this->brand->id,
-            "collection_id" => $this->collection->id,
-            "category_id" => $this->category->id
+            'seller_id' => $this->seller->id,
+            'brand_id' => $this->brand->id,
+            'collection_id' => $this->collection->id,
+            'category_id' => $this->category->id,
         ]);
     }
 }

@@ -25,20 +25,20 @@ class RoleRequest extends FormRequest
     public function rules()
     {
         return [
-            "name"=>["required","string"],
-            "captcha_token"  => ["required",new RecaptchaRule()],
+            'name' => ['required', 'string'],
+            'captcha_token' => ['required', new RecaptchaRule()],
         ];
     }
 
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     public function messages(): array
     {
         return [
-            "name.required" => "The name field is required.",
-            "name.string" => "The name must be a string.",
-            "captcha_token.required"=>"The captcha token is required",
+            'name.required' => 'The name field is required.',
+            'name.string' => 'The name must be a string.',
+            'captcha_token.required' => 'The captcha token is required',
         ];
     }
 }

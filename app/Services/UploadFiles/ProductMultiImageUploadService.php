@@ -9,22 +9,18 @@ use Illuminate\Http\UploadedFile;
 class ProductMultiImageUploadService
 {
     /**
-     * @param array<UploadedFile> $images
+     * @param  array<UploadedFile>  $images
      */
     public function createMultiImage(array $images, Product $product): void
     {
-
         foreach ($images as $image) {
-
             $originalName = $image->getClientOriginalName();
 
-            $finalName = "product"."-".time()."-".$originalName;
+            $finalName = 'product'.'-'.time().'-'.$originalName;
 
-            $image->storeAs("products", $finalName);
+            $image->storeAs('products', $finalName);
 
-            Image::create(["product_id" => $product->id,"img_path" => $finalName]);
-
+            Image::create(['product_id' => $product->id, 'img_path' => $finalName]);
         }
-
     }
 }

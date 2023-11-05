@@ -8,15 +8,12 @@ use Illuminate\Support\Collection;
 class PermanentlyDeleteAllTrashWebsiteFeedbackAction
 {
     /**
-    * @param Collection<int,WebsiteFeedback> $websiteFeedbacks
-    */
-
+     * @param  Collection<int,WebsiteFeedback>  $websiteFeedbacks
+     */
     public function handle(Collection $websiteFeedbacks): void
     {
         $websiteFeedbacks->each(function ($websiteFeedback) {
-
             $websiteFeedback->forceDelete();
-
         });
     }
 }

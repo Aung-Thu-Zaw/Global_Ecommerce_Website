@@ -21,7 +21,6 @@ class CampaignBannerImageUploadServiceTest extends TestCase
 
         // Assert
         Storage::assertExists("campaign-banners/$finalName");
-
     }
 
     public function test_updateImage_replaces_image(): void
@@ -29,7 +28,7 @@ class CampaignBannerImageUploadServiceTest extends TestCase
         // Arrange
         Storage::fake();
         $existingImageName = 'existing-campaign-banner-image.jpg';
-        Storage::put("campaign-banners/$existingImageName", "dummy");
+        Storage::put("campaign-banners/$existingImageName", 'dummy');
         $newImage = UploadedFile::fake()->image('new-campaign-banner-image.jpg');
 
         // Act

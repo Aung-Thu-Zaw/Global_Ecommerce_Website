@@ -4,9 +4,6 @@ use Illuminate\Support\Facades\Facade;
 
 return [
 
-
-
-
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -86,7 +83,6 @@ return [
     */
 
     'locale' => 'en',
-
 
     /*
     |--------------------------------------------------------------------------
@@ -190,9 +186,8 @@ return [
          * Package Service Providers...
          */
 
-         Intervention\Image\ImageServiceProvider::class,
-         Jorenvh\Share\Providers\ShareServiceProvider::class,
-
+        Intervention\Image\ImageServiceProvider::class,
+        Jorenvh\Share\Providers\ShareServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -204,7 +199,6 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Spatie\Permission\PermissionServiceProvider::class,
-
 
     ],
 

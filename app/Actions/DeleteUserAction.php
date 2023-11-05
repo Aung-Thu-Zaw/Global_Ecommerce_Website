@@ -10,7 +10,7 @@ class DeleteUserAction
 {
     public function execute(Request $request): ?string
     {
-        if (auth()->user() && !auth()->user()->google_id && !auth()->user()->facebook_id) {
+        if (auth()->user() && ! auth()->user()->google_id && ! auth()->user()->facebook_id) {
             $request->validate([
                 'password' => ['required', 'current-password'],
             ]);
@@ -18,8 +18,7 @@ class DeleteUserAction
 
         $user = $request->user();
 
-        if($user) {
-
+        if ($user) {
             User::deleteDefaultAvatar($user);
 
             User::deleteUserAvatar($user);
@@ -27,7 +26,6 @@ class DeleteUserAction
             Auth::logout();
 
             $user->delete();
-
         }
 
         $request->session()->invalidate();

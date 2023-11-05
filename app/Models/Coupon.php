@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 
 class Coupon extends Model
 {
@@ -16,11 +16,11 @@ class Coupon extends Model
     use Searchable;
     use SoftDeletes;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     /**
-    *     @return array<string>
-    */
+     *     @return array<string>
+     */
     public function toSearchableArray(): array
     {
         return [
@@ -38,30 +38,29 @@ class Coupon extends Model
         static::addGlobalScope(new FilteredByDateScope());
     }
 
-
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Coupon, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Coupon, never>
+     */
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date('j-F-Y', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<Coupon, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Coupon, never>
+     */
     protected function deletedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y", strtotime($value)),
+            get: fn ($value) => date('j-F-Y', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<User>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<User>
+     */
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class)

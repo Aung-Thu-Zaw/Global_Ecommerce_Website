@@ -23,12 +23,11 @@ class PermanentlyAutoDeleteFaqCommand extends Command
      */
     protected $description = 'Faqs in the trash will be automatically deleted after 60 days';
 
-
     public function handle(): void
     {
         $cutoffDate = Carbon::now()->subDays(60);
 
-        $faqs=Faq::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
+        $faqs = Faq::onlyTrashed()->where('deleted_at', '<=', $cutoffDate)->get();
 
         (new PermanentlyDeleteAllTrashFaqAction())->handle($faqs);
     }

@@ -11,8 +11,8 @@ use App\Models\User;
 use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
-use Tightenco\Ziggy\Ziggy;
 use Jorenvh\Share\Share;
+use Tightenco\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -41,41 +41,44 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'recaptcha_site_key' => config('services.google_recaptcha.site_key'),
             'auth' => [
-                'user' => User::with(["cart","permissions","notifications"])->where("id", $request->user()->id ?? null)->first(),
-            ],
-            'parentCategory' => Category::with("children")->whereNull("parent_id")->get(),
-            'languages' => Language::all(),
-            'locale' => session('locale'),
-            'searchHistories' => SearchHistory::orderBy("id", "desc")->get(),
-            'websiteSetting' => WebsiteSetting::first(),
-            'sellers' => User::where([["role","seller"],["status","active"]])->limit(30)->get(),
-            'totalCartItems' => Cart::with("cartItems")->where("user_id", $request->user()->id ?? null)->first(),
-            'socialShares' => (new Share())
-                               ->currentPage("Global E-commerce")
-                               ->facebook()
-                               ->twitter()
-                               ->linkedIn()
-                               ->reddit()
-                               ->telegram()
-                               ->whatsApp()
-                               ->getRawLinks(),
+                // 'user' => User::with(['permissions'])->where('id', $request->user()->id ?? null)->first(),
+                // 'user' => User::with(['cart', 'permissions', 'notifications'])->where('id', $request->user()->id ?? null)->first(),
 
-            "conversations" => Conversation::with(["messages.user:id,avatar","customer:id,name,avatar,last_activity","vendor:id,shop_name,avatar,offical,last_activity"])
-                                         ->where("customer_id", auth()->user() ? auth()->user()->id : null)
-                                         ->orWhere("seller_id", auth()->user() ? auth()->user()->id : null)
-                                         ->get(),
+                'user' => $request->user(),
+                'permissions' => $request->user()?->permissions->pluck('name')->all() ?? [],
+
+            ],
+            'parentCategory' => Category::select('id', 'name', 'slug')->with('children:id,name,slug')->whereNull('parent_id')->get(),
+            // 'languages' => Language::all(),
+            // 'locale' => session('locale'),
+            // 'searchHistories' => SearchHistory::orderBy('id', 'desc')->get(),
+            // 'websiteSetting' => WebsiteSetting::first(),
+            // 'sellers' => User::where([['role', 'seller'], ['status', 'active']])->limit(30)->get(),
+            // 'totalCartItems' => Cart::with('cartItems')->where('user_id', $request->user()->id ?? null)->first(),
+            // 'socialShares' => (new Share())
+            //                    ->currentPage('Global E-commerce')
+            //                    ->facebook()
+            //                    ->twitter()
+            //                    ->linkedIn()
+            //                    ->reddit()
+            //                    ->telegram()
+            //                    ->whatsApp()
+            //                    ->getRawLinks(),
+
+            // 'conversations' => Conversation::with(['messages.user:id,avatar', 'customer:id,name,avatar,last_activity', 'vendor:id,shop_name,avatar,offical,last_activity'])
+            //                              ->where('customer_id', auth()->user() ? auth()->user()->id : null)
+            //                              ->orWhere('seller_id', auth()->user() ? auth()->user()->id : null)
+            //                              ->get(),
 
             'flash' => [
                 'successMessage' => session('success'),
                 'errorMessage' => session('error'),
-                'infoMessage' => session('info'),
-                'suggestions' => session('suggestions'),
-
             ],
+
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy())->toArray(), [
                     'location' => $request->url(),
-                    'query' => $request->query()
+                    'query' => $request->query(),
                 ]);
             },
         ]);

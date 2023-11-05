@@ -11,7 +11,7 @@ class NewProductReviewNotificationSendToAdminDashboardService
 {
     public function send(ProductReview $productReview): void
     {
-        $admins = User::where("role", "admin")->get();
+        $admins = User::where('role', 'admin')->get();
 
         Notification::send($admins, new NewProductReviewFromCustomerNotification($productReview));
     }

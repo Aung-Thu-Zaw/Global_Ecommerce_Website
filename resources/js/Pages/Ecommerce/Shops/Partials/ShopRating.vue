@@ -2,7 +2,7 @@
 import ShopReviewCard from "@/Components/Cards/Shops/ShopReviewCard.vue";
 import ShopReplyCard from "@/Components/Cards/Shops/ShopReplyCard.vue";
 import ShopReviewForm from "@/Components/Forms/Reviews/ShopReviewForm.vue";
-import Pagination from "@/Components/Paginations/Pagination.vue";
+import Pagination from "@/Components/Paginations/DashboardPagination.vue";
 import TotalAverageRatingStarWithProgressBar from "@/Components/RatingStars/TotalAverageRatingStarWithProgressBar.vue";
 import TotalReviewAvgStars from "@/Components/RatingStars/TotalReviewAvgStars.vue";
 import { computed } from "vue";

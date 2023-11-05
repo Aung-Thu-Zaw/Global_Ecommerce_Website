@@ -17,66 +17,62 @@ class LiveChatMessage extends Model
     protected $guarded = [];
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,LiveChatMessage>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,LiveChatMessage>
+     */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, "user_id");
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<LiveChatMessage, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<LiveChatMessage, never>
+     */
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("j-F-Y ( l )", strtotime($value)),
+            get: fn ($value) => date('j-F-Y ( l )', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Casts\Attribute<LiveChatMessage, never>
-    */
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<LiveChatMessage, never>
+     */
     protected function updatedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date("h:i A", strtotime($value)),
+            get: fn ($value) => date('h:i A', strtotime($value)),
         );
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,LiveChatMessage>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User,LiveChatMessage>
+     */
     public function agent(): BelongsTo
     {
-        return $this->belongsTo(User::class, "agent_id");
+        return $this->belongsTo(User::class, 'agent_id');
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasMany<ChatFileAttachment>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<ChatFileAttachment>
+     */
     public function chatFileAttachments(): HasMany
     {
         return $this->hasMany(ChatFileAttachment::class);
     }
 
-
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<LiveChatMessage,LiveChatMessage>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<LiveChatMessage,LiveChatMessage>
+     */
     public function replyToMessage(): BelongsTo
     {
         return $this->belongsTo(LiveChatMessage::class, 'reply_to_message_id');
     }
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasMany<LiveChatMessage>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<LiveChatMessage>
+     */
     public function replies(): HasMany
     {
         return $this->hasMany(LiveChatMessage::class, 'reply_to_message_id');
     }
-
-
-
 }

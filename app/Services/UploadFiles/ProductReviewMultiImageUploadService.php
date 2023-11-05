@@ -9,19 +9,18 @@ use Illuminate\Http\UploadedFile;
 class ProductReviewMultiImageUploadService
 {
     /**
-     * @param array<UploadedFile> $images
+     * @param  array<UploadedFile>  $images
      */
     public function createMultiImage(array $images, ProductReview $productReview): void
     {
         foreach ($images as $image) {
-
             $originalName = $image->getClientOriginalName();
 
-            $finalName = "product-review"."-".time()."-".$originalName;
+            $finalName = 'product-review'.'-'.time().'-'.$originalName;
 
-            $image->storeAs("product-reviews", $finalName);
+            $image->storeAs('product-reviews', $finalName);
 
-            Image::create(["product_review_id" => $productReview->id,"img_path" => $finalName]);
+            Image::create(['product_review_id' => $productReview->id, 'img_path' => $finalName]);
         }
     }
 }

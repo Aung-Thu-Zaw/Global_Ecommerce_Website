@@ -13,8 +13,8 @@ class FlashSale extends Model
     protected $guarded = [];
 
     /**
-    * @return \Illuminate\Database\Eloquent\Relations\HasMany<FlashSaleItem>
-    */
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<FlashSaleItem>
+     */
     public function flashSaleItems(): HasMany
     {
         return $this->hasMany(FlashSaleItem::class);

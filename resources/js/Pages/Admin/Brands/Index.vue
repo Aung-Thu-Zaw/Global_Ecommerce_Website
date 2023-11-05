@@ -1,124 +1,40 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/BrandBreadcrumb.vue";
-import CreateButton from "@/Components/Buttons/CreateButton.vue";
-import TrashButton from "@/Components/Buttons/TrashButton.vue";
-import EditButton from "@/Components/Buttons/EditButton.vue";
-import DeleteButton from "@/Components/Buttons/DeleteButton.vue";
-import DashboardSearchInputForm from "@/Components/Forms/DashboardSearchInputForm.vue";
-import DashboardPerPageSelectBox from "@/Components/Forms/DashboardPerPageSelectBox.vue";
-import DashboardFilterByCreatedDate from "@/Components/Forms/DashboardFilterByCreatedDate.vue";
-import SortingArrows from "@/Components/Table/SortingArrows.vue";
+import DashboardTableDataSearchBox from "@/Components/Forms/SearchBoxs/DashboardTableDataSearchBox.vue";
+import DashboardTableDataPerPageSelectBox from "@/Components/Forms/SelectBoxs/DashboardTableDataPerPageSelectBox.vue";
+import DashboardTableFilterByCreatedDate from "@/Components/Forms/SelectBoxs/DashboardTableFilterByCreatedDate.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/Breadcrumb.vue";
+import BreadcrumbItem from "@/Components/Breadcrumbs/BreadcrumbItem.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
-import TableHeader from "@/Components/Table/TableHeader.vue";
-import HeaderTh from "@/Components/Table/HeaderTh.vue";
-import BodyTh from "@/Components/Table/BodyTh.vue";
-import Tr from "@/Components/Table/Tr.vue";
-import Td from "@/Components/Table/Td.vue";
-import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import Pagination from "@/Components/Paginations/Pagination.vue";
-import { __ } from "@/Translations/translations-inside-setup.js";
-import { inject, computed, ref, reactive } from "vue";
-import { router, Head, usePage } from "@inertiajs/vue3";
+import SortableTableHeaderCell from "@/Components/Table/SortableTableHeaderCell.vue";
+import TableHeaderCell from "@/Components/Table/TableHeaderCell.vue";
+import TableDataCell from "@/Components/Table/TableDataCell.vue";
+import Image from "@/Components/Table/Image.vue";
+import InertiaLinkButton from "@/Components/Buttons/InertiaLinkButton.vue";
+import NormalButton from "@/Components/Buttons/NormalButton.vue";
+import NoTableData from "@/Components/Table/NoTableData.vue";
+import { __ } from "@/Services/translations-inside-setup.js";
+import Pagination from "@/Components/Paginations/DashboardPagination.vue";
+import { useResourceActions } from "@/Composables/useResourceActions";
+import { Head, usePage } from "@inertiajs/vue3";
 
-// Define the props
 const props = defineProps({
   brands: Object,
 });
 
-// Define Variables
-const swal = inject("$swal");
-const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
+const brandList = "admin.brands.index";
 
-// Create New Brand Permission
-const brandAdd = computed(() => {
-  return permissions.value.length
-    ? permissions.value.some((permission) => permission.name === "brand.add")
-    : false;
-});
-
-// Brand Edit Permission
-const brandEdit = computed(() => {
-  return permissions.value.length
-    ? permissions.value.some((permission) => permission.name === "brand.edit")
-    : false;
-});
-
-// Brand Delete Permission
-const brandDelete = computed(() => {
-  return permissions.value.length
-    ? permissions.value.some((permission) => permission.name === "brand.delete")
-    : false;
-});
-
-// Brand Trash List Permission
-const brandTrashList = computed(() => {
-  return permissions.value.length
-    ? permissions.value.some(
-        (permission) => permission.name === "brand.trash.list"
-      )
-    : false;
-});
-
-// Query String Parameteres
-const params = reactive({
+const queryStringParams = {
+  page: usePage().props.ziggy.query?.page,
+  per_page: usePage().props.ziggy.query?.per_page,
   sort: usePage().props.ziggy.query?.sort,
   direction: usePage().props.ziggy.query?.direction,
-});
-
-// Update Sorting Table Column
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
-  router.get(
-    route("admin.brands.index"),
-    {
-      search: usePage().props.ziggy.query?.search,
-      page: usePage().props.ziggy.query?.page,
-      per_page: usePage().props.ziggy.query?.per_page,
-      sort: params.sort,
-      direction: params.direction,
-      created_from: usePage().props.ziggy.query?.created_from,
-      created_until: usePage().props.ziggy.query?.created_until,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
 };
 
-// Handle Brand Delete
-const handleDelete = (brand) => {
-  router.delete(
-    route("admin.brands.destroy", {
-      brand: brand,
-      search: usePage().props.ziggy.query?.search,
-      page: usePage().props.ziggy.query?.page,
-      per_page: usePage().props.ziggy.query?.per_page,
-      sort: params.sort,
-      direction: params.direction,
-      created_from: usePage().props.ziggy.query?.created_from,
-      created_until: usePage().props.ziggy.query?.created_until,
-    }),
-    {
-      preserveScroll: true,
-      onSuccess: () => {
-        if (usePage().props.flash.successMessage) {
-          swal({
-            icon: "success",
-            title: __(usePage().props.flash.successMessage),
-          });
-        }
-      },
-    }
-  );
-};
+const { softDeleteAction } = useResourceActions();
 
-// Handle Delete Brand
 const handleDeleteBrand = async (brand) => {
-  if (brand.products.length > 0) {
+  if (brand.products_count > 0) {
     const result = await swal({
       icon: "error",
       title: __("YOU_CANT_DELETE_THIS_BRAND_BECAUSE_THIS_BRAND_HAVE_PRODUCTS"),
@@ -135,154 +51,141 @@ const handleDeleteBrand = async (brand) => {
       reverseButtons: true,
     });
     if (result.isConfirmed) {
-      handleDelete(brand.slug);
+      softDeleteAction("Brand", "admin.brands.destroy", brand);
     }
   } else {
-    const result = await swal({
-      icon: "question",
-      title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_BRAND"),
-      text: __("YOU_WILL_BE_ABLE_TO_RESTORE_THIS_BRAND_IN_THE_TRASH"),
-      showCancelButton: true,
-      confirmButtonText: __("YES_DELETE_IT"),
-      cancelButtonText: __("CANCEL"),
-      confirmButtonColor: "#d52222",
-      cancelButtonColor: "#626262",
-      timer: 20000,
-      timerProgressBar: true,
-      reverseButtons: true,
-    });
-
-    if (result.isConfirmed) {
-      handleDelete(brand.slug);
-    }
+    softDeleteAction("Brand", "admin.brands.destroy", brand);
   }
 };
-
-if (usePage().props.flash.successMessage) {
-  swal({
-    icon: "success",
-    title: __(usePage().props.flash.successMessage),
-  });
-}
 </script>
 
 <template>
   <AdminDashboardLayout>
     <Head :title="__('BRANDS')" />
+    <!-- Breadcrumb And Trash Button  -->
+    <div class="min-h-screen py-10 font-poppins">
+      <div
+        class="flex flex-col md:flex-row items-center md:justify-between mb-5"
+      >
+        <Breadcrumb :to="brandList" icon="fa-award" label="Brands">
+          <BreadcrumbItem label="List" />
+        </Breadcrumb>
 
-    <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <div class="flex items-center justify-between mb-10">
-        <!-- Breadcrumb -->
-        <Breadcrumb />
-
-        <!-- Trash Button -->
-        <div v-if="brandTrashList">
-          <TrashButton href="admin.brands.trash" />
-        </div>
+        <InertiaLinkButton
+          v-show="can('brands.view.trash')"
+          to="admin.brands.trashed"
+          class="bg-red-600 text-white ring-2 ring-red-300"
+        >
+          <i class="fa-solid fa-trash-can mr-1"></i>
+          Trash
+        </InertiaLinkButton>
       </div>
 
-      <div class="mb-5 flex items-center justify-between">
-        <!-- Create Brand Button -->
-        <div v-if="brandAdd">
-          <CreateButton href="admin.brands.create" name="ADD_BRAND" />
-        </div>
+      <!-- Create New Button  -->
+      <div v-show="can('brands.create')" class="mb-3">
+        <InertiaLinkButton to="admin.brands.create">
+          <i class="fa-solid fa-file-circle-plus mr-1"></i>
+          Add A New Brand
+        </InertiaLinkButton>
+      </div>
 
-        <div class="flex items-center ml-auto">
-          <!-- Search Box -->
-          <DashboardSearchInputForm
-            href="admin.brands.index"
-            placeholder="SEARCH_BY_NAME"
+      <!-- Table Start -->
+      <div class="border bg-white rounded-md shadow px-5 py-3">
+        <div
+          class="my-5 flex flex-col sm:flex-row space-y-5 sm:space-y-0 items-center justify-between"
+        >
+          <DashboardTableDataSearchBox
+            placeholder="Search by brand name ..."
+            :to="brandList"
           />
 
-          <!-- Perpage Select Box -->
-          <div class="ml-5">
-            <DashboardPerPageSelectBox href="admin.brands.index" />
+          <div class="flex items-center space-x-5">
+            <DashboardTableDataPerPageSelectBox :to="brandList" />
+
+            <DashboardTableFilterByCreatedDate :to="brandList" />
           </div>
-
-          <!-- Filter By Date -->
-          <DashboardFilterByCreatedDate href="admin.brands.index" />
         </div>
+        <TableContainer>
+          <table class="w-full text-sm text-left text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+              <tr>
+                <SortableTableHeaderCell
+                  label="# No"
+                  :to="brandList"
+                  sort="id"
+                />
+
+                <TableHeaderCell label="Image" />
+
+                <SortableTableHeaderCell
+                  label="Name"
+                  :to="brandList"
+                  sort="name"
+                />
+
+                <SortableTableHeaderCell
+                  label="Description"
+                  :to="brandList"
+                  sort="description"
+                />
+
+                <TableHeaderCell label="Actions" />
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(brand, index) in brands.data"
+                :key="brand.id"
+                :class="{
+                  'border-b': index !== brands.data.length - 1,
+                }"
+              >
+                <TableDataCell>
+                  {{ brand.id }}
+                </TableDataCell>
+
+                <TableDataCell>
+                  <Image :src="brand.image" />
+                </TableDataCell>
+
+                <TableDataCell>
+                  {{ brand.name }}
+                </TableDataCell>
+
+                <TableDataCell>
+                  {{ brand.description }}
+                </TableDataCell>
+
+                <td class="px-6 py-4 min-w-[300px] max-w-[500px] space-x-3">
+                  <InertiaLinkButton
+                    v-show="can('brands.edit')"
+                    to="admin.brands.edit"
+                    :targetIdentifier="brand"
+                    :data="queryStringParams"
+                  >
+                    <i class="fa-solid fa-edit"></i>
+                    Edit
+                  </InertiaLinkButton>
+
+                  <NormalButton
+                    v-show="can('brands.delete')"
+                    @click="handleDeleteBrand(brand)"
+                    class="bg-red-600 text-white ring-2 ring-red-300"
+                  >
+                    <i class="fa-solid fa-trash-can"></i>
+                    Delete
+                  </NormalButton>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </TableContainer>
+
+        <Pagination :data="brands" />
+
+        <NoTableData v-show="!brands.data.length" />
       </div>
-
-      <!-- Brand Table Start -->
-      <TableContainer>
-        <TableHeader>
-          <HeaderTh @click="updateSorting('id')">
-            No
-            <SortingArrows :params="params" sort="id" />
-          </HeaderTh>
-
-          <HeaderTh> {{ __("IMAGE") }} </HeaderTh>
-
-          <HeaderTh @click="updateSorting('name')">
-            {{ __("NAME") }}
-            <SortingArrows :params="params" sort="name" />
-          </HeaderTh>
-
-          <HeaderTh @click="updateSorting('description')">
-            {{ __("DESCRIPTION") }}
-            <SortingArrows :params="params" sort="description" />
-          </HeaderTh>
-
-          <HeaderTh @click="updateSorting('created_at')">
-            {{ __("CREATED_DATE") }}
-            <SortingArrows :params="params" sort="created_at" />
-          </HeaderTh>
-
-          <HeaderTh v-if="brandEdit || brandDelete">
-            {{ __("ACTION") }}
-          </HeaderTh>
-        </TableHeader>
-
-        <tbody v-if="brands.data.length">
-          <Tr v-for="brand in brands.data" :key="brand.id">
-            <BodyTh>
-              {{ brand.id }}
-            </BodyTh>
-
-            <Td>
-              <img :src="brand.image" class="image" />
-            </Td>
-
-            <Td>
-              {{ brand.name }}
-            </Td>
-
-            <Td>
-              <span v-html="brand.description" class="line-clamp-1 w-[500px]">
-              </span>
-            </Td>
-
-            <Td>
-              {{ brand.created_at }}
-            </Td>
-
-            <Td v-if="brandEdit || brandDelete" class="flex items-center">
-              <!-- Edit Button -->
-              <div v-if="brandEdit">
-                <EditButton href="admin.brands.edit" :slug="brand.slug" />
-              </div>
-
-              <!-- Delete Button -->
-              <div v-if="brandDelete">
-                <DeleteButton @click="handleDeleteBrand(brand)" />
-              </div>
-            </Td>
-          </Tr>
-        </tbody>
-      </TableContainer>
-      <!-- Brand Table End -->
-
-      <!-- No Data Row -->
-      <NotAvaliableData v-if="!brands.data.length" />
-
-      <!-- Pagination -->
-      <div v-if="brands.data.length" class="mt-6">
-        <p class="text-center text-sm text-gray-500 mb-3 font-bold">
-          Showing {{ brands.from }} - {{ brands.to }} of {{ brands.total }}
-        </p>
-        <Pagination :links="brands.links" />
-      </div>
+      <!-- Table End -->
     </div>
   </AdminDashboardLayout>
 </template>
