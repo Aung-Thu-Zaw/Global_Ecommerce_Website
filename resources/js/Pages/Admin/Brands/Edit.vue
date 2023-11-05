@@ -1,213 +1,127 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/BrandBreadcrumb.vue";
-import InputError from "@/Components/Forms/InputError.vue";
-import InputLabel from "@/Components/Forms/InputLabel.vue";
-import TextInput from "@/Components/Forms/TextInput.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/Breadcrumb.vue";
+import BreadcrumbItem from "@/Components/Breadcrumbs/BreadcrumbItem.vue";
+import PreviewImage from "@/Components/Forms/Fields/PreviewImage.vue";
+import InputLabel from "@/Components/Forms/Fields/InputLabel.vue";
+import InputError from "@/Components/Forms/Fields/InputError.vue";
+import InputField from "@/Components/Forms/Fields/InputField.vue";
+import TextAreaField from "@/Components/Forms/Fields/TextAreaField.vue";
+import SelectBox from "@/Components/Forms/Fields/SelectBox.vue";
+import FileInput from "@/Components/Forms/Fields/FileInput.vue";
+import FormButton from "@/Components/Buttons/FormButton.vue";
 import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
-import SaveButton from "@/Components/Buttons/SaveButton.vue";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { useForm, Head } from "@inertiajs/vue3";
-import { useReCaptcha } from "vue-recaptcha-v3";
-import { ref } from "vue";
+import { useImagePreview } from "@/Composables/useImagePreview";
+import { useResourceActions } from "@/Composables/useResourceActions";
+import { Head } from "@inertiajs/vue3";
 
-// Define the props
 const props = defineProps({
-  queryStringParams: Array,
   brand: Object,
   categories: Object,
 });
 
-// Define Variables
-const editor = ClassicEditor;
-const processing = ref(false);
-const previewPhoto = ref("");
+const brandList = "admin.brands.index";
 
-// Handle Preview Image
-const getPreviewPhotoPath = (path) => {
-  previewPhoto.value.src = URL.createObjectURL(path);
+const { previewImage, setImagePreview } = useImagePreview(props.brand?.image);
+
+const handleChangeImage = (file) => {
+  setImagePreview(file);
+  form.image = file;
 };
 
-// Brand Edit Form Data
-const form = useForm({
+const { form, processing, errors, editAction } = useResourceActions({
   name: props.brand?.name,
-  image: props.brand?.image,
-  category_id: props.brand?.category_id,
   description: props.brand?.description,
-  captcha_token: null,
+  category_id: props.brand?.category_id,
+  image: props.brand?.image,
 });
-
-// Destructing ReCaptcha
-const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
-
-// Handle Edit Brand
-const handleEditBrand = async () => {
-  await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("edit_brand");
-
-  processing.value = true;
-  form.post(
-    route("admin.brands.update", {
-      brand: props.brand.slug,
-      page: props.queryStringParams.page,
-      per_page: props.queryStringParams.per_page,
-      sort: props.queryStringParams.sort,
-      direction: props.queryStringParams.direction,
-    }),
-    {
-      replace: true,
-      preserveState: true,
-      onFinish: () => {
-        processing.value = false;
-      },
-    }
-  );
-};
 </script>
 
 <template>
   <AdminDashboardLayout>
-    <Head :title="__('EDIT_BRAND')" />
-    <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <div class="flex items-center justify-between mb-10">
-        <!-- Breadcrumb -->
-        <Breadcrumb>
-          <li aria-current="page">
-            <div class="flex items-center">
-              <svg
-                aria-hidden="true"
-                class="w-6 h-6 text-gray-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <span
-                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-              >
-                {{ brand.name }}
-              </span>
-            </div>
-          </li>
-          <li aria-current="page">
-            <div class="flex items-center">
-              <svg
-                aria-hidden="true"
-                class="w-6 h-6 text-gray-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <span
-                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-              >
-                {{ __("EDIT") }}
-              </span>
-            </div>
-          </li>
+    <Head :title="__('Edit Brand')" />
+    <div class="min-h-screen py-10 font-poppins">
+      <div
+        class="flex flex-col md:flex-row items-center md:justify-between mb-5"
+      >
+        <Breadcrumb :to="brandList" icon="fa-award" label="Brands">
+          <BreadcrumbItem label="Edit" />
         </Breadcrumb>
 
-        <!-- Go Back button -->
-        <div>
-          <GoBackButton
-            href="admin.brands.index"
-            :queryStringParams="queryStringParams"
-          />
-        </div>
+        <GoBackButton :to="brandList" />
       </div>
 
-      <div class="border shadow-md p-10">
-        <!-- Preview Image -->
-        <div class="mb-6">
-          <img ref="previewPhoto" :src="form.image" class="preview-img" />
-        </div>
+      <!-- Form Start -->
+      <div class="border p-10 bg-white rounded-md">
+        <form
+          @submit.prevent="editAction('Brand', 'admin.brands.update', brand)"
+          class="space-y-4 md:space-y-6"
+        >
+          <PreviewImage :src="previewImage" />
 
-        <form @submit.prevent="handleEditBrand">
-          <!-- Brand Name Input -->
-          <div class="mb-6">
-            <InputLabel for="name" :value="__('BRAND_NAME') + ' *'" />
+          <div>
+            <InputLabel :label="__('Brand Name')" required />
 
-            <TextInput
-              id="name"
+            <InputField
               type="text"
-              class="mt-1 block w-full"
+              name="brand-name"
               v-model="form.name"
+              :placeholder="__('Enter Brand Name')"
+              autofocus
               required
-              :placeholder="__('ENTER_BRAND_NAME')"
             />
 
-            <InputError class="mt-2" :message="form.errors.name" />
+            <InputError :message="errors?.name" />
           </div>
 
-          <!-- Brand Description Editor -->
-          <div class="mb-6">
-            <InputLabel
-              for="description"
-              :value="__('BRAND_DESCRIPTION') + ' *'"
+          <div>
+            <InputLabel :label="__('Brand Description')" required />
+
+            <TextAreaField
+              name="brand-description"
+              v-model="form.description"
+              :placeholder="__('Enter Brand Description')"
+              required
             />
 
-            <ckeditor :editor="editor" v-model="form.description"></ckeditor>
-
-            <InputError class="mt-2" :message="form.errors.description" />
+            <InputError :message="errors?.description" />
           </div>
 
-          <!-- Brand Select Box -->
-          <div class="mb-6">
-            <InputLabel for="category" :value="__('CATEGORY')" />
+          <div>
+            <InputLabel :label="__('Category')" />
 
-            <select class="select-box" v-model="form.category_id">
-              <option value="" selected disabled>
-                {{ __("SELECT_CATEGORY") }}
-              </option>
-              <option
-                v-for="category in categories"
-                :key="category"
-                :value="category.id"
-                :selected="category.id === form.category_id"
-              >
-                {{ category.name }}
-              </option>
-            </select>
-
-            <InputError class="mt-2" :message="form.errors.category_id" />
-          </div>
-
-          <div class="mb-6">
-            <InputLabel for="image" :value="__('IMAGE') + ' *'" />
-
-            <!-- Brand File Input -->
-            <input
-              class="file-input"
-              type="file"
-              id="image"
-              @input="form.image = $event.target.files[0]"
-              @change="getPreviewPhotoPath($event.target.files[0])"
+            <SelectBox
+              name="brand-category"
+              :options="categories"
+              v-model="form.category_id"
+              :selected="brand.category_id"
+              :placeholder="__('Select Options')"
             />
 
-            <span class="text-xs text-gray-500">
-              SVG, PNG, JPG, JPEG, WEBP or GIF (Max File size : 5 MB)
-            </span>
-
-            <InputError class="mt-2" :message="form.errors.image" />
+            <InputError :message="errors?.category_id" />
           </div>
 
-          <!-- Save Button -->
-          <div class="mb-6">
-            <SaveButton :processing="processing" />
+          <div>
+            <InputLabel :label="__('Brand Image')" />
+
+            <FileInput
+              name="brand-image"
+              v-model="form.image"
+              text="PNG, JPG or JPEG ( Max File Size : 1.5 MB )"
+              @update:modelValue="handleChangeImage"
+            />
+
+            <InputError :message="errors?.image" />
           </div>
+
+          <InputError :message="errors?.captcha_token" />
+
+          <FormButton type="submit" :processing="processing">
+            Update
+          </FormButton>
         </form>
       </div>
+      <!-- Form End -->
     </div>
   </AdminDashboardLayout>
 </template>
