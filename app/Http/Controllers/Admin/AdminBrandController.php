@@ -92,11 +92,12 @@ class AdminBrandController extends Controller
 
     public function restore(Request $request, int $trashBrandId): RedirectResponse
     {
+
         $trashBrand = Brand::onlyTrashed()->findOrFail($trashBrandId);
 
         $trashBrand->restore();
 
-        return to_route('admin.brands.trash', $this->getQueryStringParams($request))->with('success', 'BRAND_HAS_BEEN_SUCCESSFULLY_RESTORED');
+        return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', 'BRAND_HAS_BEEN_SUCCESSFULLY_RESTORED');
     }
 
     public function forceDelete(Request $request, int $trashBrandId): RedirectResponse
@@ -107,7 +108,7 @@ class AdminBrandController extends Controller
 
         $trashBrand->forceDelete();
 
-        return to_route('admin.brands.trash', $this->getQueryStringParams($request))->with('success', 'THE_BRAND_HAS_BEEN_PERMANENTLY_DELETED');
+        return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', 'THE_BRAND_HAS_BEEN_PERMANENTLY_DELETED');
     }
 
     public function forceDeleteAll(Request $request): RedirectResponse
@@ -116,6 +117,6 @@ class AdminBrandController extends Controller
 
         (new PermanentlyDeleteAllTrashBrandAction())->handle($trashBrands);
 
-        return to_route('admin.brands.trash', $this->getQueryStringParams($request))->with('success', 'BRANDS_HAVE_BEEN_PERMANENTLY_DELETED');
+        return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', 'BRANDS_HAVE_BEEN_PERMANENTLY_DELETED');
     }
 }

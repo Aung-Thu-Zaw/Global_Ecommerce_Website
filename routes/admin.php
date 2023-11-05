@@ -83,12 +83,12 @@ Route::middleware(['admin', 'verified', 'user.role:admin'])
             });
 
         // Admin Brands Operations
-        Route::resource('brands', AdminBrandController::class)->withTrashed();
+        Route::resource('brands', AdminBrandController::class)->except(["show"]);
         Route::controller(AdminBrandController::class)
-            ->prefix('/brands')
+            ->prefix('/brands/trash')
             ->name('brands.')
             ->group(function () {
-                Route::get('/trash/all', 'trashed')->name('trashed');
+                Route::get('/', 'trashed')->name('trashed');
                 Route::post('/{id}/restore', 'restore')->name('restore');
                 Route::delete('/{id}/force-delete', 'forceDelete')->name('force-delete');
                 Route::delete('/force-delete-all', 'forceDeleteAll')->name('force-delete-all');

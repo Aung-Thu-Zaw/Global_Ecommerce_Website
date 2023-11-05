@@ -149,6 +149,47 @@ export function useResourceActions(formFields = {}) {
         }
     };
 
+    // Restore Action
+    const restoreAction = async (model, restoreRouteName, targetIdentifier) => {
+        const result = await swal({
+            icon: "question",
+            title: `Restore ${formatToTitleCase(model)}`,
+            text: `Are you sure you want to restore this?`,
+            showCancelButton: true,
+            confirmButtonText: "Confirm",
+            cancelButtonText: "Cancel",
+            confirmButtonColor: "#2562c4",
+            cancelButtonColor: "#626262",
+            timer: 20000,
+            timerProgressBar: true,
+            reverseButtons: true,
+        });
+
+        if (result.isConfirmed) {
+            router.post(
+                route(restoreRouteName, {
+                    id: targetIdentifier,
+                }),
+                {
+                    ...queryStringParams,
+                },
+                {
+                    preserveScroll: true,
+                    onSuccess: () => {
+                        const successMessage =
+                            usePage().props.flash.successMessage;
+
+                        if (successMessage) {
+                            swal({
+                                icon: "success",
+                                title: successMessage,
+                            });
+                        }
+                    },
+                }
+            );
+        }
+    };
 
     return {
         form,
@@ -156,6 +197,7 @@ export function useResourceActions(formFields = {}) {
         createAction,
         editAction,
         softDeleteAction,
+        restoreAction,
         errors,
     };
 }

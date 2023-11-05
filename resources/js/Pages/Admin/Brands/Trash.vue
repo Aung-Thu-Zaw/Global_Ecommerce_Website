@@ -31,7 +31,7 @@ const props = defineProps({
 const brandList = "admin.brands.index";
 const trashedBrandList = "admin.brands.trashed";
 
-
+const { restoreAction } = useResourceActions();
 
 // // Handle Trash Brand Delete
 // const handleDeleteTrashBrand = async (trashBrandId) => {
@@ -220,7 +220,12 @@ const trashedBrandList = "admin.brands.trashed";
                 </TableDataCell>
 
                 <TableActionCell>
-                  <NormalButton v-show="can('brands.restore')">
+                  <NormalButton
+                    v-show="can('brands.restore')"
+                    @click="
+                      restoreAction('Brand', 'admin.brands.restore', trashBrand)
+                    "
+                  >
                     <i class="fa-solid fa-recycle"></i>
                     Restore
                   </NormalButton>
