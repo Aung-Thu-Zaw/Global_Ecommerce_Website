@@ -1,12 +1,12 @@
 <script setup>
 import { useReCaptcha } from "vue-recaptcha-v3";
 import FormButton from "@/Components/Buttons/FormButton.vue";
-import Checkbox from "@/Components/Forms/Checkbox.vue";
-import FormContainer from "@/Components/Forms/FormContainer.vue";
+import Checkbox from "@/Components/Forms/Fields/Checkbox.vue";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
-import InputError from "@/Components/Forms/InputError.vue";
-import InputLabel from "@/Components/Forms/InputLabel.vue";
-import TextInput from "@/Components/Forms/TextInput.vue";
+import AuthFormContainer from "@/Components/Forms/AuthFormContainer.vue";
+import InputLabel from "@/Components/Forms/Fields/InputLabel.vue";
+import InputError from "@/Components/Forms/Fields/InputError.vue";
+import InputField from "@/Components/Forms/Fields/InputField.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -50,7 +50,7 @@ if (usePage().props.flash.successMessage) {
   <GuestLayout>
     <Head :title="__('ADMIN_DASHBOARD_LOGIN')" />
 
-    <FormContainer>
+    <AuthFormContainer>
       <div
         v-if="status"
         class="mb-4 font-medium text-sm text-green-500 bg-green-100 p-3 w-full rounded-md text-center"
@@ -64,48 +64,35 @@ if (usePage().props.flash.successMessage) {
 
         <!-- Email Input -->
         <div class="mb-3">
-          <InputLabel for="email" :value="__('EMAIL_ADDRESS') + '*'" />
+          <InputLabel :label="__('Email Address')" required />
 
-          <TextInput
-            id="email"
+          <InputField
             type="email"
-            class="mt-1 block w-full"
+            name="your-email"
+            icon="fa-envelope"
             v-model="form.email"
+            :placeholder="__('Enter Your Email Address')"
+            autofocus
             required
-            autocomplete="username"
-            :placeholder="__('ENTER_YOUR_EMAIL_ADDRESS')"
-          >
-            <template v-slot:icon>
-              <span>
-                <i class="fa-solid fa-envelope text-gray-600"></i>
-              </span>
-            </template>
-          </TextInput>
+          />
 
-          <InputError class="mt-2" :message="form.errors.email" />
+          <InputError :message="form.errors.email" />
         </div>
 
         <!-- Password Input -->
         <div class="mb-3">
-          <InputLabel for="password" :value="__('PASSWORD') + '*'" />
+          <InputLabel :label="__('Password')" required />
 
-          <TextInput
-            id="password"
+          <InputField
             type="password"
-            class="mt-1 block w-full"
+            name="your-password"
+            icon="fa-lock"
             v-model="form.password"
+            :placeholder="__('Enter Your Password')"
             required
-            autocomplete="new-password"
-            :placeholder="__('ENTER_PASSWORD')"
-          >
-            <template v-slot:icon>
-              <span>
-                <i class="fa-solid fa-lock text-gray-600"></i>
-              </span>
-            </template>
-          </TextInput>
+          />
 
-          <InputError class="mt-2" :message="form.errors.password" />
+          <InputError :message="form.errors.password" />
         </div>
 
         <!-- Remember me and Forgot Password -->
@@ -114,7 +101,7 @@ if (usePage().props.flash.successMessage) {
             <label class="flex items-center">
               <Checkbox name="remember" v-model:checked="form.remember" />
               <span class="ml-2 text-sm text-gray-600">
-                {{ __("REMEMBER_ME") }}</span
+                {{ __("Remember Me") }}</span
               >
             </label>
           </div>
@@ -132,11 +119,8 @@ if (usePage().props.flash.successMessage) {
 
         <!-- Submit Button -->
         <div class="mb-3">
-          <FormButton
-            :class="{ 'opacity-25': form.processing }"
-            :disabled="form.processing"
-          >
-            {{ __("SIGN_IN") }}
+          <FormButton>
+            {{ __("Login") }}
           </FormButton>
         </div>
 
@@ -145,6 +129,6 @@ if (usePage().props.flash.successMessage) {
           :message="form.errors.captcha_token"
         />
       </form>
-    </FormContainer>
+    </AuthFormContainer>
   </GuestLayout>
 </template>

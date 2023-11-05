@@ -1,29 +1,33 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
+import { computed } from "vue";
 
-defineProps({
-  href: String,
-  queryStringParams: Object,
+const props = defineProps({
+  to: String,
+
+  class: {
+    type: String,
+    default: "text-white bg-blue-600 ring-2 ring-blue-300 hover:bg-blue-700",
+  },
 });
+
+const computedClasses = computed(() => props.class);
 </script>
 
 <template>
   <Link
     as="button"
-    :href="route(href)"
+    :href="route(to)"
     :data="{
-      page: $page.props.ziggy.query?.page,
-      per_page: $page.props.ziggy.query?.per_page,
-      sort: $page.props.ziggy.query?.sort,
-      direction: $page.props.ziggy.query?.direction,
-      created_from: $page.props.ziggy.query?.created_from,
-      created_until: $page.props.ziggy.query?.created_until,
+      page: $page.props.ziggy.query.page ?? 1,
+      per_page: $page.props.ziggy.query.per_page ?? 10,
+      sort: $page.props.ziggy.query.sort ?? 'id',
+      direction: $page.props.ziggy.query.direction ?? 'desc',
     }"
-    class="text-sm px-5 py-2.5 font-semibold rounded-[4px] bg-blue-600 text-white hover:bg-blue-700"
+    class="text-xs px-4 shadow-md py-3 font-bold rounded-[4px] active:animate-press"
+    :class="computedClasses"
   >
-    <span>
-      <i class="fa-solid fa-circle-left"></i>
-      {{ __("GO_BACK") }}
-    </span>
+    <i class="fa-solid fa-left-long"></i>
+    Go Back
   </Link>
 </template>

@@ -17,6 +17,7 @@ import { __ } from "@/Services/translations-inside-setup.js";
 import Pagination from "@/Components/Paginations/DashboardPagination.vue";
 import { useResourceActions } from "@/Composables/useResourceActions";
 import { Head, usePage } from "@inertiajs/vue3";
+import { computed } from "vue";
 
 const props = defineProps({
   brands: Object,
@@ -24,12 +25,14 @@ const props = defineProps({
 
 const brandList = "admin.brands.index";
 
-const queryStringParams = {
-  page: usePage().props.ziggy.query?.page,
-  per_page: usePage().props.ziggy.query?.per_page,
-  sort: usePage().props.ziggy.query?.sort,
-  direction: usePage().props.ziggy.query?.direction,
-};
+const queryStringParams = computed(() => {
+  return {
+    page: usePage().props.ziggy.query?.page,
+    per_page: usePage().props.ziggy.query?.per_page,
+    sort: usePage().props.ziggy.query?.sort,
+    direction: usePage().props.ziggy.query?.direction,
+  };
+});
 
 const { softDeleteAction } = useResourceActions();
 
@@ -83,7 +86,7 @@ const handleDeleteBrand = async (brand) => {
 
       <!-- Create New Button  -->
       <div v-show="can('brands.create')" class="mb-3">
-        <InertiaLinkButton to="admin.brands.create">
+        <InertiaLinkButton to="admin.brands.create" :data="queryStringParams">
           <i class="fa-solid fa-file-circle-plus mr-1"></i>
           Add A New Brand
         </InertiaLinkButton>

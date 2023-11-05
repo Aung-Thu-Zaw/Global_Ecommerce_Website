@@ -47,7 +47,6 @@
     <x-translations />
     @inertia
 
-
 </body>
 
 </html>

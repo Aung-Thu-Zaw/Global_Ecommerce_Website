@@ -1,3 +1,6 @@
+<script setup>
+</script>
+
 <template>
   <div
     class="relative flex flex-col items-center md:min-h-[500px] justify-between w-100 px-10 py-10 bg-white border-2 rounded-md shadow-md md:flex-row md:px-5 md:w-[1000px]"
@@ -25,9 +28,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-</script>
-
-<style>
-</style>

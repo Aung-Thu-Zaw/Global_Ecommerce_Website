@@ -67,7 +67,7 @@ class Brand extends Model
     protected function image(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => str_starts_with($value, 'http') ? $value : asset("storage/brands/$value"),
+            set: fn ($value) => str_starts_with($value, 'http') || !$value ? $value : asset("storage/brands/$value"),
         );
     }
 
@@ -89,7 +89,7 @@ class Brand extends Model
 
     public static function deleteImage(string $brandImage): void
     {
-        if (! empty($brandImage) && file_exists(storage_path('app/public/brands/'.pathinfo($brandImage, PATHINFO_BASENAME)))) {
+        if (!empty($brandImage) && file_exists(storage_path('app/public/brands/'.pathinfo($brandImage, PATHINFO_BASENAME)))) {
             unlink(storage_path('app/public/brands/'.pathinfo($brandImage, PATHINFO_BASENAME)));
         }
     }

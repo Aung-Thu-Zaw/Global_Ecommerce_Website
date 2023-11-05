@@ -19,7 +19,7 @@ const computedClasses = computed(() => props.class);
 <template>
   <button
     :type="type"
-    class="text-xs px-4 shadow-md py-3 font-bold rounded-[4px] focus:animate-press"
+    class="text-xs px-4 shadow-md py-3 font-bold rounded-[4px] active:animate-press"
     :class="computedClasses"
   >
     <slot />

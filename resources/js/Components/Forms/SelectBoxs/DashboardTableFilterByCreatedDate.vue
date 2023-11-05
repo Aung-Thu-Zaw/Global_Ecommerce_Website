@@ -1,5 +1,5 @@
 <script setup>
-import InputLabel from "@/Components/Forms/InputLabel.vue";
+import InputLabel from "@/Components/Forms/Fields/InputLabel.vue";
 import Datepicker from "vue3-datepicker";
 import { useFormatFunctions } from "@/Composables/useFormatFunctions";
 import { router, usePage } from "@inertiajs/vue3";

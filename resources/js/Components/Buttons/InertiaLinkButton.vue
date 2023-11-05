@@ -22,7 +22,7 @@ const props = defineProps({
 
   data: {
     type: Object,
-    default: undefined,
+    default: {},
   },
 
   preserveState: {
@@ -43,9 +43,9 @@ const computedClasses = computed(() => props.class);
   <Link
     as="button"
     :method="method"
-    :to="route(to, targetIdentifier)"
+    :href="route(to, targetIdentifier)"
     :data="data"
-    class="text-xs px-4 shadow-md py-3 font-bold rounded-[4px] focus:animate-press"
+    class="text-xs px-4 shadow-md py-3 font-bold rounded-[4px] active:animate-press"
     :class="computedClasses"
     :preserve-state="preserveState"
     :preserve-scroll="preserveScroll"

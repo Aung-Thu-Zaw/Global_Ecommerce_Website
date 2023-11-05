@@ -33,7 +33,7 @@ class BrandRequest extends FormRequest
         ];
 
         if ($this->hasFile('image')) {
-            $rules['image'] = ['required', 'image', 'mimes:png,jpg,jpeg,svg,webp,gif', 'max:5120'];
+            $rules['image'] = ['required', 'image', 'mimes:png,jpg,jpeg', 'max:1500'];
         }
 
         $route = $this->route();
@@ -60,7 +60,7 @@ class BrandRequest extends FormRequest
             'image.required' => 'The image field is required.',
             'image.image' => 'The image must be an image.',
             'image.mimes' => 'The image must be a file of type: png,jpg,jpeg,svg,webp or gif.',
-            'image.max' => 'The image must not be greater than 5120 kilobytes.',
+            'image.max' => 'The image must not be greater than 1500 kilobytes.',
             'captcha_token.required' => 'The captcha token is required',
         ];
     }
