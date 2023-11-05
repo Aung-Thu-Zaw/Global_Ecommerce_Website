@@ -138,7 +138,7 @@ watch(
 
     <div class="w-full mb-5">
       <div>
-        <InputLabel name="Created From" />
+        <InputLabel label="Created From" />
 
         <Datepicker
           id="created-from"
@@ -150,7 +150,7 @@ watch(
     </div>
     <div class="w-full mb-5">
       <div>
-        <InputLabel name="Created Until" />
+        <InputLabel label="Created Until" />
 
         <Datepicker
           id="created-until"

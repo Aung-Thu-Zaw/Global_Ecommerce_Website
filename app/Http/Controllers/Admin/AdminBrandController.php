@@ -81,13 +81,13 @@ class AdminBrandController extends Controller
 
     public function trashed(): Response|ResponseFactory
     {
-        $trashBrands = Brand::search(request('search'))
-            ->onlyTrashed()
-            ->orderBy(request('sort', 'id'), request('direction', 'desc'))
-            ->paginate(request('per_page', 10))
-            ->appends(request()->all());
+        $trashedBrands = Brand::search(request('search'))
+                              ->onlyTrashed()
+                              ->orderBy(request('sort', 'id'), request('direction', 'desc'))
+                              ->paginate(request('per_page', 10))
+                              ->appends(request()->all());
 
-        return inertia('Admin/Brands/Trash', compact('trashBrands'));
+        return inertia('Admin/Brands/Trash', compact('trashedBrands'));
     }
 
     public function restore(Request $request, int $trashBrandId): RedirectResponse

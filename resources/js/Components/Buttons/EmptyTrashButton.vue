@@ -3,7 +3,7 @@
 
 <template>
   <button
-    class="text-primary-500 rounded-sm px-2 py-1 hover:bg-primary-200 hover:text-primary-600 transition-all hover:animate-bounce"
+    class="text-orange-500 rounded-sm px-2 py-1 hover:bg-orange-200 hover:text-orange-600 transition-all hover:animate-bounce"
   >
     {{ __("EMPTY_THE_TRASH_NOW") }}
   </button>

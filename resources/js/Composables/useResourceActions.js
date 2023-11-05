@@ -22,7 +22,7 @@ export function useResourceActions(formFields = {}) {
 
     // Dynamic Form Fields For ( Create and Edit )
     const form = useForm({ ...formFields, captcha_token: null });
-    
+
     // Google ReCaptcha Version 3
     const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 
@@ -106,7 +106,7 @@ export function useResourceActions(formFields = {}) {
         );
     };
 
-    // Delete Action
+    // Soft Delete Action
     const softDeleteAction = async (
         model,
         deleteRouteName,
@@ -148,6 +148,7 @@ export function useResourceActions(formFields = {}) {
             );
         }
     };
+
 
     return {
         form,

@@ -9,6 +9,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import SortableTableHeaderCell from "@/Components/Table/SortableTableHeaderCell.vue";
 import TableHeaderCell from "@/Components/Table/TableHeaderCell.vue";
 import TableDataCell from "@/Components/Table/TableDataCell.vue";
+import TableActionCell from "@/Components/Table/TableActionCell.vue";
 import Image from "@/Components/Table/Image.vue";
 import InertiaLinkButton from "@/Components/Buttons/InertiaLinkButton.vue";
 import NormalButton from "@/Components/Buttons/NormalButton.vue";
@@ -79,6 +80,7 @@ const handleDeleteBrand = async (brand) => {
         <InertiaLinkButton
           v-show="can('brands.view.trash')"
           to="admin.brands.trashed"
+          :data="queryStringParams"
           class="bg-red-600 text-white ring-2 ring-red-300"
         >
           <i class="fa-solid fa-trash-can mr-1"></i>
@@ -97,7 +99,7 @@ const handleDeleteBrand = async (brand) => {
       <!-- Table Start -->
       <div class="border bg-white rounded-md shadow px-5 py-3">
         <div
-          class="my-5 flex flex-col sm:flex-row space-y-5 sm:space-y-0 items-center justify-between"
+          class="my-5 flex flex-col sm:flex-row space-y-5 sm:space-y-0 items-center justify-between overflow-auto"
         >
           <DashboardTableDataSearchBox
             placeholder="Search by brand name ..."
@@ -161,7 +163,7 @@ const handleDeleteBrand = async (brand) => {
                   {{ brand.description }}
                 </TableDataCell>
 
-                <td class="px-6 py-4 min-w-[300px] max-w-[500px] space-x-3">
+                <TableActionCell>
                   <InertiaLinkButton
                     v-show="can('brands.edit')"
                     to="admin.brands.edit"
@@ -180,7 +182,7 @@ const handleDeleteBrand = async (brand) => {
                     <i class="fa-solid fa-trash-can"></i>
                     Delete
                   </NormalButton>
-                </td>
+                </TableActionCell>
               </tr>
             </tbody>
           </table>
