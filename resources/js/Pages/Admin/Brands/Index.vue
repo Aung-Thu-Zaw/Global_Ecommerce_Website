@@ -17,11 +17,13 @@ import { __ } from "@/Services/translations-inside-setup.js";
 import Pagination from "@/Components/Paginations/DashboardPagination.vue";
 import { useResourceActions } from "@/Composables/useResourceActions";
 import { Head, usePage } from "@inertiajs/vue3";
-import { computed } from "vue";
+import { computed, inject } from "vue";
 
 const props = defineProps({
   brands: Object,
 });
+
+const swal = inject("$swal");
 
 const brandList = "admin.brands.index";
 
