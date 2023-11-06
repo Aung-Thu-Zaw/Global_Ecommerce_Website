@@ -31,52 +31,7 @@ const props = defineProps({
 const brandList = "admin.brands.index";
 const trashedBrandList = "admin.brands.trashed";
 
-const { restoreAction } = useResourceActions();
-
-// // Handle Trash Brand Delete
-// const handleDeleteTrashBrand = async (trashBrandId) => {
-//   const result = await swal({
-//     icon: "question",
-//     title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_IT_FROM_THE_TRASH"),
-//     text: __(
-//       "BRAND_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK"
-//     ),
-//     showCancelButton: true,
-//     confirmButtonText: __("YES_DELETE_IT"),
-//     cancelButtonText: __("CANCEL"),
-//     confirmButtonColor: "#d52222",
-//     cancelButtonColor: "#626262",
-//     timer: 20000,
-//     timerProgressBar: true,
-//     reverseButtons: true,
-//   });
-
-//   if (result.isConfirmed) {
-//     router.delete(
-//       route("admin.brands.trash.force.delete", {
-//         trash_brand_id: trashBrandId,
-//         search: usePage().props.ziggy.query?.search,
-//         page: usePage().props.ziggy.query?.page,
-//         per_page: usePage().props.ziggy.query?.per_page,
-//         sort: params.sort,
-//         direction: params.direction,
-//         deleted_from: usePage().props.ziggy.query?.deleted_from,
-//         deleted_until: usePage().props.ziggy.query?.deleted_until,
-//       }),
-//       {
-//         preserveScroll: true,
-//         onSuccess: () => {
-//           if (usePage().props.flash.successMessage) {
-//             swal({
-//               icon: "success",
-//               title: __(usePage().props.flash.successMessage),
-//             });
-//           }
-//         },
-//       }
-//     );
-//   }
-// };
+const { restoreAction, permanentDeleteAction } = useResourceActions();
 
 // // Handle Trash Brand Delete Permanently
 // const handlePermanentlyDeleteTrashBrands = async () => {
@@ -232,6 +187,13 @@ const { restoreAction } = useResourceActions();
 
                   <NormalButton
                     v-show="can('brands.force.delete')"
+                    @click="
+                      permanentDeleteAction(
+                        'Brand',
+                        'admin.brands.force-delete',
+                        trashBrand
+                      )
+                    "
                     class="bg-red-600 text-white ring-2 ring-red-300"
                   >
                     <i class="fa-solid fa-trash-can"></i>
