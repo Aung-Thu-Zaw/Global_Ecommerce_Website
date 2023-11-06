@@ -25,7 +25,7 @@ class AdminBrandController extends Controller
         $this->middleware('permission:brands.view', ['only' => ['index']]);
         $this->middleware('permission:brands.create', ['only' => ['create', 'store']]);
         $this->middleware('permission:brands.edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:brands.delete', ['only' => ['destroy']]);
+        $this->middleware('permission:brands.delete', ['only' => ['destroy','destroySelected','destroyAll']]);
         $this->middleware('permission:brands.view.trash', ['only' => ['trashed']]);
         $this->middleware('permission:brands.restore', ['only' => ['restore']]);
         $this->middleware('permission:brands.force.delete', ['only' => ['forceDelete', 'forceDeleteAll']]);

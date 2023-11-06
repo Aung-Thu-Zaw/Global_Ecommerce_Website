@@ -119,27 +119,29 @@ const handleDeleteBrand = async (brand) => {
           <ActionTable :items="brands.data">
             <!-- Delete Actions -->
             <template #actions="{ selectedItems }">
-              <ActionButton
-                @click="
-                  softDeleteSelectedAction(
-                    'Brand',
-                    'admin.brands.destroy.selected',
-                    selectedItems
-                  )
-                "
-              >
-                <i class="fa-solid fa-trash-can"></i>
-                Delete Selected
-              </ActionButton>
-              <ActionButton
-                @click="
-                  softDeleteAllAction('Brand', 'admin.brands.destroy.all')
-                "
-                class="text-red-600"
-              >
-                <i class="fa-solid fa-trash-can"></i>
-                Delete The Whole Table
-              </ActionButton>
+              <div v-show="can('brands.delete')">
+                <ActionButton
+                  @click="
+                    softDeleteSelectedAction(
+                      'Brand',
+                      'admin.brands.destroy.selected',
+                      selectedItems
+                    )
+                  "
+                >
+                  <i class="fa-solid fa-trash-can"></i>
+                  Delete Selected
+                </ActionButton>
+                <ActionButton
+                  @click="
+                    softDeleteAllAction('Brand', 'admin.brands.destroy.all')
+                  "
+                  class="text-red-600"
+                >
+                  <i class="fa-solid fa-trash-can"></i>
+                  Delete The Whole Table
+                </ActionButton>
+              </div>
             </template>
 
             <!-- Table Header -->
