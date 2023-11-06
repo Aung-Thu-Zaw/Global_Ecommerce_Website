@@ -11,7 +11,9 @@ import TableHeaderCell from "@/Components/Table/TableHeaderCell.vue";
 import TableDataCell from "@/Components/Table/TableDataCell.vue";
 import TableActionCell from "@/Components/Table/TableActionCell.vue";
 import Image from "@/Components/Table/Image.vue";
+import ActionTable from "@/Components/Table/ActionTable.vue";
 import InertiaLinkButton from "@/Components/Buttons/InertiaLinkButton.vue";
+import ActionButton from "@/Components/Buttons/TableActionButton.vue";
 import NormalButton from "@/Components/Buttons/NormalButton.vue";
 import NoTableData from "@/Components/Table/NoTableData.vue";
 import { __ } from "@/Services/translations-inside-setup.js";
@@ -37,7 +39,7 @@ const queryStringParams = computed(() => {
   };
 });
 
-const { softDeleteAction } = useResourceActions();
+const { softDeleteAction, softDeleteAllAction } = useResourceActions();
 
 const handleDeleteBrand = async (brand) => {
   if (brand.products_count > 0) {
@@ -113,79 +115,85 @@ const handleDeleteBrand = async (brand) => {
           </div>
         </div>
         <TableContainer>
-          <table class="w-full text-sm text-left text-gray-500">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-              <tr>
-                <SortableTableHeaderCell
-                  label="# No"
-                  :to="brandList"
-                  sort="id"
-                />
-
-                <TableHeaderCell label="Image" />
-
-                <SortableTableHeaderCell
-                  label="Name"
-                  :to="brandList"
-                  sort="name"
-                />
-
-                <SortableTableHeaderCell
-                  label="Description"
-                  :to="brandList"
-                  sort="description"
-                />
-
-                <TableHeaderCell label="Actions" />
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(brand, index) in brands.data"
-                :key="brand.id"
-                :class="{
-                  'border-b': index !== brands.data.length - 1,
-                }"
+          <ActionTable :items="brands.data">
+            <!-- Delete Actions -->
+            <template #actions>
+              <ActionButton>
+                <i class="fa-solid fa-trash-can"></i>
+                Delete Selected
+              </ActionButton>
+              <ActionButton
+                @click="
+                  softDeleteAllAction('Brand', 'admin.brands.destroy.all')
+                "
+                class="text-red-600"
               >
-                <TableDataCell>
-                  {{ brand.id }}
-                </TableDataCell>
+                <i class="fa-solid fa-trash-can"></i>
+                Delete The Whole Table
+              </ActionButton>
+            </template>
 
-                <TableDataCell>
-                  <Image :src="brand.image" />
-                </TableDataCell>
+            <!-- Table Header -->
+            <template #table-header>
+              <SortableTableHeaderCell label="# No" :to="brandList" sort="id" />
 
-                <TableDataCell>
-                  {{ brand.name }}
-                </TableDataCell>
+              <TableHeaderCell label="Image" />
 
-                <TableDataCell>
-                  {{ brand.description }}
-                </TableDataCell>
+              <SortableTableHeaderCell
+                label="Name"
+                :to="brandList"
+                sort="name"
+              />
 
-                <TableActionCell>
-                  <InertiaLinkButton
-                    v-show="can('brands.edit')"
-                    to="admin.brands.edit"
-                    :targetIdentifier="brand"
-                    :data="queryStringParams"
-                  >
-                    <i class="fa-solid fa-edit"></i>
-                    Edit
-                  </InertiaLinkButton>
+              <SortableTableHeaderCell
+                label="Description"
+                :to="brandList"
+                sort="description"
+              />
 
-                  <NormalButton
-                    v-show="can('brands.delete')"
-                    @click="handleDeleteBrand(brand)"
-                    class="bg-red-600 text-white ring-2 ring-red-300"
-                  >
-                    <i class="fa-solid fa-trash-can"></i>
-                    Delete
-                  </NormalButton>
-                </TableActionCell>
-              </tr>
-            </tbody>
-          </table>
+              <TableHeaderCell label="Actions" />
+            </template>
+
+            <!-- Table Body -->
+            <template #table-data="{ item }">
+              <TableDataCell>
+                {{ item?.id }}
+              </TableDataCell>
+
+              <TableDataCell>
+                <Image :src="item?.image" />
+              </TableDataCell>
+
+              <TableDataCell>
+                {{ item?.name }}
+              </TableDataCell>
+
+              <TableDataCell>
+                {{ item?.description }}
+              </TableDataCell>
+
+              <TableActionCell>
+                <InertiaLinkButton
+                  v-show="can('brands.edit')"
+                  to="admin.brands.edit"
+                  :targetIdentifier="item"
+                  :data="queryStringParams"
+                >
+                  <i class="fa-solid fa-edit"></i>
+                  Edit
+                </InertiaLinkButton>
+
+                <NormalButton
+                  v-show="can('brands.delete')"
+                  @click="handleDeleteBrand(item)"
+                  class="bg-red-600 text-white ring-2 ring-red-300"
+                >
+                  <i class="fa-solid fa-trash-can"></i>
+                  Delete
+                </NormalButton>
+              </TableActionCell>
+            </template>
+          </ActionTable>
         </TableContainer>
 
         <Pagination :data="brands" />

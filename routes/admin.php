@@ -88,10 +88,11 @@ Route::middleware(['admin', 'verified', 'user.role:admin'])
             ->prefix('/brands/trash')
             ->name('brands.')
             ->group(function () {
+                Route::delete('/destroy/all', 'destroyAll')->name('destroy.all');
                 Route::get('/', 'trashed')->name('trashed');
                 Route::post('/{id}/restore', 'restore')->name('restore');
                 Route::delete('/{id}/force-delete', 'forceDelete')->name('force-delete');
-                Route::delete('/force-delete-all', 'forceDeleteAll')->name('force-delete-all');
+                Route::delete('/force-delete/all', 'forceDeleteAll')->name('force-delete.all');
             });
 
         //    Route::controller(AdminBrandController::class)

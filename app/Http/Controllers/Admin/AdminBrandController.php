@@ -79,6 +79,17 @@ class AdminBrandController extends Controller
         return to_route('admin.brands.index', $this->getQueryStringParams($request))->with('success', 'BRAND_HAS_BEEN_SUCCESSFULLY_DELETED');
     }
 
+    public function destroyAll(Request $request): RedirectResponse
+    {
+        $brands = Brand::all();
+
+        $brands->each(function ($brand) {
+            $brand->delete();
+        });
+
+        return to_route('admin.brands.index', $this->getQueryStringParams($request))->with('success', 'BRANDS_HAVE_BEEN_SUCCESSFULLY_DELETED');
+    }
+
     public function trashed(): Response|ResponseFactory
     {
         $trashedBrands = Brand::search(request('search'))

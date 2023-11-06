@@ -135,7 +135,7 @@ module.exports = {
         require("flowbite/plugin"),
         require("@tailwindcss/line-clamp"),
         // require("tw-elements/dist/plugin"),
-        // require("@tailwindcss/forms"),
+        require("@tailwindcss/forms"),
         require("preline/plugin"),
         plugin(function ({ addComponents, theme }) {
             const screens = theme("screens", {});

@@ -149,6 +149,45 @@ export function useResourceActions(formFields = {}) {
         }
     };
 
+    // Soft Delete All Action
+    const softDeleteAllAction = async (model, deleteRouteName) => {
+        const result = await swal({
+            icon: "question",
+            title: `Delete All ${formatToTitleCase(model)}`,
+            text: `Are you sure you want to delete all ${model.toLowerCase()}? This action can be undone within 60 days.`,
+            showCancelButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Confirm",
+            cancelButtonText: "Cancel",
+            confirmButtonColor: "#d52222",
+            cancelButtonColor: "#626262",
+            timer: 20000,
+            timerProgressBar: true,
+            reverseButtons: true,
+        });
+
+        if (result.isConfirmed) {
+            router.delete(
+                route(deleteRouteName, {
+                    ...queryStringParams,
+                }),
+                {
+                    preserveScroll: true,
+                    onSuccess: () => {
+                        const successMessage =
+                            usePage().props.flash.successMessage;
+                        if (successMessage) {
+                            swal({
+                                icon: "success",
+                                title: successMessage,
+                            });
+                        }
+                    },
+                }
+            );
+        }
+    };
+
     // Restore Action
     const restoreAction = async (model, restoreRouteName, targetIdentifier) => {
         const result = await swal({
@@ -278,6 +317,7 @@ export function useResourceActions(formFields = {}) {
         createAction,
         editAction,
         softDeleteAction,
+        softDeleteAllAction,
         restoreAction,
         permanentDeleteAction,
         permanentDeleteAllAction,
