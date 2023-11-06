@@ -234,6 +234,44 @@ export function useResourceActions(formFields = {}) {
         }
     };
 
+    // Permanent Delete All Action
+    const permanentDeleteAllAction = async (model, deleteRouteName) => {
+        const result = await swal({
+            icon: "question",
+            title: `Permanently Delete All ${formatToTitleCase(model)}`,
+            text: `This action cannot be undone. Are you sure you want to permanently delete all items in the trash?`,
+            showCancelButton: true,
+            confirmButtonText: "Confirm",
+            cancelButtonText: "Cancel",
+            confirmButtonColor: "#d52222",
+            cancelButtonColor: "#626262",
+            timer: 20000,
+            timerProgressBar: true,
+            reverseButtons: true,
+        });
+
+        if (result.isConfirmed) {
+            router.delete(
+                route(deleteRouteName, {
+                    ...queryStringParams,
+                }),
+                {
+                    preserveScroll: true,
+                    onSuccess: () => {
+                        const successMessage =
+                            usePage().props.flash.successMessage;
+                        if (successMessage) {
+                            swal({
+                                icon: "success",
+                                title: successMessage,
+                            });
+                        }
+                    },
+                }
+            );
+        }
+    };
+
     return {
         form,
         processing,
@@ -242,6 +280,7 @@ export function useResourceActions(formFields = {}) {
         softDeleteAction,
         restoreAction,
         permanentDeleteAction,
+        permanentDeleteAllAction,
         errors,
     };
 }

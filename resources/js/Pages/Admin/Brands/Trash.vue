@@ -31,50 +31,8 @@ const props = defineProps({
 const brandList = "admin.brands.index";
 const trashedBrandList = "admin.brands.trashed";
 
-const { restoreAction, permanentDeleteAction } = useResourceActions();
-
-// // Handle Trash Brand Delete Permanently
-// const handlePermanentlyDeleteTrashBrands = async () => {
-//   const result = await swal({
-//     icon: "question",
-//     title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_IT_FROM_THE_TRASH"),
-//     text: __(
-//       "ALL_BRANDS_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK"
-//     ),
-//     showCancelButton: true,
-//     confirmButtonText: __("YES_DELETE_IT"),
-//     cancelButtonText: __("CANCEL"),
-//     confirmButtonColor: "#d52222",
-//     cancelButtonColor: "#626262",
-//     timer: 20000,
-//     timerProgressBar: true,
-//     reverseButtons: true,
-//   });
-
-//   if (result.isConfirmed) {
-//     router.delete(
-//       route("admin.brands.trash.permanently.delete", {
-//         page: usePage().props.ziggy.query?.page,
-//         per_page: usePage().props.ziggy.query?.per_page,
-//         sort: params.sort,
-//         direction: params.direction,
-//         deleted_from: usePage().props.ziggy.query?.deleted_from,
-//         deleted_until: usePage().props.ziggy.query?.deleted_until,
-//       }),
-//       {
-//         preserveScroll: true,
-//         onSuccess: () => {
-//           if (usePage().props.flash.successMessage) {
-//             swal({
-//               icon: "success",
-//               title: __(usePage().props.flash.successMessage),
-//             });
-//           }
-//         },
-//       }
-//     );
-//   }
-// };
+const { restoreAction, permanentDeleteAction, permanentDeleteAllAction } =
+  useResourceActions();
 </script>
 
 <template>
@@ -120,7 +78,11 @@ const { restoreAction, permanentDeleteAction } = useResourceActions();
             )
           }}
 
-          <EmptyTrashButton />
+          <EmptyTrashButton
+            @click="
+              permanentDeleteAllAction('Brand', 'admin.brands.force-delete-all')
+            "
+          />
         </div>
 
         <TableContainer>
