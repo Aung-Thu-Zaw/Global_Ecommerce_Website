@@ -12,7 +12,9 @@ import TableHeaderCell from "@/Components/Table/TableHeaderCell.vue";
 import TableDataCell from "@/Components/Table/TableDataCell.vue";
 import TableActionCell from "@/Components/Table/TableActionCell.vue";
 import Image from "@/Components/Table/Image.vue";
+import ActionTable from "@/Components/Table/ActionTable.vue";
 import InertiaLinkButton from "@/Components/Buttons/InertiaLinkButton.vue";
+import ActionButton from "@/Components/Buttons/TableActionButton.vue";
 import NormalButton from "@/Components/Buttons/NormalButton.vue";
 import EmptyTrashButton from "@/Components/Buttons/EmptyTrashButton.vue";
 import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
@@ -80,91 +82,104 @@ const { restoreAction, permanentDeleteAction, permanentDeleteAllAction } =
 
           <EmptyTrashButton
             @click="
-              permanentDeleteAllAction('Brand', 'admin.brands.force-delete-all')
+              permanentDeleteAllAction('Brand', 'admin.brands.force-delete.all')
             "
           />
         </div>
 
         <TableContainer>
-          <table class="w-full text-sm text-left text-gray-500">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-              <tr>
-                <SortableTableHeaderCell
-                  label="# No"
-                  :to="trashedBrandList"
-                  sort="id"
-                />
+          <ActionTable :items="trashedBrands.data">
+            <!-- Table Actions -->
+            <template #actions="{ selectedItems }">
+              <div v-show="can('brands.delete')">
+                <ActionButton>
+                  <i class="fa-solid fa-trash-can"></i>
+                  Delete Selected ({{ selectedItems.length }})
+                </ActionButton>
+                <ActionButton
+                  @click="
+                    permanentDeleteAllAction(
+                      'Brand',
+                      'admin.brands.force-delete.all'
+                    )
+                  "
+                  class="text-red-600"
+                >
+                  <i class="fa-solid fa-trash-can"></i>
+                  Delete All ({{ trashedBrands.total }})
+                </ActionButton>
+              </div>
+            </template>
 
-                <TableHeaderCell label="Image" />
+            <!-- Table Header -->
+            <template #table-header>
+              <SortableTableHeaderCell
+                label="# No"
+                :to="trashedBrandList"
+                sort="id"
+              />
 
-                <SortableTableHeaderCell
-                  label="Name"
-                  :to="trashedBrandList"
-                  sort="name"
-                />
+              <TableHeaderCell label="Image" />
 
-                <SortableTableHeaderCell
-                  label="Description"
-                  :to="trashedBrandList"
-                  sort="description"
-                />
+              <SortableTableHeaderCell
+                label="Name"
+                :to="trashedBrandList"
+                sort="name"
+              />
 
-                <TableHeaderCell label="Actions" />
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(trashBrand, index) in trashedBrands.data"
-                :key="trashBrand.id"
-                :class="{
-                  'border-b': index !== trashedBrands.data.length - 1,
-                }"
-              >
-                <TableDataCell>
-                  {{ trashBrand.id }}
-                </TableDataCell>
+              <SortableTableHeaderCell
+                label="Description"
+                :to="trashedBrandList"
+                sort="description"
+              />
 
-                <TableDataCell>
-                  <Image :src="trashBrand.image" />
-                </TableDataCell>
+              <TableHeaderCell label="Actions" />
+            </template>
 
-                <TableDataCell>
-                  {{ trashBrand.name }}
-                </TableDataCell>
+            <!-- Table Body -->
+            <template #table-data="{ item }">
+              <TableDataCell>
+                {{ item.id }}
+              </TableDataCell>
 
-                <TableDataCell>
-                  {{ trashBrand.description }}
-                </TableDataCell>
+              <TableDataCell>
+                <Image :src="item.image" />
+              </TableDataCell>
 
-                <TableActionCell>
-                  <NormalButton
-                    v-show="can('brands.restore')"
-                    @click="
-                      restoreAction('Brand', 'admin.brands.restore', trashBrand)
-                    "
-                  >
-                    <i class="fa-solid fa-recycle"></i>
-                    Restore
-                  </NormalButton>
+              <TableDataCell>
+                {{ item.name }}
+              </TableDataCell>
 
-                  <NormalButton
-                    v-show="can('brands.force.delete')"
-                    @click="
-                      permanentDeleteAction(
-                        'Brand',
-                        'admin.brands.force-delete',
-                        trashBrand
-                      )
-                    "
-                    class="bg-red-600 text-white ring-2 ring-red-300"
-                  >
-                    <i class="fa-solid fa-trash-can"></i>
-                    Delete Forever
-                  </NormalButton>
-                </TableActionCell>
-              </tr>
-            </tbody>
-          </table>
+              <TableDataCell>
+                {{ item.description }}
+              </TableDataCell>
+
+              <TableActionCell>
+                <NormalButton
+                  v-show="can('brands.restore')"
+                  @click="restoreAction('Brand', 'admin.brands.restore', item)"
+                >
+                  <i class="fa-solid fa-recycle"></i>
+                  Restore
+                </NormalButton>
+
+                <NormalButton
+                  v-show="can('brands.force.delete')"
+                  @click="
+                    permanentDeleteAction(
+                      'Brand',
+                      'admin.brands.force-delete',
+                      item
+                    )
+                  "
+                  class="bg-red-600 text-white ring-2 ring-red-300"
+                >
+                  <i class="fa-solid fa-trash-can"></i>
+                  Delete Forever
+                </NormalButton>
+              </TableActionCell>
+            </template>
+          </ActionTable>
         </TableContainer>
 
         <Pagination :data="trashedBrands" />

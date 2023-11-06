@@ -150,11 +150,15 @@ export function useResourceActions(formFields = {}) {
     };
 
     // Soft Delete All Action
-    const softDeleteAllAction = async (model, deleteRouteName) => {
+    const softDeleteSelectedAction = async (
+        model,
+        deleteRouteName,
+        selected
+    ) => {
         const result = await swal({
             icon: "question",
-            title: `Delete All ${formatToTitleCase(model)}`,
-            text: `Are you sure you want to delete all ${model.toLowerCase()}? This action can be undone within 60 days.`,
+            title: `Delete Selected ${formatToTitleCase(model)}`,
+            text: `Are you sure you want to delete these ${model.toLowerCase()}? This action can be undone within 60 days.`,
             showCancelButton: true,
             showCancelButton: true,
             confirmButtonText: "Confirm",
@@ -169,6 +173,7 @@ export function useResourceActions(formFields = {}) {
         if (result.isConfirmed) {
             router.delete(
                 route(deleteRouteName, {
+                    selected,
                     ...queryStringParams,
                 }),
                 {
@@ -189,15 +194,11 @@ export function useResourceActions(formFields = {}) {
     };
 
     // Soft Delete All Action
-    const softDeleteSelectedAction = async (
-        model,
-        deleteRouteName,
-        selectedItems
-    ) => {
+    const softDeleteAllAction = async (model, deleteRouteName) => {
         const result = await swal({
             icon: "question",
-            title: `Delete Selected ${formatToTitleCase(model)}`,
-            text: `Are you sure you want to delete these ${model.toLowerCase()}? This action can be undone within 60 days.`,
+            title: `Delete All ${formatToTitleCase(model)}`,
+            text: `Are you sure you want to delete all ${model.toLowerCase()}? This action can be undone within 60 days.`,
             showCancelButton: true,
             showCancelButton: true,
             confirmButtonText: "Confirm",
@@ -212,7 +213,6 @@ export function useResourceActions(formFields = {}) {
         if (result.isConfirmed) {
             router.delete(
                 route(deleteRouteName, {
-                    selectedItems,
                     ...queryStringParams,
                 }),
                 {

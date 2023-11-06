@@ -117,7 +117,7 @@ const handleDeleteBrand = async (brand) => {
         </div>
         <TableContainer>
           <ActionTable :items="brands.data">
-            <!-- Delete Actions -->
+            <!-- Table Actions -->
             <template #actions="{ selectedItems }">
               <div v-show="can('brands.delete')">
                 <ActionButton
@@ -130,7 +130,7 @@ const handleDeleteBrand = async (brand) => {
                   "
                 >
                   <i class="fa-solid fa-trash-can"></i>
-                  Delete Selected
+                  Delete Selected ({{ selectedItems.length }})
                 </ActionButton>
                 <ActionButton
                   @click="
@@ -139,7 +139,7 @@ const handleDeleteBrand = async (brand) => {
                   class="text-red-600"
                 >
                   <i class="fa-solid fa-trash-can"></i>
-                  Delete The Whole Table
+                  Delete All ({{ brands.total }})
                 </ActionButton>
               </div>
             </template>
