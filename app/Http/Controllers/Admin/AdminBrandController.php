@@ -28,7 +28,7 @@ class AdminBrandController extends Controller
         $this->middleware('permission:brands.delete', ['only' => ['destroy','destroySelected','destroyAll']]);
         $this->middleware('permission:brands.view.trash', ['only' => ['trashed']]);
         $this->middleware('permission:brands.restore', ['only' => ['restore']]);
-        $this->middleware('permission:brands.force.delete', ['only' => ['forceDelete', 'forceDeleteAll']]);
+        $this->middleware('permission:brands.force.delete', ['only' => ['forceDelete','forceDeleteSelected', 'forceDeleteAll']]);
     }
 
     public function index(): Response|ResponseFactory
@@ -118,6 +118,26 @@ class AdminBrandController extends Controller
         $trashBrand->restore();
 
         return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', 'BRAND_HAS_BEEN_SUCCESSFULLY_RESTORED');
+    }
+
+    public function restoreSelected(Request $request): RedirectResponse
+    {
+        if (!empty($request->selectedItems)) {
+            Brand::onlyTrashed()->whereIn('id', $request->selectedItems)->restore();
+        }
+
+        return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', 'BRAND_HAS_BEEN_SUCCESSFULLY_DELETED');
+    }
+
+    public function restoreAll(Request $request): RedirectResponse
+    {
+        $brands = Brand::onlyTrashed()->get();
+
+        $brands->each(function ($brand) {
+            $brand->restore();
+        });
+
+        return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', 'BRANDS_HAVE_BEEN_SUCCESSFULLY_DELETED');
     }
 
     public function forceDelete(Request $request, int $trashBrandId): RedirectResponse

@@ -35,6 +35,8 @@ const trashedBrandList = "admin.brands.trashed";
 
 const {
   restoreAction,
+  restoreSelectedAction,
+  restoreAllAction,
   permanentDeleteAction,
   permanentDeleteSelectedAction,
   permanentDeleteAllAction,
@@ -95,7 +97,27 @@ const {
           <ActionTable :items="trashedBrands.data">
             <!-- Table Actions -->
             <template #actions="{ selectedItems }">
-              <div v-show="can('brands.delete')">
+              <div v-show="can('brands.restore')">
+                <ActionButton
+                  @click="
+                    restoreSelectedAction(
+                      'Brand',
+                      'admin.brands.restore.selected',
+                      selectedItems
+                    )
+                  "
+                >
+                  <i class="fa-solid fa-recycle"></i>
+                  Restore Selected ({{ selectedItems.length }})
+                </ActionButton>
+                <ActionButton
+                  @click="restoreAllAction('Brand', 'admin.brands.restore.all')"
+                >
+                  <i class="fa-solid fa-recycle"></i>
+                  Restore All ({{ trashedBrands.total }})
+                </ActionButton>
+              </div>
+              <div v-show="can('brands.force.delete')">
                 <ActionButton
                   @click="
                     permanentDeleteSelectedAction(
