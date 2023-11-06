@@ -1,19 +1,8 @@
 <script setup>
 import Checkbox from "@/Components/Forms/Fields/Checkbox.vue";
-import { useResourceActions } from "@/Composables/useResourceActions";
 import { ref, watch } from "vue";
 
 const props = defineProps({
-  //   deleteAllRouteName: {
-  //     type: String,
-  //     required: true,
-  //   },
-
-  //   deleteSelectedRouteName: {
-  //     type: String,
-  //     required: true,
-  //   },
-
   items: {
     type: Array,
     required: true,
@@ -42,12 +31,11 @@ const selectAll = () => {
 const deselectAll = () => {
   selectedItems.value = [];
 };
-
 </script>
 
 <template>
   <div
-    v-show="selectedItems.length !== 0"
+    v-show="selectedItems.length !== 0 && items.length !== 0"
     class="px-5 py-3 bg-[#F9FAFB] text-sm flex items-center justify-between"
   >
     <div class="flex items-center space-x-1">
@@ -79,7 +67,7 @@ const deselectAll = () => {
           class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-[15rem] bg-white shadow-md rounded-lg p-2 mt-2 dark:bg-gray-800 dark:border dark:border-gray-700"
           aria-labelledby="hs-dropdown-custom-icon-trigger"
         >
-          <slot name="actions"></slot>
+          <slot name="actions" :selectedItems="selectedItems"></slot>
         </div>
       </div>
     </div>
@@ -103,7 +91,7 @@ const deselectAll = () => {
   <table class="w-full text-sm text-left text-gray-500">
     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
       <tr>
-        <th class="pl-4">
+        <th v-show="items.length !== 0" class="pl-4">
           <Checkbox v-model:checked="isSelectedAll" @change="selectAllItems" />
         </th>
         <slot name="table-header"></slot>

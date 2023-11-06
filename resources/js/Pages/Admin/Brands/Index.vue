@@ -39,7 +39,8 @@ const queryStringParams = computed(() => {
   };
 });
 
-const { softDeleteAction, softDeleteAllAction } = useResourceActions();
+const { softDeleteAction, softDeleteSelectedAction, softDeleteAllAction } =
+  useResourceActions();
 
 const handleDeleteBrand = async (brand) => {
   if (brand.products_count > 0) {
@@ -117,8 +118,16 @@ const handleDeleteBrand = async (brand) => {
         <TableContainer>
           <ActionTable :items="brands.data">
             <!-- Delete Actions -->
-            <template #actions>
-              <ActionButton>
+            <template #actions="{ selectedItems }">
+              <ActionButton
+                @click="
+                  softDeleteSelectedAction(
+                    'Brand',
+                    'admin.brands.destroy.selected',
+                    selectedItems
+                  )
+                "
+              >
                 <i class="fa-solid fa-trash-can"></i>
                 Delete Selected
               </ActionButton>

@@ -79,6 +79,16 @@ class AdminBrandController extends Controller
         return to_route('admin.brands.index', $this->getQueryStringParams($request))->with('success', 'BRAND_HAS_BEEN_SUCCESSFULLY_DELETED');
     }
 
+    public function destroySelected(Request $request): RedirectResponse
+    {
+
+        if (!empty($request->selectedItems)) {
+            Brand::whereIn('id', $request->selectedItems)->delete();
+        }
+
+        return to_route('admin.brands.index', $this->getQueryStringParams($request))->with('success', 'BRAND_HAS_BEEN_SUCCESSFULLY_DELETED');
+    }
+
     public function destroyAll(Request $request): RedirectResponse
     {
         $brands = Brand::all();

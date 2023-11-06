@@ -88,6 +88,7 @@ Route::middleware(['admin', 'verified', 'user.role:admin'])
             ->prefix('/brands/trash')
             ->name('brands.')
             ->group(function () {
+                Route::delete('/destroy/selected', 'destroySelected')->name('destroy.selected');
                 Route::delete('/destroy/all', 'destroyAll')->name('destroy.all');
                 Route::get('/', 'trashed')->name('trashed');
                 Route::post('/{id}/restore', 'restore')->name('restore');
