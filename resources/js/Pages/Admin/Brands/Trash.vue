@@ -33,8 +33,12 @@ const props = defineProps({
 const brandList = "admin.brands.index";
 const trashedBrandList = "admin.brands.trashed";
 
-const { restoreAction, permanentDeleteAction, permanentDeleteAllAction } =
-  useResourceActions();
+const {
+  restoreAction,
+  permanentDeleteAction,
+  permanentDeleteSelectedAction,
+  permanentDeleteAllAction,
+} = useResourceActions();
 </script>
 
 <template>
@@ -92,7 +96,15 @@ const { restoreAction, permanentDeleteAction, permanentDeleteAllAction } =
             <!-- Table Actions -->
             <template #actions="{ selectedItems }">
               <div v-show="can('brands.delete')">
-                <ActionButton>
+                <ActionButton
+                  @click="
+                    permanentDeleteSelectedAction(
+                      'Brand',
+                      'admin.brands.force-delete.selected',
+                      selectedItems
+                    )
+                  "
+                >
                   <i class="fa-solid fa-trash-can"></i>
                   Delete Selected ({{ selectedItems.length }})
                 </ActionButton>

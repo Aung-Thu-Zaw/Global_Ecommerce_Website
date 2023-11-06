@@ -39,7 +39,7 @@ const queryStringParams = computed(() => {
   };
 });
 
-const { softDeleteAction, softDeleteSelectedAction, softDeleteAllAction } =
+const { softDeleteAction, selectedSoftDeleteAction, softDeleteAllAction } =
   useResourceActions();
 
 const handleDeleteBrand = async (brand) => {
@@ -122,7 +122,7 @@ const handleDeleteBrand = async (brand) => {
               <div v-show="can('brands.delete')">
                 <ActionButton
                   @click="
-                    softDeleteSelectedAction(
+                    selectedSoftDeleteAction(
                       'Brand',
                       'admin.brands.destroy.selected',
                       selectedItems

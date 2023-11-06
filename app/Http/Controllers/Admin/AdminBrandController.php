@@ -81,7 +81,6 @@ class AdminBrandController extends Controller
 
     public function destroySelected(Request $request): RedirectResponse
     {
-
         if (!empty($request->selectedItems)) {
             Brand::whereIn('id', $request->selectedItems)->delete();
         }
@@ -130,6 +129,16 @@ class AdminBrandController extends Controller
         $trashBrand->forceDelete();
 
         return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', 'THE_BRAND_HAS_BEEN_PERMANENTLY_DELETED');
+    }
+
+    public function forceDeleteSelected(Request $request): RedirectResponse
+    {
+
+        if (!empty($request->selectedItems)) {
+            Brand::onlyTrashed()->whereIn('id', $request->selectedItems)->forceDelete();
+        }
+
+        return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', 'TRASHED_BRANDS_HAVE_BEEN_SUCCESSFULLY_FORCE_DELETED');
     }
 
     public function forceDeleteAll(Request $request): RedirectResponse
