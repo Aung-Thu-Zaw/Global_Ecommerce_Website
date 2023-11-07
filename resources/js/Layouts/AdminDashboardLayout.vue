@@ -16,7 +16,7 @@ onMounted(() => {
       <AdminDashboardNavbar />
       <slot name="header"></slot>
 
-      <div class="px-4 md:px-10 mx-auto w-full -m-24 md:m-0">
+      <div class="px-4 md:px-10 mx-auto w-full -m-24 md:m-0 mt-0">
         <slot />
       </div>
     </div>

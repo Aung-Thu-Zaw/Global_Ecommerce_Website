@@ -49,14 +49,16 @@ const {
     <!-- Breadcrumb And Go back Button  -->
     <div class="min-h-screen py-10 font-poppins">
       <div
-        class="flex flex-col md:flex-row items-center md:justify-between mb-5"
+        class="flex flex-col items-start md:flex-row md:items-center md:justify-between mb-4 md:mb-8"
       >
         <Breadcrumb :to="brandList" icon="fa-award" label="Brands">
           <BreadcrumbLinkItem label="Trash" :to="trashedBrandList" />
           <BreadcrumbItem label="List" />
         </Breadcrumb>
 
-        <GoBackButton :to="brandList" />
+        <div class="w-full flex items-center justify-end">
+          <GoBackButton :to="brandList" />
+        </div>
       </div>
 
       <!-- Table Start -->
@@ -69,7 +71,7 @@ const {
             :to="trashedBrandList"
           />
 
-          <div class="flex items-center space-x-5">
+          <div class="flex items-center justify-end w-full md:space-x-5">
             <DashboardTableDataPerPageSelectBox :to="trashedBrandList" />
 
             <DashboardTableFilterByCreatedDate :to="trashedBrandList" />

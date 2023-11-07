@@ -74,11 +74,23 @@ const handleDeleteBrand = async (brand) => {
     <!-- Breadcrumb And Trash Button  -->
     <div class="min-h-screen py-10 font-poppins">
       <div
-        class="flex flex-col md:flex-row items-center md:justify-between mb-5"
+        class="flex flex-col items-start md:flex-row md:items-center md:justify-between mb-4 md:mb-8"
       >
         <Breadcrumb :to="brandList" icon="fa-award" label="Brands">
           <BreadcrumbItem label="List" />
         </Breadcrumb>
+      </div>
+
+      <!-- Create New Button  -->
+      <div class="flex items-center justify-between mb-3">
+        <InertiaLinkButton
+          v-show="can('brands.create')"
+          to="admin.brands.create"
+          :data="queryStringParams"
+        >
+          <i class="fa-solid fa-file-circle-plus mr-1"></i>
+          Add A New Brand
+        </InertiaLinkButton>
 
         <InertiaLinkButton
           v-show="can('brands.view.trash')"
@@ -91,25 +103,17 @@ const handleDeleteBrand = async (brand) => {
         </InertiaLinkButton>
       </div>
 
-      <!-- Create New Button  -->
-      <div v-show="can('brands.create')" class="mb-3">
-        <InertiaLinkButton to="admin.brands.create" :data="queryStringParams">
-          <i class="fa-solid fa-file-circle-plus mr-1"></i>
-          Add A New Brand
-        </InertiaLinkButton>
-      </div>
-
       <!-- Table Start -->
       <div class="border bg-white rounded-md shadow px-5 py-3">
         <div
-          class="my-5 flex flex-col sm:flex-row space-y-5 sm:space-y-0 items-center justify-between overflow-auto"
+          class="my-5 flex flex-col sm:flex-row space-y-5 sm:space-y-0 items-center justify-between overflow-auto p-2"
         >
           <DashboardTableDataSearchBox
             placeholder="Search by brand name ..."
             :to="brandList"
           />
 
-          <div class="flex items-center space-x-5">
+          <div class="flex items-center justify-end w-full md:space-x-5">
             <DashboardTableDataPerPageSelectBox :to="brandList" />
 
             <DashboardTableFilterByCreatedDate :to="brandList" />

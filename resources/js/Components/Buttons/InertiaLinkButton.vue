@@ -16,7 +16,7 @@ const props = defineProps({
   },
 
   targetIdentifier: {
-    type: [String, Number],
+    type: [String, Number, Object],
     default: null,
   },
 

@@ -124,7 +124,7 @@ watch(
 
   <div
     v-if="isFilterBoxOpened"
-    class="w-[400px] border border-gray-300 shadow-lg absolute bg-white top-[18.2rem] right-[3.8rem] z-30 px-5 py-4 rounded-md"
+    class="w-[390px] border border-gray-300 shadow-lg absolute bg-white top-[19rem] md:top-[18.2rem] right-4 md:right-[3.8rem] z-30 px-5 py-4 rounded-md"
   >
     <div class="flex items-center justify-between mb-5">
       <h4 class="font-bold text-slate-600 text-md">Filters</h4>

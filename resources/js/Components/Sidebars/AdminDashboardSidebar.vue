@@ -17,7 +17,7 @@ const toggleCollapseShow = (classes) => {
     class="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6"
   >
     <div
-      class="md:flex-col md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center justify-between w-full mx-auto"
+      class="md:flex-col md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center md:justify-between w-full mx-auto"
     >
       <!-- Toggler -->
       <button
@@ -32,10 +32,10 @@ const toggleCollapseShow = (classes) => {
         :href="route('home')"
         class="md:block text-left text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm font-bold px-0"
       >
-        <img :src="logo" alt="logo" class="w-auto h-12 object-contain" />
+        <img :src="logo" alt="logo" class="w-auto h-4 md:h-12 object-contain" />
       </Link>
       <!-- User -->
-      <ul class="md:hidden items-center flex flex-wrap list-none">
+      <ul class="md:hidden items-center flex flex-wrap list-none ml-auto">
         <li class="inline-block relative">
           <!-- <DashboardNotificationDropdown /> -->
         </li>

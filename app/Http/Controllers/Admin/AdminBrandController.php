@@ -46,7 +46,7 @@ class AdminBrandController extends Controller
 
     public function create(): Response|ResponseFactory
     {
-        $categories = Category::all();
+        $categories = Category::select("id", "name")->get();
 
         return inertia('Admin/Brands/Create', compact('categories'));
     }
@@ -60,7 +60,7 @@ class AdminBrandController extends Controller
 
     public function edit(Request $request, Brand $brand): Response|ResponseFactory
     {
-        $categories = Category::all();
+        $categories = Category::select("id", "name")->get();
 
         return inertia('Admin/Brands/Edit', compact('brand', 'categories'));
     }

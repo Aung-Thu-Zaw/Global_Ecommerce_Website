@@ -18,7 +18,7 @@ defineProps({
 
 <template>
   <nav
-    class="flex mb-5 md:mb-0 overflow-x-auto max-w-[350px] md:max-w-[600px] px-10 md:px-0"
+    class="flex mb-5 md:mb-0 overflow-x-auto max-w-[350px] md:max-w-[600px] px-0"
     aria-label="Breadcrumb"
   >
     <ol class="inline-flex items-center space-x-1 md:space-x-3">

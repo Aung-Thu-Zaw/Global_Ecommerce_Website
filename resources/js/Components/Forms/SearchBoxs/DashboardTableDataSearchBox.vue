@@ -68,7 +68,7 @@ watch(
 </script>
 
 <template>
-  <div class="min-w-[300px] max-w-[400px]">
+  <div class="min-w-[300px] max-w-[400px] w-full">
     <form>
       <label
         for="default-search"
@@ -107,7 +107,7 @@ watch(
         <input
           type="search"
           id="default-search"
-          class="block w-full p-4 pl-10 text-xs text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-all"
+          class="block w-full p-4 pl-10 text-xs text-gray-900 border border-gray-300 rounded-md bg-gray-50 focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-all"
           :placeholder="placeholder"
           required
           v-model="search"

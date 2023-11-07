@@ -36,10 +36,10 @@ const deselectAll = () => {
 <template>
   <div
     v-show="selectedItems.length !== 0 && items.length !== 0"
-    class="px-5 py-3 bg-[#F9FAFB] text-sm flex items-center justify-between"
+    class="px-5 py-3 bg-[#F9FAFB] text-sm flex items-center justify-between w-full"
   >
     <div class="flex items-center space-x-1">
-      <span class="font-semibold text-slate-700 bg-gray-50">
+      <span class="font-semibold text-slate-700">
         {{ selectedItems.length }} records selected
       </span>
 
