@@ -25,10 +25,10 @@ class AdminBrandController extends Controller
         $this->middleware('permission:brands.view', ['only' => ['index']]);
         $this->middleware('permission:brands.create', ['only' => ['create', 'store']]);
         $this->middleware('permission:brands.edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:brands.delete', ['only' => ['destroy','destroySelected','destroyAll']]);
+        $this->middleware('permission:brands.delete', ['only' => ['destroy', 'destroySelected', 'destroyAll']]);
         $this->middleware('permission:brands.view.trash', ['only' => ['trashed']]);
-        $this->middleware('permission:brands.restore', ['only' => ['restore']]);
-        $this->middleware('permission:brands.force.delete', ['only' => ['forceDelete','forceDeleteSelected', 'forceDeleteAll']]);
+        $this->middleware('permission:brands.restore', ['only' => ['restore','restoreSelected','restoreAll']]);
+        $this->middleware('permission:brands.force.delete', ['only' => ['forceDelete', 'forceDeleteSelected', 'forceDeleteAll']]);
     }
 
     public function index(): Response|ResponseFactory
@@ -46,7 +46,7 @@ class AdminBrandController extends Controller
 
     public function create(): Response|ResponseFactory
     {
-        $categories = Category::select("id", "name")->get();
+        $categories = Category::select('id', 'name')->get();
 
         return inertia('Admin/Brands/Create', compact('categories'));
     }
@@ -55,12 +55,12 @@ class AdminBrandController extends Controller
     {
         (new CreateBrandAction())->handle($request->validated());
 
-        return to_route('admin.brands.index', $this->getQueryStringParams($request))->with('success', 'BRAND_HAS_BEEN_SUCCESSFULLY_CREATED');
+        return to_route('admin.brands.index', $this->getQueryStringParams($request))->with('success', ':label has been successfully created.');
     }
 
     public function edit(Request $request, Brand $brand): Response|ResponseFactory
     {
-        $categories = Category::select("id", "name")->get();
+        $categories = Category::select('id', 'name')->get();
 
         return inertia('Admin/Brands/Edit', compact('brand', 'categories'));
     }
@@ -69,14 +69,14 @@ class AdminBrandController extends Controller
     {
         (new UpdateBrandAction())->handle($request->validated(), $brand);
 
-        return to_route('admin.brands.index', $this->getQueryStringParams($request))->with('success', 'BRAND_HAS_BEEN_SUCCESSFULLY_UPDATED');
+        return to_route('admin.brands.index', $this->getQueryStringParams($request))->with('success', ':label has been successfully updated.');
     }
 
     public function destroy(Request $request, Brand $brand): RedirectResponse
     {
         $brand->delete();
 
-        return to_route('admin.brands.index', $this->getQueryStringParams($request))->with('success', 'BRAND_HAS_BEEN_SUCCESSFULLY_DELETED');
+        return to_route('admin.brands.index', $this->getQueryStringParams($request))->with('success', ':label has been successfully deleted.');
     }
 
     public function destroySelected(Request $request): RedirectResponse
@@ -85,7 +85,7 @@ class AdminBrandController extends Controller
             Brand::whereIn('id', $request->selectedItems)->delete();
         }
 
-        return to_route('admin.brands.index', $this->getQueryStringParams($request))->with('success', 'BRAND_HAS_BEEN_SUCCESSFULLY_DELETED');
+        return to_route('admin.brands.index', $this->getQueryStringParams($request))->with('success', 'Selected :label have been successfully deleted.');
     }
 
     public function destroyAll(Request $request): RedirectResponse
@@ -96,7 +96,7 @@ class AdminBrandController extends Controller
             $brand->delete();
         });
 
-        return to_route('admin.brands.index', $this->getQueryStringParams($request))->with('success', 'BRANDS_HAVE_BEEN_SUCCESSFULLY_DELETED');
+        return to_route('admin.brands.index', $this->getQueryStringParams($request))->with('success', 'All :label have been successfully deleted.');
     }
 
     public function trashed(): Response|ResponseFactory
@@ -112,12 +112,11 @@ class AdminBrandController extends Controller
 
     public function restore(Request $request, int $trashBrandId): RedirectResponse
     {
-
         $trashBrand = Brand::onlyTrashed()->findOrFail($trashBrandId);
 
         $trashBrand->restore();
 
-        return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', 'BRAND_HAS_BEEN_SUCCESSFULLY_RESTORED');
+        return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', ':label has been successfully restored.');
     }
 
     public function restoreSelected(Request $request): RedirectResponse
@@ -126,7 +125,7 @@ class AdminBrandController extends Controller
             Brand::onlyTrashed()->whereIn('id', $request->selectedItems)->restore();
         }
 
-        return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', 'BRAND_HAS_BEEN_SUCCESSFULLY_DELETED');
+        return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', 'Selected :label have been successfully restored.');
     }
 
     public function restoreAll(Request $request): RedirectResponse
@@ -137,7 +136,7 @@ class AdminBrandController extends Controller
             $brand->restore();
         });
 
-        return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', 'BRANDS_HAVE_BEEN_SUCCESSFULLY_DELETED');
+        return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', 'All :label have been successfully restored.');
     }
 
     public function forceDelete(Request $request, int $trashBrandId): RedirectResponse
@@ -148,17 +147,16 @@ class AdminBrandController extends Controller
 
         $trashBrand->forceDelete();
 
-        return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', 'THE_BRAND_HAS_BEEN_PERMANENTLY_DELETED');
+        return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', 'The :label has been permanently deleted.');
     }
 
     public function forceDeleteSelected(Request $request): RedirectResponse
     {
-
         if (!empty($request->selectedItems)) {
             Brand::onlyTrashed()->whereIn('id', $request->selectedItems)->forceDelete();
         }
 
-        return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', 'TRASHED_BRANDS_HAVE_BEEN_SUCCESSFULLY_FORCE_DELETED');
+        return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', 'Selected :label have been permanently deleted.');
     }
 
     public function forceDeleteAll(Request $request): RedirectResponse
@@ -167,6 +165,6 @@ class AdminBrandController extends Controller
 
         (new PermanentlyDeleteAllTrashBrandAction())->handle($trashBrands);
 
-        return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', 'BRANDS_HAVE_BEEN_PERMANENTLY_DELETED');
+        return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', 'All :label have been permanently deleted.');
     }
 }

@@ -1,5 +1,7 @@
 <script setup>
 import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
+import LanguageDropdownForDashboard from "@/Components/Dropdowns/LanguageDropdownForDashboard.vue";
+import NotificationDropdownForAdminDashboard from "@/Components/Dropdowns/NotificationDropdownForAdminDashboard.vue";
 </script>
 
 <template>
@@ -35,6 +37,13 @@ import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
       <ul
         class="z-50 flex-col md:flex-row list-none items-center hidden md:flex"
       >
+        <!-- Admin Dashboard Notification Dropdown -->
+        <!-- <NotificationDropdownForAdminDashboard /> -->
+
+        <!-- Admin Dashboard Language Dropdown -->
+        <LanguageDropdownForDashboard />
+
+        <!-- User Dropdown -->
         <UserDropdown />
       </ul>
     </div>

@@ -30,24 +30,35 @@ class Translations extends Component
         $locale = session('locale') ? session('locale') : App::getLocale();
 
         $translations = Cache::rememberForever("translations_$locale", function () use ($locale) {
-            $phpTranslations = [];
+            $allTranslations = [];
 
-            $jsonTranslations = [];
+            // List of language directories to include
+            $directories = [
+                resource_path('lang/dashboard'),
+                resource_path('lang'),
+                // Add more directories as needed
+            ];
 
-            if (File::exists(resource_path("lang/$locale"))) {
-                $phpTranslations = collect(File::allFiles(resource_path("lang/$locale")))
-                 ->filter(function ($file) {
-                     return $file->getExtension() === 'php';
-                 })->flatMap(function ($file) {
-                     return Arr::dot(File::getRequire($file->getRealPath()));
-                 })->toArray();
+            // Iterate through each directory and load translations
+            foreach ($directories as $directory) {
+                if (File::exists($directory)) {
+                    // Load PHP language files
+                    $phpFilePath = $directory."/$locale.php";
+                    if (File::exists($phpFilePath)) {
+                        $phpTranslations = Arr::dot(File::getRequire($phpFilePath));
+                        $allTranslations = array_merge($allTranslations, $phpTranslations);
+                    }
+
+                    // Load JSON language files
+                    $jsonFilePath = $directory."/$locale.json";
+                    if (File::exists($jsonFilePath)) {
+                        $jsonTranslations = json_decode(File::get($jsonFilePath), true);
+                        $allTranslations = array_merge($allTranslations, $jsonTranslations);
+                    }
+                }
             }
 
-            if (File::exists(resource_path("lang/$locale.json"))) {
-                $jsonTranslations = json_decode(File::get(resource_path("lang/$locale.json")), true);
-            }
-
-            return array_merge($phpTranslations, $jsonTranslations);
+            return $allTranslations;
         });
 
         return view('components.translations', compact('translations'));

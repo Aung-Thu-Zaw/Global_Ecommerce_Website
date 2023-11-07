@@ -38,7 +38,7 @@ watch(
     class="p-3 py-3.5 font-medium text-xs text-gray-500 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-300 focus:border-blue-400"
     v-model="per_page"
   >
-    <option selected disabled>Per Page</option>
+    <option selected disabled>{{ __("Per Page") }}</option>
     <option value="5">5</option>
     <option value="10">10</option>
     <option value="25">25</option>

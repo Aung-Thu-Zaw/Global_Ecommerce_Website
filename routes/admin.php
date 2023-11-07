@@ -83,7 +83,7 @@ Route::middleware(['admin', 'verified', 'user.role:admin'])
             });
 
         // Admin Brands Operations
-        Route::resource('brands', AdminBrandController::class)->except(["show"]);
+        Route::resource('brands', AdminBrandController::class)->except(['show']);
         Route::controller(AdminBrandController::class)
             ->prefix('/brands/trash')
             ->name('brands.')

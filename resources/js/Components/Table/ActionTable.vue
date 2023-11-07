@@ -40,7 +40,7 @@ const deselectAll = () => {
   >
     <div class="flex items-center space-x-1">
       <span class="font-semibold text-slate-700">
-        {{ selectedItems.length }} records selected
+        {{ __(":label Records Selected", { label: selectedItems.length }) }}
       </span>
 
       <div class="hs-dropdown relative inline-flex">
@@ -67,7 +67,7 @@ const deselectAll = () => {
           class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-[15rem] bg-white shadow-md rounded-lg p-2 mt-2 dark:bg-gray-800 dark:border dark:border-gray-700"
           aria-labelledby="hs-dropdown-custom-icon-trigger"
         >
-          <slot name="actions" :selectedItems="selectedItems"></slot>
+          <slot name="bulk-actions" :selectedItems="selectedItems"></slot>
         </div>
       </div>
     </div>
@@ -77,14 +77,14 @@ const deselectAll = () => {
         @click="selectAll"
         class="text-blue-600 cursor-pointer hover:bg-blue-200 px-2 py-1.5 rounded-md"
       >
-        Select all
+        {{ __("Select All") }}
       </span>
       <button
         type="button"
         @click="deselectAll"
         class="text-red-600 cursor-pointer hover:bg-red-200 px-2 py-1.5 rounded-md"
       >
-        Deselect all
+        {{ __("Deselect All") }}
       </button>
     </div>
   </div>

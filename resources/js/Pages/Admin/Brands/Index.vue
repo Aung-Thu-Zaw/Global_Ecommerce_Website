@@ -1,26 +1,26 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import DashboardTableDataSearchBox from "@/Components/Forms/SearchBoxs/DashboardTableDataSearchBox.vue";
-import DashboardTableDataPerPageSelectBox from "@/Components/Forms/SelectBoxs/DashboardTableDataPerPageSelectBox.vue";
-import DashboardTableFilterByCreatedDate from "@/Components/Forms/SelectBoxs/DashboardTableFilterByCreatedDate.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Breadcrumb.vue";
 import BreadcrumbItem from "@/Components/Breadcrumbs/BreadcrumbItem.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
+import ActionTable from "@/Components/Table/ActionTable.vue";
+import DashboardTableDataSearchBox from "@/Components/Forms/SearchBoxs/DashboardTableDataSearchBox.vue";
+import DashboardTableDataPerPageSelectBox from "@/Components/Forms/SelectBoxs/DashboardTableDataPerPageSelectBox.vue";
+import DashboardTableFilterByCreatedDate from "@/Components/Forms/SelectBoxs/DashboardTableFilterByCreatedDate.vue";
 import SortableTableHeaderCell from "@/Components/Table/SortableTableHeaderCell.vue";
 import TableHeaderCell from "@/Components/Table/TableHeaderCell.vue";
 import TableDataCell from "@/Components/Table/TableDataCell.vue";
 import TableActionCell from "@/Components/Table/TableActionCell.vue";
 import Image from "@/Components/Table/Image.vue";
-import ActionTable from "@/Components/Table/ActionTable.vue";
-import InertiaLinkButton from "@/Components/Buttons/InertiaLinkButton.vue";
-import ActionButton from "@/Components/Buttons/TableActionButton.vue";
-import NormalButton from "@/Components/Buttons/NormalButton.vue";
 import NoTableData from "@/Components/Table/NoTableData.vue";
-import { __ } from "@/Services/translations-inside-setup.js";
+import BulkActionButton from "@/Components/Buttons/BulkActionButton.vue";
+import InertiaLinkButton from "@/Components/Buttons/InertiaLinkButton.vue";
+import NormalButton from "@/Components/Buttons/NormalButton.vue";
 import Pagination from "@/Components/Paginations/DashboardPagination.vue";
 import { useResourceActions } from "@/Composables/useResourceActions";
-import { Head, usePage } from "@inertiajs/vue3";
+import { usePage, Head } from "@inertiajs/vue3";
 import { computed, inject } from "vue";
+import { __ } from "@/Services/translations-inside-setup.js";
 
 const props = defineProps({
   brands: Object,
@@ -46,13 +46,17 @@ const handleDeleteBrand = async (brand) => {
   if (brand.products_count > 0) {
     const result = await swal({
       icon: "error",
-      title: __("YOU_CANT_DELETE_THIS_BRAND_BECAUSE_THIS_BRAND_HAVE_PRODUCTS"),
+      title: __("You can't delete this :label", {
+        label: __("brand"),
+        label2: __("products"),
+      }),
       text: __(
-        "IF_YOU_CLICK_THE_DELETE_WHATEVER_BUTTON_PRODUCTS_ASSOCIATED_WITH_THAT_BRAND_WILL_BE_AUTOMATICALLY_DELETED"
+        "If you click the 'Delete Whatever' button :label2 associated with that :label will be automatically deleted.",
+        { label2: __("products"), label: __("brand") }
       ),
       showCancelButton: true,
-      confirmButtonText: __("DELETE_WHATEVER"),
-      cancelButtonText: __("CANCEL"),
+      confirmButtonText: __("Delete Whatever"),
+      cancelButtonText: __("Cancel"),
       confirmButtonColor: "#d52222",
       cancelButtonColor: "#626262",
       timer: 20000,
@@ -70,7 +74,8 @@ const handleDeleteBrand = async (brand) => {
 
 <template>
   <AdminDashboardLayout>
-    <Head :title="__('BRANDS')" />
+    <Head :title="__('Brands')" />
+
     <!-- Breadcrumb And Trash Button  -->
     <div class="min-h-screen py-10 font-poppins">
       <div
@@ -81,17 +86,18 @@ const handleDeleteBrand = async (brand) => {
         </Breadcrumb>
       </div>
 
-      <!-- Create New Button  -->
       <div class="flex items-center justify-between mb-3">
+        <!-- Create New Button -->
         <InertiaLinkButton
           v-show="can('brands.create')"
           to="admin.brands.create"
           :data="queryStringParams"
         >
           <i class="fa-solid fa-file-circle-plus mr-1"></i>
-          Add A New Brand
+          {{ __("Create A New :label", { label: __("Brand") }) }}
         </InertiaLinkButton>
 
+        <!-- Trash Button -->
         <InertiaLinkButton
           v-show="can('brands.view.trash')"
           to="admin.brands.trashed"
@@ -99,7 +105,7 @@ const handleDeleteBrand = async (brand) => {
           class="bg-red-600 text-white ring-2 ring-red-300"
         >
           <i class="fa-solid fa-trash-can mr-1"></i>
-          Trash
+          {{ __("Trash") }}
         </InertiaLinkButton>
       </div>
 
@@ -109,7 +115,7 @@ const handleDeleteBrand = async (brand) => {
           class="my-5 flex flex-col sm:flex-row space-y-5 sm:space-y-0 items-center justify-between overflow-auto p-2"
         >
           <DashboardTableDataSearchBox
-            placeholder="Search by brand name ..."
+            :placeholder="__('Search by :label', { label: __('Name') }) + '...'"
             :to="brandList"
           />
 
@@ -122,29 +128,29 @@ const handleDeleteBrand = async (brand) => {
         <TableContainer>
           <ActionTable :items="brands.data">
             <!-- Table Actions -->
-            <template #actions="{ selectedItems }">
+            <template #bulk-actions="{ selectedItems }">
               <div v-show="can('brands.delete')">
-                <ActionButton
+                <BulkActionButton
                   @click="
                     selectedSoftDeleteAction(
-                      'Brand',
+                      'Brands',
                       'admin.brands.destroy.selected',
                       selectedItems
                     )
                   "
                 >
                   <i class="fa-solid fa-trash-can"></i>
-                  Delete Selected ({{ selectedItems.length }})
-                </ActionButton>
-                <ActionButton
+                  {{ __("Delete Selected") }} ({{ selectedItems.length }})
+                </BulkActionButton>
+                <BulkActionButton
                   @click="
                     softDeleteAllAction('Brand', 'admin.brands.destroy.all')
                   "
                   class="text-red-600"
                 >
                   <i class="fa-solid fa-trash-can"></i>
-                  Delete All ({{ brands.total }})
-                </ActionButton>
+                  {{ __("Delete All") }} ({{ brands.total }})
+                </BulkActionButton>
               </div>
             </template>
 
@@ -195,7 +201,7 @@ const handleDeleteBrand = async (brand) => {
                   :data="queryStringParams"
                 >
                   <i class="fa-solid fa-edit"></i>
-                  Edit
+                  {{ __("Edit") }}
                 </InertiaLinkButton>
 
                 <NormalButton
@@ -204,7 +210,7 @@ const handleDeleteBrand = async (brand) => {
                   class="bg-red-600 text-white ring-2 ring-red-300"
                 >
                   <i class="fa-solid fa-trash-can"></i>
-                  Delete
+                  {{ __("Delete") }}
                 </NormalButton>
               </TableActionCell>
             </template>

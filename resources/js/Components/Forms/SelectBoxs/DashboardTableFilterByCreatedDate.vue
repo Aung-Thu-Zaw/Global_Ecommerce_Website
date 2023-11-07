@@ -124,10 +124,10 @@ watch(
 
   <div
     v-if="isFilterBoxOpened"
-    class="w-[390px] border border-gray-300 shadow-lg absolute bg-white top-[19rem] md:top-[18.2rem] right-4 md:right-[3.8rem] z-30 px-5 py-4 rounded-md"
+    class="w-[390px] border border-gray-300 shadow-lg absolute bg-white top-[19rem] md:top-[21rem] right-4 md:right-[3.8rem] z-30 px-5 py-4 rounded-md"
   >
     <div class="flex items-center justify-between mb-5">
-      <h4 class="font-bold text-slate-600 text-md">Filters</h4>
+      <h4 class="font-bold text-slate-600 text-md">{{ __("Filters") }}</h4>
       <span
         @click="isFilterBoxOpened = false"
         class="text-lg text-gray-500 hover:text-red-600 cursor-pointer"
@@ -144,7 +144,7 @@ watch(
           id="created-from"
           class="block w-full p-4 font-semibold text-sm text-gray-800 border border-gray-300 bg-gray-50 focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-all rounded-md"
           v-model="createdFrom"
-          placeholder="Select date"
+          :placeholder="__('Select Date')"
         />
       </div>
     </div>
@@ -156,7 +156,7 @@ watch(
           id="created-until"
           class="block w-full p-4 font-semibold text-sm text-gray-800 border border-gray-300 bg-gray-50 focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-all rounded-md"
           v-model="createdUntil"
-          placeholder="Select date"
+          :placeholder="__('Select Date')"
         />
       </div>
     </div>
@@ -166,7 +166,7 @@ watch(
         @click="resetFiltered"
         class="text-xs font-semibold px-3 ml-auto py-2 text-white bg-red-600 rounded-[4px] hover:bg-red-700 transition-all"
       >
-        Reset Filter
+        {{ __("Reset Filters") }}
       </button>
     </div>
   </div>

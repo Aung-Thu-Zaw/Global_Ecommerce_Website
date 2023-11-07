@@ -38,7 +38,7 @@ const { form, processing, errors, createAction } = useResourceActions({
 
 <template>
   <AdminDashboardLayout>
-    <Head :title="__('CREATE_BRAND')" />
+    <Head :title="__('Create :label', { label: __('Brand') })" />
     <div class="min-h-screen py-10 font-poppins">
       <div
         class="flex flex-col items-start md:flex-row md:items-center md:justify-between mb-4 md:mb-8"
@@ -95,7 +95,7 @@ const { form, processing, errors, createAction } = useResourceActions({
               name="brand-category"
               :options="categories"
               v-model="form.category_id"
-              :placeholder="__('Select Options')"
+              :placeholder="__('Select Option')"
             />
 
             <InputError :message="errors?.category_id" />
@@ -117,7 +117,7 @@ const { form, processing, errors, createAction } = useResourceActions({
           <InputError :message="errors?.captcha_token" />
 
           <FormButton type="submit" :processing="processing">
-            Create
+            {{ __("Create") }}
           </FormButton>
         </form>
       </div>

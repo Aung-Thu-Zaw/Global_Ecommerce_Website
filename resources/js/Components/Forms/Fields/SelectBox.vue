@@ -72,7 +72,7 @@ const optionLabel = (option) => {
       @input="$emit('update:modelValue', $event.target.value)"
       :disabled="disabled"
     >
-      <option value="">{{ placeholder }}</option>
+      <option value="" selected disabled>{{ placeholder }}</option>
       <option
         v-for="(option, index) in options"
         :key="optionKey(index)"

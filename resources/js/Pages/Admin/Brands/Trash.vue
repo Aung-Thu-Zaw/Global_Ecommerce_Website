@@ -13,8 +13,7 @@ import TableDataCell from "@/Components/Table/TableDataCell.vue";
 import TableActionCell from "@/Components/Table/TableActionCell.vue";
 import Image from "@/Components/Table/Image.vue";
 import ActionTable from "@/Components/Table/ActionTable.vue";
-import InertiaLinkButton from "@/Components/Buttons/InertiaLinkButton.vue";
-import ActionButton from "@/Components/Buttons/TableActionButton.vue";
+import BulkActionButton from "@/Components/Buttons/BulkActionButton.vue";
 import NormalButton from "@/Components/Buttons/NormalButton.vue";
 import EmptyTrashButton from "@/Components/Buttons/EmptyTrashButton.vue";
 import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
@@ -22,8 +21,7 @@ import NoTableData from "@/Components/Table/NoTableData.vue";
 import { __ } from "@/Services/translations-inside-setup.js";
 import Pagination from "@/Components/Paginations/DashboardPagination.vue";
 import { useResourceActions } from "@/Composables/useResourceActions";
-import { Head, usePage } from "@inertiajs/vue3";
-import { computed, inject } from "vue";
+import { Head } from "@inertiajs/vue3";
 
 // Define the Props
 const props = defineProps({
@@ -31,6 +29,7 @@ const props = defineProps({
 });
 
 const brandList = "admin.brands.index";
+
 const trashedBrandList = "admin.brands.trashed";
 
 const {
@@ -45,7 +44,7 @@ const {
 
 <template>
   <AdminDashboardLayout>
-    <Head :title="__('Trashed Brands')" />
+    <Head :title="__('Deleted :label', { label: __('Brand') })" />
     <!-- Breadcrumb And Go back Button  -->
     <div class="min-h-screen py-10 font-poppins">
       <div
@@ -67,7 +66,7 @@ const {
           class="my-5 flex flex-col sm:flex-row space-y-5 sm:space-y-0 items-center justify-between"
         >
           <DashboardTableDataSearchBox
-            placeholder="Search by brand name ..."
+            :placeholder="__('Search by :label', { label: __('Name') }) + '...'"
             :to="trashedBrandList"
           />
 
@@ -84,7 +83,8 @@ const {
         >
           {{
             __(
-              "BRANDS_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS"
+              ":label in the trash will be automatically deleted after 60 days",
+              { label: __("Brands") }
             )
           }}
 
@@ -98,41 +98,41 @@ const {
         <TableContainer>
           <ActionTable :items="trashedBrands.data">
             <!-- Table Actions -->
-            <template #actions="{ selectedItems }">
+            <template #bulk-actions="{ selectedItems }">
               <div v-show="can('brands.restore')">
-                <ActionButton
+                <BulkActionButton
                   @click="
                     restoreSelectedAction(
-                      'Brand',
+                      'Brands',
                       'admin.brands.restore.selected',
                       selectedItems
                     )
                   "
                 >
                   <i class="fa-solid fa-recycle"></i>
-                  Restore Selected ({{ selectedItems.length }})
-                </ActionButton>
-                <ActionButton
+                  {{ __("Restore Selected") }} ({{ selectedItems.length }})
+                </BulkActionButton>
+                <BulkActionButton
                   @click="restoreAllAction('Brand', 'admin.brands.restore.all')"
                 >
                   <i class="fa-solid fa-recycle"></i>
-                  Restore All ({{ trashedBrands.total }})
-                </ActionButton>
+                  {{ __("Restore All") }} ({{ trashedBrands.total }})
+                </BulkActionButton>
               </div>
               <div v-show="can('brands.force.delete')">
-                <ActionButton
+                <BulkActionButton
                   @click="
                     permanentDeleteSelectedAction(
-                      'Brand',
+                      'Brands',
                       'admin.brands.force-delete.selected',
                       selectedItems
                     )
                   "
                 >
                   <i class="fa-solid fa-trash-can"></i>
-                  Delete Selected ({{ selectedItems.length }})
-                </ActionButton>
-                <ActionButton
+                  {{ __("Delete Selected") }} ({{ selectedItems.length }})
+                </BulkActionButton>
+                <BulkActionButton
                   @click="
                     permanentDeleteAllAction(
                       'Brand',
@@ -142,8 +142,8 @@ const {
                   class="text-red-600"
                 >
                   <i class="fa-solid fa-trash-can"></i>
-                  Delete All ({{ trashedBrands.total }})
-                </ActionButton>
+                  {{ __("Delete All") }} ({{ trashedBrands.total }})
+                </BulkActionButton>
               </div>
             </template>
 
@@ -196,7 +196,7 @@ const {
                   @click="restoreAction('Brand', 'admin.brands.restore', item)"
                 >
                   <i class="fa-solid fa-recycle"></i>
-                  Restore
+                  {{ __("Restore") }}
                 </NormalButton>
 
                 <NormalButton
@@ -211,7 +211,7 @@ const {
                   class="bg-red-600 text-white ring-2 ring-red-300"
                 >
                   <i class="fa-solid fa-trash-can"></i>
-                  Delete Forever
+                  {{ __("Delete Forever") }}
                 </NormalButton>
               </TableActionCell>
             </template>

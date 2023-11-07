@@ -25,7 +25,7 @@ defineProps({
       >
         <span class="sr-only">Loading...</span>
       </div>
-      <span>Processing...</span>
+      <span>{{ __("Processing") }}...</span>
     </div>
     <div v-else>
       <slot />

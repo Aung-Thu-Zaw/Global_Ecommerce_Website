@@ -93,7 +93,7 @@ const toggleCollapseShow = (classes) => {
         <h6
           class="md:min-w-full text-blueGray-500 text-xs font-bold block pt-1 pb-4 no-underline"
         >
-          E-commerce Administration
+          {{ __("E-commerce Administration") }}
         </h6>
         <!-- Navigation -->
 
@@ -111,7 +111,7 @@ const toggleCollapseShow = (classes) => {
                 }"
               >
                 <i class="fas fa-tv mr-2 text-sm"></i>
-                Dashboard
+                {{ __("Dashboard") }}
               </div>
             </Link>
           </li>
@@ -122,7 +122,7 @@ const toggleCollapseShow = (classes) => {
               :href="route('admin.brands.index')"
               :data="{
                 page: 1,
-                per_page: 10,
+                per_page: 5,
                 sort: 'id',
                 direction: 'desc',
               }"
@@ -135,7 +135,7 @@ const toggleCollapseShow = (classes) => {
               }"
             >
               <i class="fa-solid fa-award mr-2 text-sm"></i>
-              {{ __("BRANDS") }}
+              {{ __("Brands") }}
             </Link>
           </li>
 
@@ -145,7 +145,7 @@ const toggleCollapseShow = (classes) => {
               :href="route('admin.collections.index')"
               :data="{
                 page: 1,
-                per_page: 10,
+                per_page: 5,
                 sort: 'id',
                 direction: 'desc',
               }"
@@ -168,7 +168,7 @@ const toggleCollapseShow = (classes) => {
               :href="route('admin.categories.index')"
               :data="{
                 page: 1,
-                per_page: 10,
+                per_page: 5,
                 sort: 'id',
                 direction: 'desc',
               }"
@@ -191,7 +191,7 @@ const toggleCollapseShow = (classes) => {
               :href="route('admin.products.index')"
               :data="{
                 page: 1,
-                per_page: 10,
+                per_page: 5,
                 sort: 'id',
                 direction: 'desc',
               }"
@@ -214,7 +214,7 @@ const toggleCollapseShow = (classes) => {
               :href="route('admin.coupons.index')"
               :data="{
                 page: 1,
-                per_page: 10,
+                per_page: 5,
                 sort: 'id',
                 direction: 'desc',
               }"
@@ -237,7 +237,7 @@ const toggleCollapseShow = (classes) => {
               :href="route('admin.flash-sales.edit')"
               :data="{
                 page: 1,
-                per_page: 10,
+                per_page: 5,
                 sort: 'id',
                 direction: 'desc',
               }"
@@ -683,7 +683,7 @@ const toggleCollapseShow = (classes) => {
               :href="route('admin.coupons.index')"
               :data="{
                 page: 1,
-                per_page: 10,
+                per_page: 5,
                 sort: 'id',
                 direction: 'desc',
               }"

@@ -39,12 +39,13 @@ const { form, processing, errors, editAction } = useResourceActions({
 
 <template>
   <AdminDashboardLayout>
-    <Head :title="__('Edit Brand')" />
+    <Head :title="__('Edit :label', { label: __('Brand') })" />
     <div class="min-h-screen py-10 font-poppins">
       <div
         class="flex flex-col items-start md:flex-row md:items-center md:justify-between mb-4 md:mb-8"
       >
         <Breadcrumb :to="brandList" icon="fa-award" label="Brands">
+          <BreadcrumbItem :label="brand.name" />
           <BreadcrumbItem label="Edit" />
         </Breadcrumb>
 
@@ -52,7 +53,7 @@ const { form, processing, errors, editAction } = useResourceActions({
           <GoBackButton :to="brandList" />
         </div>
       </div>
-
+      
       <!-- Form Start -->
       <div class="border p-10 bg-white rounded-md">
         <form
@@ -119,7 +120,7 @@ const { form, processing, errors, editAction } = useResourceActions({
           <InputError :message="errors?.captcha_token" />
 
           <FormButton type="submit" :processing="processing">
-            Update
+            {{ __("Save Changes") }}
           </FormButton>
         </form>
       </div>

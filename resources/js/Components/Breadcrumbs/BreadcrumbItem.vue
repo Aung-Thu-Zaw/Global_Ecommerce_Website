@@ -14,7 +14,7 @@ defineProps({
       <div
         class="ml-1 text-sm font-semibold text-blueGray-600 hover:text-blueGray-700 md:ml-2"
       >
-        {{ label }}
+      {{ __(label) }}
       </div>
     </div>
   </li>

@@ -49,8 +49,8 @@ class HandleInertiaRequests extends Middleware
 
             ],
             'parentCategory' => Category::select('id', 'name', 'slug')->with('children:id,name,slug')->whereNull('parent_id')->get(),
-            // 'languages' => Language::all(),
-            // 'locale' => session('locale'),
+            'languages' => Language::all(),
+            'locale' => session('locale'),
             // 'searchHistories' => SearchHistory::orderBy('id', 'desc')->get(),
             // 'websiteSetting' => WebsiteSetting::first(),
             // 'sellers' => User::where([['role', 'seller'], ['status', 'active']])->limit(30)->get(),

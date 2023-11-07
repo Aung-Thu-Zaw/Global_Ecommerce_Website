@@ -28,6 +28,6 @@ const computedClasses = computed(() => props.class);
     :class="computedClasses"
   >
     <i class="fa-solid fa-left-long"></i>
-    Go Back
+    {{ __("Go Back") }}
   </Link>
 </template>

@@ -51,7 +51,7 @@ export function useResourceActions(formFields = {}) {
                     if (successMessage) {
                         swal({
                             icon: "success",
-                            title: successMessage,
+                            title: __(successMessage, { label: __(model) }),
                         });
                     }
                 },
@@ -94,7 +94,7 @@ export function useResourceActions(formFields = {}) {
                     if (successMessage) {
                         swal({
                             icon: "success",
-                            title: successMessage,
+                            title: __(successMessage, { label: __(model) }),
                         });
                     }
                 },
@@ -114,11 +114,13 @@ export function useResourceActions(formFields = {}) {
     ) => {
         const result = await swal({
             icon: "question",
-            title: `Delete ${formatToTitleCase(model)}`,
-            text: `Are you sure you want to delete this? It can be restored within 60 days.`,
+            title: __("Delete :label", { label: __(formatToTitleCase(model)) }),
+            text:
+                __("Are you sure you would like to do this?") +
+                __("It can be restored within 60 days."),
             showCancelButton: true,
-            confirmButtonText: "Confirm",
-            cancelButtonText: "Cancel",
+            confirmButtonText: __("Confirm"),
+            cancelButtonText: __("Cancel"),
             confirmButtonColor: "#d52222",
             cancelButtonColor: "#626262",
             timer: 20000,
@@ -140,7 +142,7 @@ export function useResourceActions(formFields = {}) {
                         if (successMessage) {
                             swal({
                                 icon: "success",
-                                title: successMessage,
+                                title: __(successMessage, { label: __(model) }),
                             });
                         }
                     },
@@ -157,12 +159,16 @@ export function useResourceActions(formFields = {}) {
     ) => {
         const result = await swal({
             icon: "question",
-            title: `Delete Selected ${formatToTitleCase(model)}`,
-            text: `Are you sure you want to delete these ${model.toLowerCase()}? This action can be undone within 60 days.`,
+            title: __("Delete Selected :label", {
+                label: __(formatToTitleCase(model)),
+            }),
+            text:
+                __("Are you sure you would like to do this?") +
+                __("It can be restored within 60 days."),
             showCancelButton: true,
             showCancelButton: true,
-            confirmButtonText: "Confirm",
-            cancelButtonText: "Cancel",
+            confirmButtonText: __("Confirm"),
+            cancelButtonText: __("Cancel"),
             confirmButtonColor: "#d52222",
             cancelButtonColor: "#626262",
             timer: 20000,
@@ -184,7 +190,7 @@ export function useResourceActions(formFields = {}) {
                         if (successMessage) {
                             swal({
                                 icon: "success",
-                                title: successMessage,
+                                title: __(successMessage, { label: __(model) }),
                             });
                         }
                     },
@@ -197,12 +203,16 @@ export function useResourceActions(formFields = {}) {
     const softDeleteAllAction = async (model, deleteRouteName) => {
         const result = await swal({
             icon: "question",
-            title: `Delete All ${formatToTitleCase(model)}`,
-            text: `Are you sure you want to delete all ${model.toLowerCase()}? This action can be undone within 60 days.`,
+            title: __("Delete All :label", {
+                label: __(formatToTitleCase(model)),
+            }),
+            text:
+                __("Are you sure you would like to do this?") +
+                __("It can be restored within 60 days."),
             showCancelButton: true,
             showCancelButton: true,
-            confirmButtonText: "Confirm",
-            cancelButtonText: "Cancel",
+            confirmButtonText: __("Confirm"),
+            cancelButtonText: __("Cancel"),
             confirmButtonColor: "#d52222",
             cancelButtonColor: "#626262",
             timer: 20000,
@@ -223,7 +233,7 @@ export function useResourceActions(formFields = {}) {
                         if (successMessage) {
                             swal({
                                 icon: "success",
-                                title: successMessage,
+                                title: __(successMessage, { label: __(model) }),
                             });
                         }
                     },
@@ -236,11 +246,13 @@ export function useResourceActions(formFields = {}) {
     const restoreAction = async (model, restoreRouteName, targetIdentifier) => {
         const result = await swal({
             icon: "question",
-            title: `Restore ${formatToTitleCase(model)}`,
-            text: `Are you sure you want to restore this?`,
+            title: __("Restore :label", {
+                label: __(formatToTitleCase(model)),
+            }),
+            text: __("Are you sure you would like to restore this?"),
             showCancelButton: true,
-            confirmButtonText: "Confirm",
-            cancelButtonText: "Cancel",
+            confirmButtonText: __("Confirm"),
+            cancelButtonText: __("Cancel"),
             confirmButtonColor: "#2562c4",
             cancelButtonColor: "#626262",
             timer: 20000,
@@ -265,7 +277,7 @@ export function useResourceActions(formFields = {}) {
                         if (successMessage) {
                             swal({
                                 icon: "success",
-                                title: successMessage,
+                                title: __(successMessage, { label: __(model) }),
                             });
                         }
                     },
@@ -282,11 +294,13 @@ export function useResourceActions(formFields = {}) {
     ) => {
         const result = await swal({
             icon: "question",
-            title: `Restore Selected ${formatToTitleCase(model)}`,
-            text: `Are you sure you want to restore these ${model.toLowerCase()}?`,
+            title: __("Restore Selected :label", {
+                label: formatToTitleCase(__(model)),
+            }),
+            text: __("Are you sure you would like to restore these?"),
             showCancelButton: true,
-            confirmButtonText: "Confirm",
-            cancelButtonText: "Cancel",
+            confirmButtonText: __("Confirm"),
+            cancelButtonText: __("Cancel"),
             confirmButtonColor: "#d52222",
             cancelButtonColor: "#626262",
             timer: 20000,
@@ -311,7 +325,7 @@ export function useResourceActions(formFields = {}) {
                         if (successMessage) {
                             swal({
                                 icon: "success",
-                                title: successMessage,
+                                title: __(successMessage, { label: __(model) }),
                             });
                         }
                     },
@@ -324,11 +338,13 @@ export function useResourceActions(formFields = {}) {
     const restoreAllAction = async (model, restoreRouteName) => {
         const result = await swal({
             icon: "question",
-            title: `Restore Selected ${formatToTitleCase(model)}`,
-            text: `Are you sure you want to restore all ${model.toLowerCase()}?`,
+            title: __("Restore All :label", {
+                label: formatToTitleCase(__(model)),
+            }),
+            text: __("Are you sure you would like to restore these?"),
             showCancelButton: true,
-            confirmButtonText: "Confirm",
-            cancelButtonText: "Cancel",
+            confirmButtonText: __("Confirm"),
+            cancelButtonText: __("Cancel"),
             confirmButtonColor: "#d52222",
             cancelButtonColor: "#626262",
             timer: 20000,
@@ -351,7 +367,7 @@ export function useResourceActions(formFields = {}) {
                         if (successMessage) {
                             swal({
                                 icon: "success",
-                                title: successMessage,
+                                title: __(successMessage, { label: __(model) }),
                             });
                         }
                     },
@@ -368,11 +384,15 @@ export function useResourceActions(formFields = {}) {
     ) => {
         const result = await swal({
             icon: "question",
-            title: `Permanently Delete ${formatToTitleCase(model)}`,
-            text: `This action cannot be undone. Are you sure you want to permanently delete this?`,
+            title: __("Permanently Delete :label", {
+                label: formatToTitleCase(__(model)),
+            }),
+            text: __(
+                "This action cannot be undone. Are you sure you want to permanently delete this?"
+            ),
             showCancelButton: true,
-            confirmButtonText: "Confirm",
-            cancelButtonText: "Cancel",
+            confirmButtonText: __("Confirm"),
+            cancelButtonText: __("Cancel"),
             confirmButtonColor: "#d52222",
             cancelButtonColor: "#626262",
             timer: 20000,
@@ -394,7 +414,7 @@ export function useResourceActions(formFields = {}) {
                         if (successMessage) {
                             swal({
                                 icon: "success",
-                                title: successMessage,
+                                title: __(successMessage, { label: __(model) }),
                             });
                         }
                     },
@@ -411,11 +431,16 @@ export function useResourceActions(formFields = {}) {
     ) => {
         const result = await swal({
             icon: "question",
-            title: `Permanently Delete Selected ${formatToTitleCase(model)}`,
-            text: `This action will permanently delete the selected ${model.toLowerCase()} items. Are you sure you want to proceed? This action cannot be undone.`,
+            title: __("Permanently Delete Selected :label", {
+                label: formatToTitleCase(__(model)),
+            }),
+            text: __(
+                "This action cannot be undone. Are you sure you want to permanently delete the selected :label in the trash?",
+                { label: __(model.toLowerCase()) }
+            ),
             showCancelButton: true,
-            confirmButtonText: "Confirm",
-            cancelButtonText: "Cancel",
+            confirmButtonText: __("Confirm"),
+            cancelButtonText: __("Cancel"),
             confirmButtonColor: "#d52222",
             cancelButtonColor: "#626262",
             timer: 20000,
@@ -437,7 +462,7 @@ export function useResourceActions(formFields = {}) {
                         if (successMessage) {
                             swal({
                                 icon: "success",
-                                title: successMessage,
+                                title: __(successMessage, { label: __(model) }),
                             });
                         }
                     },
@@ -450,11 +475,16 @@ export function useResourceActions(formFields = {}) {
     const permanentDeleteAllAction = async (model, deleteRouteName) => {
         const result = await swal({
             icon: "question",
-            title: `Permanently Delete All ${formatToTitleCase(model)}`,
-            text: `This action cannot be undone. Are you sure you want to permanently delete all items in the trash?`,
+            title: __("Permanently Delete All :label", {
+                label: __(formatToTitleCase(model)),
+            }),
+            text: __(
+                "This action cannot be undone. Are you sure you want to permanently delete all :label in the trash?",
+                { label: __(formatToTitleCase(model)) }
+            ),
             showCancelButton: true,
-            confirmButtonText: "Confirm",
-            cancelButtonText: "Cancel",
+            confirmButtonText: __("Confirm"),
+            cancelButtonText: __("Cancel"),
             confirmButtonColor: "#d52222",
             cancelButtonColor: "#626262",
             timer: 20000,
@@ -475,7 +505,7 @@ export function useResourceActions(formFields = {}) {
                         if (successMessage) {
                             swal({
                                 icon: "success",
-                                title: successMessage,
+                                title: __(successMessage, { label: __(model) }),
                             });
                         }
                     },
