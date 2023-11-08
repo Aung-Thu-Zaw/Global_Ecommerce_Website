@@ -1,4 +1,5 @@
 <script setup>
+import { useQueryStringParams } from "@/Composables/useQueryStringParams";
 import { Link } from "@inertiajs/vue3";
 
 defineProps({
@@ -14,6 +15,8 @@ defineProps({
     default: "fa-home",
   },
 });
+
+const { queryStringParams } = useQueryStringParams();
 </script>
 
 <template>
@@ -25,6 +28,7 @@ defineProps({
       <li class="inline-flex items-center">
         <Link
           :href="route(to)"
+          :data="queryStringParams"
           class="inline-flex items-center text-sm font-bold text-blueGray-600 hover:text-blue-600"
         >
           <span class="mr-2.5">

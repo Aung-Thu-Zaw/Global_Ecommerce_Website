@@ -1,270 +1,201 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/CollectionBreadcrumb.vue";
-import CreateButton from "@/Components/Buttons/CreateButton.vue";
-import TrashButton from "@/Components/Buttons/TrashButton.vue";
-import EditButton from "@/Components/Buttons/EditButton.vue";
-import DeleteButton from "@/Components/Buttons/DeleteButton.vue";
-import DashboardSearchInputForm from "@/Components/Forms/DashboardSearchInputForm.vue";
-import DashboardPerPageSelectBox from "@/Components/Forms/DashboardPerPageSelectBox.vue";
-import DashboardFilterByCreatedDate from "@/Components/Forms/DashboardFilterByCreatedDate.vue";
-import SortingArrows from "@/Components/Table/SortingArrows.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/Breadcrumb.vue";
+import BreadcrumbItem from "@/Components/Breadcrumbs/BreadcrumbItem.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
-import TableHeader from "@/Components/Table/TableHeader.vue";
-import HeaderTh from "@/Components/Table/HeaderTh.vue";
-import BodyTh from "@/Components/Table/BodyTh.vue";
-import Tr from "@/Components/Table/Tr.vue";
-import Td from "@/Components/Table/Td.vue";
-import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
+import ActionTable from "@/Components/Table/ActionTable.vue";
+import DashboardTableDataSearchBox from "@/Components/Forms/SearchBoxs/DashboardTableDataSearchBox.vue";
+import DashboardTableDataPerPageSelectBox from "@/Components/Forms/SelectBoxs/DashboardTableDataPerPageSelectBox.vue";
+import DashboardTableFilterByDate from "@/Components/Forms/SelectBoxs/DashboardTableFilterByDate.vue";
+import SortableTableHeaderCell from "@/Components/Table/SortableTableHeaderCell.vue";
+import TableHeaderCell from "@/Components/Table/TableHeaderCell.vue";
+import TableDataCell from "@/Components/Table/TableDataCell.vue";
+import TableActionCell from "@/Components/Table/TableActionCell.vue";
+import NoTableData from "@/Components/Table/NoTableData.vue";
+import BulkActionButton from "@/Components/Buttons/BulkActionButton.vue";
+import InertiaLinkButton from "@/Components/Buttons/InertiaLinkButton.vue";
+import NormalButton from "@/Components/Buttons/NormalButton.vue";
 import Pagination from "@/Components/Paginations/DashboardPagination.vue";
+import { useResourceActions } from "@/Composables/useResourceActions";
+import { Head } from "@inertiajs/vue3";
 import { __ } from "@/Services/translations-inside-setup.js";
-import { inject, computed, ref, reactive } from "vue";
-import { router, Head, usePage } from "@inertiajs/vue3";
+import { useQueryStringParams } from "@/Composables/useQueryStringParams";
 
-// Define the props
-const props = defineProps({
-  collections: Object,
-});
+defineProps({ collections: Object });
 
-// Define Variables
-const swal = inject("$swal");
-const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
+const collectionList = "admin.collections.index";
 
-// Create New Collection Permission
-const collectionAdd = computed(() => {
-  return permissions.value.length
-    ? permissions.value.some(
-        (permission) => permission.name === "collection.add"
-      )
-    : false;
-});
+const { queryStringParams } = useQueryStringParams();
 
-// Collection Edit Permission
-const collectionEdit = computed(() => {
-  return permissions.value.length
-    ? permissions.value.some(
-        (permission) => permission.name === "collection.edit"
-      )
-    : false;
-});
-
-// Collection Delete Permission
-const collectionDelete = computed(() => {
-  return permissions.value.length
-    ? permissions.value.some(
-        (permission) => permission.name === "collection.delete"
-      )
-    : false;
-});
-// Collection Trash List Permission
-const collectionTrashList = computed(() => {
-  return permissions.value.length
-    ? permissions.value.some(
-        (permission) => permission.name === "collection.trash.list"
-      )
-    : false;
-});
-
-// Query String Parameteres
-const params = reactive({
-  sort: usePage().props.ziggy.query?.sort,
-  direction: usePage().props.ziggy.query?.direction,
-});
-
-// Update Sorting Table Column
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
-  router.get(
-    route("admin.collections.index"),
-    {
-      search: usePage().props.ziggy.query?.search,
-      page: usePage().props.ziggy.query?.page,
-      per_page: usePage().props.ziggy.query?.per_page,
-      sort: params.sort,
-      direction: params.direction,
-      created_from: usePage().props.ziggy.query?.created_from,
-      created_until: usePage().props.ziggy.query?.created_until,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
-
-// Handle Delete Collection
-const handleDeleteCollection = async (collection) => {
-  const result = await swal({
-    icon: "question",
-    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_COLLECTION"),
-    text: __("YOU_WILL_BE_ABLE_TO_RESTORE_THIS_COLLECTION_IN_THE_TRASH"),
-    showCancelButton: true,
-    confirmButtonText: __("YES_DELETE_IT"),
-    cancelButtonText: __("CANCEL"),
-    confirmButtonColor: "#d52222",
-    cancelButtonColor: "#626262",
-    timer: 20000,
-    timerProgressBar: true,
-    reverseButtons: true,
-  });
-
-  if (result.isConfirmed) {
-    router.delete(
-      route("admin.collections.destroy", {
-        collection: collection,
-        search: usePage().props.ziggy.query?.search,
-        page: usePage().props.ziggy.query?.page,
-        per_page: usePage().props.ziggy.query?.per_page,
-        sort: params.sort,
-        direction: params.direction,
-        created_from: usePage().props.ziggy.query?.created_from,
-        created_until: usePage().props.ziggy.query?.created_until,
-      }),
-      {
-        preserveScroll: true,
-        onSuccess: () => {
-          if (usePage().props.flash.successMessage) {
-            swal({
-              icon: "success",
-              title: __(usePage().props.flash.successMessage),
-            });
-          }
-        },
-      }
-    );
-  }
-};
-
-if (usePage().props.flash.successMessage) {
-  swal({
-    icon: "success",
-    title: __(usePage().props.flash.successMessage),
-  });
-}
+const { softDeleteAction, selectedSoftDeleteAction, softDeleteAllAction } =
+  useResourceActions();
 </script>
 
 <template>
   <AdminDashboardLayout>
-    <Head :title="__('COLLECTIONS')" />
+    <Head :title="__('Collections')" />
 
-    <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <div class="flex items-center justify-between mb-10">
-        <!-- Breadcrumb -->
-        <Breadcrumb />
+    <!-- Breadcrumb And Trash Button  -->
+    <div class="min-h-screen py-10 font-poppins">
+      <div
+        class="flex flex-col items-start md:flex-row md:items-center md:justify-between mb-4 md:mb-8"
+      >
+        <Breadcrumb :to="collectionList" icon="fa-box" label="Collections">
+          <BreadcrumbItem label="List" />
+        </Breadcrumb>
+      </div>
+
+      <div class="flex items-center justify-between mb-3">
+        <!-- Create New Button -->
+        <InertiaLinkButton
+          v-show="can('collections.create')"
+          to="admin.collections.create"
+          :data="queryStringParams"
+        >
+          <i class="fa-solid fa-file-circle-plus mr-1"></i>
+          {{ __("Create A New :label", { label: __("Collection") }) }}
+        </InertiaLinkButton>
 
         <!-- Trash Button -->
-        <div v-if="collectionTrashList">
-          <TrashButton href="admin.collections.trash" />
-        </div>
+        <InertiaLinkButton
+          v-show="can('collections.view.trash')"
+          to="admin.collections.trashed"
+          :data="{
+            page: 1,
+            per_page: 5,
+            sort: 'id',
+            direction: 'desc',
+          }"
+          class="bg-red-600 text-white ring-2 ring-red-300"
+        >
+          <i class="fa-solid fa-trash-can mr-1"></i>
+          {{ __("Trash") }}
+        </InertiaLinkButton>
       </div>
 
-      <div class="mb-5 flex items-center justify-between">
-        <!-- Create Collection Button -->
-
-        <div v-if="collectionAdd">
-          <CreateButton href="admin.collections.create" name="ADD_COLLECTION" />
-        </div>
-
-        <div class="flex items-center ml-auto">
-          <!-- Search Box -->
-          <DashboardSearchInputForm
-            href="admin.collections.index"
-            placeholder="SEARCH_BY_TITLE"
+      <!-- Table Start -->
+      <div class="border bg-white rounded-md shadow px-5 py-3">
+        <div
+          class="my-5 flex flex-col sm:flex-row space-y-5 sm:space-y-0 items-center justify-between overflow-auto p-2"
+        >
+          <DashboardTableDataSearchBox
+            :placeholder="
+              __('Search by :label', { label: __('Title') }) + '...'
+            "
+            :to="collectionList"
           />
 
-          <!-- Perpage Select Box -->
-          <div class="ml-5">
-            <DashboardPerPageSelectBox href="admin.collections.index" />
+          <div class="flex items-center justify-end w-full md:space-x-5">
+            <DashboardTableDataPerPageSelectBox :to="collectionList" />
+
+            <DashboardTableFilterByDate :to="collectionList" />
           </div>
-
-          <!-- Filter By Date -->
-          <DashboardFilterByCreatedDate href="admin.collections.index" />
         </div>
-      </div>
 
-      <!-- Collection Table Start -->
-      <TableContainer>
-        <TableHeader>
-          <HeaderTh @click="updateSorting('id')">
-            No
-            <SortingArrows :params="params" sort="id" />
-          </HeaderTh>
-
-          <HeaderTh @click="updateSorting('title')">
-            {{ __("TITLE") }}
-            <SortingArrows :params="params" sort="title" />
-          </HeaderTh>
-
-          <HeaderTh @click="updateSorting('description')">
-            {{ __("DESCRIPTION") }}
-            <SortingArrows :params="params" sort="description" />
-          </HeaderTh>
-
-          <HeaderTh @click="updateSorting('created_at')">
-            {{ __("CREATED_DATE") }}
-            <SortingArrows :params="params" sort="created_at" />
-          </HeaderTh>
-
-          <HeaderTh v-if="collectionEdit || collectionDelete">
-            {{ __("ACTION") }}
-          </HeaderTh>
-        </TableHeader>
-
-        <tbody v-if="collections.data.length">
-          <Tr v-for="collection in collections.data" :key="collection.id">
-            <BodyTh>
-              {{ collection.id }}
-            </BodyTh>
-
-            <Td>
-              {{ collection.title }}
-            </Td>
-
-            <Td>
-              {{ collection.description }}
-            </Td>
-
-            <Td>
-              {{ collection.created_at }}
-            </Td>
-
-            <Td
-              v-if="collectionEdit || collectionDelete"
-              class="flex items-center"
-            >
-              <!-- Edit Button -->
-              <div v-if="collectionEdit">
-                <EditButton
-                  href="admin.collections.edit"
-                  :slug="collection.slug"
-                />
+        <TableContainer>
+          <ActionTable :items="collections.data">
+            <!-- Table Actions -->
+            <template #bulk-actions="{ selectedItems }">
+              <div v-show="can('collections.delete')">
+                <BulkActionButton
+                  @click="
+                    selectedSoftDeleteAction(
+                      'Collections',
+                      'admin.collections.destroy.selected',
+                      selectedItems
+                    )
+                  "
+                >
+                  <i class="fa-solid fa-trash-can"></i>
+                  {{ __("Delete Selected") }} ({{ selectedItems.length }})
+                </BulkActionButton>
+                <BulkActionButton
+                  @click="
+                    softDeleteAllAction(
+                      'Collection',
+                      'admin.collections.destroy.all'
+                    )
+                  "
+                  class="text-red-600"
+                >
+                  <i class="fa-solid fa-trash-can"></i>
+                  {{ __("Delete All") }} ({{ collections.total }})
+                </BulkActionButton>
               </div>
+            </template>
 
-              <!-- Delete Button -->
-              <div v-if="collectionDelete">
-                <DeleteButton
-                  @click="handleDeleteCollection(collection.slug)"
-                />
-              </div>
-            </Td>
-          </Tr>
-        </tbody>
-      </TableContainer>
-      <!-- Collection Table End -->
+            <!-- Table Header -->
+            <template #table-header>
+              <SortableTableHeaderCell
+                label="# No"
+                :to="collectionList"
+                sort="id"
+              />
 
-      <!-- No Data Row -->
-      <NotAvaliableData v-if="!collections.data.length" />
+              <SortableTableHeaderCell
+                label="Title"
+                :to="collectionList"
+                sort="title"
+              />
 
-      <!-- Pagination -->
-      <div v-if="collections.data.length" class="mt-6">
-        <p class="text-center text-sm text-gray-600 mb-3 font-bold">
-          Showing {{ collections.from }} - {{ collections.to }} of
-          {{ collections.total }}
-        </p>
-        <Pagination :links="collections.links" />
+              <SortableTableHeaderCell
+                label="Description"
+                :to="collectionList"
+                sort="description"
+              />
+
+              <TableHeaderCell label="Actions" />
+            </template>
+
+            <!-- Table Body -->
+            <template #table-data="{ item }">
+              <TableDataCell>
+                {{ item?.id }}
+              </TableDataCell>
+
+              <TableDataCell>
+                {{ item?.title }}
+              </TableDataCell>
+
+              <TableDataCell>
+                {{ item?.description }}
+              </TableDataCell>
+
+              <TableActionCell>
+                <InertiaLinkButton
+                  v-show="can('collections.edit')"
+                  to="admin.collections.edit"
+                  :targetIdentifier="item"
+                  :data="queryStringParams"
+                >
+                  <i class="fa-solid fa-edit"></i>
+                  {{ __("Edit") }}
+                </InertiaLinkButton>
+
+                <NormalButton
+                  v-show="can('collections.delete')"
+                  @click="
+                    softDeleteAction(
+                      'Collection',
+                      'admin.collections.destroy',
+                      item
+                    )
+                  "
+                  class="bg-red-600 text-white ring-2 ring-red-300"
+                >
+                  <i class="fa-solid fa-trash-can"></i>
+                  {{ __("Delete") }}
+                </NormalButton>
+              </TableActionCell>
+            </template>
+          </ActionTable>
+        </TableContainer>
+
+        <Pagination :data="collections" />
+
+        <NoTableData v-show="!collections.data.length" />
       </div>
+      <!-- Table End -->
     </div>
   </AdminDashboardLayout>
 </template>

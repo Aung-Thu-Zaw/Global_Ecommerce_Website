@@ -1,147 +1,92 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/CollectionBreadcrumb.vue";
-import InputError from "@/Components/Forms/InputError.vue";
-import InputLabel from "@/Components/Forms/InputLabel.vue";
-import TextInput from "@/Components/Forms/TextInput.vue";
-import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
-import SaveButton from "@/Components/Buttons/SaveButton.vue";
-import { useForm, Head } from "@inertiajs/vue3";
-import { useReCaptcha } from "vue-recaptcha-v3";
-import { ref } from "vue";
+import Breadcrumb from "@/Components/Breadcrumbs/Breadcrumb.vue";
+import BreadcrumbItem from "@/Components/Breadcrumbs/BreadcrumbItem.vue";
+import InputLabel from "@/Components/Forms/Fields/InputLabel.vue";
+import InputError from "@/Components/Forms/Fields/InputError.vue";
+import InputField from "@/Components/Forms/Fields/InputField.vue";
+import TextAreaField from "@/Components/Forms/Fields/TextAreaField.vue";
+import FormButton from "@/Components/Buttons/FormButton.vue";
+import InertiaLinkButton from "@/Components/Buttons/InertiaLinkButton.vue";
+import { useResourceActions } from "@/Composables/useResourceActions";
+import { Head } from "@inertiajs/vue3";
+import { useQueryStringParams } from "@/Composables/useQueryStringParams";
 
-// Define the props
-const props = defineProps({
-  per_page: String,
+const collectionList = "admin.collections.index";
+
+const { queryStringParams } = useQueryStringParams();
+
+const { form, processing, errors, createAction } = useResourceActions({
+  title: null,
+  description: null,
 });
-
-// Define Variables
-const processing = ref(false);
-
-// Collection Create Form Data
-const form = useForm({
-  title: "",
-  description: "",
-  captcha_token: null,
-});
-
-// Destructing ReCaptcha
-const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
-
-// Handle Create Collection
-const handleCreateCollection = async () => {
-  await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("create_collection");
-
-  processing.value = true;
-
-  form.post(
-    route("admin.collections.store", {
-      page: 1,
-      per_page: props.per_page,
-      sort: "id",
-      direction: "desc",
-    }),
-    {
-      replace: true,
-      preserveState: true,
-      onFinish: () => {
-        processing.value = false;
-      },
-    }
-  );
-};
 </script>
 
 <template>
   <AdminDashboardLayout>
-    <Head :title="__('CREATE_COLLECTION')" />
-    <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <div class="flex items-center justify-between mb-10">
-        <!-- Breadcrumb -->
-        <Breadcrumb>
-          <li aria-current="page">
-            <div class="flex items-center">
-              <svg
-                aria-hidden="true"
-                class="w-6 h-6 text-gray-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <span
-                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-              >
-                {{ __("CREATE") }}
-              </span>
-            </div>
-          </li>
+    <Head :title="__('Create :label', { label: __('Collection') })" />
+    <div class="min-h-screen py-10 font-poppins">
+      <div
+        class="flex flex-col items-start md:flex-row md:items-center md:justify-between mb-4 md:mb-8"
+      >
+        <Breadcrumb :to="collectionList" icon="fa-box" label="Collections">
+          <BreadcrumbItem label="Create" />
         </Breadcrumb>
 
-        <!-- Go Back button -->
-        <div>
-          <GoBackButton
-            href="admin.collections.index"
-            :queryStringParams="{
-              page: 1,
-              per_page: props.per_page,
-              sort: 'id',
-              direction: 'desc',
-            }"
-          />
+        <div class="w-full flex items-center justify-end">
+          <GoBackButton :to="collectionList" />
+
+          <InertiaLinkButton :to="collectionList" :data="queryStringParams">
+            <i class="fa-solid fa-left-long"></i>
+            {{ __("Go Back") }}
+          </InertiaLinkButton>
         </div>
       </div>
 
-      <div class="border shadow-md p-10">
-        <form @submit.prevent="handleCreateCollection">
-          <!-- Collection Title Input -->
-          <div class="mb-6">
-            <InputLabel for="title" :value="__('COLLECTION_TITLE') + ' *'" />
+      <!-- Form Start -->
+      <div class="border p-10 bg-white rounded-md">
+        <form
+          @submit.prevent="
+            createAction('Collection', 'admin.collections.store')
+          "
+          class="space-y-4 md:space-y-6"
+        >
+          <div>
+            <InputLabel :label="__('Collection Title')" required />
 
-            <TextInput
-              id="title"
+            <InputField
               type="text"
-              class="mt-1 block w-full"
+              name="collection-title"
               v-model="form.title"
+              :placeholder="__('Enter Collection Title')"
+              autofocus
               required
-              :placeholder="__('ENTER_COLLECTION_TITLE')"
             />
 
-            <InputError class="mt-2" :message="form.errors.title" />
+            <InputError :message="errors?.name" />
           </div>
 
-          <!-- Collection Description Input -->
-          <div class="mb-6">
-            <InputLabel
-              for="description"
-              :value="__('COLLECTION_DESCRIPTION') + ' *'"
-            />
+          <div>
+            <InputLabel :label="__('Collection Description')" required />
 
-            <TextInput
-              id="description"
-              type="text"
-              class="mt-1 block w-full"
+            <TextAreaField
+              name="collection-description"
               v-model="form.description"
+              :placeholder="__('Enter Collection Description')"
               required
-              :placeholder="__('ENTER_COLLECTION_DESCRIPTION')"
             />
 
-            <InputError class="mt-2" :message="form.errors.description" />
+            <InputError :message="errors?.description" />
           </div>
 
-          <!-- Save Button -->
-          <div class="mb-6">
-            <SaveButton :processing="processing" />
-          </div>
+          <InputError :message="errors?.captcha_token" />
+
+          <FormButton type="submit" :processing="processing">
+            {{ __("Create") }}
+          </FormButton>
         </form>
       </div>
+      <!-- Form End -->
     </div>
   </AdminDashboardLayout>
 </template>
-

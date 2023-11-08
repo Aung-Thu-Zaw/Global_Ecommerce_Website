@@ -189,19 +189,19 @@ const {
             <!-- Table Body -->
             <template #table-data="{ item }">
               <TableDataCell>
-                {{ item.id }}
+                {{ item?.id }}
               </TableDataCell>
 
               <TableDataCell>
-                <Image :src="item.image" />
+                <Image :src="item?.image" />
               </TableDataCell>
 
               <TableDataCell>
-                {{ item.name }}
+                {{ item?.name }}
               </TableDataCell>
 
               <TableDataCell>
-                {{ item.description }}
+                {{ item?.description }}
               </TableDataCell>
 
               <TableActionCell>

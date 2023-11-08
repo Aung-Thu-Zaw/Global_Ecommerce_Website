@@ -99,58 +99,24 @@ Route::middleware(['admin', 'verified', 'user.role:admin'])
                 Route::delete('/force-delete/all', 'forceDeleteAll')->name('force-delete.all');
             });
 
-        //    Route::controller(AdminBrandController::class)
-        //         ->prefix("/brands")
-        //         ->name("brands.")
-        //         ->group(function () {
-        //             Route::get("/", "index")->middleware('permission:brand.menu')->name("index");
-        //             Route::get("/create", "create")->middleware('permission:brand.add')->name("create");
-        //             Route::post("/", "store")->middleware('permission:brand.add')->name("store");
-        //             Route::get("/{brand}/edit", "edit")->middleware('permission:brand.edit')->name("edit");
-        //             Route::post("/{brand}", "update")->middleware('permission:brand.edit')->name("update");
-        //             Route::delete("/{brand}", "destroy")->middleware('permission:brand.delete')->name("destroy");
-        //             Route::get("/trash", "trash")->middleware('permission:brand.trash.list')->name("trash");
-        //             Route::post("/trash/{trash_brand_id}/restore", "restore")->middleware('permission:brand.trash.restore')->name("trash.restore");
-        //             Route::delete("/trash/{trash_brand_id}/force-delete", "forceDelete")->middleware('permission:brand.trash.delete')->name("trash.force.delete");
-        //             Route::delete("/trash/permanently-delete", "permanentlyDelete")->middleware('permission:brand.trash.delete')->name("trash.permanently.delete");
-        //         });
-
-        // Admin Collections Section
+        // Admin Collections Operations
+        Route::resource('collections', AdminCollectionController::class)->except(['show']);
         Route::controller(AdminCollectionController::class)
-            ->prefix('/collections')
+            ->prefix('/collections/trash')
             ->name('collections.')
             ->group(function () {
-                Route::get('/', 'index')
-                    ->middleware('permission:collection.menu')
-                    ->name('index');
-                Route::get('/create', 'create')
-                    ->middleware('permission:collection.add')
-                    ->name('create');
-                Route::post('/', 'store')
-                    ->middleware('permission:collection.add')
-                    ->name('store');
-                Route::get('/{collection}/edit', 'edit')
-                    ->middleware('permission:collection.edit')
-                    ->name('edit');
-                Route::patch('/{collection}', 'update')
-                    ->middleware('permission:collection.edit')
-                    ->name('update');
-                Route::delete('/{collection}', 'destroy')
-                    ->middleware('permission:collection.delete')
-                    ->name('destroy');
-                Route::get('/trash', 'trash')
-                    ->middleware('permission:collection.trash.list')
-                    ->name('trash');
-                Route::post('/trash/{trash_collection_id}/restore', 'restore')
-                    ->middleware('permission:collection.trash.restore')
-                    ->name('trash.restore');
-                Route::delete('/trash/{trash_collection_id}/force-delete', 'forceDelete')
-                    ->middleware('permission:collection.trash.delete')
-                    ->name('trash.force.delete');
-                Route::delete('/trash/permanently-delete', 'permanentlyDelete')
-                    ->middleware('permission:collection.trash.delete')
-                    ->name('trash.permanently.delete');
+                Route::delete('/destroy/selected', 'destroySelected')->name('destroy.selected');
+                Route::delete('/destroy/all', 'destroyAll')->name('destroy.all');
+                Route::get('/', 'trashed')->name('trashed');
+                Route::post('/{id}/restore', 'restore')->name('restore');
+                Route::post('/restore/selected', 'restoreSelected')->name('restore.selected');
+                Route::post('/restore/all', 'restoreAll')->name('restore.all');
+                Route::delete('/{id}/force-delete', 'forceDelete')->name('force-delete');
+                Route::delete('/force-delete/selected', 'forceDeleteSelected')->name('force-delete.selected');
+                Route::delete('/force-delete/all', 'forceDeleteAll')->name('force-delete.all');
             });
+
+
 
         // Admin Categories Section
         Route::controller(AdminCategoryController::class)

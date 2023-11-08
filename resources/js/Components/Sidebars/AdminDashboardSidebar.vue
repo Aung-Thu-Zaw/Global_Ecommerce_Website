@@ -158,7 +158,7 @@ const toggleCollapseShow = (classes) => {
               }"
             >
               <i class="fa-solid fa-box mr-2 text-sm"></i>
-              {{ __("COLLECTIONS") }}
+              {{ __("Collections") }}
             </Link>
           </li>
 

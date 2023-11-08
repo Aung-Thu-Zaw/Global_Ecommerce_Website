@@ -77,5 +77,12 @@
     "Restore Selected :label": "ရွေးချယ်ထားသော :label ကို ပြန်လည်ရယူပါ။",
     "Restore All :label": ":label အားလုံးကို ပြန်ယူပါ။",
     "Are you sure you would like to restore these?": "ဤအရာများကို ပြန်လည်ရယူလိုသည်မှာ သေချာပါသလား။",
-    "Filtered By": "စစ်ထုတ်ထားသည်"
+    "Filtered By": "စစ်ထုတ်ထားသည်",
+    "Collections": "စုစည်းမှုများ",
+    "collections": "စုစည်းမှုများ",
+    "Collection": "စုစည်းမှု",
+    "collection": "စုစည်းမှု",
+    "Collection Title": "စုစည်းမှုခေါင်းစဉ်",
+    "Collection Description": "စုစည်းမှုဖော်ပြချက်",
+    "Title": "ခေါင်းစဉ်"
 }
