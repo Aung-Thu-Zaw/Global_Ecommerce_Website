@@ -17,7 +17,6 @@ import BulkActionButton from "@/Components/Buttons/BulkActionButton.vue";
 import InertiaLinkButton from "@/Components/Buttons/InertiaLinkButton.vue";
 import NormalButton from "@/Components/Buttons/NormalButton.vue";
 import Pagination from "@/Components/Paginations/DashboardPagination.vue";
-import FilteredBy from "@/Components/Table/FilteredBy.vue";
 import { useResourceActions } from "@/Composables/useResourceActions";
 import { Head } from "@inertiajs/vue3";
 import { inject } from "vue";

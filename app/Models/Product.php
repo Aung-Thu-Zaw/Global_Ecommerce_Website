@@ -28,7 +28,7 @@ class Product extends Model
     /**
      * @var string[]
      */
-    protected array $cascadeDeletes = ['category'];
+    // protected array $cascadeDeletes = ['category'];
 
     protected $guarded = [];
 
