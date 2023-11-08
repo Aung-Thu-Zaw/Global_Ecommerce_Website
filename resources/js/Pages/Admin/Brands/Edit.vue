@@ -10,10 +10,11 @@ import TextAreaField from "@/Components/Forms/Fields/TextAreaField.vue";
 import SelectBox from "@/Components/Forms/Fields/SelectBox.vue";
 import FileInput from "@/Components/Forms/Fields/FileInput.vue";
 import FormButton from "@/Components/Buttons/FormButton.vue";
-import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
+import InertiaLinkButton from "@/Components/Buttons/InertiaLinkButton.vue";
 import { useImagePreview } from "@/Composables/useImagePreview";
 import { useResourceActions } from "@/Composables/useResourceActions";
 import { Head } from "@inertiajs/vue3";
+import { useQueryStringParams } from "@/Composables/useQueryStringParams";
 
 const props = defineProps({
   brand: Object,
@@ -21,6 +22,8 @@ const props = defineProps({
 });
 
 const brandList = "admin.brands.index";
+
+const { queryStringParams } = useQueryStringParams();
 
 const { previewImage, setImagePreview } = useImagePreview(props.brand?.image);
 
@@ -50,10 +53,13 @@ const { form, processing, errors, editAction } = useResourceActions({
         </Breadcrumb>
 
         <div class="w-full flex items-center justify-end">
-          <GoBackButton :to="brandList" />
+          <InertiaLinkButton :to="brandList" :data="queryStringParams">
+            <i class="fa-solid fa-left-long"></i>
+            {{ __("Go Back") }}
+          </InertiaLinkButton>
         </div>
       </div>
-      
+
       <!-- Form Start -->
       <div class="border p-10 bg-white rounded-md">
         <form

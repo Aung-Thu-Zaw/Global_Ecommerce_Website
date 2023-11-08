@@ -17,10 +17,12 @@ import BulkActionButton from "@/Components/Buttons/BulkActionButton.vue";
 import InertiaLinkButton from "@/Components/Buttons/InertiaLinkButton.vue";
 import NormalButton from "@/Components/Buttons/NormalButton.vue";
 import Pagination from "@/Components/Paginations/DashboardPagination.vue";
+import FilteredBy from "@/Components/Table/FilteredBy.vue";
 import { useResourceActions } from "@/Composables/useResourceActions";
-import { usePage, Head } from "@inertiajs/vue3";
-import { computed, inject } from "vue";
+import { Head } from "@inertiajs/vue3";
+import { inject } from "vue";
 import { __ } from "@/Services/translations-inside-setup.js";
+import { useQueryStringParams } from "@/Composables/useQueryStringParams";
 
 const props = defineProps({
   brands: Object,
@@ -30,14 +32,7 @@ const swal = inject("$swal");
 
 const brandList = "admin.brands.index";
 
-const queryStringParams = computed(() => {
-  return {
-    page: usePage().props.ziggy.query?.page,
-    per_page: usePage().props.ziggy.query?.per_page,
-    sort: usePage().props.ziggy.query?.sort,
-    direction: usePage().props.ziggy.query?.direction,
-  };
-});
+const { queryStringParams } = useQueryStringParams();
 
 const { softDeleteAction, selectedSoftDeleteAction, softDeleteAllAction } =
   useResourceActions();
@@ -101,7 +96,12 @@ const handleDeleteBrand = async (brand) => {
         <InertiaLinkButton
           v-show="can('brands.view.trash')"
           to="admin.brands.trashed"
-          :data="queryStringParams"
+          :data="{
+            page: 1,
+            per_page: 5,
+            sort: 'id',
+            direction: 'desc',
+          }"
           class="bg-red-600 text-white ring-2 ring-red-300"
         >
           <i class="fa-solid fa-trash-can mr-1"></i>
@@ -125,6 +125,7 @@ const handleDeleteBrand = async (brand) => {
             <DashboardTableFilterByCreatedDate :to="brandList" />
           </div>
         </div>
+
         <TableContainer>
           <ActionTable :items="brands.data">
             <!-- Table Actions -->

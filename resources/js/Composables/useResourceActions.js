@@ -1,8 +1,9 @@
 import { useFormatFunctions } from "@/Composables/useFormatFunctions";
 import { useReCaptcha } from "vue-recaptcha-v3";
 import { __ } from "@/Services/translations-inside-setup.js";
-import { inject, reactive, ref } from "vue";
+import { inject, ref } from "vue";
 import { router, useForm, usePage } from "@inertiajs/vue3";
+import { useQueryStringParams } from "./useQueryStringParams";
 
 export function useResourceActions(formFields = {}) {
     const swal = inject("$swal");
@@ -13,12 +14,7 @@ export function useResourceActions(formFields = {}) {
     const { formatToSnakeCase, formatToTitleCase } = useFormatFunctions();
 
     // URI Query String Parameters
-    const queryStringParams = reactive({
-        page: usePage().props.ziggy.query?.page,
-        per_page: usePage().props.ziggy.query?.per_page,
-        sort: usePage().props.ziggy.query?.sort,
-        direction: usePage().props.ziggy.query?.direction,
-    });
+    const { queryStringParams } = useQueryStringParams();
 
     // Dynamic Form Fields For ( Create and Edit )
     const form = useForm({ ...formFields, captcha_token: null });
@@ -39,7 +35,7 @@ export function useResourceActions(formFields = {}) {
             {
                 ...form,
                 page: 1,
-                per_page: queryStringParams.per_page,
+                per_page: queryStringParams.value.per_page,
                 sort: "id",
                 direction: "desc",
             },
@@ -84,7 +80,7 @@ export function useResourceActions(formFields = {}) {
                 _method:
                     method === "put" || method === "patch" ? method : undefined,
                 ...form,
-                ...queryStringParams,
+                ...queryStringParams.value,
             },
             {
                 preserveState: true,
@@ -132,7 +128,7 @@ export function useResourceActions(formFields = {}) {
             router.delete(
                 route(deleteRouteName, {
                     [formatToSnakeCase(model)]: targetIdentifier,
-                    ...queryStringParams,
+                    ...queryStringParams.value,
                 }),
                 {
                     preserveScroll: true,
@@ -180,7 +176,7 @@ export function useResourceActions(formFields = {}) {
             router.delete(
                 route(deleteRouteName, {
                     selectedItems,
-                    ...queryStringParams,
+                    ...queryStringParams.value,
                 }),
                 {
                     preserveScroll: true,
@@ -223,7 +219,7 @@ export function useResourceActions(formFields = {}) {
         if (result.isConfirmed) {
             router.delete(
                 route(deleteRouteName, {
-                    ...queryStringParams,
+                    ...queryStringParams.value,
                 }),
                 {
                     preserveScroll: true,
@@ -266,7 +262,7 @@ export function useResourceActions(formFields = {}) {
                     id: targetIdentifier,
                 }),
                 {
-                    ...queryStringParams,
+                    ...queryStringParams.value,
                 },
                 {
                     preserveScroll: true,
@@ -314,7 +310,7 @@ export function useResourceActions(formFields = {}) {
                     selectedItems,
                 }),
                 {
-                    ...queryStringParams,
+                    ...queryStringParams.value,
                 },
                 {
                     preserveScroll: true,
@@ -356,7 +352,7 @@ export function useResourceActions(formFields = {}) {
             router.post(
                 route(restoreRouteName, {}),
                 {
-                    ...queryStringParams,
+                    ...queryStringParams.value,
                 },
                 {
                     preserveScroll: true,
@@ -404,7 +400,7 @@ export function useResourceActions(formFields = {}) {
             router.delete(
                 route(deleteRouteName, {
                     id: targetIdentifier,
-                    ...queryStringParams,
+                    ...queryStringParams.value,
                 }),
                 {
                     preserveScroll: true,
@@ -452,7 +448,7 @@ export function useResourceActions(formFields = {}) {
             router.delete(
                 route(deleteRouteName, {
                     selectedItems,
-                    ...queryStringParams,
+                    ...queryStringParams.value,
                 }),
                 {
                     preserveScroll: true,
@@ -495,7 +491,7 @@ export function useResourceActions(formFields = {}) {
         if (result.isConfirmed) {
             router.delete(
                 route(deleteRouteName, {
-                    ...queryStringParams,
+                    ...queryStringParams.value,
                 }),
                 {
                     preserveScroll: true,

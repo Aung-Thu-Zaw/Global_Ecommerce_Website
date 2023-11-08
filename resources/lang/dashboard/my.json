@@ -76,5 +76,6 @@
     "This action cannot be undone. Are you sure you want to permanently delete this?": "ဤလုပ်ဆောင်ချက်ကို ပြန်ပြင်၍မရပါ။ ဤအရာကို အပြီးတိုင်ဖျက်လိုသည်မှာ သေချာပါသလား။",
     "Restore Selected :label": "ရွေးချယ်ထားသော :label ကို ပြန်လည်ရယူပါ။",
     "Restore All :label": ":label အားလုံးကို ပြန်ယူပါ။",
-    "Are you sure you would like to restore these?": "ဤအရာများကို ပြန်လည်ရယူလိုသည်မှာ သေချာပါသလား။"
+    "Are you sure you would like to restore these?": "ဤအရာများကို ပြန်လည်ရယူလိုသည်မှာ သေချာပါသလား။",
+    "Filtered By": "စစ်ထုတ်ထားသည်"
 }

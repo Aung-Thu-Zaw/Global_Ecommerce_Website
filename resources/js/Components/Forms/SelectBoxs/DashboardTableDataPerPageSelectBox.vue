@@ -22,6 +22,10 @@ watch(
         per_page: per_page.value,
         sort: usePage().props.ziggy.query?.sort,
         direction: usePage().props.ziggy.query?.direction,
+        created_from: usePage().props.ziggy.query?.created_from,
+        created_until: usePage().props.ziggy.query?.created_until,
+        deleted_from: usePage().props.ziggy.query?.deleted_from,
+        deleted_until: usePage().props.ziggy.query?.deleted_until,
       },
       {
         replace: true,

@@ -115,11 +115,17 @@ watch(
 <template>
   <button
     @click="isFilterBoxOpened = !isFilterBoxOpened"
-    class="text-sm border px-5 py-3 rounded-md ml-5 border-slate-300 hover:bg-gray-50 text-gray-600 hover:text-gray-700 focus:ring-2 focus:ring-blue-300 focus:border-blue-400"
+    class="relative text-sm border px-5 py-3 rounded-md ml-5 border-slate-300 hover:bg-gray-50 text-gray-600 hover:text-gray-700 focus:ring-2 focus:ring-blue-300 focus:border-blue-400"
   >
     <span class="">
       <i class="fa-solid fa-filter"></i>
     </span>
+    <!-- <span
+      v-show="true"
+      class="absolute top-1 right-2 font-bold text-[.5rem] text-white bg-red-500 w-3.5 h-3.5 rounded-full flex items-center justify-center"
+    >
+      5
+    </span> -->
   </button>
 
   <div

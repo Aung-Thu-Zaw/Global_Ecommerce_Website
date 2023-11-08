@@ -1,6 +1,6 @@
 <script setup>
 import { router, usePage } from "@inertiajs/vue3";
-import { ref, watch } from "vue";
+import {  ref, watch } from "vue";
 
 const props = defineProps({
   to: {
@@ -30,6 +30,10 @@ const handleSearch = () => {
         per_page: usePage().props.ziggy.query?.per_page,
         sort: usePage().props.ziggy.query?.sort,
         direction: usePage().props.ziggy.query?.direction,
+        created_from: usePage().props.ziggy.query?.created_from,
+        created_until: usePage().props.ziggy.query?.created_until,
+        deleted_from: usePage().props.ziggy.query?.deleted_from,
+        deleted_until: usePage().props.ziggy.query?.deleted_until,
       },
       {
         replace: true,
@@ -47,6 +51,10 @@ const removeSearch = () => {
       per_page: usePage().props.ziggy.query?.per_page,
       sort: usePage().props.ziggy.query?.sort,
       direction: usePage().props.ziggy.query?.direction,
+      created_from: usePage().props.ziggy.query?.created_from,
+      created_until: usePage().props.ziggy.query?.created_until,
+      deleted_from: usePage().props.ziggy.query?.deleted_from,
+      deleted_until: usePage().props.ziggy.query?.deleted_until,
     },
     {
       replace: true,

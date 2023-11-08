@@ -10,16 +10,19 @@ import TextAreaField from "@/Components/Forms/Fields/TextAreaField.vue";
 import SelectBox from "@/Components/Forms/Fields/SelectBox.vue";
 import FileInput from "@/Components/Forms/Fields/FileInput.vue";
 import FormButton from "@/Components/Buttons/FormButton.vue";
-import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
+import InertiaLinkButton from "@/Components/Buttons/InertiaLinkButton.vue";
 import { useImagePreview } from "@/Composables/useImagePreview";
 import { useResourceActions } from "@/Composables/useResourceActions";
 import { Head } from "@inertiajs/vue3";
+import { useQueryStringParams } from "@/Composables/useQueryStringParams";
 
 defineProps({
   categories: Object,
 });
 
 const brandList = "admin.brands.index";
+
+const { queryStringParams } = useQueryStringParams();
 
 const { previewImage, setImagePreview } = useImagePreview();
 
@@ -49,6 +52,11 @@ const { form, processing, errors, createAction } = useResourceActions({
 
         <div class="w-full flex items-center justify-end">
           <GoBackButton :to="brandList" />
+
+          <InertiaLinkButton :to="brandList" :data="queryStringParams">
+            <i class="fa-solid fa-left-long"></i>
+            {{ __("Go Back") }}
+          </InertiaLinkButton>
         </div>
       </div>
 
@@ -109,6 +117,7 @@ const { form, processing, errors, createAction } = useResourceActions({
               v-model="form.image"
               text="PNG, JPG or JPEG ( Max File Size : 1.5 MB )"
               @update:modelValue="handleChangeImage"
+              required
             />
 
             <InputError :message="errors?.image" />

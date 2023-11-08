@@ -15,13 +15,14 @@ import Image from "@/Components/Table/Image.vue";
 import ActionTable from "@/Components/Table/ActionTable.vue";
 import BulkActionButton from "@/Components/Buttons/BulkActionButton.vue";
 import NormalButton from "@/Components/Buttons/NormalButton.vue";
+import InertiaLinkButton from "@/Components/Buttons/InertiaLinkButton.vue";
 import EmptyTrashButton from "@/Components/Buttons/EmptyTrashButton.vue";
-import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
 import NoTableData from "@/Components/Table/NoTableData.vue";
 import { __ } from "@/Services/translations-inside-setup.js";
 import Pagination from "@/Components/Paginations/DashboardPagination.vue";
 import { useResourceActions } from "@/Composables/useResourceActions";
 import { Head } from "@inertiajs/vue3";
+import { useQueryStringParams } from "@/Composables/useQueryStringParams";
 
 // Define the Props
 const props = defineProps({
@@ -31,6 +32,7 @@ const props = defineProps({
 const brandList = "admin.brands.index";
 
 const trashedBrandList = "admin.brands.trashed";
+const { queryStringParams } = useQueryStringParams();
 
 const {
   restoreAction,
@@ -56,8 +58,38 @@ const {
         </Breadcrumb>
 
         <div class="w-full flex items-center justify-end">
-          <GoBackButton :to="brandList" />
+          <InertiaLinkButton
+            :to="brandList"
+            :data="{
+              page: 1,
+              per_page: 5,
+              sort: 'id',
+              direction: 'desc',
+            }"
+          >
+            <i class="fa-solid fa-left-long"></i>
+            {{ __("Go Back") }}
+          </InertiaLinkButton>
         </div>
+      </div>
+
+      <!-- Message -->
+      <div
+        v-if="can('brands.force.delete') && trashedBrands.data.length !== 0"
+        class="text-left text-sm font-bold mb-2 text-warning-600"
+      >
+        {{
+          __(
+            ":label in the trash will be automatically deleted after 60 days",
+            { label: __("Brands") }
+          )
+        }}
+
+        <EmptyTrashButton
+          @click="
+            permanentDeleteAllAction('Brand', 'admin.brands.force-delete.all')
+          "
+        />
       </div>
 
       <!-- Table Start -->
@@ -75,24 +107,6 @@ const {
 
             <DashboardTableFilterByCreatedDate :to="trashedBrandList" />
           </div>
-        </div>
-
-        <div
-          v-if="can('brands.force.delete') && trashedBrands.data.length !== 0"
-          class="text-left text-sm font-bold mb-2 text-warning-600"
-        >
-          {{
-            __(
-              ":label in the trash will be automatically deleted after 60 days",
-              { label: __("Brands") }
-            )
-          }}
-
-          <EmptyTrashButton
-            @click="
-              permanentDeleteAllAction('Brand', 'admin.brands.force-delete.all')
-            "
-          />
         </div>
 
         <TableContainer>

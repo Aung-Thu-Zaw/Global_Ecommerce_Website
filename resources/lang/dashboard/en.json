@@ -76,5 +76,6 @@
     "This action cannot be undone. Are you sure you want to permanently delete this?": "This action cannot be undone. Are you sure you want to permanently delete this?",
     "Restore Selected :label": "Restore Selected :label",
     "Restore All :label": "Restore All :label",
-    "Are you sure you would like to restore these?": "Are you sure you would like to restore these?"
+    "Are you sure you would like to restore these?": "Are you sure you would like to restore these?",
+    "Filtered By": "Filtered By"
 }

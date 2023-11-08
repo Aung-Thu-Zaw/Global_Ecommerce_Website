@@ -1,8 +1,8 @@
 <script setup>
 // import DashboardNotificationDropdown from "@/components/Dropdowns/DashboardNotificationDropdown.vue";
 import UserDropdown from "@/Components/Dropdowns/UserDropdown.vue";
-import { Link, usePage } from "@inertiajs/vue3";
-import { computed, ref } from "vue";
+import { Link } from "@inertiajs/vue3";
+import { ref } from "vue";
 import logo from "@/assets/images/website-logo-color.png";
 
 const collapseShow = ref("hidden");
@@ -326,7 +326,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.slider-banners.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -348,7 +348,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.campaign-banners.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -369,7 +369,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.product-banners.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -456,7 +456,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.countries.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -478,7 +478,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.regions.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -499,7 +499,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.cities.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -520,7 +520,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.townships.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -607,7 +607,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.blogs.categories.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -629,7 +629,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.blogs.posts.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -651,7 +651,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.blogs.comments.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -772,7 +772,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.product-reviews.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -794,7 +794,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.shop-reviews.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -881,7 +881,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.product-reviews.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -903,7 +903,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.shop-reviews.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -990,7 +990,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.registered-accounts.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -1012,7 +1012,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.seller-manage.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -1034,7 +1034,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.admin-manage.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -1121,7 +1121,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.roles.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -1143,7 +1143,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.permissions.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -1165,7 +1165,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.role-in-permissions.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -1340,7 +1340,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.blogs.categories.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -1362,7 +1362,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.blogs.posts.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -1384,7 +1384,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.blogs.comments.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -1471,7 +1471,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.blogs.categories.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -1493,7 +1493,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.blogs.posts.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -1515,7 +1515,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.blogs.comments.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -1613,7 +1613,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.blogs.categories.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -1635,7 +1635,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.blogs.posts.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
@@ -1657,7 +1657,7 @@ const toggleCollapseShow = (classes) => {
                           :href="route('admin.blogs.comments.index')"
                           :data="{
                             page: 1,
-                            per_page: 10,
+                            per_page: 5,
                             sort: 'id',
                             direction: 'desc',
                           }"
