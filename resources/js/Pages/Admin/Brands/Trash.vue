@@ -2,7 +2,7 @@
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
 import DashboardTableDataSearchBox from "@/Components/Forms/SearchBoxs/DashboardTableDataSearchBox.vue";
 import DashboardTableDataPerPageSelectBox from "@/Components/Forms/SelectBoxs/DashboardTableDataPerPageSelectBox.vue";
-import DashboardTableFilterByCreatedDate from "@/Components/Forms/SelectBoxs/DashboardTableFilterByCreatedDate.vue";
+import DashboardTableFilterByDate from "@/Components/Forms/SelectBoxs/DashboardTableFilterByDate.vue";
 import Breadcrumb from "@/Components/Breadcrumbs/Breadcrumb.vue";
 import BreadcrumbLinkItem from "@/Components/Breadcrumbs/BreadcrumbLinkItem.vue";
 import BreadcrumbItem from "@/Components/Breadcrumbs/BreadcrumbItem.vue";
@@ -105,7 +105,7 @@ const {
           <div class="flex items-center justify-end w-full md:space-x-5">
             <DashboardTableDataPerPageSelectBox :to="trashedBrandList" />
 
-            <DashboardTableFilterByCreatedDate :to="trashedBrandList" />
+            <DashboardTableFilterByDate :to="trashedBrandList" />
           </div>
         </div>
 

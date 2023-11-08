@@ -6,7 +6,7 @@ import TableContainer from "@/Components/Table/TableContainer.vue";
 import ActionTable from "@/Components/Table/ActionTable.vue";
 import DashboardTableDataSearchBox from "@/Components/Forms/SearchBoxs/DashboardTableDataSearchBox.vue";
 import DashboardTableDataPerPageSelectBox from "@/Components/Forms/SelectBoxs/DashboardTableDataPerPageSelectBox.vue";
-import DashboardTableFilterByCreatedDate from "@/Components/Forms/SelectBoxs/DashboardTableFilterByCreatedDate.vue";
+import DashboardTableFilterByDate from "@/Components/Forms/SelectBoxs/DashboardTableFilterByDate.vue";
 import SortableTableHeaderCell from "@/Components/Table/SortableTableHeaderCell.vue";
 import TableHeaderCell from "@/Components/Table/TableHeaderCell.vue";
 import TableDataCell from "@/Components/Table/TableDataCell.vue";
@@ -122,7 +122,7 @@ const handleDeleteBrand = async (brand) => {
           <div class="flex items-center justify-end w-full md:space-x-5">
             <DashboardTableDataPerPageSelectBox :to="brandList" />
 
-            <DashboardTableFilterByCreatedDate :to="brandList" />
+            <DashboardTableFilterByDate :to="brandList" />
           </div>
         </div>
 

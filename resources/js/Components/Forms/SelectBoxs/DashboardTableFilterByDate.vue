@@ -25,6 +25,17 @@ const createdUntil = ref(
     : ""
 );
 
+const deletedFrom = ref(
+  usePage().props.ziggy.query.deleted_from
+    ? new Date(usePage().props.ziggy.query.deleted_from)
+    : ""
+);
+const deletedUntil = ref(
+  usePage().props.ziggy.query.deleted_until
+    ? new Date(usePage().props.ziggy.query.deleted_until)
+    : ""
+);
+
 const { formatDate } = useFormatFunctions();
 
 const filteredByCreatedFrom = () => {
@@ -37,6 +48,8 @@ const filteredByCreatedFrom = () => {
       direction: usePage().props.ziggy.query?.direction,
       created_from: formatDate(createdFrom.value),
       created_until: usePage().props.ziggy.query?.created_until,
+      deleted_from: usePage().props.ziggy.query?.deleted_from,
+      deleted_until: usePage().props.ziggy.query?.deleted_until,
     },
     {
       replace: true,
@@ -58,6 +71,54 @@ const filteredByCreatedUntil = () => {
       direction: usePage().props.ziggy.query?.direction,
       created_from: usePage().props.ziggy.query?.created_from,
       created_until: formatDate(createdUntil.value),
+      deleted_from: usePage().props.ziggy.query?.deleted_from,
+      deleted_until: usePage().props.ziggy.query?.deleted_until,
+    },
+    {
+      replace: true,
+      preserveState: true,
+      onSuccess: () => {
+        isFilterBoxOpened.value = true;
+      },
+    }
+  );
+};
+
+const filteredByDeletedFrom = () => {
+  router.get(
+    route(props.to),
+    {
+      search: usePage().props.ziggy.query?.search,
+      per_page: usePage().props.ziggy.query?.per_page,
+      sort: usePage().props.ziggy.query?.sort,
+      direction: usePage().props.ziggy.query?.direction,
+      created_from: usePage().props.ziggy.query?.created_from,
+      created_until: usePage().props.ziggy.query?.created_until,
+      deleted_from: formatDate(deletedFrom.value),
+      deleted_until: usePage().props.ziggy.query?.deleted_until,
+    },
+    {
+      replace: true,
+      preserveState: true,
+      onSuccess: () => {
+        isFilterBoxOpened.value = true;
+      },
+    }
+  );
+};
+
+const filteredByDeletedUntil = () => {
+  router.get(
+    route(props.to),
+    {
+      search: usePage().props.ziggy.query?.search,
+      per_page: usePage().props.ziggy.query?.per_page,
+      sort: usePage().props.ziggy.query?.sort,
+      direction: usePage().props.ziggy.query?.direction,
+      created_from: usePage().props.ziggy.query?.created_from,
+      created_until: usePage().props.ziggy.query?.created_until,
+      deleted_from: usePage().props.ziggy.query?.deleted_from,
+      deleted_until: formatDate(deletedUntil.value),
     },
     {
       replace: true,
@@ -72,6 +133,8 @@ const filteredByCreatedUntil = () => {
 const resetFiltered = () => {
   createdFrom.value = "";
   createdUntil.value = "";
+  deletedUntil.value = "";
+  deletedFrom.value = "";
   router.get(
     route(props.to),
     {
@@ -106,6 +169,28 @@ watch(
       resetFiltered();
     } else {
       filteredByCreatedUntil();
+    }
+  }
+);
+
+watch(
+  () => deletedFrom.value,
+  () => {
+    if (deletedFrom.value === "") {
+      resetFiltered();
+    } else {
+      filteredByDeletedFrom();
+    }
+  }
+);
+
+watch(
+  () => deletedUntil.value,
+  () => {
+    if (deletedUntil.value === "") {
+      resetFiltered();
+    } else {
+      filteredByDeletedUntil();
     }
   }
 );
@@ -164,6 +249,33 @@ watch(
           v-model="createdUntil"
           :placeholder="__('Select Date')"
         />
+      </div>
+    </div>
+
+    <div v-show="$page.component.endsWith('Trash')">
+      <div class="w-full mb-5">
+        <div>
+          <InputLabel label="Deleted From" />
+
+          <Datepicker
+            id="deleted-from"
+            class="block w-full p-4 font-semibold text-sm text-gray-800 border border-gray-300 bg-gray-50 focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-all rounded-md"
+            v-model="deletedFrom"
+            :placeholder="__('Select Date')"
+          />
+        </div>
+      </div>
+      <div class="w-full mb-5">
+        <div>
+          <InputLabel label="Deleted Until" />
+
+          <Datepicker
+            id="deleted-until"
+            class="block w-full p-4 font-semibold text-sm text-gray-800 border border-gray-300 bg-gray-50 focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-all rounded-md"
+            v-model="deletedUntil"
+            :placeholder="__('Select Date')"
+          />
+        </div>
       </div>
     </div>
 
