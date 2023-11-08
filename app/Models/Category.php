@@ -25,7 +25,7 @@ class Category extends Model
     /**
      * @var string[]
      */
-    protected array $cascadeDeletes = ['children'];
+    // protected array $cascadeDeletes = ['children'];
 
     protected $guarded = [];
 
@@ -80,26 +80,6 @@ class Category extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Category, never>
-     */
-    protected function createdAt(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => date('j-F-Y', strtotime($value)),
-        );
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Category, never>
-     */
-    protected function deletedAt(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => date('j-F-Y', strtotime($value)),
-        );
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Category,Category>
      */
     public function parent(): BelongsTo
@@ -123,9 +103,9 @@ class Category extends Model
         return $this->hasMany(Brand::class);
     }
 
-    public static function deleteImage(string $categoryImage): void
+    public static function deleteImage(?string $categoryImage): void
     {
-        if (! empty($categoryImage) && file_exists(storage_path('app/public/categories/'.pathinfo($categoryImage, PATHINFO_BASENAME)))) {
+        if (!empty($categoryImage) && file_exists(storage_path('app/public/categories/'.pathinfo($categoryImage, PATHINFO_BASENAME)))) {
             unlink(storage_path('app/public/categories/'.pathinfo($categoryImage, PATHINFO_BASENAME)));
         }
     }

@@ -68,6 +68,7 @@ defineExpose({ focus: () => textarea.value.focus() });
       @input="$emit('update:modelValue', $event.target.value)"
       :placeholder="placeholder"
       :disabled="disabled"
+      :required="required"
     ></textarea>
   </div>
 </template>

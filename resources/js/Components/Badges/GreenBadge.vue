@@ -1,6 +1,6 @@
 <template>
   <span
-    class="bg-green-100 text-green-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full"
+    class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-green-100 text-green-800"
   >
     <slot />
   </span>

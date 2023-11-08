@@ -19,6 +19,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  required: {
+    type: Boolean,
+    default: false,
+  },
   placeholder: {
     type: String,
     default: "",
@@ -71,6 +75,7 @@ const optionLabel = (option) => {
       }"
       @input="$emit('update:modelValue', $event.target.value)"
       :disabled="disabled"
+      :required="required"
     >
       <option value="" selected disabled>{{ placeholder }}</option>
       <option

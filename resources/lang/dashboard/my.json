@@ -18,7 +18,6 @@
     "Brand Name": "အမှတ်တံဆိပ်အမည်",
     "Enter :label": "Enter :label",
     "Brand Description": "အမှတ်တံဆိပ်ဖော်ပြချက်",
-    "Category": "အမျိုးအစား",
     "Select Option": "ရွေးချယ်စရာကိုရွေးချယ်ပါ",
     "Brand Image": "အမှတ်တံဆိပ်ပုံ",
     "E-commerce Administration": "E-commerce စီမံခန့်ခွဲမှု",
@@ -84,5 +83,13 @@
     "collection": "စုစည်းမှု",
     "Collection Title": "စုစည်းမှုခေါင်းစဉ်",
     "Collection Description": "စုစည်းမှုဖော်ပြချက်",
-    "Title": "ခေါင်းစဉ်"
+    "Title": "ခေါင်းစဉ်",
+    "Categories": "အမျိုးအစားများ",
+    "categories": "အမျိုးအစားများ",
+    "Category": "အမျိုးအစား",
+    "category": "အမျိုးအစား",
+    "Category Name": "အမျိုးအစားအမည်",
+    "Parent Category": "မိဘအမျိုးအစား",
+    "Status": "အခြေအနေ",
+    "Category Image": "အမျိုးအစားပုံ"
 }

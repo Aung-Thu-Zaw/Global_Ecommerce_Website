@@ -1,368 +1,243 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/CategoryBreadcrumb.vue";
-import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
-import RestoreButton from "@/Components/Buttons/RestoreButton.vue";
-import DeleteForeverButton from "@/Components/Buttons/DeleteForeverButton.vue";
-import EmptyTrashButton from "@/Components/Buttons/EmptyTrashButton.vue";
-import DashboardSearchInputForm from "@/Components/Forms/DashboardSearchInputForm.vue";
-import DashboardPerPageSelectBox from "@/Components/Forms/DashboardPerPageSelectBox.vue";
-import DashboardFilterByDeletedDate from "@/Components/Forms/DashboardFilterByDeletedDate.vue";
-import SortingArrows from "@/Components/Table/SortingArrows.vue";
+import DashboardTableDataSearchBox from "@/Components/Forms/SearchBoxs/DashboardTableDataSearchBox.vue";
+import DashboardTableDataPerPageSelectBox from "@/Components/Forms/SelectBoxs/DashboardTableDataPerPageSelectBox.vue";
+import DashboardTableFilterByDate from "@/Components/Forms/SelectBoxs/DashboardTableFilterByDate.vue";
+import Breadcrumb from "@/Components/Breadcrumbs/Breadcrumb.vue";
+import BreadcrumbLinkItem from "@/Components/Breadcrumbs/BreadcrumbLinkItem.vue";
+import BreadcrumbItem from "@/Components/Breadcrumbs/BreadcrumbItem.vue";
 import TableContainer from "@/Components/Table/TableContainer.vue";
-import TableHeader from "@/Components/Table/TableHeader.vue";
-import HeaderTh from "@/Components/Table/HeaderTh.vue";
-import BodyTh from "@/Components/Table/BodyTh.vue";
-import Tr from "@/Components/Table/Tr.vue";
-import Td from "@/Components/Table/Td.vue";
-import NotAvaliableData from "@/Components/Table/NotAvaliableData.vue";
-import Pagination from "@/Components/Paginations/DashboardPagination.vue";
+import SortableTableHeaderCell from "@/Components/Table/SortableTableHeaderCell.vue";
+import TableHeaderCell from "@/Components/Table/TableHeaderCell.vue";
+import TableDataCell from "@/Components/Table/TableDataCell.vue";
+import TableActionCell from "@/Components/Table/TableActionCell.vue";
+import Image from "@/Components/Table/Image.vue";
+import ActionTable from "@/Components/Table/ActionTable.vue";
+import BulkActionButton from "@/Components/Buttons/BulkActionButton.vue";
+import NormalButton from "@/Components/Buttons/NormalButton.vue";
+import InertiaLinkButton from "@/Components/Buttons/InertiaLinkButton.vue";
+import EmptyTrashButton from "@/Components/Buttons/EmptyTrashButton.vue";
+import NoTableData from "@/Components/Table/NoTableData.vue";
 import { __ } from "@/Services/translations-inside-setup.js";
-import { reactive, inject, computed, ref } from "vue";
-import { router, Head, usePage } from "@inertiajs/vue3";
+import Pagination from "@/Components/Paginations/DashboardPagination.vue";
+import { useResourceActions } from "@/Composables/useResourceActions";
+import { Head } from "@inertiajs/vue3";
+import { useQueryStringParams } from "@/Composables/useQueryStringParams";
 
 // Define the Props
 const props = defineProps({
-  trashCategories: Object,
+  trashedCategories: Object,
 });
 
-// Define Variables
-const swal = inject("$swal");
-const permissions = ref(usePage().props.auth.user.permissions); // Permissions From HandleInertiaRequest.php
+const categoryList = "admin.categories.index";
 
-// Category Trash Restore Permission
-const categoryTrashRestore = computed(() => {
-  return permissions.value.length
-    ? permissions.value.some(
-        (permission) => permission.name === "category.trash.restore"
-      )
-    : false;
-});
+const trashedCategoryList = "admin.categories.trashed";
+const { queryStringParams } = useQueryStringParams();
 
-// Category Trash Delete Permission
-const categoryTrashDelete = computed(() => {
-  return permissions.value.length
-    ? permissions.value.some(
-        (permission) => permission.name === "category.trash.delete"
-      )
-    : false;
-});
-
-// Query String Parameteres
-const params = reactive({
-  sort: usePage().props.ziggy.query?.sort,
-  direction: usePage().props.ziggy.query?.direction,
-});
-
-// Update Sorting Table Column
-const updateSorting = (sort = "id") => {
-  params.sort = sort;
-  params.direction = params.direction === "asc" ? "desc" : "asc";
-
-  router.get(
-    route("admin.categories.trash"),
-    {
-      search: usePage().props.ziggy.query?.search,
-      page: usePage().props.ziggy.query?.page,
-      per_page: usePage().props.ziggy.query?.per_page,
-      sort: params.sort,
-      direction: params.direction,
-      deleted_from: usePage().props.ziggy.query?.deleted_from,
-      deleted_until: usePage().props.ziggy.query?.deleted_until,
-    },
-    {
-      replace: true,
-      preserveState: true,
-    }
-  );
-};
-
-// Handle Trash Category Restore
-const handleRestoreTrashCategory = async (trashCategoryId) => {
-  const result = await swal({
-    icon: "question",
-    title: __("ARE_YOU_SURE_YOU_WANT_TO_RESTORE_THIS_CATEGORY"),
-    showCancelButton: true,
-    confirmButtonText: __("YES_RESTORE_IT"),
-    cancelButtonText: __("CANCEL"),
-    confirmButtonColor: "#2562c4",
-    cancelButtonColor: "#626262",
-    timer: 20000,
-    timerProgressBar: true,
-    reverseButtons: true,
-  });
-
-  if (result.isConfirmed) {
-    router.post(
-      route("admin.categories.trash.restore", {
-        trash_category_id: trashCategoryId,
-        search: usePage().props.ziggy.query?.search,
-        page: usePage().props.ziggy.query?.page,
-        per_page: usePage().props.ziggy.query?.per_page,
-        sort: params.sort,
-        direction: params.direction,
-        deleted_from: usePage().props.ziggy.query?.deleted_from,
-        deleted_until: usePage().props.ziggy.query?.deleted_until,
-      }),
-      {},
-      {
-        preserveScroll: true,
-        onSuccess: () => {
-          if (usePage().props.flash.successMessage) {
-            swal({
-              icon: "success",
-              title: __(usePage().props.flash.successMessage),
-            });
-          }
-        },
-      }
-    );
-  }
-};
-
-// Handle Trash Category Delete
-const handleDeleteTrashCategory = async (trashCategoryId) => {
-  const result = await swal({
-    icon: "question",
-    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_IT_FROM_THE_TRASH"),
-    text: __(
-      "CATEGORY_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK"
-    ),
-    showCancelButton: true,
-    confirmButtonText: __("YES_DELETE_IT"),
-    cancelButtonText: __("CANCEL"),
-    confirmButtonColor: "#d52222",
-    cancelButtonColor: "#626262",
-    timer: 20000,
-    timerProgressBar: true,
-    reverseButtons: true,
-  });
-
-  if (result.isConfirmed) {
-    router.delete(
-      route("admin.categories.trash.force.delete", {
-        trash_category_id: trashCategoryId,
-        search: usePage().props.ziggy.query?.search,
-        page: usePage().props.ziggy.query?.page,
-        per_page: usePage().props.ziggy.query?.per_page,
-        sort: params.sort,
-        direction: params.direction,
-        deleted_from: usePage().props.ziggy.query?.deleted_from,
-        deleted_until: usePage().props.ziggy.query?.deleted_until,
-      }),
-      {
-        preserveScroll: true,
-        onSuccess: () => {
-          if (usePage().props.flash.successMessage) {
-            swal({
-              icon: "success",
-              title: __(usePage().props.flash.successMessage),
-            });
-          }
-        },
-      }
-    );
-  }
-};
-
-// Handle Trash Category Delete Permanently
-const handlePermanentlyDeleteTrashCategories = async () => {
-  const result = await swal({
-    icon: "question",
-    title: __("ARE_YOU_SURE_YOU_WANT_TO_DELETE_IT_FROM_THE_TRASH"),
-    text: __(
-      "ALL_CATEGORIES_IN_THE_TRASH_WILL_BE_PERMANETLY_DELETED_YOU_CANT_GET_IT_BACK"
-    ),
-    showCancelButton: true,
-    confirmButtonText: __("YES_DELETE_IT"),
-    cancelButtonText: __("CANCEL"),
-    confirmButtonColor: "#d52222",
-    cancelButtonColor: "#626262",
-    timer: 20000,
-    timerProgressBar: true,
-    reverseButtons: true,
-  });
-
-  if (result.isConfirmed) {
-    router.delete(
-      route("admin.categories.trash.permanently.delete", {
-        page: usePage().props.ziggy.query?.page,
-        per_page: usePage().props.ziggy.query?.per_page,
-        sort: params.sort,
-        direction: params.direction,
-        deleted_from: usePage().props.ziggy.query?.deleted_from,
-        deleted_until: usePage().props.ziggy.query?.deleted_until,
-      }),
-      {
-        preserveScroll: true,
-        onSuccess: () => {
-          if (usePage().props.flash.successMessage) {
-            swal({
-              icon: "success",
-              title: __(usePage().props.flash.successMessage),
-            });
-          }
-        },
-      }
-    );
-  }
-};
+const {
+  restoreAction,
+  restoreSelectedAction,
+  restoreAllAction,
+  permanentDeleteAction,
+  permanentDeleteSelectedAction,
+  permanentDeleteAllAction,
+} = useResourceActions();
 </script>
 
 <template>
   <AdminDashboardLayout>
-    <Head :title="__('TRASH_CATEGORIES')" />
-
-    <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <div class="flex items-center justify-between mb-10">
-        <Breadcrumb>
-          <li aria-current="page">
-            <div class="flex items-center">
-              <svg
-                aria-hidden="true"
-                class="w-6 h-6 text-gray-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <span
-                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-              >
-                {{ __("TRASH") }}
-              </span>
-            </div>
-          </li>
+    <Head :title="__('Deleted :label', { label: __('Category') })" />
+    <!-- Breadcrumb And Go back Button  -->
+    <div class="min-h-screen py-10 font-poppins">
+      <div
+        class="flex flex-col items-start md:flex-row md:items-center md:justify-between mb-4 md:mb-8"
+      >
+        <Breadcrumb :to="categoryList" icon="fa-list" label="Categories">
+          <BreadcrumbLinkItem label="Trash" :to="trashedCategoryList" />
+          <BreadcrumbItem label="List" />
         </Breadcrumb>
 
-        <!-- Go Back Button -->
-        <div>
-          <GoBackButton
-            href="admin.categories.index"
-            :queryStringParams="{
+        <div class="w-full flex items-center justify-end">
+          <InertiaLinkButton
+            :to="categoryList"
+            :data="{
               page: 1,
-              per_page: 10,
+              per_page: 5,
               sort: 'id',
               direction: 'desc',
             }"
-          />
+          >
+            <i class="fa-solid fa-left-long"></i>
+            {{ __("Go Back") }}
+          </InertiaLinkButton>
         </div>
       </div>
 
-      <div class="flex items-center justify-end mb-5">
-        <!-- Search Box -->
-        <DashboardSearchInputForm
-          href="admin.categories.trash"
-          placeholder="SEARCH_BY_NAME"
-        />
-        <!-- Perpage Select Box -->
-        <div class="ml-5">
-          <DashboardPerPageSelectBox href="admin.categories.trash" />
-        </div>
-
-        <!-- Filter By Date -->
-        <DashboardFilterByDeletedDate href="admin.categories.trash" />
-      </div>
-
-      <!-- Category Permanently Delete Button -->
-      <p
-        v-if="categoryTrashDelete && trashCategories.data.length !== 0"
+      <!-- Message -->
+      <div
+        v-if="
+          can('categories.force.delete') && trashedCategories.data.length !== 0
+        "
         class="text-left text-sm font-bold mb-2 text-warning-600"
       >
         {{
           __(
-            "CATEGORIES_IN_THE_TRASH_WILL_BE_AUTOMATICALLY_DELETED_AFTER_60_DAYS"
+            ":label in the trash will be automatically deleted after 60 days",
+            { label: __("Categories") }
           )
         }}
 
-        <EmptyTrashButton @click="handlePermanentlyDeleteTrashCategories" />
-      </p>
-
-      <!-- Trash Category Table Start -->
-      <TableContainer>
-        <TableHeader>
-          <HeaderTh @click="updateSorting('id')">
-            No
-            <SortingArrows :params="params" sort="id" />
-          </HeaderTh>
-
-          <HeaderTh> {{ __("IMAGE") }} </HeaderTh>
-
-          <HeaderTh @click="updateSorting('name')">
-            {{ __("NAME") }}
-            <SortingArrows :params="params" sort="name" />
-          </HeaderTh>
-
-          <HeaderTh @click="updateSorting('deleted_at')">
-            {{ __("DELETED_DATE") }}
-            <SortingArrows :params="params" sort="deleted_at" />
-          </HeaderTh>
-
-          <HeaderTh v-if="categoryTrashRestore || categoryTrashDelete">
-            {{ __("ACTION") }}
-          </HeaderTh>
-        </TableHeader>
-
-        <tbody v-if="trashCategories.data.length">
-          <Tr
-            v-for="trashCategory in trashCategories.data"
-            :key="trashCategory.id"
-          >
-            <BodyTh>
-              {{ trashCategory.id }}
-            </BodyTh>
-
-            <Td>
-              <img :src="trashCategory.image" class="image" />
-            </Td>
-
-            <Td>
-              {{ trashCategory.name }}
-            </Td>
-
-            <Td>
-              {{ trashCategory.deleted_at }}
-            </Td>
-
-            <Td
-              v-if="categoryTrashRestore || categoryTrashDelete"
-              class="flex items-center"
-            >
-              <!-- Restore Button -->
-              <div v-if="categoryTrashRestore">
-                <RestoreButton
-                  @click="handleRestoreTrashCategory(trashCategory.id)"
-                />
-              </div>
-
-              <!-- Delete Button -->
-              <div v-if="categoryTrashDelete">
-                <DeleteForeverButton
-                  @click="handleDeleteTrashCategory(trashCategory.id)"
-                />
-              </div>
-            </Td>
-          </Tr>
-        </tbody>
-      </TableContainer>
-      <!-- Trash Category Table End -->
-
-      <!-- No Data Row -->
-      <NotAvaliableData v-if="!trashCategories.data.length" />
-
-      <!-- Pagination -->
-      <div v-if="trashCategories.data.length" class="mt-6">
-        <p class="text-center text-sm text-gray-600 mb-3 font-bold">
-          Showing {{ trashCategories.from }} - {{ trashCategories.to }} of
-          {{ trashCategories.total }}
-        </p>
-        <Pagination :links="trashCategories.links" />
+        <EmptyTrashButton
+          @click="
+            permanentDeleteAllAction(
+              'Category',
+              'admin.categories.force-delete.all'
+            )
+          "
+        />
       </div>
+
+      <!-- Table Start -->
+      <div class="border bg-white rounded-md shadow px-5 py-3">
+        <div
+          class="my-5 flex flex-col sm:flex-row space-y-5 sm:space-y-0 items-center justify-between"
+        >
+          <DashboardTableDataSearchBox
+            :placeholder="__('Search by :label', { label: __('Name') }) + '...'"
+            :to="trashedCategoryList"
+          />
+
+          <div class="flex items-center justify-end w-full md:space-x-5">
+            <DashboardTableDataPerPageSelectBox :to="trashedCategoryList" />
+
+            <DashboardTableFilterByDate :to="trashedCategoryList" />
+          </div>
+        </div>
+
+        <TableContainer>
+          <ActionTable :items="trashedCategories.data">
+            <!-- Table Actions -->
+            <template #bulk-actions="{ selectedItems }">
+              <div v-show="can('categories.restore')">
+                <BulkActionButton
+                  @click="
+                    restoreSelectedAction(
+                      'Categories',
+                      'admin.categories.restore.selected',
+                      selectedItems
+                    )
+                  "
+                >
+                  <i class="fa-solid fa-recycle"></i>
+                  {{ __("Restore Selected") }} ({{ selectedItems.length }})
+                </BulkActionButton>
+                <BulkActionButton
+                  @click="
+                    restoreAllAction('Category', 'admin.categories.restore.all')
+                  "
+                >
+                  <i class="fa-solid fa-recycle"></i>
+                  {{ __("Restore All") }} ({{ trashedCategories.total }})
+                </BulkActionButton>
+              </div>
+              <div v-show="can('categories.force.delete')">
+                <BulkActionButton
+                  @click="
+                    permanentDeleteSelectedAction(
+                      'Categories',
+                      'admin.categories.force-delete.selected',
+                      selectedItems
+                    )
+                  "
+                >
+                  <i class="fa-solid fa-trash-can"></i>
+                  {{ __("Delete Selected") }} ({{ selectedItems.length }})
+                </BulkActionButton>
+                <BulkActionButton
+                  @click="
+                    permanentDeleteAllAction(
+                      'Category',
+                      'admin.categories.force-delete.all'
+                    )
+                  "
+                  class="text-red-600"
+                >
+                  <i class="fa-solid fa-trash-can"></i>
+                  {{ __("Delete All") }} ({{ trashedCategories.total }})
+                </BulkActionButton>
+              </div>
+            </template>
+
+            <!-- Table Header -->
+            <template #table-header>
+              <SortableTableHeaderCell
+                label="# No"
+                :to="categoryList"
+                sort="id"
+              />
+
+              <TableHeaderCell label="Image" />
+
+              <SortableTableHeaderCell
+                label="Name"
+                :to="categoryList"
+                sort="name"
+              />
+
+              <TableHeaderCell label="Status" />
+
+              <TableHeaderCell label="Actions" />
+            </template>
+
+            <!-- Table Body -->
+            <template #table-data="{ item }">
+              <TableDataCell>
+                {{ item?.id }}
+              </TableDataCell>
+
+              <TableDataCell>
+                <Image :src="item?.image" />
+              </TableDataCell>
+
+              <TableDataCell>
+                {{ item?.name }}
+              </TableDataCell>
+
+              <TableActionCell>
+                <NormalButton
+                  v-show="can('categories.restore')"
+                  @click="
+                    restoreAction('Category', 'admin.categories.restore', item)
+                  "
+                >
+                  <i class="fa-solid fa-recycle"></i>
+                  {{ __("Restore") }}
+                </NormalButton>
+
+                <NormalButton
+                  v-show="can('categories.force.delete')"
+                  @click="
+                    permanentDeleteAction(
+                      'Category',
+                      'admin.categories.force-delete',
+                      item
+                    )
+                  "
+                  class="bg-red-600 text-white ring-2 ring-red-300"
+                >
+                  <i class="fa-solid fa-trash-can"></i>
+                  {{ __("Delete Forever") }}
+                </NormalButton>
+              </TableActionCell>
+            </template>
+          </ActionTable>
+        </TableContainer>
+
+        <Pagination :data="trashedCategories" />
+
+        <NoTableData v-show="!trashedCategories.data.length" />
+      </div>
+      <!-- Table End -->
     </div>
   </AdminDashboardLayout>
 </template>

@@ -18,7 +18,6 @@
     "Brand Name": "Brand Name",
     "Enter :label": "Enter :label",
     "Brand Description": "Brand Description",
-    "Category": "Category",
     "Select Option": "Select Option",
     "Brand Image": "Brand Image",
     "E-commerce Administration": "E-commerce Administration",
@@ -84,5 +83,13 @@
     "collection": "collection",
     "Collection Title": "Collection Title",
     "Collection Description": "Collection Description",
-    "Title": "Title"
+    "Title": "Title",
+    "Categories": "Categories",
+    "categories": "categories",
+    "Category": "Category",
+    "category": "category",
+    "Category Name":"Category Name",
+    "Parent Category":"Parent Category",
+    "Status":"Status",
+    "Category Image":"Category Image"
 }

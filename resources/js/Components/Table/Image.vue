@@ -11,6 +11,7 @@ defineProps({
 
 <template>
   <div class="w-16 h-16 border border-slate-300 overflow-hidden rounded-md">
-    <img :src="src" :alt="src" class="w-full h-full object-cover" />
+    <img v-if="src" :src="src" :alt="src" class="w-full h-full object-cover" />
+    <img v-else :src="image" :alt="src" class="w-full h-full object-cover" />
   </div>
 </template>

@@ -140,7 +140,7 @@ const toggleCollapseShow = (classes) => {
           </li>
 
           <!-- Collections -->
-          <li class="items-center">
+          <li v-show="can('collections.view')" class="items-center">
             <Link
               :href="route('admin.collections.index')"
               :data="{
@@ -163,7 +163,7 @@ const toggleCollapseShow = (classes) => {
           </li>
 
           <!-- Categories -->
-          <li class="items-center">
+          <li v-show="can('categories.view')" class="items-center">
             <Link
               :href="route('admin.categories.index')"
               :data="{
@@ -181,7 +181,7 @@ const toggleCollapseShow = (classes) => {
               }"
             >
               <i class="fa-solid fa-list mr-2 text-sm"></i>
-              {{ __("CATEGORIES") }}
+              {{ __("Categories") }}
             </Link>
           </li>
 

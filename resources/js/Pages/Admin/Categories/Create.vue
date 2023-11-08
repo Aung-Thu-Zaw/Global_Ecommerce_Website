@@ -1,205 +1,142 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/CategoryBreadcrumb.vue";
-import InputError from "@/Components/Forms/InputError.vue";
-import InputLabel from "@/Components/Forms/InputLabel.vue";
-import TextInput from "@/Components/Forms/TextInput.vue";
-import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
-import SaveButton from "@/Components/Buttons/SaveButton.vue";
-import { useForm, Head } from "@inertiajs/vue3";
-import { useReCaptcha } from "vue-recaptcha-v3";
-import { ref } from "vue";
+import Breadcrumb from "@/Components/Breadcrumbs/Breadcrumb.vue";
+import BreadcrumbItem from "@/Components/Breadcrumbs/BreadcrumbItem.vue";
+import PreviewImage from "@/Components/Forms/Fields/PreviewImage.vue";
+import InputLabel from "@/Components/Forms/Fields/InputLabel.vue";
+import InputError from "@/Components/Forms/Fields/InputError.vue";
+import InputField from "@/Components/Forms/Fields/InputField.vue";
+import SelectBox from "@/Components/Forms/Fields/SelectBox.vue";
+import FileInput from "@/Components/Forms/Fields/FileInput.vue";
+import FormButton from "@/Components/Buttons/FormButton.vue";
+import InertiaLinkButton from "@/Components/Buttons/InertiaLinkButton.vue";
+import { useImagePreview } from "@/Composables/useImagePreview";
+import { useResourceActions } from "@/Composables/useResourceActions";
+import { Head } from "@inertiajs/vue3";
+import { useQueryStringParams } from "@/Composables/useQueryStringParams";
 
-// Define the props
-const props = defineProps({
-  per_page: String,
-  categories: Object,
-});
+defineProps({ categories: Object });
 
-// Define Variables
-const processing = ref(false);
-const previewPhoto = ref("");
+const categoryList = "admin.categories.index";
 
-// Handle Preview Image
-const getPreviewPhotoPath = (path) => {
-  previewPhoto.value.src = URL.createObjectURL(path);
+const { queryStringParams } = useQueryStringParams();
+
+const { previewImage, setImagePreview } = useImagePreview();
+
+const handleChangeImage = (file) => {
+  setImagePreview(file);
+  form.image = file;
 };
 
-// Category Create Form Data
-const form = useForm({
-  parent_id: "",
-  name: "",
-  status: "",
-  image: "",
-  captcha_token: null,
+const { form, processing, errors, createAction } = useResourceActions({
+  parent_id: null,
+  name: null,
+  status: null,
+  image: null,
 });
-
-// Destructing ReCaptcha
-const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
-
-// Handle Create Category
-const handleCreateCategory = async () => {
-  await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("create_category");
-
-  processing.value = true;
-  form.post(
-    route("admin.categories.store", {
-      page: 1,
-      per_page: props.per_page,
-      sort: "id",
-      direction: "desc",
-    }),
-    {
-      replace: true,
-      preserveState: true,
-      onFinish: () => {
-        processing.value = false;
-      },
-    }
-  );
-};
 </script>
 
 <template>
   <AdminDashboardLayout>
-    <Head :title="__('CREATE_CATEGORY')" />
-    <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <div class="flex items-center justify-between mb-10">
-        <!-- Breadcrumb -->
-        <Breadcrumb>
-          <li aria-current="page">
-            <div class="flex items-center">
-              <svg
-                aria-hidden="true"
-                class="w-6 h-6 text-gray-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <span
-                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-                >{{ __("CREATE") }}
-              </span>
-            </div>
-          </li>
+    <Head :title="__('Create :label', { label: __('Category') })" />
+    <div class="min-h-screen py-10 font-poppins">
+      <div
+        class="flex flex-col items-start md:flex-row md:items-center md:justify-between mb-4 md:mb-8"
+      >
+        <Breadcrumb :to="categoryList" icon="fa-list" label="Categories">
+          <BreadcrumbItem label="Create" />
         </Breadcrumb>
 
-        <!-- Go Back button -->
-        <div>
-          <GoBackButton
-            href="admin.categories.index"
-            :queryStringParams="{
-              page: 1,
-              per_page: props.per_page,
-              sort: 'id',
-              direction: 'desc',
-            }"
-          />
+        <div class="w-full flex items-center justify-end">
+          <GoBackButton :to="categoryList" />
+
+          <InertiaLinkButton :to="categoryList" :data="queryStringParams">
+            <i class="fa-solid fa-left-long"></i>
+            {{ __("Go Back") }}
+          </InertiaLinkButton>
         </div>
       </div>
 
-      <div class="border shadow-md p-10">
-        <!-- Preview Image -->
-        <div class="mb-6">
-          <img
-            ref="previewPhoto"
-            src="https://media.istockphoto.com/id/1357365823/vector/default-image-icon-vector-missing-picture-page-for-website-design-or-mobile-app-no-photo.jpg?s=612x612&w=0&k=20&c=PM_optEhHBTZkuJQLlCjLz-v3zzxp-1mpNQZsdjrbns="
-            alt=""
-            class="preview-img"
-          />
-        </div>
-        <form @submit.prevent="handleCreateCategory">
-          <!-- Category Name Input -->
-          <div class="mb-6">
-            <InputLabel for="name" :value="__('CATEGORY_NAME') + ' *'" />
+      <!-- Form Start -->
+      <div class="border p-10 bg-white rounded-md">
+        <form
+          @submit.prevent="createAction('Category', 'admin.categories.store')"
+          class="space-y-4 md:space-y-6"
+        >
+          <PreviewImage :src="previewImage" />
 
-            <TextInput
-              id="name"
+          <div>
+            <InputLabel :label="__('Category Name')" required />
+
+            <InputField
               type="text"
-              class="mt-1 block w-full"
+              name="category-name"
               v-model="form.name"
+              :placeholder="__('Enter Category Name')"
+              autofocus
               required
-              :placeholder="__('ENTER_CATEGORY_NAME')"
             />
 
-            <InputError class="mt-2" :message="form.errors.name" />
+            <InputError :message="errors?.name" />
           </div>
 
-          <!-- Parent Category Select Box -->
-          <div class="mb-6">
-            <InputLabel for="parent_category" :value="__('PARENT_CATEGORY')" />
+          <div>
+            <InputLabel :label="__('Parent Category')" />
 
-            <select
-              class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+            <SelectBox
+              name="parent-category"
+              :options="categories"
               v-model="form.parent_id"
-            >
-              <option value="" selected disabled>
-                {{ __("SELECT_PARENT_CATEGORY") }}
-              </option>
-              <option
-                v-for="category in categories"
-                :key="category"
-                :value="category.id"
-              >
-                {{ category.name }}
-              </option>
-            </select>
-
-            <InputError class="mt-2" :message="form.errors.parent_id" />
-          </div>
-
-          <!-- Status Select Box -->
-          <div class="mb-6">
-            <InputLabel for="status" :value="__('STATUS') + ' *'" />
-
-            <select
-              class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
-              v-model="form.status"
-            >
-              <option value="" selected disabled>
-                {{ __("SELECT_STATUS") }}
-              </option>
-              <option value="show">Show</option>
-              <option value="hide">Hide</option>
-            </select>
-
-            <InputError class="mt-2" :message="form.errors.status" />
-          </div>
-
-          <!-- Category File Input -->
-          <div class="mb-6">
-            <InputLabel for="image" :value="__('IMAGE')" />
-
-            <input
-              class="file-input"
-              type="file"
-              id="image"
-              @input="form.image = $event.target.files[0]"
-              @change="getPreviewPhotoPath($event.target.files[0])"
+              :placeholder="__('Select Option')"
             />
 
-            <span class="text-xs text-gray-500">
-              SVG, PNG, JPG, JPEG, WEBP or GIF (Max File size : 5 MB)
-            </span>
-
-            <InputError class="mt-2" :message="form.errors.image" />
+            <InputError :message="errors?.parent_id" />
           </div>
 
-          <!-- Save Button -->
-          <div class="mb-6">
-            <SaveButton :processing="processing" />
+          <div>
+            <InputLabel :label="__('Status')" required />
+
+            <SelectBox
+              name="status"
+              :options="[
+                {
+                  label: 'Show',
+                  value: 'show',
+                },
+                {
+                  label: 'Hide',
+                  value: 'hide',
+                },
+              ]"
+              v-model="form.status"
+              :placeholder="__('Select Option')"
+              required
+            />
+
+            <InputError :message="errors?.status" />
           </div>
+
+          <div>
+            <InputLabel :label="__('Category Image')" />
+
+            <FileInput
+              name="category-image"
+              v-model="form.image"
+              text="PNG, JPG or JPEG ( Max File Size : 1.5 MB )"
+              @update:modelValue="handleChangeImage"
+            />
+
+            <InputError :message="errors?.image" />
+          </div>
+
+          <InputError :message="errors?.captcha_token" />
+
+          <FormButton type="submit" :processing="processing">
+            {{ __("Create") }}
+          </FormButton>
         </form>
       </div>
+      <!-- Form End -->
     </div>
   </AdminDashboardLayout>
 </template>
-
-
