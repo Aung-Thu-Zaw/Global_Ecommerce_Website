@@ -24,9 +24,9 @@ class AdminCategoryController extends Controller
         $this->middleware('permission:categories.view', ['only' => ['index']]);
         $this->middleware('permission:categories.create', ['only' => ['create', 'store']]);
         $this->middleware('permission:categories.edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:categories.delete', ['only' => ['destroy', 'destroySelected', 'destroyAll']]);
+        $this->middleware('permission:categories.delete', ['only' => ['destroy', 'destroySelected']]);
         $this->middleware('permission:categories.view.trash', ['only' => ['trashed']]);
-        $this->middleware('permission:categories.restore', ['only' => ['restore', 'restoreSelected', 'restoreAll']]);
+        $this->middleware('permission:categories.restore', ['only' => ['restore', 'restoreSelected']]);
         $this->middleware('permission:categories.force.delete', ['only' => ['forceDelete', 'forceDeleteSelected', 'forceDeleteAll']]);
     }
 
@@ -87,17 +87,6 @@ class AdminCategoryController extends Controller
         return to_route('admin.categories.index', $this->getQueryStringParams($request))->with('success', 'Selected :label have been successfully deleted.');
     }
 
-    public function destroyAll(Request $request): RedirectResponse
-    {
-        $categories = Category::all();
-
-        $categories->each(function ($category) {
-            $category->delete();
-        });
-
-        return to_route('admin.categories.index', $this->getQueryStringParams($request))->with('success', 'All :label have been successfully deleted.');
-    }
-
     public function trashed(): Response|ResponseFactory
     {
         $trashedCategories = Category::search(request('search'))
@@ -125,17 +114,6 @@ class AdminCategoryController extends Controller
         }
 
         return to_route('admin.categories.trashed', $this->getQueryStringParams($request))->with('success', 'Selected :label have been successfully restored.');
-    }
-
-    public function restoreAll(Request $request): RedirectResponse
-    {
-        $categories = Category::onlyTrashed()->get();
-
-        $categories->each(function ($category) {
-            $category->restore();
-        });
-
-        return to_route('admin.categories.trashed', $this->getQueryStringParams($request))->with('success', 'All :label have been successfully restored.');
     }
 
     public function forceDelete(Request $request, int $trashCategoryId): RedirectResponse

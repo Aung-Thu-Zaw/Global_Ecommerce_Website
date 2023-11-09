@@ -89,11 +89,9 @@ Route::middleware(['admin', 'verified', 'user.role:admin'])
             ->name('brands.')
             ->group(function () {
                 Route::delete('/destroy/selected', 'destroySelected')->name('destroy.selected');
-                Route::delete('/destroy/all', 'destroyAll')->name('destroy.all');
                 Route::get('/', 'trashed')->name('trashed');
                 Route::post('/{id}/restore', 'restore')->name('restore');
                 Route::post('/restore/selected', 'restoreSelected')->name('restore.selected');
-                Route::post('/restore/all', 'restoreAll')->name('restore.all');
                 Route::delete('/{id}/force-delete', 'forceDelete')->name('force-delete');
                 Route::delete('/force-delete/selected', 'forceDeleteSelected')->name('force-delete.selected');
                 Route::delete('/force-delete/all', 'forceDeleteAll')->name('force-delete.all');
@@ -106,11 +104,9 @@ Route::middleware(['admin', 'verified', 'user.role:admin'])
             ->name('collections.')
             ->group(function () {
                 Route::delete('/destroy/selected', 'destroySelected')->name('destroy.selected');
-                Route::delete('/destroy/all', 'destroyAll')->name('destroy.all');
                 Route::get('/', 'trashed')->name('trashed');
                 Route::post('/{id}/restore', 'restore')->name('restore');
                 Route::post('/restore/selected', 'restoreSelected')->name('restore.selected');
-                Route::post('/restore/all', 'restoreAll')->name('restore.all');
                 Route::delete('/{id}/force-delete', 'forceDelete')->name('force-delete');
                 Route::delete('/force-delete/selected', 'forceDeleteSelected')->name('force-delete.selected');
                 Route::delete('/force-delete/all', 'forceDeleteAll')->name('force-delete.all');
@@ -123,11 +119,9 @@ Route::middleware(['admin', 'verified', 'user.role:admin'])
             ->name('categories.')
             ->group(function () {
                 Route::delete('/destroy/selected', 'destroySelected')->name('destroy.selected');
-                Route::delete('/destroy/all', 'destroyAll')->name('destroy.all');
                 Route::get('/', 'trashed')->name('trashed');
                 Route::post('/{id}/restore', 'restore')->name('restore');
                 Route::post('/restore/selected', 'restoreSelected')->name('restore.selected');
-                Route::post('/restore/all', 'restoreAll')->name('restore.all');
                 Route::delete('/{id}/force-delete', 'forceDelete')->name('force-delete');
                 Route::delete('/force-delete/selected', 'forceDeleteSelected')->name('force-delete.selected');
                 Route::delete('/force-delete/all', 'forceDeleteAll')->name('force-delete.all');
@@ -184,11 +178,9 @@ Route::middleware(['admin', 'verified', 'user.role:admin'])
             ->name('coupons.')
             ->group(function () {
                 Route::delete('/destroy/selected', 'destroySelected')->name('destroy.selected');
-                Route::delete('/destroy/all', 'destroyAll')->name('destroy.all');
                 Route::get('/', 'trashed')->name('trashed');
                 Route::post('/{id}/restore', 'restore')->name('restore');
                 Route::post('/restore/selected', 'restoreSelected')->name('restore.selected');
-                Route::post('/restore/all', 'restoreAll')->name('restore.all');
                 Route::delete('/{id}/force-delete', 'forceDelete')->name('force-delete');
                 Route::delete('/force-delete/selected', 'forceDeleteSelected')->name('force-delete.selected');
                 Route::delete('/force-delete/all', 'forceDeleteAll')->name('force-delete.all');

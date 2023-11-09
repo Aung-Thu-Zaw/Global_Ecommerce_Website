@@ -23,9 +23,9 @@ class AdminCollectionController extends Controller
         $this->middleware('permission:collections.view', ['only' => ['index']]);
         $this->middleware('permission:collections.create', ['only' => ['create', 'store']]);
         $this->middleware('permission:collections.edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:collections.delete', ['only' => ['destroy', 'destroySelected', 'destroyAll']]);
+        $this->middleware('permission:collections.delete', ['only' => ['destroy', 'destroySelected']]);
         $this->middleware('permission:collections.view.trash', ['only' => ['trashed']]);
-        $this->middleware('permission:collections.restore', ['only' => ['restore', 'restoreSelected', 'restoreAll']]);
+        $this->middleware('permission:collections.restore', ['only' => ['restore', 'restoreSelected']]);
         $this->middleware('permission:collections.force.delete', ['only' => ['forceDelete', 'forceDeleteSelected', 'forceDeleteAll']]);
     }
 
@@ -79,17 +79,6 @@ class AdminCollectionController extends Controller
         return to_route('admin.collections.index', $this->getQueryStringParams($request))->with('success', 'Selected :label have been successfully deleted.');
     }
 
-    public function destroyAll(Request $request): RedirectResponse
-    {
-        $collections = Collection::all();
-
-        $collections->each(function ($collection) {
-            $collection->delete();
-        });
-
-        return to_route('admin.collections.index', $this->getQueryStringParams($request))->with('success', 'All :label have been successfully deleted.');
-    }
-
     public function trashed(): Response|ResponseFactory
     {
         $trashedCollections = Collection::search(request('search'))
@@ -117,17 +106,6 @@ class AdminCollectionController extends Controller
         }
 
         return to_route('admin.collections.trashed', $this->getQueryStringParams($request))->with('success', 'Selected :label have been successfully restored.');
-    }
-
-    public function restoreAll(Request $request): RedirectResponse
-    {
-        $collections = Collection::onlyTrashed()->get();
-
-        $collections->each(function ($collection) {
-            $collection->restore();
-        });
-
-        return to_route('admin.collections.trashed', $this->getQueryStringParams($request))->with('success', 'All :label have been successfully restored.');
     }
 
     public function forceDelete(Request $request, int $trashCollectionId): RedirectResponse

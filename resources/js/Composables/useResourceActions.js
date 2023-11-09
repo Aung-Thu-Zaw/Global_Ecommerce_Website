@@ -195,49 +195,6 @@ export function useResourceActions(formFields = {}) {
         }
     };
 
-    // Soft Delete All Action
-    const softDeleteAllAction = async (model, deleteRouteName) => {
-        const result = await swal({
-            icon: "question",
-            title: __("Delete All :label", {
-                label: __(formatToTitleCase(model)),
-            }),
-            text:
-                __("Are you sure you would like to do this?") +
-                __("It can be restored within 60 days."),
-            showCancelButton: true,
-            showCancelButton: true,
-            confirmButtonText: __("Confirm"),
-            cancelButtonText: __("Cancel"),
-            confirmButtonColor: "#d52222",
-            cancelButtonColor: "#626262",
-            timer: 20000,
-            timerProgressBar: true,
-            reverseButtons: true,
-        });
-
-        if (result.isConfirmed) {
-            router.delete(
-                route(deleteRouteName, {
-                    ...queryStringParams.value,
-                }),
-                {
-                    preserveScroll: true,
-                    onSuccess: () => {
-                        const successMessage =
-                            usePage().props.flash.successMessage;
-                        if (successMessage) {
-                            swal({
-                                icon: "success",
-                                title: __(successMessage, { label: __(model) }),
-                            });
-                        }
-                    },
-                }
-            );
-        }
-    };
-
     // Restore Action
     const restoreAction = async (model, restoreRouteName, targetIdentifier) => {
         const result = await swal({
@@ -309,48 +266,6 @@ export function useResourceActions(formFields = {}) {
                 route(restoreRouteName, {
                     selectedItems,
                 }),
-                {
-                    ...queryStringParams.value,
-                },
-                {
-                    preserveScroll: true,
-                    onSuccess: () => {
-                        const successMessage =
-                            usePage().props.flash.successMessage;
-
-                        if (successMessage) {
-                            swal({
-                                icon: "success",
-                                title: __(successMessage, { label: __(model) }),
-                            });
-                        }
-                    },
-                }
-            );
-        }
-    };
-
-    // Restore All Action
-    const restoreAllAction = async (model, restoreRouteName) => {
-        const result = await swal({
-            icon: "question",
-            title: __("Restore All :label", {
-                label: formatToTitleCase(__(model)),
-            }),
-            text: __("Are you sure you would like to restore these?"),
-            showCancelButton: true,
-            confirmButtonText: __("Confirm"),
-            cancelButtonText: __("Cancel"),
-            confirmButtonColor: "#d52222",
-            cancelButtonColor: "#626262",
-            timer: 20000,
-            timerProgressBar: true,
-            reverseButtons: true,
-        });
-
-        if (result.isConfirmed) {
-            router.post(
-                route(restoreRouteName, {}),
                 {
                     ...queryStringParams.value,
                 },
@@ -467,49 +382,6 @@ export function useResourceActions(formFields = {}) {
         }
     };
 
-    // Permanent Delete All Action
-    const permanentDeleteAllAction = async (model, deleteRouteName) => {
-        const result = await swal({
-            icon: "question",
-            title: __("Permanently Delete All :label", {
-                label: __(formatToTitleCase(model)),
-            }),
-            text: __(
-                "This action cannot be undone. Are you sure you want to permanently delete all :label in the trash?",
-                { label: __(formatToTitleCase(model)) }
-            ),
-            showCancelButton: true,
-            confirmButtonText: __("Confirm"),
-            cancelButtonText: __("Cancel"),
-            confirmButtonColor: "#d52222",
-            cancelButtonColor: "#626262",
-            timer: 20000,
-            timerProgressBar: true,
-            reverseButtons: true,
-        });
-
-        if (result.isConfirmed) {
-            router.delete(
-                route(deleteRouteName, {
-                    ...queryStringParams.value,
-                }),
-                {
-                    preserveScroll: true,
-                    onSuccess: () => {
-                        const successMessage =
-                            usePage().props.flash.successMessage;
-                        if (successMessage) {
-                            swal({
-                                icon: "success",
-                                title: __(successMessage, { label: __(model) }),
-                            });
-                        }
-                    },
-                }
-            );
-        }
-    };
-
     return {
         form,
         processing,
@@ -517,13 +389,10 @@ export function useResourceActions(formFields = {}) {
         editAction,
         softDeleteAction,
         selectedSoftDeleteAction,
-        softDeleteAllAction,
         restoreAction,
         restoreSelectedAction,
-        restoreAllAction,
         permanentDeleteAction,
         permanentDeleteSelectedAction,
-        permanentDeleteAllAction,
         errors,
     };
 }

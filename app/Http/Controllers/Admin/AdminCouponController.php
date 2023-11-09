@@ -23,9 +23,9 @@ class AdminCouponController extends Controller
         $this->middleware('permission:coupons.view', ['only' => ['index']]);
         $this->middleware('permission:coupons.create', ['only' => ['create', 'store']]);
         $this->middleware('permission:coupons.edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:coupons.delete', ['only' => ['destroy', 'destroySelected', 'destroyAll']]);
+        $this->middleware('permission:coupons.delete', ['only' => ['destroy', 'destroySelected']]);
         $this->middleware('permission:coupons.view.trash', ['only' => ['trashed']]);
-        $this->middleware('permission:coupons.restore', ['only' => ['restore', 'restoreSelected', 'restoreAll']]);
+        $this->middleware('permission:coupons.restore', ['only' => ['restore', 'restoreSelected']]);
         $this->middleware('permission:coupons.force.delete', ['only' => ['forceDelete', 'forceDeleteSelected', 'forceDeleteAll']]);
     }
 
@@ -72,22 +72,11 @@ class AdminCouponController extends Controller
 
     public function destroySelected(Request $request): RedirectResponse
     {
-        if (! empty($request->selectedItems)) {
+        if (!empty($request->selectedItems)) {
             Coupon::whereIn('id', $request->selectedItems)->delete();
         }
 
         return to_route('admin.coupons.index', $this->getQueryStringParams($request))->with('success', 'Selected :label have been successfully deleted.');
-    }
-
-    public function destroyAll(Request $request): RedirectResponse
-    {
-        $coupons = Coupon::all();
-
-        $coupons->each(function ($coupon) {
-            $coupon->delete();
-        });
-
-        return to_route('admin.coupons.index', $this->getQueryStringParams($request))->with('success', 'All :label have been successfully deleted.');
     }
 
     public function trashed(): Response|ResponseFactory
@@ -112,22 +101,11 @@ class AdminCouponController extends Controller
 
     public function restoreSelected(Request $request): RedirectResponse
     {
-        if (! empty($request->selectedItems)) {
+        if (!empty($request->selectedItems)) {
             Coupon::onlyTrashed()->whereIn('id', $request->selectedItems)->restore();
         }
 
         return to_route('admin.coupons.trashed', $this->getQueryStringParams($request))->with('success', 'Selected :label have been successfully restored.');
-    }
-
-    public function restoreAll(Request $request): RedirectResponse
-    {
-        $coupons = Coupon::onlyTrashed()->get();
-
-        $coupons->each(function ($coupon) {
-            $coupon->restore();
-        });
-
-        return to_route('admin.coupons.trashed', $this->getQueryStringParams($request))->with('success', 'All :label have been successfully restored.');
     }
 
     public function forceDelete(Request $request, int $trashCouponId): RedirectResponse
@@ -141,7 +119,7 @@ class AdminCouponController extends Controller
 
     public function forceDeleteSelected(Request $request): RedirectResponse
     {
-        if (! empty($request->selectedItems)) {
+        if (!empty($request->selectedItems)) {
             Coupon::onlyTrashed()->whereIn('id', $request->selectedItems)->forceDelete();
         }
 

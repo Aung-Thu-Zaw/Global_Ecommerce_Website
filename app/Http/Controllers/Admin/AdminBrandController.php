@@ -25,9 +25,9 @@ class AdminBrandController extends Controller
         $this->middleware('permission:brands.view', ['only' => ['index']]);
         $this->middleware('permission:brands.create', ['only' => ['create', 'store']]);
         $this->middleware('permission:brands.edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:brands.delete', ['only' => ['destroy', 'destroySelected', 'destroyAll']]);
+        $this->middleware('permission:brands.delete', ['only' => ['destroy', 'destroySelected']]);
         $this->middleware('permission:brands.view.trash', ['only' => ['trashed']]);
-        $this->middleware('permission:brands.restore', ['only' => ['restore', 'restoreSelected', 'restoreAll']]);
+        $this->middleware('permission:brands.restore', ['only' => ['restore', 'restoreSelected']]);
         $this->middleware('permission:brands.force.delete', ['only' => ['forceDelete', 'forceDeleteSelected', 'forceDeleteAll']]);
     }
 
@@ -88,17 +88,6 @@ class AdminBrandController extends Controller
         return to_route('admin.brands.index', $this->getQueryStringParams($request))->with('success', 'Selected :label have been successfully deleted.');
     }
 
-    public function destroyAll(Request $request): RedirectResponse
-    {
-        $brands = Brand::all();
-
-        $brands->each(function ($brand) {
-            $brand->delete();
-        });
-
-        return to_route('admin.brands.index', $this->getQueryStringParams($request))->with('success', 'All :label have been successfully deleted.');
-    }
-
     public function trashed(): Response|ResponseFactory
     {
         $trashedBrands = Brand::search(request('search'))
@@ -126,17 +115,6 @@ class AdminBrandController extends Controller
         }
 
         return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', 'Selected :label have been successfully restored.');
-    }
-
-    public function restoreAll(Request $request): RedirectResponse
-    {
-        $brands = Brand::onlyTrashed()->get();
-
-        $brands->each(function ($brand) {
-            $brand->restore();
-        });
-
-        return to_route('admin.brands.trashed', $this->getQueryStringParams($request))->with('success', 'All :label have been successfully restored.');
     }
 
     public function forceDelete(Request $request, int $trashBrandId): RedirectResponse
