@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Notifications\Products\AdminApprovedCreatedNewProductNotification;
 use App\Notifications\Products\AdminDisapprovedCreatedNewProductNotification;
 
-class CreatedNewProductApporvedOrDisapprovedNotificationSendToSellerDashboardService
+class CreatedNewProductApprovedOrDisapprovedNotificationSendToSellerDashboardService
 {
     public function send(Product $product): void
     {

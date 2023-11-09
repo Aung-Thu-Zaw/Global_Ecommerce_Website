@@ -204,7 +204,7 @@ const toggleCollapseShow = (classes) => {
               }"
             >
               <i class="fa-solid fa-basket-shopping mr-2 text-sm"></i>
-              {{ __("PRODUCTS") }}
+              {{ __("Products") }}
             </Link>
           </li>
 

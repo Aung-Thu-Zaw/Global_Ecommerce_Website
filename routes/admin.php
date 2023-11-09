@@ -127,48 +127,63 @@ Route::middleware(['admin', 'verified', 'user.role:admin'])
                 Route::delete('/force-delete/all', 'forceDeleteAll')->name('force-delete.all');
             });
 
-        // Admin Products Section
+        // Admin Products Operations
+        Route::resource('products', AdminProductController::class)->except(['show']);
         Route::controller(AdminProductController::class)
-            ->prefix('/products')
+            ->prefix('/products/trash')
             ->name('products.')
             ->group(function () {
-                Route::get('/', 'index')
-                    ->middleware('permission:product.menu')
-                    ->name('index');
-                Route::get('/{product}/details', 'show')
-                    ->middleware('permission:product.detail')
-                    ->name('show');
-                Route::get('/create', 'create')
-                    ->middleware('permission:product.add')
-                    ->name('create');
-                Route::post('/', 'store')
-                    ->middleware('permission:product.add')
-                    ->name('store');
-                Route::get('/{product}/edit', 'edit')
-                    ->middleware('permission:product.edit')
-                    ->name('edit');
-                Route::post('/{product}', 'update')
-                    ->middleware('permission:product.edit')
-                    ->name('update');
-                Route::patch('/{product}/status', 'handleStatus')
-                    ->middleware('permission:product.control')
-                    ->name('handle.status');
-                Route::delete('/{product}', 'destroy')
-                    ->middleware('permission:product.delete')
-                    ->name('destroy');
-                Route::get('/trash', 'trash')
-                    ->middleware('permission:product.trash.list')
-                    ->name('trash');
-                Route::post('/trash/{trash_product_id}/restore', 'restore')
-                    ->middleware('permission:product.trash.restore')
-                    ->name('trash.restore');
-                Route::delete('/trash/{trash_product_id}/force-delete', 'forceDelete')
-                    ->middleware('permission:product.trash.delete')
-                    ->name('trash.force.delete');
-                Route::delete('/trash/permanently-delete', 'permanentlyDelete')
-                    ->middleware('permission:product.trash.delete')
-                    ->name('trash.permanently.delete');
+                Route::delete('/destroy/selected', 'destroySelected')->name('destroy.selected');
+                Route::get('/', 'trashed')->name('trashed');
+                Route::post('/{id}/restore', 'restore')->name('restore');
+                Route::post('/restore/selected', 'restoreSelected')->name('restore.selected');
+                Route::delete('/{id}/force-delete', 'forceDelete')->name('force-delete');
+                Route::delete('/force-delete/selected', 'forceDeleteSelected')->name('force-delete.selected');
+                Route::delete('/force-delete/all', 'forceDeleteAll')->name('force-delete.all');
             });
+
+        // Admin Products Section
+        // Route::controller(AdminProductController::class)
+        //     ->prefix('/products')
+        //     ->name('products.')
+        //     ->group(function () {
+        //         Route::get('/', 'index')
+        //             ->middleware('permission:product.menu')
+        //             ->name('index');
+        //         Route::get('/{product}/details', 'show')
+        //             ->middleware('permission:product.detail')
+        //             ->name('show');
+        //         Route::get('/create', 'create')
+        //             ->middleware('permission:product.add')
+        //             ->name('create');
+        //         Route::post('/', 'store')
+        //             ->middleware('permission:product.add')
+        //             ->name('store');
+        //         Route::get('/{product}/edit', 'edit')
+        //             ->middleware('permission:product.edit')
+        //             ->name('edit');
+        //         Route::post('/{product}', 'update')
+        //             ->middleware('permission:product.edit')
+        //             ->name('update');
+        //         Route::patch('/{product}/status', 'handleStatus')
+        //             ->middleware('permission:product.control')
+        //             ->name('handle.status');
+        //         Route::delete('/{product}', 'destroy')
+        //             ->middleware('permission:product.delete')
+        //             ->name('destroy');
+        //         Route::get('/trash', 'trash')
+        //             ->middleware('permission:product.trash.list')
+        //             ->name('trash');
+        //         Route::post('/trash/{trash_product_id}/restore', 'restore')
+        //             ->middleware('permission:product.trash.restore')
+        //             ->name('trash.restore');
+        //         Route::delete('/trash/{trash_product_id}/force-delete', 'forceDelete')
+        //             ->middleware('permission:product.trash.delete')
+        //             ->name('trash.force.delete');
+        //         Route::delete('/trash/permanently-delete', 'permanentlyDelete')
+        //             ->middleware('permission:product.trash.delete')
+        //             ->name('trash.permanently.delete');
+        //     });
         Route::delete('products/{product_id}/images/{image_id}', [MultiImageController::class, 'destroy'])->name('image.destroy');
 
         // Admin Coupon Operations
