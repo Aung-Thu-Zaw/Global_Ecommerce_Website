@@ -27,7 +27,7 @@ class AdminBrandController extends Controller
         $this->middleware('permission:brands.edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:brands.delete', ['only' => ['destroy', 'destroySelected', 'destroyAll']]);
         $this->middleware('permission:brands.view.trash', ['only' => ['trashed']]);
-        $this->middleware('permission:brands.restore', ['only' => ['restore','restoreSelected','restoreAll']]);
+        $this->middleware('permission:brands.restore', ['only' => ['restore', 'restoreSelected', 'restoreAll']]);
         $this->middleware('permission:brands.force.delete', ['only' => ['forceDelete', 'forceDeleteSelected', 'forceDeleteAll']]);
     }
 
@@ -81,7 +81,7 @@ class AdminBrandController extends Controller
 
     public function destroySelected(Request $request): RedirectResponse
     {
-        if (!empty($request->selectedItems)) {
+        if (! empty($request->selectedItems)) {
             Brand::whereIn('id', $request->selectedItems)->delete();
         }
 
@@ -121,7 +121,7 @@ class AdminBrandController extends Controller
 
     public function restoreSelected(Request $request): RedirectResponse
     {
-        if (!empty($request->selectedItems)) {
+        if (! empty($request->selectedItems)) {
             Brand::onlyTrashed()->whereIn('id', $request->selectedItems)->restore();
         }
 
@@ -152,7 +152,7 @@ class AdminBrandController extends Controller
 
     public function forceDeleteSelected(Request $request): RedirectResponse
     {
-        if (!empty($request->selectedItems)) {
+        if (! empty($request->selectedItems)) {
             Brand::onlyTrashed()->whereIn('id', $request->selectedItems)->forceDelete();
         }
 

@@ -18,6 +18,17 @@ class AdminCouponController extends Controller
 {
     use HandlesQueryStringParameters;
 
+    public function __construct()
+    {
+        $this->middleware('permission:coupons.view', ['only' => ['index']]);
+        $this->middleware('permission:coupons.create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:coupons.edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:coupons.delete', ['only' => ['destroy', 'destroySelected', 'destroyAll']]);
+        $this->middleware('permission:coupons.view.trash', ['only' => ['trashed']]);
+        $this->middleware('permission:coupons.restore', ['only' => ['restore', 'restoreSelected', 'restoreAll']]);
+        $this->middleware('permission:coupons.force.delete', ['only' => ['forceDelete', 'forceDeleteSelected', 'forceDeleteAll']]);
+    }
+
     public function index(): Response|ResponseFactory
     {
         $coupons = Coupon::search(request('search'))
@@ -30,48 +41,64 @@ class AdminCouponController extends Controller
 
     public function create(): Response|ResponseFactory
     {
-        $per_page = request('per_page');
-
-        return inertia('Admin/Coupons/Create', compact('per_page'));
+        return inertia('Admin/Coupons/Create');
     }
 
     public function store(CouponRequest $request): RedirectResponse
     {
         (new CreateCouponAction())->handle($request->validated());
 
-        return to_route('admin.coupons.index', $this->getQueryStringParams($request))->with('success', 'COUPON_HAS_BEEN_SUCCESSFULLY_CREATED');
+        return to_route('admin.coupons.index', $this->getQueryStringParams($request))->with('success', ':label has been successfully created.');
     }
 
     public function edit(Request $request, Coupon $coupon): Response|ResponseFactory
     {
-        $queryStringParams = $this->getQueryStringParams($request);
-
-        return inertia('Admin/Coupons/Edit', compact('coupon', 'queryStringParams'));
+        return inertia('Admin/Coupons/Edit', compact('coupon'));
     }
 
     public function update(CouponRequest $request, Coupon $coupon): RedirectResponse
     {
         (new UpdateCouponAction())->handle($request->validated(), $coupon);
 
-        return to_route('admin.coupons.index', $this->getQueryStringParams($request))->with('success', 'COUPON_HAS_BEEN_SUCCESSFULLY_UPDATED');
+        return to_route('admin.coupons.index', $this->getQueryStringParams($request))->with('success', ':label has been successfully updated.');
     }
 
     public function destroy(Request $request, Coupon $coupon): RedirectResponse
     {
         $coupon->delete();
 
-        return to_route('admin.coupons.index', $this->getQueryStringParams($request))->with('success', 'COUPON_HAS_BEEN_SUCCESSFULLY_DELETED');
+        return to_route('admin.coupons.index', $this->getQueryStringParams($request))->with('success', ':label has been successfully deleted.');
     }
 
-    public function trash(): Response|ResponseFactory
+    public function destroySelected(Request $request): RedirectResponse
     {
-        $trashCoupons = Coupon::search(request('search'))
+        if (! empty($request->selectedItems)) {
+            Coupon::whereIn('id', $request->selectedItems)->delete();
+        }
+
+        return to_route('admin.coupons.index', $this->getQueryStringParams($request))->with('success', 'Selected :label have been successfully deleted.');
+    }
+
+    public function destroyAll(Request $request): RedirectResponse
+    {
+        $coupons = Coupon::all();
+
+        $coupons->each(function ($coupon) {
+            $coupon->delete();
+        });
+
+        return to_route('admin.coupons.index', $this->getQueryStringParams($request))->with('success', 'All :label have been successfully deleted.');
+    }
+
+    public function trashed(): Response|ResponseFactory
+    {
+        $trashedCoupons = Coupon::search(request('search'))
                               ->onlyTrashed()
                               ->orderBy(request('sort', 'id'), request('direction', 'desc'))
                               ->paginate(request('per_page', 10))
                               ->appends(request()->all());
 
-        return inertia('Admin/Coupons/Trash', compact('trashCoupons'));
+        return inertia('Admin/Coupons/Trash', compact('trashedCoupons'));
     }
 
     public function restore(Request $request, int $trashCouponId): RedirectResponse
@@ -80,7 +107,27 @@ class AdminCouponController extends Controller
 
         $trashCoupon->restore();
 
-        return to_route('admin.coupons.trash', $this->getQueryStringParams($request))->with('success', 'COUPON_HAS_BEEN_SUCCESSFULLY_RESTORED');
+        return to_route('admin.coupons.trashed', $this->getQueryStringParams($request))->with('success', ':label has been successfully restored.');
+    }
+
+    public function restoreSelected(Request $request): RedirectResponse
+    {
+        if (! empty($request->selectedItems)) {
+            Coupon::onlyTrashed()->whereIn('id', $request->selectedItems)->restore();
+        }
+
+        return to_route('admin.coupons.trashed', $this->getQueryStringParams($request))->with('success', 'Selected :label have been successfully restored.');
+    }
+
+    public function restoreAll(Request $request): RedirectResponse
+    {
+        $coupons = Coupon::onlyTrashed()->get();
+
+        $coupons->each(function ($coupon) {
+            $coupon->restore();
+        });
+
+        return to_route('admin.coupons.trashed', $this->getQueryStringParams($request))->with('success', 'All :label have been successfully restored.');
     }
 
     public function forceDelete(Request $request, int $trashCouponId): RedirectResponse
@@ -89,15 +136,24 @@ class AdminCouponController extends Controller
 
         $trashCoupon->forceDelete();
 
-        return to_route('admin.coupons.trash', $this->getQueryStringParams($request))->with('success', 'THE_COUPON_HAS_BEEN_PERMANENTLY_DELETED');
+        return to_route('admin.coupons.trashed', $this->getQueryStringParams($request))->with('success', 'The :label has been permanently deleted.');
     }
 
-    public function permanentlyDelete(Request $request): RedirectResponse
+    public function forceDeleteSelected(Request $request): RedirectResponse
+    {
+        if (! empty($request->selectedItems)) {
+            Coupon::onlyTrashed()->whereIn('id', $request->selectedItems)->forceDelete();
+        }
+
+        return to_route('admin.coupons.trashed', $this->getQueryStringParams($request))->with('success', 'Selected :label have been permanently deleted.');
+    }
+
+    public function forceDeleteAll(Request $request): RedirectResponse
     {
         $trashCoupon = Coupon::onlyTrashed()->get();
 
         (new PermanentlyDeleteAllTrashCouponAction())->handle($trashCoupon);
 
-        return to_route('admin.coupons.trash', $this->getQueryStringParams($request))->with('success', 'COUPONS_HAVE_BEEN_PERMANENTLY_DELETED');
+        return to_route('admin.coupons.trashed', $this->getQueryStringParams($request))->with('success', 'All :label have been permanently deleted.');
     }
 }

@@ -26,7 +26,7 @@ class AdminCategoryController extends Controller
         $this->middleware('permission:categories.edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:categories.delete', ['only' => ['destroy', 'destroySelected', 'destroyAll']]);
         $this->middleware('permission:categories.view.trash', ['only' => ['trashed']]);
-        $this->middleware('permission:categories.restore', ['only' => ['restore','restoreSelected','restoreAll']]);
+        $this->middleware('permission:categories.restore', ['only' => ['restore', 'restoreSelected', 'restoreAll']]);
         $this->middleware('permission:categories.force.delete', ['only' => ['forceDelete', 'forceDeleteSelected', 'forceDeleteAll']]);
     }
 
@@ -80,7 +80,7 @@ class AdminCategoryController extends Controller
 
     public function destroySelected(Request $request): RedirectResponse
     {
-        if (!empty($request->selectedItems)) {
+        if (! empty($request->selectedItems)) {
             Category::whereIn('id', $request->selectedItems)->delete();
         }
 
@@ -97,7 +97,6 @@ class AdminCategoryController extends Controller
 
         return to_route('admin.categories.index', $this->getQueryStringParams($request))->with('success', 'All :label have been successfully deleted.');
     }
-
 
     public function trashed(): Response|ResponseFactory
     {
@@ -121,7 +120,7 @@ class AdminCategoryController extends Controller
 
     public function restoreSelected(Request $request): RedirectResponse
     {
-        if (!empty($request->selectedItems)) {
+        if (! empty($request->selectedItems)) {
             Category::onlyTrashed()->whereIn('id', $request->selectedItems)->restore();
         }
 
@@ -152,7 +151,7 @@ class AdminCategoryController extends Controller
 
     public function forceDeleteSelected(Request $request): RedirectResponse
     {
-        if (!empty($request->selectedItems)) {
+        if (! empty($request->selectedItems)) {
             Category::onlyTrashed()->whereIn('id', $request->selectedItems)->forceDelete();
         }
 

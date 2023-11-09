@@ -1,265 +1,188 @@
 <script setup>
 import AdminDashboardLayout from "@/Layouts/AdminDashboardLayout.vue";
-import Breadcrumb from "@/Components/Breadcrumbs/CouponBreadcrumb.vue";
-import InputError from "@/Components/Forms/InputError.vue";
-import InputLabel from "@/Components/Forms/InputLabel.vue";
-import TextInput from "@/Components/Forms/TextInput.vue";
-import GoBackButton from "@/Components/Buttons/GoBackButton.vue";
-import SaveButton from "@/Components/Buttons/SaveButton.vue";
-import datepicker from "vue3-datepicker";
-import { useForm, Head } from "@inertiajs/vue3";
-import { useReCaptcha } from "vue-recaptcha-v3";
-import { ref, computed } from "vue";
+import Breadcrumb from "@/Components/Breadcrumbs/Breadcrumb.vue";
+import BreadcrumbItem from "@/Components/Breadcrumbs/BreadcrumbItem.vue";
+import InputLabel from "@/Components/Forms/Fields/InputLabel.vue";
+import InputError from "@/Components/Forms/Fields/InputError.vue";
+import InputField from "@/Components/Forms/Fields/InputField.vue";
+import SelectBox from "@/Components/Forms/Fields/SelectBox.vue";
+import FormButton from "@/Components/Buttons/FormButton.vue";
+import Datepicker from "vue3-datepicker";
+import InertiaLinkButton from "@/Components/Buttons/InertiaLinkButton.vue";
+import { useResourceActions } from "@/Composables/useResourceActions";
+import { Head } from "@inertiajs/vue3";
+import { useQueryStringParams } from "@/Composables/useQueryStringParams";
+import { useFormatFunctions } from "@/Composables/useFormatFunctions";
+import { computed, ref } from "vue";
 
-// Define the props
-const props = defineProps({
-  per_page: String,
-});
-
-// Define Variables
-const processing = ref(false);
 const startDate = ref(null);
+
 const endDate = ref(null);
 
-// Format Date
-const formatStartDate = computed(() => {
-  const year = startDate.value ? startDate.value.getFullYear() : "";
-  const month = startDate.value ? startDate.value.getMonth() + 1 : "";
-  const day = startDate.value ? startDate.value.getDate() : "";
+const formatStartDate = computed(() => formatDate(startDate.value));
 
-  return `${year}-${month}-${day}`;
-});
+const formatEndDate = computed(() => formatDate(endDate.value));
 
-const formatEndDate = computed(() => {
-  const year = endDate.value ? endDate.value.getFullYear() : "";
-  const month = endDate.value ? endDate.value.getMonth() + 1 : "";
-  const day = endDate.value ? endDate.value.getDate() : "";
+const couponList = "admin.coupons.index";
 
-  return `${year}-${month}-${day}`;
-});
+const { queryStringParams } = useQueryStringParams();
 
-// Coupon Create Form Data
-const form = useForm({
-  code: "",
-  discount_type: "",
-  discount_amount: "",
-  min_spend: "",
+const { formatDate } = useFormatFunctions();
+
+const { form, processing, errors, createAction } = useResourceActions({
+  code: null,
+  discount_type: null,
+  discount_amount: null,
+  min_spend: null,
   start_date: formatStartDate,
   end_date: formatEndDate,
-  max_uses: "",
-  captcha_token: null,
+  max_uses: null,
 });
-
-// Destructing ReCaptcha
-const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
-
-// Handle Create Coupon
-const handleCreateCoupon = async () => {
-  await recaptchaLoaded();
-  form.captcha_token = await executeRecaptcha("create_coupon");
-
-  processing.value = true;
-  form.post(
-    route("admin.coupons.store", {
-      page: 1,
-      per_page: props.per_page,
-      sort: "id",
-      direction: "desc",
-    }),
-    {
-      replace: true,
-      preserveState: true,
-      onFinish: () => {
-        processing.value = false;
-      },
-    }
-  );
-};
 </script>
 
 <template>
   <AdminDashboardLayout>
-    <Head :title="__('CREATE_COUPON')" />
-    <div class="px-4 md:px-10 mx-auto w-full py-32">
-      <div class="flex items-center justify-between mb-10">
-        <!-- Breadcrumb -->
-        <Breadcrumb>
-          <li aria-current="page">
-            <div class="flex items-center">
-              <svg
-                aria-hidden="true"
-                class="w-6 h-6 text-gray-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <span
-                class="ml-1 font-medium text-gray-500 md:ml-2 dark:text-gray-400"
-              >
-                {{ __("CREATE") }}
-              </span>
-            </div>
-          </li>
+    <Head :title="__('Create :label', { label: __('Coupon') })" />
+    <div class="min-h-screen py-10 font-poppins">
+      <div
+        class="flex flex-col items-start md:flex-row md:items-center md:justify-between mb-4 md:mb-8"
+      >
+        <Breadcrumb :to="couponList" icon="fa-ticket" label="Coupons">
+          <BreadcrumbItem label="Create" />
         </Breadcrumb>
 
-        <!-- Go Back button -->
-        <div>
-          <GoBackButton
-            href="admin.coupons.index"
-            :queryStringParams="{
-              page: 1,
-              per_page: props.per_page,
-              sort: 'id',
-              direction: 'desc',
-            }"
-          />
+        <div class="w-full flex items-center justify-end">
+          <GoBackButton :to="couponList" />
+
+          <InertiaLinkButton :to="couponList" :data="queryStringParams">
+            <i class="fa-solid fa-left-long"></i>
+            {{ __("Go Back") }}
+          </InertiaLinkButton>
         </div>
       </div>
 
-      <div class="border shadow-md p-10">
-        <form @submit.prevent="handleCreateCoupon">
-          <!-- Coupon Code Input -->
-          <div class="mb-6">
-            <InputLabel for="code" :value="__('COUPON_CODE') + ' *'" />
+      <!-- Form Start -->
+      <div class="border p-10 bg-white rounded-md">
+        <form
+          @submit.prevent="createAction('Coupon', 'admin.coupons.store')"
+          class="space-y-4 md:space-y-6"
+        >
+          <div>
+            <InputLabel :label="__('Coupon Code')" required />
 
-            <TextInput
-              id="code"
+            <InputField
               type="text"
-              class="mt-1 block w-full"
+              name="coupon-code"
               v-model="form.code"
+              :placeholder="__('Enter Coupon Code')"
+              autofocus
               required
-              :placeholder="__('ENTER_COUPON_CODE')"
             />
 
-            <InputError class="mt-2" :message="form.errors.code" />
+            <InputError :message="errors?.code" />
           </div>
 
-          <!-- Coupon Type Select Box -->
-          <div class="mb-6">
-            <InputLabel
-              for="discount_type"
-              :value="__('COUPON_DISCOUNT_TYPE') + ' *'"
-            />
+          <div>
+            <InputLabel :label="__('Discount Type')" required />
 
-            <select
-              class="p-[15px] w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 text-sm"
+            <SelectBox
+              name="discount-type"
+              :options="[
+                {
+                  label: 'Percentage',
+                  value: 'percentage',
+                },
+                {
+                  label: 'Fixed Amount',
+                  value: 'fixed_amount',
+                },
+              ]"
               v-model="form.discount_type"
-            >
-              <option value="" selected disabled>
-                {{ __("SELECT_DISCOUNT_TYPE") }}
-              </option>
-              <option value="percentage">Percentage</option>
-              <option value="fixed_amount">Fixed Amount</option>
-            </select>
-
-            <InputError class="mt-2" :message="form.errors.discount_type" />
-          </div>
-
-          <!-- Coupon Amount Input -->
-          <div class="mb-6">
-            <InputLabel
-              for="discount_amount"
-              :value="__('COUPON_DISCOUNT_AMOUNT') + ' *'"
-            />
-
-            <TextInput
-              id="discount_amount"
-              type="text"
-              class="mt-1 block w-full"
-              v-model="form.discount_amount"
+              :placeholder="__('Select Option')"
               required
-              :placeholder="__('ENTER_DISCOUNT_AMOUNT')"
-            >
-              <template v-slot:icon>
-                <span
-                  v-if="form.discount_type === 'fixed_amount'"
-                  class="text-slate-500"
-                >
-                  $
-                </span>
-                <span
-                  v-else-if="form.discount_type === 'percentage'"
-                  class="text-slate-500"
-                >
-                  %
-                </span>
-              </template>
-            </TextInput>
-            <InputError class="mt-2" :message="form.errors.discount_amount" />
+            />
+
+            <InputError :message="errors?.discount_type" />
           </div>
 
-          <!-- Coupon Min Spend Input -->
-          <div class="mb-6">
-            <InputLabel for="min_spend" :value="__('MINIMUN_SPEND') + ' *'" />
+          <div>
+            <InputLabel :label="__('Discount Amount')" required />
 
-            <TextInput
-              id="min_spend"
-              type="text"
-              class="mt-1 block w-full"
+            <InputField
+              type="number"
+              name="discount-amount"
+              v-model="form.discount_amount"
+              :placeholder="__('Enter Discount Amount')"
+              required
+            />
+
+            <InputError :message="errors?.discount_amount" />
+          </div>
+
+          <div>
+            <InputLabel :label="__('Minimum Spend')" required />
+
+            <InputField
+              type="number"
+              name="min-spend"
               v-model="form.min_spend"
-              :placeholder="__('ENTER_USER_MINIMUN_SPEND_AMOUNT')"
+              :placeholder="__('Enter Minimum Spend')"
+              required
             />
 
-            <InputError class="mt-2" :message="form.errors.min_spend" />
+            <InputError :message="errors?.min_spend" />
           </div>
 
-          <!-- Coupon Date Component -->
-          <div class="mb-6">
-            <InputLabel
-              for="start_date"
-              :value="__('COUPON_START_DATE') + ' *'"
-            />
+          <div>
+            <InputLabel :label="__('Max Uses')" required />
 
-            <datepicker
-              class="p-3 w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 placeholder:text-gray-400 placeholder:text-sm"
-              :placeholder="__('SELECT_COUPON_START_DATE')"
-              v-model="startDate"
-            />
-
-            <InputError class="mt-2" :message="form.errors.start_date" />
-          </div>
-
-          <!-- Coupon Date Component -->
-          <div class="mb-6">
-            <InputLabel for="end_date" :value="__('COUPON_END_DATE') + ' *'" />
-
-            <datepicker
-              class="p-3 w-full border-gray-300 rounded-md focus:border-gray-300 focus:ring-0 placeholder:text-gray-400 placeholder:text-sm"
-              :placeholder="__('SELECT_COUPON_END_DATE')"
-              v-model="endDate"
-            />
-
-            <InputError class="mt-2" :message="form.errors.end_date" />
-          </div>
-
-          <!-- Coupon Max Usage Input -->
-          <div class="mb-6">
-            <InputLabel for="max_uses" :value="__('MAX_USES') + ' *'" />
-
-            <TextInput
-              id="max_uses"
-              type="text"
-              class="mt-1 block w-full"
+            <InputField
+              type="number"
+              name="max-uses"
               v-model="form.max_uses"
-              :placeholder="__('ENTER_MAX_USAGE_COUPON')"
+              :placeholder="__('Enter Maximum Uses')"
+              required
             />
 
-            <InputError class="mt-2" :message="form.errors.max_uses" />
+            <InputError :message="errors?.max_uses" />
           </div>
 
-          <!-- Save Button -->
-          <div class="mb-6">
-            <SaveButton :processing="processing" />
+          <div>
+            <InputLabel :label="__('Start Date')" required />
+
+            <Datepicker
+              id="coupon-start-date"
+              class="block w-full p-4 font-semibold text-sm text-gray-800 border border-gray-300 bg-gray-50 focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-all rounded-md"
+              v-model="startDate"
+              :placeholder="__('Select Date')"
+              required
+            />
+
+            <InputError :message="errors?.start_date" />
           </div>
+
+          <div>
+            <InputLabel :label="__('End Date')" required />
+
+            <Datepicker
+              id="coupon-end-date"
+              class="block w-full p-4 font-semibold text-sm text-gray-800 border border-gray-300 bg-gray-50 focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-all rounded-md"
+              v-model="endDate"
+              :placeholder="__('Select Date')"
+              required
+            />
+
+            <InputError :message="errors?.end_date" />
+          </div>
+
+          <InputError :message="errors?.captcha_token" />
+
+          <FormButton type="submit" :processing="processing">
+            {{ __("Create") }}
+          </FormButton>
         </form>
       </div>
+      <!-- Form End -->
     </div>
   </AdminDashboardLayout>
 </template>
-

@@ -91,5 +91,17 @@
     "Category Name": "အမျိုးအစားအမည်",
     "Parent Category": "မိဘအမျိုးအစား",
     "Status": "အခြေအနေ",
-    "Category Image": "အမျိုးအစားပုံ"
+    "Category Image": "အမျိုးအစားပုံ",
+    "Coupons": "ကူပွန်များ",
+    "coupons": "ကူပွန်များ",
+    "Coupon": "ကူပွန်",
+    "coupon": "ကူပွန်",
+    "There is no data in this table.": "ဤဇယားတွင် ဒေတာမရှိပါ။",
+    "Coupon Code":"ကူပွန်ကုဒ်",
+    "Discount Type":"လျှော့စျေးအမျိုးအစား",
+    "Discount Amount":"လျှော့စျေးပမာဏ",
+    "Minimum Spend":"အနည်းဆုံးသုံးငွေ",
+    "Max Uses":"အများဆုံးအသုံးပြုမှုများ",
+    "Start Date":"စတင်သည့်ရက်စွဲ",
+    "End Date":"ကုန်ဆုံးရက်စွဲ"
 }

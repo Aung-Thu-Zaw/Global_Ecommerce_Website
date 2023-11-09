@@ -25,7 +25,7 @@ class AdminCollectionController extends Controller
         $this->middleware('permission:collections.edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:collections.delete', ['only' => ['destroy', 'destroySelected', 'destroyAll']]);
         $this->middleware('permission:collections.view.trash', ['only' => ['trashed']]);
-        $this->middleware('permission:collections.restore', ['only' => ['restore','restoreSelected','restoreAll']]);
+        $this->middleware('permission:collections.restore', ['only' => ['restore', 'restoreSelected', 'restoreAll']]);
         $this->middleware('permission:collections.force.delete', ['only' => ['forceDelete', 'forceDeleteSelected', 'forceDeleteAll']]);
     }
 
@@ -72,7 +72,7 @@ class AdminCollectionController extends Controller
 
     public function destroySelected(Request $request): RedirectResponse
     {
-        if (!empty($request->selectedItems)) {
+        if (! empty($request->selectedItems)) {
             Collection::whereIn('id', $request->selectedItems)->delete();
         }
 
@@ -112,7 +112,7 @@ class AdminCollectionController extends Controller
 
     public function restoreSelected(Request $request): RedirectResponse
     {
-        if (!empty($request->selectedItems)) {
+        if (! empty($request->selectedItems)) {
             Collection::onlyTrashed()->whereIn('id', $request->selectedItems)->restore();
         }
 
@@ -141,7 +141,7 @@ class AdminCollectionController extends Controller
 
     public function forceDeleteSelected(Request $request): RedirectResponse
     {
-        if (!empty($request->selectedItems)) {
+        if (! empty($request->selectedItems)) {
             Collection::onlyTrashed()->whereIn('id', $request->selectedItems)->forceDelete();
         }
 

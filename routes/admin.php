@@ -133,9 +133,6 @@ Route::middleware(['admin', 'verified', 'user.role:admin'])
                 Route::delete('/force-delete/all', 'forceDeleteAll')->name('force-delete.all');
             });
 
-
-
-
         // Admin Products Section
         Route::controller(AdminProductController::class)
             ->prefix('/products')
@@ -180,41 +177,21 @@ Route::middleware(['admin', 'verified', 'user.role:admin'])
             });
         Route::delete('products/{product_id}/images/{image_id}', [MultiImageController::class, 'destroy'])->name('image.destroy');
 
-        // Admin Coupons Section
+        // Admin Coupon Operations
+        Route::resource('coupons', AdminCouponController::class)->except(['show']);
         Route::controller(AdminCouponController::class)
-            ->prefix('/coupons')
+            ->prefix('/coupons/trash')
             ->name('coupons.')
             ->group(function () {
-                Route::get('/', 'index')
-                    ->middleware('permission:coupon.menu')
-                    ->name('index');
-                Route::get('/create', 'create')
-                    ->middleware('permission:coupon.add')
-                    ->name('create');
-                Route::post('/', 'store')
-                    ->middleware('permission:coupon.add')
-                    ->name('store');
-                Route::get('/{coupon}/edit', 'edit')
-                    ->middleware('permission:coupon.edit')
-                    ->name('edit');
-                Route::patch('/{coupon}', 'update')
-                    ->middleware('permission:coupon.edit')
-                    ->name('update');
-                Route::delete('/{coupon}', 'destroy')
-                    ->middleware('permission:coupon.delete')
-                    ->name('destroy');
-                Route::get('/trash', 'trash')
-                    ->middleware('permission:coupon.trash.list')
-                    ->name('trash');
-                Route::post('/trash/{trash_coupon_id}/restore', 'restore')
-                    ->middleware('permission:coupon.trash.restore')
-                    ->name('trash.restore');
-                Route::delete('/trash/{trash_coupon_id}/force-delete', 'forceDelete')
-                    ->middleware('permission:coupon.trash.delete')
-                    ->name('trash.force.delete');
-                Route::delete('/trash/permanently-delete', 'permanentlyDelete')
-                    ->middleware('permission:coupon.trash.delete')
-                    ->name('trash.permanently.delete');
+                Route::delete('/destroy/selected', 'destroySelected')->name('destroy.selected');
+                Route::delete('/destroy/all', 'destroyAll')->name('destroy.all');
+                Route::get('/', 'trashed')->name('trashed');
+                Route::post('/{id}/restore', 'restore')->name('restore');
+                Route::post('/restore/selected', 'restoreSelected')->name('restore.selected');
+                Route::post('/restore/all', 'restoreAll')->name('restore.all');
+                Route::delete('/{id}/force-delete', 'forceDelete')->name('force-delete');
+                Route::delete('/force-delete/selected', 'forceDeleteSelected')->name('force-delete.selected');
+                Route::delete('/force-delete/all', 'forceDeleteAll')->name('force-delete.all');
             });
 
         // Admin Flash Sales Section

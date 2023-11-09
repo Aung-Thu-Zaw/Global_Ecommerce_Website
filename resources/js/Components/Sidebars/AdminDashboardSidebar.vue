@@ -209,7 +209,7 @@ const toggleCollapseShow = (classes) => {
           </li>
 
           <!-- Coupons -->
-          <li class="items-center">
+          <li v-show="can('coupons.view')" class="items-center">
             <Link
               :href="route('admin.coupons.index')"
               :data="{
@@ -227,7 +227,7 @@ const toggleCollapseShow = (classes) => {
               }"
             >
               <i class="fa-solid fa-ticket mr-2 text-sm"></i>
-              {{ __("COUPONS") }}
+              {{ __("Coupons") }}
             </Link>
           </li>
 

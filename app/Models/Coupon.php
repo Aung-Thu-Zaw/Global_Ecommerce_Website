@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Scopes\FilteredByDateScope;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -36,26 +35,6 @@ class Coupon extends Model
     protected static function booted()
     {
         static::addGlobalScope(new FilteredByDateScope());
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Coupon, never>
-     */
-    protected function createdAt(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => date('j-F-Y', strtotime($value)),
-        );
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<Coupon, never>
-     */
-    protected function deletedAt(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => date('j-F-Y', strtotime($value)),
-        );
     }
 
     /**

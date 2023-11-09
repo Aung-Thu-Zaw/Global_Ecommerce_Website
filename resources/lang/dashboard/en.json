@@ -91,5 +91,17 @@
     "Category Name":"Category Name",
     "Parent Category":"Parent Category",
     "Status":"Status",
-    "Category Image":"Category Image"
+    "Category Image":"Category Image",
+    "Coupons": "Coupons",
+    "coupons": "coupons",
+    "Coupon": "Coupon",
+    "coupon": "coupon",
+    "There is no data in this table.":"There is no data in this table.",
+    "Coupon Code":"Coupon Code",
+    "Discount Type":"Discount Type",
+    "Discount Amount":"Discount Amount",
+    "Minimum Spend":"Minimum Spend",
+    "Max Uses":"Max Uses",
+    "Start Date":"Start Date",
+    "End Date":"End Date"
 }

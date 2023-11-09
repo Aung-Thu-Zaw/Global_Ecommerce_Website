@@ -105,7 +105,7 @@ class Category extends Model
 
     public static function deleteImage(?string $categoryImage): void
     {
-        if (!empty($categoryImage) && file_exists(storage_path('app/public/categories/'.pathinfo($categoryImage, PATHINFO_BASENAME)))) {
+        if (! empty($categoryImage) && file_exists(storage_path('app/public/categories/'.pathinfo($categoryImage, PATHINFO_BASENAME)))) {
             unlink(storage_path('app/public/categories/'.pathinfo($categoryImage, PATHINFO_BASENAME)));
         }
     }
