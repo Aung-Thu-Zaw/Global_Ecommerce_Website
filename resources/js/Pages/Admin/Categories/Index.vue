@@ -30,8 +30,7 @@ const categoryList = "admin.categories.index";
 
 const { queryStringParams } = useQueryStringParams();
 
-const { softDeleteAction, selectedSoftDeleteAction, softDeleteAllAction } =
-  useResourceActions();
+const { softDeleteAction, selectedSoftDeleteAction } = useResourceActions();
 </script>
 
 <template>
@@ -97,32 +96,20 @@ const { softDeleteAction, selectedSoftDeleteAction, softDeleteAllAction } =
           <ActionTable :items="categories.data">
             <!-- Table Actions -->
             <template #bulk-actions="{ selectedItems }">
-              <div v-show="can('categories.delete')">
-                <BulkActionButton
-                  @click="
-                    selectedSoftDeleteAction(
-                      'Categories',
-                      'admin.categories.destroy.selected',
-                      selectedItems
-                    )
-                  "
-                >
-                  <i class="fa-solid fa-trash-can"></i>
-                  {{ __("Delete Selected") }} ({{ selectedItems.length }})
-                </BulkActionButton>
-                <BulkActionButton
-                  @click="
-                    softDeleteAllAction(
-                      'Category',
-                      'admin.categories.destroy.all'
-                    )
-                  "
-                  class="text-red-600"
-                >
-                  <i class="fa-solid fa-trash-can"></i>
-                  {{ __("Delete All") }} ({{ categories.total }})
-                </BulkActionButton>
-              </div>
+              <BulkActionButton
+                v-show="can('categories.delete')"
+                @click="
+                  selectedSoftDeleteAction(
+                    'Categories',
+                    'admin.categories.destroy.selected',
+                    selectedItems
+                  )
+                "
+                class="text-red-600"
+              >
+                <i class="fa-solid fa-trash-can"></i>
+                {{ __("Delete Selected") }} ({{ selectedItems.length }})
+              </BulkActionButton>
             </template>
 
             <!-- Table Header -->

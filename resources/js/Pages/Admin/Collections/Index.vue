@@ -27,8 +27,7 @@ const collectionList = "admin.collections.index";
 
 const { queryStringParams } = useQueryStringParams();
 
-const { softDeleteAction, selectedSoftDeleteAction, softDeleteAllAction } =
-  useResourceActions();
+const { softDeleteAction, selectedSoftDeleteAction } = useResourceActions();
 </script>
 
 <template>
@@ -96,32 +95,20 @@ const { softDeleteAction, selectedSoftDeleteAction, softDeleteAllAction } =
           <ActionTable :items="collections.data">
             <!-- Table Actions -->
             <template #bulk-actions="{ selectedItems }">
-              <div v-show="can('collections.delete')">
-                <BulkActionButton
-                  @click="
-                    selectedSoftDeleteAction(
-                      'Collections',
-                      'admin.collections.destroy.selected',
-                      selectedItems
-                    )
-                  "
-                >
-                  <i class="fa-solid fa-trash-can"></i>
-                  {{ __("Delete Selected") }} ({{ selectedItems.length }})
-                </BulkActionButton>
-                <BulkActionButton
-                  @click="
-                    softDeleteAllAction(
-                      'Collection',
-                      'admin.collections.destroy.all'
-                    )
-                  "
-                  class="text-red-600"
-                >
-                  <i class="fa-solid fa-trash-can"></i>
-                  {{ __("Delete All") }} ({{ collections.total }})
-                </BulkActionButton>
-              </div>
+              <BulkActionButton
+                v-show="can('collections.delete')"
+                @click="
+                  selectedSoftDeleteAction(
+                    'Collections',
+                    'admin.collections.destroy.selected',
+                    selectedItems
+                  )
+                "
+                class="text-red-600"
+              >
+                <i class="fa-solid fa-trash-can"></i>
+                {{ __("Delete Selected") }} ({{ selectedItems.length }})
+              </BulkActionButton>
             </template>
 
             <!-- Table Header -->

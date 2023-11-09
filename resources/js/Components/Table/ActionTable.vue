@@ -41,14 +41,6 @@ const selectAllItems = () => {
   }
 };
 
-const selectAll = () => {
-  const existingSelectedIds = selectedItems.value;
-  const newSelectedIds = props.items.map((item) => item.id);
-  selectedItems.value = [
-    ...new Set([...existingSelectedIds, ...newSelectedIds]),
-  ];
-};
-
 const deselectAll = () => {
   selectedItems.value = [];
 };
@@ -56,7 +48,7 @@ const deselectAll = () => {
 
 <template>
   <div
-    v-show="selectedItems.length !== 0 && items.length !== 0"
+    v-show="store.getters.getSelectedItems.length"
     class="px-5 py-3 bg-[#F9FAFB] text-sm flex items-center justify-between w-full"
   >
     <div class="flex items-center space-x-1">

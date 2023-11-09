@@ -4,9 +4,11 @@ import { __ } from "@/Services/translations-inside-setup.js";
 import { inject, ref } from "vue";
 import { router, useForm, usePage } from "@inertiajs/vue3";
 import { useQueryStringParams } from "./useQueryStringParams";
+import { useStore } from "vuex";
 
 export function useResourceActions(formFields = {}) {
     const swal = inject("$swal");
+    const store = useStore();
     const processing = ref(false);
     const errors = ref(null);
 
@@ -180,6 +182,9 @@ export function useResourceActions(formFields = {}) {
                 }),
                 {
                     preserveScroll: true,
+                    onFinish: () => {
+                        store.dispatch("setSelectedItems", []);
+                    },
                     onSuccess: () => {
                         const successMessage =
                             usePage().props.flash.successMessage;
@@ -271,6 +276,9 @@ export function useResourceActions(formFields = {}) {
                 },
                 {
                     preserveScroll: true,
+                    onFinish: () => {
+                        store.dispatch("setSelectedItems", []);
+                    },
                     onSuccess: () => {
                         const successMessage =
                             usePage().props.flash.successMessage;
@@ -367,6 +375,52 @@ export function useResourceActions(formFields = {}) {
                 }),
                 {
                     preserveScroll: true,
+                    onFinish: () => {
+                        store.dispatch("setSelectedItems", []);
+                    },
+                    onSuccess: () => {
+                        const successMessage =
+                            usePage().props.flash.successMessage;
+                        if (successMessage) {
+                            swal({
+                                icon: "success",
+                                title: __(successMessage, { label: __(model) }),
+                            });
+                        }
+                    },
+                }
+            );
+        }
+    };
+
+    // Permanent Delete All Action
+    const permanentDeleteAllAction = async (model, deleteRouteName) => {
+        const result = await swal({
+            icon: "question",
+            title: __("Permanently Delete All :label", {
+                label: __(formatToTitleCase(model)),
+            }),
+            text: __(
+                "This action cannot be undone. Are you sure you want to permanently delete all :label in the trash?",
+                { label: __(formatToTitleCase(model)) }
+            ),
+            showCancelButton: true,
+            confirmButtonText: __("Confirm"),
+            cancelButtonText: __("Cancel"),
+            confirmButtonColor: "#d52222",
+            cancelButtonColor: "#626262",
+            timer: 20000,
+            timerProgressBar: true,
+            reverseButtons: true,
+        });
+
+        if (result.isConfirmed) {
+            router.delete(
+                route(deleteRouteName, {
+                    ...queryStringParams.value,
+                }),
+                {
+                    preserveScroll: true,
                     onSuccess: () => {
                         const successMessage =
                             usePage().props.flash.successMessage;
@@ -393,6 +447,7 @@ export function useResourceActions(formFields = {}) {
         restoreSelectedAction,
         permanentDeleteAction,
         permanentDeleteSelectedAction,
+        permanentDeleteAllAction,
         errors,
     };
 }

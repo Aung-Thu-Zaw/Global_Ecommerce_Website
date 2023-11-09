@@ -37,7 +37,6 @@ const { queryStringParams } = useQueryStringParams();
 const {
   restoreAction,
   restoreSelectedAction,
-  restoreAllAction,
   permanentDeleteAction,
   permanentDeleteSelectedAction,
   permanentDeleteAllAction,
@@ -118,54 +117,34 @@ const {
           <ActionTable :items="trashedCategories.data">
             <!-- Table Actions -->
             <template #bulk-actions="{ selectedItems }">
-              <div v-show="can('categories.restore')">
-                <BulkActionButton
-                  @click="
-                    restoreSelectedAction(
-                      'Categories',
-                      'admin.categories.restore.selected',
-                      selectedItems
-                    )
-                  "
-                >
-                  <i class="fa-solid fa-recycle"></i>
-                  {{ __("Restore Selected") }} ({{ selectedItems.length }})
-                </BulkActionButton>
-                <BulkActionButton
-                  @click="
-                    restoreAllAction('Category', 'admin.categories.restore.all')
-                  "
-                >
-                  <i class="fa-solid fa-recycle"></i>
-                  {{ __("Restore All") }} ({{ trashedCategories.total }})
-                </BulkActionButton>
-              </div>
-              <div v-show="can('categories.force.delete')">
-                <BulkActionButton
-                  @click="
-                    permanentDeleteSelectedAction(
-                      'Categories',
-                      'admin.categories.force-delete.selected',
-                      selectedItems
-                    )
-                  "
-                >
-                  <i class="fa-solid fa-trash-can"></i>
-                  {{ __("Delete Selected") }} ({{ selectedItems.length }})
-                </BulkActionButton>
-                <BulkActionButton
-                  @click="
-                    permanentDeleteAllAction(
-                      'Category',
-                      'admin.categories.force-delete.all'
-                    )
-                  "
-                  class="text-red-600"
-                >
-                  <i class="fa-solid fa-trash-can"></i>
-                  {{ __("Delete All") }} ({{ trashedCategories.total }})
-                </BulkActionButton>
-              </div>
+              <BulkActionButton
+                v-show="can('categories.restore')"
+                @click="
+                  restoreSelectedAction(
+                    'Categories',
+                    'admin.categories.restore.selected',
+                    selectedItems
+                  )
+                "
+              >
+                <i class="fa-solid fa-recycle"></i>
+                {{ __("Restore Selected") }} ({{ selectedItems.length }})
+              </BulkActionButton>
+
+              <BulkActionButton
+                v-show="can('categories.force.delete')"
+                @click="
+                  permanentDeleteSelectedAction(
+                    'Categories',
+                    'admin.categories.force-delete.selected',
+                    selectedItems
+                  )
+                "
+                class="text-red-600"
+              >
+                <i class="fa-solid fa-trash-can"></i>
+                {{ __("Delete Selected") }} ({{ selectedItems.length }})
+              </BulkActionButton>
             </template>
 
             <!-- Table Header -->

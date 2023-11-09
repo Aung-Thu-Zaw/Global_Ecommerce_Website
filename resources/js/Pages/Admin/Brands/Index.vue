@@ -33,8 +33,7 @@ const brandList = "admin.brands.index";
 
 const { queryStringParams } = useQueryStringParams();
 
-const { softDeleteAction, selectedSoftDeleteAction, softDeleteAllAction } =
-  useResourceActions();
+const { softDeleteAction, selectedSoftDeleteAction } = useResourceActions();
 
 const handleDeleteBrand = async (brand) => {
   if (brand.products_count > 0) {
@@ -129,29 +128,20 @@ const handleDeleteBrand = async (brand) => {
           <ActionTable :items="brands.data">
             <!-- Table Actions -->
             <template #bulk-actions="{ selectedItems }">
-              <div v-show="can('brands.delete')">
-                <BulkActionButton
-                  @click="
-                    selectedSoftDeleteAction(
-                      'Brands',
-                      'admin.brands.destroy.selected',
-                      selectedItems
-                    )
-                  "
-                >
-                  <i class="fa-solid fa-trash-can"></i>
-                  {{ __("Delete Selected") }} ({{ selectedItems.length }})
-                </BulkActionButton>
-                <BulkActionButton
-                  @click="
-                    softDeleteAllAction('Brand', 'admin.brands.destroy.all')
-                  "
-                  class="text-red-600"
-                >
-                  <i class="fa-solid fa-trash-can"></i>
-                  {{ __("Delete All") }} ({{ brands.total }})
-                </BulkActionButton>
-              </div>
+              <BulkActionButton
+                v-show="can('brands.delete')"
+                @click="
+                  selectedSoftDeleteAction(
+                    'Brands',
+                    'admin.brands.destroy.selected',
+                    selectedItems
+                  )
+                "
+                class="text-red-600"
+              >
+                <i class="fa-solid fa-trash-can"></i>
+                {{ __("Delete Selected") }} ({{ selectedItems.length }})
+              </BulkActionButton>
             </template>
 
             <!-- Table Header -->

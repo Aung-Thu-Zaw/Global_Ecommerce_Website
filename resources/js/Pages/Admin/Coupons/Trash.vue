@@ -41,7 +41,6 @@ const { formatAmount } = useFormatFunctions();
 const {
   restoreAction,
   restoreSelectedAction,
-  restoreAllAction,
   permanentDeleteAction,
   permanentDeleteSelectedAction,
   permanentDeleteAllAction,
@@ -117,54 +116,34 @@ const {
           <ActionTable :items="trashedCoupons.data">
             <!-- Table Actions -->
             <template #bulk-actions="{ selectedItems }">
-              <div v-show="can('coupons.restore')">
-                <BulkActionButton
-                  @click="
-                    restoreSelectedAction(
-                      'Coupons',
-                      'admin.coupons.restore.selected',
-                      selectedItems
-                    )
-                  "
-                >
-                  <i class="fa-solid fa-recycle"></i>
-                  {{ __("Restore Selected") }} ({{ selectedItems.length }})
-                </BulkActionButton>
-                <BulkActionButton
-                  @click="
-                    restoreAllAction('Coupon', 'admin.coupons.restore.all')
-                  "
-                >
-                  <i class="fa-solid fa-recycle"></i>
-                  {{ __("Restore All") }} ({{ trashedCoupons.total }})
-                </BulkActionButton>
-              </div>
-              <div v-show="can('coupons.force.delete')">
-                <BulkActionButton
-                  @click="
-                    permanentDeleteSelectedAction(
-                      'Coupons',
-                      'admin.coupons.force-delete.selected',
-                      selectedItems
-                    )
-                  "
-                >
-                  <i class="fa-solid fa-trash-can"></i>
-                  {{ __("Delete Selected") }} ({{ selectedItems.length }})
-                </BulkActionButton>
-                <BulkActionButton
-                  @click="
-                    permanentDeleteAllAction(
-                      'Coupon',
-                      'admin.coupons.force-delete.all'
-                    )
-                  "
-                  class="text-red-600"
-                >
-                  <i class="fa-solid fa-trash-can"></i>
-                  {{ __("Delete All") }} ({{ trashedCoupons.total }})
-                </BulkActionButton>
-              </div>
+              <BulkActionButton
+                v-show="can('coupons.restore')"
+                @click="
+                  restoreSelectedAction(
+                    'Coupons',
+                    'admin.coupons.restore.selected',
+                    selectedItems
+                  )
+                "
+              >
+                <i class="fa-solid fa-recycle"></i>
+                {{ __("Restore Selected") }} ({{ selectedItems.length }})
+              </BulkActionButton>
+
+              <BulkActionButton
+                v-show="can('coupons.force.delete')"
+                @click="
+                  permanentDeleteSelectedAction(
+                    'Coupons',
+                    'admin.coupons.force-delete.selected',
+                    selectedItems
+                  )
+                "
+                class="text-red-600"
+              >
+                <i class="fa-solid fa-trash-can"></i>
+                {{ __("Delete Selected") }} ({{ selectedItems.length }})
+              </BulkActionButton>
             </template>
 
             <!-- Table Header -->

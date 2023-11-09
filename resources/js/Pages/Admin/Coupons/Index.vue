@@ -33,8 +33,7 @@ const { queryStringParams } = useQueryStringParams();
 
 const { formatAmount } = useFormatFunctions();
 
-const { softDeleteAction, selectedSoftDeleteAction, softDeleteAllAction } =
-  useResourceActions();
+const { softDeleteAction, selectedSoftDeleteAction } = useResourceActions();
 </script>
 
 <template>
@@ -100,29 +99,20 @@ const { softDeleteAction, selectedSoftDeleteAction, softDeleteAllAction } =
           <ActionTable :items="coupons.data">
             <!-- Table Actions -->
             <template #bulk-actions="{ selectedItems }">
-              <div v-show="can('coupons.delete')">
-                <BulkActionButton
-                  @click="
-                    selectedSoftDeleteAction(
-                      'Coupons',
-                      'admin.coupons.destroy.selected',
-                      selectedItems
-                    )
-                  "
-                >
-                  <i class="fa-solid fa-trash-can"></i>
-                  {{ __("Delete Selected") }} ({{ selectedItems.length }})
-                </BulkActionButton>
-                <BulkActionButton
-                  @click="
-                    softDeleteAllAction('Coupon', 'admin.coupons.destroy.all')
-                  "
-                  class="text-red-600"
-                >
-                  <i class="fa-solid fa-trash-can"></i>
-                  {{ __("Delete All") }} ({{ coupons.total }})
-                </BulkActionButton>
-              </div>
+              <BulkActionButton
+                v-show="can('coupons.delete')"
+                @click="
+                  selectedSoftDeleteAction(
+                    'Coupons',
+                    'admin.coupons.destroy.selected',
+                    selectedItems
+                  )
+                "
+                class="text-red-600"
+              >
+                <i class="fa-solid fa-trash-can"></i>
+                {{ __("Delete Selected") }} ({{ selectedItems.length }})
+              </BulkActionButton>
             </template>
 
             <!-- Table Header -->
