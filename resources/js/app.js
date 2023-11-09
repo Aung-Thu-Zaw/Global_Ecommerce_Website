@@ -12,6 +12,7 @@ import "sweetalert2/dist/sweetalert2.min.css";
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import { translations } from "./Services/translations";
 import { Can } from "@/Services/can.js";
+import store from "./store";
 
 const appName =
     window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
@@ -39,6 +40,7 @@ createInertiaApp({
             .use(ZiggyVue, Ziggy)
             .use(VueSweetalert2)
             .use(CKEditor)
+            .use(store)
             .mount(el);
     },
     progress: {

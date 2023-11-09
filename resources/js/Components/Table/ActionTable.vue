@@ -1,6 +1,7 @@
 <script setup>
 import Checkbox from "@/Components/Forms/Fields/Checkbox.vue";
-import { ref, watch } from "vue";
+import { ref, watch, onMounted, computed } from "vue";
+import { useStore } from "vuex";
 
 const props = defineProps({
   items: {
@@ -9,23 +10,43 @@ const props = defineProps({
   },
 });
 
-const isSelectedAll = ref(false);
-const selectedItems = ref([]);
+const store = useStore();
 
-watch(selectedItems, () => {
-  isSelectedAll.value = selectedItems.value.length === props.items.length;
+const selectedItems = ref(store.getters.getSelectedItems || []);
+
+const isSelectedAll = computed(() => {
+  const selectedIds = new Set(selectedItems.value);
+  return props.items.every((item) => selectedIds.has(item.id));
 });
+
+watch(
+  () => selectedItems.value,
+  () => {
+    isSelectedAll.value = selectedItems.value.length === props.items.length;
+    store.dispatch("setSelectedItems", selectedItems.value);
+  }
+);
 
 const selectAllItems = () => {
   if (isSelectedAll.value) {
-    selectedItems.value = props.items.map((item) => item.id);
+    selectedItems.value = selectedItems.value.filter(
+      (selectedId) => !props.items.some((item) => item.id === selectedId)
+    );
   } else {
-    selectedItems.value = [];
+    const existingSelectedIds = selectedItems.value;
+    const newSelectedIds = props.items.map((item) => item.id);
+    selectedItems.value = [
+      ...new Set([...existingSelectedIds, ...newSelectedIds]),
+    ];
   }
 };
 
 const selectAll = () => {
-  selectedItems.value = props.items.map((item) => item.id);
+  const existingSelectedIds = selectedItems.value;
+  const newSelectedIds = props.items.map((item) => item.id);
+  selectedItems.value = [
+    ...new Set([...existingSelectedIds, ...newSelectedIds]),
+  ];
 };
 
 const deselectAll = () => {
@@ -72,13 +93,6 @@ const deselectAll = () => {
       </div>
     </div>
     <div class="flex items-center space-x-5 font-bold">
-      <span
-        v-show="selectedItems.length < items.length"
-        @click="selectAll"
-        class="text-blue-600 cursor-pointer hover:bg-blue-200 px-2 py-1.5 rounded-md"
-      >
-        {{ __("Select All") }}
-      </span>
       <button
         type="button"
         @click="deselectAll"
@@ -88,6 +102,7 @@ const deselectAll = () => {
       </button>
     </div>
   </div>
+
   <table class="w-full text-sm text-left text-gray-500">
     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
       <tr>
